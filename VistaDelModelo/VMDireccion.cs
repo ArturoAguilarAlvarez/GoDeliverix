@@ -22,6 +22,9 @@ namespace VistaDelModelo
         public List<VMDireccion> ListaDeEstadosSeleccionados = new List<VMDireccion>();
         private Direccion _direccion;
 
+        public string Longitud { get; set; }
+        public string Latitud { get; set; }
+        public bool Clicked { get; set; }
         public Direccion Direccion
         {
             get { return _direccion; }
@@ -548,6 +551,103 @@ namespace VistaDelModelo
             }
             return resultado;
         }
+
+        public bool ActualizaListaDireccion(string Id, Guid pais, Guid estado, Guid municipio, Guid Ciudad, Guid colonia, string Calle0, string calle1, string calle2, string manzana, string lote, string CP, string referencia, string IDENTIFICADOR, string NOMBRECIUDAD, string NOMBRECOLONIA, string latitud, string longitud)
+        {
+            bool resultado = false;
+            var direccion = new VMDireccion();
+            try
+            {
+                direccion = ListaDIRECCIONES.Find(Dir => Dir.ID.ToString() == Id);
+                ListaDIRECCIONES.Remove(direccion);
+                direccion = new VMDireccion()
+                {
+                    ID = new Guid(Id),
+                    PAIS = pais.ToString(),
+                    ESTADO = estado.ToString(),
+                    MUNICIPIO = municipio.ToString(),
+                    CIUDAD = Ciudad.ToString(),
+                    COLONIA = colonia.ToString(),
+                    CALLE0 = Calle0,
+                    CALLE1 = calle1,
+                    CALLE2 = calle2,
+                    MANZANA = manzana,
+                    LOTE = lote,
+                    CodigoPostal = CP,
+                    REFERENCIA = referencia,
+                    IDENTIFICADOR = IDENTIFICADOR,
+                    NOMBRECIUDAD = NOMBRECIUDAD,
+                    NOMBRECOLONIA = NOMBRECOLONIA,
+                    Longitud = longitud,
+                    Latitud = latitud
+                };
+                ListaDIRECCIONES.Add(direccion);
+                resultado = true;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return resultado;
+        }
+
+        public void AgregaDireccionALista(Guid pais, Guid estado, Guid municipio, Guid Ciudad, Guid colonia, string Calle0, string calle1, string calle2, string manzana, string lote, string CP, string referencia, string NOMBRECIUDAD, string NOMBRECOLONIA, string IDENTIFICADOR, string Latitud, string Longitud)
+        {
+            Guid UidDireccion = Guid.NewGuid();
+            if (Ciudad == Guid.Empty)
+            {
+                NOMBRECIUDAD = "No hay información";
+            }
+            if (colonia == Guid.Empty)
+            {
+                NOMBRECOLONIA = "No hay información";
+            }
+            if (CP == "" && CP == string.Empty)
+            {
+                CP = "No indicado";
+            }
+            if (IDENTIFICADOR == "" && IDENTIFICADOR == string.Empty)
+            {
+                IDENTIFICADOR = "No hay información";
+            }
+            if (referencia == "" && referencia == string.Empty)
+            {
+                referencia = "No hay información";
+            }
+            if (ListaDIRECCIONES != null)
+            {
+                VMDireccion Dir = new VMDireccion() { ID = UidDireccion, PAIS = pais.ToString(), ESTADO = estado.ToString(), MUNICIPIO = municipio.ToString(), CIUDAD = Ciudad.ToString(), COLONIA = colonia.ToString(), CALLE0 = Calle0, CALLE1 = calle1, CALLE2 = calle2, MANZANA = manzana, LOTE = lote, CodigoPostal = CP, REFERENCIA = referencia, IDENTIFICADOR = IDENTIFICADOR, NOMBRECIUDAD = NOMBRECIUDAD, NOMBRECOLONIA = NOMBRECOLONIA, Latitud = Latitud, Longitud = Longitud };
+                ListaDIRECCIONES.Add(Dir);
+            }
+            else if (ListaDIRECCIONES == null)
+            {
+                ListaDIRECCIONES = new List<VMDireccion>();
+                VMDireccion Dir = new VMDireccion()
+                {
+                    ID = UidDireccion,
+                    PAIS = pais.ToString(),
+                    ESTADO = estado.ToString(),
+                    MUNICIPIO = municipio.ToString(),
+                    CIUDAD = Ciudad.ToString(),
+                    COLONIA = colonia.ToString(),
+                    CALLE0 = Calle0,
+                    CALLE1 = calle1,
+                    CALLE2 = calle2,
+                    MANZANA = manzana,
+                    LOTE = lote,
+                    CodigoPostal = CP,
+                    REFERENCIA = referencia,
+                    IDENTIFICADOR = IDENTIFICADOR,
+                    NOMBRECIUDAD = NOMBRECIUDAD,
+                    NOMBRECOLONIA = NOMBRECOLONIA,
+                    Latitud = Latitud,
+                    Longitud = Longitud
+                };
+                ListaDIRECCIONES.Add(Dir);
+            }
+        }
+
         public void AgregaDireccionALista(Guid UidDireccion, Guid pais, Guid estado, Guid municipio, Guid Ciudad, Guid colonia, string Calle0, string calle1, string calle2, string manzana, string lote, string CP, string referencia, string NOMBRECIUDAD, string NOMBRECOLONIA, string IDENTIFICADOR)
         {
             

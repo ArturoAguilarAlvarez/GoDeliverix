@@ -13,6 +13,7 @@ namespace VistaDelModelo
         Conexion oConexion;
         DbTelefono oDbTelefono;
         private Guid UidTelefono;
+        public bool Estado { get; set; }
         public Guid ID
         {
             get { return UidTelefono; }
@@ -237,7 +238,8 @@ namespace VistaDelModelo
                                 ID = new Guid(item["UidTelefono"].ToString()),
                                 UidTipo = new Guid(item["UidTipoDetelefono"].ToString()),
                                 NUMERO = item["Numero"].ToString(),
-                                StrNombreTipoDeTelefono = tipo
+                                StrNombreTipoDeTelefono = tipo,
+                                Estado=false
                             }
                             );
                     }

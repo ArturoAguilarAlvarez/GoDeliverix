@@ -215,12 +215,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\Repartidores_GoDeliverix\Repartidores_GoDeliverix.csproj">
-      <Project>{F4F4E2DA-4E11-4B9C-816A-A4616D62F4C1}</Project>
-      <Name>Repartidores_GoDeliverix</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BundleResource Include="Resources\Address.png" />
   </ItemGroup>
   <ItemGroup>

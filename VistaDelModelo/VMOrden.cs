@@ -114,6 +114,11 @@ namespace VistaDelModelo
         public string VisibilidadNota { get; set; }
         public bool Seleccion { get; set; }
 
+        public string UidRelacionOrdenSucursal { get; set; }
+        public string Identificador { get; set; }
+        public string MTotalSucursal { get; set; }
+        public string CostoEnvio { get; set; }
+
         public string StrNota { get; set; }
         public double MCostoTarifario { get; set; }
         public double MSubtotalSucursal { get; set; }
@@ -133,6 +138,13 @@ namespace VistaDelModelo
         public List<VMOrden> ListaDeOrdenesCanceladas = new List<VMOrden>();
         public List<VMOrden> ListaDeBitacoraDeOrdenes = new List<VMOrden>();
         public List<VMOrden> ListaDeInformacionDeOrden = new List<VMOrden>();
+
+        public List<VMOrden> ListaDeOrdenesPorConfirmar = new List<VMOrden>();
+        public List<VMOrden> ListaDeOrdenesPorElaborar = new List<VMOrden>();
+        public List<VMOrden> ListaDeOrdenesPorEnviar = new List<VMOrden>();
+        public List<VMOrden> ListaDeOrdenesEnviadas = new List<VMOrden>();
+        public List<VMOrden> ListaDeOrdenesEmpresa = new List<VMOrden>();
+        public List<VMOrden> ListaDeOrdenesCanceladasPermanentes = new List<VMOrden>();
         #endregion
 
 

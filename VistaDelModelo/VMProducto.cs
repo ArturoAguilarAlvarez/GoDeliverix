@@ -86,6 +86,7 @@ namespace VistaDelModelo
             set { _mCosto = value; }
         }
 
+        public bool IsVisible { get; set; }
         public bool IsSelected { get; set; }
         public string Empresa { get; set; }
         public Guid UidSucursal { get; set; }
@@ -417,7 +418,7 @@ namespace VistaDelModelo
             
         }
 
-        public void AgregaAlCarrito(Guid uidProducto, Guid UidSucursal, Guid UidSeccion, string cantidad, decimal CostoDeEnvio = 0.0m, Guid UidTarifario = new Guid(), string strNota = "", Guid RegistroProductoEnCarrito = new Guid())
+        public void AgregaAlCarrito(Guid uidProducto, Guid UidSucursal, Guid UidSeccion, string cantidad, decimal CostoDeEnvio = 0.0m, Guid UidTarifario = new Guid(), string strNota = "", Guid RegistroProductoEnCarrito = new Guid(),string URLEmpresa="")
         {
             //Agrega un registro sin nota
             //Agrega un registro con una nota

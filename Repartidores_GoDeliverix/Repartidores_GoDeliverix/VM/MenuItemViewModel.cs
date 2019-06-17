@@ -21,26 +21,26 @@ namespace Repartidores_GoDeliverix
 
         private void Navigate()
         {
-            //switch (this.PageName)
-            //{
-            //    case "Home":
-            //        MainViewModel.GetInstance().MVHome = new VMHome();
-            //        (Application.Current.MainPage as MasterDetailPage).Detail = new NavigationPage(new Home());
-            //        (Application.Current.MainPage as MasterDetailPage).IsPresented = false;
-            //        break;
-            //    case "Ajustes":
-            //        MainViewModel.GetInstance().MVAjustes = new VMAjustes();
-            //        (Application.Current.MainPage as MasterDetailPage).Detail = new NavigationPage(new Ajustes());
-            //        (Application.Current.MainPage as MasterDetailPage).IsPresented = false;
-            //        break;
-            //    case "Login":
-            //        var AppInstance = MainViewModel.GetInstance();
-            //        AppInstance.MVLogin = new VMLogin();
-            //        Application.Current.MainPage = new NavigationPage(new Login());
-            //        break;
-            //    default:
-            //        break;
-            //}
+            switch (this.PageName)
+            {
+                //case "Home":
+                //    MainViewModel.GetInstance().MVHome = new VMHome();
+                //    (Application.Current.MainPage as MasterDetailPage).Detail = new NavigationPage(new Home());
+                //    (Application.Current.MainPage as MasterDetailPage).IsPresented = false;
+                //    break;
+                //case "Ajustes":
+                //    MainViewModel.GetInstance().MVAjustes = new VMAjustes();
+                //    (Application.Current.MainPage as MasterDetailPage).Detail = new NavigationPage(new Ajustes());
+                //    (Application.Current.MainPage as MasterDetailPage).IsPresented = false;
+                //    break;
+                //case "Login":
+                //    var AppInstance = MainViewModel.GetInstance();
+                //    AppInstance.MVLogin = new VMLogin();
+                //    Application.Current.MainPage = new NavigationPage(new Login());
+                //    break;
+                //default:
+                //    break;
+            }
         }
     }
 }
