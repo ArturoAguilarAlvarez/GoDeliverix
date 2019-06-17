@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Repartidores_GoDeliverix.Views.Historial"
+             Title="Caja"
+             Icon="Caja.png">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="7*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <StackLayout BackgroundColor="Purple" >
+                <Label Text="Caja" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" FontSize="50"></Label>
+            </StackLayout>
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="7*"></RowDefinition>
+                    <RowDefinition Height="3*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Label Text="$867.50" Grid.ColumnSpan="3" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" FontSize="60" TextColor="Purple"></Label>
+                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Row="1" Grid.Column="0">
+                    <Label Text="Ordenes"  TextColor="Purple"></Label>
+                    <Label Text="20"  TextColor="Purple"></Label>
+                </StackLayout>
+                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Row="1" Grid.Column="1">
+                    <Label Text="Distancia"  TextColor="Purple"></Label>
+                    <Label Text="60.00 km"  TextColor="Purple"></Label>
+                </StackLayout>
+                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Row="1" Grid.Column="2">
+                    <Label Text="Tiempo"  TextColor="Purple"></Label>
+                    <Label Text="01:50"  TextColor="Purple"></Label>
+                </StackLayout>
+            </Grid>
+            <StackLayout Grid.Row="2" Padding="10">
+                <Button  Text="Historico de caja" BackgroundColor="Purple" x:Name="BtnHistorico" Clicked="BtnHistorico_Clicked"  TextColor="White" FontSize="Large"></Button>
+            </StackLayout>
+            
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

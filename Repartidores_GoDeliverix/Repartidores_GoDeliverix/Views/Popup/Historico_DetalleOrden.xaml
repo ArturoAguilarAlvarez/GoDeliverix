@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Repartidores_GoDeliverix.Views.Popup.Historico_DetalleOrden"
+             Title="Orden: 200001928732">
+    <ContentPage.Content>
+        <Grid HorizontalOptions="Fill" VerticalOptions="Fill">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="7*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <StackLayout   VerticalOptions="Center" BackgroundColor="Purple" >
+                <Label Text="Tacos doña pelos" HorizontalOptions="Center"   TextColor="White"  FontSize="30"></Label>
+            </StackLayout>
+            <StackLayout Grid.Row="1">
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="2*"></RowDefinition>
+                        <RowDefinition Height="2*"></RowDefinition>
+                        <RowDefinition Height="2*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <StackLayout   Padding="10,0,0,0"  >
+                        <Label TextColor="Purple" HorizontalOptions="Center" Text="Detalles" FontSize="40"></Label>
+                    </StackLayout>
+                    <StackLayout Grid.Row="1" Padding="10,0,0,0"  >
+                        <Grid >
+                            <Label Text="Producto" FontSize="Medium" TextColor="Purple"  Grid.Column="0"></Label>
+                            <Label Text="Cantidad" FontSize="Medium" TextColor="Purple" Grid.Column="1" ></Label>
+                            <Label Text="Importe"  FontSize="Medium" TextColor="Purple" Grid.Column="2" ></Label>
+                        </Grid>
+                    </StackLayout>
+                    <StackLayout Grid.Row="2" Padding="10,0,0,0"  >
+                        <Grid >
+                            <Label Text="Tortas" FontSize="Small" TextColor="MediumPurple" Grid.Column="0"></Label>
+                            <Label Text="5"      FontSize="Small" TextColor="MediumPurple"  Grid.Column="1"></Label>
+                            <Label Text="$175"   FontSize="Small" TextColor="MediumPurple"  Grid.Column="2"></Label>
+                        </Grid>
+
+                    </StackLayout>
+                    <StackLayout  Grid.Row="3" Padding="10,0,0,0"  >
+                        <Grid >
+                            <Label Text="Tacos de suadero" FontSize="Small" TextColor="MediumPurple"  Grid.Column="0"></Label>
+                            <Label Text="10"               FontSize="Small" TextColor="MediumPurple"  Grid.Column="1"></Label>
+                            <Label Text="$150"             FontSize="Small" TextColor="MediumPurple"  Grid.Column="2"></Label>
+                        </Grid>
+                    </StackLayout>
+                    <StackLayout  Grid.Row="4" Padding="10,0,0,0"  >
+                        <Grid >
+                            <Label Text=""           FontSize="Small" TextColor="MediumPurple"  Grid.Column="0"></Label>
+                            <Label Text="Ganancias" FontSize="Large" TextColor="Purple"  Grid.Column="1"></Label>
+                            <Label Text="$30"        FontSize="Large" TextColor="Purple"  Grid.Column="2"></Label>
+                        </Grid>
+                    </StackLayout>
+                    <StackLayout  Grid.Row="5" Padding="10,0,0,0"  >
+                        <Grid >
+                            <Label Text=""      FontSize="Small" TextColor="MediumPurple"  Grid.Column="0"></Label>
+                            <Label Text="Total" FontSize="Large" TextColor="Purple"  Grid.Column="1"></Label>
+                            <Label Text="$355"  FontSize="Large" TextColor="Purple"  Grid.Column="2"></Label>
+                        </Grid>
+                    </StackLayout>
+                </Grid>
+
+
+            </StackLayout>
+            <StackLayout Grid.Row="2" Padding="10,0,0,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5*"></RowDefinition>
+                        <RowDefinition Height="5*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <StackLayout Orientation="Horizontal" Grid.Row="0">
+                        <Label Text="Usuario" TextColor="Purple"></Label>
+                        <Label Text="Cliente117" TextColor="MediumPurple"></Label>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical" Grid.Row="1">
+                        <Label Text="Direccion de entrega" TextColor="Purple"></Label>
+                        <Label Text="La toscana playa del carmen" TextColor="MediumPurple"></Label>
+                    </StackLayout>
+                </Grid>
+                
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

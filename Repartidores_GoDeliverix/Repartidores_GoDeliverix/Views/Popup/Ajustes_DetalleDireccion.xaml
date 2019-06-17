@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Repartidores_GoDeliverix.Views.Popup.Ajustes_DetalleDireccion"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"                  
+             xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+             BindingContext="{Binding VMMain, Source={StaticResource Locator}}">
+    <pages:PopupPage.Animation>
+        <animations:ScaleAnimation 
+            PositionIn="Center"
+            PositionOut="Center"
+            ScaleIn="1.2"
+            ScaleOut="0.8"
+            DurationIn="400"
+            DurationOut="300"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True"/>
+    </pages:PopupPage.Animation>
+    <ScrollView VerticalOptions="Center" HorizontalOptions="FillAndExpand" Padding="20,20,20,20" >
+        <StackLayout BindingContext="{Binding vmAjustesDireccion}" Orientation="Vertical" BackgroundColor="#f1f1f1" Padding="10,10,10,10">
+            <Label Text="Informacion de direccion" HorizontalOptions="CenterAndExpand"></Label>
+            <Label Text="Pais"></Label>
+            <Picker  
+                ItemsSource="{Binding ListaPais}" 
+                Title="Pais"  
+                ItemDisplayBinding="{ Binding NombrePais}" 
+                SelectedIndex="{Binding IndexPaisSeleccionado,Mode=TwoWay}"></Picker>
+            <Label Text="Estado"></Label>
+            <Picker  
+                ItemsSource="{Binding ListaEstado}" 
+                Title="Estado"  
+                ItemDisplayBinding="{ Binding NombreEstado}" 
+                SelectedIndex="{Binding IndexEstadoSeleccionado,Mode=TwoWay}"></Picker>
+            <Label Text="Municipio"></Label>
+            <Picker  
+                ItemsSource="{Binding ListaMunicipio}" 
+                Title="Municipio"  
+                ItemDisplayBinding="{ Binding NombreMunicipio}" 
+                SelectedIndex="{Binding IndexMunicipioSeleccionado,Mode=TwoWay}"></Picker>
+            <Label Text="Ciudad"></Label>
+            <Picker  
+                ItemsSource="{Binding ListaCiudad}" 
+                Title="Ciudad"  
+                ItemDisplayBinding="{ Binding NombreCiudad}" 
+                SelectedIndex="{Binding IndexCiudadSeleccionado,Mode=TwoWay}"></Picker>
+            <Label Text="Colonia"></Label>
+            <Picker  
+                ItemsSource="{Binding ListaColonia}" 
+                Title="Colonia"  
+                ItemDisplayBinding="{ Binding NombreColonia}" 
+                SelectedIndex="{Binding IndexColoniaSeleccionado,Mode=TwoWay}"></Picker>
+            <Label Text="Calle"></Label>
+            <Entry Text="{Binding CallePrincipal, Mode=TwoWay}"></Entry>
+            <Label Text="Entre calle "></Label>
+            <Entry Text="{Binding CalleAux1, Mode=TwoWay}"></Entry>
+            <Label Text=" y Calle"></Label>
+            <Entry Text="{Binding CalleAux2, Mode=TwoWay}"></Entry>
+            <Label Text="Manzana"></Label>
+            <Entry Text="{Binding Manzana, Mode=TwoWay}"></Entry>
+            <Label Text="Lote"></Label>
+            <Entry Text="{Binding Lote, Mode=TwoWay}"></Entry>
+            <Label Text="Codigo postal"></Label>
+            <Entry Text="{Binding CodigoPostal, Mode=TwoWay}"></Entry>
+            <Label Text="Identificador"></Label>
+            <Entry Text="{Binding Identificador, Mode=TwoWay}"></Entry>
+            <Label Text="Referencia"></Label>
+            <Entry Text="{Binding Referencia, Mode=TwoWay}" ></Entry>
+            <StackLayout Orientation="Horizontal">
+                <Button Text="ok" FontSize="Small" TextColor="White" BackgroundColor="Green" Clicked="CloseWindowsPopup" Command="{Binding SaveAddress}" ></Button>
+                <Button Text="X" FontSize="Small" TextColor="White"  BackgroundColor="Red"  Clicked="CloseWindowsPopup"></Button>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</pages:PopupPage>

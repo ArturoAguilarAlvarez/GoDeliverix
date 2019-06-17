@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:appdata="clr-namespace:Repartidores_GoDeliverix.Resources"
+             x:Class="Repartidores_GoDeliverix.App"
+             >
+    <Application.Resources>
+        <ResourceDictionary>
+            <appdata:instancelocation x:Key="Locator"></appdata:instancelocation>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Repartidores_GoDeliverix.Views.Popup.Home_DetallesSucursal"
+                 BindingContext="{Binding VMMain, Source={StaticResource Locator}}"
+                 xmlns:Mapas="clr-namespace:Xamarin.Forms.GoogleMaps;assembly=Xamarin.Forms.GoogleMaps"
+   >
+
+    <StackLayout  BindingContext="{Binding MVHomeOrden}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Margin="20,20,20,20" >
+        <StackLayout   BackgroundColor="MediumPurple" >
+            <Grid HorizontalOptions="Fill" VerticalOptions="Fill">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="5*"></RowDefinition>
+                    <RowDefinition Height="5*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <StackLayout >
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2*"></RowDefinition>
+                            <RowDefinition Height="2*"></RowDefinition>
+                            <RowDefinition Height="2*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <StackLayout Grid.Row="0">
+                            <Grid  >
+                                <Label Grid.Column="0" Text="{Binding StrIdentificadorSucursal}" HorizontalOptions="Center" TextColor="White" FontSize="Large"></Label>
+                            </Grid>
+                        </StackLayout>
+                        <StackLayout Grid.Row="1">
+                            <Grid  >
+                                <Label Text="Recolecta: " Grid.Column="0" TextColor="White" FontSize="Large"></Label>
+                                <Label Text="{Binding StrColoniaSucursal}" Grid.Column="1" HorizontalOptions="Start" TextColor="White" FontSize="Large"></Label>
+                            </Grid>
+                        </StackLayout>
+                        <StackLayout Grid.Row="2">
+                            <Grid  >
+                                <Label Text="Entrega: " Grid.Column="0" TextColor="White" FontSize="Large"></Label>
+                                <Label Text="{Binding StrColoniaCliente}" Grid.Column="1" HorizontalOptions="Start" TextColor="White" FontSize="Large"></Label>
+                            </Grid>
+                        </StackLayout>
+                    </Grid>
+
+                </StackLayout>
+                <Label Text="{Binding StrUbicacionSucursal}" x:Name="lblubicacionSucursal" IsVisible="False"></Label>
+                <Label Text="{Binding StrUbicacionCliente }" x:Name="lblubicacionCliente" IsVisible="False"></Label>
+                <Button x:Name="BtnVerMapa" Grid.Row="1" Text="Ver ruta en mapa" Clicked="BtnVerMapa_Clicked"></Button>
+            </Grid>
+        </StackLayout>
+    </StackLayout>
+</ContentPage>

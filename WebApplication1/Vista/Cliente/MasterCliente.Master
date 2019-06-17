@@ -1,0 +1,671 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="MasterCliente.master.cs" Inherits="WebApplication1.Vista.Cliente.MasterCliente" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title></title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <!-- Importacionde scripts -->
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- Importacion de archivos css -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+    <%--Animate css--%>
+    <link href="../../Content/animate.css" rel="stylesheet" />
+    <link href="../../Content/MisEstilos.css" rel="stylesheet" />
+    <%--Scripts para mapas--%>
+
+
+    <script src="../../scripts/locationpicker.jquery.js"></script>
+    <%--Carga loader--%>
+    <link href="../../Content/Loader.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $(function () {
+            showPopup = function () {
+
+                $("#myModal").modal('show');
+                return true;
+            }
+            MuestraSucursales = function () {
+
+                $("#ModalS").modal('show');
+                return true;
+            }
+
+            MuestraProducto = function () {
+
+                $("#ModalProducto").modal('show');
+                return true;
+            }
+            OcultaProducto = function () {
+
+                $("#ModalProducto").modal('hide');
+                return true;
+            }
+            OcultaSucursales = function () {
+                $("#ModalS").modal('hide');
+                return true;
+            }
+            closePopup = function () {
+                $("#myModal").modal('hide');
+                return true;
+            }
+
+
+            MuestraCarrito = function () {
+                $("#modalCarrito").modal('show');
+                return true;
+            }
+
+            OcultaModalEliminarproducto = function () {
+                $("#ModalEliminarProductoCarrito").modal('hide');
+                return true;
+            }
+
+        });
+    </script>
+</head>
+<body style="background-color: white; padding-bottom: 30px; padding-top: 45px;">
+    <form id="form1" runat="server">
+        <asp:ScriptManager runat="server" />
+        <asp:UpdatePanel ID="PanelCentral" runat="server">
+            <ContentTemplate>
+                <%-- Barra de navegacion --%>
+                <nav class="navbar  navbar-expand-xl navbar-fixed-top  " style="background-color: purple;">
+
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                            <span class="icon-bar" style="background-color: white"></span>
+                            <span class="icon-bar" style="background-color: white"></span>
+                            <span class="icon-bar" style="background-color: white"></span>
+                            <span class="icon-bar" style="background-color: white"></span>
+                        </button>
+
+                        <div class="navbar-brand text-center">
+                            <a href="Default.aspx">
+                                <label class="TextoBlanco">GoDeliverix</label>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="collapse navbar-collapse navbar-ex1-collapse">
+                        <ul class="nav navbar-nav">
+                            <li role="presentation" class="text-center">
+                                <asp:LinkButton runat="server" ID="btnInicio" ForeColor="White" OnClick="btnInicio_Click">
+                                    <span class="glyphicon glyphicon-home "></span> Inicio</asp:LinkButton>
+
+                            </li>
+                        </ul>
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <li role="presentation" class="text-center">
+                                <div style="position: absolute; z-index: 1; margin-left: 64px;">
+                                    <asp:Label ID="lblProductosEnCarrito" ForeColor="White" runat="server" />
+                                </div>
+                                <asp:LinkButton ID="btnCarrito" OnClick="btnCarrito_Click" ForeColor="White" runat="server">
+                                Carrito
+                                <span  class="glyphicon glyphicon-shopping-cart"></span>
+                                </asp:LinkButton>
+                            </li>
+                            <li role="presentation" class="navbar-form text-center">
+                                <div class="form-group">
+                                    <label class="TextoBlanco">Mi ubicación</label>
+                                    <div class="input-group">
+                                        <asp:DropDownList ID="DDlUbicacion" OnLoad="DDlUbicacion_Load" AutoPostBack="true" CssClass="form-control" runat="server">
+                                        </asp:DropDownList>
+                                        <asp:LinkButton CssClass="btn btn-success input-group-addon" ID="btnAgregarDireccion" OnClick="btnAgregarDireccion_Click" ToolTip="Agregar direccion" runat="server">
+                                <span class="glyphicon glyphicon-plus"></span>
+                                        </asp:LinkButton>
+                                    </div>
+                                </div>
+                            </li>
+                            <li role="presentation" class="text-center ">
+                                <a href="#" class="dropdown-toggle" style="color: white" data-toggle="dropdown">
+                                    <span class="glyphicon glyphicon-align-justify"></span>
+                                    <asp:Label ID="lblNombreUsuario" runat="server" />
+                                    <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                </a>
+                                <%--Opciones de la cuenta--%>
+                                <ul class="dropdown-menu " style="background-color: purple">
+                                    <li role="presentation" class="text-center">
+                                        <asp:LinkButton runat="server" ID="btnPerfil" CssClass="text-left" ForeColor="White" OnClick="btnPerfil_Click"><span class="glyphicon glyphicon-user"></span>Perfil</asp:LinkButton>
+                                    </li>
+                                    <li role="presentation" class=" text-center">
+                                        <asp:LinkButton ID="btnHistorial" CssClass="text-left" OnClick="btnHistorial_Click" ForeColor="White" runat="server">
+                                        <span class="glyphicon glyphicon-list"></span>
+                                        Historial
+                                        </asp:LinkButton>
+                                    </li>
+                                    <li role="presentation" class=" text-center ">
+                                        <asp:LinkButton ID="btnFavoritos" CssClass="text-left" ForeColor="White" runat="server">
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        Favoritos
+                                        </asp:LinkButton>
+                                    </li>
+                                    <li role="presentation" class="text-center">
+                                        <asp:LinkButton ID="btnSalir" CssClass="text-left" OnClick="btnSalir_Click" ForeColor="White" runat="server"><span class="glyphicon glyphicon-log-out"></span>Salir</asp:LinkButton></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <asp:Label Visible="false" ID="lblUbicacion" runat="server" />
+                </nav>
+
+                <asp:Label CssClass="hide" ID="lblUidDireccion" runat="server" />
+
+                <asp:ContentPlaceHolder ID="Body" runat="server">
+                </asp:ContentPlaceHolder>
+            </ContentTemplate>
+        </asp:UpdatePanel>
+        <%-- Modal distribuidores Cliente/Carrito.aspx--%>
+        <div class="modal" role="dialog" id="ModalDistribuidores">
+            <div class="modal-dialog modal-lg">
+                <asp:UpdatePanel runat="server">
+                    <ContentTemplate>
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <label>Distribuidoras a tu alcance</label>
+                            </div>
+                            <div class="modal-body">
+
+
+                                <asp:HiddenField runat="server" ID="HFSucursalSeleccionada" />
+
+                                <asp:ListView ID="LVSeleccionDistribuidora" OnItemCommand="LVSeleccionDistribuidora_ItemCommand" OnItemDataBound="LVSeleccionDistribuidora_ItemDataBound" DataKeyNames="UidTarifario" runat="server">
+                                    <EmptyDataTemplate>
+                                        <div class="info">
+                                            No se puede enviar este producto
+                                        </div>
+                                    </EmptyDataTemplate>
+                                    <LayoutTemplate>
+
+                                        <asp:PlaceHolder ID="itemPlaceholder" runat="server"></asp:PlaceHolder>
+
+                                    </LayoutTemplate>
+                                    <ItemTemplate>
+
+
+                                        <div style="background-color: #f1f1f1; border-radius: 6px 6px 6px 6px; -moz-border-radius: 6px 6px 6px 6px; -webkit-border-radius: 6px 6px 6px 6px; border: 0px solid #000000; -webkit-box-shadow: 5px 5px 3px 2px #9C9C9C; -moz-box-shadow: 5px 5px 3px 2px #9C9C9C; box-shadow: 5px 5px 3px 2px #9C9C9C;">
+                                            <div class="media">
+                                                <div class="media-body text-center" style="padding: 10px;">
+                                                    <h4 class="media-heading"><%#Eval("StrNombreSucursal") %></h4>
+
+                                                    <div style="margin-top: 75px;" class="pull-right">
+                                                        <asp:LinkButton CommandName="Seleccionar" ID="btnEmpresaSeleccionada" runat="server">
+                                                Envio en $<%#Eval("DPrecio") %>
+                                                <span class="glyphicon glyphicon-ok"></span>
+                                                        </asp:LinkButton>
+                                                    </div>
+                                                </div>
+
+                                                <div class="media-right">
+                                                    <img src=" <%#Eval("StrRuta") %>" class="media-object" style="width: 150px; height: auto; border-radius: 6px 6px 6px 6px; -moz-border-radius: 6px 6px 6px 6px; -webkit-border-radius: 6px 6px 6px 6px; border: 0px solid #000000;" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ItemTemplate>
+                                </asp:ListView>
+
+                            </div>
+                        </div>
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+            </div>
+        </div>
+        <%-- Modal Cliente/Empresa.aspx--%>
+        <div class="modal" role="dialog" id="ModalProducto">
+            <div class=" modal-dialog modal-lg">
+
+                <asp:UpdatePanel runat="server">
+                    <ContentTemplate>
+                        <div class="modal-content">
+                            <div class="modal-header text-center">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <strong>
+                                    <asp:Label ID="lblUidProductoSeleccionado" Visible="false" runat="server" />
+                                    <asp:Label ID="lblUidSucursalSeleccionada" Visible="false" runat="server" />
+                                    <asp:Label ID="lblUidSeccionSeleccionada" Visible="false" runat="server" />
+                                    <h3>
+                                        <asp:Label ID="lblNombreDeProductoSeleccionado" runat="server" />
+                                    </h3>
+                                </strong>
+                                <asp:Panel ID="pnlMensajeProductoSeleccionado" runat="server">
+                                    <div class="alert alert-danger">
+                                        <asp:Label ID="lblMensajeProductoSeleccionado" runat="server" />
+                                    </div>
+                                </asp:Panel>
+
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6  col-xs-12 text-center">
+                                        <asp:Image ID="imgProductoSeleccionado" Width="250" Height="250" runat="server" />
+                                        <div class="form-inline" style="margin-top: 10px;">
+                                            <div class="form-group">
+                                                <asp:LinkButton CssClass="btn btn-sm btn-danger" Style="border-radius: 50px;" ID="btnQuita" OnClick="btnQuita_Click" runat="server">
+                                                                <span class="glyphicon glyphicon-minus"></span>
+                                                </asp:LinkButton>
+                                                <label>
+                                                    <asp:Label ID="lblCantidadProductoSeleccionado" runat="server" />
+                                                </label>
+                                                <asp:LinkButton CssClass="btn btn-sm btn-success" Style="border-radius: 50px;" ID="btnAgrega" OnClick="btnAgrega_Click" runat="server">
+                                                                <span class="glyphicon glyphicon-plus"></span>
+                                                </asp:LinkButton>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6  col-xs-12">
+                                        <h3>
+                                            <asp:Label ID="lblDescripcionProductoSeleccionado" runat="server" />
+                                        </h3>
+                                        <h3>
+                                            <asp:Label ID="lblPrecioDeProductoSeleccionado" runat="server" />
+                                        </h3>
+                                        <div style="margin-top: 60px;">
+                                            <label>Notas:</label>
+                                            <asp:TextBox Rows="5" CssClass="form-control" ID="txtNota" TextMode="MultiLine" runat="server"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer" style="margin-top: 20px">
+                                    <div class="form-inline">
+                                        <div class="form-group">
+                                            <asp:LinkButton CssClass="btn btn-sm btn-info btn-block " ID="btnAgregarAlCarritoProductoSeleccionado" OnClick="btnAgregarAlCarritoProductoSeleccionado_Click" runat="server">
+                                                <img src="../Carrito.png" height="30"></img>
+                                                <label>Agregar al carrito</label>
+                                                $<asp:Label ID="lblPrecioProductoSeleccionado" runat="server" />
+                                            </asp:LinkButton>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+
+
+            </div>
+
+        </div>
+        <div class="modal" id="ModalInformacionDeOrden" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <asp:UpdatePanel runat="server">
+                        <ContentTemplate>
+                            <div class="modal-header text-center">
+                                <h3>Informacion de la orden</h3>
+                            </div>
+                            <div class="modal-body">
+                                <asp:GridView runat="server" AutoGenerateColumns="false" ID="GVInFormacionDePedido" CssClass="table table-striped">
+                                    <Columns>
+                                        <asp:BoundField DataField="LNGFolio" HeaderText="Folio" />
+                                        <asp:BoundField DataField="StrNombreSucursal" HeaderText="Sucursal" />
+                                        <asp:BoundField DataField="MCostoTarifario" HeaderText="Envio" />
+                                        <asp:BoundField DataField="MSubtotalSucursal" HeaderText="Subtotal" />
+                                        <asp:BoundField DataField="LngCodigoDeEntrega" HeaderText="Codigo de entrega" />
+                                    </Columns>
+                                </asp:GridView>
+                            </div>
+                            <div class="modal-footer">
+                                <p>
+                                    Total:
+                                    <asp:Label ID="lblTotalDeOrden" runat="server" />
+                                </p>
+                            </div>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+                </div>
+            </div>
+        </div>
+        <%--Modal de confirmacion de eliminacion de producto Cliente/Carrito.aspx--%>
+        <div class="modal" id="ModalEliminarProductoCarrito" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <asp:UpdatePanel runat="server">
+                        <ContentTemplate>
+                            <div class="modal-header text-center">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body text-center">
+                                <asp:Label ID="lblCantidadDeProductosAEliminar" runat="server"></asp:Label>
+                            </div>
+                            <div class="modal-footer">
+                                <asp:LinkButton CssClass="btn btn-sm btn-success" ID="btnAceptarEliminarProducto" OnClientClick="OcultaModalEliminarproducto()" OnClick="btnAceptarEliminarProducto_Click" runat="server">
+                            <span class="glyphicon glyphicon-ok"></span>
+                                </asp:LinkButton>
+                                <asp:LinkButton CssClass="btn btn-sm btn-danger" ID="btnCancelarEliminarProducto" OnClientClick="OcultaModalEliminarproducto()" runat="server">
+                            <span class="glyphicon glyphicon-remove"></span>
+                                </asp:LinkButton>
+                            </div>
+
+                            <asp:HiddenField ID="HFUidProductoAEliminar" runat="server" />
+                            <asp:HiddenField ID="HFUidSucursalProductoAEliminar" runat="server" />
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+
+
+                </div>
+            </div>
+        </div>
+
+
+        <%-- Modal eleccion de sucursales en Cliente/Empresa.aspx--%>
+        <div class="modal" id="ModalS" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <asp:UpdatePanel runat="server">
+                        <ContentTemplate>
+                            <div class="modal-header text-center">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <strong>
+                                    <asp:Label ID="lblNombreDeEmpresa" runat="server" />
+                                </strong>
+                            </div>
+                            <div class="modal-body text-center">
+                                <label>Sucursales a tu alcance</label>
+                            </div>
+                            <div>
+                                <asp:ListView ID="lvSucursalesEmpresa" OnItemDataBound="lvSucursalesEmpresa_ItemDataBound" DataKeyNames="ID" OnSelectedIndexChanging="lvSucursalesEmpresa_SelectedIndexChanging" OnItemCommand="lvSucursalesEmpresa_ItemCommand" runat="server">
+
+                                    <LayoutTemplate>
+
+                                        <asp:PlaceHolder ID="itemPlaceholder" runat="server"></asp:PlaceHolder>
+
+                                    </LayoutTemplate>
+
+                                    <ItemTemplate>
+
+                                        <asp:LinkButton CssClass="btn-default" Style="text-decoration: none;" ID="btnSeleccion" CommandName="select" OnClientClick="OcultaSucursales()" runat="server">
+
+                                            <div style="padding: 15px;">
+                                                <div style="background-color: #f1f1f1; padding: 15px; border-radius: 6px 6px 6px 6px; -moz-border-radius: 6px 6px 6px 6px; -webkit-border-radius: 6px 6px 6px 6px; border: 0px solid #000000; -webkit-box-shadow: 5px 5px 3px 2px #9C9C9C; -moz-box-shadow: 5px 5px 3px 2px #9C9C9C; box-shadow: 5px 5px 3px 2px #9C9C9C;">
+                                                    <div class="text-center">
+                                                        <asp:HiddenField ID="lblUidSeccion" runat="server" />
+                                                        <asp:HiddenField ID="lblUidSucursal" runat="server" />
+                                                        <h4>
+                                                            <asp:Label ID="lblIdentificador" runat="server" /></h4>
+                                                        <strong>
+                                                            <h6>
+                                                                <asp:Label ID="lblColonia" runat="server" />
+                                                            </h6>
+                                                        </strong>
+                                                    </div>
+
+                                                    <div class="text-right">
+                                                        <div class="form-inline">
+                                                            <div class="form-group">
+                                                                <asp:Label ID="lblPrecio" runat="server" />
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <asp:Label ID="lblTiempoDeElaboracion" runat="server" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+
+
+                                        </asp:LinkButton>
+
+
+                                    </ItemTemplate>
+                                    <SelectedItemTemplate>
+                                        <asp:LinkButton Style="text-decoration: none;" ID="btnSeleccion" CommandName="select" OnClientClick="OcultaSucursales()" runat="server">
+
+                                            <div style="padding: 15px;">
+                                                <div style="padding: 15px; background-color: purple; color: white; border-radius: 6px 6px 6px 6px; -moz-border-radius: 6px 6px 6px 6px; -webkit-border-radius: 6px 6px 6px 6px; border: 0px solid #000000; -webkit-box-shadow: 5px 5px 3px 2px #9C9C9C; -moz-box-shadow: 5px 5px 3px 2px #9C9C9C; box-shadow: 5px 5px 3px 2px #9C9C9C;">
+                                                    <div class="text-center">
+                                                        <asp:HiddenField ID="lblUidSeccion" runat="server" />
+                                                        <asp:HiddenField ID="lblUidSucursal" runat="server" />
+                                                        <h4>
+                                                            <asp:Label ID="lblIdentificador" runat="server" /></h4>
+                                                        <strong>
+                                                            <h6>
+                                                                <asp:Label ID="lblColonia" runat="server" />
+                                                            </h6>
+                                                        </strong>
+                                                    </div>
+                                                    <div class="text-right">
+                                                        <div class="form-inline">
+                                                            <div class="form-group">
+                                                                <asp:Label ID="lblPrecio" runat="server" />
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <asp:Label ID="lblTiempoDeElaboracion" runat="server" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </div>
+
+
+                                        </asp:LinkButton>
+                                    </SelectedItemTemplate>
+                                </asp:ListView>
+                            </div>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+
+                </div>
+            </div>
+        </div>
+        <%-- Modal Cliente/Default.aspx--%>
+        <div class="modal" id="myModal" role="dialog">
+            <div class="modal-dialog modal-lg">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <asp:UpdatePanel runat="server">
+                        <ContentTemplate>
+                            <asp:Panel ID="PanelDetallesProducto" runat="server">
+                                <div class="modal-header text-center" style="padding: 0px;">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <asp:UpdatePanel runat="server">
+                                        <ContentTemplate>
+
+                                            <div class="row">
+
+                                                <div class=" col-md-9 QuitaEspacios">
+                                                    <asp:HiddenField ID="HFUidProducto" runat="server" />
+                                                    <h3>
+                                                        <asp:Label ID="lblTituloProducto" CssClass="modal-title" runat="server" />
+                                                    </h3>
+                                                    <h4>
+                                                        <asp:Label ID="LblDescripcionCarrito" runat="server" />
+                                                    </h4>
+                                                </div>
+                                                <div class="col-md-3 QuitaEspacios" style="padding: 5px;">
+                                                    <asp:Image ID="ImgEmpresaDefault" Style="width: 100px; border: 2px solid black; height: auto; border-radius: 6px 6px 6px 6px; -moz-border-radius: 6px 6px 6px 6px; -webkit-border-radius: 6px 6px 6px 6px; border: 0px solid #000000;" runat="server" />
+                                                </div>
+                                            </div>
+
+
+                                            <asp:Panel ID="pnlMensajeProducto" runat="server">
+                                                <div class="alert alert-danger">
+                                                    <asp:Label ID="lblMensaje" runat="server" />
+                                                </div>
+                                            </asp:Panel>
+                                        </ContentTemplate>
+                                    </asp:UpdatePanel>
+                                </div>
+                                <div class="modal-body" style="padding: 10px;">
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-12 text-center">
+                                            <asp:UpdatePanel ChildrenAsTriggers="true" UpdateMode="Always" runat="server">
+                                                <ContentTemplate>
+                                                    <asp:Image ID="ImgProductoCarrito" Width="250" Height="250" runat="server" />
+                                                    <p class="text-center" style="padding: 0px; margin: 0px;">
+                                                        <%--Boton quitar--%>
+                                                        <asp:LinkButton CssClass="btn btn-sm btn-danger " ID="btnQuitar" Style="border-radius: 50px;" OnClick="btnQuitar_Click" ToolTip="Quitar" runat="server">
+                                            <span class="glyphicon glyphicon-minus"></span>
+                                                        </asp:LinkButton>
+                                                        <%-- Cantidad--%>
+                                                        <asp:Label ID="lblCantidadProducto" Text="1" runat="server" />
+                                                        <%--Boton agregar--%>
+                                                        <asp:LinkButton CssClass="btn btn-sm btn-success " ID="btnAgregar" Style="border-radius: 50px;" OnClick="btnAgregar_Click" ToolTip="Agregar" runat="server">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                                        </asp:LinkButton>
+                                                    </p>
+                                                </ContentTemplate>
+                                            </asp:UpdatePanel>
+                                        </div>
+                                        <div class="col-md-7 col-xs-12" style="padding-right: 40px;">
+                                            <asp:UpdatePanel runat="server">
+                                                <ContentTemplate>
+                                                    <asp:ListView ID="LvSucursales" DataKeyNames="UidSucursal" OnItemDataBound="LvSucursales_ItemDataBound" OnSelectedIndexChanging="LvSucursales_SelectedIndexChanging" OnItemCommand="LvSucursales_ItemCommand" runat="server">
+                                                        <LayoutTemplate>
+
+                                                            <asp:PlaceHolder ID="itemPlaceholder" runat="server"></asp:PlaceHolder>
+
+                                                        </LayoutTemplate>
+
+                                                        <ItemTemplate>
+
+                                                            <asp:LinkButton ID="btnSeleccion" Style="text-decoration: none;" CommandName="select" runat="server">
+
+
+                                                                <div style="background-color: #f1f1f1; padding: 15px; color: black; border-radius: 6px 6px 6px 6px; -moz-border-radius: 6px 6px 6px 6px; -webkit-border-radius: 6px 6px 6px 6px; border: 0px solid #000000; -webkit-box-shadow: 5px 5px 3px 2px #9C9C9C; -moz-box-shadow: 5px 5px 3px 2px #9C9C9C; box-shadow: 5px 5px 3px 2px #9C9C9C;">
+                                                                    <div class="media-body">
+                                                                        <div class="media-heading">
+                                                                            <div class="text-center">
+                                                                                <asp:HiddenField ID="lblUidSeccion" runat="server" />
+                                                                                <asp:HiddenField ID="lblUidSucursal" runat="server" />
+                                                                                <h4 class="QuitaEspacios">
+                                                                                    <asp:Label ID="lblIdentificador" runat="server" /></h4>
+                                                                                <strong>
+                                                                                    <h6 class="QuitaEspacios">
+                                                                                        <asp:Label ID="lblColonia" runat="server" />
+                                                                                    </h6>
+                                                                                </strong>
+
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="media-bottom text-left">
+
+                                                                            <h4>
+                                                                                <asp:Label ID="lblTiempoDeElaboracion" runat="server" />
+                                                                            </h4>
+                                                                            <h4>
+                                                                                <asp:Label ID="lblPrecio" runat="server" />
+                                                                            </h4>
+
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <%--<div class="media-right">
+                                                                        <asp:Image ID="imgEmpresa" Style="width: 150px; height: auto; border-radius: 6px 6px 6px 6px; -moz-border-radius: 6px 6px 6px 6px; -webkit-border-radius: 6px 6px 6px 6px; border: 0px solid #000000;" runat="server" />
+                                                                    </div>--%>
+                                                            </asp:LinkButton>
+
+
+                                                        </ItemTemplate>
+                                                        <SelectedItemTemplate>
+
+                                                            <asp:LinkButton Style="text-decoration: none;" ID="btnDeseleccionado" CommandName="unselect" runat="server">
+                                                                <div style="background-color: mediumpurple; color: white; padding: 15px; border-radius: 6px 6px 6px 6px; -moz-border-radius: 6px 6px 6px 6px; -webkit-border-radius: 6px 6px 6px 6px; border: 0px solid #000000; -webkit-box-shadow: 5px 5px 3px 2px #9C9C9C; -moz-box-shadow: 5px 5px 3px 2px #9C9C9C; box-shadow: 5px 5px 3px 2px #9C9C9C;">
+
+                                                                    <div class="media-body">
+                                                                        <div class="media-heading">
+                                                                            <div class="text-center">
+                                                                                <asp:HiddenField ID="lblUidSeccion" runat="server" />
+                                                                                <asp:HiddenField ID="lblUidSucursal" runat="server" />
+                                                                                <h4>
+                                                                                    <asp:Label ID="lblIdentificador" runat="server" /></h4>
+                                                                                <strong>
+                                                                                    <h6>
+                                                                                        <asp:Label ID="lblColonia" runat="server" />
+                                                                                    </h6>
+                                                                                </strong>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="media-bottom text-left">
+                                                                            <h4>
+                                                                                <asp:Label ID="lblTiempoDeElaboracion" runat="server" />
+                                                                            </h4>
+                                                                            <h4>
+                                                                                <asp:Label ID="lblPrecio" runat="server" />
+                                                                            </h4>
+
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </asp:LinkButton>
+
+                                                        </SelectedItemTemplate>
+                                                    </asp:ListView>
+                                                </ContentTemplate>
+                                            </asp:UpdatePanel>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer " style="padding: 5px;">
+                                    <asp:UpdatePanel runat="server">
+                                        <ContentTemplate>
+                                            <div class="pull-left">
+                                                <label>Notas:</label>
+                                            </div>
+                                            <asp:TextBox Rows="3" CssClass="form-control" ID="txtNotasProducto" TextMode="MultiLine" runat="server"></asp:TextBox>
+                                            <div style="margin-top: 10px;">
+                                                <div class="form-inline">
+
+                                                    <div class="form-group">
+                                                        <asp:LinkButton CssClass="btn btn-sm btn-info btn-block " ID="btnAgregaCarrito" OnClick="btnAgregaCarrito_Click" ToolTip="Agregar al carrito" runat="server">
+                                                            <img src="../Carrito.png" height="30"></img>
+                                                            <label>Agregar al carrito</label>
+                                                            <asp:Label ID="lblPrecioFinal" runat="server" />
+                                                        </asp:LinkButton>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ContentTemplate>
+                                    </asp:UpdatePanel>
+                                </div>
+                            </asp:Panel>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+
+                </div>
+
+            </div>
+        </div>
+
+        <asp:UpdateProgress AssociatedUpdatePanelID="PanelCentral" runat="server">
+
+            <ProgressTemplate>
+                <div style="z-index: 1">
+                    <div class="cssload-preloader">
+                        <div class="cssload-preloader-box">
+                            <div>G</div>
+                            <div>o</div>
+                            <div>D</div>
+                            <div>e</div>
+                            <div>l</div>
+                            <div>i</div>
+                            <div>v</div>
+                            <div>e</div>
+                            <div>r</div>
+                            <div>i</div>
+                            <div>x</div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </ProgressTemplate>
+        </asp:UpdateProgress>
+    </form>
+</body>
+</html>

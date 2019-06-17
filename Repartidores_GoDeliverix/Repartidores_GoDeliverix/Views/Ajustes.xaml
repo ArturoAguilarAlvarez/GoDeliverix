@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Repartidores_GoDeliverix.Views.Ajustes"
+             BindingContext="{Binding VMMain, Source={StaticResource Locator}}"
+             Title="Configuracion"
+             Icon="Settings.png">
+    <ContentPage.Padding>
+        <OnPlatform iOS="20,40,20,20" Android="20,20,20,20"></OnPlatform>
+    </ContentPage.Padding>
+    <ContentPage.Content>
+        <Grid HorizontalOptions="Fill" VerticalOptions="Fill">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="7*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <StackLayout Grid.ColumnSpan="3"  >
+                <Image Source="Aguilar.jpg" HorizontalOptions="Center" HeightRequest="50" VerticalOptions="Start" ></Image>
+            </StackLayout>
+            <Grid Grid.Row="1" Grid.ColumnSpan="3" >
+                <StackLayout  Grid.Column="0">
+                    <Button x:Name="BtnGeneral" Clicked="BtnGeneral_Clicked"  HeightRequest="50" TextColor="Purple"  FlowDirection="MatchParent" Text="General"></Button>
+                </StackLayout>
+                <StackLayout Grid.Column="1">
+                    <Button x:Name="BtnDireccion" Clicked="BtnDireccion_Clicked"  HeightRequest="50" TextColor="Purple" FlowDirection="MatchParent" Text="Direccion"></Button>
+                </StackLayout>
+                <StackLayout Grid.Column="2">
+                    <Button x:Name="BtnTelefono" Clicked="BtnTelefono_Clicked"  HeightRequest="50" TextColor="Purple" FlowDirection="MatchParent" Text="Telefonos"></Button>
+                </StackLayout>
+            </Grid>
+            <StackLayout Grid.Row="2" Grid.ColumnSpan="3">
+
+                <StackLayout x:Name="PanelGeneral" BindingContext="{Binding MVAjustes}">
+                    <ListView ItemsSource="{Binding LsAjustes}" IsRefreshing="{Binding IsLoading,Mode=TwoWay}" 
+                      RefreshCommand="{Binding IsReloading}" IsPullToRefreshEnabled="True" >
+                        <ListView.ItemTemplate >
+                            <DataTemplate>
+                                <ImageCell ImageSource="{Binding StrRuta}"  TextColor="#676767" DetailColor="#272727" Command="{Binding DisplaySettingsCommand}" Text="{Binding Titulo}" Detail="{Binding Detalles}"></ImageCell>
+
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackLayout>
+
+
+                <StackLayout x:Name="PanelDireccion" BindingContext="{Binding MVAjustes}">
+                    <ListView ItemsSource="{Binding ListaDireccion}" IsRefreshing="{Binding IsLoading,Mode=TwoWay}" 
+                      RefreshCommand="{Binding IsReloading}"  RowHeight="70" IsPullToRefreshEnabled="True">
+                        <ListView.ItemTemplate>
+                            <DataTemplate >
+                                <ViewCell>
+                                    <ViewCell.ContextActions>
+                                        <MenuItem Text="Editar" Command="{Binding EditAddress}" />
+                                        <MenuItem Text="Eliminar" Command="{Binding DeleteAddress}" IsDestructive="True" />
+                                    </ViewCell.ContextActions>
+                                    <StackLayout Orientation="Vertical">
+                                        <Label Text="{Binding Identificador}" TextColor="#676767"  FontSize="Medium" />
+                                        <StackLayout  Orientation="Horizontal">
+                                            <Label Text="{Binding NombreColonia}" TextColor="#272727"  FontSize="Small" />
+                                            <Label Text="{Binding CallePrincipal}" TextColor="#272727"  FontSize="Small" />
+                                        </StackLayout>
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <ImageButton Source="FlecaAgregarDireccion.png" BackgroundColor="Green" HorizontalOptions="End" Command="{Binding AddAddres}" VerticalOptions="EndAndExpand" BorderWidth="5" BorderColor="White"  Margin="10" CornerRadius="40" HeightRequest="80" WidthRequest="80" ></ImageButton>
+                </StackLayout>
+
+                <StackLayout x:Name="PanelTelefono" BindingContext="{Binding MVAjustes}">
+                    <ListView ItemsSource="{Binding LsTelefono}" IsRefreshing="{Binding IsLoading,Mode=TwoWay}" 
+                      RefreshCommand="{Binding IsReloading}"  RowHeight="70" IsPullToRefreshEnabled="True">
+                        <ListView.ItemTemplate>
+                            <DataTemplate >
+                                <ViewCell  >
+                                    <ViewCell.ContextActions>
+                                        <MenuItem Text="Editar" Command="{Binding DisplaySettingsCommand}" />
+                                        <MenuItem Text="Eliminar" Command="{Binding DeleteNumber}" IsDestructive="True" />
+                                    </ViewCell.ContextActions>
+                                    <StackLayout>
+                                        <Label Text="{Binding StrTipoDeTelefono}" TextColor="#676767"  FontSize="Medium" />
+                                        <Label Text="{Binding intNumeroTelefono}" TextColor="#272727"  FontSize="Small" />
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <ImageButton Source="FlecaAgregarDireccion.png" BackgroundColor="Green" HorizontalOptions="End" Command="{Binding AddNumber}" VerticalOptions="EndAndExpand" BorderColor="White" BorderWidth="5" Margin="10" CornerRadius="40" HeightRequest="80" WidthRequest="80" ></ImageButton>
+
+                </StackLayout>
+
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,304 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="MasterDeliverix.master.cs" Inherits="WebApplication1.Vista.MasterDeliverix" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+        <asp:ContentPlaceHolder ID="title" runat="server">
+        </asp:ContentPlaceHolder>
+    </title>
+    <asp:ContentPlaceHolder ID="favicon" runat="server">
+    </asp:ContentPlaceHolder>
+    <!-- Importacionde scripts -->
+    <!-- Importacionde scripts -->
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- Importacion de archivos css -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../Content/bootstrap-theme.css" rel="stylesheet" />
+    <link href="../Content/MisEstilos.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link href="https://code.jquery.com/ui/1.12.1/themes/dark-hive/jquery-ui.css" rel="stylesheet" />
+    
+    <%--Carga Loader--%>
+    <link href="../Content/Loader.css" rel="stylesheet" />
+    <script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip(); 
+    });
+    </script>
+</head>
+<body style="background-color: lavender; padding-bottom: 50px; padding-top: 60px;">
+
+    <form id="form1" runat="server">
+
+        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+
+        <asp:UpdatePanel runat="server">
+            <ContentTemplate>
+                <%-- Barra de navegacion --%>
+                <nav class="navbar navbar-inverse  navbar-fixed-top ">
+                    <div class="col-md-12">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <!-- <asp:LinkButton CssClass="navbar-brand" ID="LBnBotonMenuInicio" runat="server" OnClick="RedireccionamientoInicio">-->
+                            <div class="navbar-brand text-center">
+                                <a href="Default.aspx" style="color: white">
+                                    <label>GoDeliverix</label>
+                                </a>
+                            </div>
+                            <!-- <asp:Image ID="ImgLogo" Style="max-height:50px;margin-top:-15px;" CssClass="img-responsive" ImageAlign="TextTop" runat="server" ImageUrl="~/Imgs/logo_dellser.png" /> -->
+                            <!-- </asp:LinkButton> -->
+                        </div>
+
+                        <div class="collapse navbar-collapse navbar-ex1-collapse">
+                            <ul class="nav navbar-nav">
+                                <li role="presentation" class="text-center">
+                                    <asp:LinkButton runat="server" ID="btnInicio" Style="color: white;" OnClick="RedireccionamientoInicio"><span class="glyphicon glyphicon-home"></span> Inicio</asp:LinkButton></li>
+                                <%--Modulo Empresas--%>
+                                <li class="dropdown text-center">
+                                    <a runat="server" id="btnEmpresasMenus" href="#" class="dropdown-toggle" style="color: white;" data-toggle="dropdown">
+                                        <span class="glyphicon glyphicon-cog"></span>
+                                        <asp:Label ID="Label1" runat="server" Text="Empresas" />
+                                        <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                    </a>
+                                    <ul class="dropdown-menu text-left">
+                                        <li role="presentation" class="text-left">
+                                            <asp:LinkButton runat="server" ID="btnEmpresas" OnClick="MenuEmpresas"><span class="glyphicon glyphicon-tower"></span> Empresas</asp:LinkButton></li>
+                                        <li role="presentation" class="text-left">
+                                            <asp:LinkButton runat="server" ID="btnAdministradores" OnClick="Usuarios"><span class="glyphicon glyphicon-user"></span> Administradores</asp:LinkButton></li>
+                                        <li role="presentation" class="text-left">
+                                            <asp:LinkButton runat="server" ID="btnCatalogos" OnClick="Catalogos"><span class="glyphicon glyphicon-tasks"></span> Giro</asp:LinkButton></li>
+                                        <li role="presentation" class="text-left">
+                                            <asp:LinkButton ID="btnClientes" OnClick="btnClientes_Click" runat="server">
+                                               <span class="glyphicon glyphicon-piggy-bank"></span> Clientes
+                                            </asp:LinkButton>
+                                        </li>
+                                        <li role="presentation" class="text-left">
+                                            <asp:LinkButton ID="btnZonaHoraria" OnClick="btnZonaHoraria_Click" runat="server" >
+                                                <span class="glyphicon glyphicon-time"></span> Zona Horaria
+                                            </asp:LinkButton>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <%--Modulo sucursales--%>
+                                <li class="dropdown text-center">
+                                    <a href="#" runat="server" id="btnSucursalesMenus" class="dropdown-toggle" style="color: white;" data-toggle="dropdown">
+                                        <span class="glyphicon glyphicon-cog"></span>
+                                        <asp:Label ID="Label2" runat="server" Text="Sucursales" />
+                                        <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                    </a>
+                                    <ul class="dropdown-menu text-center">
+                                        <li role="presentation" class="text-center">
+                                            <asp:LinkButton runat="server" ID="btnSucursales" OnClick="RedireccionamientoSucursales"><span class="glyphicon glyphicon-tower"></span> Sucursales</asp:LinkButton></li>
+                                        <li role="presentation" class="text-center">
+                                            <asp:LinkButton runat="server" ID="btnSupervisores" OnClick="RedireccionamientoSupervisores"><span class="glyphicon glyphicon-user"></span> Supervisores</asp:LinkButton></li>
+                                    </ul>
+                                </li>
+                                <%--Modulo Productos--%>
+                                <li role="presentation" class="text-center">
+                                    <asp:LinkButton runat="server" ID="btnModuloProductos" Style="color: white;" OnClick="BtnModuloProductos_Click">
+                                        <span class="glyphicon glyphicon-gift"></span> Productos
+                                    </asp:LinkButton>
+                                </li>
+                                <%--Modulo Menu--%>
+                                <li role="presentation" class="text-center">
+                                    <asp:LinkButton runat="server" ID="btnModuloMenu" Style="color: white;" OnClick="BtnModuloMenu_Click">
+                                        <span class="glyphicon glyphicon-list"></span> Menu
+                                    </asp:LinkButton>
+                                </li>
+                                <%-- <li role="presentation" class="text-center">
+                                    <a href="#" class="dropdown-toggle" runat="server" id="btnModuloCambioEmpresa" data-toggle="modal" style="color: white;" data-target="#myModal">
+                                        <span class="glyphicon glyphicon-eject"></span>
+                                        Cambiar De Empresa
+                                    </a>
+                                </li>--%>
+                                <%--Modulo Repartidores--%>
+                                <li role="presentation" class="text-center">
+                                    <asp:LinkButton ID="btnRepartidores" OnClick="BtnRepartidores_Click" Style="color: white;" runat="server">
+                                        <img src="Img/Iconos/Delivery.png" height="20" />
+                                        Repartidores
+                                    </asp:LinkButton>
+                                </li>
+                                <%--Modulo Vehiculos--%>
+                                <li role="presentation" class="text-center">
+                                    <asp:LinkButton ID="btnVehiculos" OnClick="BtnVehiculos_Click" Style="color: white;" runat="server">
+                                        <img src="Img/Iconos/Delivery.png" height="20" />
+                                        Vehiculos
+                                    </asp:LinkButton>
+                                </li>
+                            </ul>
+                            <%-- Lugar derecho--%>
+                            <ul class="nav navbar-nav navbar-right">
+                                <%--Informacion de la empresa que entro--%>
+                                <li role="presentation" class="dropdown text-center">
+
+                                    <asp:TextBox CssClass="hidden" ID="txtUidEmpresaSistema" runat="server"></asp:TextBox>
+                                    <asp:LinkButton Style="color: white" runat="server">
+                                        <asp:Label ID="lblNombreDeEmpresa" runat="server" />
+                                    </asp:LinkButton>
+                                </li>
+                                <%--Informacion del usuario--%>
+                                <li role="presentation" class="text-center">
+                                    <asp:TextBox ID="txtUidUsuarioSistema" CssClass="hidden" runat="server"></asp:TextBox>
+                                    <a href="#" class="dropdown-toggle" style="color: white;" data-toggle="dropdown">
+                                        <span class="glyphicon glyphicon-cog"></span>
+                                        <asp:Label ID="lblNombreUsuario" runat="server" />
+                                        <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                    </a>
+                                    <ul class="dropdown-menu ">
+                                        <li role="presentation" class="text-center">
+                                            <asp:LinkButton ID="BtnConfiguracion" OnClick="BtnConfiguracion_Click" runat="server"><span class="glyphicon glyphicon-user"></span>Perfil</asp:LinkButton></li>
+                                        <li role="presentation" class="text-center">
+                                            <asp:LinkButton ID="btnConfiguracionEmpresa" OnClick="btnConfiguracionEmpresa_Click" runat="server"><span class="glyphicon glyphicon-tower"></span>Empresa</asp:LinkButton></li>
+                                        <li role="presentation" class="text-center">
+                                            <asp:LinkButton runat="server" OnClick="Salir"><span class="glyphicon glyphicon-log-out"></span>Salir</asp:LinkButton></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </ContentTemplate>
+        </asp:UpdatePanel>
+
+
+        <asp:UpdatePanel ID="PanelCentral" UpdateMode="Always" runat="server">
+            <ContentTemplate>
+                <%-- Contenido del sitio --%>
+                <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                </asp:ContentPlaceHolder>
+            </ContentTemplate>
+        </asp:UpdatePanel>
+
+
+        <asp:UpdateProgress AssociatedUpdatePanelID="PanelCentral" runat="server">
+            <ProgressTemplate>
+                <div style="z-index: 1">
+
+                    <div class="cssload-preloader">
+                        <div class="cssload-preloader-box">
+                            <div>G</div>
+                            <div>o</div>
+                            <div>D</div>
+                            <div>e</div>
+                            <div>l</div>
+                            <div>i</div>
+                            <div>v</div>
+                            <div>e</div>
+                            <div>r</div>
+                            <div>i</div>
+                            <div>x</div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </ProgressTemplate>
+        </asp:UpdateProgress>
+
+
+        <!-- Modal -->
+        <div id="myModal" class="modal " data-toggle="modal" role="dialog">
+            <div class="modal-dialog modal-lg">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <!--<div class="modal-header">
+                                    
+                                    </div> -->
+                    <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <%-- Filtros de busqueda cambio de empresa --%>
+                                <asp:UpdatePanel runat="server">
+                                    <ContentTemplate>
+                                        <div class="col-md-4">
+                                            <h6>Nombre comercial</h6>
+                                            <asp:TextBox CssClass="form-control" ID="txtCNombre" runat="server" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h6>Rfc</h6>
+                                            <asp:TextBox CssClass="form-control" ID="txtCRfc" runat="server" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h6>Razon social</h6>
+                                            <asp:TextBox CssClass="form-control" ID="txtCRazon" runat="server" />
+                                        </div>
+                                    </ContentTemplate>
+                                </asp:UpdatePanel>
+
+                                <div class="col-md-12" style="margin-bottom: 5px;">
+                                    <%-- Botones de busqueda para el cambio de empresa --%>
+
+                                    <div class="pull-right" style="margin-top: 5px;">
+
+                                        <%--<asp:LinkButton runat="server" ID="BtnBuscarEmpresaCambio" OnClick="BtnBuscarEmpresaCambio_Click" CssClass="btn btn-default">
+                                                    <span class="glyphicon glyphicon-search"></span>
+                                                    Buscar
+                                                        </asp:LinkButton>--%>
+                                        <asp:LinkButton CssClass="btn btn-default" ID="btnLimpiarFiltrosCambio" OnClick="BtnLimpiarFiltrosCambio_Click" runat="server">
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                    Limpiar
+                                        </asp:LinkButton>
+                                    </div>
+                                </div>
+
+                                <%--<!-- GridView Cambiar empresas -->--%>
+
+                                <asp:GridView runat="server" ID="DGVEMPRESAS" OnPageIndexChanging="DGVEMPRESAS_PageIndexChanging" OnRowDataBound="DGVEMPRESAS_RowDataBound" PageSize="6" Style="margin-top: 5px;" CssClass="table table-bordered table-hover table-condensed table-striped input-sm" AutoGenerateColumns="false" DataKeyNames="UIDEMPRESA" AllowPaging="True">
+                                    <EmptyDataTemplate>
+                                        <div class="info">Para ver información debe hacer una consulta </div>
+                                    </EmptyDataTemplate>
+                                    <SelectedRowStyle CssClass="table table-hover input-sm success" />
+                                    <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />
+                                    <Columns>
+                                        <asp:ButtonField CommandName="Select" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide">
+                                            <FooterStyle CssClass="hide" />
+                                            <HeaderStyle CssClass="hide" />
+                                            <ItemStyle CssClass="hide" />
+                                        </asp:ButtonField>
+                                        <asp:BoundField DataField="NOMBRECOMERCIAL" HeaderText="Nombre comercial" SortExpression="NOMBRECOMERCIAL" />
+                                        <asp:BoundField DataField="RFC" HeaderText="Rfc" SortExpression="Rfc" />
+                                    </Columns>
+                                </asp:GridView>
+                            </div>
+                            <%-- Botones de cambio de empresa --%>
+                            <div class="pull-right">
+                                <asp:LinkButton ID="BtnCambiarEmpresa" CssClass="btn btn-success" OnClick="BtnCambiarEmpresa_Click" ToolTip="Cambiar De Empresa" runat="server">
+                                    <span class="glyphicon glyphicon-upload"></span>
+                                </asp:LinkButton>
+                                <asp:LinkButton CssClass="btn btn-danger" runat="server" ID="btnCCancelar" OnClick="BtnCCancelar_Click" ToolTip="Cancelar Cambio">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </asp:LinkButton>
+                                <asp:LinkButton CssClass="hide" runat="server" ID="btnCCerrarVentana" data-dismiss="modal">
+                                    
+                                </asp:LinkButton>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="modal-footer">
+                                    
+                                    </div> -->
+                </div>
+
+            </div>
+        </div>
+
+
+    </form>
+
+</body>
+</html>

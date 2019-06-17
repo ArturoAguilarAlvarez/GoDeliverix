@@ -1,0 +1,63 @@
+﻿<Page x:Class="Deliverix.Wpf.Distribuidores.Repartidores"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Deliverix.Wpf.Distribuidores"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      mc:Ignorable="d" 
+      d:DesignHeight="650" d:DesignWidth="1030"
+      Title="Repartidores" Background="#EFEFEF" >
+    <Grid>
+        <StackPanel HorizontalAlignment="Left" Height="292" Margin="32,10,0,0" VerticalAlignment="Top" Width="490">
+            <TextBlock HorizontalAlignment="Center" Background="Black" Foreground="White" Height="30" TextAlignment="Center" TextWrapping="Wrap" Text="Repartidores" FontSize="20" Width="490"/>
+            <DataGrid HorizontalAlignment="Left" SelectionChanged="DataGridRepartidores_SelectionChanged" AutoGenerateColumns="False" x:Name="DataGridRepartidores"  Height="270" IsReadOnly="True" SelectionMode="Single" ColumnWidth="*" Margin="0,0,0,0" Width="490">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="auto"  FontSize="18" x:Name="txtUid" Visibility="Hidden" Binding="{Binding Uid}" />
+                    <DataGridTextColumn Width="auto" Header="NOMBRE" FontSize="18" Binding="{Binding StrNombre}"/>
+                    <DataGridTextColumn Width="auto" Header="APELLIDO PATERNO" FontSize="18" Binding="{Binding StrApellidoPaterno}"/>
+                    <DataGridTextColumn Width="auto" Header="APELLIDO MATERNO" FontSize="18" Binding="{Binding StrApellidoMaterno}"/>
+                    <DataGridTextColumn Width="auto" Header="USUARIO" FontSize="18" Binding="{Binding StrUsuario}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Left"  Height="336" Margin="32,310,0,0" VerticalAlignment="Top" Width="490">
+            <TextBlock  Height="30" Background="Black" HorizontalAlignment="Left" Foreground="White" TextAlignment="Center" TextWrapping="Wrap" FontSize="20" Text="Vehiculos" Width="490"/>
+            <DataGrid HorizontalAlignment="Left" SelectionChanged="DataGridVehiculos_SelectionChanged" AutoGenerateColumns="False" Height="300" x:Name="DataGridVehiculos" IsReadOnly="True" SelectionMode="Single" ColumnWidth="*" Margin="0,0,0,0" Width="490" RenderTransformOrigin="-0.916,1.587">
+                <DataGrid.Columns>
+                    <DataGridTextColumn   FontSize="18" x:Name="txtUidVehiculo" Visibility="Hidden" Binding="{Binding UID}" />
+                    <DataGridTextColumn Width="auto"  Header="MOTO" FontSize="18" Binding="{Binding LngNumeroDeSerie}"/>
+                    <DataGridTextColumn Width="auto" Header="MARCA" FontSize="18" Binding="{Binding StrMarca}"/>
+                    <DataGridTextColumn Width="auto"  Header="AÑO" FontSize="18" Binding="{Binding StrAnio}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Left" Height="630" Margin="550,10,0,0" VerticalAlignment="Top" Width="450">
+            <TextBlock HorizontalAlignment="Left" Height="50" Background="Black" Margin="0,0,0,0" TextWrapping="Wrap"  Width="450">
+                <Button Height="30" x:Name="btnAgregar" Background="ForestGreen" Click="btnAgregar_Click"  Margin="10,10,0,0" Width="100">
+                    Agregar
+                </Button>
+                <Button Height="30" x:Name="btneliminar" Background="Red" Click="btneliminar_Click" Margin="10,10,0,0" Width="100">
+                    Eliminar
+                </Button>
+                <Button Height="30" Margin="10,10,0,0" x:Name="btnAceptar" Click="btnAceptar_Click" Background="Green"  Foreground="White" Width="50">
+                    <DockPanel>
+                      <materialDesign:PackIcon Kind="CheckCircleOutline" Foreground="White" Height="20" Width="20"/>
+                    </DockPanel>
+                </Button>
+                <Button Height="30" Margin="10,10,0,0" x:Name="btnCancelar" Click="btnCancelar_Click" Background="Red" Foreground="White"  Width="50">
+                    <DockPanel>
+                      <materialDesign:PackIcon Kind="Close" Foreground="White" Height="20" Width="20"/>
+                    </DockPanel>
+                </Button>
+            </TextBlock>
+            <DataGrid HorizontalAlignment="Left" SelectionChanged="DataGridRelacionEquipo_SelectionChanged" AutoGenerateColumns="False" x:Name="DataGridRelacionEquipo"  IsReadOnly="True" SelectionMode="Single" ColumnWidth="*" Height="580" Margin="0,0,0,0" Width="450">
+                <DataGrid.Columns>
+                    <DataGridTextColumn  Width="auto" FontSize="18" x:Name="txtUidRelacionRepartidorVehiculo" Visibility="Hidden" Binding="{Binding ID}" />
+                    <DataGridTextColumn  Width="auto" Header="Usuario" FontSize="18" Binding="{Binding usuario}"/>
+                    <DataGridTextColumn  Width="auto" Header="Vehiculo" FontSize="18" Binding="{Binding StrVehiculo}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+    </Grid>
+</Page>

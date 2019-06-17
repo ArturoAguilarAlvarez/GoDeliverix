@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Repartidores_GoDeliverix.Views.Login"
+             BindingContext="{Binding VMMain, Source={StaticResource Locator}}">
+    <ContentPage.Padding>
+        <OnPlatform iOS="20,40,20,20" Android="20,20,20,20"></OnPlatform>
+    </ContentPage.Padding>
+    <ContentPage.Content>
+        <ScrollView BindingContext="{Binding MVLogin}">
+            <StackLayout>
+                <Image Source="goDeliverix.jpg"></Image>
+
+                <Label Text="Usuario"></Label>
+                <Entry Text="{Binding User,Mode=TwoWay}"></Entry>
+                <Label Text="Contraseña" ></Label>
+                <Entry Text="{Binding Password,Mode=TwoWay}" IsPassword="True"></Entry>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="End">
+                    <Label Text="Recordar contraseña"></Label>
+                    <Switch IsToggled="{Binding IsSavingValues, Mode=TwoWay}"></Switch>
+                </StackLayout>
+                <Button 
+                Text="Ingresar"
+                IsEnabled="{Binding IsEnable,Mode=TwoWay}"
+                Command="{Binding LoginCommand}"  BackgroundColor="purple" TextColor="White"></Button>
+
+                <ActivityIndicator 
+                WidthRequest="50" 
+                HeightRequest="50" 
+                IsRunning="{Binding IsLoading}"></ActivityIndicator>
+            </StackLayout>
+
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

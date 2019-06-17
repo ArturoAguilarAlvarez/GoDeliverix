@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{97732EC8-C778-4399-A29E-49181B3EB87E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>VistaDelModelo</RootNamespace>
+    <AssemblyName>VistaDelModelo</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="VMCorreoElectronico.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VMAcceso.cs" />
+    <Compile Include="VMCategoria.cs" />
+    <Compile Include="VMContrato.cs" />
+    <Compile Include="VMDia.cs" />
+    <Compile Include="VMDireccion.cs" />
+    <Compile Include="VMEmpresas.cs" />
+    <Compile Include="VMEstatus.cs" />
+    <Compile Include="VMGiro.cs" />
+    <Compile Include="VMImagen.cs" />
+    <Compile Include="VMLicencia.cs" />
+    <Compile Include="VMMensaje.cs" />
+    <Compile Include="VMOferta.cs" />
+    <Compile Include="VMOrden.cs" />
+    <Compile Include="VMProducto.cs" />
+    <Compile Include="VMSeccion.cs" />
+    <Compile Include="VMSubCategoria.cs" />
+    <Compile Include="VMSucursales.cs" />
+    <Compile Include="VMTarifario.cs" />
+    <Compile Include="VMTelefono.cs" />
+    <Compile Include="VMUbicacion.cs" />
+    <Compile Include="VMUsuarios.cs" />
+    <Compile Include="VMValidaciones.cs" />
+    <Compile Include="VMVehiculo.cs" />
+    <Compile Include="VMZonaHoraria.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DBControl\DBControl.csproj">
+      <Project>{325beb05-a5b9-4e3f-a6c1-1f858b1aae70}</Project>
+      <Name>DBControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Modelo\Modelo.csproj">
+      <Project>{1bbd5430-599e-4cd5-8fe8-9d771cd8fbcd}</Project>
+      <Name>Modelo</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

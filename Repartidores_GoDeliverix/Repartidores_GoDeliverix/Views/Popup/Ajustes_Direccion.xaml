@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Repartidores_GoDeliverix.Views.Popup.Ajustes_Direccion"
+             BindingContext="{Binding VMMain, Source={StaticResource Locator}}">
+    <ContentPage.Padding>
+        <OnPlatform Android="10,20,10,20" iOS="10,20,10,10" ></OnPlatform>
+    </ContentPage.Padding>
+    <ContentPage.Content>
+        <StackLayout BindingContext="{Binding MVAjustes}">
+            <ListView ItemsSource="{Binding ListaDireccion}" IsRefreshing="{Binding IsLoading,Mode=TwoWay}" 
+                      RefreshCommand="{Binding IsReloading}"  RowHeight="70" IsPullToRefreshEnabled="True">
+                <ListView.ItemTemplate>
+                    <DataTemplate >
+                        <ViewCell>
+                            <ViewCell.ContextActions>
+                                <MenuItem Text="Editar" Command="{Binding EditAddress}" />
+                                <MenuItem Text="Eliminar" Command="{Binding DeleteAddress}" IsDestructive="True" />
+                            </ViewCell.ContextActions>
+                            <StackLayout Orientation="Vertical">
+                                <Label Text="{Binding Identificador}" TextColor="#676767"  FontSize="Medium" />
+                                <StackLayout  Orientation="Horizontal">
+                                    <Label Text="{Binding NombreColonia}" TextColor="#272727"  FontSize="Small" />
+                                    <Label Text="{Binding CallePrincipal}" TextColor="#272727"  FontSize="Small" />
+                                </StackLayout>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <ImageButton Source="FlecaAgregarDireccion.png" BackgroundColor="Green" HorizontalOptions="End" Command="{Binding AddAddres}" VerticalOptions="EndAndExpand" BorderWidth="5" BorderColor="White"  Margin="10" CornerRadius="40" HeightRequest="80" WidthRequest="80" ></ImageButton>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

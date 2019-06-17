@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Repartidores_GoDeliverix.Views.Popup.Historico_DetalleOrdenes">
+    <ContentPage.Content>
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid  Grid.Row="0" BackgroundColor="Purple" >
+                <StackLayout Orientation="Horizontal"  HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="0">
+                    <Image Source="Dia.png" VerticalOptions="Center"></Image>
+                    <Label Text="Orden"  TextColor="White" FontSize="40" VerticalOptions="Center"></Label>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1">
+                    <Image Source="Dinero.png" VerticalOptions="Center"></Image>
+                    <Label Text="Monto"  TextColor="White" FontSize="40" VerticalOptions="Center"></Label>
+                </StackLayout>
+            </Grid>
+            <Grid  Grid.Row="1" >
+                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Column="0">
+                    <Button Text="200001928732" TextColor="Purple" x:Name="btnver" Clicked="Btnver_Clicked"></Button>
+                    <Label Text="200001928732"  TextColor="Purple"></Label>
+                </StackLayout>
+                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Column="1">
+                    <Label Text="$1456.00"  TextColor="Purple"></Label>
+                </StackLayout>
+            </Grid>
+            <Grid  Grid.Row="2" >
+                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Column="0">
+
+                    <Label Text="200001928732222"  TextColor="Purple"></Label>
+                </StackLayout>
+                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Column="1">
+                    <Label Text="$1256.00"  TextColor="Purple"></Label>
+                </StackLayout>
+            </Grid>
+            <Grid  Grid.Row="3" >
+                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Column="0">
+
+                    <Label Text="20000192873233"  TextColor="Purple"></Label>
+                </StackLayout>
+                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Column="1">
+                    <Label Text="$856.00"  TextColor="Purple"></Label>
+                </StackLayout>
+            </Grid>
+            <Grid  Grid.Row="4" >
+
+                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Column="0">
+                    <Label Text="2000019287322232"  TextColor="Purple"></Label>
+                </StackLayout>
+                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Column="1">
+                    <Label Text="$2056.00"  TextColor="Purple"></Label>
+                </StackLayout>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

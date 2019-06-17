@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Repartidores_GoDeliverix.Views.TabbedPageMain"
+            BindingContext="{Binding VMMain, Source={StaticResource Locator}}"
+            xmlns:tabs="clr-namespace:Repartidores_GoDeliverix.Views">
+    <TabbedPage.Children>
+        <tabs:Home></tabs:Home>
+        <tabs:Historial></tabs:Historial>
+        <tabs:Ajustes></tabs:Ajustes>
+    </TabbedPage.Children>
+</TabbedPage>
