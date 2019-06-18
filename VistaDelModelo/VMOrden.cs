@@ -365,7 +365,7 @@ namespace VistaDelModelo
                 foreach (DataRow item in Datos.Busquedas(comando).Rows)
                 {
                     long CodigoEntrega = 00000;
-                    if (item["BIntCodigoEntrega"] != null)
+                    if (item.Table.Columns.Contains("BIntCodigoEntrega"))
                     {
                         CodigoEntrega = long.Parse(item["BIntCodigoEntrega"].ToString());
                     }
