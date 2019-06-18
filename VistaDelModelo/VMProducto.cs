@@ -442,7 +442,8 @@ namespace VistaDelModelo
                     string nombre = item["VchNombre"].ToString();
                     string costo = item["Mcosto"].ToString();
                     string sucursal = item["Identificador"].ToString();
-                    string imagen = "../" + item["NVchRuta"].ToString();
+                    //string imagen = "../" + item["NVchRuta"].ToString();
+                    string imagen = "http://www.godeliverix.net/vista/" + item["NVchRuta"].ToString();
                     decimal SubTotal = decimal.Parse(costo) * int.Parse(cantidad);
                     decimal Total = SubTotal + CostoDeEnvio;
                     ListaDelCarrito.Add(new VMProducto()
@@ -495,7 +496,7 @@ namespace VistaDelModelo
             if (ListaDelCarrito.Exists(Objeto => Objeto.UidRegistroProductoEnCarrito == RegistroProductoEnCarrito))
             {
                 var Producto = new VMProducto();
-                Producto = ListaDelCarrito.Find(Objeto => Objeto.UidRegistroProductoEnCarrito == uidProducto);
+                Producto = ListaDelCarrito.Find(Objeto => Objeto.UidRegistroProductoEnCarrito == RegistroProductoEnCarrito);
 
 
                 decimal precio = Producto.Subtotal / Producto.Cantidad;
