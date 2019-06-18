@@ -4,13 +4,13 @@
              xmlns:popo="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
              xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              x:Class="AppCliente.ProductoDescripcionPage">
-  <!--<NavigationPage.TitleView>
+    <!--<NavigationPage.TitleView>
     <StackLayout Orientation="Horizontal" HorizontalOptions="End" Spacing="10">
       <ImageButton Source="IconCarrito.png" HeightRequest="50" WidthRequest="30"  HorizontalOptions="End"
               BackgroundColor="Transparent"  ></ImageButton>
     </StackLayout>
   </NavigationPage.TitleView>-->
-  <ContentPage.Content>
+    <ContentPage.Content>
         <ScrollView>
             <StackLayout>
                 <Grid ColumnSpacing="0" RowSpacing="0">
@@ -27,7 +27,7 @@
                             <Label Margin="0,0" HorizontalOptions="Center" Text="" FontSize="Medium" FontAttributes="Bold" x:Name="txtNombreProducto" Grid.Row="1"></Label>
                             <Label Margin="0,5" HorizontalOptions="Center" Text="" FontSize="Default" FontAttributes="Italic" x:Name="txtDescripcionProducto" Grid.Row="2" Style="{DynamicResource bodystyle }" ></Label>
 
-                           <Grid>
+                            <Grid>
                                 <!--Orientation="Horizontal" HorizontalOptions="Center"-->
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="3*"></ColumnDefinition>
@@ -57,7 +57,7 @@
                                     </Button.BorderRadius>
                                 </Button>
                                 <!--<Button x:Name="btnMenos" Text="-" CornerRadius="30" TextColor="White" BackgroundColor="Red" Clicked="ButtonMenos_Clicked" IsEnabled="False"></Button>-->
-                                
+
                                 <!--<Label
                                     FontSize="Large"
                                      x:Name="_displayLabel"
@@ -108,7 +108,7 @@
                                     <Button  Text="Sucursal seleccionada" x:Name="txtSucursalSeleccionada" Clicked="BtnCambioDeSucursal_Clicked" BackgroundColor="Transparent"></Button>
                                 </StackLayout>
                             </StackLayout>
- 
+
                         </StackLayout>
                     </StackLayout>
 
@@ -118,6 +118,7 @@
 
 
                     <ListView x:Name="MyListViewBusquedaEmpresaDelProducto" IsVisible="False"
+            ItemsSource="{Binding VMTelefono}"
                       SelectionMode="Single"
                       SeparatorVisibility="None"
             IsPullToRefreshEnabled="False"
