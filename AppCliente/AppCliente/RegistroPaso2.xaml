@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppCliente.RegistroPaso2">
+    <ContentPage.Content>
+        <StackLayout  Padding="40,0,40,0">
+            <Label 
+                Text="Crea tu Usuario"
+                HorizontalOptions="Center" 
+                FontAttributes="Bold"  
+                TextColor="Black"
+                FontSize="22"
+                Margin="20">
+            </Label>
+
+            <StackLayout>
+                <Label Text="Usuario" FontSize="Micro"  HorizontalTextAlignment="Center"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="25"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Column="0" Source="IconoProfile.png"/>
+                    <Entry Text=""  Grid.Column="0" Grid.ColumnSpan="2" x:Name="txtUsuario" FontSize="Medium" Placeholder="Usuario" HorizontalTextAlignment="Center"></Entry>
+                </Grid>
+            </StackLayout>
+
+            <StackLayout>
+                <Label Text="Contraseña" FontSize="Micro"  HorizontalTextAlignment="Center"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="25"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Column="0" Source="IconoPassword.png"/>
+                    <Entry Text=""  Grid.Column="0" Grid.ColumnSpan="2" x:Name="txtContrasena1"  IsPassword = "true"  FontSize="Medium" Placeholder="Contraseña" HorizontalTextAlignment="Center"></Entry>
+                </Grid>
+            </StackLayout>
+
+            <StackLayout>
+                <Label Text="Repetir contraseña" FontSize="Micro"  HorizontalTextAlignment="Center"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="25"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Column="0" Source="IconoPassword.png"/>
+                    <Entry Text=""  Grid.Column="0" Grid.ColumnSpan="2" x:Name="txtContrasena2"  Placeholder="Repetir contraseña*" IsPassword = "true" FontSize="Medium" HorizontalTextAlignment="Center"></Entry>
+                </Grid>
+            </StackLayout> 
+            
+            <!--<Button 
+                VerticalOptions="CenterAndExpand"
+                HorizontalOptions="Center" 
+                Text="Siguiente" 
+                TextColor="White"
+                BackgroundColor="#51406A" 
+                Clicked="Button_Siguiente"/>-->
+
+            <Button 
+                Text="Siguiente" 
+                BackgroundColor="#51406A" 
+                Clicked="Button_Siguiente" 
+                Grid.Row="7" 
+                TextColor="White"                     
+                VerticalOptions="CenterAndExpand"
+                HorizontalOptions="Fill" />
+
+            <Label HorizontalOptions="End" VerticalOptions="End" Text="2/5"></Label>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

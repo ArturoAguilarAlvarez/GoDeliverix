@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"           
+                xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             x:Class="AppCliente.FavoritosPage"             
+             Title="Mis Favoritos">
+
+
+    <ScrollView>
+        <!--<StackLayout VerticalOptions="StartAndExpand" Padding="30">
+
+            <maps:Map WidthRequest="320" HeightRequest="200"
+            x:Name="MyMap"
+            MapType="Street"
+           IsTabStop="True"                  
+            />
+
+            <Entry x:Name="txtlatitud" Text="Latitud"></Entry>
+
+            <Entry x:Name="txtLongitud" Text="Longitud"></Entry>
+
+            <Entry x:Name="txtCountryCode" Text="txtCountryCode"></Entry>
+            <Entry x:Name="txtCountryName" Text="txtCountryName"></Entry>
+            <Entry x:Name="txtAdminArea" Text="txtAdminArea"></Entry>
+            <Entry x:Name="txtSubAdminArea" Text="txtSubAdminArea"></Entry>
+            <Entry x:Name="txtLocality" Text="txtLocality"></Entry>
+
+            <Entry x:Name="txtFeatureName" Text="txtFeatureName"></Entry>
+            <Entry x:Name="txtPostalCode" Text="txtPostalCode"></Entry>
+            <Entry x:Name="txtSubLocality" Text="txtSubLocality"></Entry>
+            <Entry x:Name="txtSubThoroughfare" Text="txtSubThoroughfare"></Entry>
+            <Entry x:Name="txtThoroughfare" Text="txtThoroughfare"></Entry>
+            <Button x:Name="btnGuardar" Clicked="BtnGuardar_Clicked"></Button>
+        </StackLayout>-->
+    </ScrollView>
+
+</ContentPage>

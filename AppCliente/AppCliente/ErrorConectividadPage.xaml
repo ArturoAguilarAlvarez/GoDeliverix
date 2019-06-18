@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppCliente.ErrorConectividadPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Image Source="IconoNoWifi"></Image>
+            <Label Text="Revisa tu conexión a internet e intenta otra vez"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+            <Button Text="Reintentar conectar" Clicked="Button_ReintentarConexion"></Button>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

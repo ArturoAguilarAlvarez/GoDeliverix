@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:circle="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+              xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:ffTrans="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+             x:Class="AppCliente.ProductoDescripcionEmpresaPage">
+
+    <ContentPage.Content>
+        <ScrollView Margin="0">
+            <StackLayout Orientation="Vertical" Margin="0">
+                <Grid Margin="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="AUTO" />
+                        <RowDefinition Height="AUTO" />
+                        <RowDefinition Height="AUTO" />
+                        <RowDefinition Height="AUTO" />
+                        <RowDefinition Height="AUTO" />
+                        <RowDefinition Height="AUTO" />
+                        <RowDefinition Height="AUTO" />
+                        <RowDefinition Height="AUTO" />
+                        <RowDefinition Height="AUTO" />
+                    </Grid.RowDefinitions>
+                    
+                    <!--#region  Area de portada y foto de perfil-->
+
+                    <StackLayout Grid.Row="0" Margin="0" Padding="0" IsVisible="True">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Image  Grid.Row="0" x:Name="imgFotoPortada" HeightRequest="200" MinimumHeightRequest="200" Margin="0" Aspect="Fill" ></Image>
+                            <!--<circle:CircleImage x:Name="imgFotoPerfilEmpresa"  Grid.RowSpan="1"  Margin="25"  Grid.Row="0" BorderThickness="5"></circle:CircleImage>-->
+                            <ff:CachedImage
+                                x:Name="imgFotoPerfilEmpresa"
+                                Grid.RowSpan="1"  Margin="25"  Grid.Row="0" 
+                               >
+                                <ff:CachedImage.Transformations>
+                                    <ffTrans:CircleTransformation/>
+                                </ff:CachedImage.Transformations>
+                            </ff:CachedImage>
+                        </Grid>
+                    </StackLayout>
+
+                    <!--#endregion-->
+                    
+                    <!--#region  Area descriptiva de la empresa-->
+                    
+                    <StackLayout Grid.Row="1" Margin="0">
+                        <Label Text="defaul" x:Name="txtNombreEmpresa" HorizontalOptions="Center" FontAttributes="Bold" FontSize="Large"></Label>
+                        <Label Text="defaul" x:Name="txtNombreSucursal" HorizontalOptions="Center" FontAttributes="Bold" FontSize="Medium"></Label>
+                        <Button BackgroundColor="Transparent" x:Name="txtCantidadDeSucursales" HorizontalOptions="Center" FontAttributes="Bold" FontSize="Micro" Text="defaul" Clicked="TxtCantidadDeSucursales_Clicked"></Button>
+                    </StackLayout>
+
+                    <!--#endregion-->
+                    
+                    <!--#region  Area de picker para seleccionar menu y seccion-->
+                    <Label Grid.Row="2" Text="Ofertas" FontSize="Medium" HorizontalOptions="Center"></Label>
+                    <!--picker para  menu-->
+                    <Grid
+                        Grid.Row="3"
+                        Margin="20,0"
+                        HorizontalOptions="Fill"
+                        WidthRequest="200">
+                        <!--  Icon Image  -->
+                        <Image
+          Grid.Column="1"
+          HeightRequest="25"
+          HorizontalOptions="End"
+          Source="IconoPicker.png"
+          VerticalOptions="Center"
+          WidthRequest="25" />
+                        <!--  Picker Control  -->
+                        <Picker
+          Title="Seleccionar Menu"
+          x:Name="MypickerMenu" 
+          Grid.Column="0"
+          Grid.ColumnSpan="2"
+          ItemDisplayBinding="{Binding STRNOMBRE}"
+                          
+          SelectedIndexChanged="MypickerMenu_SelectedIndexChanged"
+          BackgroundColor="Transparent">
+                        </Picker>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="25" />
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                    <Label Grid.Row="4" Text="Sección" FontSize="Medium" HorizontalOptions="Center"></Label>
+                    <!--Picker para Seccion-->
+                    <Grid
+                        Grid.Row="5"
+                        Margin="20,0"
+                        HorizontalOptions="Fill"
+                        WidthRequest="200">
+                        <!--  Icon Image  -->
+                        <Image
+          Grid.Column="1"
+          HeightRequest="25"
+          HorizontalOptions="End"
+          Source="IconoPicker.png"
+          VerticalOptions="Center"
+          WidthRequest="25" />
+                        <!--  Picker Control  -->
+                        <Picker
+          Title="Seleccionar sección"
+          Grid.Column="0"
+          Grid.ColumnSpan="2"
+          x:Name="MypickerSeccion"
+          ItemDisplayBinding="{Binding StrNombre}"
+          SelectedIndexChanged="MypickerSeccion_SelectedIndexChanged"
+          BackgroundColor="Transparent">
+                        </Picker>
+                        <Grid.RowDefinitions>
+                            <RowDefinition>
+                                <RowDefinition.Height>
+                                    <OnPlatform x:TypeArguments="GridLength">
+                                        <On Platform="Android" Value="50" />
+                                        <On Platform="iOS" Value="35" />
+                                    </OnPlatform>
+                                </RowDefinition.Height>
+                            </RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="25" />
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                    <!--#endregion-->                    
+                    
+                    <!--#region  ListView de productos buscados segun el filtro de menu y seccion-->
+
+                    <ListView x:Name="MyListViewBusquedaProductos"
+                           Grid.Row="7"
+                         
+                             ItemTapped="MyListViewBusquedaProductos_ItemTapped"
+                          HorizontalScrollBarVisibility="Always"
+                              VerticalScrollBarVisibility="Never"
+            ItemsSource="{Binding VMProducto}"
+                      SelectionMode="None"
+                      
+                      SeparatorVisibility="Default"
+            IsPullToRefreshEnabled="False"
+            HasUnevenRows="True">
+                        <!--<ListView.RowHeight>
+                            <OnPlatform x:TypeArguments="x:Int32">
+                                <On Platform="iOS, Android" Value="80" />
+                            </OnPlatform>
+                        </ListView.RowHeight>-->
+
+                        <!--Custom View Cells-->
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <ContentView Margin="0" Padding="0">
+
+                                        <Grid Margin="0" Padding="0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+
+                                            <StackLayout Grid.Row="0" Orientation="Horizontal">
+                                                <!--<Image
+                                                       HorizontalOptions="Start"
+                                                        VerticalOptions="Start"
+                                                   Source="{Binding STRRUTA}"
+                                                        Margin="15"
+                                                    WidthRequest="130"
+                                                    HeightRequest="130">
+                                                </Image>-->
+                                                <ff:CachedImage
+                                                    Source="{Binding STRRUTA}"
+                                                    HorizontalOptions="Start"
+                                                        VerticalOptions="Start"
+                                                    Margin="15"
+                                                    LoadingPlaceholder   = "IconoCajaVacia"
+                                                    ErrorPlaceholder     = "Error"
+                                                    WidthRequest         = "130"
+                                                    HeightRequest        = "130"
+                                                    CacheDuration        = "30"
+                                                    RetryCount           = "3"
+                                                    RetryDelay           = "250"
+                                                    DownsampleToViewSize = "False">
+                                                </ff:CachedImage>
+
+                                                <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                                                    <Label Text="{Binding STRNOMBRE}"
+                                                               HorizontalOptions="Start"
+                                                                FontSize="Medium"/>
+
+                                                    <Label  Text="{Binding STRDESCRIPCION}"
+                                                                FontSize="Micro"
+                                                                HorizontalOptions="Start"
+                                           />
+
+                                                    <Label Text="{Binding StrCosto, StringFormat='Desde ${0}'}"
+                                                               x:Name="txtProductoPrecio"
+                                                           Margin="0,15,0,0"
+                                                           VerticalOptions="End" 
+                                                               HorizontalOptions="End"
+                                           FontSize="Medium"
+                                                               TextColor="Black"
+                                           />
+
+
+                                                </StackLayout>
+                                            </StackLayout>
+
+                                        </Grid>
+
+                                    </ContentView>
+
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    
+                    <!--#endregion-->
+                    <Label IsVisible="False" x:Name="idSucursal"></Label>
+                </Grid>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+    
+</ContentPage>

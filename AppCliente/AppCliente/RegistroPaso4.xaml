@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppCliente.RegistroPaso4">
+    <ContentPage.Content>
+        <StackLayout Padding="40,0,40,0">
+            <Label 
+                HorizontalOptions="Center" 
+                FontAttributes="Bold"  
+                TextColor="Black"
+                FontSize="22"
+                Margin="20">
+                Datos de contacto
+            </Label>
+            <Entry Placeholder="Correo*" x:Name="txrCorreo" Keyboard="Email"/>
+            <Entry Placeholder="NumeroTelefono*"  x:Name="txtNumeroTelefono" Keyboard="Telephone" Grid.Column="0"/>
+
+            <!--<Button 
+                VerticalOptions="CenterAndExpand"
+                HorizontalOptions="Center" 
+                Text="Siguiente" 
+                TextColor="White"
+                BackgroundColor="#51406A" 
+                Clicked="Button_Guardar"/>-->
+
+            <Button 
+                Text="Siguiente" 
+                BackgroundColor="#51406A" 
+                Clicked="Button_Guardar" 
+                Grid.Row="7" 
+                TextColor="White"                     
+                VerticalOptions="CenterAndExpand"
+                HorizontalOptions="Fill" />
+
+            <Label HorizontalOptions="End" VerticalOptions="End" Text="4/5"></Label>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

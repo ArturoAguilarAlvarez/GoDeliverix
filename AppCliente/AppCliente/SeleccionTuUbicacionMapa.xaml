@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"           
+             xmlns:maps="clr-namespace:Xamarin.Forms.GoogleMaps;assembly=Xamarin.Forms.GoogleMaps"
+             x:Class="AppCliente.SeleccionTuUbicacionMapa"
+             Title="Seleccione su ubicación">
+    <ContentPage.Content>
+
+        <Grid
+            HorizontalOptions="Fill"
+            VerticalOptions="Fill">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="6*" />
+                <RowDefinition Height="4*" />
+            </Grid.RowDefinitions>
+
+            
+            <maps:Map Grid.Row="0" x:Name="map" Margin="10"
+                      MapLongClicked="Map_MapClicked"
+                      HasZoomEnabled="True"
+                      
+                      VerticalOptions="FillAndExpand" />
+            <!--InitialCameraUpdate="-23.68, -46.87, 13, 30, 60"-->
+            <StackLayout Grid.Row="1">
+                <Button 
+                    Text="MI Ubicacion" 
+                    Clicked="Button_MiUbicacion" 
+                    BackgroundColor="Blue" 
+                    TextColor="White"></Button>
+                <Button 
+                    Text="Continuar"  
+                    BackgroundColor="Blue" 
+                    TextColor="White" 
+                    Clicked="Button_ContinuarConElProcesoGuardado"></Button>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

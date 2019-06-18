@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppPuestoTacos.View.OrdenesEnPreparacion">
+    <NavigationPage.TitleView>
+       
+        <StackLayout Orientation="Horizontal" HorizontalOptions="End" Spacing="10" Margin="0,0,10,0">
+
+            <Label Text="Ordenes en preparacion" FontSize="Large" FontAttributes="Bold" TextColor="Black">
+            </Label>
+            <ImageButton Source="IconoBuscar.png" HeightRequest="50" WidthRequest="30"  HorizontalOptions="End"
+                    BackgroundColor="Transparent"  Margin="0,0,10,0" Clicked="ImageButtonBuscarIdOrden_Clicked"></ImageButton>
+        </StackLayout>
+    </NavigationPage.TitleView>
+    <ContentPage.Content>
+        <StackLayout x:Name="PanelPreparacion" Orientation="Vertical">
+            <Grid>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="9*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <!--<Grid Grid.Row="0">
+                        <Label Text="fecha" Grid.Column="0" HorizontalOptions="Center" FontAttributes="Bold"></Label>
+                        <Label Text="Orden" Grid.Column="1" HorizontalOptions="Center" FontAttributes="Bold"></Label>
+                        <Label Text="Finalizar orden" Grid.Column="2" HorizontalOptions="Center" FontAttributes="Bold"></Label>
+                    </Grid>-->
+                    <Grid Grid.Row="0">
+                        <Button 
+                            Text="fecha" 
+                            Grid.Column="0" 
+                            HorizontalOptions="Center" 
+                            TextColor="Black" 
+                            FontAttributes="Bold" 
+                            BackgroundColor="Transparent"
+                            Padding="0"
+                            Clicked="ButtonBusquedaFecha_Clicked"></Button>
+                        <Button 
+                            Text="Ordens" 
+                            Grid.Column="1" 
+                            HorizontalOptions="Center" 
+                            TextColor="Black" 
+                            FontAttributes="Bold" 
+                            BackgroundColor="Transparent"
+                            Padding="0" 
+                            Clicked="ButtonBusquedaOrdenes_Clicked"></Button>
+                        <Button 
+                            Text="Finalizar orden" 
+                            Grid.Column="2" 
+                            HorizontalOptions="Center" 
+                            TextColor="Black" 
+                            FontAttributes="Bold" 
+                            BackgroundColor="Transparent"
+                            Padding="0"></Button>
+
+                    </Grid>
+                    <ListView 
+                            Grid.Row="1"
+                            ItemTapped="MyListviewOrdenesPorRealizar_ItemTapped"
+                            x:Name="MyListviewOrdenesPorRealizar"
+                            ItemsSource="{Binding VMProducto}"
+                            SelectionMode="None"
+                            SeparatorVisibility="Default"
+                            IsPullToRefreshEnabled="False"
+                            HasUnevenRows="True">
+                        <!--Custom View Cells-->
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <ContentView Margin="0" Padding="0">
+                                        <Grid Margin="0" Padding="0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Label Text="{Binding FechaDeOrden}" HorizontalOptions="Center" Grid.Column="0" FontSize="Default"></Label>
+                                            <Label Text="{Binding LNGFolio }" HorizontalOptions="Center" Grid.Column="1" FontSize="Default"></Label>
+                                            <Button 
+                                                Text="Finalizar" 
+                                                Clicked="ButtonFinalizarOrdenList_Clicked" 
+                                                BackgroundColor="BurlyWood"  
+                                                HorizontalOptions="Center" 
+                                                FontSize="Small" 
+                                                CornerRadius="10" 
+                                                Grid.Column="2"  
+                                                Margin="5" 
+                                                Padding="0"></Button>
+                                        </Grid>
+                                    </ContentView>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

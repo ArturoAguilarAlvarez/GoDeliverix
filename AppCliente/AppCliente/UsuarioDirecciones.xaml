@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:popup="clr-namespace:Rg.Plugins.Popup.Converters.TypeConverters;assembly=Rg.Plugins.Popup"
+             x:Class="AppCliente.UsuarioDirecciones">
+    <StackLayout>
+        <ListView x:Name="MyListViewDirecciones"
+                                ItemTapped="MyListViewDirecciones_ItemTapped"
+                                IsPullToRefreshEnabled="False"
+                                  HasUnevenRows="True"
+                                  >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ContentView Padding="8">
+
+                                <Frame OutlineColor="Accent"
+                                                  x:Name="FrameDireccionColor"
+                               Padding="10">
+
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <StackLayout  Grid.Row="0" Orientation="Horizontal" HorizontalOptions="Fill">
+                                            <Image 
+                                            Source="IconoUbicacion"
+                                            WidthRequest="50"
+                                            HeightRequest="50">
+                                            </Image>
+                                            <StackLayout>
+                                                <Label Text="{Binding IDENTIFICADOR}"
+                                           FontSize="22"
+                                           VerticalOptions="StartAndExpand" />
+                                                <Label Text="{Binding REFERENCIA}"
+                                           FontSize="16"
+                                           VerticalOptions="CenterAndExpand" />
+                                            </StackLayout>
+
+                                        </StackLayout>
+                                        <StackLayout Grid.Row="1" Orientation="Horizontal" HorizontalOptions="Center">
+                                            <Button IsVisible="{Binding Clicked}" BackgroundColor="Transparent" TextColor="Black" Text="Eliminar" Clicked="Button_Clicked_Eliminar" ></Button>
+                                            <!--<Button IsVisible="{Binding Clicked}" BackgroundColor="Transparent" TextColor="Black" Text="Editar"  Clicked="Button_Clicked_Editar"></Button>-->
+                                        </StackLayout>
+                                    </Grid>
+                                </Frame>
+
+                            </ContentView>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        <Button HorizontalOptions="End" VerticalOptions="End"  Image="AddCircule"
+                    BackgroundColor="Transparent" FontSize="Micro" Clicked="BtnNuevo_Clicked"></Button>
+
+        <Label  IsVisible="False" Text="{Binding ID}" x:Name="txtIDDireccionn"></Label>
+        </StackLayout>
+</ContentPage>

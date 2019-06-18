@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppPuestoTacos.View.OrdenesCanceladas">
+
+    <NavigationPage.TitleView>
+        <StackLayout Orientation="Horizontal" HorizontalOptions="End" Spacing="10" Margin="0,0,10,0">
+
+            <Label Text="Ordenes canceladas" FontSize="Large" FontAttributes="Bold" TextColor="Black">
+            </Label>
+            
+            <ImageButton Source="IconoBuscar.png" HeightRequest="50" WidthRequest="30"  HorizontalOptions="End"
+                    BackgroundColor="Transparent"  Margin="0,0,10,0"></ImageButton>
+
+        </StackLayout>
+    </NavigationPage.TitleView>
+
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Label Text="Orden" Grid.Column="0" HorizontalOptions="Center"></Label>
+                    <Label Text="Estatus" Grid.Column="1" HorizontalOptions="Center"></Label>
+                    <!--<Label Text="Tiempo de vida" Grid.Column="2" HorizontalOptions="Center"></Label>-->
+                    <Label Text="Acciones" Grid.Column="2" HorizontalOptions="Center"></Label>
+                </Grid>
+                <ListView x:Name="MyListviewOrdenesRecuperarOrden"
+                          Grid.Row="1"
+                                    SelectionMode="None"
+                                    SeparatorVisibility="Default"
+                                    IsPullToRefreshEnabled="False"
+                                    HasUnevenRows="True">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ContentView Margin="0" Padding="0">
+                                    <Grid Margin="0" Padding="0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Label Text="{Binding LNGFolio}" HorizontalOptions="Center" Grid.Column="0" FontSize="Medium"></Label>
+                                        <Label Text="{Binding  Imagen}" HorizontalOptions="Center" Grid.Column="1" FontSize="Medium"></Label>
+                                        <!--<Label Text="{Binding FechaDeOrden}" HorizontalOptions="Center" Grid.Column="2" FontSize="Large"></Label>-->
+                                        <Button Text="Recuperar Orden" Grid.Column="2" HorizontalOptions="Center" Clicked="ButtonRecuperarOrden_Clicked"></Button>
+                                    </Grid>
+                                </ContentView>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

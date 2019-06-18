@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppPuestoTacos.View.Configuracion">
+    <ContentPage.Content>
+        
+        <StackLayout Padding="20,20,20,0" VerticalOptions="Center">
+            <Label Text="" x:Name="txtNombreSucursal" HorizontalOptions="Center" FontSize="Large" FontAttributes="Bold" TextColor="Black"></Label>
+            <Label Text="Licencia" HorizontalOptions="Center"></Label>
+            <Label Text="" x:Name="txtLicencia" HorizontalOptions="Center" TextColor="Black" FontSize="20"></Label>
+            <Button Text="Revocar licencia" Clicked="ButtonRevocarLicencia_Clicked"></Button>
+            <!--<Button Text="Cambiar licencia licencia" Clicked="ButtonCambioLicencia_Clicked"></Button>-->
+            <!--<Label Text="Seleccionar sucursal" HorizontalOptions="Center"></Label>
+            <Picker x:Name="PickerSucursales"  ItemDisplayBinding="{Binding IDENTIFICADOR}" Title="Seleccione su sucursal" Margin="0,0,0,10" SelectedIndexChanged="PickerSucursales_SelectedIndexChanged"></Picker>
+            <Label Text="Seleccionar Dispositivo" HorizontalOptions="Center"></Label>
+            <Picker x:Name="PickerLicencia"  ItemDisplayBinding="{Binding VchIdentificador}" Title="Seleccione su dispositivo"></Picker>
+            <Button Text="Guardar" TextColor="White" BackgroundColor="#f15a23" FontAttributes="Bold" Clicked="ButtonGuardarLicencia_Clicked"></Button>-->
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:AppPuestoTacos"
+             NavigationPage.HasNavigationBar="False"
+             x:Class="AppPuestoTacos.MainPage">
+
+    <StackLayout>
+        <ScrollView>
+            <Grid VerticalOptions="Fill" Padding="40,0,40,0" HorizontalOptions="Fill">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!--<Image Source="IconoGoDeliverix.png"
+                  VerticalOptions="End"
+                  HorizontalOptions="Center"
+                  HeightRequest="100"
+                  WidthRequest="100"
+                  Grid.Row="1"></Image>-->
+                <Label x:Name="txtSucursal" HorizontalOptions="Center" FontSize="Large" FontAttributes="Bold"></Label>
+                <Label Grid.Row="2" >Usuario</Label>
+                <Entry Placeholder="Usuario"  Text="admin1vips" x:Name="txtUsuario" Grid.Row="3"/>
+                <Label Grid.Row="4" >Password</Label>
+                <Entry Grid.Row="5"  Placeholder="Password" Text="12345" IsPassword="True" x:Name="txtIDContraseña"/>
+                <Button Text="Login" BackgroundColor="#f15a23"  Grid.Row="7" TextColor="White" Clicked="ButtonLogin_Clicked" x:Name="btnLogin"/>
+                <Button 
+                    Text="¿Olvidaste tu contraseña?"                   
+                    VerticalOptions="End"
+                    HorizontalOptions="End"
+                    FontSize="Small"
+                    BorderWidth="0"
+                    BackgroundColor="Transparent" 
+                    Grid.Row="8"></Button>
+            </Grid>
+        </ScrollView>
+    </StackLayout>
+
+</ContentPage>
