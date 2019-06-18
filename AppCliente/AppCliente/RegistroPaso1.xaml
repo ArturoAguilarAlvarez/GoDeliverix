@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppCliente.RegistroPaso1">
+    <ContentPage.Content>
+
+        <StackLayout Padding="40,0,40,0">
+
+            <Image Source="IconoRegistro.png"
+                  VerticalOptions="End"
+                  HorizontalOptions="Center"
+                  HeightRequest="200"
+                  WidthRequest="200"
+                  ></Image>
+            <Label 
+                HorizontalOptions="Center" 
+                FontAttributes="Bold"  
+                TextColor="Black"
+                FontSize="22"
+                Margin="20">
+                Bienvenido a GoDeliverix
+            </Label>
+            <Label
+                HorizontalTextAlignment="Center">
+                Con GoDeliverix encuentras lo que necesitas desde la comodidad de su casa
+            </Label>
+
+            <!--<Button 
+                    VerticalOptions="CenterAndExpand"
+                    HorizontalOptions="Center" 
+                Text="Siguiente" 
+                TextColor="White"
+                BackgroundColor="#51406A" 
+                Clicked="Button_Siguiente"/>-->
+            <Button 
+                Text="Siguiente" 
+                BackgroundColor="#51406A" 
+                Clicked="Button_Siguiente" 
+                Grid.Row="7" 
+                TextColor="White"                     
+                VerticalOptions="CenterAndExpand"
+                HorizontalOptions="Fill" />
+            <Label HorizontalOptions="End" VerticalOptions="End" Text="1/5"></Label>
+
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

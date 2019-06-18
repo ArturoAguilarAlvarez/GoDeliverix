@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppPuestoTacos.View.OrdenDescripcionEscaneado">
+    <NavigationPage.TitleView>
+        <StackLayout Orientation="Horizontal" HorizontalOptions="End" Spacing="10" Margin="0,0,10,0">
+
+            <ImageButton Source="IconoAceptar.png" HeightRequest="50" WidthRequest="30"  HorizontalOptions="End"
+                    BackgroundColor="Transparent" Clicked="ImageButton_Clicked"></ImageButton>
+        </StackLayout>
+    </NavigationPage.TitleView>
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <!--<Grid>
+                    <Button Text="Cancelar" TextColor="White" BackgroundColor="Red" Grid.Column="0" Clicked="ButtonCancelar_Clicked"></Button>
+                    <Button Text="Confirmar" TextColor="White" BackgroundColor="Green" Grid.Column="1" Clicked="ButtonConfirmar_Clicked"></Button>
+                </Grid>-->
+                <StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Orden: " FontAttributes="Bold" TextColor="Black" FontSize="Large"></Label>
+                        <Label x:Name="txtNumeroOrdenScaner" FontSize="Medium"></Label>
+                    </StackLayout>
+
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Empresa dsitribuidora: " FontAttributes="Bold" TextColor="Black" FontSize="Large"></Label>
+                        <Label x:Name="txtNombreEmpresaScaner" FontSize="Medium"></Label>
+                    </StackLayout>
+                </StackLayout>
+                <Grid Grid.Row="1" >
+                    <Label Text="Producto" Grid.Column="0" HorizontalOptions="Center"></Label>
+                    <Label Text="Cantidad" Grid.Column="1" HorizontalOptions="Center"></Label>
+                    <Label Text="Notas" Grid.Column="2" HorizontalOptions="Center"></Label>
+                </Grid>
+                <ListView x:Name="MyListviewOrdenes"
+                            Grid.Row="2"                            
+                            ItemsSource="{Binding VMProducto}"
+                            SelectionMode="None"
+                            SeparatorVisibility="Default"
+                            IsPullToRefreshEnabled="False"
+                            HasUnevenRows="True">
+                    <!--Custom View Cells-->
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ContentView Margin="0" Padding="0">
+                                    <Grid Margin="0" Padding="0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Label Text="{Binding StrNombreProducto }" HorizontalOptions="Center" Grid.Column="0" FontSize="Medium"></Label>
+                                        <Label Text="{Binding intCantidad }" HorizontalOptions="Center" Grid.Column="1" FontSize="Medium"></Label>
+                                        <Label Text="{Binding VisibilidadNota }" HorizontalOptions="Center" Grid.Column="2" FontSize="Large"></Label>
+                                    </Grid>
+                                </ContentView>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

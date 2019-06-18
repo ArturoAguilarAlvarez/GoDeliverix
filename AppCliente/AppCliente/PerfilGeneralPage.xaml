@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppCliente.PerfilGeneralPage"
+             xmlns:xfx="clr-namespace:Xfx;assembly=Xfx.Controls"
+             Title="Perfil">
+
+    <ScrollView>
+        <Grid ColumnSpacing="0" RowSpacing="0" Margin="30,0,30,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="AUTO" />
+                <RowDefinition Height="AUTO" />
+                <RowDefinition Height="AUTO" />
+                <RowDefinition Height="AUTO" />
+                <RowDefinition Height="AUTO" />
+                <RowDefinition Height="AUTO" />
+                <RowDefinition Height="AUTO" />
+                <RowDefinition Height="AUTO" />
+                <RowDefinition Height="AUTO" />
+                <RowDefinition Height="AUTO" />
+                <RowDefinition Height="AUTO" />
+                <RowDefinition Height="AUTO" />
+            </Grid.RowDefinitions>
+
+            <!-- header background -->
+            <!-- Profile Name -->
+            <Label Text="Nombre(s)" FontSize="Micro"  HorizontalTextAlignment="Center"></Label>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="25"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Source="IconoName.png"/>
+                <Entry Text=""  Grid.Column="0" Grid.ColumnSpan="2" x:Name="txtNombre" FontSize="Medium" IsEnabled="False"  HorizontalTextAlignment="Center"></Entry>
+            </Grid>
+            
+            <Label Text="Apellido paterno(s)"  Grid.Row="2" FontSize="Micro"  HorizontalTextAlignment="Center"></Label>
+
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="25"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Source="IconoName.png"/>
+                <Entry Text=""  Grid.Column="0" Grid.ColumnSpan="2" x:Name="txtApellidoP" FontSize="Medium" IsEnabled="False"  HorizontalTextAlignment="Center"></Entry>
+            </Grid>
+
+            <Label Text="Apellido materno(s)" Grid.Row="4" FontSize="Micro"  HorizontalTextAlignment="Center"></Label>
+            
+            <Grid Grid.Row="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="25"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Source="IconoName.png"/>
+                <Entry Text=""  Grid.Column="0" Grid.ColumnSpan="2" x:Name="txtApellidoM" FontSize="Medium" IsEnabled="False"  HorizontalTextAlignment="Center"></Entry>
+            </Grid>
+
+
+            <!-- Social Stats Section -->
+
+            <StackLayout  Grid.Row="6">
+                <Label Text="Usuario" FontSize="Micro"  HorizontalTextAlignment="Center"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="25"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Column="0" Source="IconoProfile.png"/>
+                    <Entry Text=""  Grid.Column="0" Grid.ColumnSpan="2" x:Name="txtUsuario" FontSize="Medium" IsEnabled="False"  HorizontalTextAlignment="Center"></Entry>
+                </Grid>
+            </StackLayout>
+
+            <StackLayout Grid.Row="7">
+                <Label Text="Contraseña" FontSize="Micro"  HorizontalTextAlignment="Center"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="25"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Column="0" Source="IconoPassword.png"/>
+                    <Entry Text=""  Grid.Column="0" Grid.ColumnSpan="2" x:Name="txtContraseña" FontSize="Medium" IsEnabled="False"  HorizontalTextAlignment="Center"></Entry>
+                </Grid>
+            </StackLayout>
+            
+            <!-- profile description -->
+            <StackLayout  Grid.Row="8">
+                <Label Margin="0,0" FontSize="Micro"  HorizontalTextAlignment="Center"
+				Text="Correo" />
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="25"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Column="0" Source="IconoEmail.png"/>
+                    <Entry Text="" Grid.Column="0" Grid.ColumnSpan="2" x:Name="txtCorreo" FontSize="Micro" IsEnabled="False"  HorizontalTextAlignment="Center"></Entry>
+                </Grid>
+            </StackLayout>
+            <StackLayout  Grid.Row="9">
+                <Label Margin="0,0" FontSize="Micro"  HorizontalTextAlignment="Center"
+				        Text="Fecha Nacimiento" />
+
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="25"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Column="0" Source="IconoDate.png"/>
+                    <DatePicker Grid.Column="1"  Format="dd-MM-yyyy"  x:Name="txtFechaNacimiento" IsEnabled="False" HorizontalOptions="Center" ></DatePicker>
+                </Grid>
+                
+            </StackLayout>
+            <!-- follow button -->
+            <Button 
+                    Text="EDITAR CUENTA"               
+                    FontSize="Small"
+                     BorderWidth="0"
+                    BackgroundColor="Transparent" 
+                 x:Name="btnGuardarEditar"
+                Grid.Row="10"
+                    Clicked="Button_EditarGuardar"
+                   ></Button>
+        </Grid>
+
+    </ScrollView>
+
+
+</ContentPage>

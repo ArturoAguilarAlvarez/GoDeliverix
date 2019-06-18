@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:maps="clr-namespace:Xamarin.Forms.GoogleMaps;assembly=Xamarin.Forms.GoogleMaps"
+             x:Class="AppCliente.HistorialEmpresaProductosMapa">
+    <ContentPage.Content>
+
+        <Grid
+            HorizontalOptions="Fill"
+            VerticalOptions="Fill">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="6*" />
+                <RowDefinition Height="4*" />
+            </Grid.RowDefinitions>
+
+
+            <maps:Map Grid.Row="0" x:Name="map" Margin="10"
+                      HasZoomEnabled="True"
+                      
+                      VerticalOptions="FillAndExpand" />
+            <!--InitialCameraUpdate="-23.68, -46.87, 13, 30, 60"-->
+            <StackLayout Grid.Row="1">
+                <ListView x:Name="MyListViewHistorial"
+                          Margin="0"
+                           Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                           Grid.Row="1"
+                              VerticalScrollBarVisibility="Always"
+            ItemsSource="{Binding VMProducto}"
+                      SelectionMode="None"
+                      SeparatorVisibility="Default"
+            IsPullToRefreshEnabled="False"
+            HasUnevenRows="True">
+                    <!--Custom View Cells-->
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ContentView Margin="0" Padding="0">
+                                    <Grid Margin="0" Padding="0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Label Text="{Binding StrNombreProducto}" HorizontalOptions="Center" Grid.Column="0" Grid.ColumnSpan="1" FontSize="Micro" ></Label>
+
+                                        <Label Text="{Binding intCantidad, StringFormat='Cantidad ${0}'}" HorizontalOptions="Center" Grid.Column="0" Grid.Row="1"  FontSize="Micro" ></Label>
+                                        <Label Text="{Binding MTotal, StringFormat='Total ${0}'}" HorizontalOptions="Center" Grid.Column="3"  Grid.Row="1"  FontSize="Micro" ></Label>
+                                    </Grid>
+                                </ContentView>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

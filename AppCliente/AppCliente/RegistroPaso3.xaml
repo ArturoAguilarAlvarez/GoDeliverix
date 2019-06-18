@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppCliente.RegistroPaso3">
+    <ContentPage.Content>
+        <ScrollView Padding="40,0,40,0">
+            <StackLayout>
+                <Label 
+                HorizontalOptions="Center" 
+                FontAttributes="Bold"  
+                TextColor="Black"
+                FontSize="22"
+                Margin="20"
+                    Text=" ¿Cual son tus datos personales?"
+                    HorizontalTextAlignment="Center">
+                   
+                </Label>
+                <Entry Placeholder="Nombre*" x:Name="txtNombre" />
+                <Entry Placeholder="Apellido Paterno*"  x:Name="txtApellidoP"/>
+                <Entry Placeholder="Apellido materno*"  x:Name="txtApellidoM"/>
+                <DatePicker x:Name="txtFechaNacimiento" Grid.Row="11"  Format="yyyy-dd-MM"></DatePicker>
+
+
+                <!--<Button 
+                VerticalOptions="CenterAndExpand"
+                HorizontalOptions="Center" 
+                Text="Siguiente" 
+                TextColor="White"
+                BackgroundColor="#51406A" 
+                Clicked="Button_Siguiente"/>-->
+
+                <Button 
+                Text="Siguiente" 
+                BackgroundColor="#51406A" 
+                Clicked="Button_Siguiente" 
+                Grid.Row="7" 
+                TextColor="White"                     
+                VerticalOptions="CenterAndExpand"
+                HorizontalOptions="Fill" />
+
+                <Label HorizontalOptions="End" VerticalOptions="End" Text="3/5"></Label>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

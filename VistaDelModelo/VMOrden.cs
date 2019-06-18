@@ -360,9 +360,16 @@ namespace VistaDelModelo
                 Datos = new Conexion();
 
                 ListaDeOrdenes.Clear();
+
+                
                 foreach (DataRow item in Datos.Busquedas(comando).Rows)
                 {
-                    VMOrden orden = new VMOrden() { Uidorden = new Guid(item["UidOrden"].ToString()), LngCodigoDeEntrega = long.Parse(item["BIntCodigoEntrega"].ToString()), FechaDeOrden = item["DtmFechaDeCreacion"].ToString(), MTotal = decimal.Parse(item["MTotal"].ToString()), LNGFolio = int.Parse(item["intFolio"].ToString()) };
+                    long CodigoEntrega = 00000;
+                    if (item["BIntCodigoEntrega"] != null)
+                    {
+                        CodigoEntrega = long.Parse(item["BIntCodigoEntrega"].ToString());
+                    }
+                    VMOrden orden = new VMOrden() { Uidorden = new Guid(item["UidOrden"].ToString()), LngCodigoDeEntrega = CodigoEntrega, FechaDeOrden = item["DtmFechaDeCreacion"].ToString(), MTotal = decimal.Parse(item["MTotal"].ToString()), LNGFolio = int.Parse(item["intFolio"].ToString()) };
                     ListaDeOrdenes.Add(orden);
                 }
             }

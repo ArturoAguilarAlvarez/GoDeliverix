@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppCliente.HistorialDetalleEmpresa">
+    <ContentPage.Content>
+        <StackLayout>
+            <ListView x:Name="MyListViewHistorial"
+                          Margin="0"
+                              VerticalScrollBarVisibility="Always"
+                      ItemTapped="MyListViewHistorial_ItemTapped"
+            ItemsSource="{Binding VMProducto}"
+                      SelectionMode="None"
+                      SeparatorVisibility="Default"
+            IsPullToRefreshEnabled="False"
+            HasUnevenRows="True">
+                <!--Custom View Cells-->
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ContentView Margin="5" Padding="0">
+                                <Grid Margin="0" Padding="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"></ColumnDefinition>
+                                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                                        <ColumnDefinition Width="4*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Text="{Binding StrNota}"  HorizontalOptions="Center" Grid.Column="0" Grid.ColumnSpan="3"></Label>
+                                    
+                                    <Image
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Center"
+                                        Source="{Binding Imagen}"
+                                        Grid.Row="1"
+                                        Grid.RowSpan="4"
+                                        Grid.Column="0"
+                                        >
+                                    </Image>
+                                    <Label Text="{Binding Identificador}" HorizontalOptions="Center" Grid.Column="0" Grid.Row="5" FontSize="Micro"></Label>
+
+                                    <Label Text="Numero de orden:" FontSize="Micro" FontAttributes="Bold" TextColor="Black" Grid.Row="1" Grid.Column="1"></Label>
+                                    <Label Text="{Binding LNGFolio}" HorizontalOptions="Center" Grid.Column="2" Grid.Row="1" FontSize="Micro" ></Label>
+
+
+                                    <Label Text="Codigo de entrega:" FontSize="Micro" FontAttributes="Bold" TextColor="Black" Grid.Row="2" Grid.Column="1"></Label>
+                                    <Label Text="{Binding LngCodigoDeEntrega}" HorizontalOptions="Center" Grid.Column="2" Grid.Row="2"></Label>
+                                    
+                                    <!--<Label Text="Sucursal:" FontSize="Micro" FontAttributes="Bold" TextColor="Black" Grid.Row="2" Grid.Column="1"></Label>
+                                    <Label Text="{Binding Identificador,StringFormat='${0}'}" HorizontalOptions="Center" Grid.Column="2" Grid.Row="2" FontSize="Micro"></Label>-->
+
+                                    <Label Text="Subtotal:" FontSize="Micro" FontAttributes="Bold" TextColor="Black" Grid.Row="3" Grid.Column="1"></Label>
+                                    <Label Text="{Binding MTotalSucursal,StringFormat='${0}'}" HorizontalOptions="Center" Grid.Column="2"  Grid.Row="3"></Label>
+
+                                    <Label Text="Costo envio:" FontSize="Micro" FontAttributes="Bold" TextColor="Black" Grid.Row="4" Grid.Column="1"></Label>
+                                    <Label Text="{Binding CostoEnvio,StringFormat='${0}'}" HorizontalOptions="Center" Grid.Column="2" Grid.Row="4"></Label>
+
+                                   
+                                    <Label Text="Total" FontSize="Micro" FontAttributes="Bold" TextColor="Black" Grid.Row="5" Grid.Column="1"></Label>
+                                    <Label Text="{Binding MTotal,StringFormat='${0}'}" HorizontalOptions="Center" Grid.Column="2" Grid.Row="5"></Label>
+
+                                    <!--
+
+                                    <Label Text="{Binding MTotal, StringFormat='Total ${0}'}" HorizontalOptions="Center" Grid.Column="1" Grid.Row="3"></Label>
+                                    
+                                    <Button Grid.Row="4" TextColor="White" BackgroundColor="Blue" Grid.Column="0"  HorizontalOptions="Center" Text="Productos..." FontSize="Small" Clicked="Button_Clicked"></Button>
+                                    <Button Grid.Row="4" TextColor="White" BackgroundColor="Blue" Grid.Column="1"  HorizontalOptions="Center" Text="Seguimiento..." FontSize="Small" Clicked="Button_Clicked_1"></Button>-->
+
+                                    
+                                </Grid>
+                            </ContentView>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

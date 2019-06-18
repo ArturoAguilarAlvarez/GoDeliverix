@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<po:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             
+             xmlns:po="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             x:Class="AppCliente.Popup.PupupFiltroBusqueda">
+    <StackLayout>
+        <Frame VerticalOptions="CenterAndExpand"
+               HorizontalOptions="CenterAndExpand">
+            <StackLayout Grid.Row="1" Orientation="Vertical" x:Name="PanelFiltro" Margin="15,0">
+                <!--<Label Text="Busqueda por"></Label>
+                <Grid
+                        Grid.Row="3"
+                        Margin="20,0"
+                        HorizontalOptions="Fill"
+                        WidthRequest="200">
+                    --><!--  Icon Image  --><!--
+                    <Image
+          Grid.Column="1"
+          HeightRequest="25"
+          HorizontalOptions="End"
+          Source="IconoPicker.png"
+          VerticalOptions="Center"
+          WidthRequest="25" />
+                    --><!--  Picker Control  -->
+                    <!--<Picker
+          Title="Busqueda por"
+          x:Name="MypickerEmpresaProducto" 
+          Grid.Column="0"
+          Grid.ColumnSpan="2"
+          ItemDisplayBinding="{Binding STRNOMBRE}"
+          BackgroundColor="Transparent">
+                        <Picker.Items>
+                            <x:String>Productos</x:String>
+                            <x:String>Empresas</x:String>
+                        </Picker.Items>
+                    </Picker>--><!--
+                    <Grid.RowDefinitions>
+                        <RowDefinition>
+                            <RowDefinition.Height>
+                                <OnPlatform x:TypeArguments="GridLength">
+                                    <On Platform="Android" Value="50" />
+                                    <On Platform="iOS" Value="35" />
+                                </OnPlatform>
+                            </RowDefinition.Height>
+                        </RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="25" />
+                    </Grid.ColumnDefinitions>
+                </Grid>-->
+                <Label Text="Tipo"></Label>
+                <Grid
+                        Grid.Row="3"
+                        Margin="20,0"
+                        HorizontalOptions="Fill"
+                        WidthRequest="200">
+                    <!--  Icon Image  -->
+                    <Image
+          Grid.Column="1"
+          HeightRequest="25"
+          HorizontalOptions="End"
+          Source="IconoPicker.png"
+          VerticalOptions="Center"
+          WidthRequest="25" />
+                    <!--  Picker Control  -->
+                    <Picker
+          Title="Seleccionar Categoria"
+          x:Name="MyPickerGiro" 
+          Grid.Column="0"
+          Grid.ColumnSpan="2"
+          ItemDisplayBinding="{Binding STRNOMBRE}"
+          BackgroundColor="Transparent"
+          SelectedIndexChanged="MyPickerGiro_SelectedIndexChanged">
+                    </Picker>
+                    <Grid.RowDefinitions>
+                        <RowDefinition>
+                            <RowDefinition.Height>
+                                <OnPlatform x:TypeArguments="GridLength">
+                                    <On Platform="Android" Value="50" />
+                                    <On Platform="iOS" Value="35" />
+                                </OnPlatform>
+                            </RowDefinition.Height>
+                        </RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="25" />
+                    </Grid.ColumnDefinitions>
+                </Grid>
+                <Label Text="Categoria"></Label>
+                <Grid
+                        Grid.Row="3"
+                        Margin="20,0"
+                        HorizontalOptions="Fill"
+                        WidthRequest="200">
+                    <!--  Icon Image  -->
+                    <Image
+          Grid.Column="1"
+          HeightRequest="25"
+          HorizontalOptions="End"
+          Source="IconoPicker.png"
+          VerticalOptions="Center"
+          WidthRequest="25" />
+                    <!--  Picker Control  -->
+                    <Picker
+          Title="Seleccionar Categoria"
+          x:Name="MyPickerCategoria" 
+          Grid.Column="0"
+          Grid.ColumnSpan="2"
+          ItemDisplayBinding="{Binding STRNOMBRE}"
+          BackgroundColor="Transparent"
+          SelectedIndexChanged="MyPickerCategoria_SelectedIndexChanged">
+                    </Picker>
+                    <Grid.RowDefinitions>
+                        <RowDefinition>
+                            <RowDefinition.Height>
+                                <OnPlatform x:TypeArguments="GridLength">
+                                    <On Platform="Android" Value="50" />
+                                    <On Platform="iOS" Value="35" />
+                                </OnPlatform>
+                            </RowDefinition.Height>
+                        </RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="25" />
+                    </Grid.ColumnDefinitions>
+                </Grid>
+                <Label Text="Subcategoria"></Label>
+                <Grid
+                        Grid.Row="3"
+                        Margin="20,0"
+                        HorizontalOptions="Fill"
+                        WidthRequest="200">
+                    <!--  Icon Image  -->
+                    <Image
+          Grid.Column="1"
+          HeightRequest="25"
+          HorizontalOptions="End"
+          Source="IconoPicker.png"
+          VerticalOptions="Center"
+          WidthRequest="25" />
+                    <!--  Picker Control  -->
+                    <Picker
+          Title="Seleccionar SubCategoria"
+          x:Name="MyPickerSubCategoria" 
+          Grid.Column="0"
+          Grid.ColumnSpan="2"
+          ItemDisplayBinding="{Binding STRNOMBRE}"
+          BackgroundColor="Transparent">
+                    </Picker>
+                    <Grid.RowDefinitions>
+                        <RowDefinition>
+                            <RowDefinition.Height>
+                                <OnPlatform x:TypeArguments="GridLength">
+                                    <On Platform="Android" Value="50" />
+                                    <On Platform="iOS" Value="35" />
+                                </OnPlatform>
+                            </RowDefinition.Height>
+                        </RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="25" />
+                    </Grid.ColumnDefinitions>
+                </Grid>
+                <StackLayout Orientation="Horizontal" Margin="10,0">
+                    <Button 
+                        Text="Cancelar"  
+                        WidthRequest="125" 
+                        FontSize="16" 
+                        Clicked="Button_Clicked_1"
+                        FontAttributes="Bold" 
+                        BorderWidth="2" 
+                        BackgroundColor="Red" 
+                        TextColor="White"  
+                        FontFamily="Roboto-Bold" 
+                        HorizontalOptions="Center">
+                        <Button.BorderRadius>
+                            <OnPlatform x:TypeArguments="x:Int32"  iOS="20" Android="65">
+                            </OnPlatform>   
+                        </Button.BorderRadius>
+                        </Button>
+
+                    <Button 
+                        Text="Aplicar"  
+                        WidthRequest="125" 
+                        FontSize="16" 
+                        Clicked="Button_OnClicked"
+                        FontAttributes="Bold" 
+                        BorderColor="Teal" 
+                        BorderWidth="2" 
+                        BackgroundColor="Green" 
+                        TextColor="White"  
+                        FontFamily="Roboto-Bold" 
+                        HorizontalOptions="Center">
+                        <Button.BorderRadius>
+                            <OnPlatform x:TypeArguments="x:Int32"  iOS="20" Android="65">
+                            </OnPlatform>
+                        </Button.BorderRadius>
+                    </Button>
+
+                </StackLayout>
+            </StackLayout>
+        </Frame>
+    </StackLayout>
+</po:PopupPage>

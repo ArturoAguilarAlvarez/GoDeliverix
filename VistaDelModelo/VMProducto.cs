@@ -442,7 +442,8 @@ namespace VistaDelModelo
                     string nombre = item["VchNombre"].ToString();
                     string costo = item["Mcosto"].ToString();
                     string sucursal = item["Identificador"].ToString();
-                    string imagen = "../" + item["NVchRuta"].ToString();
+                    //string imagen = "../" + item["NVchRuta"].ToString();
+                    string imagen = "http://www.godeliverix.net/vista/" + item["NVchRuta"].ToString();
                     decimal SubTotal = decimal.Parse(costo) * int.Parse(cantidad);
                     decimal Total = SubTotal + CostoDeEnvio;
                     ListaDelCarrito.Add(new VMProducto()
@@ -495,7 +496,7 @@ namespace VistaDelModelo
             if (ListaDelCarrito.Exists(Objeto => Objeto.UidRegistroProductoEnCarrito == RegistroProductoEnCarrito))
             {
                 var Producto = new VMProducto();
-                Producto = ListaDelCarrito.Find(Objeto => Objeto.UidRegistroProductoEnCarrito == uidProducto);
+                Producto = ListaDelCarrito.Find(Objeto => Objeto.UidRegistroProductoEnCarrito == RegistroProductoEnCarrito);
 
 
                 decimal precio = Producto.Subtotal / Producto.Cantidad;
@@ -765,7 +766,8 @@ namespace VistaDelModelo
                     Guid uidproducto = new Guid(item["UidProducto"].ToString());
                     string nombre = item["VchNombre"].ToString().ToUpper();
                     string descripcion = item["VchDescripcion"].ToString();
-                    string ruta = "../" + item["NVchRuta"].ToString();
+                    string ruta = "http://www.godeliverix.net/vista/" + item["NVchRuta"].ToString();
+                    //string ruta = "../" + item["NVchRuta"].ToString();
                     Guid UidEmpresa = new Guid(item["UidEmpresa"].ToString());
 
                     if (!ListaDeProductos.Exists(p => p.UID == uidproducto))
@@ -779,6 +781,62 @@ namespace VistaDelModelo
                 throw;
             }
         }
+        //public void BuscarProductoPorSucursal(string StrParametroBusqueda, string StrDia, Guid UidDireccion, Guid UidBusquedaCategorias, object UidProducto)
+        //{
+        //    try
+        //    {
+        //        SqlCommand CMD = new SqlCommand
+        //        {
+        //            CommandType = CommandType.StoredProcedure,
+        //            CommandText = "asp_BuscarSucursalesCliente"
+        //        };
+
+        //        CMD.Parameters.Add("@strParametroBusqueda", SqlDbType.VarChar, 100);
+        //        CMD.Parameters["@strParametroBusqueda"].Value = StrParametroBusqueda;
+                
+
+        //        CMD.Parameters.Add("@StrDia", SqlDbType.VarChar, 20);
+        //        CMD.Parameters["@StrDia"].Value = StrDia;
+
+        //        CMD.Parameters.Add("@UidDireccion", SqlDbType.UniqueIdentifier);
+        //        CMD.Parameters["@UidDireccion"].Value = UidDireccion;
+
+        //        CMD.Parameters.Add("@UidBusquedaCategorias", SqlDbType.UniqueIdentifier);
+        //        CMD.Parameters["@UidBusquedaCategorias"].Value = UidBusquedaCategorias;
+
+        //        CMD.Parameters.Add("@UidProduto", SqlDbType.UniqueIdentifier);
+        //        CMD.Parameters["@UidProduto"].Value = UidProducto;
+
+        //        ListaDePreciosSucursales.Clear();
+
+        //        foreach (DataRow item in CN.Busquedas(CMD).Rows)
+        //        {
+        //            Guid uidseccion = new Guid(item["UidSeccion"].ToString());
+        //            string stridentificador = item["Identificador"].ToString().ToUpper();
+        //            string strTiempoDeElaboracion = item["VchTiempoElaboracion"].ToString();
+        //            string dbCosto = item["Mcosto"].ToString();
+        //            Guid UidSucursal = new Guid(item["UidSucursal"].ToString());
+        //            Guid uidempresa = new Guid(item["UidEmpresa"].ToString());
+        //            if (!ListaDePreciosSucursales.Exists(p => p.UID == uidseccion))
+        //            {
+        //                ListaDePreciosSucursales.Add(new VMProducto()
+        //                {
+        //                    UID = uidseccion,
+        //                    StrCosto = dbCosto,
+        //                    DtmVariableParaTiempo = DateTime.Parse(strTiempoDeElaboracion),
+        //                    StrIdentificador = stridentificador,
+        //                    UidSucursal = UidSucursal,
+        //                    UIDEMPRESA = uidempresa
+        //                });
+        //            }
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //}
+
         public void BuscarProductoPorSucursal(string StrParametroBusqueda, string StrDia, Guid UidDireccion, Guid UidBusquedaCategorias, object UidProducto)
         {
             try
@@ -791,7 +849,7 @@ namespace VistaDelModelo
 
                 CMD.Parameters.Add("@strParametroBusqueda", SqlDbType.VarChar, 100);
                 CMD.Parameters["@strParametroBusqueda"].Value = StrParametroBusqueda;
-                
+
 
                 CMD.Parameters.Add("@StrDia", SqlDbType.VarChar, 20);
                 CMD.Parameters["@StrDia"].Value = StrDia;
@@ -834,6 +892,7 @@ namespace VistaDelModelo
                 throw;
             }
         }
+
 
         #endregion
         #endregion

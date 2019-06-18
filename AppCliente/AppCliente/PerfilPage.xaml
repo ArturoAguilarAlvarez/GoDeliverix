@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppCliente.PerfilPage">
+  <!--Pages can be added as references or inline-->
+    <ContentPage Title="Perfil">
+        <ContentPage.Content>
+            <ScrollView Margin="50,0,50,0">
+                <Grid VerticalOptions="StartAndExpand">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0">Usuario</Label>
+                    <Entry Placeholder="Usuario" x:Name="txtNombre" Grid.Row="1"/>
+                    <Label Grid.Row="2">Apellido Paterno</Label>
+                    <Entry Placeholder="Password" x:Name="txtApellido1" Grid.Row="3"/>
+                    <Label Grid.Row="4">Apellido Materno</Label>
+                    <Entry Placeholder="Password" x:Name="txtApellido2" Grid.Row="5"/>
+                    <Label Grid.Row="6">Fecha de nacimiento</Label>
+                    <DatePicker x:Name="txtFechaNacimiento" Grid.Row="7"  Format="yyyy-dd-MM"></DatePicker>
+                    <Label Grid.Row="8">Usuario</Label>
+                    <Entry Placeholder="Password" x:Name="txtUsuario" Grid.Row="9"/>
+                    <Label Grid.Row="10">Contraseña</Label>
+                    <Entry Placeholder="Password" x:Name="txtContrasena" Grid.Row="11"/>
+                    <Label Grid.Row="12">Correo</Label>
+                    <Entry Placeholder="Password" x:Name="txtCorreo" Grid.Row="13"/>
+                    <Button Text="Registro" Clicked="Button_GuardarDatos"
+              Grid.Row="14"/>
+                </Grid>
+            </ScrollView>
+
+        </ContentPage.Content>
+    </ContentPage>
+    
+    <ContentPage Title="Telefonos">
+        <ContentPage.Content>
+            <StackLayout>
+                <Label IsVisible="False" Text="" x:Name="txtIDTelefono"></Label>
+                <Label 
+                HorizontalOptions="Center" 
+                FontAttributes="Bold"  
+                TextColor="Black"
+                FontSize="22"
+                Text="Tipo Telefonico"
+                Margin="20">
+                </Label>
+                <Picker  x:Name="MyPicker" Title="Select a tipoTelefono" ItemsSource="{Binding TIPOTELEFONO}" ItemDisplayBinding="{Binding NOMBRE}" />
+                <Label 
+                HorizontalOptions="Center" 
+                FontAttributes="Bold"  
+                TextColor="Black"
+                FontSize="22"
+                Margin="20"
+                Text="Numero Telefonico">
+                </Label>
+                <Entry Placeholder="Telefonon*" x:Name="txtNumeroTelefonico" Keyboard="Email"/>
+               
+                <Button Text="Agregar"
+                                    BackgroundColor="DarkRed"
+                                    TextColor="White"
+                                    WidthRequest="150"
+                                    Clicked="Button_AgregarTelefono"
+                                    FontSize="14" ></Button>
+                
+                <ListView x:Name="MyListView"
+            ItemsSource="{Binding TelefonoLista}"
+            ItemTapped="Handle_ItemTapped"
+            Refreshing="OnRefresh"
+            IsPullToRefreshEnabled="True"
+            HasUnevenRows="True">
+
+                    <!--Built in Cells-->
+                    <!--<ListView.ItemTemplate>
+                  CachingStrategy="RecycleElement"
+        <DataTemplate>
+                <ViewCell>
+                    <ViewCell.View>
+                        <StackLayout Padding="15">
+                            <Label Text="{Binding ID}"></Label>
+                            <Label Text="{Binding NUMERO}"></Label>
+                            -->
+                    <!--<StackLayout IsVisible="{Binding IsVisible}"
+                                     Orientation="Horizontal"
+                                     Margin="0,20,0,0">
+                                <Button Text="Edit"
+                                    BackgroundColor="DodgerBlue"
+                                    TextColor="White"
+                                    WidthRequest="150"
+                                    Clicked="Button_Clicked"
+                                    FontSize="14"/>
+                                <Button Text="Delete"
+                                    BackgroundColor="DarkRed"
+                                    TextColor="White"
+                                    WidthRequest="150"
+                                    Clicked="Button_Clicked"
+                                    FontSize="14" />
+                            </StackLayout>-->
+                    <!--
+                        </StackLayout>
+                    </ViewCell.View>
+                </ViewCell>
+        </DataTemplate>
+    </ListView.ItemTemplate>-->
+
+                    <!--Custom View Cells-->
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.ContextActions>
+
+                                    <MenuItem Clicked="OnMore" CommandParameter="{Binding .}"
+                            Text="Editar" />
+                                    <MenuItem Clicked="OnDelete"     CommandParameter="{Binding .}"
+                            Text="Eliminar" IsDestructive="True" />
+                                </ViewCell.ContextActions>
+                                <ViewCell.View>
+                                    <StackLayout Orientation="Horizontal">
+                                        <StackLayout Orientation="Vertical">
+                                            <Label Text="{Binding StrNombreTipoDeTelefono}" FontSize="Medium"></Label>
+                                            <Label Text="{Binding NUMERO}" FontSize="Small"></Label>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </ViewCell.View>
+
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+
+                </ListView>
+            </StackLayout>
+        </ContentPage.Content>
+    </ContentPage>
+
+    <ContentPage Title="Direcciones" >
+        
+        <ContentPage.Content>
+            <StackLayout>
+                <Label Text="Identificador"  x:Name="LBIdentificador" IsVisible="False"/>
+                <Editor x:Name="txtDireccion" IsVisible="False"/>
+                <Label Text="Pais"  x:Name="LBPais" IsVisible="False"/>
+                <Picker IsVisible="False"  x:Name="MypickerPais" Title="Seleciona un pais" SelectedIndexChanged="MypickerPais_SelectedIndexChanged">
+                    <Picker.Items>
+                        <x:String>Mexico</x:String>
+                        <x:String>sadasd</x:String>
+                    </Picker.Items>
+                </Picker>
+
+                <Label Text="Estado"  x:Name="LBEstado" IsVisible="False"/>
+                <Picker IsVisible="False"  x:Name="MypickerEstado"></Picker>
+                
+
+                <Label Text="Municipio"  x:Name="LBMunicipio" IsVisible="False"/>
+                <Picker IsVisible="False" x:Name="MypickerMunicipio"></Picker>
+
+                <Label Text="Ciudad"  x:Name="LBCiudad" IsVisible="False"/>
+                <Picker IsVisible="False" x:Name="MypickerCiudad"></Picker>
+                
+                <Label Text="Colonia"  x:Name="LBColonia" IsVisible="False"/>
+                <Picker IsVisible="False" x:Name="MypickerColonia"></Picker>
+                
+                <Label Text="Calle"  x:Name="LBCalle" IsVisible="False"/>
+
+                <Label Text="EntreCalle"  x:Name="LBEntreCalle" IsVisible="False"/>
+
+                <Label Text="yCalle"  x:Name="LBmanzana" IsVisible="False"/>
+
+                <Label Text="Manzana"  x:Name="LBLote" IsVisible="False"/>
+
+
+                <Label Text="Lote/No"  x:Name="LBCodigoPostal" IsVisible="False"/>
+
+
+                <Label Text="Codigo Postal"  x:Name="LBReferencias" IsVisible="False"/>
+                
+                <Button Text="Nuevo" Clicked="Button_Direcciones"></Button>
+                <Button Text="Cancelar" Clicked="BtnCAncelar_Clicked" IsVisible="False" x:Name="BtnCAncelar"></Button>
+                
+                
+                <ListView x:Name="MyListViewDirecciones"
+                ItemsSource="{Binding DireccionesLista}"
+                ItemTapped="Handle_ItemTapped"
+                Refreshing="OnRefresh"
+                IsPullToRefreshEnabled="True"
+                HasUnevenRows="True"
+                      >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.ContextActions>
+
+                                    <MenuItem Clicked="OnMoreDirecciones" CommandParameter="{Binding .}"
+                                Text="Editar" />
+                                    <MenuItem Clicked="OnDeleteDirecciones"     CommandParameter="{Binding .}"
+                                Text="Eliminar" IsDestructive="True" />
+                                </ViewCell.ContextActions>
+                                <ViewCell.View>
+
+                                    <StackLayout Orientation="Horizontal">
+                                        <StackLayout Orientation="Vertical">
+                                            <Label Text="{Binding IDENTIFICADOR}" FontSize="Medium"></Label>
+                                            <Label Text="{Binding CodigoPostal}" FontSize="Small"></Label>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </ViewCell.View>
+
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </ContentPage.Content>
+    </ContentPage>
+</TabbedPage>

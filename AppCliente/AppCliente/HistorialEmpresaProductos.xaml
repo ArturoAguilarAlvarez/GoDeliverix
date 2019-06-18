@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppCliente.HistorialEmpresaProductos">
+    <ContentPage.Content>
+        <StackLayout>
+            <ListView x:Name="MyListViewHistorial"
+                          Margin="0"
+                              VerticalScrollBarVisibility="Always"
+            ItemsSource="{Binding VMProducto}"
+                      SelectionMode="None"
+                      SeparatorVisibility="Default"
+            IsPullToRefreshEnabled="False"
+            HasUnevenRows="True">
+                <!--Custom View Cells-->
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ContentView Margin="5" Padding="0">
+                                <Grid Margin="0" Padding="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"></ColumnDefinition>
+                                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                                        <ColumnDefinition Width="4*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Image
+                                                Grid.Row="0"
+                                        Grid.RowSpan="4"
+                                        Grid.Column="0"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="Center"
+                                                Aspect="Fill"
+                                                Source="{Binding Imagen}"
+                                                >
+                                    </Image>
+
+
+                                    <Label Text="{Binding StrNombreProducto}" HorizontalOptions="Center" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" FontSize="Large" TextColor="Black" FontAttributes="Bold"></Label>
+
+                                    <Label Text="Cantidad:  " FontSize="Micro" FontAttributes="Bold" TextColor="Black" Grid.Row="1" Grid.Column="1"></Label>
+                                    <Label Text="{Binding intCantidad}" HorizontalOptions="Center" Grid.Column="2" Grid.Row="1"  FontSize="Micro" ></Label>
+
+                                    <Label Text="Total:  " FontSize="Micro" FontAttributes="Bold" TextColor="Black" Grid.Row="2" Grid.Column="1"></Label>
+                                    <Label Text="{Binding MTotal,StringFormat='${0}'}" HorizontalOptions="Center" Grid.Column="2"  Grid.Row="2"  FontSize="Micro" ></Label>
+
+                                    <Label Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding VisibilidadNota}" HorizontalOptions="Center"></Label>
+                                </Grid>
+                            </ContentView>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

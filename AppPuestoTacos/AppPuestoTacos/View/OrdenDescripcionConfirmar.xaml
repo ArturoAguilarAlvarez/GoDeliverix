@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="Detalle de orden"
+             x:Class="AppPuestoTacos.View.OrdenDescripcionConfirmar">
+    <NavigationPage.TitleView>
+        <StackLayout Orientation="Horizontal" HorizontalOptions="End" Spacing="10" Margin="0,0,10,0">
+            <ImageButton Source="IconoCancelar.png" HeightRequest="50" WidthRequest="30"  HorizontalOptions="End"
+                    BackgroundColor="Transparent"  Margin="0,0,10,0" Clicked="ButtonCancelar_Clicked"></ImageButton>
+
+            <ImageButton Source="IconoAceptar.png" HeightRequest="50" WidthRequest="30"  HorizontalOptions="End"
+                    BackgroundColor="Transparent"  Margin="0,0,10,0" Clicked="ButtonConfirmar_Clicked"></ImageButton>
+            
+        </StackLayout>
+    </NavigationPage.TitleView>
+     
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <!--<Grid>
+                    <Button Text="Cancelar" TextColor="White" BackgroundColor="Red" Grid.Column="0" Clicked="ButtonCancelar_Clicked"></Button>
+                    <Button Text="Confirmar" TextColor="White" BackgroundColor="Green" Grid.Column="1" Clicked="ButtonConfirmar_Clicked"></Button>
+                </Grid>-->
+                <!--<Grid>
+                    <Label Text="Producto" Grid.Column="0" HorizontalOptions="Center"></Label>
+                    <Label Text="Cantidad" Grid.Column="1" HorizontalOptions="Center"></Label>
+                    <Label Text="$Total" Grid.Column="2" HorizontalOptions="Center"></Label>
+                    <Label Text="Notas" Grid.Column="3" HorizontalOptions="Center"></Label>
+                </Grid>-->
+                <Grid>
+                    <Button Text="Producto" Grid.Column="0" HorizontalOptions="Center" BackgroundColor="Transparent"></Button>
+                    <Button Text="Cantidad" Grid.Column="1" HorizontalOptions="Center" BackgroundColor="Transparent"></Button>
+                    <Button Text="$Total" Grid.Column="2" HorizontalOptions="Center" BackgroundColor="Transparent"></Button>
+                    <Button Text="Notas" Grid.Column="3" HorizontalOptions="Center" BackgroundColor="Transparent"></Button>
+                </Grid>
+                <ListView x:Name="MyListviewOrdenesConfirmar"
+                            Grid.Row="1"                            
+                            ItemsSource="{Binding VMProducto}"
+                            SelectionMode="None"
+                            SeparatorVisibility="Default"
+                            IsPullToRefreshEnabled="False"
+                            HasUnevenRows="True">
+                    <!--Custom View Cells-->
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ContentView Margin="0" Padding="0">
+                                    <Grid Margin="0" Padding="0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Label Text="{Binding StrNombreProducto }" HorizontalOptions="Center" Grid.Column="0" FontSize="Medium"></Label>
+                                        <Label Text="{Binding intCantidad }" HorizontalOptions="Center" Grid.Column="1" FontSize="Medium"></Label>
+                                        <Label Text="{Binding MTotal }" HorizontalOptions="Center" Grid.Column="2" FontSize="Large"></Label>
+                                        <Label Text="{Binding VisibilidadNota }" HorizontalOptions="Center" Grid.Column="3" FontSize="Small"></Label>
+                                    </Grid>
+                                </ContentView>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

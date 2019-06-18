@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppCliente.DetalleHistorial">
+    <ContentPage.Content>
+        <StackLayout>
+            <ListView x:Name="MyListViewDetalleHistorial"
+                           Grid.Row="2"
+                       RowHeight="100"
+                              VerticalScrollBarVisibility="Always"
+            ItemsSource="{Binding VMProducto}"
+                      SelectionMode="None"
+                      SeparatorVisibility="Default"
+            IsPullToRefreshEnabled="False"
+            HasUnevenRows="True">
+                <!--Custom View Cells-->
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ContentView Margin="0" Padding="0">
+                                <Grid Margin="0" Padding="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <StackLayout Grid.Row="0" Orientation="Horizontal" HorizontalOptions="Fill" Margin="10">
+                                        <Label Text="{Binding LNGFolio}" HorizontalOptions="Start"></Label>
+                                        <Label Text="{Binding Identificador }" HorizontalOptions="Center"></Label>
+                                        <Label Text="{Binding MTotalSucursal }" HorizontalOptions="End"></Label>
+                                        <Label Text="{Binding UidRelacionOrdenSucursal }" HorizontalOptions="End"></Label>
+                                        <Label Text="{Binding CostoEnvio }" HorizontalOptions="End"></Label>
+                                        <Label Text="{Binding MTotal }" HorizontalOptions="End"></Label>
+                                    </StackLayout>
+                                </Grid>
+                            </ContentView>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

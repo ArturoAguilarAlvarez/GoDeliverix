@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             x:Name="Contenido"
+             x:Class="AppCliente.PerfilDireccionesPage">
+    <ContentPage.Content x:Uid="ContenidoGeneral">
+        <StackLayout>
+
+            <ScrollView x:Name="scroll">
+                <Grid ColumnSpacing="0" RowSpacing="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="AUTO" />
+                        <RowDefinition Height="AUTO" />
+                        <RowDefinition Height="AUTO" />
+                        <RowDefinition Height="AUTO" />
+                        <RowDefinition Height="AUTO" />
+                        <RowDefinition Height="AUTO" />
+                        <RowDefinition Height="AUTO" />
+                        <RowDefinition Height="AUTO" />
+                        <RowDefinition Height="AUTO" />
+                        <RowDefinition Height="AUTO" />
+                    </Grid.RowDefinitions>
+                    <StackLayout IsVisible="False" x:Name="PanelDatos">
+                        <maps:Map WidthRequest="320" HeightRequest="200"
+                            x:Name="MyMap"
+                            MapType="Street"
+                           IsTabStop="True"                  
+                            />
+
+                        <Grid ColumnSpacing="0" RowSpacing="0" Margin="15,5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="AUTO" />
+                                <RowDefinition Height="AUTO" />
+                                <RowDefinition Height="AUTO" />
+                                <RowDefinition Height="AUTO" />
+                                <RowDefinition Height="AUTO" />
+                                <RowDefinition Height="AUTO" />
+                                <RowDefinition Height="AUTO" />
+                                <RowDefinition Height="AUTO" />
+                                <RowDefinition Height="AUTO" />
+                                <RowDefinition Height="AUTO" />
+                            </Grid.RowDefinitions>
+
+                            <Entry Grid.Row="1"  x:Name="txtIdentificador" Placeholder="Identificador" FontSize="Medium"   HorizontalTextAlignment="Center"></Entry>
+
+                            <Picker Grid.Row="2"  x:Name="MypickerPais" Title="Pais" SelectedIndexChanged="MypickerPais_SelectedIndexChanged">
+                                <Picker.Items>
+                                    <x:String>Mexico</x:String>
+                                </Picker.Items>
+                            </Picker>
+
+                            <Picker Grid.Row="3"  x:Name="MypickerEstado" Title="Estado" SelectedIndexChanged="MypickerEstado_SelectedIndexChanged"></Picker>
+
+                            <Picker Grid.Row="4"  x:Name="MypickerMunicipio" Title="Municipio" SelectedIndexChanged="MypickerMunicipio_SelectedIndexChanged"></Picker>
+
+
+
+                            <Picker Grid.Row="5"  x:Name="MypickerCiudad" Title="Ciudad" SelectedIndexChanged="MypickerCiudad_SelectedIndexChanged"></Picker>
+
+                            <Picker Grid.Row="6"  x:Name="MypickerColonia" Title="Colonia" ></Picker>
+
+
+                            <Entry Grid.Row="7"  x:Name="txtCalle" Placeholder="calle" FontSize="Medium"   HorizontalTextAlignment="Center"></Entry>
+
+                            <Entry Grid.Row="8"  x:Name="txtEntreCalle" Placeholder="Entre calle" FontSize="Medium"   HorizontalTextAlignment="Center"></Entry>
+
+
+
+                            <Entry Grid.Row="9"  x:Name="txtYCalle" Placeholder="Y calle" FontSize="Medium"   HorizontalTextAlignment="Center"></Entry>
+
+                            <Entry Grid.Row="10"  x:Name="txtManzana" Placeholder="Manzana o numero interior" FontSize="Medium"   HorizontalTextAlignment="Center"></Entry>
+
+
+                            <Entry Grid.Row="11"  x:Name="txtLote" Placeholder="Lote" FontSize="Medium"  HorizontalTextAlignment="Center"></Entry>
+
+                            <Entry Grid.Row="12"  x:Name="txtCodigoPostal" Placeholder="Codigo Postal" FontSize="Medium"   HorizontalTextAlignment="Center"></Entry>
+
+
+
+                            <Entry Grid.Row="13"  x:Name="txtReferencia" Placeholder="Referencias" FontSize="Medium"  HorizontalTextAlignment="Center"></Entry>
+
+                            <StackLayout HorizontalOptions="Center" Grid.Row="14" Orientation="Horizontal">
+                                <Button x:Name="btnCancelar" Text="CANCELAR"   Clicked="BtnCancelar_Clicked"  WidthRequest="150" BackgroundColor="Red" CornerRadius="20"/>
+                                <Button x:Name="btnGuardarEditar" Text="GUARDAR"    Clicked="BtnGuardarEditar_Clicked"  WidthRequest="150" BackgroundColor="Green" CornerRadius="20"/>
+                            </StackLayout>
+                        </Grid>
+                    </StackLayout>
+
+                    <StackLayout Grid.Row="10" IsVisible="True" x:Name="PanelListView">
+                        <ListView x:Name="MyListViewDirecciones"
+                                ItemTapped="MyListViewDirecciones_ItemTapped"
+                                ItemsSource="{Binding DireccionesLista}"
+                                IsPullToRefreshEnabled="False"
+                                  HasUnevenRows="True"
+                                  >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <ContentView Padding="8">
+
+                                            <Frame OutlineColor="Accent"
+                                                  x:Name="FrameDireccionColor"
+                               Padding="10">
+
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+
+                                                    <StackLayout  Grid.Row="0" Orientation="Horizontal" HorizontalOptions="Fill">
+                                                        <Image 
+                                            Source="IconoUbicacion"
+                                            WidthRequest="50"
+                                            HeightRequest="50">
+                                                        </Image>
+                                                        <StackLayout>
+                                                            <Label Text="{Binding IDENTIFICADOR}"
+                                           FontSize="22"
+                                           VerticalOptions="StartAndExpand" />
+                                                            <Label Text="{Binding REFERENCIA}"
+                                           FontSize="16"
+                                           VerticalOptions="CenterAndExpand" />
+                                                        </StackLayout>
+
+                                                    </StackLayout>
+                                                    <StackLayout Grid.Row="1" Orientation="Horizontal" HorizontalOptions="Center">
+                                                        <Button IsVisible="{Binding Clicked}" BackgroundColor="Transparent" TextColor="Black" Text="Eliminar" Clicked="Button_Clicked_Eliminar" ></Button>
+                                                        <Button IsVisible="{Binding Clicked}" BackgroundColor="Transparent" TextColor="Black" Text="Editar"  Clicked="Button_Clicked_Editar"></Button>
+                                                    </StackLayout>
+                                                </Grid>
+                                            </Frame>
+
+                                        </ContentView>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackLayout>
+                </Grid>
+
+            </ScrollView>
+            <Button HorizontalOptions="End" VerticalOptions="End"  Image="AddCircule" x:Name="btnNuevo"
+                    BackgroundColor="Transparent" FontSize="Micro" Clicked="Button_Clicked_NuevaDireccion"></Button>
+            <Entry x:Name="txtID" Placeholder="Identificador" FontSize="Medium" Text=""  IsVisible="False" HorizontalTextAlignment="Center"></Entry>
+
+            <Label  IsVisible="False" Text="{Binding ID}" x:Name="txtIDDireccionn"></Label>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

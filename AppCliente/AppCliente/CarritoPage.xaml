@@ -1,0 +1,299 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppCliente.CarritoPage"
+            Title="Mi Carrito">
+
+    <!--Pages can be added as references or inline-->
+    <!--<NavigationPage.TitleView>
+        <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand">
+            <Label Text="Mi carrito" FontAttributes="Bold" FontSize="Medium" VerticalOptions="Center" TextColor="White" HorizontalOptions="Start"></Label>
+            <ImageButton Source="IconCarrito.png" HeightRequest="50" WidthRequest="30"  HorizontalOptions="End"
+                    BackgroundColor="Transparent" Margin="0,0,10,0"></ImageButton>
+        </StackLayout>
+        --><!--<StackLayout Orientation="Horizontal" HorizontalOptions="End" Spacing="10" Margin="0,0,10,0">
+
+            
+        <ImageButton Source="IconoBuscar.png" HeightRequest="50" WidthRequest="30" Margin="10,0"   HorizontalOptions="End"
+                    BackgroundColor="Transparent" Clicked="MenuBuscar_Activated" ></ImageButton>
+        
+            <ImageButton Source="IconCarrito.png" HeightRequest="50" WidthRequest="30"  HorizontalOptions="End"
+                    BackgroundColor="Transparent" Clicked="MenuItem1_Activted" Margin="0,0,10,0"></ImageButton>
+            
+        <ImageButton Source="IconoBuscar.png" HeightRequest="50" WidthRequest="30"  HorizontalOptions="End"
+                    BackgroundColor="Transparent" Clicked="ImageButton_Clicked" ></ImageButton>
+        
+        </StackLayout>--><!--
+    </NavigationPage.TitleView>-->
+    
+    <ContentPage Title="Resumen">
+        <ContentPage.Content>
+            <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+
+                <Label 
+                    x:Name="txtCantidad"
+                    Text="Total de articulos: 0" 
+                    HorizontalOptions="Center" 
+                    FontSize="Large"
+                    FontAttributes="Bold"  ></Label>
+
+                <Label 
+                x:Name="txtsubtotal"
+                HorizontalOptions="Center" 
+                TextColor="Black"
+                FontSize="22"
+                Text="SubTotal: $0.00"
+                Margin="20">
+                </Label>
+
+                <Label 
+                x:Name="txtTotalEnvio"
+                HorizontalOptions="Center" 
+                TextColor="Black"
+                FontSize="22"
+                Text="Total de envio= $0.00"
+                Margin="20">
+                </Label>
+
+                <StackLayout Orientation="Horizontal" Grid.Row="2" VerticalOptions="End" HorizontalOptions="Center">
+                    <Button
+                        Margin="0,0,0,10"
+                        CornerRadius="40"
+                        HeightRequest="70"
+                        WidthRequest="100"
+                    VerticalOptions="End" 
+                    Text="Vaciar Carrito" 
+                    Clicked="BtnLimpiarCarrito_Clicked"
+                    TextColor="White"
+                    BackgroundColor="Red"></Button>
+
+                    <Button
+                        Margin="0,0,0,10"
+                    CornerRadius="40"
+                    VerticalOptions="End"    
+                        x:Name="btnPagar2"
+                        HeightRequest="75"
+                        WidthRequest="100"
+                    Text="pagar $0.00" 
+                    Clicked="BtnPagar_Clicked"
+                    TextColor="White"
+                    BackgroundColor="Green"></Button>
+
+                </StackLayout>
+
+            </StackLayout>
+        </ContentPage.Content>
+    </ContentPage>
+
+    <ContentPage Title=" Detallle" x:Name="panelCarrito">
+        <ContentPage.Content>
+            <Grid VerticalOptions="Fill">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackLayout  Grid.Row="0" x:Name="ViewListaProductoVacio">
+                    <Label
+                        Margin="0,20,0,0"
+                    HorizontalOptions="Center" 
+                    VerticalOptions="Center" 
+                    HorizontalTextAlignment="Center" 
+                    FontAttributes="Bold"  
+                    FontSize="Large" 
+                    Text="Tu carrito está vacío"></Label>
+                    <Label                 
+                    HorizontalOptions="Center" 
+                    TextColor="Black"
+                    FontSize="22" 
+                    Text="¡Miles de productos de esperan!">
+                    </Label>
+                </StackLayout>
+
+                <ListView x:Name="MyListViewCarritoEmpresa"       
+                                Grid.Row="1"
+                              VerticalScrollBarVisibility="Always"
+                          ItemTapped="MyListViewCarritoEmpresa_ItemTapped"
+            ItemsSource="{Binding VMProducto}"
+                      SelectionMode="None"                     
+                      SeparatorVisibility="Default"
+            IsPullToRefreshEnabled="False"
+            HasUnevenRows="True">
+
+                    <!--Custom View Cells-->
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ContentView Margin="0" Padding="0">
+                                    <Grid Margin="0,0,0,20" Padding="0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <StackLayout Grid.Row="0" Orientation="Horizontal">
+                                            <StackLayout HorizontalOptions="FillAndExpand" Margin="25,5">
+                                                <Label Text="{Binding Empresa }"
+                                                               HorizontalOptions="Center"
+                                                       TextColor="Black"
+                                           FontSize="Large"/>
+                                                <Button Text="Cambiar repartidor" CornerRadius="20" BackgroundColor="Black" TextColor="White" Margin="10,0" HorizontalOptions="Center"  Clicked="ButtonCambiarRepartidor_Clicked"></Button>
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"></RowDefinition>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                                                        <ColumnDefinition Width="7*"></ColumnDefinition>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Image
+                                                        Grid.Column="0"
+                                                        Grid.Row="0"
+                                                        Grid.RowSpan="3"
+                                                       HorizontalOptions="Start"
+                                                        VerticalOptions="Start"
+                                                   Source="{Binding STRRUTA}">
+                                                    </Image>
+                                                    <Label Text="{Binding Cantidad  , StringFormat='Cantidad de productos:  {0}'}"
+                                                           Grid.Column="1"
+                                                           Grid.Row="0"
+                                                               HorizontalOptions="End"
+                                                               TextColor="Black"
+                                           FontSize="Default"></Label>
+                                                    <Label Text="{Binding Subtotal  , StringFormat='Subtota:  ${0}'}"
+                                                               HorizontalOptions="End"
+                                                           Grid.Column="1"
+                                                           Grid.Row="1"
+                                           FontSize="Default"
+                                                               TextColor="Black" />
+                                                    <Label  Text="{Binding CostoEnvio , StringFormat='Costo Envio: ${0}'}"
+                                                        Grid.Column="1"
+                                                            Grid.Row="2"
+                                                               TextColor="Black"
+                                                                FontSize="Default"
+                                                                HorizontalOptions="End"
+                                           />
+                                                </Grid>
+
+                                                <Label Text="{Binding Total , StringFormat='Importe total: ${0}'}"
+                                                               HorizontalOptions="End"
+                                           FontSize="Large"
+                                                               TextColor="Red"
+                                           VerticalOptions="End" />
+                                                <Label Text="Mas detalles..." HorizontalOptions="Center"></Label>
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </Grid>
+                                </ContentView>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+
+
+                </ListView>
+
+                <ScrollView Grid.Row="0" x:Name="ScrollView_Productos" VerticalOptions="End" >
+                    <ListView x:Name="MyListViewBusquedaProductos"                          
+                             
+                              VerticalScrollBarVisibility="Always"
+            ItemsSource="{Binding VMProducto}"
+                      SelectionMode="None"
+                      
+                      SeparatorVisibility="Default"
+            IsPullToRefreshEnabled="False"
+            HasUnevenRows="True">
+                        <!--Custom View Cells-->
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <ContentView Margin="0" Padding="0">
+
+                                        <Grid Margin="0" Padding="0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+
+                                            <StackLayout Grid.Row="0" Orientation="Horizontal">
+
+
+                                                <Image
+                                                       HorizontalOptions="Start"
+                                                        VerticalOptions="Start"
+                                                   Source="{Binding STRRUTA}"
+                                                        Margin="15"
+                                                    WidthRequest="130"
+                                                    HeightRequest="130">
+                                                </Image>
+
+                                                <StackLayout HorizontalOptions="FillAndExpand" >
+                                                    <Label Text="{Binding STRNOMBRE}"
+                                                               HorizontalOptions="Start"
+                                           FontSize="Medium"/>
+
+
+                                                    <Label  Text="{Binding Cantidad, StringFormat='Cantidad {0}'}"
+                                           FontSize="Small"
+                                                                HorizontalOptions="Start"
+                                           />
+
+                                                    <Label Text="{Binding StrCosto, StringFormat='Importe ${0}.00'}"
+                                                               x:Name="txtProductoPrecio"
+                                                               HorizontalOptions="Start"
+                                           FontSize="Medium"
+                                                               TextColor="Black"
+                                           VerticalOptions="End" />
+
+
+                                                </StackLayout>
+                                            </StackLayout>
+                                            <Label Grid.Row="1" Text="{Binding StrNota}"
+                                           FontSize="Small" Margin="20,5,0,0"
+                                                                HorizontalOptions="Start"
+                                           />
+
+                                        </Grid>
+
+                                    </ContentView>
+
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+
+                    </ListView>
+                </ScrollView>
+
+                <StackLayout Orientation="Horizontal" Grid.Row="2" VerticalOptions="End" HorizontalOptions="Center">
+                    <Button
+                        CornerRadius="40"
+                    x:Name="btnLimpiarCarrito"
+                        Margin="0,0,0,10"
+                        HeightRequest="75"
+                        WidthRequest="100"
+                    VerticalOptions="End" 
+                    Text="Vaciar Carrito" 
+                    Clicked="BtnLimpiarCarrito_Clicked"
+                    TextColor="White"
+                    BackgroundColor="Red"></Button>
+
+                    <Button
+                        CornerRadius="40"
+                        x:Name="btnPagar"
+                        VerticalOptions="End"    
+                        Margin="0,0,0,10"
+                            HeightRequest="75"
+                            WidthRequest="100"
+                    Text="pagar $0.00" 
+                    Clicked="BtnPagar_Clicked"
+                    TextColor="White"
+                    BackgroundColor="Green"></Button>
+
+                </StackLayout>
+
+            </Grid>
+
+
+        </ContentPage.Content>
+    </ContentPage>
+
+</TabbedPage>
