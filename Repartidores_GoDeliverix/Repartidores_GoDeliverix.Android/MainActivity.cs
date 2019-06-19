@@ -7,6 +7,7 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 
+
 namespace Repartidores_GoDeliverix.Droid
 {
     [Activity(Label = "Repartidores_GoDeliverix", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
@@ -16,7 +17,7 @@ namespace Repartidores_GoDeliverix.Droid
         {
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
-            Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);
+            global::Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);
             base.OnCreate(savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             App.ScreenDensity = Resources.DisplayMetrics.Density;

@@ -101,8 +101,7 @@ namespace Repartidores_GoDeliverix.VM
                         AppInstance.MVHome = new VMHome();
                         AppInstance.MVHome.BlEstatus = true;
                         AppInstance.MVAjustes = new VMAjustes();
-                        Application.Current.MainPage = new NavigationPage(new TabbedPageMain());
-                       
+                        Application.Current.MainPage = new NavigationPage(new TabbedPageMain());                       
                     }
                     await PopupNavigation.Instance.PopAllAsync();
                 }
