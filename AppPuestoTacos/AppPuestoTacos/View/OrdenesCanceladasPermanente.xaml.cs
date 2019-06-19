@@ -15,7 +15,7 @@ namespace AppPuestoTacos.View
 		public OrdenesCanceladasPermanente ()
 		{
 			InitializeComponent ();
-            App.MVOrden.BuscarOrdenes("Sucursal", UidLicencia: new Guid((AppPuestoTacos.Helpers.Settings.Licencia)), EstatusSucursal: "Canceladas", TipoDeSucursal: "S");
+            App.MVOrden.BuscarOrdenesAppSucursal("Sucursal", UidLicencia: new Guid((AppPuestoTacos.Helpers.Settings.Licencia)), EstatusSucursal: "Canceladas", TipoDeSucursal: "S");
             MyListviewOrdenesRecuperarOrden.ItemsSource = App.MVOrden.ListaDeOrdenesCanceladasPermanentes;
         }
 	}

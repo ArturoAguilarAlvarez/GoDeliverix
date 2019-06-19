@@ -7,7 +7,7 @@
 
     <ContentPage.Content>
         <StackLayout>
-            <Grid>
+            <!--<Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition>
                         <RowDefinition.Height>
@@ -21,7 +21,8 @@
                 <Label Text="Folio" HorizontalOptions="Center" Grid.Column="0" Grid.Row="0" Margin="0"></Label>
                 <Label Text="Fecha Orden" HorizontalOptions="Center" Grid.Column="1" Grid.Row="0" Margin="0"></Label>
                 <Label Text="Total" HorizontalOptions="Center" Grid.Column="2" Grid.Row="0" Margin="0"></Label>
-                <ListView x:Name="MyListViewHistorial"
+            </Grid>-->
+            <!--<ListView x:Name="MyListViewHistorial"
                           Margin="0"
                            Grid.Column="0"
                             Grid.ColumnSpan="3"
@@ -29,15 +30,20 @@
                               VerticalScrollBarVisibility="Always"
             ItemsSource="{Binding VMProducto}"
                       SelectionMode="None"
-                      ItemTapped="MyListViewHistorial_ItemTapped"
+                     
                       SeparatorVisibility="Default"
             IsPullToRefreshEnabled="False"
-                HasUnevenRows="False">
+                HasUnevenRows="False">-->
+                <ListView x:Name="MyListViewHistorial"
+                                   ItemTapped="MyListViewHistorial_ItemTapped"
+                        IsPullToRefreshEnabled="False"
+                        HasUnevenRows="True">   
                     <!--Custom View Cells-->
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <ContentView Margin="0" Padding="0">
+                                <Frame OutlineColor="Accent" HorizontalOptions="Fill"
+                                     Padding="10" Margin="0,0,0,10">
                                     <Grid Margin="0" Padding="0">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -46,24 +52,35 @@
                                             <ColumnDefinition Width="3*"></ColumnDefinition>
                                             <ColumnDefinition Width="7*"></ColumnDefinition>
                                         </Grid.ColumnDefinitions>
-                                        <StackLayout Grid.Column="0" Grid.Row="0">
-                                            <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto"/>
-                                                </Grid.RowDefinitions>
-                                                <Label Text="{Binding FechaDeOrden}" HorizontalOptions="Center" Grid.Row="0"></Label>
-                                                <Label Text="{Binding MTotal}" HorizontalOptions="Center" Grid.Row="1"></Label>
-                                                <Label Text="{Binding FechaDeOrden}" HorizontalOptions="Center" Grid.Row="2"></Label>
-                                                <Label Text="{Binding MTotal}" HorizontalOptions="Center" Grid.Row="3"></Label>
-                                            </Grid>
-                                        </StackLayout>
+
+                                        <Label 
+                                            Text="{Binding LNGFolio }" 
+                                            HorizontalOptions="Center" 
+                                            Grid.Row="0" Grid.RowSpan="3" 
+                                            Grid.Column="0" 
+                                            VerticalOptions="Center"
+                                            FontSize="Large"></Label>
+
+                                        <Label 
+                                            Text="{Binding FechaDeOrden,StringFormat='Fecha: {0}'}" 
+                                            HorizontalOptions="Start" 
+                                            Grid.Row="0" Grid.Column="1"></Label>
+                                        <Label 
+                                            Text="{Binding StrNota,StringFormat='Hora: {0}'}" 
+                                            HorizontalOptions="Start" 
+                                            Grid.Row="1" Grid.Column="1"></Label>
+                                        <Label 
+                                            Text="{Binding MTotal,StringFormat='Total $:{0}'}" 
+                                            HorizontalOptions="Start" 
+                                            Grid.Row="2" 
+                                            Grid.Column="1"></Label>
                                     </Grid>
-                                </ContentView>
+                                </Frame>
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-            </Grid>
+     
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -68,6 +68,11 @@ namespace AppPuestoTacos
                         {
                             App.NOmbreUsuario = txtUsuario.Text;
                             string Licencia = Helpers.Settings.Licencia;
+
+                            App.MVEmpresas.ObtenerNombreComercial(App.UIdUsuario.ToString());
+                            App.NombreEmpresa = App.MVEmpresas.NOMBRECOMERCIAL;
+                            App.NOmbreUsuario = usuario;
+
                             if (string.IsNullOrEmpty(Licencia))
                             {
                                 Guid UidEmpresa = App.MVUsuarios.ObtenerIdEmpresa(Uidusuario.ToString());

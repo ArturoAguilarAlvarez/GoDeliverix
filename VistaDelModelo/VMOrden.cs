@@ -301,7 +301,8 @@ namespace VistaDelModelo
                         UidProductoEnOrden = new Guid(item["UidListaDeProductosEnOrden"].ToString()),
                         StrNombreSucursal = item["Identificador"].ToString(),
                         StrNombreProducto = item["VchNombre"].ToString(),
-                        Imagen = item["NVchRuta"].ToString(),
+                        //Imagen = item["NVchRuta"].ToString(),
+                        Imagen = "http://godeliverix.net/Vista/"+item["NVchRuta"].ToString(),
                         intCantidad = int.Parse(item["IntCantidad"].ToString()),
                         UidSucursal = new Guid(item["UidSucursal"].ToString()),
                         MTotal = decimal.Parse(Total),
@@ -629,6 +630,270 @@ namespace VistaDelModelo
                 throw;
             }
         }
+
+        public void BuscarOrdenesAppSucursal(string Parametro, Guid Uidusuario = new Guid(), string FechaInicial = "", string FechaFinal = "", string NumeroOrden = "", Guid UidLicencia = new Guid(), string EstatusSucursal = "", string TipoDeSucursal = "", Guid UidOrdenSucursal = new Guid())
+        {
+            try
+            {
+                SqlCommand comando = new SqlCommand();
+                comando.CommandType = CommandType.StoredProcedure;
+                comando.CommandText = "asp_BuscarOrdenes";
+
+                comando.Parameters.Add("@Parametro", SqlDbType.VarChar, 20);
+                comando.Parameters["@Parametro"].Value = Parametro;
+
+                if (Uidusuario != Guid.Empty)
+                {
+                    comando.Parameters.Add("@Uidusuario", SqlDbType.UniqueIdentifier);
+                    comando.Parameters["@Uidusuario"].Value = Uidusuario;
+                }
+
+                if (Uidorden != Guid.Empty)
+                {
+                    comando.Parameters.Add("@UidOrdenSucursal", SqlDbType.UniqueIdentifier);
+                    comando.Parameters["@UidOrdenSucursal"].Value = Uidorden;
+                }
+                if (UidLicencia != Guid.Empty)
+                {
+                    comando.Parameters.Add("@Licencia", SqlDbType.UniqueIdentifier);
+                    comando.Parameters["@Licencia"].Value = UidLicencia;
+                }
+                if (!string.IsNullOrEmpty(TipoDeSucursal))
+                {
+                    comando.Parameters.Add("@Tipo", SqlDbType.Char, 1);
+                    comando.Parameters["@Tipo"].Value = char.Parse(TipoDeSucursal);
+                }
+                if (!string.IsNullOrWhiteSpace(FechaInicial))
+                {
+                    comando.Parameters.Add("@FechaInicial", SqlDbType.VarChar, 10);
+                    comando.Parameters["@FechaInicial"].Value = FechaInicial;
+                }
+
+                if (!string.IsNullOrWhiteSpace(FechaFinal))
+                {
+                    comando.Parameters.Add("@FechaFinal", SqlDbType.VarChar, 10);
+                    comando.Parameters["@FechaFinal"].Value = FechaFinal;
+                }
+                if (!string.IsNullOrWhiteSpace(NumeroOrden))
+                {
+                    comando.Parameters.Add("@NumeroDeOrden", SqlDbType.BigInt);
+                    comando.Parameters["@NumeroDeOrden"].Value = long.Parse(NumeroOrden);
+                }
+                Datos = new Conexion();
+
+                ListaDeOrdenes.Clear();
+                switch (Parametro)
+                {
+                    case "Usuario":
+                        foreach (DataRow item in Datos.Busquedas(comando).Rows)
+                        {
+                            VMOrden orden = new VMOrden() { Uidorden = new Guid(item["UidOrden"].ToString()), FechaDeOrden = item["DtmFechaDeCreacion"].ToString(), MTotal = decimal.Parse(item["MTotal"].ToString()), LNGFolio = int.Parse(item["IntFolio"].ToString()) };
+                            ListaDeOrdenes.Add(orden);
+                        }
+                        break;
+                    case "Sucursal":
+                        #region Estatus de suministradora
+                        if (EstatusSucursal == "Pendientes a confirmar")
+                        {
+                            ListaDeOrdenesPorConfirmar.Clear();
+                            foreach (DataRow item in Datos.Busquedas(comando).Rows)
+                            {
+                                string imagen = string.Empty;
+
+                                //Estatus pendiente 
+                                if (item["estatus"].ToString() == "DE294EFC-C549-4DDD-A0D1-B0E1E2039ECC".ToLower() && item["EstatusOrdenSucursal"].ToString().ToUpper() == "B40D954D-D408-4769-B110-608436C490F1")
+                                {
+                                    imagen = "Package";
+                                    //Convierte el total en decimales con 2 numeros a la derecha
+                                    decimal MT = decimal.Parse(item["MTotalSucursal"].ToString());
+                                    string Total = MT.ToString("N2");
+                                    if (!ListaDeOrdenesPorConfirmar.Exists(o => o.Uidorden == new Guid(item["UidRelacionOrdenSucursal"].ToString())))
+                                    {
+                                        ListaDeOrdenesPorConfirmar.Add(new VMOrden()
+                                        {
+                                            Uidorden = new Guid(item["UidRelacionOrdenSucursal"].ToString()),
+                                            LNGFolio = long.Parse(item["IntFolio"].ToString()),
+                                            MTotal = decimal.Parse(Total),
+                                            FechaDeOrden = item["DtmFechaDeCreacion"].ToString(),
+                                            intCantidad = int.Parse(item["intCantidad"].ToString()),
+
+
+                                            Imagen = imagen
+                                        });
+                                    }
+
+                                }
+                            }
+                        }
+                        if (EstatusSucursal == "Pendiente para elaborar")
+                        {
+                            ListaDeOrdenesPorElaborar.Clear();
+                            foreach (DataRow item in Datos.Busquedas(comando).Rows)
+                            {
+                                string imagen = string.Empty;
+                                //Estatus pendiente a crear pero  confirmado
+                                if (item["estatus"].ToString() == "DE294EFC-C549-4DDD-A0D1-B0E1E2039ECC".ToLower() && item["EstatusOrdenSucursal"].ToString().ToUpper() == "EC09BCDE-ADAC-441D-8CC1-798BC211E46E")
+                                {
+                                    imagen = "Imagenes/Pendiente.png";
+                                }
+                                else
+                                //Estatus creando y confirmado
+                                if (item["estatus"].ToString() == "2d2f38b8-7757-45fb-9ca6-6ecfe20356ed".ToLower() && item["EstatusOrdenSucursal"].ToString().ToUpper() == "EC09BCDE-ADAC-441D-8CC1-798BC211E46E")
+                                {
+                                    imagen = "Imagenes/Creado.png";
+                                }
+                                if ((item["estatus"].ToString() == "DE294EFC-C549-4DDD-A0D1-B0E1E2039ECC".ToLower() || item["estatus"].ToString() == "2d2f38b8-7757-45fb-9ca6-6ecfe20356ed") && item["EstatusOrdenSucursal"].ToString().ToUpper() == "EC09BCDE-ADAC-441D-8CC1-798BC211E46E")
+                                {
+
+                                    if (!ListaDeOrdenesPorElaborar.Exists(o => o.Uidorden == new Guid(item["UidRelacionOrdenSucursal"].ToString())))
+                                    {
+                                        ListaDeOrdenesPorElaborar.Add(new VMOrden()
+                                        {
+                                            Uidorden = new Guid(item["UidRelacionOrdenSucursal"].ToString()),
+                                            LNGFolio = long.Parse(item["IntFolio"].ToString()),
+                                            MTotal = decimal.Parse(item["MTotalSucursal"].ToString()),
+                                            FechaDeOrden = item["DtmFechaDeCreacion"].ToString(),
+                                            Imagen = imagen,
+                                            UidEstatus = new Guid(item["estatus"].ToString().ToLower())
+                                        });
+                                    }
+
+                                }
+                            }
+                        }
+                        if (EstatusSucursal == "Lista a enviar")
+                        {
+                            ListaDeOrdenesPorEnviar.Clear();
+                            foreach (DataRow item in Datos.Busquedas(comando).Rows)
+                            {
+                                string imagen = string.Empty;
+                                //Estatus elaborado
+                                if (item["estatus"].ToString() == "C412D367-7D05-45D8-AECA-B8FABBF129D9".ToLower() && item["EstatusOrdenSucursal"].ToString().ToUpper() == "EC09BCDE-ADAC-441D-8CC1-798BC211E46E")
+                                {
+                                    //imagen = "Imagenes/Elaborada.png";
+                                    imagen = "Elaborada";
+                                }
+                                else //Estatus pendiente a elaborar
+                                if (item["estatus"].ToString() == "DE294EFC-C549-4DDD-A0D1-B0E1E2039ECC".ToLower() && item["EstatusOrdenSucursal"].ToString().ToUpper() == "EC09BCDE-ADAC-441D-8CC1-798BC211E46E")
+                                {
+                                    //imagen = "Imagenes/Pendiente.png";
+                                    imagen = "Pendiente";
+                                }
+                                else
+                                //Estatus creando y confirmado
+                                if (item["estatus"].ToString() == "2d2f38b8-7757-45fb-9ca6-6ecfe20356ed".ToLower() && item["EstatusOrdenSucursal"].ToString().ToUpper() == "EC09BCDE-ADAC-441D-8CC1-798BC211E46E")
+                                {
+                                    //imagen = "Imagenes/Creado.png";
+                                    imagen = "En elaboracion";
+                                }
+                                //Estatus enviado
+
+
+                                string estatisss = item["estatus"].ToString();
+                                if (item["estatus"].ToString() == "C412D367-7D05-45D8-AECA-B8FABBF129D9".ToLower() || item["estatus"].ToString() == "2d2f38b8-7757-45fb-9ca6-6ecfe20356ed".ToLower())
+                                {
+                                    if (!ListaDeOrdenesPorEnviar.Exists(o => o.Uidorden == new Guid(item["UidRelacionOrdenSucursal"].ToString())))
+                                    {
+                                        if (imagen == "Elaborada")
+                                        {
+                                            ListaDeOrdenesPorEnviar.Add(new VMOrden()
+                                            {
+                                                Uidorden = new Guid(item["UidRelacionOrdenSucursal"].ToString()),
+                                                LNGFolio = long.Parse(item["IntFolio"].ToString()),
+                                                MTotal = decimal.Parse(item["MTotalSucursal"].ToString()),
+                                                FechaDeOrden = item["DtmFechaDeCreacion"].ToString(),
+                                                Imagen = imagen
+                                            });
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                        if (EstatusSucursal == "Canceladas")
+                        {
+                            ListaDeOrdenesCanceladas.Clear();
+                            ListaDeOrdenesCanceladasPermanentes.Clear();
+                            foreach (DataRow item in Datos.Busquedas(comando).Rows)
+                            {
+                                string imagen = string.Empty;
+                                //Estatus Cancelado 
+                                if (item["EstatusOrdenSucursal"].ToString().ToUpper() == "EAE7A7E6-3F19-405E-87A9-3162D36CE21B")
+                                {
+                                    imagen = "Cancel";
+                                    TimeSpan TiempoDeVida = new TimeSpan();
+                                    TimeSpan TiempoRestante = new TimeSpan();
+                                    DateTime horaActual = DateTime.Now;
+                                    DateTime FechaRegistro = DateTime.Parse(item["FechaDeEstatusOrdenSucursal"].ToString());
+                                    TimeSpan Diferencia = new TimeSpan();
+                                    Diferencia = (horaActual - FechaRegistro);
+
+                                    TiempoDeVida = new TimeSpan(0, 2, 0);
+                                    TiempoRestante = TiempoDeVida - Diferencia;
+                                    //Verifica que la orden cancelada sea menor a 2 minutos
+                                    if (Diferencia.Minutes < 2)
+                                    {
+                                        //Agrega la ordenes y marca cuanto tiempo le queda de vida a la orden.
+                                        ListaDeOrdenesCanceladas.Add(new VMOrden()
+                                        {
+                                            Uidorden = new Guid(item["UidRelacionOrdenSucursal"].ToString()),
+                                            LNGFolio = long.Parse(item["IntFolio"].ToString()),
+                                            MTotal = decimal.Parse(item["MTotalSucursal"].ToString()),
+                                            FechaDeOrden = TiempoRestante.Minutes.ToString() + ":" + TiempoRestante.Seconds.ToString(),
+                                            Imagen = imagen
+                                        });
+                                    }
+                                    else
+                                    {
+                                        //Cambia el estatus de la orden al cliente y le mada mensaje del por que se cancelo,
+                                        AgregaEstatusALaOrden(new Guid("EAE7A7E6-3F19-405E-87A9-3162D36CE21B"), "S", Mensaje: new Guid(item["UidMensaje"].ToString()), UidOrden: new Guid(item["UidRelacionOrdenSucursal"].ToString()), UidLicencia: UidLicencia);
+                                        //Agrega a la lista las ordenes canceladas definitivamente
+                                        ListaDeOrdenesCanceladasPermanentes.Add(new VMOrden()
+                                        {
+                                            Uidorden = new Guid(item["UidRelacionOrdenSucursal"].ToString()),
+                                            LNGFolio = long.Parse(item["IntFolio"].ToString()),
+                                            MTotal = decimal.Parse(item["MTotalSucursal"].ToString()),
+                                            FechaDeOrden = TiempoRestante.Minutes.ToString() + ":" + TiempoRestante.Seconds.ToString(),
+                                            Imagen = imagen
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                        //Para la lista de la bitacora
+                        if (EstatusSucursal == "Enviadas")
+                        {
+                            foreach (DataRow item in Datos.Busquedas(comando).Rows)
+                            {
+                                string imagen = string.Empty;
+                                //Verifica si la orden no ha sido enviada
+                                if (item["EstatusOrdenSucursal"].ToString() == "0D711229-02A4-4952-BEB5-8CB144040A5A".ToLower())
+                                {
+                                    ListaDeOrdenes.Add(new VMOrden()
+                                    {
+                                        Uidorden = new Guid(item["UidOrden"].ToString()),
+                                        LNGFolio = long.Parse(item["IntFolio"].ToString()),
+                                        MTotal = decimal.Parse(item["MTotalSucursal"].ToString()),
+                                        FechaDeOrden = item["DtmFechaDeCreacion"].ToString(),
+                                        Imagen = imagen
+                                    });
+                                }
+                            }
+                        }
+                        #endregion
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         /// <summary>
         /// Obtiene la nota del producto en la orden mediante su Uid
         /// </summary>

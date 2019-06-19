@@ -20,15 +20,13 @@ namespace AppPuestoTacos.View
             try
             {
                 InitializeComponent();
-                App.MVOrden.BuscarOrdenes("Sucursal", UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), EstatusSucursal: "Pendiente para elaborar", TipoDeSucursal: "S");
+                App.MVOrden.BuscarOrdenesAppSucursal("Sucursal", UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), EstatusSucursal: "Pendiente para elaborar", TipoDeSucursal: "S");
                 MyListviewOrdenesPorRealizar.ItemsSource = App.MVOrden.ListaDeOrdenesPorElaborar;
             }
             catch (Exception)
             {
-
                 DisplayAlert("Sorry", "Sin acceso a internet", "Ok");
             }
-
         }
 
         private async void ButtonFinalizarOrdenList_Clicked(object sender, EventArgs e)
@@ -38,9 +36,6 @@ namespace AppPuestoTacos.View
             var action = await DisplayAlert("Finalizar?", "¿A concluido el proceso de elaboracion de la orden "+ ObjItem .LNGFolio+"?", "Si", "No");
             if (action)
             {
-
-
-
                 App.MVOrden.AgregaEstatusALaOrden(new Guid("c412d367-7d05-45d8-aeca-b8fabbf129d9"), UidOrden: ObjItem.Uidorden, UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), StrParametro: "S");
                 //Crea el codigo para que el repartidor pueda recoger la orden
                 // MVOrden.AsociarOrdenConSucursalDistribuidora(Codigo: Guid.NewGuid(), UidLicencia: Licencia, LngFolio: Folio);

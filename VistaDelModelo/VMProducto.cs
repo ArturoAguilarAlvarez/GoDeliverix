@@ -263,7 +263,8 @@ namespace VistaDelModelo
             foreach (DataRow item in DatosProductos.ObtenProductoSeccion(UidSeccion).Rows)
             {
                 Guid uidproducto = new Guid(item["UidProducto"].ToString());
-                string rutaimagen = "../" + item["NVchRuta"].ToString();
+                //string rutaimagen = "../" + item["NVchRuta"].ToString();
+                string rutaimagen = "http://godeliverix.net/Vista/" + item["NVchRuta"].ToString();
                 string Nombre = item["VchNombre"].ToString();
                 string Descripcion = item["VchDescripcion"].ToString();
                 DateTime Tiempo = DateTime.Parse(item["VchTiempoElaboracion"].ToString());

@@ -5,58 +5,74 @@
             Title="Mi Carrito">
 
     <!--Pages can be added as references or inline-->
-    <!--<NavigationPage.TitleView>
+    <NavigationPage.TitleView>
         <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand">
-            <Label Text="Mi carrito" FontAttributes="Bold" FontSize="Medium" VerticalOptions="Center" TextColor="White" HorizontalOptions="Start"></Label>
+            <!--<Label Text="Mi carrito" FontAttributes="Bold" FontSize="Medium" VerticalOptions="Center" TextColor="White" HorizontalOptions="Start"></Label>
             <ImageButton Source="IconCarrito.png" HeightRequest="50" WidthRequest="30"  HorizontalOptions="End"
                     BackgroundColor="Transparent" Margin="0,0,10,0"></ImageButton>
         </StackLayout>
-        --><!--<StackLayout Orientation="Horizontal" HorizontalOptions="End" Spacing="10" Margin="0,0,10,0">
+        <StackLayout Orientation="Horizontal" HorizontalOptions="End" Spacing="10" Margin="0,0,10,0">
 
             
         <ImageButton Source="IconoBuscar.png" HeightRequest="50" WidthRequest="30" Margin="10,0"   HorizontalOptions="End"
                     BackgroundColor="Transparent" Clicked="MenuBuscar_Activated" ></ImageButton>
         
             <ImageButton Source="IconCarrito.png" HeightRequest="50" WidthRequest="30"  HorizontalOptions="End"
-                    BackgroundColor="Transparent" Clicked="MenuItem1_Activted" Margin="0,0,10,0"></ImageButton>
-            
-        <ImageButton Source="IconoBuscar.png" HeightRequest="50" WidthRequest="30"  HorizontalOptions="End"
-                    BackgroundColor="Transparent" Clicked="ImageButton_Clicked" ></ImageButton>
+                    BackgroundColor="Transparent" Clicked="MenuItem1_Activted" Margin="0,0,10,0"></ImageButton>-->
+
+            <ImageButton Source="IconoEliminar.png" HeightRequest="50" WidthRequest="30"  HorizontalOptions="End"
+                    BackgroundColor="Transparent"      Clicked="BtnLimpiarCarrito_Clicked"></ImageButton>
         
-        </StackLayout>--><!--
-    </NavigationPage.TitleView>-->
+        </StackLayout>
+    </NavigationPage.TitleView>
     
     <ContentPage Title="Resumen">
         <ContentPage.Content>
-            <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+            <Grid VerticalOptions="Fill" HorizontalOptions="Fill">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <StackLayout VerticalOptions="Center" Grid.Row="0">
+                            <Label 
+                            x:Name="txtCantidad"
+                            Text="Total de articulos: 0" 
+                            HorizontalOptions="Center" 
+                            FontSize="Large"
+                            FontAttributes="Bold"  ></Label>
 
-                <Label 
-                    x:Name="txtCantidad"
-                    Text="Total de articulos: 0" 
-                    HorizontalOptions="Center" 
-                    FontSize="Large"
-                    FontAttributes="Bold"  ></Label>
+                            <Label 
+                        x:Name="txtsubtotal"
+                        HorizontalOptions="Center" 
+                        TextColor="Black"
+                        FontSize="22"
+                        Text="SubTotal: $0.00"
+                        Margin="20">
+                            </Label>
 
-                <Label 
-                x:Name="txtsubtotal"
-                HorizontalOptions="Center" 
-                TextColor="Black"
-                FontSize="22"
-                Text="SubTotal: $0.00"
-                Margin="20">
-                </Label>
+                            <Label 
+                        x:Name="txtTotalEnvio"
+                        HorizontalOptions="Center" 
+                        TextColor="Black"
+                        FontSize="22"
+                        Text="Total de envio= $0.00"
+                        Margin="20">
+                            </Label>
+                </StackLayout>
 
-                <Label 
-                x:Name="txtTotalEnvio"
-                HorizontalOptions="Center" 
-                TextColor="Black"
-                FontSize="22"
-                Text="Total de envio= $0.00"
-                Margin="20">
-                </Label>
 
-                <StackLayout Orientation="Horizontal" Grid.Row="2" VerticalOptions="End" HorizontalOptions="Center">
-                    <Button
+                <Button
+                    Grid.Row="1"
+                        HorizontalOptions="FillAndExpand"
+                    VerticalOptions="End"    
+                        x:Name="btnPagar2"
+                    Text="pagar $0.00" 
+                    Clicked="BtnPagar_Clicked"
+                    TextColor="White"
+                    BackgroundColor="Green"></Button>
+                
+                <!--<StackLayout Orientation="Horizontal" Grid.Row="2" VerticalOptions="End" HorizontalOptions="Center">
+                    --><!--<Button
                         Margin="0,0,0,10"
                         CornerRadius="40"
                         HeightRequest="70"
@@ -65,23 +81,10 @@
                     Text="Vaciar Carrito" 
                     Clicked="BtnLimpiarCarrito_Clicked"
                     TextColor="White"
-                    BackgroundColor="Red"></Button>
+                    BackgroundColor="Red"></Button>--><!--
+                </StackLayout>-->
 
-                    <Button
-                        Margin="0,0,0,10"
-                    CornerRadius="40"
-                    VerticalOptions="End"    
-                        x:Name="btnPagar2"
-                        HeightRequest="75"
-                        WidthRequest="100"
-                    Text="pagar $0.00" 
-                    Clicked="BtnPagar_Clicked"
-                    TextColor="White"
-                    BackgroundColor="Green"></Button>
-
-                </StackLayout>
-
-            </StackLayout>
+            </Grid>
         </ContentPage.Content>
     </ContentPage>
 
@@ -89,11 +92,10 @@
         <ContentPage.Content>
             <Grid VerticalOptions="Fill">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
-                <StackLayout  Grid.Row="0" x:Name="ViewListaProductoVacio">
+                <StackLayout  x:Name="ViewListaProductoVacio" VerticalOptions="Center"  Grid.Row="0">
                     <Label
                         Margin="0,20,0,0"
                     HorizontalOptions="Center" 
@@ -111,7 +113,7 @@
                 </StackLayout>
 
                 <ListView x:Name="MyListViewCarritoEmpresa"       
-                                Grid.Row="1"
+                               Grid.Row="0"
                               VerticalScrollBarVisibility="Always"
                           ItemTapped="MyListViewCarritoEmpresa_ItemTapped"
             ItemsSource="{Binding VMProducto}"
@@ -191,7 +193,7 @@
 
                 </ListView>
 
-                <ScrollView Grid.Row="0" x:Name="ScrollView_Productos" VerticalOptions="End" >
+                <ScrollView x:Name="ScrollView_Productos" VerticalOptions="End"   Grid.Row="0">
                     <ListView x:Name="MyListViewBusquedaProductos"                          
                              
                               VerticalScrollBarVisibility="Always"
@@ -263,8 +265,18 @@
                     </ListView>
                 </ScrollView>
 
-                <StackLayout Orientation="Horizontal" Grid.Row="2" VerticalOptions="End" HorizontalOptions="Center">
-                    <Button
+                <Button 
+                     Grid.Row="1"
+                        x:Name="btnPagar"
+                        VerticalOptions="End"  
+                        HorizontalOptions="FillAndExpand"
+                        Text="pagar $0.00" 
+                        Clicked="BtnPagar_Clicked"
+                        TextColor="White"
+                        BackgroundColor="Green"></Button>
+                
+                <!--<StackLayout Orientation="Horizontal" Grid.Row="2" VerticalOptions="End" HorizontalOptions="Center">
+                    --><!--<Button
                         CornerRadius="40"
                     x:Name="btnLimpiarCarrito"
                         Margin="0,0,0,10"
@@ -274,21 +286,11 @@
                     Text="Vaciar Carrito" 
                     Clicked="BtnLimpiarCarrito_Clicked"
                     TextColor="White"
-                    BackgroundColor="Red"></Button>
+                    BackgroundColor="Red"></Button>--><!--
 
-                    <Button
-                        CornerRadius="40"
-                        x:Name="btnPagar"
-                        VerticalOptions="End"    
-                        Margin="0,0,0,10"
-                            HeightRequest="75"
-                            WidthRequest="100"
-                    Text="pagar $0.00" 
-                    Clicked="BtnPagar_Clicked"
-                    TextColor="White"
-                    BackgroundColor="Green"></Button>
+                   
 
-                </StackLayout>
+                </StackLayout>-->
 
             </Grid>
 

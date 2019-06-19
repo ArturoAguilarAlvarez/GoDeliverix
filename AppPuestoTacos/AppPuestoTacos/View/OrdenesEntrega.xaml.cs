@@ -21,7 +21,7 @@ namespace AppPuestoTacos.View
             try
             {
                 InitializeComponent();
-                App.MVOrden.BuscarOrdenes("Sucursal", UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), EstatusSucursal: "Lista a enviar", TipoDeSucursal: "S");
+                App.MVOrden.BuscarOrdenesAppSucursal("Sucursal", UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), EstatusSucursal: "Lista a enviar", TipoDeSucursal: "S");
                 MyListviewOrdenesPorEnviar.ItemsSource = App.MVOrden.ListaDeOrdenesPorEnviar;
             }
             catch (Exception)
