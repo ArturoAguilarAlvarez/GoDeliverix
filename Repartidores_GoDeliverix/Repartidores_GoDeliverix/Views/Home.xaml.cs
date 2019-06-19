@@ -109,7 +109,7 @@ namespace Repartidores_GoDeliverix.Views
             if (Device.RuntimePlatform == Device.iOS)
             {
                 //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
-                Device.OpenUri(new Uri("http://maps.apple.com/?q=394+Pacific+Ave+San+Francisco+CA"));
+                Device.OpenUri(new Uri("http://maps.apple.com/"));
             }
             else if (Device.RuntimePlatform == Device.Android)
             {
@@ -124,7 +124,7 @@ namespace Repartidores_GoDeliverix.Views
             if (Device.RuntimePlatform == Device.iOS)
             {
                 //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
-                Device.OpenUri(new Uri("http://maps.apple.com/?q=394+Pacific+Ave+San+Francisco+CA"));
+                Device.OpenUri(new Uri("http://maps.apple.com/?q=" + lblUbicacionSucursal.Text + ""));
             }
             else if (Device.RuntimePlatform == Device.Android)
             {
@@ -139,7 +139,7 @@ namespace Repartidores_GoDeliverix.Views
             if (Device.RuntimePlatform == Device.iOS)
             {
                 //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
-                Device.OpenUri(new Uri("http://maps.apple.com/?q=394+Pacific+Ave+San+Francisco+CA"));
+                Device.OpenUri(new Uri("http://maps.apple.com/?q=" + lblUbicacionSucursal.Text + ""));
             }
             else if (Device.RuntimePlatform == Device.Android)
             {
@@ -155,7 +155,7 @@ namespace Repartidores_GoDeliverix.Views
             if (Device.RuntimePlatform == Device.iOS)
             {
                 //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
-                Device.OpenUri(new Uri("http://maps.apple.com/?q=394+Pacific+Ave+San+Francisco+CA"));
+                Device.OpenUri(new Uri("http://maps.apple.com/?q=" + lblUbicacionCliente.Text + ""));
             }
             else if (Device.RuntimePlatform == Device.Android)
             {

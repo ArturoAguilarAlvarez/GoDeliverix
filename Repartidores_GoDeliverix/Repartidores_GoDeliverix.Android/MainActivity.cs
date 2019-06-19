@@ -17,7 +17,7 @@ namespace Repartidores_GoDeliverix.Droid
         {
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
-            Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);
+            global::Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);
             base.OnCreate(savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             App.ScreenDensity = Resources.DisplayMetrics.Density;
