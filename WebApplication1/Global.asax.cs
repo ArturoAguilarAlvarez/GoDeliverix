@@ -5,6 +5,10 @@ using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
 using System.Web.UI;
+using System.Web.Http;
+using System.Web.Mvc;
+using System.Web.Routing;
+using WebApplication1.App_Start;
 
 namespace WebApplication1
 {
@@ -13,6 +17,8 @@ namespace WebApplication1
 
         protected void Application_Start(object sender, EventArgs e)
         {
+            GlobalConfiguration.Configure(WebApiConfig.Register);
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             ScriptManager.ScriptResourceMapping.AddDefinition("jquery", new ScriptResourceDefinition
             {
                 Path = "~/scripts/jquery-3.1.0.js"
