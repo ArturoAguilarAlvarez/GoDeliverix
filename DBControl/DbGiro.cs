@@ -6,7 +6,7 @@ namespace DBControl
     {
         Conexion oConexion;
 
-        public DataTable ListaDeGiroConImagen(string tipo = "")
+        public DataTable ListaDeGiroConImagen()
         {
             oConexion = new Conexion();
             string Query = "";

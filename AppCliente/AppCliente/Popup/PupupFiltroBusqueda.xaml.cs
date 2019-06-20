@@ -47,7 +47,7 @@ namespace AppCliente.Popup
             MyPickerSubCategoria.ItemsSource = null;
 
             AppCliente.App.MVGiro.LISTADEGIRO.Clear();
-            AppCliente.App.MVGiro.ListaDeGiroConimagen(tipo: "Seleccion");
+            AppCliente.App.MVGiro.ListaDeGiroConimagen();
             MyPickerGiro.ItemsSource = AppCliente.App.MVGiro.LISTADEGIRO;
             MyPickerGiro.SelectedIndex = 0;
             VMGiro objetoGiro = MyPickerGiro.SelectedItem as VMGiro;

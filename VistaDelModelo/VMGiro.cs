@@ -157,10 +157,14 @@ namespace VistaDelModelo
             LISTADEGIROSELECCIONADO.Remove(ObjetoAEliminar);
         }
 
-        public void ListaDeGiroConimagen(string tipo = "")
+        /// <summary>
+        /// Obtiene todos los giros con su imagen de la base de datos
+        /// </summary>
+        /// <param name="tipo"></param>
+        public void ListaDeGiroConimagen()
         {
             Datos = new DbGiro();
-            foreach (DataRow item in Datos.ListaDeGiroConImagen(tipo: tipo).Rows)
+            foreach (DataRow item in Datos.ListaDeGiroConImagen().Rows)
             {
 
                 Guid UidGiro = new Guid(item["UidGiro"].ToString());
@@ -184,10 +188,9 @@ namespace VistaDelModelo
                 }
                 Nombre = NuevaDescripcion;
 
-                if (!string.IsNullOrEmpty(tipo))
-                {
-                    RutaDeImagen = "../" + RutaDeImagen;
-                }
+
+                RutaDeImagen = "../" + RutaDeImagen;
+
 
                 VMGiro Objeto = new VMGiro() { UIDVM = UidGiro, STRNOMBRE = Nombre, STRDESCRIPCION = Descripcion, RUTAIMAGEN = RutaDeImagen };
                 LISTADEGIRO.Add(Objeto);

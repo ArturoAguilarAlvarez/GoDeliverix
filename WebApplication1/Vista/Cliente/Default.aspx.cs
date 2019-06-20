@@ -58,7 +58,7 @@ namespace WebApplication1.Vista.Cliente
                     Session["MVSucursales"] = MVSucursales;
                     Session["MVTarifario"] = MVTarifario;
 
-                    MVGiro.ListaDeGiroConimagen(tipo: "Seleccion");
+                    MVGiro.ListaDeGiroConimagen();
                     DDlGiro.DataSource = MVGiro.LISTADEGIRO;
                     DDlGiro.DataValueField = "UIDVM";
                     DDlGiro.DataTextField = "STRNOMBRE";

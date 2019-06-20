@@ -15,20 +15,23 @@ namespace WebApplication1.Controllers
         #endregion
 
         // GET: api/Profile
-        public string Get(string Usuario, string Contrasena)
+        public IEnumerable<string> Get(string Usuario, string Contrasena)
         {
             if (!string.IsNullOrEmpty(Usuario) && !string.IsNullOrEmpty(Contrasena))
             {
                 Guid id = Guid.Empty;
                 id = MVAcceso.Ingresar(Usuario, Contrasena);
-                return  id.ToString();
+                return new string[] { id.ToString() };
             }
             else
             {
-                return "NO valido";
+                return new string[] { "No valido"};
             }
             
         }
+
+        
+        
 
         // GET: api/Profile/5
         public string Get(int id)
