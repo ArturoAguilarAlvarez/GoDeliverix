@@ -6,7 +6,9 @@
 
     <StackLayout>
         <!-- Place new controls here -->
-        <Label x:Uid="txtIDUsuario" Text="Hola"></Label>
+        <Label x:Name="txtIDUsuario" Text="Hola"></Label>
+        <Entry x:Name="txtUsuario"></Entry>
+        <Entry x:Name="txtContrasena"></Entry>
         <Button Text="obtener datos api" Clicked="Button_Clicked"></Button>
     </StackLayout>
 
