@@ -200,6 +200,10 @@ namespace VistaDelModelo
             CONSULTAS.Eliminar(uidCategoria);
         }
 
+        /// <summary>
+        /// Obtiene todos las subcategoria de una categoria.
+        /// </summary>
+        /// <param name="UidSubcategoria"></param>
         public void SubcategoriaConImagen(string UidSubcategoria)
         {
             LISTADESUBCATEGORIAS.Clear();

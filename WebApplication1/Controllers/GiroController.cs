@@ -26,19 +26,19 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
-        // POST: api/Profile
-        public void Post([FromBody]string value)
-        {
-        }
+        //// POST: api/Profile
+        //public void Post([FromBody]string value)
+        //{
+        //}
 
-        // PUT: api/Profile/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
+        //// PUT: api/Profile/5
+        //public void Put(int id, [FromBody]string value)
+        //{
+        //}
 
-        // DELETE: api/Profile/5
-        public void Delete(int id)
-        {
-        }
+        //// DELETE: api/Profile/5
+        //public void Delete(int id)
+        //{
+        //}
     }
 }
