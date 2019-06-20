@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace APIGoDeliverix
+namespace WebApplication2
 {
     public class Startup
     {
@@ -40,8 +40,8 @@ namespace APIGoDeliverix
                 app.UseHsts();
             }
 
-            //app.UseHttpsRedirection();
-            app.UseMvc(Routes=> { Routes.MapRoute("Default","api/{controller}/{action=index}/{id:Guid?}"); });
+            app.UseHttpsRedirection();
+            app.UseMvc();
         }
     }
 }

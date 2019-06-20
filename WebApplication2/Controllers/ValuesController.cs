@@ -4,9 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace APIGoDeliverix.Controllers
+namespace WebApplication2.Controllers
 {
-    
+    [Route("api/[controller]")]
+    [ApiController]
     public class ValuesController : ControllerBase
     {
         // GET api/values
@@ -39,26 +40,6 @@ namespace APIGoDeliverix.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-        }
-
-        [HttpPost]
-        public ActionResult<string> HectorMeChupaUnHuebito()
-        {
-            return "Si lo es";
-        }
-
-        [HttpPost]
-        public ActionResult<object> Login(string User,string password)
-        {
-            if (!string.IsNullOrEmpty(User))
-            {
-                return BadRequest();
-            }
-            if (!string.IsNullOrEmpty(password))
-            {
-
-            }
-            return "Si lo es";
         }
     }
 }
