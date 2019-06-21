@@ -24,7 +24,7 @@ namespace AppCliente
             InitializeComponent();
             try
             { 
-                AppCliente.App.MVGiro.ListaDeGiroConimagen(tipo: "Seleccion");
+                AppCliente.App.MVGiro.ListaDeGiroConimagen();
                 App.giro = AppCliente.App.MVGiro.LISTADEGIRO[0].UIDVM.ToString();
 
                 string Hora = string.Empty;

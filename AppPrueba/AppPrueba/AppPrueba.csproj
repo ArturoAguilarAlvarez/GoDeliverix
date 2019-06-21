@@ -17,4 +17,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Modelo\Modelo.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\VistaDelModelo\VistaDelModelo.csproj" />
+  </ItemGroup>
 </Project>

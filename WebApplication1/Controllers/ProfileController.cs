@@ -11,7 +11,7 @@ namespace WebApplication1.Controllers
     public class ProfileController : ApiController
     {
         #region Propiedades
-        public static VMAcceso MVAcceso = new VMAcceso();
+        public static VMAcceso MVAcceso;
         #endregion
 
         // GET: api/Profile
@@ -20,12 +20,13 @@ namespace WebApplication1.Controllers
             if (!string.IsNullOrEmpty(Usuario) && !string.IsNullOrEmpty(Contrasena))
             {
                 Guid id = Guid.Empty;
+                MVAcceso = new VMAcceso();
                 id = MVAcceso.Ingresar(Usuario, Contrasena);
                 return new string[] { id.ToString() };
             }
             else
             {
-                return new string[] { "NO valido"};
+                return new string[] { "No valido"};
             }
             
         }
