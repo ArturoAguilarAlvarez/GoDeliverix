@@ -340,8 +340,10 @@
     <Compile Include="Controllers\EmpresaController.cs" />
     <Compile Include="Controllers\GiroController.cs" />
     <Compile Include="Controllers\ImagenController.cs" />
+    <Compile Include="Controllers\OfertaController.cs" />
     <Compile Include="Controllers\ProductoController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\SeccionController.cs" />
     <Compile Include="Controllers\SubcategoriaController.cs" />
     <Compile Include="Controllers\SucursalesController.cs" />
     <Compile Include="Default.aspx.cs">

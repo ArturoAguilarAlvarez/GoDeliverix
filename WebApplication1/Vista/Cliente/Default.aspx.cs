@@ -580,14 +580,17 @@ namespace WebApplication1.Vista.Cliente
 
                 if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
                 {
+                    // GetBuscarProductosCliente
                     MVProducto.BuscarProductoPorSucursal("Giro",  Dia, Colonia, new Guid(giro), UidProducto);
                 }
                 if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
                 {
+                    // GetBuscarProductosCliente
                     MVProducto.BuscarProductoPorSucursal("Categoria",  Dia, Colonia, new Guid(categoria), UidProducto);
                 }
                 if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || !string.IsNullOrWhiteSpace(subcategoria)))
                 {
+                    // GetBuscarProductosCliente
                     MVProducto.BuscarProductoPorSucursal("Subcategoria", Dia, Colonia, new Guid(subcategoria), UidProducto);
                 }
 
@@ -597,6 +600,8 @@ namespace WebApplication1.Vista.Cliente
                 PanelDetallesProducto.Visible = true;
                 LvSucursales.DataSource = MVProducto.ListaDePreciosSucursales;
                 LvSucursales.DataBind();
+
+                // GetImagenDePerfilEmpresa
                 MVImagen.ObtenerImagenPerfilDeEmpresa(MVProducto.ListaDePreciosSucursales[0].UIDEMPRESA.ToString());
                 ImgEmpresaDefault.ImageUrl = "../" + MVImagen.STRRUTA;
                 ImgEmpresaDefault.DataBind();
@@ -1012,13 +1017,13 @@ namespace WebApplication1.Vista.Cliente
 
         protected void MnSecciones_MenuItemClick(object sender, MenuEventArgs e)
         {
-
             e.Item.Selectable = true;
             e.Item.Selected = true;
                     
             Guid Seccion = new Guid(e.Item.Value);
             if (Seccion != Guid.Empty)
             {
+                // GetObtenerInformacionDeProductoDeLaSucursal
                 MVProducto.BuscarProductosSeccion(Seccion);
 
                 DLProductosSucursal.DataSource = MVProducto.ListaDeProductos;
@@ -1070,8 +1075,6 @@ namespace WebApplication1.Vista.Cliente
             Label LblProductoEnCarrito = e.Item.FindControl("LblProductoEnCarrito") as Label;
             Label lblDescripcionDeProducto = e.Item.FindControl("lblDescripcionDeProducto") as Label;
            
-
-
             Guid UidProducto = MVProducto.ListaDeProductos[e.Item.ItemIndex].UID;
 
             lblDescripcionDeProducto.Text = MVProducto.ListaDeProductos[e.Item.ItemIndex].STRDESCRIPCION;

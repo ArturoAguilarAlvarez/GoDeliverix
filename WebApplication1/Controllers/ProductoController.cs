@@ -33,7 +33,7 @@ namespace WebApplication1.Controllers
             MVProducto.BuscarProductosSeccion(new Guid(UidSeccion));
             
             Respuesta = new ResponseHelper();
-            Respuesta.Data = MVProducto;
+            Respuesta.Data = MVProducto.ListaDeProductos;
             Respuesta.Status = true;
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;
