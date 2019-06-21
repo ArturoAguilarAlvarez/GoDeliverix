@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using WebApplication1.App_Start;
 using VistaDelModelo;
+using WebApplication1.App_Start;
 
 namespace WebApplication1.Controllers
 {
@@ -17,7 +13,7 @@ namespace WebApplication1.Controllers
         public ResponseHelper GetBuscarUsuarios(string UidUsuario, string UidEmpresa = "", string NOMBRE = "", string USER = "", string APELLIDO = "", string ESTATUS = "", string UIDPERFIL = "")
         {
             MVUsuario = new VMUsuarios();
-            MVUsuario.BusquedaDeUsuario(new Guid(UidUsuario),new Guid(UidEmpresa),NOMBRE,USER,APELLIDO,ESTATUS,new Guid(UIDPERFIL));
+            MVUsuario.BusquedaDeUsuario(new Guid(UidUsuario), new Guid(UidEmpresa), NOMBRE, USER, APELLIDO, ESTATUS, new Guid(UIDPERFIL));
 
             Respuesta = new ResponseHelper();
             if (!string.IsNullOrEmpty(UidUsuario))
@@ -28,9 +24,24 @@ namespace WebApplication1.Controllers
             {
                 Respuesta.Data = MVUsuario.LISTADEUSUARIOS;
             }
-           
+
             Respuesta.Status = true;
             Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
+
+        public ResponseHelper GetGuardarUsuario(string UidUsuario, string Nombre, string ApellidoPaterno, string ApellidoMaterno, string usuario, string password, string fnacimiento, string perfil, string estatus, string TIPODEUSUARIO, string UidEmpresa, string UidSucursal)
+        {
+            MVUsuario = new VMUsuarios();
+            MVUsuario.GuardaUsuario(new Guid(UidUsuario), Nombre, ApellidoPaterno, ApellidoMaterno, usuario, password, fnacimiento, perfil, estatus, TIPODEUSUARIO, new Guid(UidEmpresa), new Guid(UidSucursal));
+
+            Respuesta = new ResponseHelper();
+
+            Respuesta.Data = "Registro guardado";
+
+
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion agregada satisfactoriamente";
             return Respuesta;
         }
 

@@ -64,7 +64,7 @@ namespace WebApplication1.Vista
                                     {
                                         MVAcceso.CorreoDeConfirmacion(uidusuaro, correo, usuario, password, nombre, paterno + " " + materno);
                                     }
-                                    MVTelefono.GuardaTelefonoUsuario(uidusuaro);
+                                    
                                     if (MVTelefono.ListaDeTelefonos != null)
                                     {
                                         if (MVTelefono.ListaDeTelefonos.Count != 0)

@@ -84,20 +84,7 @@ namespace VistaDelModelo
             ListaDeTelefonos.Remove(T);
         }
 
-        public void GuardaTelefonoUsuario(Guid uidusuaro)
-        {
-            //var T = new Telefono();
-            //foreach (var item in ListaDeTelefonos)
-            //{
-            //    var Telefono = new Telefono
-            //    {
-            //        ID = item.ID,
-            //        NUMERO = item.NUMERO,
-            //        Tipo = item.Tipo.ToString()
-            //    };
-            //    Telefono.GuardaTelefono(uidusuaro, "Sucursal");
-            //}
-        }
+     
 
         /// <summary>
         /// Guarda el telefono a la sucursal por el identificador para guardar la lista

@@ -73,7 +73,6 @@ namespace AppCliente
 
                         Application.Current.MainPage = new MasterMenu();
                     }
-                    MVTelefono.GuardaTelefonoUsuario(uidusuaro);
                     if (MVTelefono.ListaDeTelefonos != null)
                     {
                         if (MVTelefono.ListaDeTelefonos.Count != 0)

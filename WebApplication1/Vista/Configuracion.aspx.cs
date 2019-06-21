@@ -513,7 +513,6 @@ namespace WebApplication1.Vista
             {
                 GuardaTelefono();
             }
-            MVTelefono.GuardaTelefonoUsuario(new Guid(Session["IdUsuario"].ToString()));
             DDLDTipoDETelefono.SelectedIndex = -1;
             txtDTelefono.Text = string.Empty;
             DDLDTipoDETelefono.Enabled = false;

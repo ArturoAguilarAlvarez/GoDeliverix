@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using VistaDelModelo;
 using WebApplication1.App_Start;
@@ -27,8 +24,15 @@ namespace WebApplication1.Controllers
             }
             else
             {
-                return new string[] { "No valido"};
+                return new string[] { "No valido" };
             }
+
+        }
+
+        public void GetCorreoDeConfirmacion(string UidUsuario, string correo, string usuario, string password, string Nombre, string Apellidos)
+        {
+            MVAcceso = new VMAcceso();
+            MVAcceso.CorreoDeConfirmacion(new Guid(UidUsuario),correo,usuario,password,Nombre,Apellidos);
             
         }
 
