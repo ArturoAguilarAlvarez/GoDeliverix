@@ -45,6 +45,7 @@ namespace AppCliente
 
             string usuario = txtUsuario.Text;
             string password = txtIDContraseña.Text;
+
                 if (Ingresar(usuario, password))
                 {
                     App.MVDireccion.ObtenerDireccionesUsuario(App.Global1);
@@ -53,70 +54,13 @@ namespace AppCliente
 
                     AppCliente.Helpers.Settings.UserName = txtUsuario.Text;
                     AppCliente.Helpers.Settings.Password = txtIDContraseña.Text;
-
-                    //App.MVTelefono.TipoDeTelefonos();
-                    //App.MVTelefono.BuscarTelefonos(UidPropietario: new Guid(AppCliente.App.Global1), ParadetroDeBusqueda: "Usuario");
-                    //App.MVCorreoElectronico.BuscarCorreos(UidPropietario: new Guid(AppCliente.App.Global1), strParametroDebusqueda: "Usuario");
-                    //App.MVUsuarios.obtenerUsuario(AppCliente.App.Global1);
-                    //App.MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
-
-                    //for (int i = 0; i < MVDireccion.ListaDIRECCIONES.Count; i++)
-                    //{
-                    //    MVUbicacion.RecuperaUbicacionDireccion(MVDireccion.ListaDIRECCIONES[i].ID.ToString());
-                    //}
-
-
-
                     Application.Current.MainPage = new MasterMenu();
-
-                        //switch (Device.RuntimePlatform)
-                        //    {
-                        //        case Device.iOS:
-                        //            Application.Current.MainPage = new NavigationPage(new TabsMain());
-                        //            //Application.Current.MainPage = new HomePage();
-                        //        break;
-                        //        case Device.Android:
-                        //        // Navigation.PushAsync(new RegistroPaso1());
-                        //        Application.Current.MainPage = new MasterDetailPage1();
-
-                        //        //Application.Current.MainPage = new HomePage();
-                        //        break;
-                        //        case Device.UWP:
-                        //        case Device.macOS:
-                        //        default:
-                        //            // This is just an example. You wouldn't actually need to do this, since Padding is already 0 by default.
-                        //            this.Padding = new Thickness(0);
-                        //            break;
-                        //    }
 
                         await PopupNavigation.Instance.PopAsync();
                     }
                     else
-                    {
-
-                        //App.MVTelefono.TipoDeTelefonos();
-                        //App.MVTelefono.BuscarTelefonos(UidPropietario: new Guid(AppCliente.App.Global1), ParadetroDeBusqueda: "Usuario");
-                        //App.MVUsuarios.obtenerUsuario(AppCliente.App.Global1);
-                        //App.MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
-                        //App.MVCorreoElectronico.BuscarCorreos(UidPropietario: new Guid(AppCliente.App.Global1), strParametroDebusqueda: "Usuario");
-
-
-                        Application.Current.MainPage = new MasterMenu();
-                        //switch (Device.RuntimePlatform)
-                        //{
-                        //    case Device.iOS:
-                        //        Application.Current.MainPage = new MasterDetailPage1();
-                        //        break;
-                        //    case Device.Android:
-                        //        Application.Current.MainPage = new MasterDetailPage1();
-                        //        break;
-                        //    case Device.UWP:
-                        //    case Device.macOS:
-                        //    default:
-                        //        // This is just an example. You wouldn't actually need to do this, since Padding is already 0 by default.
-                        //        this.Padding = new Thickness(0);
-                        //        break;
-                        //}
+                    {                    
+                        Application.Current.MainPage = new MasterMenu();   
                         await PopupNavigation.Instance.PopAsync();
                     }
 
