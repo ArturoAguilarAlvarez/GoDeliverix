@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AppPrueba.WebApi
+namespace PruebaApi.WebApi
 {
     public static class RestService
     {
@@ -23,7 +23,7 @@ namespace AppPrueba.WebApi
         public static class Methods
         {
             public static string Giro = "api/Giro/";
+            public static string Profile = "api/Profile/";
         }
-
     }
 }

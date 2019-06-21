@@ -1,12 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:AppPrueba"
-             x:Class="AppPrueba.MainPage">
+             xmlns:local="clr-namespace:PruebaApi"
+             x:Class="PruebaApi.MainPage">
+
 
     <StackLayout>
         <!-- Place new controls here -->
-        <Label x:Uid="txtIDUsuario" Text="Hola"></Label>
+        <Label x:Name="txtIDUsuario" Text="Hola"></Label>
+        <Entry x:Name="txtUsuario"></Entry>
+        <Entry x:Name="txtContrasena"></Entry>
         <Button Text="obtener datos api" Clicked="Button_Clicked"></Button>
     </StackLayout>
 

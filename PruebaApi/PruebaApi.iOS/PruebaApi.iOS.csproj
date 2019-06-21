@@ -5,13 +5,13 @@
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{ECE0E400-796B-40F2-950D-C6EA1A89F0D3}</ProjectGuid>
+    <ProjectGuid>{FA135C3B-5789-463C-9C55-87A3382CA948}</ProjectGuid>
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TemplateGuid>{6143fdea-f3c2-4a09-aafa-6e230626515e}</TemplateGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>AppPrueba.iOS</RootNamespace>
+    <RootNamespace>PruebaApi.iOS</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>AppPrueba.iOS</AssemblyName>
+    <AssemblyName>PruebaApi.iOS</AssemblyName>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -152,9 +152,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\AppPrueba\AppPrueba.csproj">
-      <Project>{E1D7EA1D-D03C-466D-A4F6-99BBA65D2370}</Project>
-      <Name>AppPrueba</Name>
+    <ProjectReference Include="..\PruebaApi\PruebaApi.csproj">
+      <Project>{D5C114B8-5207-4C2A-BDB0-AF37CF7F6F0A}</Project>
+      <Name>PruebaApi</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

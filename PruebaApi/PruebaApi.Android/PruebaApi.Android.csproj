@@ -3,12 +3,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{163D1FF1-C150-469D-A8AD-9186CE1E34C3}</ProjectGuid>
+    <ProjectGuid>{69160062-5E31-4766-A53D-0A23F7E2CCC2}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TemplateGuid>{c9e5eea5-ca05-42a1-839b-61506e0a37df}</TemplateGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>AppPrueba.Droid</RootNamespace>
-    <AssemblyName>AppPrueba.Android</AssemblyName>
+    <RootNamespace>PruebaApi.Droid</RootNamespace>
+    <AssemblyName>PruebaApi.Android</AssemblyName>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
@@ -92,9 +92,9 @@
     <Folder Include="Resources\drawable-xxxhdpi\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AppPrueba\AppPrueba.csproj">
-      <Project>{E1D7EA1D-D03C-466D-A4F6-99BBA65D2370}</Project>
-      <Name>AppPrueba</Name>
+    <ProjectReference Include="..\PruebaApi\PruebaApi.csproj">
+      <Project>{D5C114B8-5207-4C2A-BDB0-AF37CF7F6F0A}</Project>
+      <Name>PruebaApi</Name>
     </ProjectReference>
   </ItemGroup>
  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
