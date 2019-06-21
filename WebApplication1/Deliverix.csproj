@@ -346,6 +346,7 @@
     <Compile Include="Controllers\SeccionController.cs" />
     <Compile Include="Controllers\SubcategoriaController.cs" />
     <Compile Include="Controllers\SucursalesController.cs" />
+    <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

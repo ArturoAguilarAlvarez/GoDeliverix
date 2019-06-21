@@ -5,13 +5,14 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using VistaDelModelo;
-
+using WebApplication1.App_Start;
 namespace WebApplication1.Controllers
 {
     public class ProfileController : ApiController
     {
         #region Propiedades
         public static VMAcceso MVAcceso;
+        ResponseHelper Respuesta;
         #endregion
 
         // GET: api/Profile
@@ -29,6 +30,16 @@ namespace WebApplication1.Controllers
                 return new string[] { "No valido"};
             }
             
+        }
+
+        public ResponseHelper GetProfileType(string UidUsuario)
+        {
+            Respuesta = new ResponseHelper();
+            MVAcceso = new VMAcceso();
+            Respuesta.Status = true;
+            Respuesta.Data = MVAcceso.PerfilDeUsuario(UidUsuario);
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
         }
 
         // GET: api/Profile/5

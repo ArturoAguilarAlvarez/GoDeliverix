@@ -125,6 +125,7 @@ namespace WebApplication1
                 {
                     if (MVAcceso.VerificarEstatus(Id.ToString()))
                     {
+                        // ProfileController GetProfileType
                         string perfil = MVAcceso.PerfilDeUsuario(Id.ToString());
                         //Obtener la empresa a la que pertenece el usuario
                         Guid UidEmpresa = MVUsuarios.ObtenerIdEmpresa(Id.ToString());
