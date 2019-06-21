@@ -30,9 +30,6 @@ namespace WebApplication1.Controllers
             
         }
 
-        
-        
-
         // GET: api/Profile/5
         public string Get(int id)
         {
