@@ -156,7 +156,10 @@ namespace VistaDelModelo
             }
         }
 
-
+        /// <summary>
+        /// Retorna una lista de categorias dependiendo el giro que se le envie
+        /// </summary>
+        /// <param name="UidGiro"></param>
         public void CategoriaConImagen(string UidGiro)
         {
             LISTADECATEGORIAS.Clear();

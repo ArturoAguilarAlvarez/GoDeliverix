@@ -6,21 +6,32 @@ using System.Net.Http;
 using System.Web.Http;
 using VistaDelModelo;
 using WebApplication1.App_Start;
-
 namespace WebApplication1.Controllers
 {
-    public class GiroController : ApiController
+    public class ImagenController : ApiController
     {
-        VMGiro MVGiro;
+        VMImagen MVImagen;
         ResponseHelper Respuesta;
         // GET: api/Profile/5
-        public ResponseHelper Get()
+        public ResponseHelper GetImagenDePerfilEmpresa(string UidEmpresa)
         {
-            MVGiro = new VMGiro();
-            MVGiro.ListaDeGiroConimagen();
-
+            MVImagen = new VMImagen();
+            MVImagen.ObtenerImagenPerfilDeEmpresa(UidEmpresa);
+            
             Respuesta = new ResponseHelper();
-            Respuesta.Data = MVGiro.LISTADEGIRO;
+            Respuesta.Data = MVImagen;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
+
+        public ResponseHelper GetImagenDePortadaDeEmpresa(string UidEmpresa)
+        {
+            MVImagen = new VMImagen();
+            MVImagen.ObtenerImagenPerfilDeEmpresa(UidEmpresa);
+            
+            Respuesta = new ResponseHelper();
+            Respuesta.Data = MVImagen;
             Respuesta.Status = true;
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;

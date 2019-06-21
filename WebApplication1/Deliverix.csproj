@@ -334,9 +334,16 @@
     <Compile Include="App_Start\ResponseHelper.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\CategoriaController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
+    <Compile Include="Controllers\DireccionController.cs" />
+    <Compile Include="Controllers\EmpresaController.cs" />
     <Compile Include="Controllers\GiroController.cs" />
+    <Compile Include="Controllers\ImagenController.cs" />
+    <Compile Include="Controllers\ProductoController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\SubcategoriaController.cs" />
+    <Compile Include="Controllers\SucursalesController.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
