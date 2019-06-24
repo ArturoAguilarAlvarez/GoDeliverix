@@ -38,8 +38,7 @@ namespace WebApplication1.Controllers
             Respuesta = new ResponseHelper();
 
             Respuesta.Data = "Registro guardado";
-
-
+            
             Respuesta.Status = true;
             Respuesta.Message = "Informacion agregada satisfactoriamente";
             return Respuesta;

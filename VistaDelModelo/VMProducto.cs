@@ -416,10 +416,10 @@ namespace VistaDelModelo
             {
                 ListaDelInformacionSucursales.Remove(sucursal);
             }
-            
+
         }
 
-        public void AgregaAlCarrito(Guid uidProducto, Guid UidSucursal, Guid UidSeccion, string cantidad, decimal CostoDeEnvio = 0.0m, Guid UidTarifario = new Guid(), string strNota = "", Guid RegistroProductoEnCarrito = new Guid(),string URLEmpresa="")
+        public void AgregaAlCarrito(Guid uidProducto, Guid UidSucursal, Guid UidSeccion, string cantidad, decimal CostoDeEnvio = 0.0m, Guid UidTarifario = new Guid(), string strNota = "", Guid RegistroProductoEnCarrito = new Guid(), string URLEmpresa = "")
         {
             //Agrega un registro sin nota
             //Agrega un registro con una nota
@@ -728,9 +728,9 @@ namespace VistaDelModelo
             };
             CLASSProducto.ActualizaInformacionProductoSucursal(UIDSECCION);
         }
-        
+
         #region Busqueda de productos desde cliente
-        public void buscarProductosEmpresaDesdeCliente(string StrParametroBusqueda,  string StrDia, Guid UidDireccion, Guid UidBusquedaCategorias, string StrNombreEmpresa = "")
+        public void buscarProductosEmpresaDesdeCliente(string StrParametroBusqueda, string StrDia, Guid UidDireccion, Guid UidBusquedaCategorias, string StrNombreEmpresa = "")
         {
             try
             {
@@ -742,25 +742,22 @@ namespace VistaDelModelo
 
                 CMD.Parameters.Add("@strParametroBusqueda", SqlDbType.VarChar, 100);
                 CMD.Parameters["@strParametroBusqueda"].Value = StrParametroBusqueda;
-
-
+                
                 if (!string.IsNullOrEmpty(StrNombreEmpresa))
                 {
                     CMD.Parameters.Add("@StrNombreProducto", SqlDbType.VarChar, 200);
                     CMD.Parameters["@StrNombreProducto"].Value = StrNombreEmpresa;
-
                 }
 
                 CMD.Parameters.Add("@StrDia", SqlDbType.VarChar, 20);
                 CMD.Parameters["@StrDia"].Value = StrDia;
-                
+
                 CMD.Parameters.Add("@UidDireccion", SqlDbType.UniqueIdentifier);
                 CMD.Parameters["@UidDireccion"].Value = UidDireccion;
 
                 CMD.Parameters.Add("@UidBusquedaCategorias", SqlDbType.UniqueIdentifier);
                 CMD.Parameters["@UidBusquedaCategorias"].Value = UidBusquedaCategorias;
-
-
+                
                 ListaDeProductos.Clear();
                 foreach (DataRow item in CN.Busquedas(CMD).Rows)
                 {
@@ -794,7 +791,7 @@ namespace VistaDelModelo
 
         //        CMD.Parameters.Add("@strParametroBusqueda", SqlDbType.VarChar, 100);
         //        CMD.Parameters["@strParametroBusqueda"].Value = StrParametroBusqueda;
-                
+
 
         //        CMD.Parameters.Add("@StrDia", SqlDbType.VarChar, 20);
         //        CMD.Parameters["@StrDia"].Value = StrDia;

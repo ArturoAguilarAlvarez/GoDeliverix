@@ -27,7 +27,19 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
-        public ResponseHelper GetObtenerInformacionDeProductoDeLaSucursal(string UidSeccion)
+        public ResponseHelper GetObtenerInformacionDeProductoDeLaSucursal(string StrParametroBusqueda, string StrDia, Guid UidDireccion, Guid UidBusquedaCategorias, object UidProducto)
+        {
+            MVProducto = new VMProducto();
+            MVProducto.BuscarProductoPorSucursal(StrParametroBusqueda,StrDia,UidDireccion,UidBusquedaCategorias,UidProducto);
+            
+            Respuesta = new ResponseHelper();
+            Respuesta.Data = MVProducto.ListaDeProductos;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
+
+        public ResponseHelper GetObtenerProductosDeLaSucursal(string UidSeccion)
         {
             MVProducto = new VMProducto();
             MVProducto.BuscarProductosSeccion(new Guid(UidSeccion));

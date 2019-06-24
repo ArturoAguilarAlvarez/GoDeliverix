@@ -25,6 +25,19 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
+        public ResponseHelper GetBuscarCorreo(string UidPropietario, string strParametroDebusqueda, string strCorreoElectronico, string UidCorreoElectronico)
+        {
+            MVCorreoElectronico = new VMCorreoElectronico();
+            MVCorreoElectronico.BuscarCorreos(new Guid(UidPropietario), strParametroDebusqueda, strCorreoElectronico,new Guid(UidCorreoElectronico));
+
+            Respuesta = new ResponseHelper();
+
+            Respuesta.Data = MVCorreoElectronico;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion agregada satisfactoriamente";
+            return Respuesta;
+        }
+
         // POST: api/Profile
         public void Post([FromBody]string value)
         {

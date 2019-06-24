@@ -24,6 +24,30 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
+        public ResponseHelper GetObtenerTipoDetelefono(string uidUsuario, string Parametro)
+        {
+            Respuesta = new ResponseHelper();
+            MVTelefono = new VMTelefono();
+
+            MVTelefono.TipoDeTelefonos();
+            Respuesta.Data = MVTelefono.TIPOTELEFONO;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion agregada satisfactoriamente";
+            return Respuesta;
+        }
+
+        public ResponseHelper GetBuscarTelefonos(string UidPropietario, string ParadetroDeBusqueda, string UidTelefono, string strTelefono)
+        {
+            Respuesta = new ResponseHelper();
+            MVTelefono = new VMTelefono();
+
+            MVTelefono.BuscarTelefonos(new Guid(UidPropietario) , ParadetroDeBusqueda,new Guid(UidTelefono)  , strTelefono);
+            Respuesta.Data = MVTelefono.ListaDeTelefonos;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion agregada satisfactoriamente";
+            return Respuesta;
+        }
+
         // GET: api/Profile/5
         public string Get(int id)
         {
