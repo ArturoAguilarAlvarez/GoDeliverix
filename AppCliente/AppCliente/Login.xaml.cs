@@ -12,6 +12,8 @@ using VistaDelModelo;
 using Rg.Plugins.Popup.Services;
 using System.Net.Http;
 using Newtonsoft.Json;
+using AppCliente.WebApi;
+using Newtonsoft.Json.Linq;
 
 namespace AppCliente
 {
@@ -97,7 +99,37 @@ namespace AppCliente
                 }
                 if (_acceso)
                 {
-                    App.MVDireccion.ObtenerDireccionesUsuario(App.Global1);
+                    var tex = ("http://godeliverix.net/api/Direccion/GetObtenerDireccionUsuario?UidUsuario="+_id);
+                    string strDirecciones = await _client.GetStringAsync(tex);
+                    var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
+
+                    JArray blogPostArray = JArray.Parse(obj.ToString());
+
+                    //IList<VMDireccion> blogPosts 
+                     App.MVDireccion.ListaDIRECCIONES = blogPostArray.Select(p => new VMDireccion
+                    {
+                        REFERENCIA = (string)p["REFERENCIA"],
+                        ID =(Guid)p["ID"],
+                        PAIS = (string)p["PAIS"],
+                        ESTADO = (string)p["ESTADO"],
+                        MUNICIPIO = (string)p["MUNICIPIO"],
+                        CIUDAD = (string)p["CIUDAD"],
+                        COLONIA = (string)p["REFERENCIA"],
+                        CALLE0 = (string)p["CALLE0"],
+                        CALLE1 = (string)p["CALLE1"],
+                        CALLE2 = (string)p["CALLE2"],
+                        MANZANA = (string)p["MANZANA"],
+                        LOTE = (string)p["LOTE"],
+                        CodigoPostal = (string)p["CodigoPostal"],
+                        IDENTIFICADOR = (string)p["REFERENCIA"],
+                        NOMBRECIUDAD = (string)p["NOMBRECIUDAD"],
+                        NOMBRECOLONIA = (string)p["NOMBRECOLONIA"],
+                        Clicked = false
+
+                    }).ToList();
+
+
+                    // App.MVDireccion.ObtenerDireccionesUsuario(App.Global1);
                     if (GuardarContraseña.IsToggled)
                     {
 

@@ -1,8 +1,12 @@
-﻿using Rg.Plugins.Popup.Services;
+﻿using AppCliente.WebApi;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using VistaDelModelo;
@@ -18,124 +22,127 @@ namespace AppCliente
         public List<VMProducto> ListaDeProductosHome = new List<VMProducto>();
 
         int CantidadProductosMostrados = 0;
+        HttpClient _client = new HttpClient();
 
         public HomePage()
         {
             InitializeComponent();
-            try
-            { 
-                AppCliente.App.MVGiro.ListaDeGiroConimagen();
-                App.giro = AppCliente.App.MVGiro.LISTADEGIRO[0].UIDVM.ToString();
+            Iniciar();
+            //try
+            //{ 
+            //    AppCliente.App.MVGiro.ListaDeGiroConimagen();
 
-                string Hora = string.Empty;
-                if (DateTime.Now.Hour < 10)
-                {
-                    Hora = "0" + DateTime.Now.Hour.ToString();
-                }
-                else
-                {
-                    Hora = DateTime.Now.Hour.ToString();
-                }
+            //    App.giro = AppCliente.App.MVGiro.LISTADEGIRO[0].UIDVM.ToString();
 
-
-                CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
-                string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
-
-                string hora = Hora + ":" + DateTime.Now.Minute.ToString();
+            //    string Hora = string.Empty;
+            //    if (DateTime.Now.Hour < 10)
+            //    {
+            //        Hora = "0" + DateTime.Now.Hour.ToString();
+            //    }
+            //    else
+            //    {
+            //        Hora = DateTime.Now.Hour.ToString();
+            //    }
 
 
+            //    CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
+            //    string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
 
-                if (AppCliente.App.ListaDeProductos.Count == 0)
-                {
-                    Guid Colonia = App.MVDireccion.ListaDIRECCIONES[0].ID;
-
-                    IDDireccionBusqueda.Text = Colonia.ToString();
-
-                    App.MVCategoria.BuscarCategorias(UidGiro: App.giro.ToString(), tipo: "seleccion");
-
-                    App.MVSubCategoria.BuscarSubCategoria(UidCategoria: Guid.Empty.ToString(), Tipo: "Seleccionar");
+            //    string hora = Hora + ":" + DateTime.Now.Minute.ToString();
 
 
 
-                    Guid Direccion = App.MVDireccion.ListaDIRECCIONES[0].ID;
-                    App.DireccionABuscar = App.MVDireccion.ListaDIRECCIONES[0].ID.ToString();
+            //    if (AppCliente.App.ListaDeProductos.Count == 0)
+            //    {
+            //        Guid Colonia = App.MVDireccion.ListaDIRECCIONES[0].ID;
 
-                    App.MVProducto.buscarProductosEmpresaDesdeCliente("Giro", Dia, Direccion, new Guid(App.giro),"");
-                    App.MVEmpresa.BuscarEmpresaBusquedaCliente("Giro", Dia, Direccion, new Guid(App.giro),"");
-                    //App.MVProducto.buscarProductosEmpresaDesdeCliente("Giro", hora, Dia, Colonia, new Guid("63cd1aa3-74ef-4112-8835-fd4400706256"), "");
+            //        IDDireccionBusqueda.Text = Colonia.ToString();
 
-                    //int a = AppCliente.App.MVProducto.ListaDeProductos.Count;
+            //        App.MVCategoria.BuscarCategorias(UidGiro: App.giro.ToString(), tipo: "seleccion");
 
-
-
-                    foreach (VMProducto item in AppCliente.App.MVProducto.ListaDeProductos)
-                    {
-                        App.MVProducto.BuscarProductoPorSucursal("Giro", Dia, Colonia, new Guid(App.giro), item.UID);
-                        item.StrCosto = App.MVProducto.ListaDePreciosSucursales[0].StrCosto;
-                    }
-                    for (int i = 0; i < AppCliente.App.MVProducto.ListaDeProductos.Count; i++)
-                    {
-                        App.ListaDeProductos.Add(App.MVProducto.ListaDeProductos[i]);
-                    }
-                    for (int i = 0; i < App.MVEmpresa.LISTADEEMPRESAS.Count; i++)
-                    {
-                        App.LISTADEEMPRESAS.Add(App.MVEmpresa.LISTADEEMPRESAS[i]);
-                    }
-                    for (int i = 0; i < App.LISTADEEMPRESAS.Count; i++)
-                    {
-                        App.LISTADEEMPRESAS[i].StrRuta = "http://www.godeliverix.net/vista" + App.LISTADEEMPRESAS[i].StrRuta.Substring(2);
-                    }
-                }
-                else
-                {
-                    var Colonia = App.MVDireccion.ListaDIRECCIONES.Find(t => t.ID.ToString() == App.DireccionABuscar.ToString()); ;
-
-                    IDDireccionBusqueda.Text = Colonia.ID.ToString();
-                }
+            //        App.MVSubCategoria.BuscarSubCategoria(UidCategoria: Guid.Empty.ToString(), Tipo: "Seleccionar");
 
 
-                ListaDeProductosHome = AppCliente.App.ListaDeProductos;
-                if (App.ListaDeProductos.Count > 10)
-                {
-                    MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.ListaDeProductos.GetRange(0, 10);
-                    lbCantidad.Text = "1-10/" + App.ListaDeProductos.Count;
-                    CantidadProductosMostrados = 10;
-                    //btnAtras.IsEnabled = false;
-                }
-                else
-                {
-                    MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.ListaDeProductos;
-                    CantidadProductosMostrados = AppCliente.App.ListaDeProductos.Count;
-                    lbCantidad.Text = "1-" + App.ListaDeProductos.Count + "/" + App.ListaDeProductos.Count;
-                    //btnAtras.IsVisible = false;
-                    //btnAdelante.IsVisible = false;
-                }
 
-                //BindingContext = App.MVProducto;
-                if (App.DireccionABuscar != "")
-                {
-                    btnSeleccionarDireccion.Text = "ENTREGAR EN " + AppCliente.App.MVDireccion.ListaDIRECCIONES.Find(x => x.ID == new Guid(App.DireccionABuscar)).IDENTIFICADOR + " >";
-                }
-                else
-                {
-                    btnSeleccionarDireccion.Text = "ENTREGAR EN " + AppCliente.App.MVDireccion.ListaDIRECCIONES[0].IDENTIFICADOR + " >";
-                }
-                if (AppCliente.App.ListaDeProductos.Count == 0)
-                {
-                    lbCantidad.Text = "0-0/0";
-                   PanelProductoNoEncontrados.IsVisible = true;
-                    //ScrollView_Productos.IsVisible = false;
-                }
+            //        Guid Direccion = App.MVDireccion.ListaDIRECCIONES[0].ID;
+            //        App.DireccionABuscar = App.MVDireccion.ListaDIRECCIONES[0].ID.ToString();
 
-            }
-            catch (Exception)
-            {
-                if (AppCliente.App.ListaDeProductos.Count == 0)
-                {
-                    PanelProductoNoEncontrados.IsVisible = true;
-                    ScrollView_Productos.IsVisible = false;
-                }
-            }
+            //        App.MVProducto.buscarProductosEmpresaDesdeCliente("Giro", Dia, Direccion, new Guid(App.giro),"");
+            //        App.MVEmpresa.BuscarEmpresaBusquedaCliente("Giro", Dia, Direccion, new Guid(App.giro),"");
+            //        //App.MVProducto.buscarProductosEmpresaDesdeCliente("Giro", hora, Dia, Colonia, new Guid("63cd1aa3-74ef-4112-8835-fd4400706256"), "");
+
+            //        //int a = AppCliente.App.MVProducto.ListaDeProductos.Count;
+
+
+
+            //        foreach (VMProducto item in AppCliente.App.MVProducto.ListaDeProductos)
+            //        {
+            //            App.MVProducto.BuscarProductoPorSucursal("Giro", Dia, Colonia, new Guid(App.giro), item.UID);
+            //            item.StrCosto = App.MVProducto.ListaDePreciosSucursales[0].StrCosto;
+            //        }
+            //        for (int i = 0; i < AppCliente.App.MVProducto.ListaDeProductos.Count; i++)
+            //        {
+            //            App.ListaDeProductos.Add(App.MVProducto.ListaDeProductos[i]);
+            //        }
+            //        for (int i = 0; i < App.MVEmpresa.LISTADEEMPRESAS.Count; i++)
+            //        {
+            //            App.LISTADEEMPRESAS.Add(App.MVEmpresa.LISTADEEMPRESAS[i]);
+            //        }
+            //        for (int i = 0; i < App.LISTADEEMPRESAS.Count; i++)
+            //        {
+            //            App.LISTADEEMPRESAS[i].StrRuta = "http://www.godeliverix.net/vista" + App.LISTADEEMPRESAS[i].StrRuta.Substring(2);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        var Colonia = App.MVDireccion.ListaDIRECCIONES.Find(t => t.ID.ToString() == App.DireccionABuscar.ToString()); ;
+
+            //        IDDireccionBusqueda.Text = Colonia.ID.ToString();
+            //    }
+
+
+            //    ListaDeProductosHome = AppCliente.App.ListaDeProductos;
+            //    if (App.ListaDeProductos.Count > 10)
+            //    {
+            //        MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.ListaDeProductos.GetRange(0, 10);
+            //        lbCantidad.Text = "1-10/" + App.ListaDeProductos.Count;
+            //        CantidadProductosMostrados = 10;
+            //        //btnAtras.IsEnabled = false;
+            //    }
+            //    else
+            //    {
+            //        MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.ListaDeProductos;
+            //        CantidadProductosMostrados = AppCliente.App.ListaDeProductos.Count;
+            //        lbCantidad.Text = "1-" + App.ListaDeProductos.Count + "/" + App.ListaDeProductos.Count;
+            //        //btnAtras.IsVisible = false;
+            //        //btnAdelante.IsVisible = false;
+            //    }
+
+            //    //BindingContext = App.MVProducto;
+            //    if (App.DireccionABuscar != "")
+            //    {
+            //        btnSeleccionarDireccion.Text = "ENTREGAR EN " + AppCliente.App.MVDireccion.ListaDIRECCIONES.Find(x => x.ID == new Guid(App.DireccionABuscar)).IDENTIFICADOR + " >";
+            //    }
+            //    else
+            //    {
+            //        btnSeleccionarDireccion.Text = "ENTREGAR EN " + AppCliente.App.MVDireccion.ListaDIRECCIONES[0].IDENTIFICADOR + " >";
+            //    }
+            //    if (AppCliente.App.ListaDeProductos.Count == 0)
+            //    {
+            //        lbCantidad.Text = "0-0/0";
+            //       PanelProductoNoEncontrados.IsVisible = true;
+            //        //ScrollView_Productos.IsVisible = false;
+            //    }
+
+            //}
+            //catch (Exception)
+            //{
+            //    if (AppCliente.App.ListaDeProductos.Count == 0)
+            //    {
+            //        PanelProductoNoEncontrados.IsVisible = true;
+            //        ScrollView_Productos.IsVisible = false;
+            //    }
+            //}
         }
 
         private void MenuItem1_Activted(object sender, EventArgs e)
@@ -674,6 +681,120 @@ namespace AppCliente
             //}
             PanelNavegacionCarrito.IsVisible = false;
             PanelNavegacionBuscar.IsVisible = true;
+        }
+
+
+        private async void Iniciar()
+        {
+            var _URL = ("http://godeliverix.net/api/Giro/Get");
+            string DatosObtenidos = await _client.GetStringAsync(_URL);
+            var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
+
+            JArray blogPostArray = JArray.Parse(DatosGiros.ToString());
+
+            App.MVGiro.LISTADEGIRO = blogPostArray.Select(p => new VMGiro
+            {
+                UIDVM = (Guid)p["UIDVM"],
+                STRNOMBRE = (string)p["STRNOMBRE"],
+                STRDESCRIPCION = (string)p["RUTAIMAGEN"],
+                RUTAIMAGEN = (string)p["REFERENCIA"]
+            }).ToList();
+
+            App.giro = AppCliente.App.MVGiro.LISTADEGIRO[0].UIDVM.ToString();
+
+
+            string Hora = string.Empty;
+            if (DateTime.Now.Hour < 10)
+            {
+                Hora = "0" + DateTime.Now.Hour.ToString();
+            }
+            else
+            {
+                Hora = DateTime.Now.Hour.ToString();
+            }
+
+
+            CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
+            string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
+
+            string hora = Hora + ":" + DateTime.Now.Minute.ToString();
+
+
+            if (AppCliente.App.ListaDeProductos.Count == 0)
+            {
+                Guid Colonia = App.MVDireccion.ListaDIRECCIONES[0].ID;
+
+                IDDireccionBusqueda.Text = Colonia.ToString();
+
+                _URL = ("http://godeliverix.net/api/Categoria/Get?value="+ App.giro.ToString());
+                DatosObtenidos = await _client.GetStringAsync(_URL);
+                var DatosCategorias = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
+
+                blogPostArray = JArray.Parse(DatosCategorias.ToString());
+
+                App.MVCategoria.LISTADECATEGORIAS = blogPostArray.Select(p => new VMCategoria
+                {
+                    UIDCATEGORIA = (Guid)p["UIDCATEGORIA"],
+                    STRNOMBRE = (string)p["STRNOMBRE"],
+                    STRDESCRIPCION = (string)p["STRDESCRIPCION"]
+                }).ToList();
+
+
+                //App.MVCategoria.BuscarCategorias(UidGiro: App.giro.ToString(), tipo: "seleccion");
+
+                //App.MVSubCategoria.BuscarSubCategoria(UidCategoria: Guid.Empty.ToString(), Tipo: "Seleccionar");
+
+
+
+                Guid Direccion = App.MVDireccion.ListaDIRECCIONES[0].ID;
+                App.DireccionABuscar = App.MVDireccion.ListaDIRECCIONES[0].ID.ToString();
+
+
+                _URL = ("http://godeliverix.net/api/Producto/GetBuscarProductosCliente?StrParametroBusqueda="+"Giro"+"&StrDia="+Dia+"&UidDireccion="+Direccion+"&UidBusquedaCategorias="+App.giro+"&StrNombreEmpresa=");
+                DatosObtenidos = await _client.GetStringAsync(_URL);
+                var DatosProductos = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
+
+                var ArrayDatosProductos = JArray.Parse(DatosProductos.ToString());
+                App.MVProducto.ListaDeProductos = ArrayDatosProductos.Select(p => new VMProducto
+                {
+                    UID = (Guid)p["UID"],
+                    STRNOMBRE = (string)p["STRNOMBRE"],
+                    Empresa = (string)p["Empresa"],
+                    UIDEMPRESA = (Guid)p["UIDEMPRESA"],
+                    STRDESCRIPCION = (string)p["STRDESCRIPCION"],
+                    STRRUTA = (string)p["STRRUTA"]
+                }).ToList();
+
+                //App.MVProducto.buscarProductosEmpresaDesdeCliente("Giro", Dia, Direccion, new Guid(App.giro), "");
+
+
+
+                // App.MVEmpresa.BuscarEmpresaBusquedaCliente("Giro", Dia, Direccion, new Guid(App.giro), "");
+
+                //App.MVProducto.buscarProductosEmpresaDesdeCliente("Giro", hora, Dia, Colonia, new Guid("63cd1aa3-74ef-4112-8835-fd4400706256"), "");
+
+                //int a = AppCliente.App.MVProducto.ListaDeProductos.Count;
+
+
+
+                foreach (VMProducto item in AppCliente.App.MVProducto.ListaDeProductos)
+                {
+                    App.MVProducto.BuscarProductoPorSucursal("Giro", Dia, Colonia, new Guid(App.giro), item.UID);
+                    item.StrCosto = App.MVProducto.ListaDePreciosSucursales[0].StrCosto;
+                }
+                for (int i = 0; i < AppCliente.App.MVProducto.ListaDeProductos.Count; i++)
+                {
+                    App.ListaDeProductos.Add(App.MVProducto.ListaDeProductos[i]);
+                }
+                for (int i = 0; i < App.MVEmpresa.LISTADEEMPRESAS.Count; i++)
+                {
+                    App.LISTADEEMPRESAS.Add(App.MVEmpresa.LISTADEEMPRESAS[i]);
+                }
+                for (int i = 0; i < App.LISTADEEMPRESAS.Count; i++)
+                {
+                    App.LISTADEEMPRESAS[i].StrRuta = "http://www.godeliverix.net/vista" + App.LISTADEEMPRESAS[i].StrRuta.Substring(2);
+                }
+            }
         }
     }
 }
