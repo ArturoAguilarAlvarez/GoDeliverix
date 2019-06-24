@@ -25,6 +25,18 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
+        public ResponseHelper GetObtenerDireccionUsuario(string UidUsuario)
+        {
+            MVDireccion = new VMDireccion();
+            MVDireccion.ObtenerDireccionesUsuario(UidUsuario);
+
+            Respuesta = new ResponseHelper();
+            Respuesta.Data = MVDireccion.ListaDIRECCIONES;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
+
         // POST: api/Profile
         public void Post([FromBody]string value)
         {
