@@ -10,6 +10,8 @@ using Xamarin.Essentials;
 
 using VistaDelModelo;
 using Rg.Plugins.Popup.Services;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace AppCliente
 {
@@ -18,7 +20,8 @@ namespace AppCliente
     {
 
         #region Propiedades
-
+        Guid _id = Guid.Empty;
+        bool _acceso;
         #endregion
 
         public Login()
@@ -45,32 +48,7 @@ namespace AppCliente
 
             string usuario = txtUsuario.Text;
             string password = txtIDContraseña.Text;
-
-                if (Ingresar(usuario, password))
-                {
-                    App.MVDireccion.ObtenerDireccionesUsuario(App.Global1);
-                    if (GuardarContraseña.IsToggled)
-                    {
-
-                    AppCliente.Helpers.Settings.UserName = txtUsuario.Text;
-                    AppCliente.Helpers.Settings.Password = txtIDContraseña.Text;
-                    Application.Current.MainPage = new MasterMenu();
-
-                        await PopupNavigation.Instance.PopAsync();
-                    }
-                    else
-                    {                    
-                        Application.Current.MainPage = new MasterMenu();   
-                        await PopupNavigation.Instance.PopAsync();
-                    }
-
-                }
-                else
-                {
-                    await PopupNavigation.Instance.PopAsync();
-
-                    await DisplayAlert("Error", "Contraseña o usuario incorrecto", "ok");
-                }
+            Ingresar(usuario, password);
 
             }                     
             else
@@ -98,29 +76,58 @@ namespace AppCliente
             await PopupNavigation.Instance.PushAsync(new Popup.PopupLoanding());
         }
 
-        protected bool Ingresar(string Usuario,string Contrasena)
+        protected async void Ingresar(string Usuario,string Contrasena)
         {
-            bool acceso = false;
             try
             {
-                if (!string.IsNullOrEmpty(Usuario) && !string.IsNullOrEmpty(Contrasena))
+                HttpClient _client = new HttpClient();
+                string url = "http://godeliverix.net/api/Profile/GET?Usuario="+Usuario+"&Contrasena="+Contrasena;
+                string content = await  _client.GetStringAsync(url);
+                List<string> listaID = JsonConvert.DeserializeObject<List<string>>(content);
+
+
+                //if (!string.IsNullOrEmpty(Usuario) && !string.IsNullOrEmpty(Contrasena))
+                //{
+                
+                _id =new Guid( listaID[0].ToString());
+                if (_id != Guid.Empty)
                 {
-                    Guid id = Guid.Empty;
-                    id = App.MVAcceso.Ingresar(Usuario, Contrasena);
-                    if (id != Guid.Empty)
-                    {
-                        App.Global1 = id.ToString();
-                        acceso = true;
-                    }
+                    App.Global1 = _id.ToString();
+                    _acceso = true;
                 }
+                if (_acceso)
+                {
+                    App.MVDireccion.ObtenerDireccionesUsuario(App.Global1);
+                    if (GuardarContraseña.IsToggled)
+                    {
+
+                        AppCliente.Helpers.Settings.UserName = txtUsuario.Text;
+                        AppCliente.Helpers.Settings.Password = txtIDContraseña.Text;
+                        Application.Current.MainPage = new MasterMenu();
+
+                        await PopupNavigation.Instance.PopAsync();
+                    }
+                    else
+                    {
+                        Application.Current.MainPage = new MasterMenu();
+                        await PopupNavigation.Instance.PopAsync();
+                    }
+
+                }
+                else
+                {
+                    await PopupNavigation.Instance.PopAsync();
+
+                    await DisplayAlert("Error", "Contraseña o usuario incorrecto", "ok");
+                }
+
+                //}
             }
             catch (Exception)
             {
 
-                DisplayAlert("sorry", "No hay internet", "ok");
+                await DisplayAlert("sorry", "No hay internet", "ok");
             }
-
-            return acceso;
         }
 
         public void LimpiarPerfil()
