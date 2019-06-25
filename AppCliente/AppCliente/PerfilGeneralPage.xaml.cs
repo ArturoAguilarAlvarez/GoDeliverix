@@ -106,8 +106,11 @@ namespace AppCliente
             var DatosObtenidos = await _client.GetAsync(_URL);
             string res = await DatosObtenidos.Content.ReadAsStringAsync();
 
-            //DataContractJsonSerializer asd = new DataContractJsonSerializer(typeof(VistaDelModelo.VMUsuarios));
-            //DataContractJsonSerializer asd = JsonConvert.DeserializeObject<ResponseHelper>(res).Data;
+            DataContractJsonSerializer asd = new DataContractJsonSerializer(typeof(VistaDelModelo.VMUsuarios));
+
+            dynamic results = JsonConvert.DeserializeObject<dynamic>(res);
+
+
 
 
 

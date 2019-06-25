@@ -36,7 +36,7 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
-        public ResponseHelper GetBuscarTelefonos(string UidPropietario, string ParadetroDeBusqueda, string UidTelefono, string strTelefono)
+        public ResponseHelper GetBuscarTelefonos(string UidPropietario, string ParadetroDeBusqueda, string UidTelefono = "", string strTelefono = "")
         {
             Respuesta = new ResponseHelper();
             MVTelefono = new VMTelefono();
