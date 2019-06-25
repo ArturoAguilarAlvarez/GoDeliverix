@@ -34,6 +34,20 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
+        public ResponseHelper GetUsuario(string UidUsuario)
+        {
+            MVUsuario = new VMUsuarios();
+            MVUsuario.obtenerUsuario(UidUsuario);
+            Respuesta = new ResponseHelper();
+            VMUsuarios lista = new VMUsuarios
+                (
+                LISTADEUSUARIOS= MVUsuario.LISTADEUSUARIOS);
+            Respuesta.Data = MVUsuario;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+
+        }
         public ResponseHelper GetGuardarUsuario(string UidUsuario, string Nombre, string ApellidoPaterno, string ApellidoMaterno, string usuario, string password, string fnacimiento, string perfil, string estatus, string TIPODEUSUARIO, string UidEmpresa, string UidSucursal)
         {
             MVUsuario = new VMUsuarios();
