@@ -1,6 +1,11 @@
-﻿using System;
+﻿using AppCliente.WebApi;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,12 +17,14 @@ namespace AppCliente
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class PerfilGeneralPage : ContentPage
 	{
-		public PerfilGeneralPage ()
+        HttpClient _client = new HttpClient();
+        public PerfilGeneralPage ()
 		{
 			InitializeComponent ();
             App.MVCorreoElectronico.BuscarCorreos(UidPropietario: new Guid(App.Global1), strParametroDebusqueda: "Usuario");
-            App.MVUsuarios.obtenerUsuario(App.Global1);
-            Cargausuario();
+            Cargar();
+            //App.MVUsuarios.obtenerUsuario(App.Global1);
+            //Cargausuario();
         }
         private void Button_EditarGuardar(object sender, EventArgs e)
         {
@@ -91,6 +98,33 @@ namespace AppCliente
         private void Button_PerfilDirecciones(object sender, EventArgs e)
         {
             Navigation.PushAsync(new PerfilDireccionesPage());
+        }
+
+        public async  void Cargar()
+        {
+            string _URL = ("http://godeliverix.net/api/Usuario/GetUsuario?UidUsuario=" + App.Global1);
+            var DatosObtenidos = await _client.GetAsync(_URL);
+            string res = await DatosObtenidos.Content.ReadAsStringAsync();
+
+            //DataContractJsonSerializer asd = new DataContractJsonSerializer(typeof(VistaDelModelo.VMUsuarios));
+            //DataContractJsonSerializer asd = JsonConvert.DeserializeObject<ResponseHelper>(res).Data;
+
+
+
+            //VistaDelModelo.VMUsuarios adsffj = (VistaDelModelo.VMUsuarios)asd;
+            //var json = JsonConvert.SerializeObject(commandMessage);
+            //var myCommandMessage = (VistaDelModelo.VMUsuarios)JsonConvert.DeserializeObject();
+            //var content = Json.Deserialize<Model>(res);
+            //var Datos = JsonConvert.DeserializeObject<VistaDelModelo.VMUsuarios>(DatosObtenidos);
+
+
+            //var ArrayDatosProductos = JArray.Parse(Datos.ToString());
+            //    App.MVEmpresa.LISTADEEMPRESAS = ArrayDatosProductos.Select(p => new VMEmpresas
+            //    {
+            //        UIDEMPRESA = (Guid)p["UIDEMPRESA"],
+            //        NOMBRECOMERCIAL = (string)p["NOMBRECOMERCIAL"],
+            //        StrRuta = "http://godeliverix.net/vista/" + (string)p["StrRuta"].ToString().Substring(3)
+            //    }).ToList();
         }
     }
 }
