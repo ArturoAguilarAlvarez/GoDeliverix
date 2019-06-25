@@ -10,9 +10,13 @@ namespace WebApplication1.Controllers
         VMUsuarios MVUsuario;
         ResponseHelper Respuesta;
         // GET: api/Profile/5
-        public ResponseHelper GetBuscarUsuarios(string UidUsuario, string UidEmpresa = "", string NOMBRE = "", string USER = "", string APELLIDO = "", string ESTATUS = "", string UIDPERFIL = "")
+        public ResponseHelper GetBuscarUsuarios(string UidUsuario, string UidEmpresa = "", string NOMBRE = "", string USER = "", string APELLIDO = "", string ESTATUS = "", string UIDPERFIL)
         {
             MVUsuario = new VMUsuarios();
+            if (string.IsNullOrEmpty(UidEmpresa))
+            {
+                UidEmpresa = Guid.Empty.ToString();
+            }
             MVUsuario.BusquedaDeUsuario(new Guid(UidUsuario), new Guid(UidEmpresa), NOMBRE, USER, APELLIDO, ESTATUS, new Guid(UIDPERFIL));
 
             Respuesta = new ResponseHelper();
