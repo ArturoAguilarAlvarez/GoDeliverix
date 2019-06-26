@@ -19,6 +19,7 @@ namespace WebApplication1.Vista
         VMImagen MVImagen;
         VMTelefono MVTelefono;
         VMCorreoElectronico MVCorreoElectronico;
+        ImagenHelper oImagenHelper = new ImagenHelper();
         string AccionesDeLaPagina = "";
 
         #endregion
@@ -1364,7 +1365,7 @@ namespace WebApplication1.Vista
                                 //Valida si el archivo existe
                                 if (!File.Exists(RutaCompleta))
                                 {
-                                    System.Drawing.Image img = MVImagen.RedimensionarImagen(System.Drawing.Image.FromStream(FU.FileContent));
+                                    System.Drawing.Image img = oImagenHelper.RedimensionarImagen(System.Drawing.Image.FromStream(FU.FileContent));
                                     //Guarda la imagen en el servidor
                                     img.Save(Server.MapPath("~/Vista/" + RutaCompleta), ImageFormat.Png);
 

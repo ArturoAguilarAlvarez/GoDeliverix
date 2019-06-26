@@ -350,6 +350,7 @@
     <Compile Include="Controllers\SucursalesController.cs" />
     <Compile Include="Controllers\TarifarioController.cs" />
     <Compile Include="Controllers\TelefonoController.cs" />
+    <Compile Include="Controllers\UbicacionController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -361,6 +362,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="ImagenHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Vista\ActivacionDeCuenta.aspx.cs">
       <DependentUpon>ActivacionDeCuenta.aspx</DependentUpon>

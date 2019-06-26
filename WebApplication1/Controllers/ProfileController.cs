@@ -28,13 +28,23 @@ namespace WebApplication1.Controllers
             }
 
         }
-
+        /// <summary>
+        /// Envia el correo de confirmacion de la cuenta cliente
+        /// </summary>
+        /// <param name="UidUsuario"></param>
+        /// <param name="correo"></param>
+        /// <param name="usuario"></param>
+        /// <param name="password"></param>
+        /// <param name="Nombre"></param>
+        /// <param name="Apellidos"></param>
         public void GetCorreoDeConfirmacion(string UidUsuario, string correo, string usuario, string password, string Nombre, string Apellidos)
         {
             MVAcceso = new VMAcceso();
             MVAcceso.CorreoDeConfirmacion(new Guid(UidUsuario),correo,usuario,password,Nombre,Apellidos);
             
         }
+
+        
 
         public ResponseHelper GetProfileType(string UidUsuario)
         {
@@ -46,6 +56,37 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
+        public ResponseHelper GetObtenerUltimoEstatusBitacoraRepartidor(Guid UidUsuario)
+        {
+            MVAcceso = new VMAcceso();
+            
+            Respuesta = new ResponseHelper();
+            Respuesta.Data = MVAcceso.ObtenerUltimoEstatusBitacoraRepartidor(UidUsuario); 
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion agregada satisfactoriamente";
+            return Respuesta;
+        }
+
+        /// <summary>
+        /// Cambia el estatus del repartidor ya sea suyo o de la orden asignada
+        /// </summary>
+        /// <param name="StrParametro"></param>
+        /// <param name="UidUsuario"></param>
+        /// <param name="UidEstatus"></param>
+        /// <param name="UidOrdenRepartidor"></param>
+        /// <returns></returns>
+        public ResponseHelper GetBitacoraRegistroRepartidores(char StrParametro, Guid UidUsuario, Guid UidEstatus, Guid UidOrdenRepartidor = new Guid())
+        {
+            MVAcceso = new VMAcceso();
+            Respuesta = new ResponseHelper();
+
+            MVAcceso.BitacoraRegistroRepartidores(StrParametro, UidUsuario, UidEstatus, UidOrdenRepartidor);
+            Respuesta.Status = true;
+            Respuesta.Message = "Estatus actualizado";
+            return Respuesta;
+
+
+        }
         // GET: api/Profile/5
         public string Get(int id)
         {

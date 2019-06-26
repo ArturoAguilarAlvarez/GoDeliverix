@@ -8,6 +8,9 @@ namespace WebApplication1.Controllers
     {
         VMOrden MVOrden;
         ResponseHelper Respuesta;
+
+
+        #region Aplicacion cliente
         /// <summary>
         /// Guarda la orden del cliente al pagarla
         /// </summary>
@@ -30,7 +33,6 @@ namespace WebApplication1.Controllers
             Respuesta.Message = "Informacion agregada satisfactoriamente";
             return Respuesta;
         }
-
         /// <summary>
         /// Guarda los productos de una orden pagada
         /// </summary>
@@ -78,7 +80,6 @@ namespace WebApplication1.Controllers
             Respuesta.Message = "Informacion agregada satisfactoriamente";
             return Respuesta;
         }
-
         /// <summary>
         /// Obtiene el historico de ordenes del cliente 
         /// </summary>
@@ -95,7 +96,6 @@ namespace WebApplication1.Controllers
             Respuesta.Message = "Informacion agregada satisfactoriamente";
             return Respuesta;
         }
-
         /// <summary>
         /// Obtiene el estatus actual de la orden sucursal
         /// </summary>
@@ -140,6 +140,11 @@ namespace WebApplication1.Controllers
             Respuesta.Message = "Informacion agregada satisfactoriamente";
             return Respuesta;
         }
+        #endregion
+
+
+
+
         /// <summary>
         /// Busca las ordenes para el modulo de busquedas en el historico
         /// </summary>
@@ -156,12 +161,35 @@ namespace WebApplication1.Controllers
         public ResponseHelper GetBuscarOrdenes(string Parametro, Guid Uidusuario = new Guid(), string FechaInicial = "", string FechaFinal = "", string NumeroOrden = "", Guid UidLicencia = new Guid(), string EstatusSucursal = "", string TipoDeSucursal = "", Guid UidOrdenSucursal = new Guid())
         {
             MVOrden = new VMOrden();
-            MVOrden.BuscarOrdenes(Parametro,Uidusuario,FechaInicial,FechaFinal,NumeroOrden,UidLicencia,EstatusSucursal,TipoDeSucursal,UidOrdenSucursal);
+            MVOrden.BuscarOrdenes(Parametro, Uidusuario, FechaInicial, FechaFinal, NumeroOrden, UidLicencia, EstatusSucursal, TipoDeSucursal, UidOrdenSucursal);
             Respuesta = new ResponseHelper();
             Respuesta.Data = MVOrden.ListaDeOrdenes;
             Respuesta.Status = true;
             Respuesta.Message = "Informacion agregada satisfactoriamente";
             return Respuesta;
         }
+
+
+        #region Aplicacion repartidor
+        /// <summary>
+        /// usca las ordenes asignadas al repartidor
+        /// </summary>
+        /// <param name="UidUsuario"></param>
+        /// <returns></returns>
+        public ResponseHelper GetBuscarOrdenAsiganadaRepartidor(Guid UidUsuario)
+        {
+            MVOrden = new VMOrden();
+            MVOrden.BuscarOrdenAsiganadaRepartidor(UidUsuario);
+            Respuesta = new ResponseHelper();
+            Respuesta.Data = MVOrden;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion agregada satisfactoriamente";
+            return Respuesta;
+        }
+
+
+       
+        #endregion
+
     }
 }
