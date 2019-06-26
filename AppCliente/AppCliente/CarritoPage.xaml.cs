@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using VistaDelModelo;
@@ -17,6 +18,7 @@ namespace AppCliente
         decimal subtotal = 0;
         decimal TotalEnvio = 0;
         decimal TotalPagar = 0;
+        HttpClient _client = new HttpClient();
 
         public CarritoPage()
         {
@@ -62,7 +64,11 @@ namespace AppCliente
             }
         }
 
-        private void BtnPagar_Clicked(object sender, EventArgs e)
+        private  void BtnPagar_Clicked(object sender, EventArgs e)
+        {
+             BtnPagar_ClickedAsync();
+        }
+            private async void BtnPagar_ClickedAsync()
         {
 
 
@@ -101,26 +107,61 @@ namespace AppCliente
                             {
                                 mensaje = item.StrNota;
                             }
-                            App.MVOrden.GuardaProducto(UidOrdenSucursal, item.UidSeccionPoducto, item.Cantidad, item.StrCosto, item.UidSucursal, item.UidRegistroProductoEnCarrito, Uidnota, mensaje);
+                            else
+                            {
+                                mensaje = "sin nota";
+                            }
+                            //App.MVOrden.GuardaProducto(UidOrdenSucursal, 
+                            //    item.UidSeccionPoducto,
+                            //    item.Cantidad, 
+                            //    item.StrCosto, 
+                            //    item.UidSucursal, 
+                            //    item.UidRegistroProductoEnCarrito, 
+                            //    Uidnota, mensaje);
+
+
+                            string _Url = $"http://godeliverix.net/api/Orden/GetGuardarProductos?UIDORDEN={App.Global1}&UIDSECCIONPRODUCTO={item.UidSeccionPoducto}&INTCANTIDAD={item.Cantidad}&STRCOSTO={item.StrCosto}&UidSucursal={item.UidSucursal}&UidRegistroEncarrito={item.UidRegistroProductoEnCarrito}&UidNota={Uidnota}&StrMensaje={mensaje}";                            
+                            var content = await _client.GetAsync(_Url);
+                        
                         }
                         //Envia la orden a la sucursal suministradora
                         Random Codigo = new Random();
                         long CodigoDeEnrega = Codigo.Next(00001, 99999);
-                        App.MVOrden.GuardaOrden(UidOrden, total, UidUsuario, UidDireccion, objeto.UidSucursal, totalSucursal, UidOrdenSucursal, CodigoDeEnrega);
+                        //App.MVOrden.GuardaOrden(
+                        //    UidOrden, 
+                        //    total, 
+                        //    UidUsuario,
+                        //    UidDireccion,
+                        //    objeto.UidSucursal, 
+                        //    totalSucursal,
+                        //    UidOrdenSucursal,
+                        //    CodigoDeEnrega);
+
+                        string _Url1 = $"http://godeliverix.net/api/Orden/GetGuardarOrden?UIDORDEN={UidOrden}&Total={total}&Uidusuario={UidUsuario}&UidDireccion={UidDireccion}&Uidsucursal={objeto.UidSucursal}&totalSucursal={totalSucursal}&UidRelacionOrdenSucursal={UidOrdenSucursal}&LngCodigoDeEntrega={CodigoDeEnrega}";
+                        var content1 = await _client.GetAsync(_Url1);
+
                         // Envia la orden a la sucursal distribuidora
-                        App.MVTarifario.AgregarTarifarioOrden(UidOrden: UidOrdenSucursal, UidTarifario: objeto.UidTarifario);
+                        //App.MVTarifario.AgregarTarifarioOrden(UidOrden: UidOrdenSucursal, UidTarifario: objeto.UidTarifario);
+
+                        string _Url2 = $@"http://godeliverix.net/api/Tarifario/GetGuardarTarifario?UidOrdenSucursal={UidOrdenSucursal}&UidTarifario={objeto.UidTarifario}";
+                        var content2 = await _client.GetAsync(_Url2);
+
                         //Una vez que se haya guardado ella basededatosse le cambia el estatus a la orden
-                        App.MVOrden.AgregaEstatusALaOrden(new Guid("DE294EFC-C549-4DDD-A0D1-B0E1E2039ECC"), UidOrden: UidOrdenSucursal, StrParametro: "U", UidSucursal: objeto.UidSucursal);
+                        //App.MVOrden.AgregaEstatusALaOrden(new Guid("DE294EFC-C549-4DDD-A0D1-B0E1E2039ECC"), UidOrden: UidOrdenSucursal, StrParametro: "U", UidSucursal: objeto.UidSucursal);
+
+                        string _Url3 = $"http://godeliverix.net/api/Orden/GetAgregaEstatusALaOrden?UidEstatus=DE294EFC-C549-4DDD-A0D1-B0E1E2039ECC&StrParametro=U&UidOrden={UidOrdenSucursal}&UidSucursal={objeto.UidSucursal}";
+                        var content3 = await _client.GetAsync(_Url3);
+
                         App.MVProducto.ListaDelCarrito.RemoveAll(sucursal => sucursal.UidSucursal == objeto.UidSucursal);
                         i = i - 1;
                     }
                     LimpiarCarrito();
                     App.MVOrden.ObtenerInformacionDeLaUltimaOrden(UidUsuario);
-                    DisplayAlert("Que bien!", "Su orden esta en camino", "ok");
+                    await DisplayAlert("Que bien!", "Su orden esta en camino", "ok");
                 }
                 else
                 {
-                    DisplayAlert("NO a escogido distribuidora","No se ha elegido una empresa distribuidora dentro de la orden", "ok");
+                    await DisplayAlert("NO a escogido distribuidora","No se ha elegido una empresa distribuidora dentro de la orden", "ok");
                 }
             }
 
