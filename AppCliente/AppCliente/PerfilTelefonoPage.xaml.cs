@@ -9,6 +9,10 @@ using Xamarin.Forms.Xaml;
 using VistaDelModelo;
 using System.Diagnostics;
 using Modelo;
+using Newtonsoft.Json;
+using AppCliente.WebApi;
+using Newtonsoft.Json.Linq;
+using System.Net.Http;
 
 namespace AppCliente
 {
@@ -21,34 +25,21 @@ namespace AppCliente
         {
             
             InitializeComponent();
-
-            //         Items = new ObservableCollection<string>
-            //         {
-            //             "Item 1",
-            //             "Item 2",
-            //             "Item 3",
-            //             "Item 4",
-            //             "Item 5"
-            //         };
-
-            //MyListView.ItemsSource = Items;
-            //AppCliente.App.MVTelefono.TipoDeTelefonos();
-            //AppCliente.App.MVTelefono.BuscarTelefonos(UidPropietario: new Guid(AppCliente.App.Global1), ParadetroDeBusqueda: "Usuario");
-
             App.MVTelefono.TipoDeTelefonos();
+            CargarAsync();
             App.MVTelefono.BuscarTelefonos(UidPropietario: new Guid(App.Global1), ParadetroDeBusqueda: "Usuario");
-            CargarNombreTelefono();
+            //CargarNombreTelefono();
 
 
 
 
-            for (int i = 0; i < AppCliente.App.MVTelefono.ListaDeTelefonos.Count; i++)
-            {
-                AppCliente.App.MVTelefono.ListaDeTelefonos[i].Estado = false;
-            }
+            //for (int i = 0; i < AppCliente.App.MVTelefono.ListaDeTelefonos.Count; i++)
+            //{
+            //    AppCliente.App.MVTelefono.ListaDeTelefonos[i].Estado = false;
+            //}
 
-            MyPicker.ItemsSource = AppCliente.App.MVTelefono.TIPOTELEFONO;
-            MyListView.ItemsSource = AppCliente.App.MVTelefono.ListaDeTelefonos;
+            //MyPicker.ItemsSource = AppCliente.App.MVTelefono.TIPOTELEFONO;
+            //MyListView.ItemsSource = AppCliente.App.MVTelefono.ListaDeTelefonos;
         }
 
         public void CargarNombreTelefono()
@@ -257,6 +248,37 @@ namespace AppCliente
             MyPicker.SelectedIndex = query1;
             btnNuevoNumero.IsVisible = false;
           
+        }
+
+        public async void CargarAsync()
+        {
+            //lista
+
+
+            HttpClient _client =new HttpClient();
+            var _URL = ("http://godeliverix.net/api/Telefono/GetBuscarTelefonos?UidPropietario="+App.Global1+"&ParadetroDeBusqueda=Usuario&UidTelefono=00000000-0000-0000-0000-000000000000&strTelefono=");
+            string DatosObtenidos = await _client.GetStringAsync(_URL);
+            var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
+
+            JArray blogPostArray = JArray.Parse(DatosGiros.ToString());
+
+            App.MVTelefono.ListaDeTelefonos = blogPostArray.Select(p => new VMTelefono
+            {
+                ID = (Guid)p["ID"],
+                NUMERO = (string)p["NUMERO"],
+                UidTipo = (Guid)p["UidTipo"],
+                StrNombreTipoDeTelefono = (string)p["StrNombreTipoDeTelefono"],
+                Estado = false
+            }).ToList();
+
+            for (int i = 0; i < AppCliente.App.MVTelefono.ListaDeTelefonos.Count; i++)
+            {
+                AppCliente.App.MVTelefono.ListaDeTelefonos[i].Estado = false;
+            }
+
+
+            MyPicker.ItemsSource = AppCliente.App.MVTelefono.TIPOTELEFONO;
+            MyListView.ItemsSource = AppCliente.App.MVTelefono.ListaDeTelefonos;
         }
     }
 }

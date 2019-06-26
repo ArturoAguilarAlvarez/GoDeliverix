@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Plugin.Clipboard;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -97,6 +98,14 @@ namespace AppCliente
                 Navigation.PushAsync(new HistorialEmpresaProductos());
             }
 
+        }
+
+        private void ButtonCopiarNumeroEnvio_Clicked_2(object sender, EventArgs e)
+        {
+            var item = sender as Button;
+            var ObjItem = item.BindingContext as VMOrden;
+            CrossClipboard.Current.SetText(ObjItem.LngCodigoDeEntrega.ToString());
+            DisplayAlert("!", "Codigo copiado", "Ok");
         }
     }
 }

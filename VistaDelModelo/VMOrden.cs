@@ -235,7 +235,7 @@ namespace VistaDelModelo
             DataTable DatoQuery = new DataTable();
             try
             {
-                string Query = "select distinct OS.UidRelacionOrdenSucursal,os.BintCodigoEntrega, i.NVchRuta, S.Identificador, (cast(os.MTotalSucursal  as decimal(10,2)) + cast(t.MCosto  as decimal(10,2))) as MTotal,os.IntFolio as LNGFolio, cast(os.MTotalSucursal  as decimal(10,2)) as MTotalSucursal,s.uidSucursal,cast(t.MCosto  as decimal(10,2)) as CostoEnvio from Ordenes o inner join OrdenSucursal OS on o.UidOrden = OS.UidOrden inner join Sucursales S on s.UidSucursal = OS.UidSucursal inner join OrdenTarifario ot on ot.UidOrden = os.UidRelacionOrdenSucursal inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario inner join OrdenProducto op on op.UidOrden = os.UidRelacionOrdenSucursal inner join SeccionProducto sp on sp.UidSeccionProducto = op.UidSeccionProducto inner join ImagenProducto imp on imp.UidProducto = sp.UidProducto inner join Imagenes i on i.UIdImagen = imp.UidImagen  where o.UidOrden = '" + UidOrden.ToString() + "'";
+                string Query = $"select distinct OS.UidRelacionOrdenSucursal,os.BintCodigoEntrega, i.NVchRuta, S.Identificador, (cast(os.MTotalSucursal as decimal(10, 2)) + cast(t.MCosto as decimal(10, 2))) as MTotal, os.IntFolio as LNGFolio, cast(os.MTotalSucursal as decimal(10, 2)) as MTotalSucursal,s.uidSucursal,cast(t.MCosto as decimal(10, 2)) as CostoEnvio from Ordenes o inner   join OrdenSucursal OS on o.UidOrden = OS.UidOrden                                                                                                                   inner  join Sucursales S on s.UidSucursal = OS.UidSucursal inner  join OrdenTarifario ot on ot.UidOrden = os.UidRelacionOrdenSucursal                                                                                                                   inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario                                                                                                                   inner join OrdenProducto op on op.UidOrden = os.UidRelacionOrdenSucursal inner join SeccionProducto sp on sp.UidSeccionProducto = op.UidSeccionProducto inner join ImagenEmpresa IE on IE.UidEmpresa = S.UidEmpresa inner join Imagenes i on i.UIdImagen = IE.UidImagen where o.UidOrden = '{ UidOrden.ToString()}' and i.NVchRuta like '%FotoPerfil%' ";
                 DatoQuery = Datos.Consultas(Query);
             }
             catch (Exception)
@@ -302,7 +302,7 @@ namespace VistaDelModelo
                         StrNombreSucursal = item["Identificador"].ToString(),
                         StrNombreProducto = item["VchNombre"].ToString(),
                         //Imagen = item["NVchRuta"].ToString(),
-                        Imagen = "http://godeliverix.net/Vista/"+item["NVchRuta"].ToString(),
+                        Imagen = "http://godeliverix.net/Vista/" + item["NVchRuta"].ToString(),
                         intCantidad = int.Parse(item["IntCantidad"].ToString()),
                         UidSucursal = new Guid(item["UidSucursal"].ToString()),
                         MTotal = decimal.Parse(Total),
@@ -362,7 +362,7 @@ namespace VistaDelModelo
 
                 ListaDeOrdenes.Clear();
 
-                
+
                 foreach (DataRow item in Datos.Busquedas(comando).Rows)
                 {
                     long CodigoEntrega = 00000;
@@ -376,7 +376,7 @@ namespace VistaDelModelo
             }
             catch (Exception)
             {
-   
+
             }
         }
 
@@ -1095,16 +1095,16 @@ namespace VistaDelModelo
                 {
                     //if (item["EstatusRepartidor"].ToString().ToUpper() == "12748F8A-E746-427D-8836-B54432A38C07" || item["EstatusRepartidor"] == null)
                     //{
-                        ListaDeBitacoraDeOrdenes.Add(new VMOrden()
-                        {
-                            UidSucursal = new Guid(item["UidSucursal"].ToString()),
-                            MTotal = decimal.Parse(item["MTotalSucursal"].ToString()),
-                            MCostoTarifario = double.Parse(item["MCosto"].ToString()),
-                            StrNombreSucursal = item["Identificador"].ToString(),
-                            LNGFolio = long.Parse(item["intfolio"].ToString()),
-                            FechaDeOrden = item["DtmFecha"].ToString(),
-                            Uidorden = new Guid(item["UidRelacionOrdenTarifario"].ToString())
-                        });
+                    ListaDeBitacoraDeOrdenes.Add(new VMOrden()
+                    {
+                        UidSucursal = new Guid(item["UidSucursal"].ToString()),
+                        MTotal = decimal.Parse(item["MTotalSucursal"].ToString()),
+                        MCostoTarifario = double.Parse(item["MCosto"].ToString()),
+                        StrNombreSucursal = item["Identificador"].ToString(),
+                        LNGFolio = long.Parse(item["intfolio"].ToString()),
+                        FechaDeOrden = item["DtmFecha"].ToString(),
+                        Uidorden = new Guid(item["UidRelacionOrdenTarifario"].ToString())
+                    });
                     //}
 
                 }

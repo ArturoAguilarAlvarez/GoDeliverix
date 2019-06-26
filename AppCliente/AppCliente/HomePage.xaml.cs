@@ -769,6 +769,7 @@ namespace AppCliente
 
 
                 _URL = ("http://godeliverix.net/api/Empresa/GetObtenerEmpresaCliente?StrParametroBusqueda=Giro&StrDia="+Dia+"&UidDireccion="+Direccion+"&UidBusquedaCategorias="+App.giro);
+
                 DatosObtenidos = await _client.GetStringAsync(_URL);
                 var DatosEmpresa = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
 
@@ -778,7 +779,7 @@ namespace AppCliente
                 {
                     UIDEMPRESA = (Guid)p["UIDEMPRESA"],
                     NOMBRECOMERCIAL = (string)p["NOMBRECOMERCIAL"],
-                    StrRuta= "http://godeliverix.net/vista/"+(string)p["StrRuta"].ToString().Substring(3)
+                    StrRuta= "http://godeliverix.net/vista/"+((string)p["StrRuta"].ToString().Substring(3))
                 }).ToList();
 
                 //App.MVEmpresa.BuscarEmpresaBusquedaCliente("Giro", Dia, Direccion, new Guid(App.giro), "");
@@ -802,10 +803,10 @@ namespace AppCliente
                 {
                     App.LISTADEEMPRESAS.Add(App.MVEmpresa.LISTADEEMPRESAS[i]);
                 }
-                for (int i = 0; i < App.LISTADEEMPRESAS.Count; i++)
-                {
-                    App.LISTADEEMPRESAS[i].StrRuta = "http://www.godeliverix.net/vista" + App.LISTADEEMPRESAS[i].StrRuta.Substring(2);
-                }
+                //for (int i = 0; i < App.LISTADEEMPRESAS.Count; i++)
+                //{
+                //    App.LISTADEEMPRESAS[i].StrRuta = "http://www.godeliverix.net/vista" + App.LISTADEEMPRESAS[i].StrRuta.Substring(2);
+                //}
             }
             else
             {

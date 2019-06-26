@@ -17,12 +17,12 @@ namespace AppCliente
 			InitializeComponent ();
 
 
-            //for (int i = 0; i < AppCliente.App.MVDireccion.ListaDIRECCIONES.Count; i++)
-            //{
-            //    AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Clicked = false;
-            //}
+            for (int i = 0; i < AppCliente.App.MVDireccion.ListaDIRECCIONES.Count; i++)
+            {
+                AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Clicked = false;
+            }
 
-            //MyListViewDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;
+            MyListViewDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;
 
         }
 

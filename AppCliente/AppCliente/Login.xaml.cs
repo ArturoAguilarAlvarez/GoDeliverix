@@ -114,7 +114,7 @@ namespace AppCliente
                         ESTADO = (string)p["ESTADO"],
                         MUNICIPIO = (string)p["MUNICIPIO"],
                         CIUDAD = (string)p["CIUDAD"],
-                        COLONIA = (string)p["REFERENCIA"],
+                        COLONIA = (string)p["COLONIA"],
                         CALLE0 = (string)p["CALLE0"],
                         CALLE1 = (string)p["CALLE1"],
                         CALLE2 = (string)p["CALLE2"],
