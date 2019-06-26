@@ -63,7 +63,7 @@ namespace VistaDelModelo
         /// <param name="Tipo"></param>
         /// <param name="Numero"></param>
         /// <param name="NombreTipoDeTelefono"></param>
-        public void AgregaTelefonoALista(string IdTipoDeTelefono,  string Numero, string NombreTipoDeTelefono)
+        public void AgregaTelefonoALista(string IdTipoDeTelefono, string Numero, string NombreTipoDeTelefono)
         {
             Guid UidTelefono = Guid.NewGuid();
             if (!ListaDeTelefonos.Exists(tel => tel.ID == UidTelefono))
@@ -84,7 +84,7 @@ namespace VistaDelModelo
             ListaDeTelefonos.Remove(T);
         }
 
-     
+
 
         /// <summary>
         /// Guarda el telefono a la sucursal por el identificador para guardar la lista
@@ -137,6 +137,25 @@ namespace VistaDelModelo
                 };
                 Telefono.GuardaTelefono(uidUsuario, Parametro);
             }
+        }
+
+        /// <summary>
+        /// Este metodo solo es para agregar registros independientes en la base de datos desde la web api
+        /// </summary>
+        /// <param name="uidUsuario"></param>
+        /// <param name="Parametro"></param>
+        /// <param name="UidTelefono"></param>
+        /// <param name="Numero"></param>
+        /// <param name="UidTipoDeTelefono"></param>
+        public void GuardaTelefonoWepApi(Guid uidUsuario, string Parametro, Guid UidTelefono, string Numero, string UidTipoDeTelefono)
+        {
+            var Telefono = new Telefono
+            {
+                ID = UidTelefono,
+                NUMERO = Numero,
+                Tipo = UidTipoDeTelefono
+            };
+            Telefono.GuardaTelefono(uidUsuario, Parametro);
         }
 
         /// <summary>
@@ -226,7 +245,7 @@ namespace VistaDelModelo
                                 UidTipo = new Guid(item["UidTipoDetelefono"].ToString()),
                                 NUMERO = item["Numero"].ToString(),
                                 StrNombreTipoDeTelefono = tipo,
-                                Estado=false
+                                Estado = false
                             }
                             );
                     }
@@ -300,9 +319,9 @@ namespace VistaDelModelo
                 Guid id = new Guid(item["UidTipoDeTelefono"].ToString());
                 string nombre = item["Nombre"].ToString();
                 TIPOTELEFONO.Add(new TipoDeTelefono(id, nombre));
-                ListaDeTipoDeTelefono.Add(new VMTelefono() { UidTipo = id,StrNombreTipoDeTelefono = nombre });
+                ListaDeTipoDeTelefono.Add(new VMTelefono() { UidTipo = id, StrNombreTipoDeTelefono = nombre });
             }
-            
+
         }
 
         public void EliminaTelefonosUsuario(Guid uidUsuario)

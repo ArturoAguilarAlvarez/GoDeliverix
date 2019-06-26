@@ -428,6 +428,7 @@ namespace VistaDelModelo
                     { 
                         this.Uid = new Guid(item["UidUsuario"].ToString());
                         this.StrNombre = item["Nombre"].ToString().ToUpper();
+                        this.StrCotrasena = item["Contrasena"].ToString().ToUpper();
                         this.StrUsuario = item["usuario"].ToString().ToUpper();
                         this.StrApellidoPaterno = item["ApellidoPaterno"].ToString().ToUpper();
                         this.StrApellidoMaterno = item["ApellidoMaterno"].ToString().ToUpper();
