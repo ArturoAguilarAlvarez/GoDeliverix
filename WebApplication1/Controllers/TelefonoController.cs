@@ -77,7 +77,10 @@ namespace WebApplication1.Controllers
         {
             Respuesta = new ResponseHelper();
             MVTelefono = new VMTelefono();
-
+            if (String.IsNullOrEmpty(UidTelefono))
+            {
+                UidTelefono = Guid.Empty.ToString();
+            }
             MVTelefono.BuscarTelefonos(new Guid(UidPropietario) , ParadetroDeBusqueda,new Guid(UidTelefono)  , strTelefono);
             Respuesta.Data = MVTelefono.ListaDeTelefonos;
             Respuesta.Status = true;

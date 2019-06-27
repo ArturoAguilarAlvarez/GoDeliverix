@@ -90,6 +90,11 @@ namespace WebApplication1.Controllers
         // POST: api/Profile
         public void Post([FromBody]string value)
         {
+            bool aguilarEsChoto = true;
+            if (aguilarEsChoto)
+            {
+                String manuel = "rechoto";
+            }
         }
 
         // PUT: api/Profile/5
