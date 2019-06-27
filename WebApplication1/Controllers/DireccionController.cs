@@ -73,26 +73,23 @@ namespace WebApplication1.Controllers
         public ResponseHelper GetGuardarDireccion(Guid UidUsuario, Guid UidPais, Guid UidEstado, Guid UidMunicipio, Guid UidCiudad, Guid UidColonia, string CallePrincipal, string CalleAux1, string CalleAux2, string Manzana, string Lote, string CodigoPostal, string Referencia, string NOMBRECIUDAD, string NOMBRECOLONIA, string Identificador, string Latitud, string Longitud, Guid UidDireccion = new Guid())
         {
             MVDireccion = new VMDireccion();
-
+            Respuesta = new ResponseHelper();
             if (UidDireccion == Guid.Empty)
             {
                 UidDireccion = Guid.NewGuid();
-                MVDireccion.AgregaDireccionALista(UidDireccion, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, "", "", Identificador);
-
+                MVDireccion.AgregaDireccion("asp_AgregaDireccionUsuario",UidUsuario,UidDireccion, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador);
+                Respuesta.Message = "Informacion agregada satisfactoriamente";
             }
             else
             {
-
-                MVDireccion.ActualizaListaDireccion(UidDireccion.ToString(), UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador, "", "");
+                MVDireccion.ActualizaDireccion(UidUsuario,UidDireccion, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador);
+                Respuesta.Message = "Informacion actualizada satisfactoriamente";
             }
             MVDireccion.GuardaListaDeDirecciones(MVDireccion.ListaDIRECCIONES, UidUsuario, "asp_AgregaDireccionUsuario", "Usuario");
 
-
-
-            Respuesta = new ResponseHelper();
-            Respuesta.Data = MVDireccion.ListaDIRECCIONES;
+            Respuesta.Data = "";
             Respuesta.Status = true;
-            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            
             return Respuesta;
         }
 

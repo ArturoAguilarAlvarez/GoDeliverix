@@ -104,6 +104,54 @@ namespace VistaDelModelo
             get { return _NombrePais; }
             set { _NombrePais = value; }
         }
+
+        public void AgregaDireccion(string StoreProcedure, Guid Usuario, Guid uidDireccion, Guid uidPais, Guid uidEstado, Guid uidMunicipio, Guid uidCiudad, Guid uidColonia, string callePrincipal, string calleAux1, string calleAux2, string manzana, string lote, string codigoPostal, string referencia, string identificador)
+        {
+            var direccion = new Direccion()
+            {
+                ID = uidDireccion,
+                PAIS = new Pais() { ID = uidPais },
+                ESTADO = new Estado() { IDESTADO = uidEstado },
+                MUNICIPIO = new Municipio() { IDMUNICIPIO = uidMunicipio },
+                CIUDAD = new Ciudad() { ID = uidCiudad },
+                COLONIA = new Colonia() { UID = uidColonia },
+                CALLE0 = callePrincipal,
+                CALLE1 = calleAux1,
+                CALLE2 = calleAux2,
+                MANZANA = manzana,
+                LOTE = lote,
+                CodigoPostal = codigoPostal,
+                REFERENCIA = referencia,
+                IDENTIFICADOR = identificador
+            };
+
+            Direccion.GuardaDireccion(StoreProcedure, direccion, Usuario);
+        }
+
+        public void ActualizaDireccion(Guid Usuario, Guid uidDireccion, Guid uidPais, Guid uidEstado, Guid uidMunicipio, Guid uidCiudad, Guid uidColonia, string callePrincipal, string calleAux1, string calleAux2, string manzana, string lote, string codigoPostal, string referencia, string identificador)
+        {
+            var direccion = new Direccion()
+            {
+                ID = uidDireccion,
+                PAIS = new Pais() { ID = uidPais },
+                ESTADO = new Estado() { IDESTADO = uidEstado },
+                MUNICIPIO = new Municipio() { IDMUNICIPIO = uidMunicipio },
+                CIUDAD = new Ciudad() { ID = uidCiudad },
+                COLONIA = new Colonia() { UID = uidColonia },
+                CALLE0 = callePrincipal,
+                CALLE1 = calleAux1,
+                CALLE2 = calleAux2,
+                MANZANA = manzana,
+                LOTE = lote,
+                CodigoPostal = codigoPostal,
+                REFERENCIA = referencia,
+                IDENTIFICADOR = identificador
+            };
+
+            Direccion.GuardaDireccion("asp_ActualizaDireccion", direccion, Usuario);
+        }
+        
+
         private string _NombreEstado;
             
         public string NombreEstado

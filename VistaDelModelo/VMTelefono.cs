@@ -157,6 +157,22 @@ namespace VistaDelModelo
             };
             Telefono.GuardaTelefono(uidUsuario, Parametro);
         }
+        /// <summary>
+        /// Actualiza un registro de telefono
+        /// </summary>
+        /// <param name="UidTelefono"></param>
+        /// <param name="Numero"></param>
+        /// <param name="UidTipoDeTelefono"></param>
+        public void ActualizaTelefonoWepApi( Guid UidTelefono, string Numero, string UidTipoDeTelefono)
+        {
+            var Telefono = new Telefono
+            {
+                ID = UidTelefono,
+                NUMERO = Numero,
+                Tipo = UidTipoDeTelefono
+            };
+            Telefono.Actualiza();
+        }
 
         /// <summary>
         /// Verifica que lista de direcciones tiene que mostrar, si solo informacion o gestion

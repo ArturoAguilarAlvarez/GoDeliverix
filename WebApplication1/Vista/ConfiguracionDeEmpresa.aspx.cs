@@ -13,6 +13,7 @@ namespace WebApplication1.Vista
         VMEmpresas MVEmpresas;
         VMDireccion MVDireccion;
         VMCorreoElectronico MVCorreoElectronico;
+        ImagenHelper oImagenHelper = new ImagenHelper();
         protected void Page_Load(object sender, EventArgs e)
         {
             FUImagen.Attributes["onchange"] = "UploadFile(this)";
@@ -257,7 +258,7 @@ namespace WebApplication1.Vista
                                 //Valida si el archivo existe
                                 if (!File.Exists(RutaCompleta))
                                 {
-                                    System.Drawing.Image img = MVImagen.RedimensionarImagen(System.Drawing.Image.FromStream(FU.FileContent));
+                                    System.Drawing.Image img = oImagenHelper.RedimensionarImagen(System.Drawing.Image.FromStream(FU.FileContent));
                                     //Guarda la imagen en el servidor
                                     img.Save(Server.MapPath("~/Vista/" + RutaCompleta), ImageFormat.Png);
 
@@ -327,7 +328,7 @@ namespace WebApplication1.Vista
                                 //Valida si el archivo existe
                                 if (!File.Exists(RutaCompleta))
                                 {
-                                    System.Drawing.Image img = MVImagen.RedimensionarImagen(System.Drawing.Image.FromStream(FU.FileContent));
+                                    System.Drawing.Image img = oImagenHelper.RedimensionarImagen(System.Drawing.Image.FromStream(FU.FileContent));
                                     //Guarda la imagen en el servidor
                                     img.Save(Server.MapPath("~/Vista/" + RutaCompleta), ImageFormat.Png);
 

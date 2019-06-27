@@ -44,6 +44,24 @@ namespace WebApplication1.Controllers
             Respuesta.Message = "Informacion agregada satisfactoriamente";
             return Respuesta;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="UidTelefono"></param>
+        /// <param name="Numero"></param>
+        /// <param name="UidTipoDeTelefono"></param>
+        /// <returns></returns>
+        public ResponseHelper GetActualizaTelefonoApi( Guid UidTelefono, string Numero, string UidTipoDeTelefono)
+        {
+            Respuesta = new ResponseHelper();
+            MVTelefono = new VMTelefono();
+
+            MVTelefono.GuardaTelefonoWepApi(uidUsuario, Parametro, UidTelefono, Numero, UidTipoDeTelefono);
+
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion agregada satisfactoriamente";
+            return Respuesta;
+        }
 
         public ResponseHelper GetObtenerTipoDetelefono(string uidUsuario, string Parametro)
         {
