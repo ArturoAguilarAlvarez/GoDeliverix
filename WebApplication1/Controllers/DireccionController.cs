@@ -37,6 +37,55 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
+        /// <summary>
+        /// Guarda en la base de datos una direccion
+        /// </summary>
+        /// <param name="UidUsuario"></param>
+        /// <param name="UidPais"></param>
+        /// <param name="UidEstado"></param>
+        /// <param name="UidMunicipio"></param>
+        /// <param name="UidCiudad"></param>
+        /// <param name="UidColonia"></param>
+        /// <param name="CallePrincipal"></param>
+        /// <param name="CalleAux1"></param>
+        /// <param name="CalleAux2"></param>
+        /// <param name="Manzana"></param>
+        /// <param name="Lote"></param>
+        /// <param name="CodigoPostal"></param>
+        /// <param name="Referencia"></param>
+        /// <param name="NOMBRECIUDAD"></param>
+        /// <param name="NOMBRECOLONIA"></param>
+        /// <param name="Identificador"></param>
+        /// <param name="Latitud"></param>
+        /// <param name="Longitud"></param>
+        /// <param name="UidDireccion"></param>
+        /// <returns></returns>
+        public ResponseHelper GetGuardarDireccion(Guid UidUsuario, Guid UidPais, Guid UidEstado, Guid UidMunicipio, Guid UidCiudad, Guid UidColonia, string CallePrincipal, string CalleAux1, string CalleAux2, string Manzana, string Lote, string CodigoPostal, string Referencia, string NOMBRECIUDAD, string NOMBRECOLONIA, string Identificador, string Latitud, string Longitud, Guid UidDireccion = new Guid())
+        {
+            MVDireccion = new VMDireccion();
+
+            if (UidDireccion == Guid.Empty)
+            {
+                UidDireccion = Guid.NewGuid();
+                MVDireccion.AgregaDireccionALista(UidDireccion, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, "", "", Identificador);
+
+            }
+            else
+            {
+
+                MVDireccion.ActualizaListaDireccion(UidDireccion.ToString(), UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador, "", "");
+            }
+            MVDireccion.GuardaListaDeDirecciones(MVDireccion.ListaDIRECCIONES, UidUsuario, "asp_AgregaDireccionUsuario", "Usuario");
+
+
+
+            Respuesta = new ResponseHelper();
+            Respuesta.Data = MVDireccion.ListaDIRECCIONES;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
+
         // POST: api/Profile
         public void Post([FromBody]string value)
         {

@@ -24,6 +24,27 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
+        /// <summary>
+        /// Metodo para guardar registros independientes los telefonos
+        /// </summary>
+        /// <param name="uidUsuario"></param>
+        /// <param name="Parametro"></param>
+        /// <param name="UidTelefono"></param>
+        /// <param name="Numero"></param>
+        /// <param name="UidTipoDeTelefono"></param>
+        /// <returns></returns>
+        public ResponseHelper GetGuardaTelefonoApi(Guid uidUsuario, string Parametro, Guid UidTelefono, string Numero, string UidTipoDeTelefono)
+        {
+            Respuesta = new ResponseHelper();
+            MVTelefono = new VMTelefono();
+
+            MVTelefono.GuardaTelefonoWepApi(uidUsuario, Parametro, UidTelefono, Numero, UidTipoDeTelefono);
+
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion agregada satisfactoriamente";
+            return Respuesta;
+        }
+
         public ResponseHelper GetObtenerTipoDetelefono(string uidUsuario, string Parametro)
         {
             Respuesta = new ResponseHelper();
@@ -36,7 +57,7 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
-        public ResponseHelper GetBuscarTelefonos(string UidPropietario, string ParadetroDeBusqueda, string UidTelefono, string strTelefono)
+        public ResponseHelper GetBuscarTelefonos(string UidPropietario, string ParadetroDeBusqueda, string UidTelefono = "", string strTelefono = "")
         {
             Respuesta = new ResponseHelper();
             MVTelefono = new VMTelefono();
