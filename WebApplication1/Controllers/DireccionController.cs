@@ -86,7 +86,7 @@ namespace WebApplication1.Controllers
         public void Put(int id, [FromBody]string value)
         {
         }
-
+         
         // DELETE: api/Profile/5
         public ResponseHelper DeleteDireccionUsuario(string UidDireccion)
         {
