@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using WebApplication1.App_Start;
 using VistaDelModelo;
+using WebApplication1.App_Start;
 namespace WebApplication1.Controllers
 {
     public class DireccionController : ApiController
@@ -67,19 +63,17 @@ namespace WebApplication1.Controllers
             if (UidDireccion == Guid.Empty)
             {
                 UidDireccion = Guid.NewGuid();
-                MVDireccion.AgregaDireccion("asp_AgregaDireccionUsuario",UidUsuario,UidDireccion, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador);
+                MVDireccion.AgregaDireccion("asp_AgregaDireccionUsuario", UidUsuario, UidDireccion, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador);
                 Respuesta.Message = "Informacion agregada satisfactoriamente";
             }
             else
             {
-                MVDireccion.ActualizaDireccion(UidUsuario,UidDireccion, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador);
+                MVDireccion.ActualizaDireccion(UidUsuario, UidDireccion, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador);
                 Respuesta.Message = "Informacion actualizada satisfactoriamente";
             }
             MVDireccion.GuardaListaDeDirecciones(MVDireccion.ListaDIRECCIONES, UidUsuario, "asp_AgregaDireccionUsuario", "Usuario");
-
             Respuesta.Data = "";
             Respuesta.Status = true;
-            
             return Respuesta;
         }
 
@@ -94,8 +88,14 @@ namespace WebApplication1.Controllers
         }
 
         // DELETE: api/Profile/5
-        public void Delete(int id)
+        public ResponseHelper DeleteDireccionUsuario(string UidDireccion)
         {
+            MVDireccion = new VMDireccion();
+            MVDireccion.EliminaDireccionUsuario(UidDireccion);
+            Respuesta = new ResponseHelper();
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion eliminada satisfactoriamente";
+            return Respuesta;
         }
     }
 }
