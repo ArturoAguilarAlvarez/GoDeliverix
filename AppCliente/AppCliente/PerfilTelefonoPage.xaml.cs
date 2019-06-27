@@ -19,6 +19,8 @@ namespace AppCliente
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PerfilTelefonoPage : ContentPage
     {
+
+        HttpClient _client = new HttpClient();
         public ObservableCollection<string> Items { get; set; }
         public ObservableCollection<VMTelefono> TelefonoLista { get; set; }
         public PerfilTelefonoPage()
@@ -224,8 +226,12 @@ namespace AppCliente
 
                     //Guid Gui = new Guid(txtIDTelefono.Text);
                     //int index = AppCliente.App.MVTelefono.ListaDeTelefonos.FindIndex(x => x.ID == Gui);
-                    AppCliente.App.MVTelefono.EliminaTelefonoUsuario(txtIDTelefono.Text);
+                    //AppCliente.App.MVTelefono.EliminaTelefonoUsuario(txtIDTelefono.Text);
                     //MVTelefono.ListaDeTelefonos[index].NUMERO = "1234";
+
+                    string _Url = $"http://godeliverix.net/api/Telefono/DeleteTelefonoUsuario?UidTelefono={txtIDTelefono.Text}";
+                    var content = await _client.DeleteAsync(_Url);
+
                     AppCliente.App.MVTelefono.BuscarTelefonos(UidPropietario: new Guid(AppCliente.App.Global1), ParadetroDeBusqueda: "Usuario");
                     MyListView.ItemsSource = null;
                     CargarNombreTelefono();

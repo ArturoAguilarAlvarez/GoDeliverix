@@ -81,11 +81,11 @@ namespace AppCliente
                     //int index = MVTelefono.ListaDeTelefonos.FindIndex(x => x.ID == Gui);
                     AppCliente.App.MVDireccion.QuitaDireeccionDeLista(txtIDDireccionn.Text);
 
-                   // AppCliente.App.MVDireccion.EliminaDireccionUsuario(txtIDDireccionn.Text);
+                    // AppCliente.App.MVDireccion.EliminaDireccionUsuario(txtIDDireccionn.Text);
 
 
-                    //string _Url = $"http://godeliverix.net/api/Orden/GetGuardarProductos?UIDORDEN={UidOrdenSucursal}&UIDSECCIONPRODUCTO={item.UidSeccionPoducto}&INTCANTIDAD={item.Cantidad}&STRCOSTO={item.StrCosto}&UidSucursal={item.UidSucursal}&UidRegistroEncarrito={item.UidRegistroProductoEnCarrito}&UidNota={Uidnota}&StrMensaje={mensaje}";
-                    //var content = await _client.GetAsync(_Url);
+                    string _Url = $"http://godeliverix.net/api/Direccion/DeleteDireccionUsuario?UidDireccion={txtIDDireccionn.Text}";
+                    var content = await _client.DeleteAsync(_Url);
 
                     AppCliente.App.MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
                     MyListViewDirecciones.ItemsSource = null;
