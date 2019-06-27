@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using VistaDelModelo;
@@ -12,7 +13,11 @@ namespace AppCliente
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class UsuarioDirecciones : ContentPage
 	{
-		public UsuarioDirecciones ()
+
+        HttpClient _client = new HttpClient();
+
+
+        public UsuarioDirecciones ()
 		{
 			InitializeComponent ();
             for (int i = 0; i < AppCliente.App.MVDireccion.ListaDIRECCIONES.Count; i++)
@@ -75,7 +80,12 @@ namespace AppCliente
                     int index = AppCliente.App.MVDireccion.ListaDIRECCIONES.FindIndex(x => x.ID == Gui);
                     //int index = MVTelefono.ListaDeTelefonos.FindIndex(x => x.ID == Gui);
                     AppCliente.App.MVDireccion.QuitaDireeccionDeLista(txtIDDireccionn.Text);
-                    AppCliente.App.MVDireccion.EliminaDireccionUsuario(txtIDDireccionn.Text);
+
+                   // AppCliente.App.MVDireccion.EliminaDireccionUsuario(txtIDDireccionn.Text);
+
+
+                    //string _Url = $"http://godeliverix.net/api/Orden/GetGuardarProductos?UIDORDEN={UidOrdenSucursal}&UIDSECCIONPRODUCTO={item.UidSeccionPoducto}&INTCANTIDAD={item.Cantidad}&STRCOSTO={item.StrCosto}&UidSucursal={item.UidSucursal}&UidRegistroEncarrito={item.UidRegistroProductoEnCarrito}&UidNota={Uidnota}&StrMensaje={mensaje}";
+                    //var content = await _client.GetAsync(_Url);
 
                     AppCliente.App.MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
                     MyListViewDirecciones.ItemsSource = null;

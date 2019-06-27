@@ -13,6 +13,11 @@ namespace WebApplication1.Controllers
         VMDireccion MVDireccion;
         ResponseHelper Respuesta;
         // GET: api/Profile/5
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="UidSucursal"></param>
+        /// <returns></returns>
         public ResponseHelper GetObtenerDireccionCompletaDeSucursal(string UidSucursal)
         {
             MVDireccion = new VMDireccion();
@@ -25,6 +30,11 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="UidUsuario"></param>
+        /// <returns></returns>
         public ResponseHelper GetObtenerDireccionUsuario(string UidUsuario)
         {
             MVDireccion = new VMDireccion();
@@ -97,7 +107,7 @@ namespace WebApplication1.Controllers
         }
 
         // DELETE: api/Profile/5
-        public void Delete(int id)
+        public void Delete(string id)
         {
         }
     }
