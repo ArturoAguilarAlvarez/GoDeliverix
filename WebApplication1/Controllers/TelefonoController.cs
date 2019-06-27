@@ -55,9 +55,7 @@ namespace WebApplication1.Controllers
         {
             Respuesta = new ResponseHelper();
             MVTelefono = new VMTelefono();
-
-            MVTelefono.GuardaTelefonoWepApi(uidUsuario, Parametro, UidTelefono, Numero, UidTipoDeTelefono);
-
+            MVTelefono.ActualizaTelefonoWepApi( UidTelefono, Numero, UidTipoDeTelefono);
             Respuesta.Status = true;
             Respuesta.Message = "Informacion agregada satisfactoriamente";
             return Respuesta;
@@ -104,8 +102,14 @@ namespace WebApplication1.Controllers
         }
 
         // DELETE: api/Profile/5
-        public void Delete(int id)
+        public ResponseHelper DeleteTelefonoUsuario(string UidTelefono)
         {
+            Respuesta = new ResponseHelper();
+            MVTelefono = new VMTelefono();
+            MVTelefono.EliminaTelefonoUsuario(UidTelefono);
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion eliminada satisfactoriamente";
+            return Respuesta;
         }
     }
 }
