@@ -341,6 +341,7 @@
     <Compile Include="Controllers\EmpresaController.cs" />
     <Compile Include="Controllers\GiroController.cs" />
     <Compile Include="Controllers\ImagenController.cs" />
+    <Compile Include="Controllers\LicenciaController.cs" />
     <Compile Include="Controllers\OfertaController.cs" />
     <Compile Include="Controllers\OrdenController.cs" />
     <Compile Include="Controllers\ProductoController.cs" />

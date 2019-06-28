@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using VistaDelModelo;
 using WebApplication1.App_Start;
@@ -16,10 +12,51 @@ namespace WebApplication1.Controllers
         public ResponseHelper GetBuscarSucursalesDeUnProducto(Guid uidEmpresa, string day, Guid UidDireccion)
         {
             MVSucursales = new VMSucursales();
-            MVSucursales.BuscarSucursalesCliente(uidEmpresa,day,UidDireccion);
+            MVSucursales.BuscarSucursalesCliente(uidEmpresa, day, UidDireccion);
 
             Respuesta = new ResponseHelper();
             Respuesta.Data = MVSucursales.LISTADESUCURSALES;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
+
+
+        public ResponseHelper GetObtenSucursalDeLicencia(string licencia)
+        {
+            MVSucursales = new VMSucursales();
+            Respuesta = new ResponseHelper();
+            Respuesta.Data = MVSucursales.ObtenSucursalDeLicencia(licencia);
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
+
+        public ResponseHelper GetVerificaEstatusSucursal(string UidSucursal)
+        {
+            MVSucursales = new VMSucursales();
+            Respuesta = new ResponseHelper();
+            Respuesta.Data = MVSucursales.VerificaEstatusSucursal(UidSucursal);
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
+
+        public ResponseHelper GetBuscarSucursales(string identificador = "", string horaApertura = "", string horaCierre = "", Guid IdColonia = new Guid(), string Uidempresa = "", string UidSucursal = "")
+        {
+            MVSucursales = new VMSucursales();
+            Respuesta = new ResponseHelper();
+
+            MVSucursales.BuscarSucursales(UidSucursal);
+            if (!string.IsNullOrEmpty(UidSucursal))
+            {
+                Respuesta.Data = MVSucursales;
+            }
+            else
+            {
+                Respuesta.Data = MVSucursales.LISTADESUCURSALES;
+            }
+
             Respuesta.Status = true;
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;

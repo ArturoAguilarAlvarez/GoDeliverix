@@ -40,11 +40,11 @@ namespace WebApplication1.Controllers
         public void GetCorreoDeConfirmacion(string UidUsuario, string correo, string usuario, string password, string Nombre, string Apellidos)
         {
             MVAcceso = new VMAcceso();
-            MVAcceso.CorreoDeConfirmacion(new Guid(UidUsuario),correo,usuario,password,Nombre,Apellidos);
-            
+            MVAcceso.CorreoDeConfirmacion(new Guid(UidUsuario), correo, usuario, password, Nombre, Apellidos);
+
         }
 
-        
+
 
         public ResponseHelper GetProfileType(string UidUsuario)
         {
@@ -59,9 +59,24 @@ namespace WebApplication1.Controllers
         public ResponseHelper GetObtenerUltimoEstatusBitacoraRepartidor(Guid UidUsuario)
         {
             MVAcceso = new VMAcceso();
-            
+
             Respuesta = new ResponseHelper();
-            Respuesta.Data = MVAcceso.ObtenerUltimoEstatusBitacoraRepartidor(UidUsuario); 
+            Respuesta.Data = MVAcceso.ObtenerUltimoEstatusBitacoraRepartidor(UidUsuario);
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion agregada satisfactoriamente";
+            return Respuesta;
+        }
+        /// <summary>
+        /// Registro en bitacora de acceso de los supervisores
+        /// </summary>
+        /// <param name="UidUsuario"></param>
+        /// <param name="UidEstatus"></param>
+        /// <returns></returns>
+        public ResponseHelper GetBitacoraRegistroSupervisores(Guid UidUsuario, Guid UidEstatus)
+        {
+            MVAcceso = new VMAcceso();
+            MVAcceso.BitacoraRegistroSupervisores(UidUsuario, UidEstatus);
+            Respuesta = new ResponseHelper();
             Respuesta.Status = true;
             Respuesta.Message = "Informacion agregada satisfactoriamente";
             return Respuesta;

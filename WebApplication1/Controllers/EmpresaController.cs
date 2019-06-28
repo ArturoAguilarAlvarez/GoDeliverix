@@ -48,6 +48,18 @@ namespace WebApplication1.Controllers
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;
         }
+        
+        //Busqueda de empresas
+        public ResponseHelper GetVerificaEstatusEmpresa(string UidEmpresa)
+        {
+            MVEmpresa = new VMEmpresas();            
+            Respuesta = new ResponseHelper();
+            
+            Respuesta.Data = MVEmpresa.VerificaEstatusEmpresa(UidEmpresa);
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
 
         //// POST: api/Profile
         //public void Post([FromBody]string value)

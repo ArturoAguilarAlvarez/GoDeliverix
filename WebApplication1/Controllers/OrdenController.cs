@@ -187,6 +187,17 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
+        public ResponseHelper GetBuscarOrdenPorCodigoQR(Guid UidUsuario)
+        {
+            MVOrden = new VMOrden();
+            MVOrden.BuscarOrdenAsiganadaRepartidor(UidUsuario);
+            Respuesta = new ResponseHelper();
+            Respuesta.Data = MVOrden;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion agregada satisfactoriamente";
+            return Respuesta;
+        }
+
 
        
         #endregion

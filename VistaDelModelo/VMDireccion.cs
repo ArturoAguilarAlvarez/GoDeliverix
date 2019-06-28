@@ -124,11 +124,11 @@ namespace VistaDelModelo
                 REFERENCIA = referencia,
                 IDENTIFICADOR = identificador
             };
-
+            Direccion = new Direccion();
             Direccion.GuardaDireccion(StoreProcedure, direccion, Usuario);
         }
 
-        public void ActualizaDireccion(Guid Usuario, Guid uidDireccion, Guid uidPais, Guid uidEstado, Guid uidMunicipio, Guid uidCiudad, Guid uidColonia, string callePrincipal, string calleAux1, string calleAux2, string manzana, string lote, string codigoPostal, string referencia, string identificador)
+        public void ActualizaDireccion( Guid uidDireccion, Guid uidPais, Guid uidEstado, Guid uidMunicipio, Guid uidCiudad, Guid uidColonia, string callePrincipal, string calleAux1, string calleAux2, string manzana, string lote, string codigoPostal, string referencia, string identificador)
         {
             var direccion = new Direccion()
             {
@@ -147,8 +147,8 @@ namespace VistaDelModelo
                 REFERENCIA = referencia,
                 IDENTIFICADOR = identificador
             };
-
-            Direccion.GuardaDireccion("asp_ActualizaDireccion", direccion, Usuario);
+            Direccion = new Direccion();
+            Direccion.GuardaDireccion("asp_ActualizaDireccion", direccion, Guid.Empty);
         }
         
 

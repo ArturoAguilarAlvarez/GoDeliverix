@@ -91,11 +91,11 @@ namespace Modelo
                 cmd.CommandText = "asp_ActualizaTelefono";
                 
 
-                cmd.Parameters.Add("@UidTelefono", SqlDbType.UniqueIdentifier);
-                cmd.Parameters["@UidTelefono"].Value = ID;
+                cmd.Parameters.Add("@IdTelefono", SqlDbType.UniqueIdentifier);
+                cmd.Parameters["@IdTelefono"].Value = ID;
 
-                cmd.Parameters.Add("@TipoDeTelefono", SqlDbType.UniqueIdentifier);
-                cmd.Parameters["@TipoDeTelefono"].Value = new Guid(Tipo);
+                cmd.Parameters.Add("@idTipoDeTelefono", SqlDbType.UniqueIdentifier);
+                cmd.Parameters["@idTipoDeTelefono"].Value = new Guid(Tipo);
 
                 cmd.Parameters.Add("@Numero", SqlDbType.NVarChar, 30);
                 cmd.Parameters["@Numero"].Value = NUMERO;

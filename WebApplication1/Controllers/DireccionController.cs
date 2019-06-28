@@ -7,6 +7,7 @@ namespace WebApplication1.Controllers
     public class DireccionController : ApiController
     {
         VMDireccion MVDireccion;
+        VMUbicacion MVUbicacion;
         ResponseHelper Respuesta;
         // GET: api/Profile/5
         public ResponseHelper GetObtenerDireccionCompletaDeSucursal(string UidSucursal)
@@ -56,22 +57,30 @@ namespace WebApplication1.Controllers
         /// <param name="Longitud"></param>
         /// <param name="UidDireccion"></param>
         /// <returns></returns>
-        public ResponseHelper GetGuardarDireccion(Guid UidUsuario, Guid UidPais, Guid UidEstado, Guid UidMunicipio, Guid UidCiudad, Guid UidColonia, string CallePrincipal, string CalleAux1, string CalleAux2, string Manzana, string Lote, string CodigoPostal, string Referencia, string NOMBRECIUDAD, string NOMBRECOLONIA, string Identificador, string Latitud, string Longitud, Guid UidDireccion = new Guid())
+        public ResponseHelper GetGuardarDireccion(Guid UidUsuario, Guid UidPais, Guid UidEstado, Guid UidMunicipio, Guid UidCiudad, Guid UidColonia, string CallePrincipal, string CalleAux1, string CalleAux2, string Manzana, string Lote, string CodigoPostal, string Referencia, string NOMBRECIUDAD, string NOMBRECOLONIA, string Identificador, string Latitud, string Longitud)
+        {
+            MVDireccion = new VMDireccion();
+            MVUbicacion = new VMUbicacion();
+            Respuesta = new ResponseHelper();
+            Guid uidDirecion = Guid.NewGuid();
+            MVDireccion.AgregaDireccion("asp_AgregaDireccionUsuario", UidUsuario, uidDirecion, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador);
+            MVUbicacion.GuardaUbicacionDireccion(uidDirecion,Guid.NewGuid(), Latitud, Longitud);
+            Respuesta.Message = "Informacion agregada satisfactoriamente";
+
+            Respuesta.Data = "";
+            Respuesta.Status = true;
+            return Respuesta;
+        }
+
+        public ResponseHelper GetActualizarDireccion( Guid UidPais, Guid UidEstado, Guid UidMunicipio, Guid UidCiudad, Guid UidColonia, string CallePrincipal, string CalleAux1, string CalleAux2, string Manzana, string Lote, string CodigoPostal, string Referencia, string NOMBRECIUDAD, string NOMBRECOLONIA, string Identificador, string Latitud, string Longitud, string UidDireccion)
         {
             MVDireccion = new VMDireccion();
             Respuesta = new ResponseHelper();
-            if (UidDireccion == Guid.Empty)
-            {
-                UidDireccion = Guid.NewGuid();
-                MVDireccion.AgregaDireccion("asp_AgregaDireccionUsuario", UidUsuario, UidDireccion, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador);
-                Respuesta.Message = "Informacion agregada satisfactoriamente";
-            }
-            else
-            {
-                MVDireccion.ActualizaDireccion(UidUsuario, UidDireccion, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador);
-                Respuesta.Message = "Informacion actualizada satisfactoriamente";
-            }
-            MVDireccion.GuardaListaDeDirecciones(MVDireccion.ListaDIRECCIONES, UidUsuario, "asp_AgregaDireccionUsuario", "Usuario");
+            MVUbicacion = new VMUbicacion();
+            MVDireccion.ActualizaDireccion( new Guid(UidDireccion), UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador);
+            MVUbicacion.GuardaUbicacionDireccion(new Guid(UidDireccion), Guid.NewGuid(), Latitud, Longitud);
+            Respuesta.Message = "Informacion actualizada satisfactoriamente";
+
             Respuesta.Data = "";
             Respuesta.Status = true;
             return Respuesta;
@@ -91,7 +100,7 @@ namespace WebApplication1.Controllers
         public void Put(int id, [FromBody]string value)
         {
         }
-         
+
         // DELETE: api/Profile/5
         public ResponseHelper DeleteDireccionUsuario(string UidDireccion)
         {
