@@ -299,48 +299,48 @@ namespace AppCliente
 
 
 
-            //string NOMBRECIUDAD = AppCliente.App.MVDireccion.ObtenerNombreDeLaCiudad(UidCiudad.ToString());
+                //string NOMBRECIUDAD = AppCliente.App.MVDireccion.ObtenerNombreDeLaCiudad(UidCiudad.ToString());
 
-            //if (txtID.Text != string.Empty && txtID.Text != null)
-            //{
-            //    AppCliente.App.MVDireccion.ActualizaListaDireccion(txtID.Text, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, txtCalle.Text, txtEntreCalle.Text, txtYCalle.Text, txtManzana.Text, txtLote.Text, txtCodigoPostal.Text, txtReferencia.Text, txtIdentificador.Text, NOMBRECIUDAD, NOMBRECOLONIA, Latitud.ToString(), Longitud.ToString());
-            //}
-            //else
-            //{
-            //    AppCliente.App.MVDireccion.AgregaDireccionALista(UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, txtCalle.Text, txtEntreCalle.Text, txtYCalle.Text, txtManzana.Text, txtLote.Text, txtCodigoPostal.Text, txtReferencia.Text, NOMBRECIUDAD, NOMBRECOLONIA, txtIdentificador.Text, Latitud.ToString(), Longitud.ToString());
-            //}
+                //if (txtID.Text != string.Empty && txtID.Text != null)
+                //{
+                //    AppCliente.App.MVDireccion.ActualizaListaDireccion(txtID.Text, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, txtCalle.Text, txtEntreCalle.Text, txtYCalle.Text, txtManzana.Text, txtLote.Text, txtCodigoPostal.Text, txtReferencia.Text, txtIdentificador.Text, NOMBRECIUDAD, NOMBRECOLONIA, Latitud.ToString(), Longitud.ToString());
+                //}
+                //else
+                //{
+                //    AppCliente.App.MVDireccion.AgregaDireccionALista(UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, txtCalle.Text, txtEntreCalle.Text, txtYCalle.Text, txtManzana.Text, txtLote.Text, txtCodigoPostal.Text, txtReferencia.Text, NOMBRECIUDAD, NOMBRECOLONIA, txtIdentificador.Text, Latitud.ToString(), Longitud.ToString());
+                //}
 
-            //AppCliente.App.MVDireccion.GuardaListaDeDirecciones(AppCliente.App.MVDireccion.ListaDIRECCIONES, new Guid(AppCliente.App.Global1), "asp_AgregaDireccionUsuario", "Usuario");
-
-
-            //for (int i = 0; i < AppCliente.App.MVDireccion.ListaDIRECCIONES.Count; i++)
-            //{
-            //    Guid guid = Guid.NewGuid();
-            //    if (AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Latitud != null)
-            //    {
-            //        Latitud = AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Latitud;
-            //    }
-            //    else
-            //    {
-            //        Latitud = "0";
-            //    }
-
-            //    if (AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Longitud != null)
-            //    {
-            //        Longitud = AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Longitud;
-            //    }
-            //    else
-            //    {
-            //        Latitud = "0";
-            //    }
-
-            //    AppCliente.App.MVUbicacion.GuardaUbicacionDireccion(AppCliente.App.MVDireccion.ListaDIRECCIONES[i].ID, guid, Latitud, Longitud);
-            //}
+                //AppCliente.App.MVDireccion.GuardaListaDeDirecciones(AppCliente.App.MVDireccion.ListaDIRECCIONES, new Guid(AppCliente.App.Global1), "asp_AgregaDireccionUsuario", "Usuario");
 
 
+                //for (int i = 0; i < AppCliente.App.MVDireccion.ListaDIRECCIONES.Count; i++)
+                //{
+                //    Guid guid = Guid.NewGuid();
+                //    if (AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Latitud != null)
+                //    {
+                //        Latitud = AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Latitud;
+                //    }
+                //    else
+                //    {
+                //        Latitud = "0";
+                //    }
 
-                //string _Url = $"http://godeliverix.net/api/Direccion/GetGuardarDireccion?UidUsuario={App.Global1}&UidPais={UidPais}&UidEstado={UidEstado}&UidMunicipio={UidMunicipio}&UidCiudad={UidCiudad}&UidColonia={UidColonia}&CallePrincipal={txtCalle.Text}&CalleAux1={txtEntreCalle.Text}&CalleAux2={txtYCalle.Text}&Manzana={txtManzana.Text}&Lote={txtLote.Text}&CodigoPostal={txtCodigoPostal.Text}&Referencia={txtReferencia.Text}&NOMBRECIUDAD=s&NOMBRECOLONIA=s&Identificador={txtIdentificador.Text}&Latitud={Latitud}&Longitud={Longitud}";
-                //var content = await _client.(_Url);
+                //    if (AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Longitud != null)
+                //    {
+                //        Longitud = AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Longitud;
+                //    }
+                //    else
+                //    {
+                //        Latitud = "0";
+                //    }
+
+                //    AppCliente.App.MVUbicacion.GuardaUbicacionDireccion(AppCliente.App.MVDireccion.ListaDIRECCIONES[i].ID, guid, Latitud, Longitud);
+                //}
+
+
+
+                string _Url = $"http://godeliverix.net/api/Direccion/GetGuardarDireccion?UidUsuario={App.Global1}&UidPais={UidPais}&UidEstado={UidEstado}&UidMunicipio={UidMunicipio}&UidCiudad={UidCiudad}&UidColonia={UidColonia}&CallePrincipal={txtCalle.Text}&CalleAux1={txtEntreCalle.Text}&CalleAux2={txtYCalle.Text}&Manzana={txtManzana.Text}&Lote={txtLote.Text}&CodigoPostal={txtCodigoPostal.Text}&Referencia={txtReferencia.Text}&NOMBRECIUDAD=s&NOMBRECOLONIA=s&Identificador={txtIdentificador.Text}&Latitud={Latitud}&Longitud={Longitud}";
+                var content = await _client.GetAsync(_Url);
 
 
                 //AppCliente.App.MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
