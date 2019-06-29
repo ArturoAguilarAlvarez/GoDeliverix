@@ -6,6 +6,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace WebApplication1
 {
@@ -89,7 +91,7 @@ namespace WebApplication1
 
                 if (Response.Cookies["Usuario"] != null && Response.Cookies["Password"] != null)
                 {
-                    if (Ingresar(Response.Cookies["Usuario"].Value, Response.Cookies["Password"].Value))
+                    if (IngresarAsync(Response.Cookies["Usuario"].Value, Response.Cookies["Password"].Value))
                     {
 
                     }
@@ -98,7 +100,7 @@ namespace WebApplication1
         }
         #region Metodos
 
-        protected bool Ingresar(string usuario, string password)
+        protected bool IngresarAsync(string usuario, string password)
         {
             bool acceso = false;
             txtUser.BorderColor = Color.Empty;
@@ -120,6 +122,11 @@ namespace WebApplication1
             {
 
                 Guid Id = Guid.Empty;
+                //HttpClient _client = new HttpClient();
+                //string url = "http://godeliverix.net/api/Profile/GET?Usuario=" + usuario + "&Contrasena=" + password;
+                //string content = await _client.GetStringAsync(url);
+                //List<string> listaID = JsonConvert.DeserializeObject<List<string>>(content);
+
                 Id = MVAcceso.Ingresar(usuario, password);
                 if (Id != Guid.Empty)
                 {
@@ -129,6 +136,7 @@ namespace WebApplication1
                         string perfil = MVAcceso.PerfilDeUsuario(Id.ToString());
                         //Obtener la empresa a la que pertenece el usuario
                         Guid UidEmpresa = MVUsuarios.ObtenerIdEmpresa(Id.ToString());
+                        
 
                         MVUsuarios.BusquedaDeUsuario(UidUsuario: Id, UIDPERFIL: new Guid(perfil), UidEmpresa: UidEmpresa);
                         Session["IdUsuario"] = Id;
@@ -158,7 +166,7 @@ namespace WebApplication1
 
         protected void btnAcceso_Click(object sender, EventArgs e)
         {
-            if (Ingresar(txtUser.Text, txtPass.Text))
+            if (IngresarAsync(txtUser.Text, txtPass.Text))
             {
                 //Crea el proceso para recordar la sesion en las cookies
                 if (chkRecuerdame.Checked == true)
