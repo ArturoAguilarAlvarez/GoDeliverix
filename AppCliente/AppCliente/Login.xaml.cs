@@ -132,11 +132,9 @@ namespace AppCliente
                     // App.MVDireccion.ObtenerDireccionesUsuario(App.Global1);
                     if (GuardarContraseña.IsToggled)
                     {
-
                         AppCliente.Helpers.Settings.UserName = txtUsuario.Text;
                         AppCliente.Helpers.Settings.Password = txtIDContraseña.Text;
                         Application.Current.MainPage = new MasterMenu();
-
                         await PopupNavigation.Instance.PopAsync();
                     }
                     else
