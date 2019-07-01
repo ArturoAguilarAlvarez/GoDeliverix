@@ -7,11 +7,16 @@ using System;
 using System.Windows.Input;
 using VistaDelModelo;
 using Xamarin.Forms;
+using Newtonsoft.Json;
+using Repartidores_GoDeliverix.Helpers;
+using System.Net.Http;
 
 namespace Repartidores_GoDeliverix.VM
 {
     public class VMAjustesItem
     {
+        ResponseHelper oWebApiResponse;
+        string UrlApi = "http://www.godeliverix.net/api/";
         public string Titulo { get; set; }
         public string Detalles { get; set; }
         public string StrRuta { get; set; }
@@ -22,6 +27,7 @@ namespace Repartidores_GoDeliverix.VM
         private async void DisplaySetting()
         {
             var AppInstance = MainViewModel.GetInstance();
+            HttpClient _WebApiGoDeliverix = new HttpClient();
             AppInstance.MVAjustes.ModuloACambiar = Titulo;
             switch (this.Titulo)
             {
@@ -43,7 +49,9 @@ namespace Repartidores_GoDeliverix.VM
                     await (Application.Current.MainPage as MasterDetailPage).Detail.Navigation.PushAsync(new Ajustes_Direccion());
                     break;
                 case "Cerrar sesion":
-                    MVAcceso.BitacoraRegistroRepartidores(char.Parse("S"), AppInstance.Session_.UidUsuario, new Guid("AAD35D44-5E65-46B6-964F-CD2DF026ECB1"));
+                    string url = UrlApi + "Profile/GetBitacoraRegistroRepartidores?StrParametro=S&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=AAD35D44-5E65-46B6-964F-CD2DF026ECB1";
+                    await _WebApiGoDeliverix.GetAsync(url);
+                    //MVAcceso.BitacoraRegistroRepartidores(char.Parse("S"), AppInstance.Session_.UidUsuario, new Guid("AAD35D44-5E65-46B6-964F-CD2DF026ECB1"));
                     AppInstance.MVLogin = new VMLogin();
                     AppInstance.Session_ = new Session();
                     Application.Current.MainPage = new NavigationPage(new Login());

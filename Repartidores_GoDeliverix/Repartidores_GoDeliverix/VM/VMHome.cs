@@ -6,6 +6,8 @@ using System.Windows.Input;
 using VistaDelModelo;
 using Xamarin.Forms;
 using Xamarin.Essentials;
+using System.Net.Http;
+
 namespace Repartidores_GoDeliverix.VM
 {
     public class VMHome : ControlsController
@@ -15,6 +17,8 @@ namespace Repartidores_GoDeliverix.VM
         VMUbicacion MVUbicacion = new VMUbicacion();
         VMDireccion MVDireccion = new VMDireccion();
 
+
+        string UrlApi = "http://www.godeliverix.net/api/";
 
         private Guid _UidOrdenTarifario;
 
@@ -49,23 +53,26 @@ namespace Repartidores_GoDeliverix.VM
         }
         private bool _blEstatus;
 
-        public bool BlEstatus
+        public  bool BlEstatus
         {
             get { return _blEstatus; }
             set
             {
-                //                var AppInstance = MainViewModel.GetInstance();
                 SetValue(ref _blEstatus, value);
                 try
                 {
+                    string url = "";
+                    HttpClient _WebApiGoDeliverix = new HttpClient();
                     var AppInstance = MainViewModel.GetInstance();
                     if (_blEstatus)
                     {
-                        MVAcceso.BitacoraRegistroRepartidores(char.Parse("S"), AppInstance.Session_.UidUsuario, new Guid("A298B40F-C495-4BD8-A357-4A3209FBC162"));
+                        url = UrlApi + "Profile/GetBitacoraRegistroRepartidores?StrParametro=S&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=A298B40F-C495-4BD8-A357-4A3209FBC162";
+                         _WebApiGoDeliverix.GetAsync(url);
                     }
                     else
                     {
-                        MVAcceso.BitacoraRegistroRepartidores(char.Parse("S"), AppInstance.Session_.UidUsuario, new Guid("AAD35D44-5E65-46B6-964F-CD2DF026ECB1"));
+                         url = UrlApi + "Profile/GetBitacoraRegistroRepartidores?StrParametro=S&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=AAD35D44-5E65-46B6-964F-CD2DF026ECB1";
+                        _WebApiGoDeliverix.GetAsync(url);
                     }
                 }
                 catch (Exception)

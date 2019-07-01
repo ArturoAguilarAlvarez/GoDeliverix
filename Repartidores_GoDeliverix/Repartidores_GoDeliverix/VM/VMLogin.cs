@@ -7,13 +7,19 @@ using System;
 using System.Windows.Input;
 using VistaDelModelo;
 using Xamarin.Forms;
+using Repartidores_GoDeliverix.Helpers;
+using System.Net.Http;
+using System.Collections.Generic;
+using Newtonsoft;
+using Newtonsoft.Json;
 
 namespace Repartidores_GoDeliverix.VM
 {
     public class VMLogin : ControlsController
     {
         VMAcceso mVAcceso = new VMAcceso();
-
+        ResponseHelper oWebApiResponse;
+        string UrlApi = "http://www.godeliverix.net/api/";
         #region atributos
         private string _strUser;
         private string _Password;
@@ -95,15 +101,8 @@ namespace Repartidores_GoDeliverix.VM
                 }
                 else
                 {
-                    if (Acceso(User, Password, "Login"))
-                    {
-                        var AppInstance = MainViewModel.GetInstance();
-                        AppInstance.MVHome = new VMHome();
-                        AppInstance.MVHome.BlEstatus = true;
-                        AppInstance.MVAjustes = new VMAjustes();
-                        Application.Current.MainPage = new NavigationPage(new TabbedPageMain());                       
-                    }
-                    await PopupNavigation.Instance.PopAllAsync();
+                    Acceso(User, Password, "Login");
+                   
                 }
             }
             catch (Exception)
@@ -118,33 +117,55 @@ namespace Repartidores_GoDeliverix.VM
 
         public void AccesoGuardado(string Usuario, string password)
         {
-            if (Acceso(Usuario, password, "Datoas Guardados"))
-            {
-                Application.Current.MainPage = new NavigationPage(new TabbedPageMain());
-            }
-            else
-            {
-                Application.Current.MainPage = new NavigationPage(new Login());
-            }
+            //if (Acceso(Usuario, password, "Datoas Guardados"))
+            //{
+            //    Application.Current.MainPage = new NavigationPage(new TabbedPageMain());
+            //}
+            //else
+            //{
+            //    Application.Current.MainPage = new NavigationPage(new Login());
+            //}
         }
-        public bool Acceso(string Usuario, string password, string Modulo)
+        public async void Acceso(string Usuario, string password, string Modulo)
         {
-            bool resultado = false;
+           
+            HttpClient _WebApiGoDeliverix = new HttpClient();
+            string url = UrlApi+"Profile/GET?Usuario="+ Usuario +"&Contrasena="+ password + "";
+            
+            string content = await _WebApiGoDeliverix.GetStringAsync(url);
+            List<string> lista = JsonConvert.DeserializeObject<List<string>>(content);
 
-            Guid UidUsuario = mVAcceso.Ingresar(Usuario, password);
+            Guid UidUsuario = new Guid(lista[0].ToString());
             if (UidUsuario != null && UidUsuario != Guid.Empty)
             {
-                string perfil = mVAcceso.PerfilDeUsuario(UidUsuario.ToString());
+                 url = UrlApi + "Profile/GetProfileType?UidUsuario=" + UidUsuario + "";
+                 
+                 content = await _WebApiGoDeliverix.GetStringAsync(url);
+                var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                string perfil = obj.ToString();
+
                 //Entrada solo para perfil de repartidor
                 if (perfil.ToUpper() == "DFC29662-0259-4F6F-90EA-B24E39BE4346")
                 {
-                    mVAcceso.BitacoraRegistroRepartidores(char.Parse("S"), UidUsuario, new Guid("A298B40F-C495-4BD8-A357-4A3209FBC162"));
+                    url = UrlApi + "Profile/GetBitacoraRegistroRepartidores?StrParametro=S&UidUsuario=" + UidUsuario + "&UidEstatus=A298B40F-C495-4BD8-A357-4A3209FBC162";
+                    await _WebApiGoDeliverix.GetAsync(url);
                     var AppInstance = MainViewModel.GetInstance();
                     AppInstance.Session_ = new Session() { UidUsuario = UidUsuario };
                     VMUsuarios MVUsuario = new VMUsuarios();
-                    MVUsuario.BusquedaDeUsuario(UidUsuario: UidUsuario, UIDPERFIL: new Guid("DFC29662-0259-4F6F-90EA-B24E39BE4346"));
+
+                    url = UrlApi + "Usuario/GetBuscarUsuarios?UidUsuario=" + UidUsuario + "&UIDPERFIL=DFC29662-0259-4F6F-90EA-B24E39BE4346";
+                    content = await _WebApiGoDeliverix.GetStringAsync(url);
+                    obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                    MVUsuario = JsonConvert.DeserializeObject<VistaDelModelo.VMUsuarios>(obj);
+                    
                     AppInstance.Nombre = MVUsuario.StrNombre + " " + MVUsuario.StrApellidoPaterno;
 
+                    
+                    AppInstance.MVHome = new VMHome();
+                    AppInstance.MVHome.BlEstatus = true;
+                    AppInstance.MVAjustes = new VMAjustes();
+                    Application.Current.MainPage = new NavigationPage(new TabbedPageMain());
+                    
 
                     if (IsSavingValues && Modulo == "Login")
                     {
@@ -155,7 +176,6 @@ namespace Repartidores_GoDeliverix.VM
                     {
                         Repartidores_GoDeliverix.Helpers.settings.ClearAllData();
                     }
-                    resultado = true;
                 }
                 else
                 {
@@ -170,8 +190,9 @@ namespace Repartidores_GoDeliverix.VM
                 GenerateMessage("Datos invalidos", "El usuario no existe", "Aceptar");
                 this.IsLoading = false;
                 this.IsEnable = true;
+                await PopupNavigation.Instance.PopAllAsync();
             }
-            return resultado;
+            await PopupNavigation.Instance.PopAllAsync();
         }
 
 

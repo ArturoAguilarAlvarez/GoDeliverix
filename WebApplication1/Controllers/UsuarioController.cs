@@ -13,6 +13,11 @@ namespace WebApplication1.Controllers
         public ResponseHelper GetBuscarUsuarios(string UidUsuario, string UidEmpresa = "", string NOMBRE = "", string USER = "", string APELLIDO = "", string ESTATUS = "", string UIDPERFIL = "")
         {
             MVUsuario = new VMUsuarios();
+
+            if (string.IsNullOrEmpty(UidEmpresa))
+            {
+                UidEmpresa = Guid.Empty.ToString();
+            }
             MVUsuario.BusquedaDeUsuario(new Guid(UidUsuario), new Guid(UidEmpresa), NOMBRE, USER, APELLIDO, ESTATUS, new Guid(UIDPERFIL));
 
             Respuesta = new ResponseHelper();

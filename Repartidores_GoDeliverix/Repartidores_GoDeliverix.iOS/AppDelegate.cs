@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Foundation;
 using SuaveControls.FloatingActionButton.iOS.Renderers;
 using UIKit;
-
+using Repartidores_GoDeliverix;
 namespace Repartidores_GoDeliverix.iOS
 {
     // The UIApplicationDelegate for the application. This class is responsible for launching the 
@@ -25,11 +24,12 @@ namespace Repartidores_GoDeliverix.iOS
         {
             Xamarin.Forms.Forms.Init();
             Rg.Plugins.Popup.Popup.Init();
-            ZXing.Net.Mobile.Forms.iOS.Platform.Init();
-            LoadApplication(new App());
+            ZXing.Net.Mobile.Forms.iOS.Platform.Init();           
             FloatingActionButtonRenderer.InitRenderer();
+
             App.ScreenWidth = (int)UIScreen.MainScreen.Bounds.Width;
             App.ScreenHeight = (int)UIScreen.MainScreen.Bounds.Height;
+            LoadApplication(new App());
             return base.FinishedLaunching(app, options);
         }
     }

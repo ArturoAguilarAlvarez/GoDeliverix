@@ -90,12 +90,21 @@ namespace WebApplication1.Controllers
         /// <param name="UidEstatus"></param>
         /// <param name="UidOrdenRepartidor"></param>
         /// <returns></returns>
-        public ResponseHelper GetBitacoraRegistroRepartidores(char StrParametro, Guid UidUsuario, Guid UidEstatus, Guid UidOrdenRepartidor = new Guid())
+        public ResponseHelper GetBitacoraRegistroRepartidores(char StrParametro, Guid UidUsuario, Guid UidEstatus, string UidOrdenRepartidor = "")
         {
             MVAcceso = new VMAcceso();
             Respuesta = new ResponseHelper();
-
-            MVAcceso.BitacoraRegistroRepartidores(StrParametro, UidUsuario, UidEstatus, UidOrdenRepartidor);
+            Guid UidOrdenAsignada = new Guid();
+            if (string.IsNullOrEmpty(UidOrdenRepartidor))
+            {
+                MVAcceso.BitacoraRegistroRepartidores(StrParametro, UidUsuario, UidEstatus);
+            }
+            else
+            {
+                UidOrdenAsignada = new Guid(UidOrdenRepartidor);
+                MVAcceso.BitacoraRegistroRepartidores(StrParametro, UidUsuario, UidEstatus, UidOrdenAsignada);
+            }
+            
             Respuesta.Status = true;
             Respuesta.Message = "Estatus actualizado";
             return Respuesta;
