@@ -27,9 +27,7 @@
     <Compile Update="Popup\ConfirmarCancelacionOrden.xaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
-    <Compile Update="View\MasterMenuMenuItem.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Update="View\MasterMenuMenuItem.cs" />
   </ItemGroup>
 
   <ItemGroup>
