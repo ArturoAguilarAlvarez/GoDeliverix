@@ -36,9 +36,7 @@
     <Compile Update="MasterDetailPage1MenuItem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="MasterMenuMenuItem.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Update="MasterMenuMenuItem.cs" />
     <Compile Update="MenuMasterMenuItem.cs">
       <SubType>Code</SubType>
     </Compile>

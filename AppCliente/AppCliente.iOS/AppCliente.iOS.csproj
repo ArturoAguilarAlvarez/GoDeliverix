@@ -57,7 +57,8 @@
     <CodesignEntitlements>
     </CodesignEntitlements>
     <MtouchI18n>west</MtouchI18n>
-    <CodesignProvision>iOS Team Provisioning Profile: com.companyname.AppCliente</CodesignProvision>
+    <CodesignProvision>
+    </CodesignProvision>
     <CodesignExtraArgs />
     <CodesignResourceRules />
   </PropertyGroup>

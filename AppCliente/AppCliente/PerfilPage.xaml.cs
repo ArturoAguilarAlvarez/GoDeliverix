@@ -33,8 +33,6 @@ namespace AppCliente
         public PerfilPage ()
         {
             InitializeComponent();
-            //MVTelefono.TipoDeTelefonos();
-            //MVTelefono.BuscarTelefonos(UidPropietario: new Guid(AppCliente.App.Global1), ParadetroDeBusqueda: "Usuario");
             MVTelefono = AppCliente.App.MVTelefono;
             MVUsuarios = AppCliente.App.MVUsuarios;
             MVCorreoElectronico = AppCliente.App.MVCorreoElectronico;
@@ -101,32 +99,6 @@ namespace AppCliente
             txtNumeroTelefonico.Text = ObjItem.NUMERO;
             txtIDTelefono.Text = ObjItem.ID.ToString();
             MyPicker.SelectedIndex = -1; 
-            //= ObjItem.StrNombreTipoDeTelefono;
-
-            // //int a = MVTelefono.ListaDeTelefonos.Count();
-            // //a = a - 1;
-            // //for (int i = 0; i <= a; i++)
-            // //{
-            // //    MVTelefono.ListaDeTelefonos[i].StrNombreTipoDeTelefono = MVTelefono.TIPOTELEFONO.Where(t => t.ID == MVTelefono.ListaDeTelefonos[i].Tipo).FirstOrDefault().NOMBRE;
-
-            // //    //int index = MVTelefono.TIPOTELEFONO.FindIndex(x => x.ID == MVTelefono.ListaDeTelefonos[i].ID);
-            // //    //MVTelefono.ListaDeTelefonos[i].StrNombreTipoDeTelefono = MVTelefono.TIPOTELEFONO[index].NOMBRE;
-            // //}
-            // MyListView.ItemsSource = null;
-            // //MyListView.ItemsSource = MVTelefono.ListaDeTelefonos;
-
-            // var item = ((MenuItem)sender);
-            // VMTelefono ObjItem = (VMTelefono)item.CommandParameter;
-            // ////DisplayAlert("Delete Context Action", mi.CommandParameter + " delete context action", "OK");
-
-            // MVTelefono.ListaDeTelefonos.Remove(ObjItem);
-
-            // ////var item = (MenuItem)sender;
-            // ////VMTelefono ObjItem = (VMTelefono)item.CommandParameter;
-            // ////DisplayAlert("More Context Action", ObjItem.StrNombreTipoDeTelefono + " more context action", "OK");
-            // ////MVTelefono.ListaDeTelefonos.Clear();
-            //MyListView.ItemsSource = MVTelefono.ListaDeTelefonos;
-            // ////MyListView.BeginRefresh();
         }
         private void OnDeleteDirecciones(object sender, EventArgs e)
         {
@@ -134,33 +106,15 @@ namespace AppCliente
             VMDireccion ObjItem = (VMDireccion)item.CommandParameter;
             Guid Gui = ObjItem.ID;
             int index = MVDireccion.ListaDIRECCIONES.FindIndex(x => x.ID == Gui);
-            //int index = MVTelefono.ListaDeTelefonos.FindIndex(x => x.ID == Gui);
             MVDireccion.QuitaDireeccionDeLista(ObjItem.ID.ToString());
             MVDireccion.EliminaDireccionUsuario(ObjItem.ID.ToString());
 
             MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
             MyListView.ItemsSource = null;
-            MyListViewDirecciones.ItemsSource = MVDireccion.ListaDIRECCIONES;// MVTelefono.TIPOTELEFONO;
-
-            //MVTelefono.BuscarTelefonos(UidPropietario: new Guid(AppCliente.App.Global1), ParadetroDeBusqueda: "Usuario");
-            //MyListView.ItemsSource = null;
-            //CargarNombreTelefono();
-            //MyListView.ItemsSource = MVTelefono.ListaDeTelefonos;
+            MyListViewDirecciones.ItemsSource = MVDireccion.ListaDIRECCIONES;
         }
         private void OnDelete(object sender, EventArgs e)
         {
-
-            //MVTelefono.BuscarTelefonos(UidPropietario: new Guid(AppCliente.App.Global1), ParadetroDeBusqueda: "Usuario");
-            //int a = MVTelefono.ListaDeTelefonos.Count();
-            //a = a - 1;
-            //for (int i = 0; i <= a; i++)
-            //{
-            //    MVTelefono.ListaDeTelefonos[i].StrNombreTipoDeTelefono = MVTelefono.TIPOTELEFONO.Where(t => t.ID == MVTelefono.ListaDeTelefonos[i].Tipo).FirstOrDefault().NOMBRE;
-            //}
-
-
-            //MyListView.ItemsSource = MVTelefono.ListaDeTelefonos;
-
             var item = (MenuItem)sender;
             VMTelefono ObjItem = (VMTelefono)item.CommandParameter;
             Guid Gui = ObjItem.ID;
@@ -183,8 +137,6 @@ namespace AppCliente
             try
             {
                 MVUsuarios.ActualizarUsuario(UidUsuario: new Guid(AppCliente.App.Global1), Nombre: txtNombre.Text, ApellidoPaterno: txtApellido1.Text, ApellidoMaterno: txtApellido2.Text, usuario: txtUsuario.Text, password: txtContrasena.Text, fnacimiento: txtFechaNacimiento.Date.ToString("MM-dd-yyyy"), perfil: "4F1E1C4B-3253-4225-9E46-DD7D1940DA19");
-                //MVCorreoElectronico.EliminaCorreoUsuario(DeliverixUsuario.App.Global1);
-                //MVCorreoElectronico.AgregarCorreo(new Guid(DeliverixUsuario.App.Global1), "Usuario", txtCorreo.Text, Guid.NewGuid());
                 Cargausuario();
                 await PopupNavigation.Instance.PopAsync();
                 await DisplayAlert("Error", "Registro exitoso", "OK");
@@ -209,8 +161,6 @@ namespace AppCliente
 
                 if (!string.IsNullOrEmpty(txtIDTelefono.Text))
                 {
-                    
-                    //MVTelefono.ActualizaRegistroEnListaDeTelefonos(TipoTelefono)
                     MVTelefono.ActualizaRegistroEnListaDeTelefonos(txtIDTelefono.Text, TipoTelefono, txtNumeroTelefonico.Text);
 
                 }
@@ -224,7 +174,6 @@ namespace AppCliente
                 {
                     if (MVTelefono.ListaDeTelefonos.Count != 0)
                     {
-
                         MVTelefono.EliminaTelefonosUsuario(new Guid(AppCliente.App.Global1));
                         MVTelefono.GuardaTelefono(new Guid(AppCliente.App.Global1), "Usuario");
                     }
@@ -239,8 +188,6 @@ namespace AppCliente
                 txtNumeroTelefonico.Text = "";
                 txtIDTelefono.Text = "";
             }
-            
-            //DisplayAlert(Numero, TipoTelefono, "OK");
         }
 
         private void Button_Direcciones(object sender, EventArgs e)
@@ -313,50 +260,5 @@ namespace AppCliente
                   });
             }
         }
-
-        //protected void AgregaTelefono(object sender, EventArgs e)
-        //{
-        //    if (IconActualizaTelefono.CssClass == "glyphicon glyphicon-refresh")
-        //    {
-        //        ActualizaTelefono();
-        //    }
-        //    else
-        //    {
-        //        GuardaTelefono();
-        //    }
-        //    MVTelefono.GuardaTelefonoUsuario(new Guid(Session["IdUsuario"].ToString()));
-        //    DDLDTipoDETelefono.SelectedIndex = -1;
-        //    txtDTelefono.Text = string.Empty;
-        //    DDLDTipoDETelefono.Enabled = false;
-        //    txtDTelefono.Enabled = false;
-        //    btnGuardarTelefono.Visible = false;
-        //    btnCancelarTelefono.Visible = false;
-        //    CargaGrid("Telefono");
-        //}
-
-        //protected void GuardaTelefono()
-        //{
-        //    if (string.IsNullOrEmpty(txtIdTelefono.Text))
-        //    {
-        //        MVTelefono.AgregaTelefonoALista(DDLDTipoDETelefono.SelectedItem.Value.ToString(), DDLDTipoDETelefono.SelectedItem.Value.ToString(), txtDTelefono.Text, DDLDTipoDETelefono.SelectedItem.Text.ToString());
-        //    }
-        //    else
-        //    {
-        //        MVTelefono.ActualizaRegistroEnListaDeTelefonos(txtIdTelefono.Text, DDLDTipoDETelefono.SelectedItem.Value.ToString(), DDLDTipoDETelefono.SelectedItem.Value.ToString(), txtDTelefono.Text);
-        //    }
-        //    MVTelefono.EliminaTelefonosUsuario(new Guid(Session["IdUsuario"].ToString()));
-        //    //Guarda los telefonos
-        //    if (MVTelefono.ListaDeTelefonos != null)
-        //    {
-        //        if (MVTelefono.ListaDeTelefonos.Count != 0)
-        //        {
-        //            MVTelefono.GuardaTelefono(new Guid(Session["IdUsuario"].ToString()), "Usuario");
-        //        }
-        //    }
-        //}
-        //protected void ActualizaTelefono()
-        //{
-        //    MVTelefono.ActualizaRegistroEnListaDeTelefonos(txtIdTelefono.Text, DDLDTipoDETelefono.SelectedItem.Value.ToString(), DDLDTipoDETelefono.SelectedItem.Text.ToString(), txtDTelefono.Text);
-        //}
     }
 }

@@ -142,9 +142,6 @@ namespace WebApplication1.Controllers
         }
         #endregion
 
-
-
-
         /// <summary>
         /// Busca las ordenes para el modulo de busquedas en el historico
         /// </summary>
@@ -169,7 +166,6 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
-
         #region Aplicacion repartidor
         /// <summary>
         /// usca las ordenes asignadas al repartidor
@@ -187,7 +183,18 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
-
+        public ResponseHelper GetOrdenesSucursal(string Licencia, string Estatus, string tipoSucursal)
+        {
+            VMOrden MVOrden = new VMOrden();
+            Respuesta = new ResponseHelper();
+            MVOrden.BuscarOrdenesAppSucursal(
+                "Sucursal", 
+                UidLicencia: new Guid(Licencia), 
+                EstatusSucursal: Estatus, 
+                TipoDeSucursal: tipoSucursal);
+            Respuesta.Data = MVOrden;
+            return Respuesta;
+        }
        
         #endregion
 

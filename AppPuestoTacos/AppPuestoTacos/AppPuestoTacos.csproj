@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="Rg.Plugins.Popup" Version="1.1.5.188" />
     <PackageReference Include="Xam.Plugins.Notifier" Version="3.0.1" />
     <PackageReference Include="Xam.Plugins.Settings" Version="4.1.0-beta" />
@@ -27,9 +28,7 @@
     <Compile Update="Popup\ConfirmarCancelacionOrden.xaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
-    <Compile Update="View\MasterMenuMenuItem.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Update="View\MasterMenuMenuItem.cs" />
   </ItemGroup>
 
   <ItemGroup>

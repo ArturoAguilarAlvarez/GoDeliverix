@@ -49,6 +49,43 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
+
+        public ResponseHelper GetNombreEmpresa(string UIdUsuario)
+        {
+            Respuesta = new ResponseHelper();
+            VMEmpresas MVEmpresas = new VMEmpresas();
+
+            MVEmpresas.ObtenerNombreComercial(UIdUsuario);
+            Respuesta.Data = MVEmpresas.NOMBRECOMERCIAL;
+            return Respuesta;
+        }
+
+        public ResponseHelper GetListaSucursalesDeEmpresa(string UidEmpresa)
+        {
+            Respuesta = new ResponseHelper();
+            VMSucursales MVSucursal = new VMSucursales();
+            MVSucursal.DatosGridViewBusquedaNormal(UidEmpresa);
+            Respuesta.Data = MVSucursal;
+            return Respuesta;
+        }
+
+        public ResponseHelper GetIdEmpresa(string Uidusuario)
+        {
+            Respuesta = new ResponseHelper();
+            VMUsuarios MVUsuarios = new VMUsuarios();
+            MVUsuarios.ObtenerIdEmpresa(Uidusuario);
+            return Respuesta;
+        }
+
+        public ResponseHelper GetLicenciasEmpresa(string ID)
+        {
+            Respuesta = new ResponseHelper();
+            VMLicencia MVLicencia = new VMLicencia();
+            MVLicencia.ObtenerLicenciaSucursal(ID);
+            Respuesta.Data = MVLicencia;
+            return Respuesta
+        }
+
         //// POST: api/Profile
         //public void Post([FromBody]string value)
         //{
