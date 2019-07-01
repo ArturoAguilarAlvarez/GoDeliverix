@@ -85,12 +85,7 @@ namespace AppCliente
                 HttpClient _client = new HttpClient();
                 string url = "http://godeliverix.net/api/Profile/GET?Usuario="+Usuario+"&Contrasena="+Contrasena;
                 string content = await  _client.GetStringAsync(url);
-                List<string> listaID = JsonConvert.DeserializeObject<List<string>>(content);
-
-
-                //if (!string.IsNullOrEmpty(Usuario) && !string.IsNullOrEmpty(Contrasena))
-                //{
-                
+                List<string> listaID = JsonConvert.DeserializeObject<List<string>>(content);                
                 _id =new Guid( listaID[0].ToString());
                 if (_id != Guid.Empty)
                 {

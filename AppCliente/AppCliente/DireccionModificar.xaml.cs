@@ -23,7 +23,7 @@ namespace AppCliente
         public List<VMDireccion> DireccionesListaMunicipios = new List<VMDireccion>();
         public List<VMDireccion> DireccionesListaCiudad = new List<VMDireccion>();
         public List<VMDireccion> DireccionesListaColonia = new List<VMDireccion>();
-        string Longitud = "0";
+        string Longitud = "0";  
         string Latitud = "0";
         double Longitud1 = 0;
         double Latitud1 = 0;
@@ -66,8 +66,6 @@ namespace AppCliente
             MypickerEstado.Items.Clear();
             MypickerCiudad.Items.Clear();
             MypickerColonia.Items.Clear();
-
-            string tipo = "Gestion";
             Guid Pais = new Guid("afd6c3b7-f5be-40c9-8385-936d275a8d6b");
             DataTable dt = new DataTable();
 

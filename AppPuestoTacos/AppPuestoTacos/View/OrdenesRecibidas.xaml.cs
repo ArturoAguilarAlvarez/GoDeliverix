@@ -18,21 +18,9 @@ namespace AppPuestoTacos.View
    
 		public OrdenesRecibidas ()
 		{
-
                 InitializeComponent();
                 App.MVOrden.BuscarOrdenesAppSucursal("Sucursal", UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), EstatusSucursal: "Pendientes a confirmar", TipoDeSucursal: "S");
                 MyListviewOrdenesRecibidas.ItemsSource = App.MVOrden.ListaDeOrdenesPorConfirmar;
-
-            Device.StartTimer(TimeSpan.FromSeconds(60), () =>
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    MetodoConsulta();
-                });
-                return true;
-            });
-
-
         }
 
         public async void MetodoConsulta()//object sender, EventArgs e
@@ -97,7 +85,7 @@ namespace AppPuestoTacos.View
 
             //VMOrden fila = (VMOrden)DGOrdenesAConfirmar.SelectedItem;
             //MVLicencia.RecuperaLicencia();
-            string sucursal = App.MVSucursal.ObtenSucursalDeLicencia(AppPuestoTacos.Helpers.Settings.Licencia);
+            //string sucursal = App.MVSucursal.ObtenSucursalDeLicencia(AppPuestoTacos.Helpers.Settings.Licencia);
             //txtConfirmarUidOrden.Text = fila.Uidorden.ToString();
             //txtCNumeroOrden.Text = fila.LNGFolio.ToString();
             App.MVOrden.ObtenerProductosDeOrden(ObjItem.Uidorden.ToString());

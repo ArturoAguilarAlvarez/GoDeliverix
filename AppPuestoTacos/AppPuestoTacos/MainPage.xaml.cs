@@ -1,7 +1,10 @@
-﻿using Rg.Plugins.Popup.Services;
+﻿using AppPuestoTacos.WebApi;
+using Newtonsoft.Json;
+using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -10,6 +13,10 @@ namespace AppPuestoTacos
 {
     public partial class MainPage : ContentPage
     {
+
+        HttpClient _client = new HttpClient();
+        string url = "";
+
         public MainPage()
         {
             InitializeComponent();
@@ -28,11 +35,16 @@ namespace AppPuestoTacos
                 string password = txtIDContraseña.Text;
                 if (!string.IsNullOrWhiteSpace(usuario) && !string.IsNullOrWhiteSpace(password))
                 {
-                    Guid Uidusuario = App.MVAcceso.Ingresar(usuario, password);
+                    url = RestService.Servidor + "api/Profile/GET?Usuario=" + usuario + "&Contrasena=" + password;
+                    string content = await _client.GetStringAsync(url);
+                    List<string> listaID = JsonConvert.DeserializeObject<List<string>>(content);
+                    Guid Uidusuario = new Guid(listaID[0].ToString());
                     App.UIdUsuario = Uidusuario;
                     if (Uidusuario != Guid.Empty)
                     {
-                        perfil = App.MVAcceso.PerfilDeUsuario(Uidusuario.ToString());
+                        url = RestService.Servidor+"api/Profile/GetProfileType?UidUsuario="+Uidusuario.ToString();
+                        string strDirecciones = await _client.GetStringAsync(url);
+                        perfil = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();                       
                         //Supervisior
                         if (perfil.ToUpper() == "81232596-4C6B-4568-9005-8D4A0A382FDA")
                         {
@@ -58,7 +70,7 @@ namespace AppPuestoTacos
                             }
                             else
                             {
-                                await PopupNavigation.Instance.PopAsync();
+                                await PopupNavigation.Instance.PopAllAsync();
                                 await DisplayAlert("Error", "Debe ingresar como Administrador por primera vez", "ok");
                             }
                             App.NOmbreUsuario = txtUsuario.Text;
@@ -68,11 +80,9 @@ namespace AppPuestoTacos
                         {
                             App.NOmbreUsuario = txtUsuario.Text;
                             string Licencia = Helpers.Settings.Licencia;
-
                             App.MVEmpresas.ObtenerNombreComercial(App.UIdUsuario.ToString());
                             App.NombreEmpresa = App.MVEmpresas.NOMBRECOMERCIAL;
                             App.NOmbreUsuario = usuario;
-
                             if (string.IsNullOrEmpty(Licencia))
                             {
                                 Guid UidEmpresa = App.MVUsuarios.ObtenerIdEmpresa(Uidusuario.ToString());
@@ -92,15 +102,26 @@ namespace AppPuestoTacos
                                 App.NombreEmpresa = App.MVEmpresas.NOMBRECOMERCIAL;
                                 App.Current.MainPage =new View.MasterMenu();//Perfil
                             }
-                            //App.MVUsuarios.BusquedaDeUsuario(UidUsuario: Id, UIDPERFIL: new Guid(perfil), UidEmpresa: UidEmpresa);
-                            //DisplayAlert("","Administrador","ok");
+                        }
+                        else
+                        {
+                            await PopupNavigation.Instance.PopAllAsync();
+                            await DisplayAlert("", "Usuario invalido", "OK");
                         }
 
                     }
+                    else
+                    {
+                        await PopupNavigation.Instance.PopAllAsync();
+                        await DisplayAlert("", "Usuario o contraseña incorrecta", "OK");
+                    }
                 }
                 else
+                {
+
+                    await PopupNavigation.Instance.PopAllAsync();
                     await NewMethod();
-                await PopupNavigation.Instance.PopAllAsync();
+                }
             }
             catch (Exception)
             {

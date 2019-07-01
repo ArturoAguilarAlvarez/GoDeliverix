@@ -28,121 +28,6 @@ namespace AppCliente
         {
             InitializeComponent();
             Iniciar();
-            //try
-            //{ 
-            //    AppCliente.App.MVGiro.ListaDeGiroConimagen();
-
-            //    App.giro = AppCliente.App.MVGiro.LISTADEGIRO[0].UIDVM.ToString();
-
-            //    string Hora = string.Empty;
-            //    if (DateTime.Now.Hour < 10)
-            //    {
-            //        Hora = "0" + DateTime.Now.Hour.ToString();
-            //    }
-            //    else
-            //    {
-            //        Hora = DateTime.Now.Hour.ToString();
-            //    }
-
-
-            //    CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
-            //    string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
-
-            //    string hora = Hora + ":" + DateTime.Now.Minute.ToString();
-
-
-
-            //    if (AppCliente.App.ListaDeProductos.Count == 0)
-            //    {
-            //        Guid Colonia = App.MVDireccion.ListaDIRECCIONES[0].ID;
-
-            //        IDDireccionBusqueda.Text = Colonia.ToString();
-
-            //        App.MVCategoria.BuscarCategorias(UidGiro: App.giro.ToString(), tipo: "seleccion");
-
-            //        App.MVSubCategoria.BuscarSubCategoria(UidCategoria: Guid.Empty.ToString(), Tipo: "Seleccionar");
-
-
-
-            //        Guid Direccion = App.MVDireccion.ListaDIRECCIONES[0].ID;
-            //        App.DireccionABuscar = App.MVDireccion.ListaDIRECCIONES[0].ID.ToString();
-
-            //        App.MVProducto.buscarProductosEmpresaDesdeCliente("Giro", Dia, Direccion, new Guid(App.giro),"");
-            //        App.MVEmpresa.BuscarEmpresaBusquedaCliente("Giro", Dia, Direccion, new Guid(App.giro),"");
-            //        //App.MVProducto.buscarProductosEmpresaDesdeCliente("Giro", hora, Dia, Colonia, new Guid("63cd1aa3-74ef-4112-8835-fd4400706256"), "");
-
-            //        //int a = AppCliente.App.MVProducto.ListaDeProductos.Count;
-
-
-
-            //        foreach (VMProducto item in AppCliente.App.MVProducto.ListaDeProductos)
-            //        {
-            //            App.MVProducto.BuscarProductoPorSucursal("Giro", Dia, Colonia, new Guid(App.giro), item.UID);
-            //            item.StrCosto = App.MVProducto.ListaDePreciosSucursales[0].StrCosto;
-            //        }
-            //        for (int i = 0; i < AppCliente.App.MVProducto.ListaDeProductos.Count; i++)
-            //        {
-            //            App.ListaDeProductos.Add(App.MVProducto.ListaDeProductos[i]);
-            //        }
-            //        for (int i = 0; i < App.MVEmpresa.LISTADEEMPRESAS.Count; i++)
-            //        {
-            //            App.LISTADEEMPRESAS.Add(App.MVEmpresa.LISTADEEMPRESAS[i]);
-            //        }
-            //        for (int i = 0; i < App.LISTADEEMPRESAS.Count; i++)
-            //        {
-            //            App.LISTADEEMPRESAS[i].StrRuta = "http://www.godeliverix.net/vista" + App.LISTADEEMPRESAS[i].StrRuta.Substring(2);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        var Colonia = App.MVDireccion.ListaDIRECCIONES.Find(t => t.ID.ToString() == App.DireccionABuscar.ToString()); ;
-
-            //        IDDireccionBusqueda.Text = Colonia.ID.ToString();
-            //    }
-
-
-            //    ListaDeProductosHome = AppCliente.App.ListaDeProductos;
-            //    if (App.ListaDeProductos.Count > 10)
-            //    {
-            //        MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.ListaDeProductos.GetRange(0, 10);
-            //        lbCantidad.Text = "1-10/" + App.ListaDeProductos.Count;
-            //        CantidadProductosMostrados = 10;
-            //        //btnAtras.IsEnabled = false;
-            //    }
-            //    else
-            //    {
-            //        MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.ListaDeProductos;
-            //        CantidadProductosMostrados = AppCliente.App.ListaDeProductos.Count;
-            //        lbCantidad.Text = "1-" + App.ListaDeProductos.Count + "/" + App.ListaDeProductos.Count;
-            //        //btnAtras.IsVisible = false;
-            //        //btnAdelante.IsVisible = false;
-            //    }
-
-            //    //BindingContext = App.MVProducto;
-            //    if (App.DireccionABuscar != "")
-            //    {
-            //        btnSeleccionarDireccion.Text = "ENTREGAR EN " + AppCliente.App.MVDireccion.ListaDIRECCIONES.Find(x => x.ID == new Guid(App.DireccionABuscar)).IDENTIFICADOR + " >";
-            //    }
-            //    else
-            //    {
-            //        btnSeleccionarDireccion.Text = "ENTREGAR EN " + AppCliente.App.MVDireccion.ListaDIRECCIONES[0].IDENTIFICADOR + " >";
-            //    }
-            //    if (AppCliente.App.ListaDeProductos.Count == 0)
-            //    {
-            //        lbCantidad.Text = "0-0/0";
-            //       PanelProductoNoEncontrados.IsVisible = true;
-            //        //ScrollView_Productos.IsVisible = false;
-            //    }
-
-            //}
-            //catch (Exception)
-            //{
-            //    if (AppCliente.App.ListaDeProductos.Count == 0)
-            //    {
-            //        PanelProductoNoEncontrados.IsVisible = true;
-            //        ScrollView_Productos.IsVisible = false;
-            //    }
-            //}
         }
 
         private void MenuItem1_Activted(object sender, EventArgs e)
@@ -740,12 +625,6 @@ namespace AppCliente
                 }).ToList();
 
 
-                //App.MVCategoria.BuscarCategorias(UidGiro: App.giro.ToString(), tipo: "seleccion");
-
-                //App.MVSubCategoria.BuscarSubCategoria(UidCategoria: Guid.Empty.ToString(), Tipo: "Seleccionar");
-
-
-
                 Guid Direccion = App.MVDireccion.ListaDIRECCIONES[0].ID;
                 App.DireccionABuscar = App.MVDireccion.ListaDIRECCIONES[0].ID.ToString();
 
@@ -765,8 +644,6 @@ namespace AppCliente
                     STRRUTA = (string)p["STRRUTA"]
                 }).ToList();
 
-                //App.MVProducto.buscarProductosEmpresaDesdeCliente("Giro", Dia, Direccion, new Guid(App.giro), "");
-
 
                 _URL = ("http://godeliverix.net/api/Empresa/GetObtenerEmpresaCliente?StrParametroBusqueda=Giro&StrDia="+Dia+"&UidDireccion="+Direccion+"&UidBusquedaCategorias="+App.giro);
 
@@ -782,13 +659,6 @@ namespace AppCliente
                     StrRuta= "http://godeliverix.net/vista/"+((string)p["StrRuta"].ToString().Substring(3))
                 }).ToList();
 
-                //App.MVEmpresa.BuscarEmpresaBusquedaCliente("Giro", Dia, Direccion, new Guid(App.giro), "");
-
-                //App.MVProducto.buscarProductosEmpresaDesdeCliente("Giro", hora, Dia, Colonia, new Guid("63cd1aa3-74ef-4112-8835-fd4400706256"), "");
-
-                //int a = AppCliente.App.MVProducto.ListaDeProductos.Count;
-
-
 
                 foreach (VMProducto item in AppCliente.App.MVProducto.ListaDeProductos)
                 {
@@ -803,10 +673,6 @@ namespace AppCliente
                 {
                     App.LISTADEEMPRESAS.Add(App.MVEmpresa.LISTADEEMPRESAS[i]);
                 }
-                //for (int i = 0; i < App.LISTADEEMPRESAS.Count; i++)
-                //{
-                //    App.LISTADEEMPRESAS[i].StrRuta = "http://www.godeliverix.net/vista" + App.LISTADEEMPRESAS[i].StrRuta.Substring(2);
-                //}
             }
             else
             {
@@ -822,18 +688,13 @@ namespace AppCliente
                 MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.ListaDeProductos.GetRange(0, 10);
                 lbCantidad.Text = "1-10/" + App.ListaDeProductos.Count;
                 CantidadProductosMostrados = 10;
-                //btnAtras.IsEnabled = false;
             }
             else
             {
                 MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.ListaDeProductos;
                 CantidadProductosMostrados = AppCliente.App.ListaDeProductos.Count;
                 lbCantidad.Text = "1-" + App.ListaDeProductos.Count + "/" + App.ListaDeProductos.Count;
-                //btnAtras.IsVisible = false;
-                //btnAdelante.IsVisible = false;
             }
-
-            //BindingContext = App.MVProducto;
             if (App.DireccionABuscar != "")
             {
                 btnSeleccionarDireccion.Text = "ENTREGAR EN " + AppCliente.App.MVDireccion.ListaDIRECCIONES.Find(x => x.ID == new Guid(App.DireccionABuscar)).IDENTIFICADOR + " >";
@@ -846,7 +707,6 @@ namespace AppCliente
             {
                 lbCantidad.Text = "0-0/0";
                 PanelProductoNoEncontrados.IsVisible = true;
-                //ScrollView_Productos.IsVisible = false;
             }
         }
     }
