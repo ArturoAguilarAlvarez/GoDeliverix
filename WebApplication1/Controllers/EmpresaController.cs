@@ -95,7 +95,7 @@ namespace WebApplication1.Controllers
             VMLicencia MVLicencia = new VMLicencia();
             MVLicencia.ObtenerLicenciaSucursal(ID);
             Respuesta.Data = MVLicencia;
-            return Respuesta
+            return Respuesta;
         }
 
         //// POST: api/Profile

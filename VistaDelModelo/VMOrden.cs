@@ -124,7 +124,16 @@ namespace VistaDelModelo
         public double MSubtotalSucursal { get; set; }
         public string StrEstatusOrdenSucursal { get; private set; }
         public string StrEstatusOrdenTarifario { get; private set; }
-        public string StrEstatusOrdenRepartidor { get; private set; }
+
+
+        private string _StrEstatusOrdenRepartidor;
+
+        public string StrEstatusOrdenRepartidor
+        {
+            get { return _StrEstatusOrdenRepartidor; }
+            set { _StrEstatusOrdenRepartidor = value; }
+        }
+
         public string StrEstatusOrdenGeneral { get; set; }
         public string StrNombreProducto { get; private set; }
         public int intCantidad { get; set; }

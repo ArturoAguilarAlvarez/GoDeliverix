@@ -55,7 +55,11 @@ namespace WebApplication1.Controllers
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;
         }
-
+        /// <summary>
+        /// Obtiene el ultimo estatus del registro de la bitacora
+        /// </summary>
+        /// <param name="UidUsuario"></param>
+        /// <returns></returns>
         public ResponseHelper GetObtenerUltimoEstatusBitacoraRepartidor(Guid UidUsuario)
         {
             MVAcceso = new VMAcceso();

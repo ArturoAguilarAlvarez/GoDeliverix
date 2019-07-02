@@ -1,12 +1,13 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using Newtonsoft.Json;
+using Repartidores_GoDeliverix.Helpers;
 using Repartidores_GoDeliverix.Views;
 using System;
+using System.Net.Http;
 using System.Timers;
 using System.Windows.Input;
 using VistaDelModelo;
 using Xamarin.Forms;
-using Xamarin.Essentials;
-using System.Net.Http;
 
 namespace Repartidores_GoDeliverix.VM
 {
@@ -19,7 +20,8 @@ namespace Repartidores_GoDeliverix.VM
 
 
         string UrlApi = "http://www.godeliverix.net/api/";
-
+        string url = "";
+        HttpClient _WebApiGoDeliverix = new HttpClient();
         private Guid _UidOrdenTarifario;
 
         public Guid UidOrdenTarifario
@@ -53,7 +55,7 @@ namespace Repartidores_GoDeliverix.VM
         }
         private bool _blEstatus;
 
-        public  bool BlEstatus
+        public bool BlEstatus
         {
             get { return _blEstatus; }
             set
@@ -61,17 +63,16 @@ namespace Repartidores_GoDeliverix.VM
                 SetValue(ref _blEstatus, value);
                 try
                 {
-                    string url = "";
-                    HttpClient _WebApiGoDeliverix = new HttpClient();
+                    url = "";
                     var AppInstance = MainViewModel.GetInstance();
                     if (_blEstatus)
                     {
                         url = UrlApi + "Profile/GetBitacoraRegistroRepartidores?StrParametro=S&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=A298B40F-C495-4BD8-A357-4A3209FBC162";
-                         _WebApiGoDeliverix.GetAsync(url);
+                        _WebApiGoDeliverix.GetAsync(url);
                     }
                     else
                     {
-                         url = UrlApi + "Profile/GetBitacoraRegistroRepartidores?StrParametro=S&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=AAD35D44-5E65-46B6-964F-CD2DF026ECB1";
+                        url = UrlApi + "Profile/GetBitacoraRegistroRepartidores?StrParametro=S&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=AAD35D44-5E65-46B6-964F-CD2DF026ECB1";
                         _WebApiGoDeliverix.GetAsync(url);
                     }
                 }
@@ -96,7 +97,7 @@ namespace Repartidores_GoDeliverix.VM
         public string StrUbicacionSucursal
         {
             get { return _StrUbicacionSucursal; }
-            set { SetValue(ref _StrUbicacionSucursal,value); }
+            set { SetValue(ref _StrUbicacionSucursal, value); }
         }
         private string _StrUbicacionCliente;
 
@@ -202,7 +203,7 @@ namespace Repartidores_GoDeliverix.VM
         public ICommand BtnMapaEspera { get { return new RelayCommand(MapaEnEsperaAsync); } }
 
 
-        
+
 
 
 
@@ -293,7 +294,7 @@ namespace Repartidores_GoDeliverix.VM
             Verifica();
         }
 
-        protected void Verifica()
+        protected async void Verifica()
         {
             try
             {
@@ -303,9 +304,20 @@ namespace Repartidores_GoDeliverix.VM
                 StrUbicacionCliente = string.Empty;
                 StrUbicacionSucursal = string.Empty;
 
-                MVOrden.BuscarOrdenAsiganadaRepartidor(AppInstance.Session_.UidUsuario);
 
-                if (MVAcceso.ObtenerUltimoEstatusBitacoraRepartidor(AppInstance.Session_.UidUsuario).ToUpper() == "AAD35D44-5E65-46B6-964F-CD2DF026ECB1")
+                url = UrlApi + "Orden/GetBuscarOrdenAsiganadaRepartidor?UidUsuario=" + AppInstance.Session_.UidUsuario + "";
+                string content = await _WebApiGoDeliverix.GetStringAsync(url);
+                var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(obj);
+                //MVOrden.BuscarOrdenAsiganadaRepartidor(AppInstance.Session_.UidUsuario);
+
+
+                url = UrlApi + "Profile/GetObtenerUltimoEstatusBitacoraRepartidor?UidUsuario=" + AppInstance.Session_.UidUsuario + "";
+
+                content = await _WebApiGoDeliverix.GetStringAsync(url);
+                obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                string UltimoAcceso = obj.ToString();
+                if (UltimoAcceso.ToUpper() == "AAD35D44-5E65-46B6-964F-CD2DF026ECB1")
                 {
                     Application.Current.MainPage = new NavigationPage(new Login());
                 }
@@ -336,7 +348,7 @@ namespace Repartidores_GoDeliverix.VM
                         BlNuevaOrden = false;
                         BlRecolecta = false;
                         BlEntrega = false;
-                        
+
                     }
                     else//Orden pendiente
                     if (UidEstatus.ToString().ToUpper() == "6294DACE-C9D1-4F9F-A942-FF12B6E7E957")
@@ -346,11 +358,22 @@ namespace Repartidores_GoDeliverix.VM
                         BlRecolecta = false;
                         BlEntrega = false;
 
-                        
-                        MVUbicacion.RecuperaUbicacionSucursal(UidSucursal.ToString());
+                        url = UrlApi + "Ubicacion/GetRecuperaUbicacionSucursal?UidSucursal=" + UidSucursal + "";
+                        content = await _WebApiGoDeliverix.GetStringAsync(url);
+                        obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                        MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(obj);
+
+                        //MVUbicacion.RecuperaUbicacionSucursal(UidSucursal.ToString());
                         StrUbicacionSucursal = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
 
-                        MVUbicacion.RecuperaUbicacionDireccion(UidDireccionCliente.ToString());
+
+
+                        url = UrlApi + "Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
+                        content = await _WebApiGoDeliverix.GetStringAsync(url);
+                        obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                        MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
+
+                        //MVUbicacion.RecuperaUbicacionDireccion(UidDireccionCliente.ToString());
                         StrUbicacionCliente = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
 
                     }
@@ -360,14 +383,22 @@ namespace Repartidores_GoDeliverix.VM
                     {
                         if (MVOrden.StrEstatusOrdenGeneral.ToUpper() == "B6BFC834-7CC4-4E67-817D-5ECB0EB2FFA7")
                         {
-                            MVAcceso = new VMAcceso();
-                            MVAcceso.BitacoraRegistroRepartidores(char.Parse("O"), AppInstance.Session_.UidUsuario, new Guid("B6791F2C-FA16-40C6-B5F5-123232773612"), UidOrdenRepartidor: UidordenRepartidor);
+                            url = UrlApi + "Profile/GetBitacoraRegistroRepartidores?StrParametro=O&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=B6791F2C-FA16-40C6-B5F5-123232773612&UidOrdenRepartidor="+ UidordenRepartidor + "";
+                            await _WebApiGoDeliverix.GetAsync(url);
+
+                            //MVAcceso = new VMAcceso();
+                            //MVAcceso.BitacoraRegistroRepartidores(char.Parse("O"), AppInstance.Session_.UidUsuario, new Guid("B6791F2C-FA16-40C6-B5F5-123232773612"), UidOrdenRepartidor: UidordenRepartidor);
                             BlSinAsignar = false;
                             BlNuevaOrden = false;
                             BlRecolecta = false;
                             BlEntrega = true;
 
-                            MVUbicacion.RecuperaUbicacionDireccion(UidDireccionCliente.ToString());
+                            url = UrlApi + "Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
+                            content = await _WebApiGoDeliverix.GetStringAsync(url);
+                            obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                            MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
+
+                            //MVUbicacion.RecuperaUbicacionDireccion(UidDireccionCliente.ToString());
                             StrUbicacionCliente = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
                         }
                         else
@@ -377,7 +408,12 @@ namespace Repartidores_GoDeliverix.VM
                             BlRecolecta = true;
                             BlEntrega = false;
 
-                            MVUbicacion.RecuperaUbicacionSucursal(UidSucursal.ToString());
+                            url = UrlApi + "Ubicacion/GetRecuperaUbicacionSucursal?UidSucursal=" + UidSucursal + "";
+                            content = await _WebApiGoDeliverix.GetStringAsync(url);
+                            obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                            MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
+
+                           // MVUbicacion.RecuperaUbicacionSucursal(UidSucursal.ToString());
                             StrUbicacionSucursal = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
                         }
                     }
@@ -390,7 +426,12 @@ namespace Repartidores_GoDeliverix.VM
                         BlRecolecta = false;
                         BlEntrega = true;
 
-                        MVUbicacion.RecuperaUbicacionDireccion(UidDireccionCliente.ToString());
+                        url = UrlApi + "Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
+                        content = await _WebApiGoDeliverix.GetStringAsync(url);
+                        obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                        MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
+
+                       // MVUbicacion.RecuperaUbicacionDireccion(UidDireccionCliente.ToString());
                         StrUbicacionCliente = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
                     }
                     else
