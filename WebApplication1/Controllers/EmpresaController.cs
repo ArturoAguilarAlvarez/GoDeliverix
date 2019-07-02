@@ -85,7 +85,8 @@ namespace WebApplication1.Controllers
         {
             Respuesta = new ResponseHelper();
             VMUsuarios MVUsuarios = new VMUsuarios();
-            MVUsuarios.ObtenerIdEmpresa(Uidusuario);
+            var Guid=MVUsuarios.ObtenerIdEmpresa(Uidusuario);
+            Respuesta.Data = Guid;
             return Respuesta;
         }
 
@@ -95,7 +96,16 @@ namespace WebApplication1.Controllers
             VMLicencia MVLicencia = new VMLicencia();
             MVLicencia.ObtenerLicenciaSucursal(ID);
             Respuesta.Data = MVLicencia;
-            return Respuesta
+            return Respuesta;
+        }
+
+        public ResponseHelper GetMensajeSucursal(string Licencia)
+        {
+            Respuesta = new ResponseHelper();
+            VMMensaje MVMensaje = new VMMensaje();
+            MVMensaje.Buscar(strLicencia: Licencia);           
+            Respuesta.Data = MVMensaje;
+            return Respuesta;
         }
 
         //// POST: api/Profile

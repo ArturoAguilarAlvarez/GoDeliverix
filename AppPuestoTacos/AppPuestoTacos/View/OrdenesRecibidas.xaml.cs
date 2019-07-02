@@ -1,7 +1,11 @@
-﻿using Rg.Plugins.Popup.Services;
+﻿using AppPuestoTacos.WebApi;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using VistaDelModelo;
@@ -15,12 +19,13 @@ namespace AppPuestoTacos.View
 	{
         bool Ordenamiento = false;
         string TipoBusqueda = "";
-   
-		public OrdenesRecibidas ()
+        HttpClient _client = new HttpClient();
+        string url = "";
+
+        public OrdenesRecibidas ()
 		{
-                InitializeComponent();
-                App.MVOrden.BuscarOrdenesAppSucursal("Sucursal", UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), EstatusSucursal: "Pendientes a confirmar", TipoDeSucursal: "S");
-                MyListviewOrdenesRecibidas.ItemsSource = App.MVOrden.ListaDeOrdenesPorConfirmar;
+            InitializeComponent();
+            Cargar();
         }
 
         public async void MetodoConsulta()//object sender, EventArgs e
@@ -88,7 +93,28 @@ namespace AppPuestoTacos.View
             //string sucursal = App.MVSucursal.ObtenSucursalDeLicencia(AppPuestoTacos.Helpers.Settings.Licencia);
             //txtConfirmarUidOrden.Text = fila.Uidorden.ToString();
             //txtCNumeroOrden.Text = fila.LNGFolio.ToString();
-            App.MVOrden.ObtenerProductosDeOrden(ObjItem.Uidorden.ToString());
+
+            string _URL = (RestService.Servidor + "api/Orden/GetObtenerProductosDeOrden?UidOrden="+ObjItem.Uidorden.ToString());
+            string DatosObtenidos = await _client.GetStringAsync(_URL);
+            var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
+
+            JArray blogPostArray = JArray.Parse(DatosGiros.ToString());
+
+            App.MVOrden.ListaDeProductos = blogPostArray.Select(p => new VMOrden
+            {
+                UidProducto = (Guid)p["UidProducto"],
+                StrNombreSucursal = (string)p["Identificador"],
+                StrNombreProducto = (string)p["StrNombreProducto"],
+                Imagen = (string)p["Imagen"],              
+                intCantidad = (int)p["intCantidad"],
+                UidSucursal = (Guid)p["UidSucursal"],
+                MTotal = (int)p["MTotal"],
+                MCostoTarifario = (int)p["MCostoTarifario"],
+                VisibilidadNota = (string)p["StrNota"]
+            }).ToList();
+
+            //App.MVOrden.ObtenerProductosDeOrden(ObjItem.Uidorden.ToString());
+
             await Navigation.PushAsync(new OrdenDescripcionConfirmar(ObjItem, MyListviewOrdenesRecibidas));
             await PopupNavigation.Instance.PopAllAsync();
             //GridViewDetalleOrdenConfirmar.ItemsSource = MVOrden.ListaDeProductos;
@@ -151,6 +177,19 @@ namespace AppPuestoTacos.View
                 Ordenamiento = true;
             }
             TipoBusqueda = "Total";
+        }
+
+        private async void Cargar()
+        {
+            string _URL = (RestService.Servidor + "api/Orden/GetOrdenesSucursal?Licencia=" + AppPuestoTacos.Helpers.Settings.Licencia +
+                "&Estatus=Pendientes%20a%20confirmar&tipoSucursal=s");
+            var DatosObtenidos = await _client.GetAsync(_URL);
+            string res = await DatosObtenidos.Content.ReadAsStringAsync();
+            var asd = JsonConvert.DeserializeObject<ResponseHelper>(res).Data.ToString();
+            App.MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(asd);
+
+            //App.MVOrden.BuscarOrdenesAppSucursal("Sucursal", UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), EstatusSucursal: "Pendientes a confirmar", TipoDeSucursal: "S");
+            MyListviewOrdenesRecibidas.ItemsSource = App.MVOrden.ListaDeOrdenesPorConfirmar;
         }
     }
 }

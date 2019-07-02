@@ -1,7 +1,10 @@
-﻿using Rg.Plugins.Popup.Services;
+﻿using AppPuestoTacos.WebApi;
+using Newtonsoft.Json;
+using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using VistaDelModelo;
@@ -15,6 +18,8 @@ namespace AppPuestoTacos.View
 	{
         VMOrden ObjItem;
         ListView MyListviewOrdenesRecibidas;
+        HttpClient _client = new HttpClient();
+        string _url = "";
         public OrdenDescripcionConfirmar (VMOrden ObjItem, ListView MyListviewOrdenesRecibidas)
 		{
 			InitializeComponent ();
@@ -40,18 +45,29 @@ namespace AppPuestoTacos.View
             }
         }
 
-        public void ConfirmarOrden()
+        public async void ConfirmarOrden()
         {
-            App.MVOrden.AgregarEstatusOrdenEnSucursal(new Guid("EC09BCDE-ADAC-441D-8CC1-798BC211E46E"), "S", AppPuestoTacos.Helpers.Settings.Licencia, UidOrden: ObjItem.Uidorden);
-            App.MVOrden.AgregaEstatusALaOrden(new Guid("2d2f38b8-7757-45fb-9ca6-6ecfe20356ed"), UidOrden: ObjItem.Uidorden, UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), StrParametro: "S");
-            App.MVTarifario.AgregarCodigoAOrdenTarifario(UidCodigo: Guid.NewGuid(), UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), uidorden: ObjItem.Uidorden);
+            //App.MVOrden.AgregarEstatusOrdenEnSucursal(new Guid("EC09BCDE-ADAC-441D-8CC1-798BC211E46E"), "S", AppPuestoTacos.Helpers.Settings.Licencia, UidOrden: ObjItem.Uidorden);
+            //App.MVOrden.AgregaEstatusALaOrden(new Guid("2d2f38b8-7757-45fb-9ca6-6ecfe20356ed"), UidOrden: ObjItem.Uidorden, UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), StrParametro: "S");
+            //App.MVTarifario.AgregarCodigoAOrdenTarifario(UidCodigo: Guid.NewGuid(), UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), uidorden: ObjItem.Uidorden);
 
-            App.MVOrden.BuscarOrdenes("Sucursal", UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), EstatusSucursal: "Pendientes a confirmar", TipoDeSucursal: "S");
+            _url = (RestService.Servidor + "api/Orden/GetConfirmarOrden?Licencia="+ AppPuestoTacos.Helpers.Settings.Licencia + "&Uidorden="+ ObjItem.Uidorden);
+            var DatosObtenidos = await _client.GetStringAsync(_url);
+
+            //App.MVOrden.BuscarOrdenes("Sucursal", UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), EstatusSucursal: "Pendientes a confirmar", TipoDeSucursal: "S");
+
+            string _URL = (RestService.Servidor + "api/Orden/GetOrdenesSucursal?Licencia=" + AppPuestoTacos.Helpers.Settings.Licencia +
+    "&Estatus=Pendientes%20a%20confirmar&tipoSucursal=s");
+            var DatosObtenidos3 = await _client.GetAsync(_URL);
+            string res = await DatosObtenidos3.Content.ReadAsStringAsync();
+            var asd = JsonConvert.DeserializeObject<ResponseHelper>(res).Data.ToString();
+            App.MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(asd);
+
             MyListviewOrdenesRecibidas.ItemsSource = null;
             MyListviewOrdenesRecibidas.ItemsSource = App.MVOrden.ListaDeOrdenesPorConfirmar;
 
 
-            Navigation.PopToRootAsync();
+            await Navigation.PopToRootAsync();
         }
     }
 }

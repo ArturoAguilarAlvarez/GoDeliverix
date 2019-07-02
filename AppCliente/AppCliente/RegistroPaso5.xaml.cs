@@ -8,7 +8,8 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 using VistaDelModelo;
-
+using AppCliente.WebApi;
+using System.Net.Http;
 
 namespace AppCliente
 {
@@ -49,12 +50,26 @@ namespace AppCliente
             var action = await DisplayAlert("Términos y condiciones", "He leído y acepto los términos y condiciones", "Si", "No");
             if (action)
             {
+                //string url = RestService.Servidor+"api/Usuario/GetGuardarusuarioCliente?" +
+                //    "nombre=" + nombre +
+                //    "&apellidoP=" + apellidoP +
+                //    "&ApellidoP=" + apellidoP +
+                //    "&apellidoM=" + apellidoM +
+                //    "&usuario=" +usuario+
+                //    "&contrasena=" + contraseña +
+                //    "&fechaNacimiento=" + fechaNacimiento +
+                //    "&telefono=" + telefono +
+                //    "&correo=" + correo;
+                //HttpClient _client = new HttpClient();
+                //string strDirecciones = await _client.GetStringAsync(url);
+                //Application.Current.MainPage = new MasterMenu();
+
                 if (MVUsuarios.GuardaUsuario(UidUsuario: uidusuaro, Nombre: nombre, ApellidoPaterno: apellidoP, ApellidoMaterno: apellidoM, usuario: usuario, password: contraseña, fnacimiento: fechaNacimiento, perfil: "4f1e1c4b-3253-4225-9e46-dd7d1940da19", estatus: "2", TIPODEUSUARIO: "Cliente"))
                 {
                     MVTelefono = new VMTelefono();
                     MVCorreoElectronico = new VMCorreoElectronico();
                     MVTelefono = new VMTelefono();
-                    MVTelefono.AgregaTelefonoALista( "f7bdd1d0-28e5-4f52-bc26-a17cd5c297de", telefono, "Principal");
+                    MVTelefono.AgregaTelefonoALista("f7bdd1d0-28e5-4f52-bc26-a17cd5c297de", telefono, "Principal");
                     if (MVCorreoElectronico.AgregarCorreo(uidusuaro, "Usuario", correo, uidcorreo))
                     {
                         MVAcceso.CorreoDeConfirmacion(uidusuaro, correo, usuario, contraseña, nombre, apellidoM + " " + apellidoM);
@@ -62,8 +77,8 @@ namespace AppCliente
                         //Application.Current.MainPage = new MasterDetailPage1();
 
                         AppCliente.App.Global1 = uidusuaro.ToString();
-                        MVTelefono.TipoDeTelefonos();
-                        MVTelefono.BuscarTelefonos(UidPropietario: new Guid(AppCliente.App.Global1), ParadetroDeBusqueda: "Usuario");
+                        //MVTelefono.TipoDeTelefonos();
+                        //MVTelefono.BuscarTelefonos(UidPropietario: new Guid(AppCliente.App.Global1), ParadetroDeBusqueda: "Usuario");
                         MVUsuarios.obtenerUsuario(AppCliente.App.Global1);
                         MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
 
@@ -81,6 +96,7 @@ namespace AppCliente
                         }
                     }
                 }
+
             }
 
 

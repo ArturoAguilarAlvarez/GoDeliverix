@@ -206,8 +206,34 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
+        public ResponseHelper GetConfirmarOrden(string Licencia,string Uidorden)
+        {
+            VMOrden MVOrden = new VMOrden();
+            Respuesta = new ResponseHelper();
+            VMTarifario MVTarifario = new VMTarifario();
+            MVOrden.AgregarEstatusOrdenEnSucursal(new Guid("EC09BCDE-ADAC-441D-8CC1-798BC211E46E"), "S", Licencia, UidOrden: new Guid(Uidorden));
+            MVOrden.AgregaEstatusALaOrden(new Guid("2d2f38b8-7757-45fb-9ca6-6ecfe20356ed"), UidOrden:new Guid(Uidorden), UidLicencia: new Guid(Licencia), StrParametro: "S");
+            MVTarifario.AgregarCodigoAOrdenTarifario(UidCodigo: Guid.NewGuid(), UidLicencia: new Guid(Licencia), uidorden: new Guid(Uidorden));
+            return Respuesta;
+        }
 
-       
+        public ResponseHelper GetCancelarOrden(string Licencia, string LNGFolio,string IdMensaje)
+        {
+            VMOrden MVOrden = new VMOrden();
+            Respuesta = new ResponseHelper();
+            VMTarifario MVTarifario = new VMTarifario();
+            MVOrden.AgregarEstatusOrdenEnSucursal(new Guid("EAE7A7E6-3F19-405E-87A9-3162D36CE21B"), "S", Licencia, LngFolio: long.Parse(LNGFolio), UidMensaje:new Guid (IdMensaje));
+            return Respuesta;
+        }
+
+        public ResponseHelper GetFinalizarOrden(string Licencia,string Uidorden)
+        {
+            VMOrden MVOrden = new VMOrden();
+            Respuesta = new ResponseHelper();
+            MVOrden.AgregaEstatusALaOrden(new Guid("c412d367-7d05-45d8-aeca-b8fabbf129d9"), UidOrden: new Guid(Uidorden), UidLicencia: new Guid(Licencia), StrParametro: "S");
+            return Respuesta;
+        }
+
         #endregion
 
     }

@@ -80,13 +80,17 @@ namespace AppPuestoTacos
                         {
                             App.NOmbreUsuario = txtUsuario.Text;
                             string Licencia = Helpers.Settings.Licencia;
-                            App.MVEmpresas.ObtenerNombreComercial(App.UIdUsuario.ToString());
-                            App.NombreEmpresa = App.MVEmpresas.NOMBRECOMERCIAL;
+                            url = RestService.Servidor + "api/Empresa/GetNombreEmpresa?UIdUsuario=" + App.UIdUsuario.ToString();
+                            string NombreEmpresa = await _client.GetStringAsync(url);
+                            App.NombreEmpresa = JsonConvert.DeserializeObject<ResponseHelper>(NombreEmpresa).Data.ToString();
                             App.NOmbreUsuario = usuario;
                             if (string.IsNullOrEmpty(Licencia))
                             {
-                                Guid UidEmpresa = App.MVUsuarios.ObtenerIdEmpresa(Uidusuario.ToString());
-                                App.MVSucursal.DatosGridViewBusquedaNormal(UidEmpresa.ToString());
+                                //Guid UidEmpresa = App.MVUsuarios.ObtenerIdEmpresa(Uidusuario.ToString());
+
+                                //App.MVSucursal.DatosGridViewBusquedaNormal(UidEmpresa.ToString());
+
+
                                 Helpers.Settings.Perfil = perfil;
                                 AppPuestoTacos.Helpers.Settings.Usuario = usuario;
                                 AppPuestoTacos.Helpers.Settings.Contrasena = password;

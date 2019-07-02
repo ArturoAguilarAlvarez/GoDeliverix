@@ -1,7 +1,11 @@
-﻿using Rg.Plugins.Popup.Services;
+﻿using AppPuestoTacos.WebApi;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using VistaDelModelo;
@@ -15,16 +19,42 @@ namespace AppPuestoTacos.View
 	{
         VMOrden ObjItem;
         ListView MyListviewOrdenesPorRealizar;
+        HttpClient _client = new HttpClient();
+        string url = "";
 
         public OrdenDescripcionPorElaborar (VMOrden ObjItem,ListView MyListviewOrdenesPorRealizar)
 		{
 			InitializeComponent ();
             this.ObjItem = ObjItem;
-            App.MVOrden.ObtenerProductosDeOrden(ObjItem.Uidorden.ToString());
-            MyListviewOrdenesEnPreparacion.ItemsSource = App.MVOrden.ListaDeProductos;
+            Cargar();
+            
             this.MyListviewOrdenesPorRealizar = MyListviewOrdenesPorRealizar;
         }
 
+        public async void Cargar()
+        {
+            string _URL = (RestService.Servidor + "api/Orden/GetObtenerProductosDeOrden?UidOrden=" + ObjItem.Uidorden.ToString());
+            string DatosObtenidos = await _client.GetStringAsync(_URL);
+            var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
+
+            JArray blogPostArray = JArray.Parse(DatosGiros.ToString());
+
+            App.MVOrden.ListaDeProductos = blogPostArray.Select(p => new VMOrden
+            {
+                UidProducto = (Guid)p["UidProducto"],
+                StrNombreSucursal = (string)p["Identificador"],
+                StrNombreProducto = (string)p["StrNombreProducto"],
+                Imagen = (string)p["Imagen"],
+                intCantidad = (int)p["intCantidad"],
+                UidSucursal = (Guid)p["UidSucursal"],
+                MTotal = (int)p["MTotal"],
+                MCostoTarifario = (int)p["MCostoTarifario"],
+                VisibilidadNota = (string)p["StrNota"]
+            }).ToList();
+
+            //App.MVOrden.ObtenerProductosDeOrden(ObjItem.Uidorden.ToString());
+            MyListviewOrdenesEnPreparacion.ItemsSource = App.MVOrden.ListaDeProductos;
+        }
         private async void ImageButtonFinalizar_Clicked(object sender, EventArgs e)
         {
             var action = await DisplayAlert("Finalizar?", "¿A concluido el proceso de elaboracion de la orden "+ ObjItem.LNGFolio+"?", "Si", "No");

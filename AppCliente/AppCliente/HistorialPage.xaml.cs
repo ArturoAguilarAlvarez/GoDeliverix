@@ -19,11 +19,15 @@ namespace AppCliente
         public HistorialPage()
         {
             InitializeComponent();
+            Cargar();
+         }
+        public void Cargar()
+        {
             App.MVOrden.ObtenerOrdenesCliente(App.Global1.ToString(), "Usuario");
             for (int i = 0; i < App.MVOrden.ListaDeOrdenes.Count; i++)
             {
                 int letras = App.MVOrden.ListaDeOrdenes[i].FechaDeOrden.Length;
-                if (letras== 23)
+                if (letras == 23)
                 {
                     App.MVOrden.ListaDeOrdenes[i].StrNota = App.MVOrden.ListaDeOrdenes[i].FechaDeOrden.Substring(10, 13);
                     App.MVOrden.ListaDeOrdenes[i].FechaDeOrden = App.MVOrden.ListaDeOrdenes[i].FechaDeOrden.Substring(0, 9);
@@ -32,11 +36,11 @@ namespace AppCliente
                 {
                     App.MVOrden.ListaDeOrdenes[i].StrNota = App.MVOrden.ListaDeOrdenes[i].FechaDeOrden.Substring(11, 13);
                     App.MVOrden.ListaDeOrdenes[i].FechaDeOrden = App.MVOrden.ListaDeOrdenes[i].FechaDeOrden.Substring(0, 10);
-                }                
+                }
             }
 
             MyListViewHistorial.ItemsSource = App.MVOrden.ListaDeOrdenes;
-         }
+        }
 
         private void MyListViewHistorial_ItemTapped(object sender, ItemTappedEventArgs e)
         {
