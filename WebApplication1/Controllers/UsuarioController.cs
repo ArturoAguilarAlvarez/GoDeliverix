@@ -93,5 +93,33 @@ namespace WebApplication1.Controllers
         public void Delete(int id)
         {
         }
+
+        public void GetActualizarUsuario(
+            string UidUsuario,
+            string Nombre,
+            string ApellidoPaterno, 
+            string ApellidoMaterno, 
+            string usuario, 
+            string password, 
+            string fnacimiento, 
+            string perfil, 
+            string estatus,
+            string UidEmpresa, 
+            string UidSucursal)
+        {
+
+            VMUsuarios MVUsuarios = new VMUsuarios();
+            MVUsuarios.ActualizarUsuario(
+                UidUsuario: new Guid(UidUsuario),
+                Nombre: Nombre,
+                ApellidoPaterno: ApellidoPaterno,
+                ApellidoMaterno: ApellidoMaterno,
+                usuario: usuario,
+                password: password,
+                fnacimiento: fnacimiento,
+                perfil: perfil);
+        }
+        
+
     }
 }

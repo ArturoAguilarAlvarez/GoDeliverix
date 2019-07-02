@@ -130,12 +130,12 @@ namespace AppCliente
                         AppCliente.Helpers.Settings.UserName = txtUsuario.Text;
                         AppCliente.Helpers.Settings.Password = txtIDContraseña.Text;
                         Application.Current.MainPage = new MasterMenu();
-                        //await PopupNavigation.Instance.PopAsync();
+                        await PopupNavigation.Instance.PopAsync();
                     }
                     else
                     {
                         Application.Current.MainPage = new MasterMenu();
-                        //await PopupNavigation.Instance.PopAsync();
+                        await PopupNavigation.Instance.PopAsync();
                     }
 
                 }
