@@ -708,15 +708,6 @@ namespace AppCliente
                 lbCantidad.Text = "0-0/0";
                 PanelProductoNoEncontrados.IsVisible = true;
             }
-
-            try
-            {
-                await PopupNavigation.Instance.PopAsync();
-            }
-            catch (Exception)
-            {
-                
-            }
         }
     }
 }
