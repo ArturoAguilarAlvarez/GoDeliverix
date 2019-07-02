@@ -1,17 +1,16 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using Newtonsoft.Json;
+using Repartidores_GoDeliverix.Helpers;
+using Repartidores_GoDeliverix.Modelo;
 using Repartidores_GoDeliverix.Views;
 using Repartidores_GoDeliverix.Views.Popup;
-using Repartidores_GoDeliverix.Modelo;
 using Rg.Plugins.Popup.Services;
 using System;
+using System.Collections.Generic;
+using System.Net.Http;
 using System.Windows.Input;
 using VistaDelModelo;
 using Xamarin.Forms;
-using Repartidores_GoDeliverix.Helpers;
-using System.Net.Http;
-using System.Collections.Generic;
-using Newtonsoft;
-using Newtonsoft.Json;
 
 namespace Repartidores_GoDeliverix.VM
 {
@@ -102,7 +101,7 @@ namespace Repartidores_GoDeliverix.VM
                 else
                 {
                     Acceso(User, Password, "Login");
-                   
+
                 }
             }
             catch (Exception)
@@ -128,19 +127,18 @@ namespace Repartidores_GoDeliverix.VM
         }
         public async void Acceso(string Usuario, string password, string Modulo)
         {
-           
+
             HttpClient _WebApiGoDeliverix = new HttpClient();
-            string url = UrlApi+"Profile/GET?Usuario="+ Usuario +"&Contrasena="+ password + "";
-            
+            string url = UrlApi + "Profile/GET?Usuario=" + Usuario + "&Contrasena=" + password + "";
+
             string content = await _WebApiGoDeliverix.GetStringAsync(url);
             List<string> lista = JsonConvert.DeserializeObject<List<string>>(content);
 
             Guid UidUsuario = new Guid(lista[0].ToString());
             if (UidUsuario != null && UidUsuario != Guid.Empty)
             {
-                 url = UrlApi + "Profile/GetProfileType?UidUsuario=" + UidUsuario + "";
-                 
-                 content = await _WebApiGoDeliverix.GetStringAsync(url);
+                url = UrlApi + "Profile/GetProfileType?UidUsuario=" + UidUsuario + "";
+                content = await _WebApiGoDeliverix.GetStringAsync(url);
                 var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                 string perfil = obj.ToString();
 
@@ -157,15 +155,15 @@ namespace Repartidores_GoDeliverix.VM
                     content = await _WebApiGoDeliverix.GetStringAsync(url);
                     obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                     MVUsuario = JsonConvert.DeserializeObject<VistaDelModelo.VMUsuarios>(obj);
-                    
+
                     AppInstance.Nombre = MVUsuario.StrNombre + " " + MVUsuario.StrApellidoPaterno;
 
-                    
+
                     AppInstance.MVHome = new VMHome();
                     AppInstance.MVHome.BlEstatus = true;
                     AppInstance.MVAjustes = new VMAjustes();
                     Application.Current.MainPage = new NavigationPage(new TabbedPageMain());
-                    
+
 
                     if (IsSavingValues && Modulo == "Login")
                     {

@@ -1,6 +1,11 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Repartidores_GoDeliverix.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using System.Windows.Input;
 using VistaDelModelo;
 using Xamarin.Forms;
@@ -9,6 +14,13 @@ namespace Repartidores_GoDeliverix.VM
 {
     public class VMHomeOrden : ControlsController
     {
+
+
+        #region Variables de la Api
+        string UrlApi = "http://www.godeliverix.net/api/";
+        string url = "";
+        HttpClient _WebApiGoDeliverix = new HttpClient();
+        #endregion
 
         public string StrUidOrden { get; set; }
         private Guid _UidOrdenTarifario;
@@ -199,12 +211,17 @@ namespace Repartidores_GoDeliverix.VM
         public ICommand ConfirmOrder { get { return new RelayCommand(ConfirmarOrder); } }
         public ICommand CancelOrder { get { return new RelayCommand(CanelarOrden); } }
 
-        private void CanelarOrden()
+        private async void CanelarOrden()
         {
             var AppInstance = MainViewModel.GetInstance();
             //Cambia el estatus del repartidor
-            mVAcceso = new VMAcceso();
-            mVAcceso.BitacoraRegistroRepartidores(char.Parse("O"), AppInstance.Session_.UidUsuario, new Guid("12748F8A-E746-427D-8836-B54432A38C07"), UidOrdenRepartidor: UidordenRepartidor);
+            url = UrlApi + "Profile/GetBitacoraRegistroRepartidores?StrParametro=O&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=12748F8A-E746-427D-8836-B54432A38C07&UidOrdenRepartidor=" + UidordenRepartidor + "";
+            await _WebApiGoDeliverix.GetAsync(url);
+
+
+
+            //mVAcceso = new VMAcceso();
+            //mVAcceso.BitacoraRegistroRepartidores(char.Parse("O"), AppInstance.Session_.UidUsuario, new Guid("12748F8A-E746-427D-8836-B54432A38C07"), UidOrdenRepartidor: UidordenRepartidor);
             cargaOrden();
             GenerateMessage("Cancelacion exitosa", "Orden Cancelada", "Aceptar");
 
@@ -215,22 +232,34 @@ namespace Repartidores_GoDeliverix.VM
         /// <summary>
         /// Confirmacion de la orden por el repartidor, cambia el estatus de la misma para el control interno.
         /// </summary>
-        private void ConfirmarOrder()
+        private async void ConfirmarOrder()
         {
             mVAcceso = new VMAcceso();
             var AppInstance = MainViewModel.GetInstance();
-            mVAcceso.BitacoraRegistroRepartidores(char.Parse("O"), AppInstance.Session_.UidUsuario, new Guid("A42B2588-D650-4DD9-829D-5978C927E2ED"), UidOrdenRepartidor: UidordenRepartidor);
+
+
+            url = UrlApi + "Profile/GetBitacoraRegistroRepartidores?StrParametro=O&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=A42B2588-D650-4DD9-829D-5978C927E2ED&UidOrdenRepartidor=" + UidordenRepartidor + "";
+            await _WebApiGoDeliverix.GetAsync(url);
+
+            //mVAcceso.BitacoraRegistroRepartidores(char.Parse("O"), AppInstance.Session_.UidUsuario, new Guid("A42B2588-D650-4DD9-829D-5978C927E2ED"), UidOrdenRepartidor: UidordenRepartidor);
 
         }
 
-        private void CargaDirecciones()
+        private async void CargaDirecciones()
         {
             MVDireccion = new VMDireccion();
             MVUbicacion = new VMUbicacion();
+
+            url = UrlApi + "Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
+            string content = await _WebApiGoDeliverix.GetStringAsync(url);
+            var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+            MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
+
             MVDireccion.ObtenerDireccionSucursal(UidSucursal.ToString());
             MVUbicacion.RecuperaUbicacionSucursal(UidSucursal.ToString());
             StrUbicacionSucursal = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
             StrColoniaSucursal = MVDireccion.ObtenerNombreDeLaColonia(MVDireccion.COLONIA);
+
             MVDireccion.BuscarDireccionPorUid(UidDireccionDelCliente);
 
             MVUbicacion.RecuperaUbicacionDireccion(UidDireccionDelCliente);
@@ -242,11 +271,37 @@ namespace Repartidores_GoDeliverix.VM
         {
 
         }
-        public void cargaOrden()
+        public async void cargaOrden()
         {
             ListaProductos = new List<VMHomeOrden>();
             MVOrden = new VMOrden();
-            MVOrden.ObtenerProductosDeOrden(StrUidOrden);
+
+
+            url = UrlApi + "Orden/GetObtenerProductosDeOrden?UidOrden="+ StrUidOrden + "";
+           
+            string DatosObtenidos = await _WebApiGoDeliverix.GetStringAsync(url);
+            var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
+
+            JArray blogPostArray = JArray.Parse(DatosGiros.ToString());
+
+
+            MVOrden.ListaDeProductos = blogPostArray.Select(p =>  new VMOrden()
+            {
+                UidProducto = new Guid(p["uidproducto"].ToString()),
+                UidProductoEnOrden = new Guid(p["UidListaDeProductosEnOrden"].ToString()),
+                StrNombreSucursal = p["Identificador"].ToString(),
+                StrNombreProducto = p["VchNombre"].ToString(),
+                //Imagen = item["NVchRuta"].ToString(),
+                Imagen = "http://godeliverix.net/Vista/" + p["NVchRuta"].ToString(),
+                intCantidad = int.Parse(p["IntCantidad"].ToString()),
+                UidSucursal = new Guid(p["UidSucursal"].ToString()),
+                MTotal = decimal.Parse((decimal.Parse(p["MTotal"].ToString())).ToString("N2")),
+                MCostoTarifario = double.Parse(p["tarifario"].ToString())
+                
+            }).ToList();
+
+
+            //MVOrden.ObtenerProductosDeOrden(StrUidOrden);
             StrIdentificadorSucursal = MVOrden.ListaDeProductos[0].StrNombreSucursal;
 
             MTotal = 0.0m;

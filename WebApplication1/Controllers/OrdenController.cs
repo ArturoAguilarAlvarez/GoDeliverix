@@ -66,14 +66,27 @@ namespace WebApplication1.Controllers
         /// <param name="UidLicencia"></param>
         /// <param name="UidSucursal"></param>
         /// <returns></returns>
-        public ResponseHelper GetAgregaEstatusALaOrden(Guid UidEstatus, string StrParametro, Guid Mensaje = new Guid(), Guid UidOrden = new Guid(), long LngFolio = 0, Guid UidLicencia = new Guid(), Guid UidSucursal = new Guid())
+        public ResponseHelper GetAgregaEstatusALaOrden(Guid UidEstatus, string StrParametro, string Mensaje = "", string UidOrden = "", long LngFolio = 0, string UidLicencia = "", string UidSucursal ="")
         {
             MVOrden = new VMOrden();
-            if (Mensaje == null)
+
+            if (string.IsNullOrEmpty(UidSucursal))
             {
-                Mensaje = Guid.Empty;
+                UidSucursal = Guid.Empty.ToString();
             }
-            MVOrden.AgregaEstatusALaOrden(UidEstatus, StrParametro, Mensaje, UidOrden, LngFolio, UidLicencia, UidSucursal);
+            if (string.IsNullOrEmpty(UidLicencia))
+            {
+                UidLicencia = Guid.Empty.ToString();
+            }
+            if (string.IsNullOrEmpty(UidOrden))
+            {
+                UidOrden = Guid.Empty.ToString();
+            }
+            if (string.IsNullOrEmpty(Mensaje))
+            {
+                Mensaje = Guid.Empty.ToString();
+            }
+            MVOrden.AgregaEstatusALaOrden(UidEstatus, StrParametro,new Guid(Mensaje),new Guid(UidOrden), LngFolio,new Guid(UidLicencia),new Guid(UidSucursal));
             Respuesta = new ResponseHelper();
             Respuesta.Data = "Registro guardado";
             Respuesta.Status = true;
@@ -195,10 +208,24 @@ namespace WebApplication1.Controllers
             Respuesta.Data = MVOrden;
             return Respuesta;
         }
-        public ResponseHelper GetBuscarOrdenPorCodigoQR(Guid UidUsuario)
+
+
+        public ResponseHelper GetBuscarOrdenPorCodigoQR(string strCodigo, string UidRepartidor)
         {
             MVOrden = new VMOrden();
-            MVOrden.BuscarOrdenAsiganadaRepartidor(UidUsuario);
+            
+            Respuesta = new ResponseHelper();
+            Respuesta.Data = MVOrden.ValidarCodigoUsuario(strCodigo, UidRepartidor); 
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion agregada satisfactoriamente";
+            return Respuesta;
+        }
+
+
+        public ResponseHelper GetObtenerCodigoOrdenTarifario(Guid uidOrdenTarifario)
+        {
+            MVOrden = new VMOrden();
+            MVOrden.ObtenerCodigoOrdenTarifario(uidOrdenTarifario);
             Respuesta = new ResponseHelper();
             Respuesta.Data = MVOrden;
             Respuesta.Status = true;
