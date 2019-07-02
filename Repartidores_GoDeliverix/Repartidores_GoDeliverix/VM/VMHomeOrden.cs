@@ -249,22 +249,56 @@ namespace Repartidores_GoDeliverix.VM
         {
             MVDireccion = new VMDireccion();
             MVUbicacion = new VMUbicacion();
-
-            url = UrlApi + "Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
+            string NombreColonia = "";
+            
+            //Obtiene la ubicacion de la sucursal
+            url = UrlApi + "Ubicacion/GetRecuperaUbicacionSucursal?UidSucursal=" + UidSucursal + "";
             string content = await _WebApiGoDeliverix.GetStringAsync(url);
             var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
             MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
 
-            MVDireccion.ObtenerDireccionSucursal(UidSucursal.ToString());
-            MVUbicacion.RecuperaUbicacionSucursal(UidSucursal.ToString());
+            //Obtiene la direccion de la sucursal
+            url = UrlApi + "Direccion/GetObtenerDireccionCompletaDeSucursal?UidSucursal=" + UidSucursal + "";
+            content = await _WebApiGoDeliverix.GetStringAsync(url);
+            obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+            MVDireccion = JsonConvert.DeserializeObject<VistaDelModelo.VMDireccion>(obj);
+
+            //MVDireccion.ObtenerDireccionSucursal(UidSucursal.ToString());
+            //MVUbicacion.RecuperaUbicacionSucursal(UidSucursal.ToString());
+
+            url = UrlApi + "Direccion/GetObtenerNombreDeLaColonia?UidColonia=" + MVDireccion.COLONIA + "";
+            content = await _WebApiGoDeliverix.GetStringAsync(url);
+            obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+            NombreColonia = obj.ToString();
+
             StrUbicacionSucursal = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
-            StrColoniaSucursal = MVDireccion.ObtenerNombreDeLaColonia(MVDireccion.COLONIA);
 
-            MVDireccion.BuscarDireccionPorUid(UidDireccionDelCliente);
 
-            MVUbicacion.RecuperaUbicacionDireccion(UidDireccionDelCliente);
+            StrColoniaSucursal = NombreColonia;
+
+            //MVDireccion.BuscarDireccionPorUid(UidDireccionDelCliente);
+            
+            url = UrlApi + "Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionDelCliente + "";
+            content = await _WebApiGoDeliverix.GetStringAsync(url);
+            obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+            MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
+
+            //Obtiene la direccion del usuario
+            url = UrlApi + "Direccion/GetBuscarDireccion?UidDireccion=" + UidDireccionDelCliente + "";
+            content = await _WebApiGoDeliverix.GetStringAsync(url);
+            obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+            MVDireccion = JsonConvert.DeserializeObject<VistaDelModelo.VMDireccion>(obj);
+
+            NombreColonia = string.Empty;
+            url = UrlApi + "Direccion/GetObtenerNombreDeLaColonia?UidColonia=" + MVDireccion.COLONIA + "";
+            content = await _WebApiGoDeliverix.GetStringAsync(url);
+            obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+            NombreColonia = obj.ToString();
+
+
+           // MVUbicacion.RecuperaUbicacionDireccion(UidDireccionDelCliente);
             StrUbicacionCliente = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
-            StrColoniaCliente = MVDireccion.ObtenerNombreDeLaColonia(MVDireccion.COLONIA);
+            StrColoniaCliente = NombreColonia;
         }
 
         public VMHomeOrden()

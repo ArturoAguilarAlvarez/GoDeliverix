@@ -26,6 +26,32 @@ namespace WebApplication1.Controllers
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;
         }
+        /// <summary>
+        /// Busca direcciones por medio del Uid que se le envie
+        /// </summary>
+        /// <param name="UidDireccion"></param>
+        /// <returns></returns>
+        public ResponseHelper GetBuscarDireccion(string UidDireccion)
+        {
+            MVDireccion = new VMDireccion();
+            MVDireccion.BuscarDireccionPorUid(UidDireccion);
+
+            Respuesta = new ResponseHelper();
+            Respuesta.Data = MVDireccion;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
+
+        public ResponseHelper GetObtenerNombreDeLaColonia(string UidColonia)
+        {
+            MVDireccion = new VMDireccion();
+            Respuesta = new ResponseHelper();
+            Respuesta.Data = MVDireccion.ObtenerNombreDeLaColonia(UidColonia);
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
 
         /// <summary>
         /// 
@@ -74,7 +100,7 @@ namespace WebApplication1.Controllers
             Respuesta = new ResponseHelper();
             Guid uidDirecion = Guid.NewGuid();
             MVDireccion.AgregaDireccion("asp_AgregaDireccionUsuario", UidUsuario, uidDirecion, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador);
-            MVUbicacion.GuardaUbicacionDireccion(uidDirecion,Guid.NewGuid(), Latitud, Longitud);
+            MVUbicacion.GuardaUbicacionDireccion(uidDirecion, Guid.NewGuid(), Latitud, Longitud);
             Respuesta.Message = "Informacion agregada satisfactoriamente";
 
             Respuesta.Data = "";
@@ -82,12 +108,12 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
-        public ResponseHelper GetActualizarDireccion( Guid UidPais, Guid UidEstado, Guid UidMunicipio, Guid UidCiudad, Guid UidColonia, string CallePrincipal, string CalleAux1, string CalleAux2, string Manzana, string Lote, string CodigoPostal, string Referencia, string NOMBRECIUDAD, string NOMBRECOLONIA, string Identificador, string Latitud, string Longitud, string UidDireccion)
+        public ResponseHelper GetActualizarDireccion(Guid UidPais, Guid UidEstado, Guid UidMunicipio, Guid UidCiudad, Guid UidColonia, string CallePrincipal, string CalleAux1, string CalleAux2, string Manzana, string Lote, string CodigoPostal, string Referencia, string NOMBRECIUDAD, string NOMBRECOLONIA, string Identificador, string Latitud, string Longitud, string UidDireccion)
         {
             MVDireccion = new VMDireccion();
             Respuesta = new ResponseHelper();
             MVUbicacion = new VMUbicacion();
-            MVDireccion.ActualizaDireccion( new Guid(UidDireccion), UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador);
+            MVDireccion.ActualizaDireccion(new Guid(UidDireccion), UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador);
             MVUbicacion.GuardaUbicacionDireccion(new Guid(UidDireccion), Guid.NewGuid(), Latitud, Longitud);
             Respuesta.Message = "Informacion actualizada satisfactoriamente";
 
