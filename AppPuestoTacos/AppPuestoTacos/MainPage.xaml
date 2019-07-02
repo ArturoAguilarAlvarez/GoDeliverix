@@ -29,9 +29,9 @@
                   Grid.Row="1"></Image>-->
                 <Label x:Name="txtSucursal" HorizontalOptions="Center" FontSize="Large" FontAttributes="Bold"></Label>
                 <Label Grid.Row="2" >Usuario</Label>
-                <Entry Placeholder="Usuario"   x:Name="txtUsuario" Grid.Row="3"/>
+                <Entry Placeholder="Usuario" Text="admin1Clorifla"  x:Name="txtUsuario" Grid.Row="3"/>
                 <Label Grid.Row="4" >Password</Label>
-                <Entry Grid.Row="5"  Placeholder="Password"  IsPassword="True" x:Name="txtIDContraseña"/>
+                <Entry Grid.Row="5"  Placeholder="Password" Text="12345"  IsPassword="True" x:Name="txtIDContraseña"/>
                 <Button Text="Login" BackgroundColor="#f15a23"  Grid.Row="7" TextColor="White" Clicked="ButtonLogin_Clicked" x:Name="btnLogin"/>
                 <Button 
                     Text="¿Olvidaste tu contraseña?"                   

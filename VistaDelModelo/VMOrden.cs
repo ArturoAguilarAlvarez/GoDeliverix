@@ -135,7 +135,7 @@ namespace VistaDelModelo
         }
 
         public string StrEstatusOrdenGeneral { get; set; }
-        public string StrNombreProducto { get; private set; }
+        public string StrNombreProducto { get;  set; }
         public int intCantidad { get; set; }
         public Guid UidEstatus { get; set; }
         public Guid UidSucursal { get; set; }

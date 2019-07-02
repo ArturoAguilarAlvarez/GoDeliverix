@@ -1,7 +1,10 @@
-﻿using Rg.Plugins.Popup.Services;
+﻿using AppPuestoTacos.WebApi;
+using Newtonsoft.Json;
+using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,13 +19,14 @@ namespace AppPuestoTacos.View
 	{
         bool Ordenamiento = false;
         string escaneado;
+        HttpClient _client = new HttpClient();
+        string url = "";
         public OrdenesEntrega ()
 		{
             try
             {
                 InitializeComponent();
-                App.MVOrden.BuscarOrdenesAppSucursal("Sucursal", UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), EstatusSucursal: "Lista a enviar", TipoDeSucursal: "S");
-                MyListviewOrdenesPorEnviar.ItemsSource = App.MVOrden.ListaDeOrdenesPorEnviar;
+                Cargar();
             }
             catch (Exception)
             {
@@ -31,6 +35,16 @@ namespace AppPuestoTacos.View
             }
         }
 
+
+            public async void Cargar()
+            {
+                url = (RestService.Servidor + "api/Orden/GetOrdenesSucursal?Licencia=" + AppPuestoTacos.Helpers.Settings.Licencia.ToString() + "&Estatus=Lista%20a%20enviar&tipoSucursal=s");
+                string DatosObtenidos = await _client.GetStringAsync(url);
+                var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
+                App.MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(DatosGiros);           
+                MyListviewOrdenesPorEnviar.ItemsSource = App.MVOrden.ListaDeOrdenesPorEnviar;
+        }
+ 
         private  void ImageButtonEscanear_Clicked(object sender, EventArgs e)
         {
             var scan = new ZXingScannerPage();
