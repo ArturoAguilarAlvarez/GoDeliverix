@@ -40,16 +40,18 @@ namespace AppCliente
                     //    password: txtContraseña.Text,
                     //    fnacimiento: txtFechaNacimiento.Date.ToString("MM-dd-yyyy"),
                     //    perfil: "4F1E1C4B-3253-4225-9E46-DD7D1940DA19");
-                    string _Url = $@"http://godeliverix.net/api/Usuario/GetActualizarUsuario?"+
-                $"UidUsuario={App.Global1}"+
-                $"&Nombre ={txtNombre.Text}"+
-                $"&ApellidoPaterno={ txtApellidoP.Text}"+
-                $"&ApellidoMaterno={txtApellidoM.Text}"+
-                $"&usuario={txtUsuario.Text}"+
-                $"&password={txtContraseña.Text}"+
-                $"&fnacimiento={txtFechaNacimiento.Date.ToString("MM-dd-yyyy")}"+
-                $"&perfil=4F1E1C4B-3253-4225-9E46-DD7D1940DA19"+
-                "&estatus=0&UidEmpresa=&UidSucursal=";
+
+                    string _Url = "http://www.godeliverix.net/api/Usuario/GetActualizarUsuario?"+
+                    $"UidUsuario={App.Global1}" +
+                    $"&Nombre={txtNombre.Text}" +
+                    $"&ApellidoPaterno={txtApellidoP.Text}" +
+                    $"&ApellidoMaterno={txtApellidoM.Text}" +
+                    $"&usuario={txtUsuario.Text}" +
+                    $"&password={txtContraseña.Text}" +
+                    $"&fnacimiento={txtFechaNacimiento.Date.ToString("MM-dd-yyyy")}" +
+                    $"&perfil=4F1E1C4B-3253-4225-9E46-DD7D1940DA19" +
+                    "&estatus=0&UidEmpresa=&UidSucursal=";
+
                     var content = await _client.GetAsync(_Url);
 
                     await DisplayAlert("Excelente :)", "Registro exitoso", "OK");
