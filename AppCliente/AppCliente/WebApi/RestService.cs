@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 
 namespace AppCliente.WebApi
@@ -9,6 +11,18 @@ namespace AppCliente.WebApi
         public static string Servidor = "http://godeliverix.net/";
         public static string ContentType = "application/json";
         public static string ApiKey = "";
+
+        //public static async System.Threading.Tasks.Task<ResponseHelper> PeticionAsync(string _Url,ResponseHelper Datos)
+        //{
+        //    //HttpClient _client =new HttpClient();
+        //    //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        //    //_client.DefaultRequestHeaders.Add("Accept", ContentType);
+        //    //_client.DefaultRequestHeaders.Add("Content-Type", ContentType);
+        //    //var DatosObtenidos = await _client.GetAsync(_Url);
+        //    //string Res = await DatosObtenidos.Content.ReadAsStringAsync();
+        //    //var Data = JsonConvert.DeserializeObject<ResponseHelper>(Res);
+        //    //return Data;
+        //}
 
         public static class HTTPMethods
         {
