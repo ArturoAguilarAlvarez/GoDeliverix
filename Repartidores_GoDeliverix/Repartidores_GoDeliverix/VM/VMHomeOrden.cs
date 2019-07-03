@@ -321,16 +321,16 @@ namespace Repartidores_GoDeliverix.VM
 
             MVOrden.ListaDeProductos = blogPostArray.Select(p =>  new VMOrden()
             {
-                UidProducto = new Guid(p["uidproducto"].ToString()),
-                UidProductoEnOrden = new Guid(p["UidListaDeProductosEnOrden"].ToString()),
-                StrNombreSucursal = p["Identificador"].ToString(),
-                StrNombreProducto = p["VchNombre"].ToString(),
+                UidProducto = new Guid(p["UidProducto"].ToString()),
+                UidProductoEnOrden = new Guid(p["UidProductoEnOrden"].ToString()),
+                StrNombreSucursal = p["StrNombreSucursal"].ToString(),
+                StrNombreProducto = p["StrNombreProducto"].ToString(),
                 //Imagen = item["NVchRuta"].ToString(),
-                Imagen = "http://godeliverix.net/Vista/" + p["NVchRuta"].ToString(),
-                intCantidad = int.Parse(p["IntCantidad"].ToString()),
+                Imagen =  p["Imagen"].ToString(),
+                intCantidad = int.Parse(p["intCantidad"].ToString()),
                 UidSucursal = new Guid(p["UidSucursal"].ToString()),
-                MTotal = decimal.Parse((decimal.Parse(p["MTotal"].ToString())).ToString("N2")),
-                MCostoTarifario = double.Parse(p["tarifario"].ToString())
+                MTotal = decimal.Parse(p["MTotal"].ToString()),
+                MCostoTarifario = double.Parse(p["MCostoTarifario"].ToString())
                 
             }).ToList();
 

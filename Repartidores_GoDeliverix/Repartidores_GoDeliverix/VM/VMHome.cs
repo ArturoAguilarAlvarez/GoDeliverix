@@ -279,7 +279,7 @@ namespace Repartidores_GoDeliverix.VM
 
 
             MVOrden = new VMOrden();
-            MVOrden.ObtenerCodigoOrdenTarifario(UidOrdenTarifario);
+            //MVOrden.ObtenerCodigoOrdenTarifario(UidOrdenTarifario);
 
             url = UrlApi + "Orden/GetObtenerCodigoOrdenTarifario?uidOrdenTarifario=" + UidOrdenTarifario + "";
             string content = await _WebApiGoDeliverix.GetStringAsync(url);
