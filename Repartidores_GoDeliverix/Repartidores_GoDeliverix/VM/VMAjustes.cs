@@ -1,12 +1,17 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.ObjectModel;
+using System.Net.Http;
 using System.Windows.Input;
 using VistaDelModelo;
 namespace Repartidores_GoDeliverix.VM
 {
     public class VMAjustes : ControlsController
     {
+
+        string UrlApi = "http://www.godeliverix.net/api/";
+        string url = "";
+        HttpClient _WebApiGoDeliverix = new HttpClient();
         /// <summary>
         /// Atributos para el popup de los ajustes generales
         /// </summary>
