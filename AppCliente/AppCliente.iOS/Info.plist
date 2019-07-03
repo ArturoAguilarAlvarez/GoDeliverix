@@ -63,5 +63,10 @@
 	<string>This app needs access location when open.</string>
 	<key>NSLocationUsageDescription</key>
 	<string>This app needs access location when open.</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 </dict>
 </plist>
