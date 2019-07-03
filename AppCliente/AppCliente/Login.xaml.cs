@@ -14,6 +14,7 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using AppCliente.WebApi;
 using Newtonsoft.Json.Linq;
+using Foundation;
 
 namespace AppCliente
 {
@@ -82,10 +83,13 @@ namespace AppCliente
         {
             try
             {
+
+                string url = "http://www.godeliverix.net/api/Profile/GET?Usuario=" + Usuario + "&Contrasena=" + Contrasena;
+
                 HttpClient _client = new HttpClient();
-                string url = "http://godeliverix.net/api/Profile/GET?Usuario="+Usuario+"&Contrasena="+Contrasena;
-                string content = await  _client.GetStringAsync(url);
-                List<string> listaID = JsonConvert.DeserializeObject<List<string>>(content);                
+                var content = await  _client.GetAsync(url);
+                string res = await content.Content.ReadAsStringAsync();
+                List<string> listaID = JsonConvert.DeserializeObject<List<string>>(res);                
                 _id =new Guid( listaID[0].ToString());
                 if (_id != Guid.Empty)
                 {
@@ -94,7 +98,7 @@ namespace AppCliente
                 }
                 if (_acceso)
                 {
-                    var tex = ("http://godeliverix.net/api/Direccion/GetObtenerDireccionUsuario?UidUsuario="+_id);
+                    var tex = ("http://www.godeliverix.net/api/Direccion/GetObtenerDireccionUsuario?UidUsuario="+_id);
                     string strDirecciones = await _client.GetStringAsync(tex);
                     var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
 
@@ -150,7 +154,7 @@ namespace AppCliente
             }
             catch (Exception)
             {
-
+                await PopupNavigation.Instance.PopAsync();
                 await DisplayAlert("sorry", "No hay internet", "ok");
             }
         }

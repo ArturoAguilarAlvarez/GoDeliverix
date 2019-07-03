@@ -52,13 +52,12 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>ARM64</MtouchArch>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>iPhone Developer: m_dark066@hotmail.com (89238NT47H)</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <CodesignEntitlements>
     </CodesignEntitlements>
     <MtouchI18n>west</MtouchI18n>
-    <CodesignProvision>
-    </CodesignProvision>
+    <CodesignProvision>iOS Team Provisioning Profile: com.companyname.AppCliente</CodesignProvision>
     <CodesignExtraArgs />
     <CodesignResourceRules />
   </PropertyGroup>
@@ -184,6 +183,9 @@
   <ItemGroup>
     <PackageReference Include="Com.Airbnb.Xamarin.Forms.Lottie">
       <Version>2.7.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Net.Http">
+      <Version>2.2.29</Version>
     </PackageReference>
     <PackageReference Include="Xam.Plugins.Forms.ImageCircle">
       <Version>3.1.1.1-beta</Version>
