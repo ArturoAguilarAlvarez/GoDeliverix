@@ -34,5 +34,10 @@
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleLightContent</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowArbitrayLoads</key>
+		<true/>
+	</dict>
 </dict>
 </plist>
