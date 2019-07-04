@@ -38,6 +38,17 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
+
+
+        public ResponseHelper GetActualizarCorreo(string UidPropietario, string strParametroDeInsercion, string strCorreoElectronico, Guid UidCorreoElectronico)
+        {
+            Respuesta = new ResponseHelper();
+            MVCorreoElectronico = new VMCorreoElectronico();
+            MVCorreoElectronico.EliminaCorreoUsuario(UidPropietario);
+            MVCorreoElectronico.AgregarCorreo(new Guid(UidPropietario), strParametroDeInsercion, strCorreoElectronico, UidCorreoElectronico);
+            return Respuesta;
+        }
+
         // POST: api/Profile
         public void Post([FromBody]string value)
         {
@@ -49,7 +60,7 @@ namespace WebApplication1.Controllers
         }
 
         // DELETE: api/Profile/5
-        public void Delete(int id)
+        public void Delete(Guid UidUsuario)
         {
         }
     }
