@@ -93,7 +93,7 @@
             <StackLayout Grid.Row="0" x:Name="ScrollView_Productos">
                 <ListView x:Name="MyListViewBusquedaProductosHome"
                               ItemTapped="MyListViewBusquedaProductosHome_ItemTapped"
-                              VerticalScrollBarVisibility="Always"
+                          VerticalScrollBarVisibility="Always"
             ItemsSource="{Binding ListaDeProductos}"
                       SelectionMode="None"
                       SeparatorVisibility="None"
