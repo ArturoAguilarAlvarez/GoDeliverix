@@ -5,6 +5,7 @@ using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Net.Http;
 using System.Windows.Input;
 using VistaDelModelo;
 using Xamarin.Forms;
@@ -15,6 +16,10 @@ namespace Repartidores_GoDeliverix.VM
     {
         #region Propiedades de la clase
         #region Propiedades para los controles de la vista
+
+        string UrlApi = "http://www.godeliverix.net/api/";
+        string url = "";
+        HttpClient _WebApiGoDeliverix = new HttpClient();
 
         private bool _IsLoading;
         public bool IsLoading
@@ -258,9 +263,6 @@ namespace Repartidores_GoDeliverix.VM
         #region Propiedades de Pais,Estado,Municipio,Ciudad,Colonia
 
 
-
-
-
         #endregion
         #region Listas 
         private List<Pais> _ListaPais;
@@ -320,16 +322,17 @@ namespace Repartidores_GoDeliverix.VM
             MVDireccion.ObtenerDireccionesUsuario(UidUsuario.ToString());
             if (UidDireccion == Guid.Empty)
             {
-                Guid UidDireccion = Guid.NewGuid();
-                MVDireccion.AgregaDireccionALista(UidDireccion,UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, "", "", Identificador);
-
+                url = UrlApi + "Direccion/GetGuardarDireccion?UidUsuario=" + UidUsuario + "&UidPais=" + UidPais + "&UidEstado=" + UidEstado + "&UidMunicipio=" + UidMunicipio + "&UidCiudad=" + UidCiudad + "&UidColonia=" + UidColonia + "&CallePrincipal=" + CallePrincipal + "&CalleAux1=" + CalleAux1 + "&CalleAux2=" + CalleAux2 + "&Manzana=" + Manzana + "&Lote=" + Lote + "&CodigoPostal=" + CodigoPostal + "&Referencia=" + Referencia + "&NOMBRECIUDAD=S&NOMBRECOLONIA=S&Identificador=" + Identificador + "&Latitud=0&Longitud=0";
+                //Guid UidDireccion = Guid.NewGuid();
+                //MVDireccion.AgregaDireccionALista(UidDireccion,UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, "", "", Identificador);
             }
             else
             {
-
-                MVDireccion.ActualizaListaDireccion(UidDireccion.ToString(), UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador, "", "");
+                url = UrlApi + "Direccion/GetActualizarDireccion?UidPais=" + UidPais + "&UidEstado=" + UidEstado + "&UidMunicipio=" + UidMunicipio + "&UidCiudad=" + UidCiudad + "&UidColonia=" + UidColonia + "&CallePrincipal=" + CallePrincipal + "&CalleAux1=" + CalleAux1 + "&CalleAux2=" + CalleAux2 + "&Manzana=" + Manzana + "&Lote=" + Lote + "&CodigoPostal=" + CodigoPostal + "&Referencia=" + Referencia + "&NOMBRECIUDAD=S&NOMBRECOLONIA=S&Identificador=" + Identificador + "&Latitud=0&Longitud=0";
+                //   MVDireccion.ActualizaListaDireccion(UidDireccion.ToString(), UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador, "", "");
             }
-            MVDireccion.GuardaListaDeDirecciones(MVDireccion.ListaDIRECCIONES, UidUsuario, "asp_AgregaDireccionUsuario", "Usuario");
+            _WebApiGoDeliverix.GetAsync(url);
+            // MVDireccion.GuardaListaDeDirecciones(MVDireccion.ListaDIRECCIONES, UidUsuario, "asp_AgregaDireccionUsuario", "Usuario");
             AppInstance.MVAjustes.Recargar();
         }
         public async void AgregaDireccion()
