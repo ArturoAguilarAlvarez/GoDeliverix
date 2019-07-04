@@ -14,7 +14,7 @@ namespace AppPrueba
             InitializeComponent();
 
             DependencyService.Register<MockDataStore>();
-            MainPage = new MenuMaster();
+            MainPage = new LoginPage();
         }
 
         protected override void OnStart()

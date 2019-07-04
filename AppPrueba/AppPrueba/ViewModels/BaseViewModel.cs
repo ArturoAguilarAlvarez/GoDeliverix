@@ -28,6 +28,14 @@ namespace AppPrueba.ViewModels
             set { SetProperty(ref title, value); }
         }
 
+
+        string _GuidUsuario = "";
+        public string GuidUsuario1
+        {
+            get { return _GuidUsuario; }
+            set { SetProperty(ref _GuidUsuario, value); }
+        }
+
         protected bool SetProperty<T>(ref T backingStore, T value,
             [CallerMemberName]string propertyName = "",
             Action onChanged = null)

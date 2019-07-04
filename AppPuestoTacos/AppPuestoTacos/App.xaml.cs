@@ -38,42 +38,42 @@ namespace AppPuestoTacos
         public App()
         {
             InitializeComponent();
-            //if (!string.IsNullOrEmpty(AppPuestoTacos.Helpers.Settings.Licencia))
-            //{
-            //    if (!string.IsNullOrEmpty(AppPuestoTacos.Helpers.Settings.Perfil))
-            //    {
-            //        Guid Uidusuario = App.MVAcceso.Ingresar(AppPuestoTacos.Helpers.Settings.Usuario, AppPuestoTacos.Helpers.Settings.Contrasena);
-            //        App.UIdUsuario = Uidusuario;
-            //        if (Uidusuario != Guid.Empty)
-            //        {
-            //            App.MVEmpresas.ObtenerNombreComercial(App.UIdUsuario.ToString());
-            //            App.NombreEmpresa = App.MVEmpresas.NOMBRECOMERCIAL;
-            //            App.NOmbreUsuario = AppPuestoTacos.Helpers.Settings.Usuario;
-            //            MainPage = new View.MasterMenu();
-            //            Device.StartTimer(TimeSpan.FromSeconds(10), () =>
-            //            {
-            //                Device.BeginInvokeOnMainThread(() =>
-            //                {
-            //                    MetodoConsulta();
-            //                });
-            //                return true;
-            //            });
-            //        }
-            //        else
-            //        {
-            //            MainPage = new NavigationPage(new MainPage());
-            //        }
-            //    }
-            //    else
-            //    {
-            //        MainPage = new NavigationPage(new MainPage());
-            //    }
-            //}
-            //else
+            if (!string.IsNullOrEmpty(AppPuestoTacos.Helpers.Settings.Licencia))
+            {
+                if (!string.IsNullOrEmpty(AppPuestoTacos.Helpers.Settings.Perfil))
+                {
+                    Guid Uidusuario = App.MVAcceso.Ingresar(AppPuestoTacos.Helpers.Settings.Usuario, AppPuestoTacos.Helpers.Settings.Contrasena);
+                    App.UIdUsuario = Uidusuario;
+                    if (Uidusuario != Guid.Empty)
+                    {
+                        App.MVEmpresas.ObtenerNombreComercial(App.UIdUsuario.ToString());
+                        App.NombreEmpresa = App.MVEmpresas.NOMBRECOMERCIAL;
+                        App.NOmbreUsuario = AppPuestoTacos.Helpers.Settings.Usuario;
+                        MainPage = new View.MasterMenu();
+                        Device.StartTimer(TimeSpan.FromSeconds(10), () =>
+                        {
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                MetodoConsulta();
+                            });
+                            return true;
+                        });
+                    }
+                    else
+                    {
+                        MainPage = new NavigationPage(new MainPage());
+                    }
+                }
+                else
+                {
+                    MainPage = new NavigationPage(new MainPage());
+                }
+            }
+            else
 
-            //{
+            {
                 MainPage = new NavigationPage(new MainPage());
-            //}
+            }
 
         }
 
