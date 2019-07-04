@@ -26,7 +26,7 @@ namespace AppPuestoTacos
         private async void ButtonLogin_Clicked(object sender, EventArgs e)
         {
             btnLogin.IsEnabled = false;
-            await PopupNavigation.Instance.PushAsync(new AppPuestoTacos.Popup.Loanding());
+            // await PopupNavigation.Instance.PushAsync(new AppPuestoTacos.Popup.Loanding());
 
             string perfil;
             try
@@ -64,13 +64,13 @@ namespace AppPuestoTacos
                                 }
                                 else
                                 {
-                                    await PopupNavigation.Instance.PopAsync();
+                                   // await PopupNavigation.Instance.PopAsync();
                                     await DisplayAlert("Error", "este usuario no es de esta sucursal", "ok");
                                 }
                             }
                             else
                             {
-                                await PopupNavigation.Instance.PopAllAsync();
+                                // await PopupNavigation.Instance.PopAllAsync();
                                 await DisplayAlert("Error", "Debe ingresar como Administrador por primera vez", "ok");
                             }
                             App.NOmbreUsuario = txtUsuario.Text;
@@ -109,28 +109,28 @@ namespace AppPuestoTacos
                         }
                         else
                         {
-                            await PopupNavigation.Instance.PopAllAsync();
+                          //  await PopupNavigation.Instance.PopAllAsync();
                             await DisplayAlert("", "Usuario invalido", "OK");
                         }
 
                     }
                     else
                     {
-                        await PopupNavigation.Instance.PopAllAsync();
+                       // await PopupNavigation.Instance.PopAllAsync();
                         await DisplayAlert("", "Usuario o contraseña incorrecta", "OK");
                     }
                 }
                 else
                 {
 
-                    await PopupNavigation.Instance.PopAllAsync();
+                    // await PopupNavigation.Instance.PopAllAsync();
                     await NewMethod();
                 }
             }
             catch (Exception)
             {
                 btnLogin.IsEnabled = true;
-                await PopupNavigation.Instance.PopAllAsync();
+                // await PopupNavigation.Instance.PopAllAsync();
                 await DisplayAlert("", "No tiene Internet", "ok");
             }
 

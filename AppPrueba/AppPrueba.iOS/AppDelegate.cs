@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Foundation;
-using ImageCircle.Forms.Plugin.iOS;
 using UIKit;
 
-namespace AppCliente.iOS
+namespace AppPrueba.iOS
 {
     // The UIApplicationDelegate for the application. This class is responsible for launching the 
     // User Interface of the application, as well as listening (and optionally responding) to 
@@ -22,14 +22,9 @@ namespace AppCliente.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            global::Xamarin.Forms.Forms.Init();                        
-            global::Xamarin.FormsMaps.Init();       
-            ImageCircleRenderer.Init();
-            FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
-            Xamarin.FormsGoogleMaps.Init("AIzaSyBiWETPG3f-5VYV30iPCAPv-39tu_EjOYo");
-            global::Rg.Plugins.Popup.Popup.Init();
-
+            global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
+
             return base.FinishedLaunching(app, options);
         }
     }

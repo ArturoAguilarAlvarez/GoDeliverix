@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                          xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              x:Class="AppCliente.HistorialDetalleEmpresa">
     <ContentPage.Content>
         <StackLayout>
@@ -29,16 +30,22 @@
                                     </Grid.ColumnDefinitions>
 
                                     <Label Text="{Binding StrNota}"  HorizontalOptions="Center" Grid.Column="0" Grid.ColumnSpan="3"></Label>
+
+
+                                    <ff:CachedImage
+                                                    Source="{Binding Imagen}"
+                                                    HorizontalOptions="Center"
+                                                    VerticalOptions="Center"
+                                                    LoadingPlaceholder   = "IconoCajaVacia"
+                                                    ErrorPlaceholder     = "Error"
+                                                    Grid.Row="1"
+                                                    Grid.RowSpan="4"
+                                                    Grid.Column="0"
+                                                    RetryCount           = "3"
+                                                    RetryDelay           = "3"
+                                                    DownsampleToViewSize = "False">
+                                    </ff:CachedImage>
                                     
-                                    <Image
-                                        HorizontalOptions="Center"
-                                        VerticalOptions="Center"
-                                        Source="{Binding Imagen}"
-                                        Grid.Row="1"
-                                        Grid.RowSpan="4"
-                                        Grid.Column="0"
-                                        >
-                                    </Image>
                                     <Label Text="{Binding Identificador}" HorizontalOptions="Center" Grid.Column="0" Grid.Row="5" FontSize="Micro"></Label>
 
                                     <Label Text="Numero de orden:" FontSize="Micro" FontAttributes="Bold" TextColor="Black" Grid.Row="1" Grid.Column="1"></Label>

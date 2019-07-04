@@ -58,9 +58,9 @@ namespace AppCliente
                 {
 
                     if (Ingresar())
-                    {                       
+                    {
                         MVDireccion.ObtenerDireccionesUsuario(Global1);
-                       
+
 
                         MainPage = new MasterMenu();
                         //switch (Device.RuntimePlatform)
