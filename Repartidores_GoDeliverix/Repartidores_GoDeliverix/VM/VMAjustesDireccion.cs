@@ -328,7 +328,7 @@ namespace Repartidores_GoDeliverix.VM
             }
             else
             {
-                url = UrlApi + "Direccion/GetActualizarDireccion?UidPais=" + UidPais + "&UidEstado=" + UidEstado + "&UidMunicipio=" + UidMunicipio + "&UidCiudad=" + UidCiudad + "&UidColonia=" + UidColonia + "&CallePrincipal=" + CallePrincipal + "&CalleAux1=" + CalleAux1 + "&CalleAux2=" + CalleAux2 + "&Manzana=" + Manzana + "&Lote=" + Lote + "&CodigoPostal=" + CodigoPostal + "&Referencia=" + Referencia + "&NOMBRECIUDAD=S&NOMBRECOLONIA=S&Identificador=" + Identificador + "&Latitud=0&Longitud=0";
+                url = UrlApi + "Direccion/GetActualizarDireccion?UidPais=" + UidPais + "&UidEstado=" + UidEstado + "&UidMunicipio=" + UidMunicipio + "&UidCiudad=" + UidCiudad + "&UidColonia=" + UidColonia + "&CallePrincipal=" + CallePrincipal + "&CalleAux1=" + CalleAux1 + "&CalleAux2=" + CalleAux2 + "&Manzana=" + Manzana + "&Lote=" + Lote + "&CodigoPostal=" + CodigoPostal + "&Referencia=" + Referencia + "&NOMBRECIUDAD=S&NOMBRECOLONIA=S&Identificador=" + Identificador + "&Latitud=0&Longitud=0&UidDireccion=" + UidDireccion + "";
                 //   MVDireccion.ActualizaListaDireccion(UidDireccion.ToString(), UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador, "", "");
             }
             _WebApiGoDeliverix.GetAsync(url);
