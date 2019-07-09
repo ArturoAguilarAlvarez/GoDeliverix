@@ -269,17 +269,19 @@ namespace AppCliente
             var _URL = ("http://godeliverix.net/api/Telefono/GetBuscarTelefonos?UidPropietario="+App.Global1+"&ParadetroDeBusqueda=Usuario&UidTelefono=00000000-0000-0000-0000-000000000000&strTelefono=");
             string DatosObtenidos = await _client.GetStringAsync(_URL);
             var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
+            App.MVTelefono = JsonConvert.DeserializeObject<VMTelefono>(DatosGiros);
 
-            JArray blogPostArray = JArray.Parse(DatosGiros.ToString());
 
-            App.MVTelefono.ListaDeTelefonos = blogPostArray.Select(p => new VMTelefono
-            {
-                ID = (Guid)p["ID"],
-                NUMERO = (string)p["NUMERO"],
-                UidTipo = (Guid)p["UidTipo"],
-                StrNombreTipoDeTelefono = (string)p["StrNombreTipoDeTelefono"],
-                Estado = false
-            }).ToList();
+            //JArray blogPostArray = JArray.Parse(DatosGiros.ToString());
+
+            //App.MVTelefono.ListaDeTelefonos = blogPostArray.Select(p => new VMTelefono
+            //{
+            //    ID = (Guid)p["ID"],
+            //    NUMERO = (string)p["NUMERO"],
+            //    UidTipo = (Guid)p["UidTipo"],
+            //    StrNombreTipoDeTelefono = (string)p["StrNombreTipoDeTelefono"],
+            //    Estado = false
+            //}).ToList();
 
             for (int i = 0; i < AppCliente.App.MVTelefono.ListaDeTelefonos.Count; i++)
             {

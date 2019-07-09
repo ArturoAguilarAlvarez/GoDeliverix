@@ -99,31 +99,31 @@ namespace AppCliente
             var tex = ("http://godeliverix.net/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + App.Global1);
             string strDirecciones = await _client.GetStringAsync(tex);
             var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
+            App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
+            //JArray blogPostArray = JArray.Parse(obj.ToString());
 
-            JArray blogPostArray = JArray.Parse(obj.ToString());
+            ////IList<VMDireccion> blogPosts 
+            //App.MVDireccion.ListaDIRECCIONES = blogPostArray.Select(p => new VMDireccion
+            //{
+            //    REFERENCIA = (string)p["REFERENCIA"],
+            //    ID = (Guid)p["ID"],
+            //    PAIS = (string)p["PAIS"],
+            //    ESTADO = (string)p["ESTADO"],
+            //    MUNICIPIO = (string)p["MUNICIPIO"],
+            //    CIUDAD = (string)p["CIUDAD"],
+            //    COLONIA = (string)p["COLONIA"],
+            //    CALLE0 = (string)p["CALLE0"],
+            //    CALLE1 = (string)p["CALLE1"],
+            //    CALLE2 = (string)p["CALLE2"],
+            //    MANZANA = (string)p["MANZANA"],
+            //    LOTE = (string)p["LOTE"],
+            //    CodigoPostal = (string)p["CodigoPostal"],
+            //    IDENTIFICADOR = (string)p["REFERENCIA"],
+            //    NOMBRECIUDAD = (string)p["NOMBRECIUDAD"],
+            //    NOMBRECOLONIA = (string)p["NOMBRECOLONIA"],
+            //    Clicked = false
 
-            //IList<VMDireccion> blogPosts 
-            App.MVDireccion.ListaDIRECCIONES = blogPostArray.Select(p => new VMDireccion
-            {
-                REFERENCIA = (string)p["REFERENCIA"],
-                ID = (Guid)p["ID"],
-                PAIS = (string)p["PAIS"],
-                ESTADO = (string)p["ESTADO"],
-                MUNICIPIO = (string)p["MUNICIPIO"],
-                CIUDAD = (string)p["CIUDAD"],
-                COLONIA = (string)p["COLONIA"],
-                CALLE0 = (string)p["CALLE0"],
-                CALLE1 = (string)p["CALLE1"],
-                CALLE2 = (string)p["CALLE2"],
-                MANZANA = (string)p["MANZANA"],
-                LOTE = (string)p["LOTE"],
-                CodigoPostal = (string)p["CodigoPostal"],
-                IDENTIFICADOR = (string)p["REFERENCIA"],
-                NOMBRECIUDAD = (string)p["NOMBRECIUDAD"],
-                NOMBRECOLONIA = (string)p["NOMBRECOLONIA"],
-                Clicked = false
-
-            }).ToList();
+            //}).ToList();
 
             for (int i = 0; i < AppCliente.App.MVDireccion.ListaDIRECCIONES.Count; i++)
             {

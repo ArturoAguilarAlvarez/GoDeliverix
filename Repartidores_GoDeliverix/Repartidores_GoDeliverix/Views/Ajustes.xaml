@@ -5,20 +5,13 @@
              BindingContext="{Binding VMMain, Source={StaticResource Locator}}"
              Title="Configuracion"
              Icon="Settings.png">
-    <ContentPage.Padding>
-        <OnPlatform iOS="20,40,20,20" Android="20,20,20,20"></OnPlatform>
-    </ContentPage.Padding>
     <ContentPage.Content>
         <Grid HorizontalOptions="Fill" VerticalOptions="Fill">
             <Grid.RowDefinitions>
-                <RowDefinition Height="2*"></RowDefinition>
                 <RowDefinition Height="1*"></RowDefinition>
-                <RowDefinition Height="7*"></RowDefinition>
+                <RowDefinition Height="9*"></RowDefinition>
             </Grid.RowDefinitions>
-            <StackLayout Grid.ColumnSpan="3"  >
-                <Image Source="Aguilar.jpg" HorizontalOptions="Center" HeightRequest="50" VerticalOptions="Start" ></Image>
-            </StackLayout>
-            <Grid Grid.Row="1" Grid.ColumnSpan="3" >
+            <Grid Grid.Row="0" Grid.ColumnSpan="3" >
                 <StackLayout  Grid.Column="0">
                     <Button x:Name="BtnGeneral" Clicked="BtnGeneral_Clicked"  HeightRequest="50" TextColor="Purple"  FlowDirection="MatchParent" Text="General"></Button>
                 </StackLayout>
@@ -29,7 +22,7 @@
                     <Button x:Name="BtnTelefono" Clicked="BtnTelefono_Clicked"  HeightRequest="50" TextColor="Purple" FlowDirection="MatchParent" Text="Telefonos"></Button>
                 </StackLayout>
             </Grid>
-            <StackLayout Grid.Row="2" Grid.ColumnSpan="3">
+            <StackLayout Grid.Row="1" Grid.ColumnSpan="3">
 
                 <StackLayout x:Name="PanelGeneral" BindingContext="{Binding MVAjustes}">
                     <ListView ItemsSource="{Binding LsAjustes}" IsRefreshing="{Binding IsLoading,Mode=TwoWay}" 
@@ -37,12 +30,10 @@
                         <ListView.ItemTemplate >
                             <DataTemplate>
                                 <ImageCell ImageSource="{Binding StrRuta}"  TextColor="#676767" DetailColor="#272727" Command="{Binding DisplaySettingsCommand}" Text="{Binding Titulo}" Detail="{Binding Detalles}"></ImageCell>
-
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
                 </StackLayout>
-
 
                 <StackLayout x:Name="PanelDireccion" BindingContext="{Binding MVAjustes}">
                     <ListView ItemsSource="{Binding ListaDireccion}" IsRefreshing="{Binding IsLoading,Mode=TwoWay}" 

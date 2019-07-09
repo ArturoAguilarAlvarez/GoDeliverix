@@ -329,6 +329,10 @@ namespace Repartidores_GoDeliverix.VM
                 MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(obj);
                 //MVOrden.BuscarOrdenAsiganadaRepartidor(AppInstance.Session_.UidUsuario);
 
+                BlSinAsignar = true;
+                BlNuevaOrden = false;
+                BlRecolecta = false;
+                BlEntrega = false;
 
                 url = UrlApi + "Profile/GetObtenerUltimoEstatusBitacoraRepartidor?UidUsuario=" + AppInstance.Session_.UidUsuario + "";
 

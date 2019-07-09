@@ -63,10 +63,10 @@ namespace AppCliente
 
         private void SearchFor_SearchButtonPressed(object sender, EventArgs e)
         {
-            btnAdelante.IsEnabled = true;
-            btnAtras.IsEnabled = true;
-            btnAdelante.IsVisible = true;
-            btnAtras.IsVisible = true;
+            //btnAdelante.IsEnabled = true;
+            //btnAtras.IsEnabled = true;
+            //btnAdelante.IsVisible = true;
+            //btnAtras.IsVisible = true;
 
             string Buscado = "";
 
@@ -184,15 +184,15 @@ namespace AppCliente
                     MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.MVProducto.ListaDeProductos.GetRange(0, 10);
                     CantidadProductosMostrados = 10;
                     lbCantidad.Text = "1-10/" + App.MVProducto.ListaDeProductos.Count;
-                    btnAtras.IsEnabled = false;
+                    //btnAtras.IsEnabled = false;
                 }
                 else
                 {
                     MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.MVProducto.ListaDeProductos;
                     CantidadProductosMostrados = AppCliente.App.MVProducto.ListaDeProductos.Count;
                     lbCantidad.Text = "1-" + App.MVProducto.ListaDeProductos.Count + "/" + App.MVProducto.ListaDeProductos.Count;
-                    btnAtras.IsVisible = false;
-                    btnAdelante.IsVisible = false;
+                    //btnAtras.IsVisible = false;
+                    //btnAdelante.IsVisible = false;
                 }
 
                 MyListViewBusquedaEmpresas.ItemsSource = null;
@@ -325,61 +325,61 @@ namespace AppCliente
             txtBusquedaActual.Text = searchFor.Text;
         }
 
-        private void BtnAtras_Clicked(object sender, EventArgs e)
-        {
-            if (CantidadProductosMostrados > 0)
-            {
-                int mod = CantidadProductosMostrados % 10;
-                if (mod==0)
-                {
-                    if (CantidadProductosMostrados>10)
-                    {
-                        lbCantidad.Text = ((CantidadProductosMostrados - (20)) + 1) + "-" + (CantidadProductosMostrados-10 ) + "/" + App.ListaDeProductos.Count;
-                        MyListViewBusquedaProductosHome.ItemsSource = null;
-                        MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos.GetRange((CantidadProductosMostrados - (20)), 10);
-                        CantidadProductosMostrados = CantidadProductosMostrados - (10);
-                    }
-                }
-                else
-                {
-                    lbCantidad.Text = (CantidadProductosMostrados - (9 + mod )) + "-" + (CantidadProductosMostrados - mod)+"/"+ App.ListaDeProductos.Count;
-                    MyListViewBusquedaProductosHome.ItemsSource = null;
-                    MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos.GetRange((CantidadProductosMostrados - (10 + mod)), 10);
-                    CantidadProductosMostrados = CantidadProductosMostrados - (mod);
-                }
-            }
-            else
-            {
+        //private void BtnAtras_Clicked(object sender, EventArgs e)
+        //{
+        //    if (CantidadProductosMostrados > 0)
+        //    {
+        //        int mod = CantidadProductosMostrados % 10;
+        //        if (mod==0)
+        //        {
+        //            if (CantidadProductosMostrados>10)
+        //            {
+        //                lbCantidad.Text = ((CantidadProductosMostrados - (20)) + 1) + "-" + (CantidadProductosMostrados-10 ) + "/" + App.ListaDeProductos.Count;
+        //                MyListViewBusquedaProductosHome.ItemsSource = null;
+        //                MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos.GetRange((CantidadProductosMostrados - (20)), 10);
+        //                CantidadProductosMostrados = CantidadProductosMostrados - (10);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            lbCantidad.Text = (CantidadProductosMostrados - (9 + mod )) + "-" + (CantidadProductosMostrados - mod)+"/"+ App.ListaDeProductos.Count;
+        //            MyListViewBusquedaProductosHome.ItemsSource = null;
+        //            MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos.GetRange((CantidadProductosMostrados - (10 + mod)), 10);
+        //            CantidadProductosMostrados = CantidadProductosMostrados - (mod);
+        //        }
+        //    }
+        //    else
+        //    {
 
-            }
-        }
+        //    }
+        //}
 
-        private void BtnAdelante_Clicked(object sender, EventArgs e)
-        {
-            if (AppCliente.App.ListaDeProductos.Count> CantidadProductosMostrados)
-            {
-                if (App.ListaDeProductos.Count>=(CantidadProductosMostrados+10))
-                {
-                    lbCantidad.Text = (CantidadProductosMostrados+1) + "-" + (CantidadProductosMostrados + 10) + "/" + App.ListaDeProductos.Count;
-                    MyListViewBusquedaProductosHome.ItemsSource = null;
-                    MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos.GetRange(CantidadProductosMostrados,10);
-                    CantidadProductosMostrados = CantidadProductosMostrados + 10;
-                }
-                else
-                {
-                    lbCantidad.Text = CantidadProductosMostrados+"-"+ App.ListaDeProductos.Count + "/" + App.ListaDeProductos.Count;
-                    MyListViewBusquedaProductosHome.ItemsSource = null;
-                    int posicion = CantidadProductosMostrados;
-                    int cantidad= App.ListaDeProductos.Count-CantidadProductosMostrados;
-                    MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos.GetRange(posicion,cantidad);
-                    CantidadProductosMostrados = App.ListaDeProductos.Count;
-                }
-            }
-            else
-            {
+        //private void BtnAdelante_Clicked(object sender, EventArgs e)
+        //{
+        //    if (AppCliente.App.ListaDeProductos.Count> CantidadProductosMostrados)
+        //    {
+        //        if (App.ListaDeProductos.Count>=(CantidadProductosMostrados+10))
+        //        {
+        //            lbCantidad.Text = (CantidadProductosMostrados+1) + "-" + (CantidadProductosMostrados + 10) + "/" + App.ListaDeProductos.Count;
+        //            MyListViewBusquedaProductosHome.ItemsSource = null;
+        //            MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos.GetRange(CantidadProductosMostrados,10);
+        //            CantidadProductosMostrados = CantidadProductosMostrados + 10;
+        //        }
+        //        else
+        //        {
+        //            lbCantidad.Text = CantidadProductosMostrados+"-"+ App.ListaDeProductos.Count + "/" + App.ListaDeProductos.Count;
+        //            MyListViewBusquedaProductosHome.ItemsSource = null;
+        //            int posicion = CantidadProductosMostrados;
+        //            int cantidad= App.ListaDeProductos.Count-CantidadProductosMostrados;
+        //            MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos.GetRange(posicion,cantidad);
+        //            CantidadProductosMostrados = App.ListaDeProductos.Count;
+        //        }
+        //    }
+        //    else
+        //    {
 
-            }
-        }
+        //    }
+        //}
 
         private void ImageButton_Clicked_2(object sender, EventArgs e)
         {
@@ -683,18 +683,18 @@ namespace AppCliente
 
 
             ListaDeProductosHome = AppCliente.App.ListaDeProductos;
-            if (App.ListaDeProductos.Count > 10)
-            {
-                MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.ListaDeProductos.GetRange(0, 10);
-                lbCantidad.Text = "1-10/" + App.ListaDeProductos.Count;
-                CantidadProductosMostrados = 10;
-            }
-            else
-            {
+            //if (App.ListaDeProductos.Count > 10)
+            //{
+            //    MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.ListaDeProductos.GetRange(0, 10);
+            //    lbCantidad.Text = "1-10/" + App.ListaDeProductos.Count;
+            //    CantidadProductosMostrados = 10;
+            //}
+            //else
+            //{
                 MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.ListaDeProductos;
                 CantidadProductosMostrados = AppCliente.App.ListaDeProductos.Count;
                 lbCantidad.Text = "1-" + App.ListaDeProductos.Count + "/" + App.ListaDeProductos.Count;
-            }
+            //}
             if (App.DireccionABuscar != "")
             {
                 btnSeleccionarDireccion.Text = "ENTREGAR EN " + AppCliente.App.MVDireccion.ListaDIRECCIONES.Find(x => x.ID == new Guid(App.DireccionABuscar)).IDENTIFICADOR + " >";
