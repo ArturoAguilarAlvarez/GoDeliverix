@@ -4,59 +4,46 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             Title="hsaodpasd"
+             Title="Login"
              x:Class="AppPrueba.Views.LoginPage">
 
-    <Grid VerticalOptions="Fill" Padding="40,0,40,0" HorizontalOptions="Fill">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Image Source="IconoGoDeliverix.png"
+    <StackLayout>
+        <ScrollView>
+            <Grid VerticalOptions="Fill" Padding="40,0,40,0" HorizontalOptions="Fill">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!--<Image Source="IconoGoDeliverix.png"
                   VerticalOptions="End"
                   HorizontalOptions="Center"
-                  HeightRequest="150"
-                  WidthRequest="150"
-                  Grid.Row="1"></Image>
-        <Label Grid.Row="2" >Usuario</Label>
-        <Entry Placeholder="Usuario"  Text="xxx" x:Name="txtUsuario" Grid.Row="3"/>
-        <Label Grid.Row="4" >Password</Label>
-        <Entry Grid.Row="5"  Placeholder="Password" Text="xxx" IsPassword="True" x:Name="txtIDContraseña"/>
-        <StackLayout x:Name="CuadroRecordar" IsVisible="True" Orientation="Horizontal" Grid.Row="6" Spacing="0">
-            <Label Text="Recordar Contraseña" FontSize="Micro" VerticalOptions="Center" HorizontalOptions="StartAndExpand" />
-            <Switch  x:Name="GuardarContraseña" HorizontalOptions="End" IsToggled="false" VerticalOptions="Center" />
-        </StackLayout>
-        <ActivityIndicator IsRunning="False"  Grid.Row="6" x:Name="LoderLogin" IsVisible="False"/>
-        <Button Text="Login" BackgroundColor="#f15a23" Grid.Row="7" TextColor="White" x:Name="btnLogin"/>
-        <Grid Grid.Row="8">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Label BackgroundColor="#bababa" HeightRequest="1" HorizontalOptions="FillAndExpand" VerticalOptions="Center" />
-            <Label Text="OR" Grid.Column="1" VerticalOptions="Center" Margin="10,0,10,0" />
-            <Label BackgroundColor="#bababa" Grid.Column="2" HeightRequest="1" HorizontalOptions="FillAndExpand" VerticalOptions="Center" />
-        </Grid>
-
-        <Button BackgroundColor="#51406A" Text="Registro" TextColor="White"  Grid.Row="9"/>
-
-        <Button 
+                  HeightRequest="100"
+                  WidthRequest="100"
+                  Grid.Row="1"></Image>-->
+                <Label x:Name="txtSucursal" HorizontalOptions="Center" FontSize="Large" FontAttributes="Bold"></Label>
+                <Label Grid.Row="2" >Usuario</Label>
+                <Entry Placeholder="Usuario" Text="admin1Clorifla"  x:Name="txtUsuario" Grid.Row="3"/>
+                <Label Grid.Row="4" >Password</Label>
+                <Entry Grid.Row="5"  Placeholder="Password" Text="12345"  IsPassword="True" x:Name="txtIDContraseña"/>
+                <Button Text="Login" BackgroundColor="#f15a23"  Grid.Row="7" TextColor="White" Clicked="ButtonLogin_Clicked" x:Name="btnLogin"/>
+                <Button 
                     Text="¿Olvidaste tu contraseña?"                   
                     VerticalOptions="End"
                     HorizontalOptions="End"
                     FontSize="Small"
-                     BorderWidth="0"
+                    BorderWidth="0"
                     BackgroundColor="Transparent" 
-                     Grid.Row="10"></Button>
-    </Grid>
+                    Grid.Row="8"></Button>
+            </Grid>
+        </ScrollView>
+    </StackLayout>
 </ContentPage>

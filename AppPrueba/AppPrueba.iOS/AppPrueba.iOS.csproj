@@ -133,8 +133,17 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Rg.Plugins.Popup">
+      <Version>1.1.5.188</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="4.0.0.425677" />
     <PackageReference Include="Xamarin.Essentials" Version="1.1.0" />
+    <PackageReference Include="ZXing.Net.Mobile">
+      <Version>2.4.1</Version>
+    </PackageReference>
+    <PackageReference Include="ZXing.Net.Mobile.Forms">
+      <Version>2.4.1</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
@@ -142,5 +151,32 @@
       <Project>{1A654692-6F26-48EE-BCB5-E6DAA660A281}</Project>
       <Name>AppPrueba</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\IconoCancelar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\IconoCodigoQR.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\IconoConfigurar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\IconoOrdenesCanceladas.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\IconoOrdenesEnPreparacion.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\IconoOrdenesParaEntregar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\IconoOrdenesRecibidas.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\IconoSalir.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\IconoAceptar.png" />
   </ItemGroup>
 </Project>
