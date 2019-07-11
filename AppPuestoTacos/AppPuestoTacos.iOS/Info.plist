@@ -35,6 +35,10 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>OnePosInventory wants to access your Camera</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>New Entry</string>
 	<key>CFBundleDisplayName</key>
 	<string>GoDeliverix_Suministradora</string>
 </dict>

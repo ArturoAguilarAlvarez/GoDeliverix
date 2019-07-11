@@ -111,7 +111,6 @@ namespace AppPuestoTacos.View
             var SelectSucursal = App.MVSucursal.LISTADESUCURSALES.Find(t => t.IDENTIFICADOR == AppPuestoTacos.Helpers.Settings.NombreSucursal);
             this.perfil = perfil;
             PickerSucursales.SelectedItem = SelectSucursal;
-            await PopupNavigation.Instance.PopAllAsync();
         }
     }
 }

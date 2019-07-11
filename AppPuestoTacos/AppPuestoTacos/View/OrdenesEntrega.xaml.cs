@@ -36,7 +36,7 @@ namespace AppPuestoTacos.View
         }
 
 
-            public async void Cargar()
+        public async void Cargar()
             {
                 url = (RestService.Servidor + "api/Orden/GetOrdenesSucursal?Licencia=" + AppPuestoTacos.Helpers.Settings.Licencia.ToString() + "&Estatus=Lista%20a%20enviar&tipoSucursal=s");
                 string DatosObtenidos = await _client.GetStringAsync(url);
@@ -47,18 +47,18 @@ namespace AppPuestoTacos.View
  
         private  void ImageButtonEscanear_Clicked(object sender, EventArgs e)
         {
-            var scan = new ZXingScannerPage();
-            Navigation.PushAsync(scan);
-            scan.OnScanResult += (result) =>
-            {
-                Device.BeginInvokeOnMainThread
-                (async () =>
-                {
-                    await Navigation.PopAsync();
-                    escaneado = result.Text;
-                    BuscarOrdenCodigo();
-                });
-            };
+            //var scan = new ZXingScannerPage();
+            //Navigation.PushAsync(scan);
+            //scan.OnScanResult += (result) =>
+            //{
+            //    Device.BeginInvokeOnMainThread
+            //    (async () =>
+            //    {
+            //        await Navigation.PopAsync();
+            //        escaneado = result.Text;
+            //        BuscarOrdenCodigo();
+            //    });
+            //};
             //await PopupNavigation.Instance.PushAsync(new AppPuestoTacos.Popup.Escaner());
         }
 

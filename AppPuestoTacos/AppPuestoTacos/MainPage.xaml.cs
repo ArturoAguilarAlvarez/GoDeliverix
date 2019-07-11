@@ -102,8 +102,14 @@ namespace AppPuestoTacos
                                 AppPuestoTacos.Helpers.Settings.Perfil = perfil;
                                 AppPuestoTacos.Helpers.Settings.Usuario = usuario;
                                 AppPuestoTacos.Helpers.Settings.Contrasena = password;
-                                App.MVEmpresas.ObtenerNombreComercial(App.UIdUsuario.ToString());
-                                App.NombreEmpresa = App.MVEmpresas.NOMBRECOMERCIAL;
+
+                                url = RestService.Servidor + "api/Empresa/GetNombreEmpresa?UIdUsuario=" + App.UIdUsuario.ToString();
+                                NombreEmpresa = await _client.GetStringAsync(url);
+                                App.NombreEmpresa = JsonConvert.DeserializeObject<ResponseHelper>(NombreEmpresa).Data.ToString();
+                               
+                                //App.MVEmpresas.ObtenerNombreComercial(App.UIdUsuario.ToString());
+
+                                //App.NombreEmpresa = App.MVEmpresas.NOMBRECOMERCIAL;
                                 App.Current.MainPage =new View.MasterMenu();//Perfil
                             }
                         }

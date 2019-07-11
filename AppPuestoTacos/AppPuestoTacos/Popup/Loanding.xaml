@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <po:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"             
              xmlns:po="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
              x:Class="AppPuestoTacos.Popup.Loanding">
     <ContentPage.Content>
