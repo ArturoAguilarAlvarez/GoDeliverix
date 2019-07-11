@@ -20,7 +20,7 @@ namespace WebApplication1.Controllers
             MVGiro.ListaDeGiroConimagen();
 
             Respuesta = new ResponseHelper();
-            Respuesta.Data = MVGiro.LISTADEGIRO;
+            Respuesta.Data = MVGiro;
             Respuesta.Status = true;
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;

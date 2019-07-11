@@ -20,7 +20,7 @@ namespace WebApplication1.Controllers
             MVCategoria.CategoriaConImagen(value);
 
             Respuesta = new ResponseHelper();
-            Respuesta.Data = MVCategoria.LISTADECATEGORIAS;
+            Respuesta.Data = MVCategoria;
             Respuesta.Status = true;
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;

@@ -8,9 +8,7 @@
              x:Class="Repartidores_GoDeliverix.Views.Home" 
              Title="Inicio"
              Icon="Home.png">
-    <ContentPage.Padding>
-        <OnPlatform iOS="10,5,10,10" Android="10,10,10,10"></OnPlatform>
-    </ContentPage.Padding>
+
     <ContentPage.Content>
         <StackLayout BindingContext="{ Binding MVHome}">
             <Grid x:Name="GContenedorPrincipal">

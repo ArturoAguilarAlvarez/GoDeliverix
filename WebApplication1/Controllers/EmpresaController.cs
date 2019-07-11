@@ -21,7 +21,7 @@ namespace WebApplication1.Controllers
             MVEmpresa.BuscarEmpresaBusquedaCliente(StrParametroBusqueda, StrDia,UidDireccion,UidBusquedaCategorias,StrNombreEmpresa);
 
             Respuesta = new ResponseHelper();
-            Respuesta.Data = MVEmpresa.LISTADEEMPRESAS;
+            Respuesta.Data = MVEmpresa;
             Respuesta.Status = true;
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;

@@ -214,9 +214,9 @@
  
             <StackLayout Orientation="Horizontal" Grid.Row="2" HorizontalOptions="FillAndExpand"  x:Name="PanelNavegacion">
 
-                <ImageButton  Source="IconoAtras" HeightRequest="30" WidthRequest="80" HorizontalOptions="Start" BackgroundColor="Transparent" x:Name="btnAtras" Clicked="BtnAtras_Clicked"></ImageButton>
+                <!--<ImageButton  Source="IconoAtras" HeightRequest="30" WidthRequest="80" HorizontalOptions="Start" BackgroundColor="Transparent" x:Name="btnAtras" Clicked="BtnAtras_Clicked"></ImageButton>-->
                 <Label Text="0-0/0" HorizontalOptions="CenterAndExpand" x:Name="lbCantidad"></Label>
-                <ImageButton Source="IconoAdelante" HeightRequest="30" WidthRequest="80" HorizontalOptions="End" BackgroundColor="Transparent" x:Name="btnAdelante" Clicked="BtnAdelante_Clicked"></ImageButton>
+                <!--<ImageButton Source="IconoAdelante" HeightRequest="30" WidthRequest="80" HorizontalOptions="End" BackgroundColor="Transparent" x:Name="btnAdelante" Clicked="BtnAdelante_Clicked"></ImageButton>-->
             </StackLayout>
             
             <!--<Button 

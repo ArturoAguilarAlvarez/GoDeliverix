@@ -18,7 +18,7 @@ namespace AppCliente
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class HomePage : ContentPage
     {
-    
+
         public List<VMProducto> ListaDeProductosHome = new List<VMProducto>();
 
         int CantidadProductosMostrados = 0;
@@ -39,7 +39,7 @@ namespace AppCliente
 
         private void MenuBuscar_Activated(object sender, EventArgs e)
         {
-            
+
             //ContenidoSearch.IsVisible = true;
         }
 
@@ -58,7 +58,7 @@ namespace AppCliente
         private void ButtonFiltros_Clicked(object sender, EventArgs e)
         {
             btnFitltrosBusquedas.IsEnabled = false;
-            PopupNavigation.Instance.PushAsync(new Popup.PupupFiltroBusqueda(btnFitltrosBusquedas, ScrollView_Productos, ScrollView_Empresas,MyListViewBusquedaProductosHome, MyListViewBusquedaEmpresas,PanelProductoNoEncontrados, lbCantidad));
+            PopupNavigation.Instance.PushAsync(new Popup.PupupFiltroBusqueda(btnFitltrosBusquedas, ScrollView_Productos, ScrollView_Empresas, MyListViewBusquedaProductosHome, MyListViewBusquedaEmpresas, PanelProductoNoEncontrados, lbCantidad));
         }
 
         private void SearchFor_SearchButtonPressed(object sender, EventArgs e)
@@ -246,7 +246,7 @@ namespace AppCliente
         private async void BtnSeleccionarDireccion_Clicked(object sender, EventArgs e)
         {
             //await Navigation.PushAsync(new PerfilDireccionesPage(btnSeleccionarDireccion, IDDireccionBusqueda));
-            await Navigation.PushAsync(new SeleccionarDirecciones(btnSeleccionarDireccion, IDDireccionBusqueda,MyListViewBusquedaProductosHome, lbCantidad, CantidadProductosMostrados,PanelProductoNoEncontrados, MyListViewBusquedaEmpresas,ScrollView_Productos,ScrollView_Empresas));
+            await Navigation.PushAsync(new SeleccionarDirecciones(btnSeleccionarDireccion, IDDireccionBusqueda, MyListViewBusquedaProductosHome, lbCantidad, CantidadProductosMostrados, PanelProductoNoEncontrados, MyListViewBusquedaEmpresas, ScrollView_Productos, ScrollView_Empresas));
         }
 
         private async void MyListViewBusquedaEmpresas_ItemTapped(object sender, ItemTappedEventArgs e)
@@ -282,7 +282,7 @@ namespace AppCliente
             string hora = Hora + ":" + DateTime.Now.Minute.ToString();
 
             //Guid Direccion = App.MVDireccion.ListaDIRECCIONES[0].ID;
-            Guid Direccion =new Guid( App.DireccionABuscar);
+            Guid Direccion = new Guid(App.DireccionABuscar);
 
             App.MVProducto.BuscarProductoPorSucursal("Giro", Dia, Direccion, new Guid(App.giro), ObjItem.UID);
             //string StrParametroBusqueda, string StrDia, Guid UidDireccion, Guid UidBusquedaCategorias, object UidProducto
@@ -569,21 +569,22 @@ namespace AppCliente
         }
 
 
-        private async void Iniciar()
+        private async  void Iniciar()
         {
-            var _URL = ("http://godeliverix.net/api/Giro/Get");
-            string DatosObtenidos = await _client.GetStringAsync(_URL);
-            var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
+            //_client.BaseAddress = new Uri("http://www.godeliverix.net/api/");
+            string _URL = "http://www.godeliverix.net/api/Giro/Get";
+            var content = await _client.GetStringAsync(_URL);
+            var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+            App.MVGiro = JsonConvert.DeserializeObject<VMGiro>(obj);
+            //JArray blogPostArray = JArray.Parse(DatosGiros.ToString());
 
-            JArray blogPostArray = JArray.Parse(DatosGiros.ToString());
-
-            App.MVGiro.LISTADEGIRO = blogPostArray.Select(p => new VMGiro
-            {
-                UIDVM = (Guid)p["UIDVM"],
-                STRNOMBRE = (string)p["STRNOMBRE"],
-                STRDESCRIPCION = (string)p["RUTAIMAGEN"],
-                RUTAIMAGEN = (string)p["REFERENCIA"]
-            }).ToList();
+            //App.MVGiro.LISTADEGIRO = blogPostArray.Select(p => new VMGiro
+            //{
+            //    UIDVM = (Guid)p["UIDVM"],
+            //    STRNOMBRE = (string)p["STRNOMBRE"],
+            //    STRDESCRIPCION = (string)p["RUTAIMAGEN"],
+            //    RUTAIMAGEN = (string)p["REFERENCIA"]
+            //}).ToList();
 
             App.giro = AppCliente.App.MVGiro.LISTADEGIRO[0].UIDVM.ToString();
 
@@ -611,53 +612,45 @@ namespace AppCliente
 
                 IDDireccionBusqueda.Text = Colonia.ToString();
 
-                _URL = ("http://godeliverix.net/api/Categoria/Get?value="+ App.giro.ToString());
-                DatosObtenidos = await _client.GetStringAsync(_URL);
-                var DatosCategorias = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
+                _URL = "http://www.godeliverix.net/api/Categoria/Get?value=" + App.giro.ToString();
+                 content = await _client.GetStringAsync(_URL);
+                 obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                App.MVCategoria = JsonConvert.DeserializeObject<VMCategoria>(obj);
 
-                blogPostArray = JArray.Parse(DatosCategorias.ToString());
-
-                App.MVCategoria.LISTADECATEGORIAS = blogPostArray.Select(p => new VMCategoria
-                {
-                    UIDCATEGORIA = (Guid)p["UIDCATEGORIA"],
-                    STRNOMBRE = (string)p["STRNOMBRE"],
-                    STRDESCRIPCION = (string)p["STRDESCRIPCION"]
-                }).ToList();
 
 
                 Guid Direccion = App.MVDireccion.ListaDIRECCIONES[0].ID;
                 App.DireccionABuscar = App.MVDireccion.ListaDIRECCIONES[0].ID.ToString();
 
 
-                _URL = ("http://godeliverix.net/api/Producto/GetBuscarProductosCliente?StrParametroBusqueda="+"Giro"+"&StrDia="+Dia+"&UidDireccion="+Direccion+"&UidBusquedaCategorias="+App.giro+"&StrNombreEmpresa=");
-                DatosObtenidos = await _client.GetStringAsync(_URL);
-                var DatosProductos = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
-
-                var ArrayDatosProductos = JArray.Parse(DatosProductos.ToString());
-                App.MVProducto.ListaDeProductos = ArrayDatosProductos.Select(p => new VMProducto
-                {
-                    UID = (Guid)p["UID"],
-                    STRNOMBRE = (string)p["STRNOMBRE"],
-                    Empresa = (string)p["Empresa"],
-                    UIDEMPRESA = (Guid)p["UIDEMPRESA"],
-                    STRDESCRIPCION = (string)p["STRDESCRIPCION"],
-                    STRRUTA = (string)p["STRRUTA"]
-                }).ToList();
-
-
-                _URL = ("http://godeliverix.net/api/Empresa/GetObtenerEmpresaCliente?StrParametroBusqueda=Giro&StrDia="+Dia+"&UidDireccion="+Direccion+"&UidBusquedaCategorias="+App.giro);
-
-                DatosObtenidos = await _client.GetStringAsync(_URL);
-                var DatosEmpresa = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
+                _URL = "http://www.godeliverix.net/api/Producto/GetBuscarProductosCliente?StrParametroBusqueda=" + "Giro" + "&StrDia=" + Dia + "&UidDireccion=" + Direccion + "&UidBusquedaCategorias=" + App.giro + "&StrNombreEmpresa=";
+                content = await _client.GetStringAsync(_URL);
+                obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                App.MVProducto = JsonConvert.DeserializeObject<VMProducto>(obj);
+                //var ArrayDatosProductos = JArray.Parse(DatosProductos.ToString());
+                //App.MVProducto.ListaDeProductos = ArrayDatosProductos.Select(p => new VMProducto
+                //{
+                //    UID = (Guid)p["UID"],
+                //    STRNOMBRE = (string)p["STRNOMBRE"],
+                //    Empresa = (string)p["Empresa"],
+                //    UIDEMPRESA = (Guid)p["UIDEMPRESA"],
+                //    STRDESCRIPCION = (string)p["STRDESCRIPCION"],
+                //    STRRUTA = (string)p["STRRUTA"]
+                //}).ToList();
 
 
-                ArrayDatosProductos = JArray.Parse(DatosEmpresa.ToString());
-                App.MVEmpresa.LISTADEEMPRESAS = ArrayDatosProductos.Select(p => new VMEmpresas
-                {
-                    UIDEMPRESA = (Guid)p["UIDEMPRESA"],
-                    NOMBRECOMERCIAL = (string)p["NOMBRECOMERCIAL"],
-                    StrRuta= "http://godeliverix.net/vista/"+((string)p["StrRuta"].ToString().Substring(3))
-                }).ToList();
+                _URL = "http://www.godeliverix.net/api/Empresa/GetObtenerEmpresaCliente?StrParametroBusqueda=Giro&StrDia=" + Dia + "&UidDireccion=" + Direccion + "&UidBusquedaCategorias=" + App.giro;
+                content = await _client.GetStringAsync(_URL);
+                obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                App.MVEmpresa = JsonConvert.DeserializeObject<VMEmpresas>(obj);
+
+                //ArrayDatosProductos = JArray.Parse(DatosEmpresa.ToString());
+                //App.MVEmpresa.LISTADEEMPRESAS = ArrayDatosProductos.Select(p => new VMEmpresas
+                //{
+                //    UIDEMPRESA = (Guid)p["UIDEMPRESA"],
+                //    NOMBRECOMERCIAL = (string)p["NOMBRECOMERCIAL"],
+                //    StrRuta= "http://godeliverix.net/vista/"+((string)p["StrRuta"].ToString().Substring(3))
+                //}).ToList();
 
 
                 foreach (VMProducto item in AppCliente.App.MVProducto.ListaDeProductos)
@@ -691,9 +684,9 @@ namespace AppCliente
             //}
             //else
             //{
-                MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.ListaDeProductos;
-                CantidadProductosMostrados = AppCliente.App.ListaDeProductos.Count;
-                lbCantidad.Text = "1-" + App.ListaDeProductos.Count + "/" + App.ListaDeProductos.Count;
+            MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.ListaDeProductos;
+            CantidadProductosMostrados = AppCliente.App.ListaDeProductos.Count;
+            lbCantidad.Text = "1-" + App.ListaDeProductos.Count + "/" + App.ListaDeProductos.Count;
             //}
             if (App.DireccionABuscar != "")
             {
@@ -709,5 +702,7 @@ namespace AppCliente
                 PanelProductoNoEncontrados.IsVisible = true;
             }
         }
+
+       
     }
 }

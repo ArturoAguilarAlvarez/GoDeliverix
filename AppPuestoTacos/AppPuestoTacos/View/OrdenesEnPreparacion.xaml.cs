@@ -52,9 +52,7 @@ namespace AppPuestoTacos.View
             if (action)
             {
                 //App.MVOrden.AgregaEstatusALaOrden(new Guid("c412d367-7d05-45d8-aeca-b8fabbf129d9"), UidOrden: ObjItem.Uidorden, UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), StrParametro: "S");
-                url = ("http://godeliverix.net/api/Orden/GetFinalizarOrden?Licencia="
-                    + AppPuestoTacos.Helpers.Settings.Licencia.ToString() +
-                    "&Uidorden=" + ObjItem.Uidorden);
+                url = ("http://godeliverix.net/api/Orden/GetFinalizarOrden?Licencia="+AppPuestoTacos.Helpers.Settings.Licencia.ToString() +"&Uidorden=" + ObjItem.Uidorden);
 
                 var DatosObtenidos = await _client.GetAsync(url);
 

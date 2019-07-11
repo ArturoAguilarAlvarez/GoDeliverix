@@ -383,12 +383,10 @@ namespace Repartidores_GoDeliverix.VM
                         url = UrlApi + "Ubicacion/GetRecuperaUbicacionSucursal?UidSucursal=" + UidSucursal + "";
                         content = await _WebApiGoDeliverix.GetStringAsync(url);
                         obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                        MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(obj);
+                        MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
 
                         //MVUbicacion.RecuperaUbicacionSucursal(UidSucursal.ToString());
                         StrUbicacionSucursal = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
-
-
 
                         url = UrlApi + "Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
                         content = await _WebApiGoDeliverix.GetStringAsync(url);
