@@ -67,7 +67,7 @@ namespace AppPrueba.Views
                     App.MVOrden.AgregaEstatusALaOrden(new Guid("c412d367-7d05-45d8-aeca-b8fabbf129d9"), UidOrden: ObjItem.Uidorden, UidLicencia: new Guid(AppPrueba.Helpers.Settings.Licencia), StrParametro: "S");
                     //App.MVTarifario.AgregarCodigoAOrdenTarifario(UidCodigo: Guid.NewGuid(), UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), uidorden: ObjItem.Uidorden);
                     App.MVOrden.BuscarOrdenes("Sucursal", UidLicencia: new Guid(AppPrueba.Helpers.Settings.Licencia), EstatusSucursal: "Pendiente para elaborar", TipoDeSucursal: "S");
-                    MyListviewOrdenesPorRealizar.ItemsSource = null;
+                    MyListviewOrdenesPorRealizar.ItemsSource = null;    
                     MyListviewOrdenesPorRealizar.ItemsSource = App.MVOrden.ListaDeOrdenesPorElaborar;
                     await Navigation.PopToRootAsync();
                 }
