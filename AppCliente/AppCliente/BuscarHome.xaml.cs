@@ -1,8 +1,11 @@
-﻿using Rg.Plugins.Popup.Services;
+﻿using AppCliente.WebApi;
+using Newtonsoft.Json;
+using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using VistaDelModelo;
@@ -11,45 +14,40 @@ using Xamarin.Forms.Xaml;
 
 namespace AppCliente
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class BuscarHome : ContentPage
-	{
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class BuscarHome : ContentPage
+    {
         int CantidadProductosMostrados = 0;
-
-        public BuscarHome ()
-		{
-			InitializeComponent ();
+        HttpClient _client = new HttpClient();
+        public BuscarHome()
+        {
+            InitializeComponent();
             btnSeleccionarDireccion.IsVisible = false;
             //MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.ListaDeProductos;
             MyListViewBusquedaEmpresas.ItemsSource = AppCliente.App.LISTADEEMPRESAS;
 
-            if (App.ListaDeProductos.Count > 10)
-            {
-                MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.ListaDeProductos.GetRange(0, 10);
-                lbCantidad.Text = "1-10/" + App.ListaDeProductos.Count;
-                CantidadProductosMostrados = 10;
-                //btnAtras.IsEnabled = false;
-            }
-            else
-            {
-                MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.ListaDeProductos;
-                CantidadProductosMostrados = AppCliente.App.ListaDeProductos.Count;
-                lbCantidad.Text = "1-" + App.ListaDeProductos.Count + "/" + App.ListaDeProductos.Count;
-                //btnAtras.IsVisible = false;
-                //btnAdelante.IsVisible = false;
-            }
+            //if (App.ListaDeProductos.Count > 10)
+            //{
+            //    MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.ListaDeProductos.GetRange(0, 10);
+            //    lbCantidad.Text = "1-10/" + App.ListaDeProductos.Count;
+            //    CantidadProductosMostrados = 10;
+            //    //btnAtras.IsEnabled = false;
+            //}
+            //else
+            //{
+            MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.ListaDeProductos;
+            CantidadProductosMostrados = AppCliente.App.ListaDeProductos.Count;
+            lbCantidad.Text = "1-" + App.ListaDeProductos.Count + "/" + App.ListaDeProductos.Count;
+            //btnAtras.IsVisible = false;
+            //btnAdelante.IsVisible = false;
+            //}
         }
 
-        private void SearchFor_SearchButtonPressed(object sender, EventArgs e)
+        private  async void SearchFor_SearchButtonPressed(object sender, EventArgs e)
         {
-           
-
             //await Task.Factory.StartNew(() =>
             //{
-                string Buscado = "";
-            
-
-                string Hora = string.Empty;
+            string Buscado = ""; string Hora = string.Empty;
             if (DateTime.Now.Hour < 10)
             {
                 Hora = "0" + DateTime.Now.Hour.ToString();
@@ -62,15 +60,11 @@ namespace AppCliente
             {
                 Buscado = searchFor.Text;
             }
-
             string hora = Hora + ":" + DateTime.Now.Minute.ToString();
-
             CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
             string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
-
             ScrollView_Productos.Orientation = 0;
 
-            //App.MVProducto.buscarProductosEmpresaDesdeCliente("Giro", hora, Dia, new Guid("d14a0380-e972-4013-a89b-586f54d4e381"), new Guid("63cd1aa3-74ef-4112-8835-fd4400706256"), Buscado);    
             string giro = App.giro;
             string categoria = App.categoria;
             string subcategoria = App.subcategoria;
@@ -108,28 +102,63 @@ namespace AppCliente
 
 
             Guid Direccion = new Guid(App.DireccionABuscar);
+            //_client.BaseAddress = new Uri("http://www.godeliverix.net/api/");
 
 
             //Busqueda por giro
             if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
             {
-                //giro
-                App.MVProducto.buscarProductosEmpresaDesdeCliente("Giro", Dia, Direccion, new Guid(giro), searchFor.Text);
-                App.MVEmpresa.BuscarEmpresaBusquedaCliente("Giro", Dia, Direccion, new Guid(giro), searchFor.Text);
+                //Conexiones a la webApi
+                //*Productos
+                var url = "http://www.godeliverix.net/api/Producto/GetBuscarProductosCliente?StrParametroBusqueda=Giro&StrDia="+Dia+"&UidDireccion=" + Direccion + "&UidBusquedaCategorias="+ giro + "&StrNombreEmpresa=" + searchFor.Text + "";
+                string content = await _client.GetStringAsync(url);
+                var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                App.MVProducto = JsonConvert.DeserializeObject<VMProducto>(obj);
+                //*Empresas
+                url = "http://www.godeliverix.net/api/Empresa/GetObtenerEmpresaCliente?StrParametroBusqueda=Giro&StrDia=" + Dia + "&UidDireccion=" + Direccion + "&UidBusquedaCategorias="+ giro +"&StrNombreEmpresa=" + searchFor.Text + "";
+                content = await _client.GetStringAsync(url);
+                obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                App.MVEmpresa = JsonConvert.DeserializeObject<VMEmpresas>(obj);
+                // App.MVProducto.buscarProductosEmpresaDesdeCliente("Giro", Dia, Direccion, new Guid(giro), searchFor.Text);
+                // App.MVEmpresa.BuscarEmpresaBusquedaCliente("Giro", Dia, Direccion, new Guid(giro), searchFor.Text);
             }
             else
             //// Busqueda por categoria
             if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
             {
-                App.MVProducto.buscarProductosEmpresaDesdeCliente("Categoria", Dia, Direccion, new Guid(categoria), searchFor.Text);
-                App.MVEmpresa.BuscarEmpresaBusquedaCliente("Giro", Dia, Direccion, new Guid(categoria), searchFor.Text);
+                //Conexiones a la webApi
+                //*Productos
+                var url = "http://www.godeliverix.net/api/Producto/GetBuscarProductosCliente?StrParametroBusqueda=Categoria&StrDia=" + Dia + "&UidDireccion=" + Direccion + "&UidBusquedaCategorias="+ categoria +"&StrNombreEmpresa=" + searchFor.Text + "";
+                string content = await _client.GetStringAsync(url);
+                var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                App.MVProducto = JsonConvert.DeserializeObject<VMProducto>(obj);
+                //*Empresas
+                url = "http://www.godeliverix.net/api/Empresa/GetObtenerEmpresaCliente?StrParametroBusqueda=Categoria&StrDia=" + Dia + "&UidDireccion=" + Direccion + "&UidBusquedaCategorias="+ categoria +"&StrNombreEmpresa=" + searchFor.Text + "";
+                content = await _client.GetStringAsync(url);
+                obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                App.MVEmpresa = JsonConvert.DeserializeObject<VMEmpresas>(obj);
+
+                //App.MVProducto.buscarProductosEmpresaDesdeCliente("Categoria", Dia, Direccion, new Guid(categoria), searchFor.Text);
+                //App.MVEmpresa.BuscarEmpresaBusquedaCliente("Giro", Dia, Direccion, new Guid(categoria), searchFor.Text);
             }
             else
             //Busqueda por subcategoria
             if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || !string.IsNullOrWhiteSpace(subcategoria)))
             {
-                App.MVProducto.buscarProductosEmpresaDesdeCliente("Subcategoria", Dia, Direccion, new Guid(subcategoria), searchFor.Text);
-                App.MVEmpresa.BuscarEmpresaBusquedaCliente("Giro", Dia, Direccion, new Guid(subcategoria), searchFor.Text);
+                //Conexiones a la webApi
+                //*Productos
+                var url = "http://www.godeliverix.net/api/Producto/GetBuscarProductosCliente?StrParametroBusqueda=Subcategoria&StrDia=" + Dia + "&UidDireccion=" + Direccion + "&UidBusquedaCategorias="+ subcategoria +"&StrNombreEmpresa=" + searchFor.Text + "";
+                string content = await _client.GetStringAsync(url);
+                var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                App.MVProducto = JsonConvert.DeserializeObject<VMProducto>(obj);
+                //*Empresas
+                url = "http://www.godeliverix.net/api/Empresa/GetObtenerEmpresaCliente?StrParametroBusqueda=Subcategoria&StrDia=" + Dia + "&UidDireccion=" + Direccion + "&UidBusquedaCategorias="+ subcategoria +"&StrNombreEmpresa=" + searchFor.Text + "";
+                content = await _client.GetStringAsync(url);
+                obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                App.MVEmpresa = JsonConvert.DeserializeObject<VMEmpresas>(obj);
+
+                //App.MVProducto.buscarProductosEmpresaDesdeCliente("Subcategoria", Dia, Direccion, new Guid(subcategoria), searchFor.Text);
+                //App.MVEmpresa.BuscarEmpresaBusquedaCliente("Giro", Dia, Direccion, new Guid(subcategoria), searchFor.Text);
             }
             if (App.buscarPor == "Productos")
             {
@@ -159,21 +188,21 @@ namespace AppCliente
                 ScrollView_Productos.IsVisible = true;
 
                 MyListViewBusquedaProductosHome.ItemsSource = null;
-                if (App.MVProducto.ListaDeProductos.Count > 10)
-                {
-                    MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.MVProducto.ListaDeProductos.GetRange(0, 10);
-                    CantidadProductosMostrados = 10;
-                    lbCantidad.Text = "1-10/" + App.MVProducto.ListaDeProductos.Count;
-                    btnAtras.IsEnabled = false;
-                }
-                else
-                {
-                    MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.MVProducto.ListaDeProductos;
-                    CantidadProductosMostrados = AppCliente.App.MVProducto.ListaDeProductos.Count;
-                    lbCantidad.Text = "1-" + App.MVProducto.ListaDeProductos.Count + "/" + App.MVProducto.ListaDeProductos.Count;
-                    btnAtras.IsVisible = false;
-                    btnAdelante.IsVisible = false;
-                }
+                //if (App.MVProducto.ListaDeProductos.Count > 10)
+                //{
+                //    MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.MVProducto.ListaDeProductos.GetRange(0, 10);
+                //    CantidadProductosMostrados = 10;
+                //    lbCantidad.Text = "1-10/" + App.MVProducto.ListaDeProductos.Count;
+                //    //btnAtras.IsEnabled = false;
+                //}
+                //else
+                //{
+                MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.MVProducto.ListaDeProductos;
+                CantidadProductosMostrados = AppCliente.App.MVProducto.ListaDeProductos.Count;
+                lbCantidad.Text = "1-" + App.MVProducto.ListaDeProductos.Count + "/" + App.MVProducto.ListaDeProductos.Count;
+                //btnAtras.IsVisible = false;
+                //btnAdelante.IsVisible = false;
+                //}
 
                 MyListViewBusquedaEmpresas.ItemsSource = null;
 
@@ -467,7 +496,7 @@ namespace AppCliente
 
         private void ButtonCambiarBusqEmpresadaProducto_Clicked(object sender, EventArgs e)
         {
-            App.buscarPor="Empresas";
+            App.buscarPor = "Empresas";
             ScrollView_Empresas.IsVisible = true;
             ScrollView_Productos.IsVisible = false;
             btnEmpresa.TextColor = Color.Red;
@@ -481,60 +510,62 @@ namespace AppCliente
         }
 
 
-        private void BtnAtras_Clicked(object sender, EventArgs e)
-        {
-            if (CantidadProductosMostrados > 0)
-            {
-                int mod = CantidadProductosMostrados % 10;
-                if (mod == 0)
-                {
-                    if (CantidadProductosMostrados > 10)
-                    {
-                        lbCantidad.Text = ((CantidadProductosMostrados - (20)) + 1) + "-" + (CantidadProductosMostrados - 10) + "/" + App.MVProducto.ListaDeProductos.Count;
-                        MyListViewBusquedaProductosHome.ItemsSource = null;
-                        MyListViewBusquedaProductosHome.ItemsSource = App.MVProducto.ListaDeProductos.GetRange((CantidadProductosMostrados - (20)), 10);
-                        CantidadProductosMostrados = CantidadProductosMostrados - (10);
-                    }
-                }
-                else
-                {
-                    lbCantidad.Text = (CantidadProductosMostrados - (9 + mod)) + "-" + (CantidadProductosMostrados - mod) + "/" + App.MVProducto.ListaDeProductos.Count;
-                    MyListViewBusquedaProductosHome.ItemsSource = null;
-                    MyListViewBusquedaProductosHome.ItemsSource = App.MVProducto.ListaDeProductos.GetRange((CantidadProductosMostrados - (10 + mod)), 10);
-                    CantidadProductosMostrados = CantidadProductosMostrados - (mod);
-                }
-            }
-            else
-            {
+        
 
-            }
-        }
+        //private void BtnAtras_Clicked(object sender, EventArgs e)
+        //{
+        //    if (CantidadProductosMostrados > 0)
+        //    {
+        //        int mod = CantidadProductosMostrados % 10;
+        //        if (mod == 0)
+        //        {
+        //            if (CantidadProductosMostrados > 10)
+        //            {
+        //                lbCantidad.Text = ((CantidadProductosMostrados - (20)) + 1) + "-" + (CantidadProductosMostrados - 10) + "/" + App.MVProducto.ListaDeProductos.Count;
+        //                MyListViewBusquedaProductosHome.ItemsSource = null;
+        //                MyListViewBusquedaProductosHome.ItemsSource = App.MVProducto.ListaDeProductos.GetRange((CantidadProductosMostrados - (20)), 10);
+        //                CantidadProductosMostrados = CantidadProductosMostrados - (10);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            lbCantidad.Text = (CantidadProductosMostrados - (9 + mod)) + "-" + (CantidadProductosMostrados - mod) + "/" + App.MVProducto.ListaDeProductos.Count;
+        //            MyListViewBusquedaProductosHome.ItemsSource = null;
+        //            MyListViewBusquedaProductosHome.ItemsSource = App.MVProducto.ListaDeProductos.GetRange((CantidadProductosMostrados - (10 + mod)), 10);
+        //            CantidadProductosMostrados = CantidadProductosMostrados - (mod);
+        //        }
+        //    }
+        //    else
+        //    {
 
-        private void BtnAdelante_Clicked(object sender, EventArgs e)
-        {
-            if (AppCliente.App.MVProducto.ListaDeProductos.Count > CantidadProductosMostrados)
-            {
-                if (App.MVProducto.ListaDeProductos.Count >= (CantidadProductosMostrados + 10))
-                {
-                    lbCantidad.Text = (CantidadProductosMostrados + 1) + "-" + (CantidadProductosMostrados + 10) + "/" + App.MVProducto.ListaDeProductos.Count;
-                    MyListViewBusquedaProductosHome.ItemsSource = null;
-                    MyListViewBusquedaProductosHome.ItemsSource = App.MVProducto.ListaDeProductos.GetRange(CantidadProductosMostrados, 10);
-                    CantidadProductosMostrados = CantidadProductosMostrados + 10;
-                }
-                else
-                {
-                    lbCantidad.Text = CantidadProductosMostrados + "-" + App.MVProducto.ListaDeProductos.Count + "/" + App.MVProducto.ListaDeProductos.Count;
-                    MyListViewBusquedaProductosHome.ItemsSource = null;
-                    int posicion = CantidadProductosMostrados;
-                    int cantidad = App.MVProducto.ListaDeProductos.Count - CantidadProductosMostrados;
-                    MyListViewBusquedaProductosHome.ItemsSource = App.MVProducto.ListaDeProductos.GetRange(posicion, cantidad);
-                    CantidadProductosMostrados = App.MVProducto.ListaDeProductos.Count;
-                }
-            }
-            else
-            {
+        //    }
+        //}
 
-            }
-        }
+        //private void BtnAdelante_Clicked(object sender, EventArgs e)
+        //{
+        //    if (AppCliente.App.MVProducto.ListaDeProductos.Count > CantidadProductosMostrados)
+        //    {
+        //        if (App.MVProducto.ListaDeProductos.Count >= (CantidadProductosMostrados + 10))
+        //        {
+        //            lbCantidad.Text = (CantidadProductosMostrados + 1) + "-" + (CantidadProductosMostrados + 10) + "/" + App.MVProducto.ListaDeProductos.Count;
+        //            MyListViewBusquedaProductosHome.ItemsSource = null;
+        //            MyListViewBusquedaProductosHome.ItemsSource = App.MVProducto.ListaDeProductos.GetRange(CantidadProductosMostrados, 10);
+        //            CantidadProductosMostrados = CantidadProductosMostrados + 10;
+        //        }
+        //        else
+        //        {
+        //            lbCantidad.Text = CantidadProductosMostrados + "-" + App.MVProducto.ListaDeProductos.Count + "/" + App.MVProducto.ListaDeProductos.Count;
+        //            MyListViewBusquedaProductosHome.ItemsSource = null;
+        //            int posicion = CantidadProductosMostrados;
+        //            int cantidad = App.MVProducto.ListaDeProductos.Count - CantidadProductosMostrados;
+        //            MyListViewBusquedaProductosHome.ItemsSource = App.MVProducto.ListaDeProductos.GetRange(posicion, cantidad);
+        //            CantidadProductosMostrados = App.MVProducto.ListaDeProductos.Count;
+        //        }
+        //    }
+        //    else
+        //    {
+
+        //    }
+        //}
     }
 }

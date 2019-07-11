@@ -49,8 +49,16 @@ namespace WebApplication1.Controllers
         //    //return Respuesta;
 
         //}
-        public ResponseHelper GetGuardarUsuario(string UidUsuario, string Nombre, string ApellidoPaterno, string ApellidoMaterno, string usuario, string password, string fnacimiento, string perfil, string estatus, string TIPODEUSUARIO, string UidEmpresa, string UidSucursal)
+        public ResponseHelper GetGuardarUsuario(string UidUsuario, string perfil, string Nombre = "", string ApellidoPaterno = "", string ApellidoMaterno = "", string usuario = "", string password = "", string fnacimiento = "",  string estatus = "", string TIPODEUSUARIO = "", string UidEmpresa = "", string UidSucursal = "")
         {
+            if (string.IsNullOrEmpty(UidEmpresa))
+            {
+                UidEmpresa = Guid.Empty.ToString();
+            }
+            if (string.IsNullOrEmpty(UidSucursal))
+            {
+                UidSucursal = Guid.Empty.ToString();
+            }
             MVUsuario = new VMUsuarios();
             MVUsuario.GuardaUsuario(new Guid(UidUsuario), Nombre, ApellidoPaterno, ApellidoMaterno, usuario, password, fnacimiento, perfil, estatus, TIPODEUSUARIO, new Guid(UidEmpresa), new Guid(UidSucursal));
 
@@ -96,18 +104,25 @@ namespace WebApplication1.Controllers
 
         public void GetActualizarUsuario(
             string UidUsuario,
-            string Nombre,
-            string ApellidoPaterno, 
-            string ApellidoMaterno, 
-            string usuario, 
-            string password, 
-            string fnacimiento, 
-            string perfil, 
-            string estatus,
-            string UidEmpresa, 
-            string UidSucursal)
+            string perfil,
+            string Nombre = "",
+            string ApellidoPaterno = "", 
+            string ApellidoMaterno = "", 
+            string usuario = "", 
+            string password = "", 
+            string fnacimiento = "",              
+            string estatus = "",
+            string UidEmpresa = "", 
+            string UidSucursal = "")
         {
-
+            if (string.IsNullOrEmpty(UidEmpresa))
+            {
+                UidEmpresa = Guid.Empty.ToString();
+            }
+            if (string.IsNullOrEmpty(UidSucursal))
+            {
+                UidSucursal = Guid.Empty.ToString();
+            }
             VMUsuarios MVUsuarios = new VMUsuarios();
             MVUsuarios.ActualizarUsuario(
                 UidUsuario: new Guid(UidUsuario),

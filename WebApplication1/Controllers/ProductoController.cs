@@ -21,7 +21,7 @@ namespace WebApplication1.Controllers
             MVProducto.buscarProductosEmpresaDesdeCliente(StrParametroBusqueda, StrDia, UidDireccion, UidBusquedaCategorias, StrNombreEmpresa);
             
             Respuesta = new ResponseHelper();
-            Respuesta.Data = MVProducto.ListaDeProductos;
+            Respuesta.Data = MVProducto;
             Respuesta.Status = true;
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;

@@ -1,8 +1,10 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Repartidores_GoDeliverix.Helpers;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Net.Http;
 using System.Windows.Input;
 using VistaDelModelo;
@@ -14,6 +16,7 @@ namespace Repartidores_GoDeliverix.VM
         string UrlApi = "http://www.godeliverix.net/api/";
         string url = "";
         HttpClient _WebApiGoDeliverix = new HttpClient();
+
         /// <summary>
         /// Atributos para el popup de los ajustes generales
         /// </summary>
@@ -183,6 +186,7 @@ namespace Repartidores_GoDeliverix.VM
             IsLoading = true;
             var AppInstance = MainViewModel.GetInstance();
             UidUsuario = AppInstance.Session_.UidUsuario;
+            _WebApiGoDeliverix.BaseAddress = new Uri(UrlApi);
             //Declaracion de las vistas del modelo 
             VMUsuarios MVUsuario = new VMUsuarios();
             VMCorreoElectronico MVCorreoElectronico = new VMCorreoElectronico();
@@ -190,34 +194,67 @@ namespace Repartidores_GoDeliverix.VM
             VMDireccion MVDireccion = new VMDireccion();
             //Obtiene los datos
 
-            url = UrlApi + "Usuario/GetBuscarUsuarios?UidUsuario=" + UidUsuario + "&UIDPERFIL=DFC29662-0259-4F6F-90EA-B24E39BE4346";
+            url = "Usuario/GetBuscarUsuarios?UidUsuario=" + UidUsuario + "&UIDPERFIL=DFC29662-0259-4F6F-90EA-B24E39BE4346";
             string content = await _WebApiGoDeliverix.GetStringAsync(url);
             var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
             MVUsuario = JsonConvert.DeserializeObject<VMUsuarios>(obj);
 
 
             //MVUsuario.BusquedaDeUsuario(UidUsuario: UidUsuario, UIDPERFIL: new Guid("DFC29662-0259-4F6F-90EA-B24E39BE4346"));
-
-            url = UrlApi + "CorreoElectronico/GetBuscarCorreo?UidPropietario=" + UidUsuario + "&strParametroDebusqueda=Usuario";
-            content = await _WebApiGoDeliverix.GetStringAsync(url);
-            obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+            url = "CorreoElectronico/GetBuscarCorreo?UidPropietario=" + UidUsuario + "&strParametroDebusqueda=Usuario";
+            var contenido = await _WebApiGoDeliverix.GetStringAsync(url);
+            obj = JsonConvert.DeserializeObject<ResponseHelper>(contenido).Data.ToString();
             MVCorreoElectronico = JsonConvert.DeserializeObject<VMCorreoElectronico>(obj);
 
             //MVCorreoElectronico.BuscarCorreos(UidPropietario: MVUsuario.Uid, strParametroDebusqueda: "Usuario");
 
+            url = "Telefono/GetBuscarTelefonos?UidPropietario=" + UidUsuario + "&ParadetroDeBusqueda=Usuario";
+            var cont = await _WebApiGoDeliverix.GetStringAsync(url);
 
-            url = UrlApi + "Telefono/GetBuscarTelefonos?UidPropietario=" + UidUsuario + "&strParametroDebusqueda=Usuario";
-            content = await _WebApiGoDeliverix.GetStringAsync(url);
-            obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-            MVCorreoElectronico = JsonConvert.DeserializeObject<VMCorreoElectronico>(obj);
+            var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(cont).Data.ToString();
+            MVTelefono = JsonConvert.DeserializeObject<VMTelefono>(DatosGiros);
+
+
+            //JArray blogPostArray = JArray.Parse(DatosGiros.ToString());
+
+            //MVTelefono.ListaDeTelefonos = blogPostArray.Select(p => new VMTelefono
+            //{
+            //    ID = new Guid(p["ID"].ToString()),
+            //    UidTipo = new Guid(p["UidTipo"].ToString()),
+            //    NUMERO = p["NUMERO"].ToString(),
+            //    StrNombreTipoDeTelefono = p["StrNombreTipoDeTelefono"].ToString(),
+            //    Estado = bool.Parse(p["Estado"].ToString())
+            //}).ToList();
 
             // MVTelefono.BuscarTelefonos(UidPropietario: UidUsuario, ParadetroDeBusqueda: "Usuario");
 
 
-            url = UrlApi + "Direccion/GetObtenerDireccionUsuario?UidUsuario=" + UidUsuario + "";
-            content = await _WebApiGoDeliverix.GetStringAsync(url);
-            obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-            MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
+            url = "Direccion/GetObtenerDireccionUsuario?UidUsuario=" + UidUsuario + "";
+            var c = await _WebApiGoDeliverix.GetStringAsync(url);
+
+            DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(c).Data.ToString();
+            MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(DatosGiros);
+
+            //var blogPostArray = JArray.Parse(DatosGiros.ToString());
+
+            //MVDireccion.ListaDIRECCIONES = blogPostArray.Select(p => new VMDireccion
+            //{
+            //    ID = new Guid(p["ID"].ToString()),
+            //    PAIS = p["PAIS"].ToString(),
+            //    ESTADO = p["ESTADO"].ToString(),
+            //    MUNICIPIO = p["MUNICIPIO"].ToString(),
+            //    CIUDAD = p["CIUDAD"].ToString(),
+            //    COLONIA = p["COLONIA"].ToString(),
+            //    CALLE0 = p["CALLE0"].ToString(),
+            //    CALLE1 = p["CALLE1"].ToString(),
+            //    CALLE2 = p["CALLE2"].ToString(),
+            //    MANZANA = p["MANZANA"].ToString(),
+            //    LOTE = p["LOTE"].ToString(),
+            //    CodigoPostal = p["CodigoPostal"].ToString(),
+            //    REFERENCIA = p["REFERENCIA"].ToString(),
+            //    IDENTIFICADOR = p["IDENTIFICADOR"].ToString()
+            //}).ToList();
+
 
             //MVDireccion.ObtenerDireccionesUsuario(UidUsuario.ToString());
             //Asignacion de variables locales

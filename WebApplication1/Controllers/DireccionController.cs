@@ -64,7 +64,7 @@ namespace WebApplication1.Controllers
             MVDireccion.ObtenerDireccionesUsuario(UidUsuario);
 
             Respuesta = new ResponseHelper();
-            Respuesta.Data = MVDireccion.ListaDIRECCIONES;
+            Respuesta.Data = MVDireccion;
             Respuesta.Status = true;
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;

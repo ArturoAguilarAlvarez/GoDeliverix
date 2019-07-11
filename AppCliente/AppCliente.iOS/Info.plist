@@ -21,7 +21,7 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>CFBundleDisplayName</key>
-	<string>AppCliente</string>
+	<string>GoDeliverix</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.companyname.AppCliente</string>
 	<key>CFBundleVersion</key>

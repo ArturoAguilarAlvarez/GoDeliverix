@@ -21,6 +21,7 @@
         <StackLayout  x:Name="pnlContenido" BackgroundColor="MediumPurple"  Padding="10,10,10,10">
             <Label x:Name="lblCodigo" Text="{Binding StrCodigo,Mode=TwoWay}" IsVisible="False"></Label>
             <Button Text="Detalles de sucursal" Command="{Binding ShowInfoOrder}" HorizontalOptions="FillAndExpand" x:Name="btnDetalles" Clicked="BtnDetalles_Clicked"></Button>
+            <Button Text="Ver orden" Command="{Binding ShowOrder}" HorizontalOptions="FillAndExpand"  ></Button>
             <Label Text="muestra el codigo para recibir la orden" TextColor="White" HorizontalOptions="Center" FontSize="Large"></Label>
             
 

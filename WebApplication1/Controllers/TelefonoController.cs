@@ -51,11 +51,11 @@ namespace WebApplication1.Controllers
         /// <param name="Numero"></param>
         /// <param name="UidTipoDeTelefono"></param>
         /// <returns></returns>
-        public ResponseHelper GetActualizaTelefonoApi( Guid UidTelefono, string Numero, string UidTipoDeTelefono)
+        public ResponseHelper GetActualizaTelefonoApi(Guid UidTelefono, string Numero, string UidTipoDeTelefono)
         {
             Respuesta = new ResponseHelper();
             MVTelefono = new VMTelefono();
-            MVTelefono.ActualizaTelefonoWepApi( UidTelefono, Numero, UidTipoDeTelefono);
+            MVTelefono.ActualizaTelefonoWepApi(UidTelefono, Numero, UidTipoDeTelefono);
             Respuesta.Status = true;
             Respuesta.Message = "Informacion agregada satisfactoriamente";
             return Respuesta;
@@ -81,8 +81,10 @@ namespace WebApplication1.Controllers
             {
                 UidTelefono = Guid.Empty.ToString();
             }
-            MVTelefono.BuscarTelefonos(new Guid(UidPropietario) , ParadetroDeBusqueda,new Guid(UidTelefono)  , strTelefono);
-            Respuesta.Data = MVTelefono.ListaDeTelefonos;
+            MVTelefono.BuscarTelefonos(new Guid(UidPropietario), ParadetroDeBusqueda, new Guid(UidTelefono), strTelefono);
+
+            Respuesta.Data = MVTelefono;
+
             Respuesta.Status = true;
             Respuesta.Message = "Informacion agregada satisfactoriamente";
             return Respuesta;

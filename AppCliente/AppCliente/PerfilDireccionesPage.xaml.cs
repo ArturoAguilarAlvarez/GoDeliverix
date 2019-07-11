@@ -1,7 +1,10 @@
-﻿using System;
+﻿using AppCliente.WebApi;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using VistaDelModelo;
@@ -27,7 +30,7 @@ namespace AppCliente
         double Latitud1 = 0;
         Button Button;
         Label IDDireccionBusqueda;
-
+        HttpClient _WebApiGoDeliverix = new HttpClient();
         public PerfilDireccionesPage()
         {
             InitializeComponent();
@@ -207,7 +210,7 @@ namespace AppCliente
             PanelListView.IsVisible = false;
         }
 
-        private void BtnGuardarEditar_Clicked(object sender, EventArgs e)
+        private async void BtnGuardarEditar_Clicked(object sender, EventArgs e)
         {
             PanelDatos.IsVisible = false;
             btnNuevo.IsVisible = true;
@@ -228,27 +231,37 @@ namespace AppCliente
 
             string NOMBRECOLONIA = AppCliente.App.MVDireccion.ObtenerNombreDeLaColonia(UidColonia.ToString());
 
-
+            string url = string.Empty;
 
             string NOMBRECIUDAD = AppCliente.App.MVDireccion.ObtenerNombreDeLaCiudad(UidCiudad.ToString());
 
             if (txtID.Text != string.Empty && txtID.Text != null)
             {
-                AppCliente.App.MVDireccion.ActualizaListaDireccion(txtID.Text, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, txtCalle.Text, txtEntreCalle.Text, txtYCalle.Text, txtManzana.Text, txtLote.Text, txtCodigoPostal.Text, txtReferencia.Text, txtIdentificador.Text, NOMBRECIUDAD, NOMBRECOLONIA, Latitud1.ToString(), Longitud1.ToString());
+                url = "http://www.godeliverix.net/api/Direccion/GetActualizarDireccion?UidPais=" + UidPais + "&UidEstado=" + UidEstado + "&UidMunicipio=" + UidMunicipio + "&UidCiudad=" + UidCiudad + "&UidColonia=" + UidColonia + "&CallePrincipal=" + txtCalle.Text + "&CalleAux1=" + txtEntreCalle.Text + "&CalleAux2=" + txtYCalle.Text + "&Manzana=" + txtManzana.Text + "&Lote=" + txtLote.Text + "&CodigoPostal=" + txtCodigoPostal.Text + "&Referencia=" + txtReferencia.Text + "&NOMBRECIUDAD=S&NOMBRECOLONIA=S&Identificador=" + txtIdentificador.Text + "&Latitud=0&Longitud=0&UidDireccion=" + txtID.Text + "";
+
+                // AppCliente.App.MVDireccion.ActualizaListaDireccion(txtID.Text, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, txtCalle.Text, txtEntreCalle.Text, txtYCalle.Text, txtManzana.Text, txtLote.Text, txtCodigoPostal.Text, txtReferencia.Text, txtIdentificador.Text, NOMBRECIUDAD, NOMBRECOLONIA, Latitud1.ToString(), Longitud1.ToString());
             }
             else
             {
-                AppCliente.App.MVDireccion.AgregaDireccionALista(UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, txtCalle.Text, txtEntreCalle.Text, txtYCalle.Text, txtManzana.Text, txtLote.Text, txtCodigoPostal.Text, txtReferencia.Text, NOMBRECIUDAD, NOMBRECOLONIA, txtIdentificador.Text, Latitud.ToString(), Longitud.ToString());
+                url = "http://www.godeliverix.net/api/Direccion/GetGuardarDireccion?UidUsuario=" + AppCliente.App.Global1 + "&UidPais=" + UidPais + "&UidEstado=" + UidEstado + "&UidMunicipio=" + UidMunicipio + "&UidCiudad=" + UidCiudad + "&UidColonia=" + UidColonia + "&CallePrincipal=" + txtCalle.Text + "&CalleAux1=" + txtEntreCalle.Text + "&CalleAux2=" + txtYCalle.Text + "&Manzana=" + txtManzana.Text + "&Lote=" + txtLote.Text + "&CodigoPostal=" + txtCodigoPostal.Text + "&Referencia=" + txtReferencia.Text + "&NOMBRECIUDAD=S&NOMBRECOLONIA=S&Identificador=" + txtIdentificador.Text + "&Latitud=0&Longitud=0";
+
+                //AppCliente.App.MVDireccion.AgregaDireccionALista(UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, txtCalle.Text, txtEntreCalle.Text, txtYCalle.Text, txtManzana.Text, txtLote.Text, txtCodigoPostal.Text, txtReferencia.Text, NOMBRECIUDAD, NOMBRECOLONIA, txtIdentificador.Text, Latitud.ToString(), Longitud.ToString());
             }
 
-            AppCliente.App.MVDireccion.GuardaListaDeDirecciones(AppCliente.App.MVDireccion.ListaDIRECCIONES, new Guid(AppCliente.App.Global1), "asp_AgregaDireccionUsuario", "Usuario");
+            await _WebApiGoDeliverix.GetAsync(url);
+            //AppCliente.App.MVDireccion.GuardaListaDeDirecciones(AppCliente.App.MVDireccion.ListaDIRECCIONES, new Guid(AppCliente.App.Global1), "asp_AgregaDireccionUsuario", "Usuario");
 
             //for (int i = 0; i < AppCliente.App.MVDireccion.ListaDIRECCIONES.Count; i++)
             //{
             //    Guid guid = Guid.NewGuid();
             //   AppCliente.App.MVUbicacion.GuardaUbicacionDireccion(AppCliente.App.MVDireccion.ListaDIRECCIONES[i].ID, guid, Latitud.ToString(), Longitud.ToString());
             //}
-            AppCliente.App.MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
+            url = ("http://www.godeliverix.net/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + AppCliente.App.Global1);
+            var strDirecciones = await _WebApiGoDeliverix.GetStringAsync(url);
+            var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
+            App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
+
+            // AppCliente.App.MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
             MyListViewDirecciones.ItemsSource = null;
 
             MyListViewDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;
@@ -557,10 +570,18 @@ namespace AppCliente
 
                     int index = AppCliente.App.MVDireccion.ListaDIRECCIONES.FindIndex(x => x.ID == Gui);
                     //int index = MVTelefono.ListaDeTelefonos.FindIndex(x => x.ID == Gui);
-                    AppCliente.App.MVDireccion.QuitaDireeccionDeLista(txtIDDireccionn.Text);
-                    AppCliente.App.MVDireccion.EliminaDireccionUsuario(txtIDDireccionn.Text);
+                    //AppCliente.App.MVDireccion.QuitaDireeccionDeLista(txtIDDireccionn.Text);
+                    //AppCliente.App.MVDireccion.EliminaDireccionUsuario(txtIDDireccionn.Text);
 
-                    AppCliente.App.MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
+                    var tex = ("http://www.godeliverix.net/api/Direccion/DeleteDireccionUsuario?UidDireccion=" + txtIDDireccionn.Text);
+                    string strDirecciones = await _WebApiGoDeliverix.GetStringAsync(tex);
+
+                    tex = ("http://www.godeliverix.net/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + AppCliente.App.Global1);
+                    strDirecciones = await _WebApiGoDeliverix.GetStringAsync(tex);
+                    var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
+                    App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
+
+                    //AppCliente.App.MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
                     MyListViewDirecciones.ItemsSource = null;
                     MyListViewDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;
                     txtIDDireccionn.Text = "0";

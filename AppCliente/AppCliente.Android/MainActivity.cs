@@ -10,7 +10,7 @@ using ImageCircle.Forms.Plugin.Droid;
 
 namespace AppCliente.Droid
 {
-    [Activity(Label = "AppCliente", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,  ScreenOrientation = ScreenOrientation.Portrait)]
+    [Activity(Label = "GoDeliverix", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,  ScreenOrientation = ScreenOrientation.Portrait)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)

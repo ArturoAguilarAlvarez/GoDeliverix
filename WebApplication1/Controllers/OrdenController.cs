@@ -249,7 +249,7 @@ namespace WebApplication1.Controllers
         {
             VMOrden MVOrden = new VMOrden();
             Respuesta = new ResponseHelper();
-            MVOrden.AgregaEstatusALaOrden(new Guid("c412d367-7d05-45d8-aeca-b8fabbf129d9"), UidOrden: new Guid(Uidorden), UidLicencia: new Guid(Licencia), StrParametro: "S");
+            Respuesta.Data = MVOrden.AgregaEstatusALaOrden(new Guid("c412d367-7d05-45d8-aeca-b8fabbf129d9"), UidOrden: new Guid(Uidorden), UidLicencia: new Guid(Licencia), StrParametro: "S");
             return Respuesta;
         }
 

@@ -124,10 +124,11 @@ namespace Repartidores_GoDeliverix.Views
             if (Device.RuntimePlatform == Device.iOS)
             {
                 //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
-                Device.OpenUri(new Uri("http://maps.apple.com/?q=" + lblUbicacionSucursal.Text + ""));
+                Device.OpenUri(new Uri("comgooglemaps://?center=" + lblUbicacionSucursal.Text + "&zoom=14&views=traffic"));
             }
             else if (Device.RuntimePlatform == Device.Android)
             {
+                Device.OpenUri(new Uri("geo:0,0?q=" + lblUbicacionSucursal.Text+""));
                 // opens the Maps app directly
                 // Device.OpenUri(new Uri("geo:" + location.Latitude + "," + location.Longitude + ""));
             }
@@ -139,12 +140,12 @@ namespace Repartidores_GoDeliverix.Views
             if (Device.RuntimePlatform == Device.iOS)
             {
                 //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
-                Device.OpenUri(new Uri("http://maps.apple.com/?q=" + lblUbicacionSucursal.Text + ""));
+                Device.OpenUri(new Uri("comgooglemaps://?center=" + lblUbicacionSucursal.Text + "&zoom=14&views=traffic"));
             }
             else if (Device.RuntimePlatform == Device.Android)
             {
                 // opens the Maps app directly
-                Device.OpenUri(new Uri("geo:0,0?q=" + lblUbicacionSucursal.Text + ""));
+                Device.OpenUri(new Uri("geo:0,0?saddr=" + lblUbicacionSucursal.Text + ""));
             }
         }
 
@@ -155,7 +156,7 @@ namespace Repartidores_GoDeliverix.Views
             if (Device.RuntimePlatform == Device.iOS)
             {
                 //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
-                Device.OpenUri(new Uri("http://maps.apple.com/?q=" + lblUbicacionCliente.Text + ""));
+                Device.OpenUri(new Uri("comgooglemaps://?center=" + lblUbicacionCliente.Text + "&zoom=14&views=traffic"));
             }
             else if (Device.RuntimePlatform == Device.Android)
             {

@@ -10,7 +10,7 @@ using Android.OS;
 namespace AppPuestoTacos.Droid
 {
     //[Activity(Label = "AppPuestoTacos", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
-    [Activity(Label = "AppSucursal", Icon = "@mipmap/icon", MainLauncher = true, Theme = "@style/MainTheme", ScreenOrientation = ScreenOrientation.Landscape)]
+    [Activity(Label = "GoDeliverix_Suministadora", Icon = "@mipmap/icon", MainLauncher = true, Theme = "@style/MainTheme", ScreenOrientation = ScreenOrientation.Landscape)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)

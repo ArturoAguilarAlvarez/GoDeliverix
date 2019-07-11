@@ -10,6 +10,7 @@ using Xamarin.Forms.Xaml;
 using VistaDelModelo;
 using AppCliente.WebApi;
 using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace AppCliente
 {
@@ -21,6 +22,7 @@ namespace AppCliente
         VMCorreoElectronico MVCorreoElectronico;
         VMDireccion MVDireccion = new VMDireccion();
         VMTelefono MVTelefono;
+        HttpClient _client = new HttpClient();
 
         string usuario;
         string contraseña;
@@ -69,8 +71,15 @@ namespace AppCliente
                     MVTelefono = new VMTelefono();
                     MVCorreoElectronico = new VMCorreoElectronico();
                     MVTelefono = new VMTelefono();
+                    _client.BaseAddress = new Uri("http://www.godeliverix.net/api/");
                     MVTelefono.AgregaTelefonoALista("f7bdd1d0-28e5-4f52-bc26-a17cd5c297de", telefono, "Principal");
-                    if (MVCorreoElectronico.AgregarCorreo(uidusuaro, "Usuario", correo, uidcorreo))
+
+                    string url = "CorreoElectronico/GetAgregarCorreo?UidPropietario="+ uidusuaro + "&strParametroDeInsercion=Usuario&strCorreoElectronico="+ correo + "&UidCorreoElectronico="+ uidcorreo + "";
+                    string content = await _client.GetStringAsync(url);
+                    var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                    bool respuesta = bool.Parse(obj.ToString());
+
+                    if (respuesta)
                     {
                         MVAcceso.CorreoDeConfirmacion(uidusuaro, correo, usuario, contraseña, nombre, apellidoM + " " + apellidoM);
 
@@ -79,8 +88,18 @@ namespace AppCliente
                         AppCliente.App.Global1 = uidusuaro.ToString();
                         //MVTelefono.TipoDeTelefonos();
                         //MVTelefono.BuscarTelefonos(UidPropietario: new Guid(AppCliente.App.Global1), ParadetroDeBusqueda: "Usuario");
-                        MVUsuarios.obtenerUsuario(AppCliente.App.Global1);
-                        MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
+
+                        url = "Usuario/GetBuscarUsuarios?UidUsuario=" + uidusuaro + "&UIDPERFIL=4f1e1c4b-3253-4225-9e46-dd7d1940da19";
+                        content = await _client.GetStringAsync(url);
+                        obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                        MVUsuarios = JsonConvert.DeserializeObject<VMUsuarios>(obj);
+                        //MVUsuarios.obtenerUsuario(AppCliente.App.Global1);
+                                               
+                        var tex = ("Direccion/GetObtenerDireccionUsuario?UidUsuario=" + uidusuaro);
+                        string strDirecciones = await _client.GetStringAsync(tex);
+                         obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
+                        MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
+                       // MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
 
                         AppCliente.App.MVDireccion = MVDireccion;
                         AppCliente.App.MVTelefono = MVTelefono;
@@ -92,7 +111,9 @@ namespace AppCliente
                     {
                         if (MVTelefono.ListaDeTelefonos.Count != 0)
                         {
-                            MVTelefono.GuardaTelefono(uidusuaro, "Usuario");
+                            var tex = ("Telefono/GuardaTelefonoWepApi?uidUsuario="+ uidusuaro + "&Parametro=Usuario&UidTelefono="+ MVTelefono.ListaDeTelefonos[0].ID+ "&Numero="+ MVTelefono.ListaDeTelefonos[0].NUMERO+ "&UidTipoDeTelefono=F7BDD1D0-28E5-4F52-BC26-A17CD5C297DE");
+                            string strDirecciones = await _client.GetStringAsync(tex);
+                            //MVTelefono.GuardaTelefono(uidusuaro, "Usuario");
                         }
                     }
                 }

@@ -69,9 +69,9 @@ namespace AppPuestoTacos.View
                 App.MVOrden.BuscarOrdenRepartidor(escaneado, AppPuestoTacos.Helpers.Settings.Licencia);
                 if (escaneado.Length == 36)
                 {
-                    if (App.MVOrden.UidEstatus != null)
+                    if (App.MVOrden.StrEstatusOrdenSucursal != null)
                     {
-                        if (App.MVOrden.UidEstatus.ToString() == "C412D367-7D05-45D8-AECA-B8FABBF129D9".ToLower())
+                        if (App.MVOrden.StrEstatusOrdenSucursal.ToString() == "C412D367-7D05-45D8-AECA-B8FABBF129D9".ToLower())
                         {
                             //await DisplayAlert("", "Orden lista", "ok");
                             await Navigation.PushAsync(new OrdenDescripcionEscaneado(MyListviewOrdenesPorEnviar));
@@ -81,7 +81,7 @@ namespace AppPuestoTacos.View
                             //txtNombreEmpresaScaner.Text = App.MVOrden.StrNombreSucursal;
                             //btnAsignarOrdenRepartidor.IsEnabled = true;
                         }
-                        else if (App.MVOrden.UidEstatus.ToString() == "B6BFC834-7CC4-4E67-817D-5ECB0EB2FFA7".ToLower())
+                        else if (App.MVOrden.StrEstatusOrdenSucursal.ToString() == "B6BFC834-7CC4-4E67-817D-5ECB0EB2FFA7".ToLower())
                         {
                             App.MVOrden.Uidorden = new Guid();
                             await DisplayAlert("", "La orden ya ha sido enviada", "ok");

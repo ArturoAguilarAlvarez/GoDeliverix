@@ -18,10 +18,9 @@ namespace WebApplication1.Controllers
         public ResponseHelper GetObtenerEmpresaCliente(string StrParametroBusqueda, string StrDia, Guid UidDireccion, Guid UidBusquedaCategorias, string StrNombreEmpresa = "")
         {
             MVEmpresa = new VMEmpresas();
-            MVEmpresa.BuscarEmpresaBusquedaCliente(StrParametroBusqueda, StrDia,UidDireccion,UidBusquedaCategorias,StrNombreEmpresa);
-
+            MVEmpresa.BuscarEmpresaBusquedaCliente(StrParametroBusqueda, StrDia, UidDireccion, UidBusquedaCategorias, StrNombreEmpresa);
             Respuesta = new ResponseHelper();
-            Respuesta.Data = MVEmpresa.LISTADEEMPRESAS;
+            Respuesta.Data = MVEmpresa;
             Respuesta.Status = true;
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;
@@ -32,7 +31,7 @@ namespace WebApplication1.Controllers
         public ResponseHelper GetBuscarEmpresas(Guid UidEmpresa = new Guid(), string RazonSocial = "", string NombreComercial = "", string RFC = "", int tipo = 0, int status = 0)
         {
             MVEmpresa = new VMEmpresas();
-            MVEmpresa.BuscarEmpresas(UidEmpresa,RazonSocial,NombreComercial,RFC,tipo,status);
+            MVEmpresa.BuscarEmpresas(UidEmpresa, RazonSocial, NombreComercial, RFC, tipo, status);
 
             Respuesta = new ResponseHelper();
             if (UidEmpresa != Guid.Empty)
@@ -43,18 +42,18 @@ namespace WebApplication1.Controllers
             {
                 Respuesta.Data = MVEmpresa.LISTADEEMPRESAS;
             }
-            
+
             Respuesta.Status = true;
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;
         }
-        
+
         //Busqueda de empresas
         public ResponseHelper GetVerificaEstatusEmpresa(string UidEmpresa)
         {
-            MVEmpresa = new VMEmpresas();            
+            MVEmpresa = new VMEmpresas();
             Respuesta = new ResponseHelper();
-            
+
             Respuesta.Data = MVEmpresa.VerificaEstatusEmpresa(UidEmpresa);
             Respuesta.Status = true;
             Respuesta.Message = "Informacion recibida satisfactoriamente";
@@ -85,7 +84,7 @@ namespace WebApplication1.Controllers
         {
             Respuesta = new ResponseHelper();
             VMUsuarios MVUsuarios = new VMUsuarios();
-            var Guid=MVUsuarios.ObtenerIdEmpresa(Uidusuario);
+            var Guid = MVUsuarios.ObtenerIdEmpresa(Uidusuario);
             Respuesta.Data = Guid;
             return Respuesta;
         }
@@ -103,7 +102,7 @@ namespace WebApplication1.Controllers
         {
             Respuesta = new ResponseHelper();
             VMMensaje MVMensaje = new VMMensaje();
-            MVMensaje.Buscar(strLicencia: Licencia);           
+            MVMensaje.Buscar(strLicencia: Licencia);
             Respuesta.Data = MVMensaje;
             return Respuesta;
         }
