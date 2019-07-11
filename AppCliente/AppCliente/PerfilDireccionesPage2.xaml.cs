@@ -1,6 +1,9 @@
-﻿using System;
+﻿using AppCliente.WebApi;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using VistaDelModelo;
@@ -12,7 +15,9 @@ namespace AppCliente
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class PerfilDireccionesPage2 : ContentPage
 	{
-		public PerfilDireccionesPage2 ()
+        HttpClient _client = new HttpClient();
+
+        public PerfilDireccionesPage2 ()
 		{
 			InitializeComponent ();
 
@@ -86,10 +91,20 @@ namespace AppCliente
                     Guid Gui = new Guid(txtIDDireccionn.Text);
                     int index = AppCliente.App.MVDireccion.ListaDIRECCIONES.FindIndex(x => x.ID == Gui);
                     //int index = MVTelefono.ListaDeTelefonos.FindIndex(x => x.ID == Gui);
-                    AppCliente.App.MVDireccion.QuitaDireeccionDeLista(txtIDDireccionn.Text);
-                    AppCliente.App.MVDireccion.EliminaDireccionUsuario(txtIDDireccionn.Text);
 
-                    AppCliente.App.MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
+
+                    //AppCliente.App.MVDireccion.QuitaDireeccionDeLista(txtIDDireccionn.Text);
+                    //AppCliente.App.MVDireccion.EliminaDireccionUsuario(txtIDDireccionn.Text);
+
+                    var tex = ("http://www.godeliverix.net/api/Direccion/DeleteDireccionUsuario?UidDireccion=" + txtIDDireccionn.Text);
+                    string strDirecciones = await _client.GetStringAsync(tex);
+
+                    tex = ("http://www.godeliverix.net/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + AppCliente.App.Global1);
+                    strDirecciones = await _client.GetStringAsync(tex);
+                    var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
+                    App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
+
+                   // AppCliente.App.MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
                     MyListViewDirecciones.ItemsSource = null;
                     MyListViewDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;
                     txtIDDireccionn.Text = "0";

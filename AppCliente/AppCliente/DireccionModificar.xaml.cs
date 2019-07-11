@@ -1,4 +1,6 @@
-﻿using Plugin.Geolocator.Abstractions;
+﻿using AppCliente.WebApi;
+using Newtonsoft.Json;
+using Plugin.Geolocator.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -340,7 +342,10 @@ namespace AppCliente
                 string _Url = $"http://godeliverix.net/api/Direccion/GetGuardarDireccion?UidUsuario={App.Global1}&UidPais={UidPais}&UidEstado={UidEstado}&UidMunicipio={UidMunicipio}&UidCiudad={UidCiudad}&UidColonia={UidColonia}&CallePrincipal={txtCalle.Text}&CalleAux1={txtEntreCalle.Text}&CalleAux2={txtYCalle.Text}&Manzana={txtManzana.Text}&Lote={txtLote.Text}&CodigoPostal={txtCodigoPostal.Text}&Referencia={txtReferencia.Text}&NOMBRECIUDAD=s&NOMBRECOLONIA=s&Identificador={txtIdentificador.Text}&Latitud={Latitud}&Longitud={Longitud}";
                 var content = await _client.GetAsync(_Url);
 
-
+                _Url = ("http://www.godeliverix.net/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + AppCliente.App.Global1);
+                string strDirecciones = await _client.GetStringAsync(_Url);
+                var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
+                App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
                 //AppCliente.App.MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
 
                 //await Navigation.PopToRootAsync();
