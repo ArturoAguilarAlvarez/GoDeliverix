@@ -1,7 +1,10 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using Newtonsoft.Json;
+using Repartidores_GoDeliverix.Helpers;
 using Repartidores_GoDeliverix.Views.Popup;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Windows.Input;
 using VistaDelModelo;
 using Xamarin.Forms;
@@ -11,6 +14,7 @@ namespace Repartidores_GoDeliverix.VM
     public class VMAjustesTelefono : ControlsController
     {
         #region Propiedades
+        HttpClient _WebApiGoDeliverix = new HttpClient();
         private Guid _UidTelefono;
         public Guid UidTelefono
         {
@@ -57,15 +61,19 @@ namespace Repartidores_GoDeliverix.VM
         #endregion
 
         #region Metodos
-        private void EliminaTelefono()
+        private async void EliminaTelefono()
         {
             var AppInstance = MainViewModel.GetInstance();
             Guid UidUsuario = AppInstance.Session_.UidUsuario;
             VMTelefono MVTelefono = new VMTelefono();
-            MVTelefono.BuscarTelefonos(UidPropietario: UidUsuario, ParadetroDeBusqueda: "Usuario");
-            MVTelefono.QuitaTelefonoDeLista(UidTelefono.ToString());
-            MVTelefono.EliminaTelefonosUsuario(UidUsuario);
-            MVTelefono.GuardaTelefono(UidUsuario, "Usuario");
+            //MVTelefono.BuscarTelefonos(UidPropietario: UidUsuario, ParadetroDeBusqueda: "Usuario");
+
+            string url = "Telefono/DeleteTelefonoUsuario?UidTelefono=" + UidTelefono + "";
+             await _WebApiGoDeliverix.GetStringAsync(url);
+            
+            //MVTelefono.QuitaTelefonoDeLista(UidTelefono.ToString());
+            //MVTelefono.EliminaTelefonosUsuario(UidUsuario);
+            //MVTelefono.GuardaTelefono(UidUsuario, "Usuario");
             AppInstance.MVAjustes.Recargar();
         }
         public async void AgregarTelefono()
@@ -88,7 +96,7 @@ namespace Repartidores_GoDeliverix.VM
             AppInstance.MVAjustesTelefono.UidTelefono = Guid.Empty;
             await Application.Current.MainPage.Navigation.PushAsync(new Ajustes_DetalleTelefono());
         }
-        private void GuardarTelefono()
+        private async void GuardarTelefono()
         {
             var AppInstance = MainViewModel.GetInstance();
             Guid UidUsuario = new Guid();
@@ -98,6 +106,10 @@ namespace Repartidores_GoDeliverix.VM
                 Guid UidTipoDeTelefono = AppInstance.MVAjustesTelefono.LsTipoDeTelefono[intSelectTelefono].UidTipoDeTelefono;
                 string NombreTipoTelfono = AppInstance.MVAjustesTelefono.LsTipoDeTelefono[intSelectTelefono].StrTipoDeTelefono;
                 UidUsuario = AppInstance.Session_.UidUsuario;
+
+                string url = "Telefono/GetGuardaTelefonoApi?uidUsuario="+ UidUsuario + "&Parametro, Guid UidTelefono, string Numero, string UidTipoDeTelefono &UidTelefono=" + UidTelefono + "";
+                await _WebApiGoDeliverix.GetStringAsync(url);
+
                 MVTelefono.BuscarTelefonos(UidPropietario: UidUsuario, ParadetroDeBusqueda: "Usuario");
                 MVTelefono.AgregaTelefonoALista(UidTipoDeTelefono.ToString(), intNumeroTelefono, NombreTipoTelfono);
             }

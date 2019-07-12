@@ -21,6 +21,16 @@ namespace Repartidores_GoDeliverix.VM
         HttpClient _WebApiGoDeliverix = new HttpClient();
         #endregion
 
+        #region Informacion de la sucursal de la orden
+
+        private string _StrEmpresa;
+
+        public string StrEmpresaNombreComercial
+        {
+            get { return _StrEmpresa; }
+            set { SetValue(ref _StrEmpresa, value); }
+        }
+        #endregion
         public string StrUidOrden { get; set; }
         private Guid _UidOrdenTarifario;
 
@@ -42,6 +52,8 @@ namespace Repartidores_GoDeliverix.VM
         //Vistas del modelo
         protected VMOrden MVOrden;
         protected VMDireccion MVDireccion;
+        protected VMSucursales MVSucursal;
+        protected VMEmpresas MVEmpresa;
         protected VMAcceso mVAcceso;
         protected VMUbicacion MVUbicacion;
 
@@ -189,7 +201,7 @@ namespace Repartidores_GoDeliverix.VM
         public string StrUbicacionSucursal
         {
             get { return _UbicacionSucursal; }
-            set { SetValue( ref _UbicacionSucursal, value); }
+            set { SetValue(ref _UbicacionSucursal, value); }
         }
 
         private string _UbicacionCliente;
@@ -197,7 +209,7 @@ namespace Repartidores_GoDeliverix.VM
         public string StrUbicacionCliente
         {
             get { return _UbicacionSucursal; }
-            set { SetValue( ref _UbicacionSucursal, value); }
+            set { SetValue(ref _UbicacionSucursal, value); }
         }
 
         #endregion
@@ -240,7 +252,7 @@ namespace Repartidores_GoDeliverix.VM
             _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
 
 
-            url =  "Profile/GetBitacoraRegistroRepartidores?StrParametro=O&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=A42B2588-D650-4DD9-829D-5978C927E2ED&UidOrdenRepartidor=" + UidordenRepartidor + "";
+            url = "Profile/GetBitacoraRegistroRepartidores?StrParametro=O&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=A42B2588-D650-4DD9-829D-5978C927E2ED&UidOrdenRepartidor=" + UidordenRepartidor + "";
             await _WebApiGoDeliverix.GetAsync(url);
 
             //mVAcceso.BitacoraRegistroRepartidores(char.Parse("O"), AppInstance.Session_.UidUsuario, new Guid("A42B2588-D650-4DD9-829D-5978C927E2ED"), UidOrdenRepartidor: UidordenRepartidor);
@@ -255,7 +267,7 @@ namespace Repartidores_GoDeliverix.VM
             _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
 
             //Obtiene la ubicacion de la sucursal
-            url =  "Ubicacion/GetRecuperaUbicacionSucursal?UidSucursal=" + UidSucursal + "";
+            url = "Ubicacion/GetRecuperaUbicacionSucursal?UidSucursal=" + UidSucursal + "";
             string content = await _WebApiGoDeliverix.GetStringAsync(url);
             var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
             MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
@@ -280,14 +292,14 @@ namespace Repartidores_GoDeliverix.VM
             StrColoniaSucursal = NombreColonia;
 
             //MVDireccion.BuscarDireccionPorUid(UidDireccionDelCliente);
-            
+
             url = "Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionDelCliente + "";
             content = await _WebApiGoDeliverix.GetStringAsync(url);
             obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
             MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
 
             //Obtiene la direccion del usuario
-            url =  "Direccion/GetBuscarDireccion?UidDireccion=" + UidDireccionDelCliente + "";
+            url = "Direccion/GetBuscarDireccion?UidDireccion=" + UidDireccionDelCliente + "";
             content = await _WebApiGoDeliverix.GetStringAsync(url);
             obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
             MVDireccion = JsonConvert.DeserializeObject<VistaDelModelo.VMDireccion>(obj);
@@ -299,7 +311,7 @@ namespace Repartidores_GoDeliverix.VM
             NombreColonia = obj.ToString();
 
 
-           // MVUbicacion.RecuperaUbicacionDireccion(UidDireccionDelCliente);
+            // MVUbicacion.RecuperaUbicacionDireccion(UidDireccionDelCliente);
             StrUbicacionCliente = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
             StrColoniaCliente = NombreColonia;
         }
@@ -315,27 +327,39 @@ namespace Repartidores_GoDeliverix.VM
             _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
 
 
-            url = "Orden/GetObtenerProductosDeOrden?UidOrden="+ StrUidOrden + "";
-           
+            url = "Orden/GetObtenerProductosDeOrden?UidOrden=" + StrUidOrden + "";
+
             string DatosObtenidos = await _WebApiGoDeliverix.GetStringAsync(url);
             var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
+            url = string.Empty;
+            url = "http://www.godeliverix.net/api/Sucursales/GetBuscarSucursales?UidSucursal=" + UidSucursal + "";
+            var content = await _WebApiGoDeliverix.GetStringAsync(url);
+            var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+            MVSucursal = JsonConvert.DeserializeObject<VistaDelModelo.VMSucursales>(obj);
+            StrIdentificadorSucursal = MVSucursal.IDENTIFICADOR;
+            url = string.Empty;
+            url = "http://www.godeliverix.net/api/Empresa/GetBuscarEmpresas?UidEmpresa=" + MVSucursal.UidEmpresa + "";
+            content = await _WebApiGoDeliverix.GetStringAsync(url);
+            obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+            MVEmpresa = JsonConvert.DeserializeObject<VistaDelModelo.VMEmpresas>(obj);
+            StrEmpresaNombreComercial = MVEmpresa.NOMBRECOMERCIAL;
 
             JArray blogPostArray = JArray.Parse(DatosGiros.ToString());
 
 
-            MVOrden.ListaDeProductos = blogPostArray.Select(p =>  new VMOrden()
+            MVOrden.ListaDeProductos = blogPostArray.Select(p => new VMOrden()
             {
                 UidProducto = new Guid(p["UidProducto"].ToString()),
                 UidProductoEnOrden = new Guid(p["UidProductoEnOrden"].ToString()),
                 StrNombreSucursal = p["StrNombreSucursal"].ToString(),
                 StrNombreProducto = p["StrNombreProducto"].ToString(),
                 //Imagen = item["NVchRuta"].ToString(),
-                Imagen =  p["Imagen"].ToString(),
+                Imagen = p["Imagen"].ToString(),
                 intCantidad = int.Parse(p["intCantidad"].ToString()),
                 UidSucursal = new Guid(p["UidSucursal"].ToString()),
                 MTotal = decimal.Parse(p["MTotal"].ToString()),
                 MCostoTarifario = double.Parse(p["MCostoTarifario"].ToString())
-                
+
             }).ToList();
 
 

@@ -4,15 +4,14 @@
              x:Class="Repartidores_GoDeliverix.Views.Popup.Ajustes_FechaDeNacimiento"
                   BindingContext="{Binding VMMain, Source={StaticResource Locator}}">
     <ContentPage.Content>
-        <StackLayout VerticalOptions="Center" HorizontalOptions="FillAndExpand" Padding="20,20,20,20" >
-            <StackLayout BindingContext="{Binding MVAjustes}" Orientation="Vertical" BackgroundColor="#f1f1f1" Padding="10,10,10,10">
-
+        <StackLayout VerticalOptions="Start" HorizontalOptions="FillAndExpand"  >
+            <StackLayout BindingContext="{Binding MVAjustes}" Orientation="Vertical" BackgroundColor="#f1f1f1">
                 <Label FontSize="Large" Text="Fecha de Nacimiento"></Label>
-
                 <DatePicker  Date="{Binding StrFechaDeNacimiento,Mode=TwoWay}"></DatePicker>
-
-                <Button Text="Guardar" FontSize="Large" Clicked="CloseWindowsPopup" Command="{Binding IsSavingBirthday}" TextColor="White"  BackgroundColor="Green"></Button>
-                <Button Text="Cancelar" FontSize="Large" TextColor="White"  BackgroundColor="Red" Clicked="CloseWindowsPopup" ></Button>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                    <Button Text="OK" FontSize="Large" Clicked="CloseWindowsPopup" Command="{Binding IsSavingBirthday}" TextColor="White"  BackgroundColor="Green"></Button>
+                    <Button Text="X" FontSize="Large" TextColor="White"  BackgroundColor="Red" Clicked="CloseWindowsPopup" ></Button>
+                </StackLayout>
             </StackLayout>
         </StackLayout>
 

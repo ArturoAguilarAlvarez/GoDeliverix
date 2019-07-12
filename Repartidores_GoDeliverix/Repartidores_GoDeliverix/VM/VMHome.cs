@@ -366,7 +366,7 @@ namespace Repartidores_GoDeliverix.VM
                 StrUbicacionCliente = string.Empty;
                 StrUbicacionSucursal = string.Empty;
 
-
+                IsLoading = true;
                 url = "Orden/GetBuscarOrdenAsiganadaRepartidor?UidUsuario=" + AppInstance.Session_.UidUsuario + "";
                 string content = await _WebApiGoDeliverix.GetStringAsync(url);
                 var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
@@ -502,6 +502,8 @@ namespace Repartidores_GoDeliverix.VM
                         BlEntrega = false;
                     }
                 }
+
+                IsLoading = false;
             }
             catch (Exception)
             {

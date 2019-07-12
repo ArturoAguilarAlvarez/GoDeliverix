@@ -4,8 +4,8 @@
              x:Class="Repartidores_GoDeliverix.Views.Popup.Ajustes_DetalleDireccion"
              BindingContext="{Binding VMMain, Source={StaticResource Locator}}">
     <ContentPage.Content>
-        <ScrollView VerticalOptions="Center" HorizontalOptions="FillAndExpand" Padding="20,20,20,20" >
-            <StackLayout BindingContext="{Binding vmAjustesDireccion}" Orientation="Vertical" BackgroundColor="#f1f1f1" Padding="10,10,10,10">
+        <ScrollView VerticalOptions="Center" HorizontalOptions="FillAndExpand"  >
+            <StackLayout BindingContext="{Binding vmAjustesDireccion}" Orientation="Vertical" BackgroundColor="#f1f1f1" >
                 <Label Text="Informacion de direccion" HorizontalOptions="CenterAndExpand"></Label>
                 <Label Text="Pais"></Label>
                 <Picker  

@@ -3,9 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              BindingContext="{Binding VMMain, Source={StaticResource Locator}}"
              x:Class="Repartidores_GoDeliverix.Views.Home_NuevaOrden">
-    <ContentPage.Padding>
-        <OnPlatform iOS="10,5,10,10" Android="10,10,10,10"></OnPlatform>
-    </ContentPage.Padding>
+ 
     <Grid HorizontalOptions="Fill" BindingContext="{Binding MVHomeOrden}" VerticalOptions="Fill">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"></RowDefinition>
@@ -13,8 +11,27 @@
             <RowDefinition Height="2*"></RowDefinition>
         </Grid.RowDefinitions>
         <StackLayout   VerticalOptions="Center">
-            <Button Text="{Binding StrIdentificadorSucursal}" Command="{Binding ShowInfoOrder}" HorizontalOptions="Fill" Clicked="Button_Clicked" BackgroundColor="Purple" TextColor="White"  FontSize="Large"></Button>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="5*"></RowDefinition>
+                    <RowDefinition Height="5*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="0">
+                    <Label  Text="Empresa" FontSize="Large"  TextColor="Black"></Label>
+                    <Label  Text="{Binding StrEmpresaNombreComercial}" TextColor="Purple" FontSize="Medium" ></Label>
+                </StackLayout>
+                <StackLayout Orientation="Vertical" Grid.Row="1" HorizontalOptions="Center">
+                    <Label  Text="Numero de orden" FontSize="Large"  TextColor="Black"></Label>
+                    <Label  Text="{Binding LngFolio}" TextColor="Purple" FontSize="Medium" ></Label>
+                </StackLayout>
+                <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="1">
+                    <Label  Text="Sucursal" FontSize="Large" TextColor="Black"></Label>
+                    <Label x:Name="lblSucursal" Text="{Binding StrIdentificadorSucursal}" TextColor="Purple" FontSize="Medium" ></Label>
+                </StackLayout>
+            </Grid>
         </StackLayout>
+        
+        
         <StackLayout Grid.Row="1">
             <Grid >
                 <Grid.RowDefinitions>

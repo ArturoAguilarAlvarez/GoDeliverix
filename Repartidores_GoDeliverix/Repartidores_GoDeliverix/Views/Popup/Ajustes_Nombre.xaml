@@ -5,8 +5,8 @@
                   BindingContext="{Binding VMMain, Source={StaticResource Locator}}">
 
     <ContentPage.Content>
-        <StackLayout VerticalOptions="Center" HorizontalOptions="FillAndExpand" Padding="20,20,20,20" >
-            <StackLayout BindingContext="{Binding MVAjustes}" Orientation="Vertical" BackgroundColor="#f1f1f1" Padding="10,10,10,10">
+        <StackLayout VerticalOptions="Center" HorizontalOptions="FillAndExpand"  >
+            <StackLayout BindingContext="{Binding MVAjustes}" Orientation="Vertical"  >
 
                 <Label Text="Nombre(s)" VerticalTextAlignment="Center"></Label>
                 <Entry  Text="{Binding Path= StrNombre,Mode=TwoWay}" ></Entry>
@@ -16,10 +16,10 @@
 
                 <Label Text="Apellido Materno" VerticalTextAlignment="Center"></Label>
                 <Entry  Text="{Binding Path= StrApellidoMaterno,Mode=TwoWay}"></Entry>
-
-                <Button Text="Guardar" FontSize="Large" TextColor="White" Clicked="CloseWindowsPopup" Command="{Binding IsSavingName}" BackgroundColor="Green"></Button>
-                <Button Text="Cancelar" FontSize="Large" TextColor="White"  BackgroundColor="Red"  Clicked="CloseWindowsPopup"></Button>
-
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                    <Button Text="OK" FontSize="Large" TextColor="White" Clicked="CloseWindowsPopup" Command="{Binding IsSavingName}" BackgroundColor="Green"></Button>
+                    <Button Text="X" FontSize="Large" TextColor="White"  BackgroundColor="Red"  Clicked="CloseWindowsPopup"></Button>
+                </StackLayout>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

@@ -23,21 +23,18 @@
                     <RowDefinition Height="5*"></RowDefinition>
                     <RowDefinition Height="5*"></RowDefinition>
                 </Grid.RowDefinitions>
-
                 <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="0">
                     <Label  Text="Empresa" FontSize="Large"  TextColor="Black"></Label>
                     <Label  Text="{Binding StrEmpresaNombreComercial}" TextColor="Purple" FontSize="Medium" ></Label>
                 </StackLayout>
                 <StackLayout Orientation="Vertical" Grid.Row="1" HorizontalOptions="Center">
                     <Label  Text="Numero de orden" FontSize="Large"  TextColor="Black"></Label>
-                    <Label  Text="{Binding LngFolio}" TextColor="Purple" FontSize="Medium" ></Label>
+                    <Label  Text="" TextColor="Purple" FontSize="Medium" ></Label>
                 </StackLayout>
-
                 <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="1">
                     <Label  Text="Sucursal" FontSize="Large" TextColor="Black"></Label>
                     <Label x:Name="lblSucursal" Text="{Binding StrSucursalIdentificador}" TextColor="Purple" FontSize="Medium" ></Label>
                 </StackLayout>
-                
             </Grid>
             <!--<Button Text="Detalles de sucursal" Command="{Binding ShowInfoOrder}" HorizontalOptions="FillAndExpand" x:Name="btnDetalles" Clicked="BtnDetalles_Clicked"></Button>-->
         </StackLayout>

@@ -4,12 +4,14 @@
              x:Class="Repartidores_GoDeliverix.Views.Popup.Ajustes_CorreoElectronico"
                   BindingContext="{Binding VMMain, Source={StaticResource Locator}}">
     <ContentPage.Content>
-        <StackLayout VerticalOptions="Center" HorizontalOptions="FillAndExpand" Padding="20,20,20,20" >
-            <StackLayout BindingContext="{Binding MVAjustes}" Orientation="Vertical" BackgroundColor="#f1f1f1" Padding="10,10,10,10">
+        <StackLayout VerticalOptions="Center" HorizontalOptions="FillAndExpand"  >
+            <StackLayout BindingContext="{Binding MVAjustes}" Orientation="Vertical" BackgroundColor="#f1f1f1" >
                 <Label FontSize="Large" HorizontalOptions="Center" Text="Correo Electronico"></Label>
                 <Entry Text="{Binding StrCorreoElectronico,Mode=TwoWay}"></Entry>
-                <Button Text="Guardar" FontSize="Large" Clicked="CloseWindowsPopup" Command="{Binding IsSavingMail}" TextColor="White"  BackgroundColor="Green"></Button>
-                <Button Text="Cancelar" FontSize="Large" TextColor="White"  BackgroundColor="Red" Clicked="CloseWindowsPopup" ></Button>
+                <StackLayout Orientation="Horizontal">
+                    <Button Text="OK" FontSize="Large" Clicked="CloseWindowsPopup" Command="{Binding IsSavingMail}" TextColor="White"  BackgroundColor="Green"></Button>
+                    <Button Text="X" FontSize="Large" TextColor="White"  BackgroundColor="Red" Clicked="CloseWindowsPopup" ></Button>
+                </StackLayout>
             </StackLayout>
         </StackLayout>
 

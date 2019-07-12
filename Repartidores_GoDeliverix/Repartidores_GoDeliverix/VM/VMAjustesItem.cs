@@ -30,7 +30,6 @@ namespace Repartidores_GoDeliverix.VM
             switch (this.Titulo)
             {
                 case "Nombre":
-                  
                     await Application.Current.MainPage.Navigation.PushAsync(new Ajustes_Nombre());
                     break;
                 case "Usuario":
@@ -49,7 +48,7 @@ namespace Repartidores_GoDeliverix.VM
                     break;
                 case "Cerrar sesion":
                     _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
-                    string url =  "Profile/GetBitacoraRegistroRepartidores?StrParametro=S&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=AAD35D44-5E65-46B6-964F-CD2DF026ECB1";
+                    string url = "Profile/GetBitacoraRegistroRepartidores?StrParametro=S&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=AAD35D44-5E65-46B6-964F-CD2DF026ECB1";
                     await _WebApiGoDeliverix.GetAsync(url);
                     //MVAcceso.BitacoraRegistroRepartidores(char.Parse("S"), AppInstance.Session_.UidUsuario, new Guid("AAD35D44-5E65-46B6-964F-CD2DF026ECB1"));
                     AppInstance.MVLogin = new VMLogin();

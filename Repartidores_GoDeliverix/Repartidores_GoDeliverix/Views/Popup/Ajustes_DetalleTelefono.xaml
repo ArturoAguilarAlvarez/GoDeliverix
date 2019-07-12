@@ -4,8 +4,8 @@
              x:Class="Repartidores_GoDeliverix.Views.Popup.Ajustes_DetalleTelefono"
              BindingContext="{Binding VMMain, Source={StaticResource Locator}}">
     <ContentPage.Content>
-        <StackLayout VerticalOptions="Center" HorizontalOptions="FillAndExpand" Padding="20,20,20,20" >
-            <StackLayout BindingContext="{Binding MVAjustesTelefono}" Orientation="Vertical" BackgroundColor="#f1f1f1" Padding="10,10,10,10">
+        <StackLayout VerticalOptions="Center" HorizontalOptions="FillAndExpand" >
+            <StackLayout BindingContext="{Binding MVAjustesTelefono}" Orientation="Vertical" BackgroundColor="#f1f1f1" >
                 <Label Text="Datos de telefono" VerticalTextAlignment="Center"></Label>
                 <Picker  
                 ItemsSource="{Binding LsTipoDeTelefono}" 
@@ -14,8 +14,10 @@
                 SelectedIndex="{Binding intSelectTelefono,Mode=TwoWay}"></Picker>
                 <Label Text="Numero" VerticalTextAlignment="Center"></Label>
                 <Entry  Text="{Binding Path= intNumeroTelefono,Mode=TwoWay}" Keyboard="Telephone" Placeholder="Numero"></Entry>
-                <Button Text="Guardar" FontSize="Small" TextColor="White" Clicked="CloseWindowsPopup" Command="{Binding SaveNumber}" BackgroundColor="Green"></Button>
-                <Button Text="Cancelar" FontSize="Small" TextColor="White"  BackgroundColor="Red"  Clicked="CloseWindowsPopup"></Button>
+                <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+                    <Button Text="OK" FontSize="Small" TextColor="White" Clicked="CloseWindowsPopup" Command="{Binding SaveNumber}" BackgroundColor="Green"></Button>
+                    <Button Text="X" FontSize="Small" TextColor="White"  BackgroundColor="Red"  Clicked="CloseWindowsPopup"></Button>
+                </StackLayout>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>
