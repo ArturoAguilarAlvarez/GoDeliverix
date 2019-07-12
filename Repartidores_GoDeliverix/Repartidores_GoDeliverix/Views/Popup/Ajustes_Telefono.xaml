@@ -3,9 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Repartidores_GoDeliverix.Views.Popup.Ajustes_Telefono"
              BindingContext="{Binding VMMain, Source={StaticResource Locator}}">
-    <ContentPage.Padding>
-        <OnPlatform Android="10,20,10,20" ></OnPlatform>
-    </ContentPage.Padding>
+
     <ContentPage.Content>
         <StackLayout BindingContext="{Binding MVAjustes}">
             <ListView ItemsSource="{Binding LsTelefono}" IsRefreshing="{Binding IsLoading,Mode=TwoWay}" 

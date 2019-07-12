@@ -3,9 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Repartidores_GoDeliverix.Views.Popup.Ajustes_Direccion"
              BindingContext="{Binding VMMain, Source={StaticResource Locator}}">
-    <ContentPage.Padding>
-        <OnPlatform Android="10,20,10,20" iOS="10,20,10,10" ></OnPlatform>
-    </ContentPage.Padding>
+
     <ContentPage.Content>
         <StackLayout BindingContext="{Binding MVAjustes}">
             <ListView ItemsSource="{Binding ListaDireccion}" IsRefreshing="{Binding IsLoading,Mode=TwoWay}" 

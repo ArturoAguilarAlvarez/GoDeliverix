@@ -8,7 +8,6 @@ using Xamarin.Forms.Xaml;
 using Newtonsoft.Json;
 using AppPrueba.WebApi;
 using System.Net.Http;
-using Rg.Plugins.Popup.Services;
 
 namespace AppPrueba.Views
 {
@@ -27,7 +26,7 @@ namespace AppPrueba.Views
             HttpClient _client = new HttpClient();
             string url = "";
             btnLogin.IsEnabled = false;
-             await PopupNavigation.Instance.PushAsync(new AppPrueba.Popup.Loanding());
+             //await PopupNavigation.Instance.PushAsync(new AppPrueba.Popup.Loanding());
 
             string perfil;
             try
@@ -138,12 +137,10 @@ namespace AppPrueba.Views
                     await NewMethod();
                 }
 
-                await PopupNavigation.Instance.PopAllAsync();
             }
             catch (Exception)
             {
                 btnLogin.IsEnabled = true;
-                await PopupNavigation.Instance.PopAllAsync();
                 await DisplayAlert("", "No tiene Internet", "ok");
             }
 

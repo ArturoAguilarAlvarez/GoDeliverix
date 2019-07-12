@@ -1,4 +1,4 @@
-﻿using Rg.Plugins.Popup.Services;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +20,7 @@ namespace Repartidores_GoDeliverix.Views.Popup
 
         private async void Btnver_Clicked(object sender, EventArgs e)
         {
-            await PopupNavigation.Instance.PushAsync(new PopoLoading());
             await Navigation.PushAsync(new Historico_DetalleOrden());
-            await PopupNavigation.Instance.PopAllAsync();
         }
     }
 }

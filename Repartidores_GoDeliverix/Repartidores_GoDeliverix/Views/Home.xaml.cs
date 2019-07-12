@@ -29,7 +29,6 @@ namespace Repartidores_GoDeliverix.Views
         private async void BtnQr_Clicked(object sender, EventArgs e)
         {
 
-            await Navigation.PushAsync(new Home_CodigoQR());
 
         }
         protected override void OnSizeAllocated(double width, double height)
@@ -128,7 +127,7 @@ namespace Repartidores_GoDeliverix.Views
             }
             else if (Device.RuntimePlatform == Device.Android)
             {
-                Device.OpenUri(new Uri("geo:0,0?q=" + lblUbicacionSucursal.Text+""));
+                Device.OpenUri(new Uri("geo:0,0?q=" + lblUbicacionSucursal.Text+"&mode=d&avoid=h"));
                 // opens the Maps app directly
                 // Device.OpenUri(new Uri("geo:" + location.Latitude + "," + location.Longitude + ""));
             }
@@ -145,7 +144,7 @@ namespace Repartidores_GoDeliverix.Views
             else if (Device.RuntimePlatform == Device.Android)
             {
                 // opens the Maps app directly
-                Device.OpenUri(new Uri("geo:0,0?saddr=" + lblUbicacionSucursal.Text + ""));
+                Device.OpenUri(new Uri("geo:0,0?q=" + lblUbicacionSucursal.Text + ""));
             }
         }
 

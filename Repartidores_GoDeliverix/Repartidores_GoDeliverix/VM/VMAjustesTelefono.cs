@@ -1,6 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using Repartidores_GoDeliverix.Views.Popup;
-using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
@@ -87,7 +86,7 @@ namespace Repartidores_GoDeliverix.VM
             AppInstance.MVAjustesTelefono.StrTipoDeTelefono = string.Empty;
             AppInstance.MVAjustesTelefono.UidTipoDeTelefono = Guid.Empty;
             AppInstance.MVAjustesTelefono.UidTelefono = Guid.Empty;
-            await PopupNavigation.Instance.PushAsync(new Ajustes_DetalleTelefono());
+            await Application.Current.MainPage.Navigation.PushAsync(new Ajustes_DetalleTelefono());
         }
         private void GuardarTelefono()
         {
@@ -134,7 +133,7 @@ namespace Repartidores_GoDeliverix.VM
             AppInstance.MVAjustesTelefono.StrTipoDeTelefono = StrTipoDeTelefono;
             AppInstance.MVAjustesTelefono.UidTipoDeTelefono = UidTipoDeTelefono;
             AppInstance.MVAjustesTelefono.UidTelefono = UidTelefono;
-            await PopupNavigation.Instance.PushAsync(new Ajustes_DetalleTelefono());
+            await Application.Current.MainPage.Navigation.PushAsync(new Ajustes_DetalleTelefono());
         }
         protected async void GenerateMessage(string Tittle, string Message, string TextOption)
         {

@@ -1,12 +1,12 @@
-﻿using Rg.Plugins.Popup.Pages;
-using Rg.Plugins.Popup.Services;
+﻿
 using System;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace Repartidores_GoDeliverix.Views.Popup
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class Ajustes_DetalleDireccion : PopupPage
+	public partial class Ajustes_DetalleDireccion : ContentPage
     {
 		public Ajustes_DetalleDireccion ()
 		{
@@ -14,7 +14,7 @@ namespace Repartidores_GoDeliverix.Views.Popup
 		}
         public async void CloseWindowsPopup(object sender, EventArgs e)
         {
-            await PopupNavigation.Instance.PopAsync();
+            await App.Navigator.PopToRootAsync();
         }
     }
 }

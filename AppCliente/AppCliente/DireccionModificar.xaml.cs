@@ -346,14 +346,15 @@ namespace AppCliente
                 string strDirecciones = await _client.GetStringAsync(_Url);
                 var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
                 App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
+
                 //AppCliente.App.MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
 
-                //await Navigation.PopToRootAsync();
+                await Navigation.PopToRootAsync();
                 //MyListViewDirecciones.ItemsSource = null;
 
                 //MyListViewDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;
 
-                //txtID.Text = null;
+                txtID.Text = null;
 
                 //limpiarFormulario();
             }

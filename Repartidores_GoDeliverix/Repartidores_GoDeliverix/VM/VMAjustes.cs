@@ -13,7 +13,6 @@ namespace Repartidores_GoDeliverix.VM
     public class VMAjustes : ControlsController
     {
 
-        string UrlApi = "http://www.godeliverix.net/api/";
         string url = "";
         HttpClient _WebApiGoDeliverix = new HttpClient();
 
@@ -144,14 +143,16 @@ namespace Repartidores_GoDeliverix.VM
         {
             VMUsuarios MVUsuario = new VMUsuarios();
             string PerfilDeUsuario = "DFC29662-0259-4F6F-90EA-B24E39BE4346";
+            _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
+
             if (!string.IsNullOrEmpty(Nombre) && !string.IsNullOrEmpty(ApellidoPaterno) && !string.IsNullOrEmpty(ApellidoMaterno))
             {
-                url = UrlApi + "Usuario/GetActualizarUsuario?UidUsuario=" + UidUsuario + "&Nombre=" + Nombre + "&ApellidoPaterno=" + ApellidoPaterno + "&ApellidoMaterno=" + ApellidoMaterno + "&perfil=" + PerfilDeUsuario + "";
+                url = "Usuario/GetActualizarUsuario?UidUsuario=" + UidUsuario + "&Nombre=" + Nombre + "&ApellidoPaterno=" + ApellidoPaterno + "&ApellidoMaterno=" + ApellidoMaterno + "&perfil=" + PerfilDeUsuario + "";
                 // MVUsuario.ActualizarUsuario(UidUsuario: UidUsuario, Nombre: Nombre, ApellidoPaterno: ApellidoPaterno, ApellidoMaterno: ApellidoMaterno, perfil: PerfilDeUsuario);
             }
             if (!string.IsNullOrEmpty(fnacimiento))
             {
-                url = UrlApi + "Usuario/GetActualizarUsuario?UidUsuario=" + UidUsuario + "&fnacimiento=" + StrFechaDeNacimiento + "&perfil=" + PerfilDeUsuario + "";
+                url = "Usuario/GetActualizarUsuario?UidUsuario=" + UidUsuario + "&fnacimiento=" + StrFechaDeNacimiento + "&perfil=" + PerfilDeUsuario + "";
                 // MVUsuario.ActualizarUsuario(UidUsuario: UidUsuario, fnacimiento: StrFechaDeNacimiento, perfil: PerfilDeUsuario);
             }
             _WebApiGoDeliverix.GetAsync(url);
@@ -159,8 +160,8 @@ namespace Repartidores_GoDeliverix.VM
         public void ActualizaCorreo()
         {
             VMCorreoElectronico MVCorreoElectronico = new VMCorreoElectronico();
-
-            url = UrlApi + "CorreoElectronico/GetActualizarCorreo?UidPropietario=" + UidUsuario + "&strParametroDeInsercion=Usuario&strCorreoElectronico=" + StrCorreoElectronico + "&UidCorreoElectronico=" + Guid.NewGuid() + "";
+            _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
+            url = "CorreoElectronico/GetActualizarCorreo?UidPropietario=" + UidUsuario + "&strParametroDeInsercion=Usuario&strCorreoElectronico=" + StrCorreoElectronico + "&UidCorreoElectronico=" + Guid.NewGuid() + "";
             _WebApiGoDeliverix.GetAsync(url);
 
             //MVCorreoElectronico.EliminaCorreoUsuario(UidUsuario.ToString());
@@ -170,11 +171,12 @@ namespace Repartidores_GoDeliverix.VM
         private void ActualizaTelefonos()
         {
             VMTelefono MVTelefono = new VMTelefono();
+            _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
 
-            url = UrlApi + "Telefono/GetActualizaTelefonoApi?UidPropietario=" + UidUsuario + "&strParametroDeInsercion=Usuario&strCorreoElectronico=" + StrCorreoElectronico + "&UidCorreoElectronico=" + Guid.NewGuid() + "";
+            url = "Telefono/GetActualizaTelefonoApi?UidPropietario=" + UidUsuario + "&strParametroDeInsercion=Usuario&strCorreoElectronico=" + StrCorreoElectronico + "&UidCorreoElectronico=" + Guid.NewGuid() + "";
             _WebApiGoDeliverix.GetAsync(url);
-            MVTelefono.EliminaTelefonosUsuario(UidUsuario);
-            MVTelefono.GuardaTelefono(UidUsuario, "Usuario");
+            //MVTelefono.EliminaTelefonosUsuario(UidUsuario);
+            //MVTelefono.GuardaTelefono(UidUsuario, "Usuario");
         }
         public void Recargar()
         {
@@ -186,13 +188,13 @@ namespace Repartidores_GoDeliverix.VM
             IsLoading = true;
             var AppInstance = MainViewModel.GetInstance();
             UidUsuario = AppInstance.Session_.UidUsuario;
-            _WebApiGoDeliverix.BaseAddress = new Uri(UrlApi);
             //Declaracion de las vistas del modelo 
             VMUsuarios MVUsuario = new VMUsuarios();
             VMCorreoElectronico MVCorreoElectronico = new VMCorreoElectronico();
             VMTelefono MVTelefono = new VMTelefono();
             VMDireccion MVDireccion = new VMDireccion();
             //Obtiene los datos
+            _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
 
             url = "Usuario/GetBuscarUsuarios?UidUsuario=" + UidUsuario + "&UIDPERFIL=DFC29662-0259-4F6F-90EA-B24E39BE4346";
             string content = await _WebApiGoDeliverix.GetStringAsync(url);

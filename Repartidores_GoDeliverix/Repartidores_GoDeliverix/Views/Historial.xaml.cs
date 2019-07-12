@@ -1,5 +1,4 @@
 ﻿using Repartidores_GoDeliverix.Views.Popup;
-using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +20,7 @@ namespace Repartidores_GoDeliverix.Views
 
         private async void BtnHistorico_Clicked(object sender, EventArgs e)
         {
-            await PopupNavigation.Instance.PushAsync(new PopoLoading());
             await Navigation.PushAsync(new Historico_Bitacora());
-            await PopupNavigation.Instance.PopAllAsync();
         }
     }
 }

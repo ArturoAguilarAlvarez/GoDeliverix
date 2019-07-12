@@ -1,7 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using Repartidores_GoDeliverix.Modelo;
 using Repartidores_GoDeliverix.Views.Popup;
-using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,7 +16,6 @@ namespace Repartidores_GoDeliverix.VM
         #region Propiedades de la clase
         #region Propiedades para los controles de la vista
 
-        string UrlApi = "http://www.godeliverix.net/api/";
         string url = "";
         HttpClient _WebApiGoDeliverix = new HttpClient();
 
@@ -320,15 +318,17 @@ namespace Repartidores_GoDeliverix.VM
             VMDireccion MVDireccion = new VMDireccion();
             Guid UidUsuario = AppInstance.Session_.UidUsuario;
             MVDireccion.ObtenerDireccionesUsuario(UidUsuario.ToString());
+            _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
+
             if (UidDireccion == Guid.Empty)
             {
-                url = UrlApi + "Direccion/GetGuardarDireccion?UidUsuario=" + UidUsuario + "&UidPais=" + UidPais + "&UidEstado=" + UidEstado + "&UidMunicipio=" + UidMunicipio + "&UidCiudad=" + UidCiudad + "&UidColonia=" + UidColonia + "&CallePrincipal=" + CallePrincipal + "&CalleAux1=" + CalleAux1 + "&CalleAux2=" + CalleAux2 + "&Manzana=" + Manzana + "&Lote=" + Lote + "&CodigoPostal=" + CodigoPostal + "&Referencia=" + Referencia + "&NOMBRECIUDAD=S&NOMBRECOLONIA=S&Identificador=" + Identificador + "&Latitud=0&Longitud=0";
+                url = "Direccion/GetGuardarDireccion?UidUsuario=" + UidUsuario + "&UidPais=" + UidPais + "&UidEstado=" + UidEstado + "&UidMunicipio=" + UidMunicipio + "&UidCiudad=" + UidCiudad + "&UidColonia=" + UidColonia + "&CallePrincipal=" + CallePrincipal + "&CalleAux1=" + CalleAux1 + "&CalleAux2=" + CalleAux2 + "&Manzana=" + Manzana + "&Lote=" + Lote + "&CodigoPostal=" + CodigoPostal + "&Referencia=" + Referencia + "&NOMBRECIUDAD=S&NOMBRECOLONIA=S&Identificador=" + Identificador + "&Latitud=0&Longitud=0";
                 //Guid UidDireccion = Guid.NewGuid();
                 //MVDireccion.AgregaDireccionALista(UidDireccion,UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, "", "", Identificador);
             }
             else
             {
-                url = UrlApi + "Direccion/GetActualizarDireccion?UidPais=" + UidPais + "&UidEstado=" + UidEstado + "&UidMunicipio=" + UidMunicipio + "&UidCiudad=" + UidCiudad + "&UidColonia=" + UidColonia + "&CallePrincipal=" + CallePrincipal + "&CalleAux1=" + CalleAux1 + "&CalleAux2=" + CalleAux2 + "&Manzana=" + Manzana + "&Lote=" + Lote + "&CodigoPostal=" + CodigoPostal + "&Referencia=" + Referencia + "&NOMBRECIUDAD=S&NOMBRECOLONIA=S&Identificador=" + Identificador + "&Latitud=0&Longitud=0&UidDireccion=" + UidDireccion + "";
+                url = "Direccion/GetActualizarDireccion?UidPais=" + UidPais + "&UidEstado=" + UidEstado + "&UidMunicipio=" + UidMunicipio + "&UidCiudad=" + UidCiudad + "&UidColonia=" + UidColonia + "&CallePrincipal=" + CallePrincipal + "&CalleAux1=" + CalleAux1 + "&CalleAux2=" + CalleAux2 + "&Manzana=" + Manzana + "&Lote=" + Lote + "&CodigoPostal=" + CodigoPostal + "&Referencia=" + Referencia + "&NOMBRECIUDAD=S&NOMBRECOLONIA=S&Identificador=" + Identificador + "&Latitud=0&Longitud=0&UidDireccion=" + UidDireccion + "";
                 //   MVDireccion.ActualizaListaDireccion(UidDireccion.ToString(), UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador, "", "");
             }
             _WebApiGoDeliverix.GetAsync(url);
@@ -380,7 +380,7 @@ namespace Repartidores_GoDeliverix.VM
             AppInstance.vmAjustesDireccion.IndexCiudadSeleccionado = 0;
             AppInstance.vmAjustesDireccion.IndexColoniaSeleccionado = 0;
             //Levanta a la ventana modal
-            await PopupNavigation.Instance.PushAsync(new Ajustes_DetalleDireccion());
+            await App.Navigator.PushAsync(new Ajustes_DetalleDireccion());
         }
         private void EliminaDireccion()
         {
@@ -433,7 +433,7 @@ namespace Repartidores_GoDeliverix.VM
             AppInstance.vmAjustesDireccion.IndexCiudadSeleccionado = AppInstance.vmAjustesDireccion.ListaCiudad.FindIndex(C => C.UidCiudad == UidCiudad);
             AppInstance.vmAjustesDireccion.IndexColoniaSeleccionado = AppInstance.vmAjustesDireccion.ListaColonia.FindIndex(C => C.UidColonia == UidColonia);
             //Levanta a la ventana modal
-            await PopupNavigation.Instance.PushAsync(new Ajustes_DetalleDireccion());
+            await Application.Current.MainPage.Navigation.PushAsync(new Ajustes_DetalleDireccion());
         }
         protected async void GenerateMessage(string Tittle, string Message, string TextOption)
         {

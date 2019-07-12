@@ -42,12 +42,16 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
-        public ResponseHelper GetBuscarSucursales(string identificador = "", string horaApertura = "", string horaCierre = "", Guid IdColonia = new Guid(), string Uidempresa = "", string UidSucursal = "")
+        public ResponseHelper GetBuscarSucursales(string identificador = "", string horaApertura = "", string horaCierre = "", string IdColonia = "", string Uidempresa = "", string UidSucursal = "")
         {
             MVSucursales = new VMSucursales();
             Respuesta = new ResponseHelper();
+            if (string.IsNullOrEmpty(IdColonia))
+            {
+                IdColonia = Guid.Empty.ToString();
+            }
+            MVSucursales.BuscarSucursales(UidSucursal: UidSucursal,identificador: identificador,horaApertura: horaApertura,horaCierre: horaCierre,IdColonia: new Guid(IdColonia), Uidempresa: Uidempresa);
 
-            MVSucursales.BuscarSucursales(UidSucursal);
             if (!string.IsNullOrEmpty(UidSucursal))
             {
                 Respuesta.Data = MVSucursales;

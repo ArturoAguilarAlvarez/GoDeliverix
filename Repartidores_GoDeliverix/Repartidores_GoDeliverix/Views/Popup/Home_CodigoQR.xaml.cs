@@ -1,5 +1,4 @@
-﻿using Rg.Plugins.Popup.Pages;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using ZXing;
 using ZXing.Net.Mobile.Forms;
@@ -23,22 +22,21 @@ namespace Repartidores_GoDeliverix.Views.Popup
                     Width = 250
                 },
                 BarcodeValue = lblCodigo.Text,
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                HorizontalOptions = LayoutOptions.CenterAndExpand
+                VerticalOptions = LayoutOptions.EndAndExpand,
+                HorizontalOptions = LayoutOptions.Center
             };
             // Workaround for iOS
             ImgQrCodigo.WidthRequest = 250;
             ImgQrCodigo.HeightRequest = 250;
 
-
             pnlContenido.Children.Add(ImgQrCodigo);
+            Label Mensaje = new Label() {Text="Muestra el codigo para recibir la orden.",VerticalOptions = LayoutOptions.EndAndExpand, TextColor= Color.MediumPurple, HorizontalOptions = LayoutOptions.CenterAndExpand  };
+            pnlContenido.Children.Add(Mensaje);
 
         }
 
         private async void BtnDetalles_Clicked(object sender, System.EventArgs e)
         {
-            await Navigation.PushAsync(new PopoLoading());
-            await Navigation.PopAsync();
             await Navigation.PushAsync(new Home_DetallesSucursal());
         }
     }
