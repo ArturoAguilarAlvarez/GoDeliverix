@@ -45,21 +45,21 @@ namespace AppPuestoTacos.View
                 MyListviewOrdenesPorEnviar.ItemsSource = App.MVOrden.ListaDeOrdenesPorEnviar;
         }
  
-        private  void ImageButtonEscanear_Clicked(object sender, EventArgs e)
+        private async void ImageButtonEscanear_Clicked(object sender, EventArgs e)
         {
-            //var scan = new ZXingScannerPage();
-            //Navigation.PushAsync(scan);
-            //scan.OnScanResult += (result) =>
-            //{
-            //    Device.BeginInvokeOnMainThread
-            //    (async () =>
-            //    {
-            //        await Navigation.PopAsync();
-            //        escaneado = result.Text;
-            //        BuscarOrdenCodigo();
-            //    });
-            //};
-            //await PopupNavigation.Instance.PushAsync(new AppPuestoTacos.Popup.Escaner());
+            var scan = new ZXingScannerPage();
+            await Navigation.PushAsync(scan);
+            scan.OnScanResult += (result) =>
+            {
+                Device.BeginInvokeOnMainThread
+                (async () =>
+                {
+                    await Navigation.PopAsync();
+                    escaneado = result.Text;
+                    BuscarOrdenCodigo();
+                });
+            };
+           // await PopupNavigation.Instance.PushAsync(new AppPuestoTacos.Popup.Escaner());
         }
 
         private async void BuscarOrdenCodigo()

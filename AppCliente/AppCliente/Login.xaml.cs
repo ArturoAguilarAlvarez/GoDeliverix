@@ -127,7 +127,6 @@ namespace AppCliente
 
                     //}).ToList();
 
-
                     // App.MVDireccion.ObtenerDireccionesUsuario(App.Global1);
                     if (GuardarContraseña.IsToggled)
                     {
@@ -141,7 +140,6 @@ namespace AppCliente
                         Application.Current.MainPage = new MasterMenu();
                         await PopupNavigation.Instance.PopAsync();
                     }
-
                 }
                 else
                 {
