@@ -36,11 +36,11 @@ namespace AppCliente
 
                 MenuItems = new ObservableCollection<MasterMenuMenuItem>(new[]
 {
-                    new MasterMenuMenuItem { Id = 0, Title = "MI GoDeliverix", TargetType = typeof(PerfilGeneralPage), UrlResource="IconoProfileMenu"},
+                    new MasterMenuMenuItem { Id = 0, Title = "Perfil", TargetType = typeof(PerfilGeneralPage), UrlResource="IconoProfileMenu"},
                     new MasterMenuMenuItem { Id = 1, Title = "Home", TargetType = typeof(HomePage), UrlResource="IconoHomeMenu"},
-                    new MasterMenuMenuItem { Id = 2, Title = "Mi Historial", TargetType = typeof(HistorialPage),UrlResource="IconoOrdenMenu"},
-                    new MasterMenuMenuItem { Id = 3, Title = "Mis Direcciones", TargetType = typeof(UsuarioDirecciones),UrlResource="IconoDireccionesMenu"},
-                    new MasterMenuMenuItem { Id = 4, Title = "Mis Telefonos", TargetType = typeof(PerfilTelefonoPage),UrlResource="IconoTelefonoHome"},
+                    new MasterMenuMenuItem { Id = 2, Title = "Historial", TargetType = typeof(HistorialPage),UrlResource="IconoOrdenMenu"},
+                    new MasterMenuMenuItem { Id = 3, Title = "Direcciones", TargetType = typeof(UsuarioDirecciones),UrlResource="IconoDireccionesMenu"},
+                    new MasterMenuMenuItem { Id = 4, Title = "Telefonos", TargetType = typeof(PerfilTelefonoPage),UrlResource="IconoTelefonoHome"},
                     new MasterMenuMenuItem { Id = 6, Title = "Salir", UrlResource="IconoSalir"},
                 });
             }

@@ -125,7 +125,7 @@ namespace AppCliente
                 //App.MVProducto.ListaDelInformacionSucursales.Add
                 //await PopupNavigation.Instance.PushAsync(new Popup.PopupProductoComentario());
                 //Navigation.PopToRootAsync();
-                await Navigation.PopAsync();
+                await Navigation.PopToRootAsync();
                 //await PopupNavigation.Instance.PopAllAsync();
                 await DisplayAlert("¡Que bien!", "Productos agregados al carrito", "ok");
 

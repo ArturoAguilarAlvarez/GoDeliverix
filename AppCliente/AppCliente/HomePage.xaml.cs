@@ -27,13 +27,31 @@ namespace AppCliente
         public HomePage()
         {
             InitializeComponent();
+
+
             Iniciar();
+
+
         }
 
-        private void MenuItem1_Activted(object sender, EventArgs e)
+        private async void MenuItem1_Activted(object sender, EventArgs e)
         {
 
-            Navigation.PushAsync(new CarritoPage());
+            foreach (var item in App.MVProducto.ListaDelInformacionSucursales)
+            {
+
+                string _URL = "http://www.godeliverix.net/api/Sucursales/GetBuscarSucursales?UidSucursal=" + item.UidSucursal + "";
+                string content = await _client.GetStringAsync(_URL);
+                var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                App.MVSucursales = JsonConvert.DeserializeObject<VMSucursales>(obj);
+
+                _URL = "http://www.godeliverix.net/api/Imagen/GetImagenDePerfilEmpresa?UidEmpresa=" + App.MVSucursales.UidEmpresa + "";
+                content = await _client.GetStringAsync(_URL);
+                obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                App.MVImagen = JsonConvert.DeserializeObject<VMImagen>(obj);
+                item.STRRUTA = "http://www.godeliverix.net/vista/" + App.MVImagen.STRRUTA;
+            }
+            await Navigation.PushAsync(new CarritoPage());
             //Navigation.PushAsync(new CarritoPage());
         }
 
@@ -569,8 +587,10 @@ namespace AppCliente
         }
 
 
-        private async  void Iniciar()
+        private async void Iniciar()
         {
+            acloading.IsVisible = true;
+            acloading.IsRunning = true;
             //_client.BaseAddress = new Uri("http://www.godeliverix.net/api/");
             string _URL = "http://www.godeliverix.net/api/Giro/Get";
             var content = await _client.GetStringAsync(_URL);
@@ -613,8 +633,8 @@ namespace AppCliente
                 IDDireccionBusqueda.Text = Colonia.ToString();
 
                 _URL = "http://www.godeliverix.net/api/Categoria/Get?value=" + App.giro.ToString();
-                 content = await _client.GetStringAsync(_URL);
-                 obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                content = await _client.GetStringAsync(_URL);
+                obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                 App.MVCategoria = JsonConvert.DeserializeObject<VMCategoria>(obj);
 
 
@@ -645,11 +665,15 @@ namespace AppCliente
                 App.MVEmpresa = JsonConvert.DeserializeObject<VMEmpresas>(obj);
 
                 //ArrayDatosProductos = JArray.Parse(DatosEmpresa.ToString());
-                //App.MVEmpresa.LISTADEEMPRESAS = ArrayDatosProductos.Select(p => new VMEmpresas
+                foreach (var item in App.MVEmpresa.LISTADEEMPRESAS)
+                {
+                    item.StrRuta = "http://godeliverix.net/vista/" + (item.StrRuta.Substring(3));
+                }
+                //= ArrayDatosProductos.Select(p => new VMEmpresas
                 //{
                 //    UIDEMPRESA = (Guid)p["UIDEMPRESA"],
                 //    NOMBRECOMERCIAL = (string)p["NOMBRECOMERCIAL"],
-                //    StrRuta= "http://godeliverix.net/vista/"+((string)p["StrRuta"].ToString().Substring(3))
+                //    StrRuta = "http://godeliverix.net/vista/" + ((string)p["StrRuta"].ToString().Substring(3))
                 //}).ToList();
 
 
@@ -686,7 +710,7 @@ namespace AppCliente
             //{
             MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.ListaDeProductos;
             CantidadProductosMostrados = AppCliente.App.ListaDeProductos.Count;
-            lbCantidad.Text = "1-" + App.ListaDeProductos.Count + "/" + App.ListaDeProductos.Count;
+            lbCantidad.Text = App.ListaDeProductos.Count + " Productos disponibles";
             //}
             if (App.DireccionABuscar != "")
             {
@@ -701,8 +725,8 @@ namespace AppCliente
                 lbCantidad.Text = "0-0/0";
                 PanelProductoNoEncontrados.IsVisible = true;
             }
+            acloading.IsRunning = false;
+            acloading.IsVisible = false;
         }
-
-       
     }
 }

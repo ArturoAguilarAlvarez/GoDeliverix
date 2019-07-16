@@ -107,7 +107,18 @@ namespace AppCliente
 
         protected override void OnResume()
         {
-            // Handle when your app resumes
+            Application.Current.MainPage = new MasterMenu();
+            Usuario = AppCliente.Helpers.Settings.UserName;
+            Contrasena = AppCliente.Helpers.Settings.Password;
+            if (Ingresar())
+            {
+                MVDireccion.ObtenerDireccionesUsuario(Global1);
+                MainPage = new MasterMenu();
+            }
+            else
+            {
+                MainPage = new NavigationPage(new Login());
+            }
         }
 
         protected bool Ingresar()

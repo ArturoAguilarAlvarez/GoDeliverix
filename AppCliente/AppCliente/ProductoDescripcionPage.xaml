@@ -17,15 +17,16 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="AUTO" />
                         <RowDefinition Height="AUTO" />
+                        <RowDefinition Height="AUTO" />
+                        <RowDefinition Height="AUTO" />
                     </Grid.RowDefinitions>
 
-
-                    <Image x:Name="ImagenProducto"  HeightRequest="250" Margin="5" VerticalOptions="Center" Grid.Row="0" Aspect="Fill"></Image>
+                    <Image x:Name="ImagenProducto"  HeightRequest="150" Margin="5" VerticalOptions="Center" Grid.Row="0" Aspect="Fill"></Image>
 
                     <StackLayout Orientation="Horizontal" Margin="10,0" Grid.Row="1" HorizontalOptions="Center">
                         <StackLayout Orientation="Vertical">
                             <Label Margin="0,0" HorizontalOptions="Center" Text="" FontSize="Medium" FontAttributes="Bold" x:Name="txtNombreProducto" Grid.Row="1"></Label>
-                            <Label Margin="0,5" HorizontalOptions="Center" Text="" FontSize="Default" FontAttributes="Italic" x:Name="txtDescripcionProducto" Grid.Row="2" Style="{DynamicResource bodystyle }" ></Label>
+                            <Label Margin="0,0" HorizontalOptions="Center" Text="" FontSize="Default" FontAttributes="Italic" x:Name="txtDescripcionProducto" Grid.Row="2" Style="{DynamicResource bodystyle }" ></Label>
 
                             <Grid>
                                 <!--Orientation="Horizontal" HorizontalOptions="Center"-->
@@ -114,10 +115,10 @@
 
 
 
-                    <Entry x:Name="txtComentario" Placeholder="Agregar Notas" Margin="25,0" Grid.Row="3"></Entry>
+                    <Entry x:Name="txtComentario" Placeholder="Agregar Notas" Margin="5,0" Grid.Row="2"></Entry>
 
 
-                    <ListView x:Name="MyListViewBusquedaEmpresaDelProducto" IsVisible="False"
+                    <ListView x:Name="MyListViewBusquedaEmpresaDelProducto" Margin="5,0" IsVisible="False"
             ItemsSource="{Binding VMTelefono}"
                       SelectionMode="Single"
                       SeparatorVisibility="None"
@@ -163,7 +164,7 @@
 
                     </ListView>
                     <Label x:Name="idSeucursalSeleccionada" Text="" IsVisible="False"></Label>
-                    <Button Text="Agregar carrito $0" x:Name="btnAgregarCarrito"  BackgroundColor="Purple" TextColor="White" Margin="10,0" Grid.Row="4"  HorizontalOptions="Fill" VerticalOptions="End" Clicked="ButtonCarrito_Clicked"></Button>
+                    <Button Text="Agregar carrito $0" x:Name="btnAgregarCarrito"  BackgroundColor="Purple" TextColor="White"  Grid.Row="3"  HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" Clicked="ButtonCarrito_Clicked"></Button>
                     <Label IsVisible="False" x:Name="txtIDSeccion" Text=""></Label>
                 </Grid>
             </StackLayout>

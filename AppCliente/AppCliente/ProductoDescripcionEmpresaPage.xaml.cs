@@ -16,13 +16,12 @@ namespace AppCliente
         VMEmpresas ObjItem;
         Guid UidEmpresa;
         Guid UiSucursal;
-        Guid UidDireccion;       
+        Guid UidDireccion;
 
         public ProductoDescripcionEmpresaPage()
         {
             InitializeComponent();
         }
-
 
         public ProductoDescripcionEmpresaPage(VMEmpresas ObjItem, Guid UidDireccion)
         {
@@ -91,7 +90,7 @@ namespace AppCliente
         private void MypickerSeccion_SelectedIndexChanged(object sender, EventArgs e)
         {
             VMSeccion ovjSeccion = MypickerSeccion.SelectedItem as VMSeccion;
-            if (ovjSeccion!=null)
+            if (ovjSeccion != null)
             {
 
                 App.MVProducto.BuscarProductosSeccion(ovjSeccion.UID);
@@ -121,7 +120,7 @@ namespace AppCliente
             catch (Exception)
             {
 
-                
+
             }
 
         }
@@ -137,19 +136,23 @@ namespace AppCliente
                 VMSeccion ovjSeccion = MypickerSeccion.SelectedItem as VMSeccion;
 
                 //Navigation.PushAsync(new ProductoDescripcionPage(ObjItem, UiSucursal, ovjSeccion));
-                Navigation.PushAsync(new ProductoDescripcionPage(ObjItem,new Guid(idSucursal.Text), ovjSeccion));
-                
+                Navigation.PushAsync(new ProductoDescripcionPage(ObjItem, new Guid(idSucursal.Text), ovjSeccion));
+
             }
             catch (Exception)
             {
 
             }
-
         }
 
         private void TxtCantidadDeSucursales_Clicked(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new SeleccionarSucursalEmpresa(MypickerMenu, App.MVSucursales.LISTADESUCURSALES,ObjItem,idSucursal,txtNombreSucursal));
+            Navigation.PushAsync(new SeleccionarSucursalEmpresa(MypickerMenu, App.MVSucursales.LISTADESUCURSALES, ObjItem, idSucursal, txtNombreSucursal));
+        }
+
+        private void BtnCarrito_Clicked(object sender, EventArgs e)
+        {
+
         }
     }
 }

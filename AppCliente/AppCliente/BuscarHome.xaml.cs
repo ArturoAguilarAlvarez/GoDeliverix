@@ -37,7 +37,7 @@ namespace AppCliente
             //{
             MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.ListaDeProductos;
             CantidadProductosMostrados = AppCliente.App.ListaDeProductos.Count;
-            lbCantidad.Text = "1-" + App.ListaDeProductos.Count + "/" + App.ListaDeProductos.Count;
+            lbCantidad.Text =  App.ListaDeProductos.Count.ToString() + " Produtos disponibles";
             //btnAtras.IsVisible = false;
             //btnAdelante.IsVisible = false;
             //}
@@ -199,7 +199,7 @@ namespace AppCliente
                 //{
                 MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.MVProducto.ListaDeProductos;
                 CantidadProductosMostrados = AppCliente.App.MVProducto.ListaDeProductos.Count;
-                lbCantidad.Text = "1-" + App.MVProducto.ListaDeProductos.Count + "/" + App.MVProducto.ListaDeProductos.Count;
+                //lbCantidad.Text = "1-" + App.MVProducto.ListaDeProductos.Count + "/" + App.MVProducto.ListaDeProductos.Count;
                 //btnAtras.IsVisible = false;
                 //btnAdelante.IsVisible = false;
                 //}
@@ -216,7 +216,7 @@ namespace AppCliente
                     PanelProductoNoEncontrados.IsVisible = false;
                     ScrollView_Productos.IsVisible = true;
                 }
-
+                lbCantidad.Text = App.MVProducto.ListaDeProductos.Count.ToString() + " Produtos disponibles";
             }
             else if (App.buscarPor == "Empresas")
             {
@@ -244,7 +244,7 @@ namespace AppCliente
                     PanelProductoNoEncontrados.IsVisible = false;
                     ScrollView_Empresas.IsVisible = true;
                 }
-
+                lbCantidad.Text = App.MVEmpresa.LISTADEEMPRESAS.Count.ToString() + " Empresas disponibles";
             }
 
         }
@@ -492,6 +492,8 @@ namespace AppCliente
             ScrollView_Productos.IsVisible = true;
             btnEmpresa.TextColor = Color.Black;
             btnProducto.TextColor = Color.Red;
+
+           lbCantidad.Text = App.MVProducto.ListaDeProductos.Count.ToString()+" Produtos disponibles";
         }
 
         private void ButtonCambiarBusqEmpresadaProducto_Clicked(object sender, EventArgs e)
@@ -501,6 +503,8 @@ namespace AppCliente
             ScrollView_Productos.IsVisible = false;
             btnEmpresa.TextColor = Color.Red;
             btnProducto.TextColor = Color.Black;
+
+            lbCantidad.Text = App.MVEmpresa.LISTADEEMPRESAS.Count.ToString() + " Empresas disponibles";
         }
 
         private void BtnFitltrosBusquedas_Clicked(object sender, EventArgs e)

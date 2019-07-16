@@ -1,4 +1,6 @@
-﻿using Rg.Plugins.Popup.Services;
+﻿using AppCliente.WebApi;
+using Newtonsoft.Json;
+using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +25,6 @@ namespace AppCliente
         public CarritoPage()
         {
             InitializeComponent();
-
             if (App.MVProducto.ListaDelCarrito.Count > 0)
             {
                 MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDelCarrito;
@@ -36,10 +37,11 @@ namespace AppCliente
                 {
                     cantidad = cantidad + App.MVProducto.ListaDelCarrito[i].Cantidad;
                     decimal a = decimal.Parse(App.MVProducto.ListaDelCarrito[i].StrCosto);
-                }              
+                }
                 for (int i = 0; i < App.MVProducto.ListaDelInformacionSucursales.Count; i++)
                 {
-                    TotalEnvio= TotalEnvio+ App.MVProducto.ListaDelInformacionSucursales[i].CostoEnvio;
+
+                    TotalEnvio = TotalEnvio + App.MVProducto.ListaDelInformacionSucursales[i].CostoEnvio;
                     TotalPagar = TotalPagar + App.MVProducto.ListaDelInformacionSucursales[i].Total;
                     subtotal = subtotal + App.MVProducto.ListaDelInformacionSucursales[i].Subtotal;
                 }
@@ -47,10 +49,10 @@ namespace AppCliente
                 ScrollView_Productos.IsVisible = false;
 
                 #region mostrar los datos al usuario
-                txtTotalEnvio.Text ="Total de envio: " + TotalEnvio.ToString();
+                txtTotalEnvio.Text = "Total de envio: " + TotalEnvio.ToString();
                 txtCantidad.Text = "Total de articulos: " + cantidad;
                 txtsubtotal.Text = "SubTotal: $" + subtotal;
-                
+
 
                 btnPagar.Text = "Pagar  $" + TotalPagar;
                 btnPagar2.Text = "Pagar  $" + TotalPagar;
@@ -62,19 +64,21 @@ namespace AppCliente
                 ViewListaProductoVacio.IsVisible = true;
                 ScrollView_Productos.IsVisible = false;
             }
+
         }
 
-        private  void BtnPagar_Clicked(object sender, EventArgs e)
+
+        private void BtnPagar_Clicked(object sender, EventArgs e)
         {
-             BtnPagar_ClickedAsync();
+            BtnPagar_ClickedAsync();
         }
-            private async void BtnPagar_ClickedAsync()
+        private async void BtnPagar_ClickedAsync()
         {
 
 
             Guid UidOrden = Guid.NewGuid();
             decimal total = TotalPagar;
-            Guid UidUsuario =new Guid( App.Global1);
+            Guid UidUsuario = new Guid(App.Global1);
             Guid UidDireccion = new Guid(App.DireccionABuscar);
 
 
@@ -190,7 +194,7 @@ namespace AppCliente
                 }
                 else
                 {
-                    await DisplayAlert("NO a escogido distribuidora","No se ha elegido una empresa distribuidora dentro de la orden", "ok");
+                    await DisplayAlert("NO a escogido distribuidora", "No se ha elegido una empresa distribuidora dentro de la orden", "ok");
                 }
             }
 
@@ -202,7 +206,7 @@ namespace AppCliente
             var item = ((ItemTappedEventArgs)e);
             VMProducto ObjItem = (VMProducto)item.Item;
             MyListViewCarritoEmpresa.ItemsSource = App.MVProducto.ListaDelInformacionSucursales;
-            await Navigation.PushAsync(new CarritoDetalleSucursal(ObjItem, txtCantidad, txtsubtotal, txtTotalEnvio,MyListViewCarritoEmpresa, btnPagar, btnPagar2));
+            await Navigation.PushAsync(new CarritoDetalleSucursal(ObjItem, txtCantidad, txtsubtotal, txtTotalEnvio, MyListViewCarritoEmpresa, btnPagar, btnPagar2));
             await PopupNavigation.Instance.PopAsync();
         }
 
@@ -210,16 +214,16 @@ namespace AppCliente
         private void LimpiarCarrito()
         {
 
-                App.MVProducto.ListaDelCarrito.Clear();
-                App.MVProducto.ListaDelInformacionSucursales.Clear();
-                MyListViewBusquedaProductos.ItemsSource = null;
-                MyListViewCarritoEmpresa.ItemsSource = null;
-                txtCantidad.Text = "Total de articulos: 0";
-                txtsubtotal.Text = "SubTotal: $0.00";
-                txtTotalEnvio.Text = "Total de envio : $0.00";
-                btnPagar.Text = "pagar $0.00";
-                btnPagar2.Text = "pagar $0.00";
-            
+            App.MVProducto.ListaDelCarrito.Clear();
+            App.MVProducto.ListaDelInformacionSucursales.Clear();
+            MyListViewBusquedaProductos.ItemsSource = null;
+            MyListViewCarritoEmpresa.ItemsSource = null;
+            txtCantidad.Text = "Total de articulos: 0";
+            txtsubtotal.Text = "SubTotal: $0.00";
+            txtTotalEnvio.Text = "Total de envio : $0.00";
+            btnPagar.Text = "pagar $0.00";
+            btnPagar2.Text = "pagar $0.00";
+
         }
 
         private async void BtnLimpiarCarrito_Clicked(object sender, EventArgs e)
@@ -238,14 +242,14 @@ namespace AppCliente
             var ObjItem = item.BindingContext as VMProducto;
 
             App.MVTarifario.BuscarTarifario("Cliente", ZonaEntrega: App.DireccionABuscar, uidSucursal: ObjItem.UidSucursal.ToString());
-            await Navigation.PushAsync(new SeleccionarDistribuidoraCarrito(ObjItem,MyListViewCarritoEmpresa,txtTotalEnvio,btnPagar, btnPagar2));
+            await Navigation.PushAsync(new SeleccionarDistribuidoraCarrito(ObjItem, MyListViewCarritoEmpresa, txtTotalEnvio, btnPagar, btnPagar2));
             await PopupNavigation.Instance.PopAsync();
         }
 
         private void ImageButton_Clicked(object sender, EventArgs e)
         {
             var item = sender as Button;
-            var ObjItem = item.BindingContext as VMProducto;    
+            var ObjItem = item.BindingContext as VMProducto;
         }
     }
 }

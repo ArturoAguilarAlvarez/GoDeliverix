@@ -5,7 +5,6 @@
               xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:ffTrans="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
              x:Class="AppCliente.ProductoDescripcionEmpresaPage">
-
     <ContentPage.Content>
         <ScrollView Margin="0">
             <StackLayout Orientation="Vertical" Margin="0">
@@ -22,7 +21,7 @@
                         <RowDefinition Height="AUTO" />
                         <RowDefinition Height="AUTO" />
                     </Grid.RowDefinitions>
-                    
+
                     <!--#region  Area de portada y foto de perfil-->
 
                     <StackLayout Grid.Row="0" Margin="0" Padding="0" IsVisible="True">
@@ -44,9 +43,9 @@
                     </StackLayout>
 
                     <!--#endregion-->
-                    
+
                     <!--#region  Area descriptiva de la empresa-->
-                    
+
                     <StackLayout Grid.Row="1" Margin="0">
                         <Label Text="defaul" x:Name="txtNombreEmpresa" HorizontalOptions="Center" FontAttributes="Bold" FontSize="Large"></Label>
                         <Label Text="defaul" x:Name="txtNombreSucursal" HorizontalOptions="Center" FontAttributes="Bold" FontSize="Medium"></Label>
@@ -54,7 +53,7 @@
                     </StackLayout>
 
                     <!--#endregion-->
-                    
+
                     <!--#region  Area de picker para seleccionar menu y seccion-->
                     <Label Grid.Row="2" Text="Ofertas" FontSize="Medium" HorizontalOptions="Center"></Label>
                     <!--picker para  menu-->
@@ -127,8 +126,8 @@
                             <ColumnDefinition Width="25" />
                         </Grid.ColumnDefinitions>
                     </Grid>
-                    <!--#endregion-->                    
-                    
+                    <!--#endregion-->
+
                     <!--#region  ListView de productos buscados segun el filtro de menu y seccion-->
 
                     <ListView x:Name="MyListViewBusquedaProductos"
@@ -215,12 +214,11 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-                    
+
                     <!--#endregion-->
                     <Label IsVisible="False" x:Name="idSucursal"></Label>
                 </Grid>
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>
-    
 </ContentPage>

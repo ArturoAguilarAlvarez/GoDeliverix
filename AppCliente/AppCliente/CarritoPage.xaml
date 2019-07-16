@@ -2,6 +2,8 @@
 <TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AppCliente.CarritoPage"
+            xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"             
+             xmlns:ffTrans="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
             Title="Mi Carrito">
 
     <!--Pages can be added as references or inline-->
@@ -22,10 +24,10 @@
 
             <ImageButton Source="IconoEliminar.png" HeightRequest="50" WidthRequest="30"  HorizontalOptions="End"
                     BackgroundColor="Transparent"      Clicked="BtnLimpiarCarrito_Clicked"></ImageButton>
-        
+
         </StackLayout>
     </NavigationPage.TitleView>
-    
+
     <ContentPage Title="Resumen">
         <ContentPage.Content>
             <Grid VerticalOptions="Fill" HorizontalOptions="Fill">
@@ -34,30 +36,30 @@
                     <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
                 <StackLayout VerticalOptions="Center" Grid.Row="0">
-                            <Label 
+                    <Label 
                             x:Name="txtCantidad"
                             Text="Total de articulos: 0" 
                             HorizontalOptions="Center" 
                             FontSize="Large"
                             FontAttributes="Bold"  ></Label>
 
-                            <Label 
+                    <Label 
                         x:Name="txtsubtotal"
                         HorizontalOptions="Center" 
                         TextColor="Black"
                         FontSize="22"
                         Text="SubTotal: $0.00"
                         Margin="20">
-                            </Label>
+                    </Label>
 
-                            <Label 
+                    <Label 
                         x:Name="txtTotalEnvio"
                         HorizontalOptions="Center" 
                         TextColor="Black"
                         FontSize="22"
                         Text="Total de envio= $0.00"
                         Margin="20">
-                            </Label>
+                    </Label>
                 </StackLayout>
 
 
@@ -70,9 +72,10 @@
                     Clicked="BtnPagar_Clicked"
                     TextColor="White"
                     BackgroundColor="Green"></Button>
-                
+
                 <!--<StackLayout Orientation="Horizontal" Grid.Row="2" VerticalOptions="End" HorizontalOptions="Center">
-                    --><!--<Button
+                    -->
+                <!--<Button
                         Margin="0,0,0,10"
                         CornerRadius="40"
                         HeightRequest="70"
@@ -81,7 +84,8 @@
                     Text="Vaciar Carrito" 
                     Clicked="BtnLimpiarCarrito_Clicked"
                     TextColor="White"
-                    BackgroundColor="Red"></Button>--><!--
+                    BackgroundColor="Red"></Button>-->
+                <!--
                 </StackLayout>-->
 
             </Grid>
@@ -138,6 +142,7 @@
                                                                HorizontalOptions="Center"
                                                        TextColor="Black"
                                            FontSize="Large"/>
+
                                                 <Button Text="Cambiar repartidor" CornerRadius="20" BackgroundColor="Black" TextColor="White" Margin="10,0" HorizontalOptions="Center"  Clicked="ButtonCambiarRepartidor_Clicked"></Button>
                                                 <Grid>
                                                     <Grid.RowDefinitions>
@@ -147,14 +152,31 @@
                                                         <ColumnDefinition Width="3*"></ColumnDefinition>
                                                         <ColumnDefinition Width="7*"></ColumnDefinition>
                                                     </Grid.ColumnDefinitions>
-                                                    <Image
+                                                    <!--<Image
                                                         Grid.Column="0"
                                                         Grid.Row="0"
                                                         Grid.RowSpan="3"
                                                        HorizontalOptions="Start"
                                                         VerticalOptions="Start"
-                                                   Source="{Binding STRRUTA}">
-                                                    </Image>
+                                                   Source="{Binding STRRUTA,Mode=OneTime}">-->
+                                                    <ff:CachedImage
+                                                    Source="{Binding STRRUTA}"
+                                                    HorizontalOptions="Start"
+                                                    VerticalOptions="Center"
+                                                    LoadingPlaceholder   = "IconoCajaVacia"
+                                                    ErrorPlaceholder     = "Error"
+                                                    WidthRequest         = "80"
+                                                    HeightRequest        = "80"
+                                                    CacheDuration        = "30"
+                                                    RetryCount           = "3"
+                                                    RetryDelay           = "250"
+                                                    DownsampleToViewSize = "False">
+                                                        <ff:CachedImage.Transformations>
+                                                            <ffTrans:RoundedTransformation Radius="20" />
+                                                        </ff:CachedImage.Transformations>
+                                                    </ff:CachedImage>
+
+
                                                     <Label Text="{Binding Cantidad  , StringFormat='Cantidad de productos:  {0}'}"
                                                            Grid.Column="1"
                                                            Grid.Row="0"
@@ -274,9 +296,10 @@
                         Clicked="BtnPagar_Clicked"
                         TextColor="White"
                         BackgroundColor="Green"></Button>
-                
+
                 <!--<StackLayout Orientation="Horizontal" Grid.Row="2" VerticalOptions="End" HorizontalOptions="Center">
-                    --><!--<Button
+                    -->
+                <!--<Button
                         CornerRadius="40"
                     x:Name="btnLimpiarCarrito"
                         Margin="0,0,0,10"
@@ -286,7 +309,8 @@
                     Text="Vaciar Carrito" 
                     Clicked="BtnLimpiarCarrito_Clicked"
                     TextColor="White"
-                    BackgroundColor="Red"></Button>--><!--
+                    BackgroundColor="Red"></Button>-->
+                <!--
 
                    
 
