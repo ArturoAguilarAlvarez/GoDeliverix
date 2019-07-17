@@ -102,17 +102,12 @@ namespace AppCliente
 
         protected override void OnSleep()
         {
-            // Handle when your app sleeps
         }
 
         protected override void OnResume()
         {
-            Application.Current.MainPage = new MasterMenu();
-            Usuario = AppCliente.Helpers.Settings.UserName;
-            Contrasena = AppCliente.Helpers.Settings.Password;
-            if (Ingresar())
+            if (Application.Current.Properties.ContainsKey("IsLogged"))
             {
-                MVDireccion.ObtenerDireccionesUsuario(Global1);
                 MainPage = new MasterMenu();
             }
             else

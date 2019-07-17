@@ -140,6 +140,7 @@ namespace AppCliente
                         Application.Current.MainPage = new MasterMenu();
                         await PopupNavigation.Instance.PopAsync();
                     }
+                    Application.Current.Properties["IsLogged"] = true;
                 }
                 else
                 {

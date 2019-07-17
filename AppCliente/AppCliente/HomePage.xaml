@@ -245,7 +245,7 @@
                 <Label Text="No hay productos disponibles en esta ubicacion" HorizontalOptions="Center" VerticalOptions="Center"></Label>
             </StackLayout>
 
-            <StackLayout Orientation="Horizontal" Grid.Row="2" HorizontalOptions="FillAndExpand"  x:Name="PanelNavegacion">
+            <StackLayout Orientation="Horizontal" Grid.Row="2" VerticalOptions="EndAndExpand" HorizontalOptions="FillAndExpand"  x:Name="PanelNavegacion">
 
                 <!--<ImageButton  Source="IconoAtras" HeightRequest="30" WidthRequest="80" HorizontalOptions="Start" BackgroundColor="Transparent" x:Name="btnAtras" Clicked="BtnAtras_Clicked"></ImageButton>-->
                 <Label  HorizontalOptions="CenterAndExpand" x:Name="lbCantidad"></Label>

@@ -67,9 +67,9 @@ namespace AppPrueba.Views
                 App.MVOrden.BuscarOrdenRepartidor(escaneado, AppPrueba.Helpers.Settings.Licencia);
                 if (escaneado.Length == 36)
                 {
-                    if (App.MVOrden.UidEstatus != null)
+                    if (App.MVOrden.StrEstatusOrdenSucursal != null)
                     {
-                        if (App.MVOrden.UidEstatus.ToString() == "C412D367-7D05-45D8-AECA-B8FABBF129D9".ToLower())
+                        if (App.MVOrden.StrEstatusOrdenSucursal.ToString() == "C412D367-7D05-45D8-AECA-B8FABBF129D9".ToLower())
                         {
                             await DisplayAlert("", "Orden lista", "ok");
                             await Navigation.PushAsync(new OrdenDescripcionEscaneado(MyListviewOrdenesPorEnviar));

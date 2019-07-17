@@ -27,7 +27,9 @@ namespace AppCliente
             string Salir = item.TargetType.ToString();
             if (Salir == "AppCliente.MasterMenuDetail")
             {
+                Application.Current.Properties.Remove("IsLogged");
                 App.Current.MainPage = new NavigationPage(new Login());
+
             }
             else
             {

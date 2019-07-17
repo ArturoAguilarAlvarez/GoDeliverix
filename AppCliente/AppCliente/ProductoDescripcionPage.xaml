@@ -13,7 +13,7 @@
     <ContentPage.Content>
         <ScrollView>
             <StackLayout>
-                <Grid ColumnSpacing="0" RowSpacing="0">
+                <Grid ColumnSpacing="0" VerticalOptions="FillAndExpand" RowSpacing="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="AUTO" />
                         <RowDefinition Height="AUTO" />
@@ -112,59 +112,58 @@
 
                         </StackLayout>
                     </StackLayout>
-
-
-
-                    <Entry x:Name="txtComentario" Placeholder="Agregar Notas" Margin="5,0" Grid.Row="2"></Entry>
-
-
-                    <ListView x:Name="MyListViewBusquedaEmpresaDelProducto" Margin="5,0" IsVisible="False"
+                    <StackLayout Grid.Row="2">
+                        <Entry x:Name="txtComentario" Placeholder="Agregar Notas" Margin="5,0" ></Entry>
+                        <ListView x:Name="MyListViewBusquedaEmpresaDelProducto" Margin="5,0" IsVisible="False"
             ItemsSource="{Binding VMTelefono}"
                       SelectionMode="Single"
                       SeparatorVisibility="None"
             IsPullToRefreshEnabled="False"
             HasUnevenRows="True">
-                        <ListView.RowHeight>
-                            <OnPlatform x:TypeArguments="x:Int32">
-                                <On Platform="iOS, Android" Value="80" />
-                            </OnPlatform>
-                        </ListView.RowHeight>
-                        <!--Custom View Cells-->
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <ContentView Padding="8">
-                                        <Frame OutlineColor="Accent"
+                            <ListView.RowHeight>
+                                <OnPlatform x:TypeArguments="x:Int32">
+                                    <On Platform="iOS, Android" Value="80" />
+                                </OnPlatform>
+                            </ListView.RowHeight>
+                            <!--Custom View Cells-->
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <ContentView Padding="8">
+                                            <Frame OutlineColor="Accent"
                      Padding="10">
-                                            <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto"/>
-                                                    <RowDefinition Height="Auto"/>
-                                                </Grid.RowDefinitions>
-                                                <StackLayout Grid.Row="0" Orientation="Horizontal">
-                                                    <StackLayout>
-                                                        <Label Text="{Binding StrIdentificador }"
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    <StackLayout Grid.Row="0" Orientation="Horizontal">
+                                                        <StackLayout>
+                                                            <Label Text="{Binding StrIdentificador }"
                          FontSize="22"
                          VerticalOptions="StartAndExpand" />
-                                                        <Label Text="{Binding StrCosto, StringFormat='Costo ${0}'}"
+                                                            <Label Text="{Binding StrCosto, StringFormat='Costo ${0}'}"
                          FontSize="16"
                          VerticalOptions="CenterAndExpand" />
+                                                        </StackLayout>
                                                     </StackLayout>
-                                                </StackLayout>
 
-                                            </Grid>
+                                                </Grid>
 
-                                        </Frame>
-                                    </ContentView>
+                                            </Frame>
+                                        </ContentView>
 
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
 
 
-                    </ListView>
+                        </ListView>
+                    </StackLayout>
+ 
+                    
                     <Label x:Name="idSeucursalSeleccionada" Text="" IsVisible="False"></Label>
-                    <Button Text="Agregar carrito $0" x:Name="btnAgregarCarrito"  BackgroundColor="Purple" TextColor="White"  Grid.Row="3"  HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" Clicked="ButtonCarrito_Clicked"></Button>
+                    <Button Text="Agregar carrito $0" x:Name="btnAgregarCarrito"  BackgroundColor="Purple" TextColor="White"  Grid.Row="3"  HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand" Clicked="ButtonCarrito_Clicked"></Button>
                     <Label IsVisible="False" x:Name="txtIDSeccion" Text=""></Label>
                 </Grid>
             </StackLayout>
