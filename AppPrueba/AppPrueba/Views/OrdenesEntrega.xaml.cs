@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-
+using VistaDelModelo;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using ZXing.Net.Mobile.Forms;
@@ -36,11 +36,11 @@ namespace AppPrueba.Views
 
         public async void Cargar()
         {
-            url = (RestService.Servidor + "api/Orden/GetOrdenesSucursal?Licencia=" + AppPrueba.Helpers.Settings.Licencia.ToString() + "&Estatus=Lista%20a%20enviar&tipoSucursal=s");
+            url = (RestService.Servidor + "api/Orden/GetOrdenesSucursal?Licencia=" + AppPrueba.Helpers.Settings.Licencia.ToString() + "&Estatus=Listaaenviar&tipoSucursal=s");
             string DatosObtenidos = await _client.GetStringAsync(url);
             var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
             App.MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(DatosGiros);
-            MyListviewOrdenesPorEnviar.ItemsSource = App.MVOrden.ListaDeOrdenesPorEnviar;
+            MyListviewOrdenesPorEnviar.ItemsSource = App.MVOrden.ListaDeOrdenes;
         }
 
         private void ImageButtonEscanear_Clicked(object sender, EventArgs e)
@@ -64,7 +64,15 @@ namespace AppPrueba.Views
         {
             try
             {
-                App.MVOrden.BuscarOrdenRepartidor(escaneado, AppPrueba.Helpers.Settings.Licencia);
+                //App.MVOrden = new VistaDelModelo.VMOrden();
+                //App.MVOrden.BuscarOrdenRepartidor(escaneado, AppPrueba.Helpers.Settings.Licencia);
+
+                url = "http://www.godeliverix.net/api/Orden/GetBuscarOrdenRepartidor?UidCodigo=" + escaneado + "&UidLicencia="+ AppPrueba.Helpers.Settings.Licencia + "";
+                string content = await _client.GetStringAsync(url);
+                var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                App.MVOrden = new VMOrden();
+                App.MVOrden = JsonConvert.DeserializeObject<VMOrden>(obj);
+
                 if (escaneado.Length == 36)
                 {
                     if (App.MVOrden.StrEstatusOrdenSucursal != null)
@@ -104,10 +112,10 @@ namespace AppPrueba.Views
                     await DisplayAlert("", "Codigo invalido", "ok");
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 App.MVOrden.Uidorden = new Guid();
-                await DisplayAlert("", "Codigo invalido", "ok");
+                await DisplayAlert("", "Codigo invalido: " + e.Message.ToString(), "ok");
             }
         }
 

@@ -27,6 +27,9 @@ namespace AppCliente
             string Salir = item.TargetType.ToString();
             if (Salir == "AppCliente.MasterMenuDetail")
             {
+                AppCliente.App.ListaDeProductos.Clear();
+                AppCliente.App.LISTADEEMPRESAS.Clear();
+                //AppCliente.App.MVDireccion = null;
                 Application.Current.Properties.Remove("IsLogged");
                 App.Current.MainPage = new NavigationPage(new Login());
 

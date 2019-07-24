@@ -4,7 +4,13 @@
              xmlns:popup="clr-namespace:Rg.Plugins.Popup.Converters.TypeConverters;assembly=Rg.Plugins.Popup"
              x:Class="AppCliente.UsuarioDirecciones">
     <StackLayout>
-        <ListView x:Name="MyListViewDirecciones"
+
+        <StackLayout x:Name="PanelSinDirecciones" VerticalOptions="Fill">
+            <Label Text="Sin direcciones" FontAttributes="Bold" VerticalOptions="Fill" TextDecorations="None" VerticalTextAlignment="Center" HorizontalOptions="Center"  Margin="20" FontSize="Large"></Label>
+
+        </StackLayout>
+        <StackLayout x:Name="PanelDirecciones">
+            <ListView x:Name="MyListViewDirecciones"
                                 ItemTapped="MyListViewDirecciones_ItemTapped"
                                 IsPullToRefreshEnabled="False"
                                   HasUnevenRows="True"
@@ -52,10 +58,12 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+        </StackLayout>
+
 
         <Button HorizontalOptions="End" VerticalOptions="End"  Image="AddCircule"
                     BackgroundColor="Transparent" FontSize="Micro" Clicked="BtnNuevo_Clicked"></Button>
 
         <Label  IsVisible="False" Text="{Binding ID}" x:Name="txtIDDireccionn"></Label>
-        </StackLayout>
+    </StackLayout>
 </ContentPage>

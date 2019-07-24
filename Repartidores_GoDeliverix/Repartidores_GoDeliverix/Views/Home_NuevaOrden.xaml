@@ -3,12 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              BindingContext="{Binding VMMain, Source={StaticResource Locator}}"
              x:Class="Repartidores_GoDeliverix.Views.Home_NuevaOrden">
- 
+
     <Grid HorizontalOptions="Fill" BindingContext="{Binding MVHomeOrden}" VerticalOptions="Fill">
         <Grid.RowDefinitions>
+            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="6*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="7*"></RowDefinition>
-            <RowDefinition Height="2*"></RowDefinition>
         </Grid.RowDefinitions>
         <StackLayout   VerticalOptions="Center">
             <Grid>
@@ -30,28 +30,25 @@
                 </StackLayout>
             </Grid>
         </StackLayout>
-        
-        
-        <StackLayout Grid.Row="1">
+
+
+        <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="1">
             <Grid >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*"></RowDefinition>
+                    <RowDefinition Height="8*"></RowDefinition>
                     <RowDefinition Height="1*"></RowDefinition>
-                    <RowDefinition Height="6*"></RowDefinition>
-                    <RowDefinition Height="2*"></RowDefinition>
                 </Grid.RowDefinitions>
-                <StackLayout   Padding="10,0,0,0"  >
-                    <Label TextColor="Purple" Text="Detalles de orden"></Label>
-                </StackLayout>
-                <StackLayout Grid.Row="1" Padding="10,0,0,0"  >
+
+                <StackLayout Grid.Row="0" Padding="10,0,0,0"  >
                     <Grid >
                         <Label Text="Producto" FontSize="Medium" TextColor="Purple"  Grid.Column="0"></Label>
                         <Label Text="Cantidad" FontSize="Medium" TextColor="Purple"  Grid.Column="1" ></Label>
                         <Label Text="Importe"  FontSize="Medium" TextColor="Purple"  Grid.Column="2" ></Label>
                     </Grid>
                 </StackLayout>
-                <StackLayout Grid.Row="2"  Padding="10,0,0,0"  >
-                    <ScrollView>
+                <StackLayout Grid.Row="1"  Padding="10,0,0,0"  >
+                    <ScrollView VerticalOptions="StartAndExpand">
                         <ListView ItemsSource="{Binding ListaProductos}" >
                             <ListView.ItemTemplate >
                                 <DataTemplate>
@@ -68,17 +65,17 @@
                     </ScrollView>
                 </StackLayout>
 
-                <StackLayout  Grid.Row="3" Padding="10,0,0,0"  >
+                <StackLayout  Grid.Row="2" Padding="10,0,0,0"  >
                     <Grid >
-                        <Label Text="Envio"      FontSize="Small" TextColor="MediumPurple"  Grid.Column="0"></Label>
-                        <Label Text="{Binding MTotalTarifario}"      FontSize="Small" TextColor="MediumPurple"  Grid.Column="1"></Label>
-                        <Label Text="Total" FontSize="Small" TextColor="MediumPurple"  Grid.Column="2"></Label>
-                        <Label Text="{Binding MTotal}"  FontSize="Small" TextColor="MediumPurple"  Grid.Column="3"></Label>
+                        <Label Text="Envio"      FontSize="Large" TextColor="MediumPurple"  Grid.Column="0"></Label>
+                        <Label Text="{Binding MTotalTarifario}"      FontSize="Large" TextColor="MediumPurple"  Grid.Column="1"></Label>
+                        <Label Text="Total" FontSize="Large" TextColor="MediumPurple"  Grid.Column="2"></Label>
+                        <Label Text="{Binding MTotal}"  FontSize="Large" TextColor="MediumPurple"  Grid.Column="3"></Label>
                     </Grid>
                 </StackLayout>
             </Grid>
         </StackLayout>
-        <StackLayout  Grid.Row="2">
+        <StackLayout  Grid.Row="2" VerticalOptions="End">
             <Grid>
                 <Button  Text="Si" FontSize="Large" Command="{Binding ConfirmOrder}" x:Name="btnAceptar" Clicked="BtnAceptar_Clicked" TextColor="White"  Grid.Column="0" BackgroundColor="Green"></Button>
                 <Button Text="No" FontSize="Large" Command="{Binding CancelOrder}"  x:Name="btnCancelar" Clicked="BtnCancelar_Clicked" TextColor="White" Grid.Column="1"  BackgroundColor="Red"  ></Button>

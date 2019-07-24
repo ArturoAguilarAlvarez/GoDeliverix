@@ -28,7 +28,7 @@
                     
                     <StackLayout>
                         <Label Text="Tipo de Telefono" HorizontalTextAlignment="Center"/>
-                        <Picker  x:Name="MyPicker" Title="Tipo Telefono" ItemsSource="{Binding TIPOTELEFONO}"  ItemDisplayBinding="{Binding NOMBRE}" />
+                        <Picker  x:Name="MyPicker" SelectedIndexChanged="MyPicker_SelectedIndexChanged" Title="Tipo Telefono" ItemsSource="{Binding ListaDeTipoDeTelefono}"  ItemDisplayBinding="{Binding StrNombreTipoDeTelefono}" />
                     </StackLayout>
 
                     <StackLayout Grid.Row="1">

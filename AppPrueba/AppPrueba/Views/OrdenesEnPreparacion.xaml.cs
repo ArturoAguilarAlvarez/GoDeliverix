@@ -35,12 +35,12 @@ namespace AppPrueba.Views
 
         public async void Cargar()
         {
-            url = (RestService.Servidor + "api/Orden/GetOrdenesSucursal?Licencia=" + AppPrueba.Helpers.Settings.Licencia.ToString() + "&Estatus=Pendiente%20para%20elaborar&tipoSucursal=s");
+            url = (RestService.Servidor + "api/Orden/GetOrdenesSucursal?Licencia=" + AppPrueba.Helpers.Settings.Licencia.ToString() + "&Estatus=Pendienteparaelaborar&tipoSucursal=s");
             string DatosObtenidos = await _client.GetStringAsync(url);
             var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
             App.MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(DatosGiros);
             //App.MVOrden.BuscarOrdenesAppSucursal("Sucursal", UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), EstatusSucursal: "Pendiente para elaborar", TipoDeSucursal: "S");
-            MyListviewOrdenesPorRealizar.ItemsSource = App.MVOrden.ListaDeOrdenesPorElaborar;
+            MyListviewOrdenesPorRealizar.ItemsSource = App.MVOrden.ListaDeOrdenes;
         }
 
         private async void ButtonFinalizarOrdenList_Clicked(object sender, EventArgs e)

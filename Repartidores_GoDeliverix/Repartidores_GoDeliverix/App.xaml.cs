@@ -30,7 +30,14 @@ namespace Repartidores_GoDeliverix
 
         protected override void OnResume()
         {
-            // Handle when your app resumes
+            if (Application.Current.Properties.ContainsKey("IsLogged"))
+            {
+                MainPage = new NavigationPage(new TabbedPageMain()); 
+            }
+            else
+            {
+                MainPage = new NavigationPage(new Login());
+            }
         }
     }
 }

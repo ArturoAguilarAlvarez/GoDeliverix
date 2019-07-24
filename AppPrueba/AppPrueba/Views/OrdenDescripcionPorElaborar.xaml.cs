@@ -37,22 +37,10 @@ namespace AppPrueba.Views
         {
             string _URL = (RestService.Servidor + "api/Orden/GetObtenerProductosDeOrden?UidOrden=" + ObjItem.Uidorden.ToString());
             string DatosObtenidos = await _client.GetStringAsync(_URL);
-            var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
+            var DatosJson = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
+            App.MVOrden = JsonConvert.DeserializeObject<VMOrden>(DatosJson);
 
-            JArray blogPostArray = JArray.Parse(DatosGiros.ToString());
-
-            App.MVOrden.ListaDeProductos = blogPostArray.Select(p => new VMOrden
-            {
-                UidProducto = (Guid)p["UidProducto"],
-                StrNombreSucursal = (string)p["Identificador"],
-                StrNombreProducto = (string)p["StrNombreProducto"],
-                Imagen = (string)p["Imagen"],
-                intCantidad = (int)p["intCantidad"],
-                UidSucursal = (Guid)p["UidSucursal"],
-                MTotal = (int)p["MTotal"],
-                MCostoTarifario = (int)p["MCostoTarifario"],
-                VisibilidadNota = (string)p["StrNota"]
-            }).ToList();
+            
 
             //App.MVOrden.ObtenerProductosDeOrden(ObjItem.Uidorden.ToString());
             MyListviewOrdenesEnPreparacion.ItemsSource = App.MVOrden.ListaDeProductos;

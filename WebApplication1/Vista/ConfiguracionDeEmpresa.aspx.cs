@@ -101,9 +101,9 @@ namespace WebApplication1.Vista
                 #endregion
                 #region DropdownList
 
-                DDLDTipoDETelefono.DataSource = MVTelefono.TIPOTELEFONO;
-                DDLDTipoDETelefono.DataValueField = "ID";
-                DDLDTipoDETelefono.DataTextField = "NOMBRE";
+                DDLDTipoDETelefono.DataSource = MVTelefono.ListaDeTipoDeTelefono;
+                DDLDTipoDETelefono.DataValueField = "UidTipo";
+                DDLDTipoDETelefono.DataTextField = "StrNombreTipoDeTelefono";
                 DDLDTipoDETelefono.DataBind();
                 //Obtiene el pais
                 DDLDPais.DataSource = MVDireccion.Paises();

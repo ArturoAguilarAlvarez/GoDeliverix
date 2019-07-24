@@ -61,13 +61,13 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
-        public ResponseHelper GetObtenerTipoDetelefono(string uidUsuario, string Parametro)
+        public ResponseHelper GetObtenerTipoDetelefono()
         {
             Respuesta = new ResponseHelper();
             MVTelefono = new VMTelefono();
 
             MVTelefono.TipoDeTelefonos();
-            Respuesta.Data = MVTelefono.TIPOTELEFONO;
+            Respuesta.Data = MVTelefono.ListaDeTipoDeTelefono;
             Respuesta.Status = true;
             Respuesta.Message = "Informacion agregada satisfactoriamente";
             return Respuesta;

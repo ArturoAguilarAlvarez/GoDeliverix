@@ -26,7 +26,7 @@ namespace AppCliente
         {
             InitializeComponent();
         }
-        private void Button_Siguiente(object sender, EventArgs e)
+        private async void Button_Siguiente(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(txtUsuario.Text)
                 && !string.IsNullOrEmpty(txtContrasena1.Text)
@@ -34,8 +34,10 @@ namespace AppCliente
             {
                 if (txtContrasena1.Text.Length > 7)
                 {
-                    url = "Usuario/GetBuscarUsuarios?USER=" + txtUsuario.Text + "&UIDPERFIL=4f1e1c4b-3253-4225-9e46-dd7d1940da19";
-                    MVUsuarios = JsonConvert.DeserializeObject<VMUsuarios>(ConsultarAapiAsync(url).ToString());
+                    url = "http://www.godeliverix.net/api/Usuario/GetBuscarUsuarios?USER=" + txtUsuario.Text + "&UIDPERFIL=4f1e1c4b-3253-4225-9e46-dd7d1940da19";
+                    string content = await _WebApiGoDeliverix.GetStringAsync(url);
+                    var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                    MVUsuarios = JsonConvert.DeserializeObject<VMUsuarios>(obj);
                     //string content = await _WebApiGoDeliverix.GetStringAsync(url);
                     //var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                     //MVUsuarios = JsonConvert.DeserializeObject<VMUsuarios>(obj);
@@ -45,7 +47,7 @@ namespace AppCliente
                     {
                         if (txtContrasena1.Text == txtContrasena2.Text)
                         {
-                            Navigation.PushAsync(new RegistroPaso3(txtUsuario.Text, txtContrasena1.Text));
+                            await Navigation.PushAsync(new RegistroPaso3(txtUsuario.Text, txtContrasena1.Text));
                         }
                         else
                         {
@@ -68,11 +70,5 @@ namespace AppCliente
             }
         }
 
-        private async Task<object> ConsultarAapiAsync(string url)
-        {
-            string content = await _WebApiGoDeliverix.GetStringAsync(url);
-            var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-            return obj;
-        }
     }
 }

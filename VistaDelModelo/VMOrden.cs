@@ -122,7 +122,14 @@ namespace VistaDelModelo
         public string StrNota { get; set; }
         public double MCostoTarifario { get; set; }
         public double MSubtotalSucursal { get; set; }
-        public string StrEstatusOrdenSucursal { get; private set; }
+        private string _StrEstatusOrdenSucursal;
+
+        public string StrEstatusOrdenSucursal
+        {
+            get { return _StrEstatusOrdenSucursal; }
+            set { _StrEstatusOrdenSucursal = value; }
+        }
+
         public string StrEstatusOrdenTarifario { get; private set; }
 
 
@@ -135,16 +142,38 @@ namespace VistaDelModelo
         }
 
         public string StrEstatusOrdenGeneral { get; set; }
-        public string StrNombreProducto { get;  set; }
+        public string StrNombreProducto { get; set; }
         public int intCantidad { get; set; }
         public Guid UidEstatus { get; set; }
         public Guid UidSucursal { get; set; }
         public Guid UidProductoEnOrden { get; set; }
         public Guid UidDireccionSucursal { get; set; }
         public Guid UidDireccionCliente { get; set; }
-        public List<VMOrden> ListaDeProductos = new List<VMOrden>();
-        public List<VMOrden> ListaDeOrdenes = new List<VMOrden>();
-        public List<VMOrden> ListaDeOrdenesCanceladas = new List<VMOrden>();
+        private List<VMOrden> _ListaDeProductos;
+
+        public List<VMOrden> ListaDeProductos
+        {
+            get { return _ListaDeProductos; }
+            set { _ListaDeProductos = value; }
+        }
+
+        private List<VMOrden> _ListaDeOrdenes;
+
+        public List<VMOrden> ListaDeOrdenes
+        {
+            get { return _ListaDeOrdenes; }
+            set { _ListaDeOrdenes = value; }
+        }
+
+        private List<VMOrden> _ListaDeOrdenesCanceladas;
+
+        public List<VMOrden> ListaDeOrdenesCanceladas
+        {
+            get { return _ListaDeOrdenesCanceladas; }
+            set { _ListaDeOrdenesCanceladas = value; }
+        }
+
+
         public List<VMOrden> ListaDeBitacoraDeOrdenes = new List<VMOrden>();
         public List<VMOrden> ListaDeInformacionDeOrden = new List<VMOrden>();
 
@@ -369,7 +398,7 @@ namespace VistaDelModelo
 
                 Datos = new Conexion();
 
-                ListaDeOrdenes.Clear();
+                ListaDeOrdenes = new List<VMOrden>();
 
 
                 foreach (DataRow item in Datos.Busquedas(comando).Rows)
@@ -439,7 +468,7 @@ namespace VistaDelModelo
                 }
                 Datos = new Conexion();
 
-                ListaDeOrdenes.Clear();
+                ListaDeOrdenes = new List<VMOrden>();
                 switch (Parametro)
                 {
                     case "Usuario":
@@ -558,7 +587,7 @@ namespace VistaDelModelo
                         }
                         if (EstatusSucursal == "Canceladas")
                         {
-                            ListaDeOrdenesCanceladas.Clear();
+                            ListaDeOrdenesCanceladas = new List<VMOrden>(); ;
                             foreach (DataRow item in Datos.Busquedas(comando).Rows)
                             {
                                 string imagen = string.Empty;
@@ -690,7 +719,7 @@ namespace VistaDelModelo
                 }
                 Datos = new Conexion();
 
-                ListaDeOrdenes.Clear();
+                ListaDeOrdenes = new List<VMOrden>();
                 switch (Parametro)
                 {
                     case "Usuario":

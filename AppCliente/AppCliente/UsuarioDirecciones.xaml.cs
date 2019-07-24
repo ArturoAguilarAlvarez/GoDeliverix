@@ -100,37 +100,25 @@ namespace AppCliente
             string strDirecciones = await _client.GetStringAsync(tex);
             var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
             App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
-            //JArray blogPostArray = JArray.Parse(obj.ToString());
 
-            ////IList<VMDireccion> blogPosts 
-            //App.MVDireccion.ListaDIRECCIONES = blogPostArray.Select(p => new VMDireccion
-            //{
-            //    REFERENCIA = (string)p["REFERENCIA"],
-            //    ID = (Guid)p["ID"],
-            //    PAIS = (string)p["PAIS"],
-            //    ESTADO = (string)p["ESTADO"],
-            //    MUNICIPIO = (string)p["MUNICIPIO"],
-            //    CIUDAD = (string)p["CIUDAD"],
-            //    COLONIA = (string)p["COLONIA"],
-            //    CALLE0 = (string)p["CALLE0"],
-            //    CALLE1 = (string)p["CALLE1"],
-            //    CALLE2 = (string)p["CALLE2"],
-            //    MANZANA = (string)p["MANZANA"],
-            //    LOTE = (string)p["LOTE"],
-            //    CodigoPostal = (string)p["CodigoPostal"],
-            //    IDENTIFICADOR = (string)p["REFERENCIA"],
-            //    NOMBRECIUDAD = (string)p["NOMBRECIUDAD"],
-            //    NOMBRECOLONIA = (string)p["NOMBRECOLONIA"],
-            //    Clicked = false
-
-            //}).ToList();
-
-            for (int i = 0; i < AppCliente.App.MVDireccion.ListaDIRECCIONES.Count; i++)
+            if (AppCliente.App.MVDireccion.ListaDIRECCIONES.Count == 0)
             {
-                AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Clicked = false;
+                PanelSinDirecciones.IsVisible = true;
+                PanelDirecciones.IsVisible = false;
+            }
+            else
+            {
+                PanelSinDirecciones.IsVisible = false;
+                PanelDirecciones.IsVisible = true;
+                for (int i = 0; i < AppCliente.App.MVDireccion.ListaDIRECCIONES.Count; i++)
+                {
+                    AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Clicked = false;
+                }
+
+                MyListViewDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;
             }
 
-            MyListViewDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;
+          
         }
     }
 }

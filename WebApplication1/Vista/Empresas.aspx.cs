@@ -96,9 +96,9 @@ namespace WebApplication1.Vista
                 DDLDTipoDeEmpresa.DataValueField = "IdTipoDeEmpresa";
                 DDLDTipoDeEmpresa.DataBind();
 
-                DDLDTipoDETelefono.DataSource = MVTelefono.TIPOTELEFONO;
-                DDLDTipoDETelefono.DataValueField = "ID";
-                DDLDTipoDETelefono.DataTextField = "NOMBRE";
+                DDLDTipoDETelefono.DataSource = MVTelefono.ListaDeTipoDeTelefono;
+                DDLDTipoDETelefono.DataValueField = "UidTipo";
+                DDLDTipoDETelefono.DataTextField = "StrNombreTipoDeTelefono";
                 DDLDTipoDETelefono.DataBind();
 
                 #endregion
@@ -1264,8 +1264,8 @@ namespace WebApplication1.Vista
             DDLDTipoDETelefono.SelectedIndex = -1;
 
             //Limpia los datos de direccion y de telefono
-            MVDireccion.ListaDIRECCIONES.Clear();
-            MVTelefono.ListaDeTelefonos.Clear();
+            MVDireccion.ListaDIRECCIONES = new List<VMDireccion>();
+            MVTelefono.ListaDeTelefonos = new List<VMTelefono>();
         }
         protected void PanelGeneral(object sender, EventArgs e)
         {

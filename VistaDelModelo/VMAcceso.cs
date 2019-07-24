@@ -78,7 +78,7 @@ namespace VistaDelModelo
         public void CorreoDeConfirmacion(Guid UidUsuario, string correo, string usuario, string password, string Nombre, string Apellidos)
         {
             Guid CodigoActivacion = Guid.NewGuid();
-            MailMessage mail = new MailMessage("sistemas@compuandsoft.com", correo);
+            MailMessage mail = new MailMessage("website@compuandsoft.com", correo);
             mail.Subject = "Activacion de cuenta";
             //Se crea el contenido del correo eletronico
             string contenido = "Hola usuario " + Nombre + " " + Apellidos + ",";
@@ -97,7 +97,7 @@ namespace VistaDelModelo
             smtp.EnableSsl = false;
 
             //Activacion de la cuenta de la que se enviaran los correos electronicos
-            NetworkCredential credenciales = new NetworkCredential("sistemas@compuandsoft.com", "S15t3m45");
+            NetworkCredential credenciales = new NetworkCredential("website@compuandsoft.com", "W3bs1t35@");
             // asignacion de las credenciales al protocolo smtp
             smtp.UseDefaultCredentials = true;
             smtp.Credentials = credenciales;

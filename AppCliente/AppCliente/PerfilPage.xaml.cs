@@ -40,7 +40,7 @@ namespace AppCliente
             CargarNombreTelefono();
             MyListView.ItemsSource = MVTelefono.ListaDeTelefonos;
             Cargausuario();
-            MyPicker.ItemsSource = MVTelefono.TIPOTELEFONO;
+            MyPicker.ItemsSource = MVTelefono.ListaDeTipoDeTelefono;
 
             txtNumeroTelefonico.Text = "";
             txtIDTelefono.Text = "";
@@ -57,7 +57,7 @@ namespace AppCliente
             //MyListViewDirecciones.ItemsSource = MVTelefono.ListaDeTelefonos;
             for (int i = 0; i <= a; i++)
             {
-                MVTelefono.ListaDeTelefonos[i].StrNombreTipoDeTelefono = MVTelefono.TIPOTELEFONO.Where(t => t.ID == MVTelefono.ListaDeTelefonos[i].UidTipo).FirstOrDefault().NOMBRE;
+                MVTelefono.ListaDeTelefonos[i].StrNombreTipoDeTelefono = MVTelefono.ListaDeTipoDeTelefono.Where(t => t.ID == MVTelefono.ListaDeTelefonos[i].UidTipo).FirstOrDefault().StrNombreTipoDeTelefono;
 
                 //int index = MVTelefono.TIPOTELEFONO.FindIndex(x => x.ID == MVTelefono.ListaDeTelefonos[i].ID);
                 //MVTelefono.ListaDeTelefonos[i].StrNombreTipoDeTelefono = MVTelefono.TIPOTELEFONO[index].NOMBRE;
@@ -183,7 +183,7 @@ namespace AppCliente
                 MyListView.ItemsSource = null;
                 MyListView.ItemsSource = MVTelefono.ListaDeTelefonos;
                 Cargausuario();
-                MyPicker.ItemsSource = MVTelefono.TIPOTELEFONO;
+                MyPicker.ItemsSource = MVTelefono.ListaDeTipoDeTelefono;
 
                 txtNumeroTelefonico.Text = "";
                 txtIDTelefono.Text = "";

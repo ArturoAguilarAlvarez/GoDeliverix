@@ -322,64 +322,81 @@ namespace Repartidores_GoDeliverix.VM
         }
         public async void cargaOrden()
         {
-            ListaProductos = new List<VMHomeOrden>();
-            MVOrden = new VMOrden();
-            _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
-
-
-            url = "Orden/GetObtenerProductosDeOrden?UidOrden=" + StrUidOrden + "";
-
-            string DatosObtenidos = await _WebApiGoDeliverix.GetStringAsync(url);
-            var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
-            url = string.Empty;
-            url = "http://www.godeliverix.net/api/Sucursales/GetBuscarSucursales?UidSucursal=" + UidSucursal + "";
-            var content = await _WebApiGoDeliverix.GetStringAsync(url);
-            var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-            MVSucursal = JsonConvert.DeserializeObject<VistaDelModelo.VMSucursales>(obj);
-            StrIdentificadorSucursal = MVSucursal.IDENTIFICADOR;
-            url = string.Empty;
-            url = "http://www.godeliverix.net/api/Empresa/GetBuscarEmpresas?UidEmpresa=" + MVSucursal.UidEmpresa + "";
-            content = await _WebApiGoDeliverix.GetStringAsync(url);
-            obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-            MVEmpresa = JsonConvert.DeserializeObject<VistaDelModelo.VMEmpresas>(obj);
-            StrEmpresaNombreComercial = MVEmpresa.NOMBRECOMERCIAL;
-
-            JArray blogPostArray = JArray.Parse(DatosGiros.ToString());
-
-
-            MVOrden.ListaDeProductos = blogPostArray.Select(p => new VMOrden()
+            try
             {
-                UidProducto = new Guid(p["UidProducto"].ToString()),
-                UidProductoEnOrden = new Guid(p["UidProductoEnOrden"].ToString()),
-                StrNombreSucursal = p["StrNombreSucursal"].ToString(),
-                StrNombreProducto = p["StrNombreProducto"].ToString(),
-                //Imagen = item["NVchRuta"].ToString(),
-                Imagen = p["Imagen"].ToString(),
-                intCantidad = int.Parse(p["intCantidad"].ToString()),
-                UidSucursal = new Guid(p["UidSucursal"].ToString()),
-                MTotal = decimal.Parse(p["MTotal"].ToString()),
-                MCostoTarifario = double.Parse(p["MCostoTarifario"].ToString())
+                if (ListaProductos == null)
+                {
+                    ListaProductos = new List<VMHomeOrden>();
+                }
+                else
+                {
+                    ListaProductos.Clear();
+                }
 
-            }).ToList();
+                MVOrden = new VMOrden();
+                _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
 
+
+                url = "Orden/GetObtenerProductosDeOrden?UidOrden=" + StrUidOrden + "";
+
+                string DatosObtenidos = await _WebApiGoDeliverix.GetStringAsync(url);
+                var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
+                JArray blogPostArray = JArray.Parse(DatosGiros.ToString());
+                MVOrden.ListaDeProductos = blogPostArray.Select(p => new VMOrden()
+                {
+                    UidProducto = new Guid(p["UidProducto"].ToString()),
+                    UidProductoEnOrden = new Guid(p["UidProductoEnOrden"].ToString()),
+                    StrNombreSucursal = p["StrNombreSucursal"].ToString(),
+                    StrNombreProducto = p["StrNombreProducto"].ToString(),
+                    //Imagen = item["NVchRuta"].ToString(),
+                    Imagen = p["Imagen"].ToString(),
+                    intCantidad = int.Parse(p["intCantidad"].ToString()),
+                    UidSucursal = new Guid(p["UidSucursal"].ToString()),
+                    MTotal = decimal.Parse(p["MTotal"].ToString()),
+                    MCostoTarifario = double.Parse(p["MCostoTarifario"].ToString())
+
+                }).ToList();
+                StrIdentificadorSucursal = MVOrden.ListaDeProductos[0].StrNombreSucursal;
+
+                MTotal = 0.0m;
+                foreach (VMOrden item in MVOrden.ListaDeProductos)
+                {
+                    MTotalTarifario = 0.0m;
+                    ListaProductos.Add(new VMHomeOrden()
+                    {
+                        StrNombreProducto = item.StrNombreProducto,
+                        IntCantidad = item.intCantidad,
+                        MTotal = item.MTotal
+                    });
+                    MTotalTarifario = decimal.Parse(item.MCostoTarifario.ToString());
+                    MTotal = MTotal + (item.MTotal * item.intCantidad);
+                }
+                MTotal = MTotal + MTotalTarifario;
+
+                url = string.Empty;
+                url = "http://www.godeliverix.net/api/Sucursales/GetBuscarSucursales?UidSucursal=" + UidSucursal + "";
+                var content = await _WebApiGoDeliverix.GetStringAsync(url);
+                var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                MVSucursal = JsonConvert.DeserializeObject<VistaDelModelo.VMSucursales>(obj);
+                StrIdentificadorSucursal = MVSucursal.IDENTIFICADOR;
+                url = string.Empty;
+                url = "http://www.godeliverix.net/api/Empresa/GetBuscarEmpresas?UidEmpresa=" + MVSucursal.UidEmpresa + "";
+                content = await _WebApiGoDeliverix.GetStringAsync(url);
+                obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                MVEmpresa = JsonConvert.DeserializeObject<VistaDelModelo.VMEmpresas>(obj);
+                StrEmpresaNombreComercial = MVEmpresa.NOMBRECOMERCIAL;
+
+
+
+            }
+            catch (Exception)
+            {
+
+                GenerateMessage("Aviso","Sin acceso a los servidores","OK");
+            }
 
             //MVOrden.ObtenerProductosDeOrden(StrUidOrden);
-            StrIdentificadorSucursal = MVOrden.ListaDeProductos[0].StrNombreSucursal;
-
-            MTotal = 0.0m;
-            foreach (VMOrden item in MVOrden.ListaDeProductos)
-            {
-                MTotalTarifario = 0.0m;
-                ListaProductos.Add(new VMHomeOrden()
-                {
-                    StrNombreProducto = item.StrNombreProducto,
-                    IntCantidad = item.intCantidad,
-                    MTotal = item.MTotal
-                });
-                MTotalTarifario = decimal.Parse(item.MCostoTarifario.ToString());
-                MTotal = MTotal + item.MTotal;
-            }
-            MTotal = MTotal + MTotalTarifario;
+           
         }
         protected async void GenerateMessage(string Tittle, string Message, string TextOption)
         {

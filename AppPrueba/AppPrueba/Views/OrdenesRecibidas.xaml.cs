@@ -96,22 +96,9 @@ namespace AppPrueba.Views
 
             string _URL = (RestService.Servidor + "api/Orden/GetObtenerProductosDeOrden?UidOrden=" + ObjItem.Uidorden.ToString());
             string DatosObtenidos = await _client.GetStringAsync(_URL);
-            var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
+            var DatosProductos = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
+            App.MVOrden = JsonConvert.DeserializeObject<VMOrden>(DatosProductos);
 
-            JArray blogPostArray = JArray.Parse(DatosGiros.ToString());
-
-            App.MVOrden.ListaDeProductos = blogPostArray.Select(p => new VMOrden
-            {
-                UidProducto = (Guid)p["UidProducto"],
-                StrNombreSucursal = (string)p["Identificador"],
-                StrNombreProducto = (string)p["StrNombreProducto"],
-                Imagen = (string)p["Imagen"],
-                intCantidad = (int)p["intCantidad"],
-                UidSucursal = (Guid)p["UidSucursal"],
-                MTotal = (int)p["MTotal"],
-                MCostoTarifario = (int)p["MCostoTarifario"],
-                VisibilidadNota = (string)p["StrNota"]
-            }).ToList();
 
             //App.MVOrden.ObtenerProductosDeOrden(ObjItem.Uidorden.ToString());
 
@@ -182,14 +169,14 @@ namespace AppPrueba.Views
         private async void Cargar()
         {
             string _URL = (RestService.Servidor + "api/Orden/GetOrdenesSucursal?Licencia=" + AppPrueba.Helpers.Settings.Licencia +
-                "&Estatus=Pendientes%20a%20confirmar&tipoSucursal=s");
+                "&Estatus=Pendientesaconfirmar&tipoSucursal=s");
             var DatosObtenidos = await _client.GetAsync(_URL);
             string res = await DatosObtenidos.Content.ReadAsStringAsync();
             var asd = JsonConvert.DeserializeObject<ResponseHelper>(res).Data.ToString();
             App.MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(asd);
 
             //App.MVOrden.BuscarOrdenesAppSucursal("Sucursal", UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), EstatusSucursal: "Pendientes a confirmar", TipoDeSucursal: "S");
-            MyListviewOrdenesRecibidas.ItemsSource = App.MVOrden.ListaDeOrdenesPorConfirmar;
+            MyListviewOrdenesRecibidas.ItemsSource = App.MVOrden.ListaDeOrdenes;
         }
     }
 }

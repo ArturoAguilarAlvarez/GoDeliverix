@@ -139,5 +139,8 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\IconoOrdenesEnPreparacion.png" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\Repartidores.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

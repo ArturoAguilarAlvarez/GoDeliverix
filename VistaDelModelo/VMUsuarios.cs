@@ -131,7 +131,14 @@ namespace VistaDelModelo
             set { _Perfil = value; }
         }
         public bool Seleccion { get; set; }
-        public List<VMUsuarios> LISTADEUSUARIOS;
+        private List<VMUsuarios> _ListaDeUsuarios;
+
+        public List<VMUsuarios> LISTADEUSUARIOS
+        {
+            get { return _ListaDeUsuarios; }
+            set { _ListaDeUsuarios = value; }
+        }
+
 
 
         #endregion

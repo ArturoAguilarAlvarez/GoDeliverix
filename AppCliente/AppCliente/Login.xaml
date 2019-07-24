@@ -24,9 +24,9 @@
                   WidthRequest="150"
                   Grid.Row="1"></Image>
         <Label Grid.Row="2" >Usuario</Label>
-        <Entry Placeholder="Usuario"  Text="xxx" x:Name="txtUsuario" Grid.Row="3"/>
+        <Entry Placeholder="Usuario"  Text="cliente117" x:Name="txtUsuario" Grid.Row="3"/>
         <Label Grid.Row="4" >Password</Label>
-        <Entry Grid.Row="5"  Placeholder="Password" Text="xxx" IsPassword="True" x:Name="txtIDContraseña"/>
+        <Entry Grid.Row="5"  Placeholder="Password" Text="54321" IsPassword="True" x:Name="txtIDContraseña"/>
         <StackLayout x:Name="CuadroRecordar" IsVisible="True" Orientation="Horizontal" Grid.Row="6" Spacing="0">
             <Label Text="Recordar Contraseña" FontSize="Micro" VerticalOptions="Center" HorizontalOptions="StartAndExpand" />
             <Switch  x:Name="GuardarContraseña" HorizontalOptions="End" IsToggled="false" VerticalOptions="Center" />
@@ -46,6 +46,7 @@
 
         <Button BackgroundColor="#51406A" Text="Registro" TextColor="White" Clicked="Button_Siguiente" Grid.Row="9"/>
 
+        <ActivityIndicator x:Name="acLogin"></ActivityIndicator>
         <Button 
                     Text="¿Olvidaste tu contraseña?"                   
                     VerticalOptions="End"

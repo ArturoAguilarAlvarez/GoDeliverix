@@ -92,9 +92,9 @@ namespace WebApplication1.Vista
                 DDLDEstatus.DataBind();
 
 
-                DDLDTipoDETelefono.DataSource = MVTelefono.TIPOTELEFONO;
-                DDLDTipoDETelefono.DataValueField = "ID";
-                DDLDTipoDETelefono.DataTextField = "NOMBRE";
+                DDLDTipoDETelefono.DataSource = MVTelefono.ListaDeTipoDeTelefono;
+                DDLDTipoDETelefono.DataValueField = "UidTipo";
+                DDLDTipoDETelefono.DataTextField = "StrNombreTipoDeTelefono";
                 DDLDTipoDETelefono.DataBind();
 
                 #endregion

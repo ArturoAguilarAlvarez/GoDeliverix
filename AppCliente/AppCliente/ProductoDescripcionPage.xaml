@@ -21,7 +21,7 @@
                         <RowDefinition Height="AUTO" />
                     </Grid.RowDefinitions>
 
-                    <Image x:Name="ImagenProducto"  HeightRequest="150" Margin="5" VerticalOptions="Center" Grid.Row="0" Aspect="Fill"></Image>
+                    <Image x:Name="ImagenProducto"  HeightRequest="250" Margin="5" VerticalOptions="Center" Grid.Row="0" Aspect="Fill"></Image>
 
                     <StackLayout Orientation="Horizontal" Margin="10,0" Grid.Row="1" HorizontalOptions="Center">
                         <StackLayout Orientation="Vertical">

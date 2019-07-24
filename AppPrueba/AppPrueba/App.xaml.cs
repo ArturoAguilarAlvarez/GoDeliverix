@@ -55,7 +55,14 @@ namespace AppPrueba
 
         protected override void OnResume()
         {
-            // Handle when your app resumes
+            if (Application.Current.Properties.ContainsKey("IsLogged"))
+            {
+                MainPage = new MasterMenu();
+            }
+            else
+            {
+                MainPage = new NavigationPage(new LoginPage());
+            }
         }
     }
 }

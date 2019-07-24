@@ -59,7 +59,10 @@ namespace AppPrueba.Views
                                     App.MVEmpresas.ObtenerNombreComercial(App.UIdUsuario.ToString());
                                     App.NombreEmpresa = App.MVEmpresas.NOMBRECOMERCIAL;
                                     App.NOmbreUsuario = usuario;
+                                    Application.Current.Properties["IsLogged"] = true;
                                     App.Current.MainPage = new Views.MasterMenu();//Xam.Plugins.Settings
+
+                                    
 
                                 }
                                 else
@@ -113,7 +116,7 @@ namespace AppPrueba.Views
                                 //App.MVEmpresas.ObtenerNombreComercial(App.UIdUsuario.ToString());
                                 //App.NombreEmpresa = App.MVEmpresas.NOMBRECOMERCIAL;
 
-
+                                Application.Current.Properties["IsLogged"] = true;
                                 App.Current.MainPage = new Views.MasterMenu();//Perfil
                             }
                         }

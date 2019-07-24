@@ -96,9 +96,9 @@ namespace WebApplication1.Vista
                 DDLDEstatus.DataBind();
 
                 MVTelefono.TipoDeTelefonos();
-                DDLDTipoDETelefono.DataSource = MVTelefono.TIPOTELEFONO;
-                DDLDTipoDETelefono.DataValueField = "ID";
-                DDLDTipoDETelefono.DataTextField = "NOMBRE";
+                DDLDTipoDETelefono.DataSource = MVTelefono.ListaDeTipoDeTelefono;
+                DDLDTipoDETelefono.DataValueField = "UidTipo";
+                DDLDTipoDETelefono.DataTextField = "StrNombreTipoDeTelefono";
                 DDLDTipoDETelefono.DataBind();
 
                 #endregion
@@ -866,7 +866,7 @@ namespace WebApplication1.Vista
             lblEstado.Visible = false;
 
 
-
+            MVTelefono.ListaDeTelefonos = new List<VMTelefono>();
             CargaGrid("Direccion");
             CargaGrid("Telefono");
 

@@ -25,6 +25,7 @@ namespace AppCliente
         #region Propiedades
         Guid _id = Guid.Empty;
         bool _acceso;
+        bool Isloading;
         #endregion
 
         public Login()
@@ -41,7 +42,7 @@ namespace AppCliente
             btnLogin.IsEnabled = false;
             var current = Connectivity.NetworkAccess;
 
-            await PopupNavigation.Instance.PushAsync(new Popup.PopupLoanding());
+            //await PopupNavigation.Instance.PushAsync(new Popup.PopupLoanding());
  
             if (current == NetworkAccess.Internet)
             {
@@ -56,7 +57,7 @@ namespace AppCliente
             }                     
             else
             {
-                 await  PopupNavigation.Instance.PopAsync(true);
+                 //await  PopupNavigation.Instance.PopAsync(true);
                  await DisplayAlert("Sorry", "Revisa tu conexión a internet e intenta otra vez", "ok");
             }
 
@@ -83,7 +84,8 @@ namespace AppCliente
         {
             try
             {
-
+                acLogin.IsRunning = true;
+                acLogin.IsVisible = true;
                 string url = "http://www.godeliverix.net/api/Profile/GET?Usuario=" + Usuario + "&Contrasena=" + Contrasena;
 
                 HttpClient _client = new HttpClient();
@@ -102,58 +104,34 @@ namespace AppCliente
                     string strDirecciones = await _client.GetStringAsync(tex);
                     var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
                     App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
-                    //JArray blogPostArray = JArray.Parse(obj.ToString());
-
-                    //IList<VMDireccion> blogPosts 
-                    // App.MVDireccion.ListaDIRECCIONES = blogPostArray.Select(p => new VMDireccion
-                    //{
-                    //    REFERENCIA = (string)p["REFERENCIA"],
-                    //    ID =(Guid)p["ID"],
-                    //    PAIS = (string)p["PAIS"],
-                    //    ESTADO = (string)p["ESTADO"],
-                    //    MUNICIPIO = (string)p["MUNICIPIO"],
-                    //    CIUDAD = (string)p["CIUDAD"],
-                    //    COLONIA = (string)p["COLONIA"],
-                    //    CALLE0 = (string)p["CALLE0"],
-                    //    CALLE1 = (string)p["CALLE1"],
-                    //    CALLE2 = (string)p["CALLE2"],
-                    //    MANZANA = (string)p["MANZANA"],
-                    //    LOTE = (string)p["LOTE"],
-                    //    CodigoPostal = (string)p["CodigoPostal"],
-                    //    IDENTIFICADOR = (string)p["REFERENCIA"],
-                    //    NOMBRECIUDAD = (string)p["NOMBRECIUDAD"],
-                    //    NOMBRECOLONIA = (string)p["NOMBRECOLONIA"],
-                    //    Clicked = false
-
-                    //}).ToList();
-
-                    // App.MVDireccion.ObtenerDireccionesUsuario(App.Global1);
+                    
                     if (GuardarContraseña.IsToggled)
                     {
                         AppCliente.Helpers.Settings.UserName = txtUsuario.Text;
                         AppCliente.Helpers.Settings.Password = txtIDContraseña.Text;
                         Application.Current.MainPage = new MasterMenu();
-                        await PopupNavigation.Instance.PopAsync();
+                        //await PopupNavigation.Instance.PopAsync();
                     }
                     else
                     {
                         Application.Current.MainPage = new MasterMenu();
-                        await PopupNavigation.Instance.PopAsync();
+                        //await PopupNavigation.Instance.PopAsync();
                     }
                     Application.Current.Properties["IsLogged"] = true;
                 }
                 else
                 {
-                    await PopupNavigation.Instance.PopAsync();
+                   // await PopupNavigation.Instance.PopAsync();
 
                     await DisplayAlert("Error", "Contraseña o usuario incorrecto", "ok");
                 }
-
+                acLogin.IsRunning = false;
+                acLogin.IsVisible = false;
                 //}
             }
             catch (Exception)
             {
-                await PopupNavigation.Instance.PopAsync();
+                //await PopupNavigation.Instance.PopAsync();
                 await DisplayAlert("sorry", "No hay internet", "ok");
             }
         }

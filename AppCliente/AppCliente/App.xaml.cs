@@ -4,6 +4,8 @@ using Xamarin.Forms.Xaml;
 using VistaDelModelo;
 using Xamarin.Essentials;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Threading;
 using Rg.Plugins.Popup.Services;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
@@ -45,6 +47,7 @@ namespace AppCliente
         public App()
         {
             InitializeComponent();
+            SetCultureToUSEnglish();
             Usuario = AppCliente.Helpers.Settings.UserName;
             Contrasena = AppCliente.Helpers.Settings.Password;
             var current = Connectivity.NetworkAccess;
@@ -93,6 +96,15 @@ namespace AppCliente
                 }
             }
 
+        }
+
+
+
+
+        private void SetCultureToUSEnglish()
+        {
+            CultureInfo englishUSCulture = new CultureInfo("es-MX");
+            CultureInfo.DefaultThreadCurrentCulture = englishUSCulture;
         }
 
         protected override void OnStart()

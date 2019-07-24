@@ -20,9 +20,9 @@ namespace Repartidores_GoDeliverix.Views
 
         private async void BtnNuevaOrden_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new PopoLoading());
-            await Navigation.PopAsync();
-            await Navigation.PushAsync(new Home_NuevaOrden());
+            //await Navigation.PushAsync(new PopoLoading());
+            //await Navigation.PopAsync();
+            //await Navigation.PushAsync(new Home_NuevaOrden());
 
         }
 

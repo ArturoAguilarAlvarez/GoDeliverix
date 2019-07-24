@@ -5,6 +5,7 @@ using Repartidores_GoDeliverix.Views;
 using Repartidores_GoDeliverix.Views.Popup;
 using System;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Input;
 using VistaDelModelo;
@@ -77,41 +78,90 @@ namespace Repartidores_GoDeliverix.VM
 
         private bool _blEstatus;
 
-        public bool BlEstatus
+        public  bool BlEstatus
         {
             get { return _blEstatus; }
             set
             {
-                SetValue(ref _blEstatus, value);
+
                 try
                 {
                     _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
                     url = "";
                     var AppInstance = MainViewModel.GetInstance();
-                    if (_blEstatus)
-                    {
-                        url = "Profile/GetBitacoraRegistroRepartidores?StrParametro=S&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=A298B40F-C495-4BD8-A357-4A3209FBC162";
-                        _WebApiGoDeliverix.GetAsync(url);
-                    }
-                    else
-                    {
-                        url = "Profile/GetBitacoraRegistroRepartidores?StrParametro=S&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=AAD35D44-5E65-46B6-964F-CD2DF026ECB1";
-                        _WebApiGoDeliverix.GetAsync(url);
-                    }
+                    SetValue(ref _blEstatus, value);
+
+                    //if (BlEstatus)
+                    //{
+                        
+                    //    if (UidEstatus == Guid.Empty)
+                    //    {
+                    //        url = "Profile/GetBitacoraRegistroRepartidores?StrParametro=S&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=AAD35D44-5E65-46B6-964F-CD2DF026ECB1";
+                    //        _WebApiGoDeliverix.GetAsync(url);
+                    //        SetValue(ref _blEstatus, value);
+                    //    }
+                    //    else
+                    //    {
+                            
+                    //        //Orden pendiente
+                    //        if (UidEstatus.ToString().ToUpper() == "6294DACE-C9D1-4F9F-A942-FF12B6E7E957")
+                    //        {
+                    //            GenerateMessage("Aviso", "No puedes cerrar session al tener una orden asignada", "OK");
+
+                    //        }
+                    //        else
+                    //        //Orden Confirmada
+                    //        if (UidEstatus.ToString().ToUpper() == "A42B2588-D650-4DD9-829D-5978C927E2ED")
+                    //        {
+                    //            GenerateMessage("Aviso", "No puedes cerrar session al haber confirmado la orden", "OK");
+
+                    //        }
+                    //        else
+                    //        //Entrega
+                    //        if (UidEstatus.ToString().ToUpper() == "B6791F2C-FA16-40C6-B5F5-123232773612")
+                    //        {
+                    //            GenerateMessage("Aviso", "No puedes cerrar session sin haber entregado la orden recolectada", "OK");
+
+                    //        }
+                    //        else
+                    //        {
+                    //            url = "Profile/GetBitacoraRegistroRepartidores?StrParametro=S&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=AAD35D44-5E65-46B6-964F-CD2DF026ECB1";
+                    //            _WebApiGoDeliverix.GetAsync(url);
+                    //            SetValue(ref _blEstatus, value);
+                    //        }
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    url = "Profile/GetBitacoraRegistroRepartidores?StrParametro=S&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=A298B40F-C495-4BD8-A357-4A3209FBC162";
+                    //    _WebApiGoDeliverix.GetAsync(url);
+                    //    SetValue(ref _blEstatus, value);
+                    //}
                 }
                 catch (Exception)
                 {
                     GenerateMessage("Alerta!!", "No hay internet", "Aceptar");
                 }
-
             }
         }
+
+        
+
+
         private bool _IsLoading;
 
         public bool IsLoading
         {
             get { return _IsLoading; }
             set { SetValue(ref _IsLoading, value); }
+        }
+
+        private bool _IsEnable;
+
+        public bool IsEnable
+        {
+            get { return _IsEnable; }
+            set { SetValue(ref _IsEnable, value); }
         }
 
         #region Propiedades de ubicacion
@@ -224,8 +274,8 @@ namespace Repartidores_GoDeliverix.VM
         public ICommand ShowInfoOrder { get { return new RelayCommand(MapaEnEsperaAsync); } }
 
 
-        public ICommand BtnMapaEspera { get { return new RelayCommand(MapaEnEsperaAsync); } }
 
+        public ICommand BtnMapaEspera { get { return new RelayCommand(MapaEnEsperaAsync); } }
 
 
 
@@ -328,16 +378,22 @@ namespace Repartidores_GoDeliverix.VM
             await Application.Current.MainPage.Navigation.PushAsync(new Home_CodigoQR());
         }
 
-        private void MostrarOrden()
+        private async void MostrarOrden()
         {
+            IsLoading = true;
+            IsEnable = false;
             var AppInstance = MainViewModel.GetInstance();
             AppInstance.MVHomeOrden = new VMHomeOrden();
             AppInstance.MVHomeOrden.StrUidOrden = UidOrden.ToString();
             AppInstance.MVHomeOrden.UidDireccionDelCliente = UidDireccionCliente.ToString();
             AppInstance.MVHomeOrden.UidSucursal = UidSucursal;
+            AppInstance.MVHomeOrden.LngFolio = LngFolio;
             AppInstance.MVHomeOrden.UidOrdenTarifario = UidOrdenTarifario;
             AppInstance.MVHomeOrden.UidordenRepartidor = UidordenRepartidor;
             AppInstance.MVHomeOrden.cargaOrden();
+            IsLoading = false;
+            IsEnable = true;
+            await Application.Current.MainPage.Navigation.PushAsync(new Home_NuevaOrden());
         }
         #endregion
         public VMHome()
@@ -372,7 +428,6 @@ namespace Repartidores_GoDeliverix.VM
                 var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                 MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(obj);
                 //MVOrden.BuscarOrdenAsiganadaRepartidor(AppInstance.Session_.UidUsuario);
-
                 url = "Profile/GetObtenerUltimoEstatusBitacoraRepartidor?UidUsuario=" + AppInstance.Session_.UidUsuario + "";
 
                 content = await _WebApiGoDeliverix.GetStringAsync(url);
@@ -400,7 +455,7 @@ namespace Repartidores_GoDeliverix.VM
                     UidOrdenSucursal = MVOrden.UidOrdenSucursal;
                     LngFolio = MVOrden.LNGFolio;
                     StrIdentificador = MVOrden.StrNombreSucursal;
-                    
+
                     //Obtiene el estatus de al orden asignada al repartidor, aqui tambien se pueden controlar los demas tipos de estatus
                     UidEstatus = new Guid(MVOrden.StrEstatusOrdenRepartidor);
                     //Cancelado

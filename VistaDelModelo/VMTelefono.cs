@@ -35,10 +35,23 @@ namespace VistaDelModelo
         public string StrNombreTipoDeTelefono { get; set; }
 
         public TipoDeTelefono TIPO;
-        public List<VMTelefono> ListaDeTelefonos = new List<VMTelefono>();
+        private List<VMTelefono> _ListaDeTelefonos;
+
+        public List<VMTelefono> ListaDeTelefonos
+        {
+            get { return _ListaDeTelefonos; }
+            set { _ListaDeTelefonos = value; }
+        }
+
         public List<VMTelefono> ListaDeTelefonosInformacion = new List<VMTelefono>();
-        public List<VMTelefono> ListaDeTipoDeTelefono = new List<VMTelefono>();
-        public List<TipoDeTelefono> TIPOTELEFONO = new List<TipoDeTelefono>();
+        private List<VMTelefono> _ListaDeTipoDeTelefono;
+
+        public List<VMTelefono> ListaDeTipoDeTelefono
+        {
+            get { return _ListaDeTipoDeTelefono; }
+            set { _ListaDeTipoDeTelefono = value; }
+        }
+
         #endregion
 
         DbTelefono MVTelefono = new DbTelefono();
@@ -246,7 +259,7 @@ namespace VistaDelModelo
                         Comando.Parameters["@vchTelefono"].Value = strTelefono;
                     }
                     oConexion = new Conexion();
-                    ListaDeTelefonos.Clear();
+                    ListaDeTelefonos = new List<VMTelefono>();
                     foreach (DataRow item in oConexion.Busquedas(Comando).Rows)
                     {
                         string tipo = string.Empty;
@@ -328,13 +341,12 @@ namespace VistaDelModelo
         }
         public void TipoDeTelefonos()
         {
-            TIPOTELEFONO = new List<TipoDeTelefono>();
+            ListaDeTipoDeTelefono = new List<VMTelefono>();
             oDbTelefono = new DbTelefono();
             foreach (DataRow item in oDbTelefono.ObtenerTipoDeTelefono().Rows)
             {
                 Guid id = new Guid(item["UidTipoDeTelefono"].ToString());
-                string nombre = item["Nombre"].ToString();
-                TIPOTELEFONO.Add(new TipoDeTelefono(id, nombre));
+                string nombre = item["Nombre"].ToString();                
                 ListaDeTipoDeTelefono.Add(new VMTelefono() { UidTipo = id, StrNombreTipoDeTelefono = nombre });
             }
 

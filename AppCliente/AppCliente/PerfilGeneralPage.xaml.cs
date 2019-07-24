@@ -23,8 +23,6 @@ namespace AppCliente
 			InitializeComponent ();
             App.MVCorreoElectronico.BuscarCorreos(UidPropietario: new Guid(App.Global1), strParametroDebusqueda: "Usuario");
             Cargar();
-            //App.MVUsuarios.obtenerUsuario(App.Global1);
-            //Cargausuario();
         }
         private async void Button_EditarGuardar(object sender, EventArgs e)
         {
@@ -32,15 +30,6 @@ namespace AppCliente
             {
                 try
                 {
-                    //AppCliente.App.MVUsuarios.ActualizarUsuario(UidUsuario: new Guid(AppCliente.App.Global1),
-                    //    Nombre: txtNombre.Text,
-                    //    ApellidoPaterno: txtApellidoP.Text,
-                    //    ApellidoMaterno: txtApellidoM.Text,
-                    //    usuario: txtUsuario.Text,
-                    //    password: txtContraseña.Text,
-                    //    fnacimiento: txtFechaNacimiento.Date.ToString("MM-dd-yyyy"),
-                    //    perfil: "4F1E1C4B-3253-4225-9E46-DD7D1940DA19");
-
                     string _Url = "http://www.godeliverix.net/api/Usuario/GetActualizarUsuario?"+
                     $"UidUsuario={App.Global1}" +
                     $"&Nombre={txtNombre.Text}" +
@@ -54,7 +43,7 @@ namespace AppCliente
 
                     var content = await _client.GetAsync(_Url);
 
-                    await DisplayAlert("Excelente :)", "Registro exitoso", "OK");
+                    await DisplayAlert("Informacion actualizada", "Se ha actualizado la informacion", "OK");
                     txtNombre.IsEnabled = false;
                     txtApellidoP.IsEnabled = false;
                     txtApellidoM.IsEnabled = false;
@@ -87,7 +76,7 @@ namespace AppCliente
             txtApellidoM.Text = App.MVUsuarios.StrApellidoMaterno;
             txtUsuario.Text = App.MVUsuarios.StrUsuario;
             txtContraseña.Text = App.MVUsuarios.StrCotrasena;
-            txtFechaNacimiento.Date = DateTime.Parse(App.MVUsuarios.DtmFechaDeNacimiento);
+            txtFechaNacimiento.Date = Convert.ToDateTime(App.MVUsuarios.DtmFechaDeNacimiento);
             txtCorreo.Text = App.MVCorreoElectronico.CORREO;
         }
 
