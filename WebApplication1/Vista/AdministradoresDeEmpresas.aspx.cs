@@ -44,7 +44,7 @@ namespace WebApplication1.Vista
                 Session["MVCorreoElectronico"] = MVCorreoElectronico;
                 Session["MVValidaciones"] = MVValidaciones;
 
-
+                MVTelefono.ListaDeTelefonos = new List<VMTelefono>();
 
                 MVUsuarios.CargaPerfilesDeUsuario("76a96ff6-e720-4092-a217-a77a58a9bf0d");
                 txtUidEmpresaSeleccionadaSistema = Master.FindControl("txtUidEmpresaSistema") as TextBox;

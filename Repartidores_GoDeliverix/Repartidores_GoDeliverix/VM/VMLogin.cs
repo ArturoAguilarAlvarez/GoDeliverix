@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Windows.Input;
 using VistaDelModelo;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Repartidores_GoDeliverix.VM
@@ -76,7 +77,14 @@ namespace Repartidores_GoDeliverix.VM
 
         private async void login()
         {
-            try
+            //var supportsUri = false;
+            //if (Device.RuntimePlatform == Device.iOS)
+            //{
+            //    supportsUri = await Launcher.CanOpenAsync("comgooglemaps://");
+            //}
+            //if (supportsUri)
+            //{
+                try
             {
                 this.IsLoading = true;
                 this.IsEnable = false;
@@ -109,6 +117,18 @@ namespace Repartidores_GoDeliverix.VM
                 GenerateMessage("Alerta!!", "No hay internet", "Aceptar");
 
             }
+            //}
+            //else
+            //{
+            //    if (Device.RuntimePlatform == Device.iOS)
+            //    {
+            //        var action = await Application.Current.MainPage.DisplayAlert("Aplicacion requerida", "No se encuentra la aplicacion de google maps en este dispositivo, reinicie la aplicacion despues de la instalarla", "Instalar", "Cancelar");
+            //        if (action)
+            //        {
+            //            await Launcher.OpenAsync("https://apps.apple.com/mx/app/google-maps-trafico-y-comida/id585027354");
+            //        }
+            //    }
+            //}
         }
 
         public void AccesoGuardado(string Usuario, string password)
@@ -162,6 +182,7 @@ namespace Repartidores_GoDeliverix.VM
                         AppInstance.MVHome = new VMHome();
                         AppInstance.MVHome.BlEstatus = true;
                         AppInstance.MVAjustes = new VMAjustes();
+                        AppInstance.MVTurno = new VMTurno();
                         Application.Current.Properties["IsLogged"] = true;
                         Application.Current.MainPage = new NavigationPage(new TabbedPageMain());
 

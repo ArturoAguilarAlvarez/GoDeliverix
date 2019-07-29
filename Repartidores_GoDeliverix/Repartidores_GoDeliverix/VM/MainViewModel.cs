@@ -9,6 +9,7 @@ namespace Repartidores_GoDeliverix.VM
         public ObservableCollection<MenuItemViewModel> MenuItems { get; set; }
         public VMLogin MVLogin { get; set; }
         public VMAjustes MVAjustes { get; set; }
+        public VMTurno MVTurno { get; set; }
         public VMAjustesTelefono MVAjustesTelefono { get; set; }
         public VMHome MVHome { get; set; }
         public VMHomeOrden MVHomeOrden { get; set; }

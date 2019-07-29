@@ -140,6 +140,7 @@
                     </StackPanel>
                     <Label Visibility="Hidden" x:Name="LblUidOrden"></Label>
                     <Label Visibility="Hidden" x:Name="LblUidRepartidor"></Label>
+                    <Label Visibility="Hidden" x:Name="LblUidTurnoRepartidor"></Label>
                 </Grid>
 
             </TabItem>

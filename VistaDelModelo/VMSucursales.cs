@@ -1115,12 +1115,12 @@ namespace VistaDelModelo
             }
             return Resultado;
         }
-        public void AsignarOrdenRepartidor( Guid uidUsuario, Guid UidSucursal , Guid UidOrdenRepartidor)
+        public void AsignarOrdenRepartidor( Guid UidTurnoRepartidor, Guid UidSucursal , Guid UidOrdenRepartidor)
         {
             try
             {
                 SUCURSAL = new Sucursal();
-                SUCURSAL.AsingaOrdenRepartidor(uidUsuario, UidSucursal, UidOrdenRepartidor);
+                SUCURSAL.AsingaOrdenRepartidor(UidTurnoRepartidor, UidSucursal, UidOrdenRepartidor);
             }
             catch (Exception)
             {

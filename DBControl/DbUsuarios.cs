@@ -174,7 +174,7 @@ namespace DBControl
             return oConexcion.Consultas(query);
         }
 
-        public DataTable ObtenerRepartidoresConVehiculos(string licencia)
+        public DataTable ObtenerRepartidoresConVehiculosYTurnoAbierto(string licencia)
         {
             oConexcion = new Conexion();
             string query = "select UidUsuario,Nombre,usuario,dbo.asp_ObtenerUtimoEstatus(UidUsuario) as estatus from Usuarios where UidUsuario in (select UidUsuario from VehiculoUsuario where UidVehiculo in (select UidVehiculo from vehiculoSucursal where uidsucursal in ( select UidSucursal from SucursalLicencia where UidLicencia = '" + licencia + "')))";

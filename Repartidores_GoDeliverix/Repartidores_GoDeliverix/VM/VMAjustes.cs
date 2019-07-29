@@ -137,8 +137,6 @@ namespace Repartidores_GoDeliverix.VM
             Recargar();
         }
 
-
-
         public void ActualizaUsuario(string Nombre = "", string ApellidoPaterno = "", string ApellidoMaterno = "", string password = "", string fnacimiento = "")
         {
             VMUsuarios MVUsuario = new VMUsuarios();

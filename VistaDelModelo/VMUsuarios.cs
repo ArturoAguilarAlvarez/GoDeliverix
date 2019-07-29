@@ -622,7 +622,7 @@ namespace VistaDelModelo
         public void ObtenerRepartidoresDisponibles(string licencia)
         {
             LISTADEUSUARIOS = new List<VMUsuarios>();
-            foreach (DataRow item in oDbusuarios.ObtenerRepartidoresConVehiculos(licencia).Rows)
+            foreach (DataRow item in oDbusuarios.ObtenerRepartidoresConVehiculosYTurnoAbierto(licencia).Rows)
             {
 
                 //Varifica que este activo el campo

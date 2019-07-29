@@ -114,11 +114,12 @@ namespace Deliverix.Wpf.Distribuidores
                 {
 
                     Guid UidRepartidor = new Guid(LblUidRepartidor.Content.ToString());
+                    Guid UidTurnoRepartidor = new Guid(LblUidTurnoRepartidor.Content.ToString());
                     Guid UidOrden = new Guid(LblUidOrden.Content.ToString());
                     MVLicencia.RecuperaLicencia();
                     string licencia = MVLicencia.Licencia;
                     Guid UidOrdenRepartidor = Guid.NewGuid();
-                    MVSucursal.AsignarOrdenRepartidor(UidRepartidor, UidOrden, UidOrdenRepartidor);
+                    MVSucursal.AsignarOrdenRepartidor(UidTurnoRepartidor, UidOrden, UidOrdenRepartidor);
                     MVOrden.AgregarEstatusOrdenEnSucursal(new Guid("42A97847-20CF-4338-994F-9E26A91619A3"), "D", MVLicencia.Licencia, UidOrden: UidOrden);
                     //Crea la orden pendiente de confirmacion
                     MVAcceso.BitacoraRegistroRepartidores(char.Parse("O"), UidRepartidor, new Guid("6294DACE-C9D1-4F9F-A942-FF12B6E7E957"), UidOrdenRepartidor);

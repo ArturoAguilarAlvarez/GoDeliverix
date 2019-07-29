@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Input;
 using VistaDelModelo;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Repartidores_GoDeliverix.VM
@@ -78,7 +79,7 @@ namespace Repartidores_GoDeliverix.VM
 
         private bool _blEstatus;
 
-        public  bool BlEstatus
+        public bool BlEstatus
         {
             get { return _blEstatus; }
             set
@@ -93,7 +94,7 @@ namespace Repartidores_GoDeliverix.VM
 
                     //if (BlEstatus)
                     //{
-                        
+
                     //    if (UidEstatus == Guid.Empty)
                     //    {
                     //        url = "Profile/GetBitacoraRegistroRepartidores?StrParametro=S&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=AAD35D44-5E65-46B6-964F-CD2DF026ECB1";
@@ -102,7 +103,7 @@ namespace Repartidores_GoDeliverix.VM
                     //    }
                     //    else
                     //    {
-                            
+
                     //        //Orden pendiente
                     //        if (UidEstatus.ToString().ToUpper() == "6294DACE-C9D1-4F9F-A942-FF12B6E7E957")
                     //        {
@@ -144,9 +145,6 @@ namespace Repartidores_GoDeliverix.VM
                 }
             }
         }
-
-        
-
 
         private bool _IsLoading;
 
@@ -398,7 +396,7 @@ namespace Repartidores_GoDeliverix.VM
         #endregion
         public VMHome()
         {
-            Verifica();
+            //Verifica();
             Timer tiempo = new Timer();
             tiempo.Interval = 6000;
             //enlazas un metodo al evento elapsed que es el que se ejecutara
@@ -415,6 +413,7 @@ namespace Repartidores_GoDeliverix.VM
         {
             try
             {
+
                 _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
                 var AppInstance = MainViewModel.GetInstance();
                 MVDireccion = new VMDireccion();
@@ -564,7 +563,6 @@ namespace Repartidores_GoDeliverix.VM
             {
                 GenerateMessage("Aviso de red", "Sin conexion a internet", "Aceptar");
             }
-
         }
         protected async void GenerateMessage(string Tittle, string Message, string TextOption)
         {

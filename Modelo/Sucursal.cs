@@ -279,7 +279,7 @@ namespace Modelo
             return resultado;
         }
 
-        public void AsingaOrdenRepartidor( Guid uidUsuario, Guid UidSucursal,Guid UidOrdenRepartidor)
+        public void AsingaOrdenRepartidor( Guid UidTurnoRepartidor, Guid UidSucursal,Guid UidOrdenRepartidor)
         {
             Conexion = new Conexion();
             bool resultado = false;
@@ -289,8 +289,8 @@ namespace Modelo
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.CommandText = "asp_AsignarOrdenRepartidor";
 
-                cmd.Parameters.Add("@UidUsuario", SqlDbType.UniqueIdentifier);
-                cmd.Parameters["@UidUsuario"].Value = uidUsuario;
+                cmd.Parameters.Add("@UidTurnoRepartidor", SqlDbType.UniqueIdentifier);
+                cmd.Parameters["@UidTurnoRepartidor"].Value = UidTurnoRepartidor;
 
                 cmd.Parameters.Add("@UidOrden", SqlDbType.UniqueIdentifier);
                 cmd.Parameters["@UidOrden"].Value = UidSucursal;

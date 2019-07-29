@@ -101,14 +101,15 @@ namespace Repartidores_GoDeliverix.Views
             await Navigation.PushAsync(new Home_Entregar());
         }
 
-        private void BtnMapaEspera_ClickedAsync(object sender, EventArgs e)
+        private async void BtnMapaEspera_ClickedAsync(object sender, EventArgs e)
         {
             
 
             if (Device.RuntimePlatform == Device.iOS)
             {
-                //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
-                Device.OpenUri(new Uri("http://maps.apple.com/"));
+               
+                    //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
+                    Device.OpenUri(new Uri("http://maps.apple.com/"));
             }
             else if (Device.RuntimePlatform == Device.Android)
             {

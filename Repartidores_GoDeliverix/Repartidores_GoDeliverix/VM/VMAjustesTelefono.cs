@@ -100,31 +100,34 @@ namespace Repartidores_GoDeliverix.VM
         {
             var AppInstance = MainViewModel.GetInstance();
             Guid UidUsuario = new Guid();
-            VMTelefono MVTelefono = new VMTelefono();
+            //VMTelefono MVTelefono = new VMTelefono();
+            string url = string.Empty;
             if (UidTelefono == Guid.Empty)
             {
                 Guid UidTipoDeTelefono = AppInstance.MVAjustesTelefono.LsTipoDeTelefono[intSelectTelefono].UidTipoDeTelefono;
                 string NombreTipoTelfono = AppInstance.MVAjustesTelefono.LsTipoDeTelefono[intSelectTelefono].StrTipoDeTelefono;
                 UidUsuario = AppInstance.Session_.UidUsuario;
 
-                string url = "Telefono/GetGuardaTelefonoApi?uidUsuario="+ UidUsuario + "&Parametro, Guid UidTelefono, string Numero, string UidTipoDeTelefono &UidTelefono=" + UidTelefono + "";
+                 url = "Telefono/GetGuardaTelefonoApi?uidUsuario="+ UidUsuario + "&Parametro, Guid UidTelefono, string Numero, string UidTipoDeTelefono &UidTelefono=" + UidTelefono + "";
                 await _WebApiGoDeliverix.GetStringAsync(url);
 
-                MVTelefono.BuscarTelefonos(UidPropietario: UidUsuario, ParadetroDeBusqueda: "Usuario");
-                MVTelefono.AgregaTelefonoALista(UidTipoDeTelefono.ToString(), intNumeroTelefono, NombreTipoTelfono);
+                //MVTelefono.BuscarTelefonos(UidPropietario: UidUsuario, ParadetroDeBusqueda: "Usuario");
+                //MVTelefono.AgregaTelefonoALista(UidTipoDeTelefono.ToString(), intNumeroTelefono, NombreTipoTelfono);
             }
             else
             {
                 Guid UidTipoDeTelefono = AppInstance.MVAjustesTelefono.LsTipoDeTelefono[intSelectTelefono].UidTipoDeTelefono;
                 string NombreTipoTelfono = AppInstance.MVAjustesTelefono.LsTipoDeTelefono[intSelectTelefono].StrTipoDeTelefono;
-
+                string numero = AppInstance.MVAjustesTelefono.LsTipoDeTelefono[intSelectTelefono].intNumeroTelefono;
+                url = "Telefono/GetActualizaTelefonoApi?UidTelefono=" + UidTipoDeTelefono + "&Numero="+ numero + "&UidTipoDeTelefono=" + NombreTipoTelfono + "";
+                await _WebApiGoDeliverix.GetAsync(url);
                 UidUsuario = AppInstance.Session_.UidUsuario;
-                MVTelefono.BuscarTelefonos(UidPropietario: UidUsuario, ParadetroDeBusqueda: "Usuario");
-                MVTelefono.ActualizaRegistroEnListaDeTelefonos(UidTelefono.ToString(), UidTipoDeTelefono.ToString(), intNumeroTelefono);
+                //MVTelefono.BuscarTelefonos(UidPropietario: UidUsuario, ParadetroDeBusqueda: "Usuario");
+                //MVTelefono.ActualizaRegistroEnListaDeTelefonos(UidTelefono.ToString(), UidTipoDeTelefono.ToString(), intNumeroTelefono);
 
             }
-            MVTelefono.EliminaTelefonosUsuario(UidUsuario);
-            MVTelefono.GuardaTelefono(UidUsuario, "Usuario");
+            //MVTelefono.EliminaTelefonosUsuario(UidUsuario);
+            //MVTelefono.GuardaTelefono(UidUsuario, "Usuario");
             AppInstance.MVAjustes.Recargar();
         }
         private async void EditaTelefono()
