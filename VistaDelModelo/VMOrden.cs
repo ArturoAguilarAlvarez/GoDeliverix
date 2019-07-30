@@ -232,13 +232,13 @@ namespace VistaDelModelo
             }
         }
 
-        public bool ValidarCodigoUsuario(string strCodigo, string UidRepartidor)
+        public bool ValidarCodigoUsuario(string strCodigo, string UidTurnoRepartidor)
         {
             bool resultado = false;
             try
             {
                 oDBOrden = new DBOrden();
-                if (oDBOrden.VerificaCodigoDeEntrega(strCodigo, UidRepartidor).Rows.Count == 1)
+                if (oDBOrden.VerificaCodigoDeEntrega(strCodigo, UidTurnoRepartidor).Rows.Count == 1)
                 {
                     resultado = true;
                 }
@@ -1004,11 +1004,11 @@ namespace VistaDelModelo
 
 
         #region Metodos de repartidores
-        public void BuscarOrdenAsiganadaRepartidor(Guid UidUsuario)
+        public void BuscarOrdenAsiganadaRepartidor(Guid UidTurnoRepartidor)
         {
             oDBOrden = new DBOrden();
             Uidorden = Guid.Empty;
-            foreach (DataRow item in oDBOrden.ObtenerOrdenRepartidor(UidUsuario).Rows)
+            foreach (DataRow item in oDBOrden.ObtenerOrdenRepartidor(UidTurnoRepartidor).Rows)
             {
                 Uidorden = new Guid(item["UidOrden"].ToString());
                 UidOrdenTarifario = new Guid(item["UidRelacionOrdenTarifario"].ToString());
@@ -1151,11 +1151,11 @@ namespace VistaDelModelo
         public void SeleccionaOrden(Guid uidorden)
         {
             var objeto = new VMOrden();
-            if (ListaDeOrdenes.Exists(u => u.Seleccion == true))
+            if (ListaDeBitacoraDeOrdenes.Exists(u => u.Seleccion == true))
             {
-                objeto = ListaDeOrdenes.Find(u => u.Seleccion == true);
+                objeto = ListaDeBitacoraDeOrdenes.Find(u => u.Seleccion == true);
                 objeto.Seleccion = false;
-                objeto = ListaDeOrdenes.Find(U => U.Uidorden == uidorden);
+                objeto = ListaDeBitacoraDeOrdenes.Find(U => U.Uidorden == uidorden);
                 objeto.Seleccion = false;
             }
         }

@@ -209,10 +209,10 @@ namespace WebApplication1.Controllers
         /// </summary>
         /// <param name="UidUsuario"></param>
         /// <returns></returns>
-        public ResponseHelper GetBuscarOrdenAsiganadaRepartidor(Guid UidUsuario)
+        public ResponseHelper GetBuscarOrdenAsiganadaRepartidor(Guid UidTurnoRepartidor)
         {
             MVOrden = new VMOrden();
-            MVOrden.BuscarOrdenAsiganadaRepartidor(UidUsuario);
+            MVOrden.BuscarOrdenAsiganadaRepartidor(UidTurnoRepartidor);
             Respuesta = new ResponseHelper();
             Respuesta.Data = MVOrden;
             Respuesta.Status = true;
@@ -261,12 +261,12 @@ namespace WebApplication1.Controllers
         }
 
 
-        public ResponseHelper GetBuscarOrdenPorCodigoQR(string strCodigo, string UidRepartidor)
+        public ResponseHelper GetBuscarOrdenPorCodigoQR(string strCodigo, string UidTurnoRepartidor)
         {
             MVOrden = new VMOrden();
             
             Respuesta = new ResponseHelper();
-            Respuesta.Data = MVOrden.ValidarCodigoUsuario(strCodigo, UidRepartidor); 
+            Respuesta.Data = MVOrden.ValidarCodigoUsuario(strCodigo, UidTurnoRepartidor); 
             Respuesta.Status = true;
             Respuesta.Message = "Informacion agregada satisfactoriamente";
             return Respuesta;

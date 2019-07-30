@@ -221,6 +221,14 @@ namespace VistaDelModelo
         public bool Seleccionar { get; set; }
         //Variables para el control de los repartiores de la sucursal
         public List<VMSucursales> ListaDeRepartidoresyVehiculosEnSucursal = new List<VMSucursales>();
+        private Guid _UidTurnoRepartidor;
+
+        public Guid UidTurnoRepartidor
+        {
+            get { return _UidTurnoRepartidor; }
+            set { _UidTurnoRepartidor = value; }
+        }
+
         public Guid UidUsuario { get; set; }
         public Guid UidVehiculo { get; set; }
         //Variables para el control de las ordenes asignadas
@@ -1159,7 +1167,7 @@ namespace VistaDelModelo
                     var objeto = new VMSucursales()
                     {
                         ID = new Guid(item["UidRelacionOrdenRepartidor"].ToString()),
-                        UidUsuario = new Guid(item["UidUsuario"].ToString()),
+                        UidTurnoRepartidor = new Guid(item["UidTurnoRepartidor"].ToString()),
                         StrNombreRepartidor = item["Nombre"].ToString(),
                         IDENTIFICADOR = item["Identificador"].ToString(),
                         lngFolio = long.Parse(item["IntFolio"].ToString()),

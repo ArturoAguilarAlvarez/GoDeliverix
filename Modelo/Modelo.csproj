@@ -69,6 +69,7 @@
     <Compile Include="Telefono.cs" />
     <Compile Include="TipoDeEmpresa.cs" />
     <Compile Include="TipoDeTelefono.cs" />
+    <Compile Include="Turno.cs" />
     <Compile Include="Ubicacion.cs" />
     <Compile Include="Usuario\Perfiles.cs" />
     <Compile Include="Usuario\Persona.cs" />

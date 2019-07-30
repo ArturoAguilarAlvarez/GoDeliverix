@@ -6,44 +6,43 @@
              Title="Caja"
              Icon="Caja.png">
     <ContentPage.Content>
-        <StackLayout BindingContext="{Binding VMTurno}">
-            <Grid >
+        <Grid BindingContext="{Binding MVTurno}" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="7*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Button Text="{Binding Texto,Mode=TwoWay}" VerticalOptions="Fill" Command="{Binding Activar}" HorizontalOptions="Fill" ></Button>
+
+            <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"></RowDefinition>
                     <RowDefinition Height="7*"></RowDefinition>
-                    <RowDefinition Height="2*"></RowDefinition>
+                    <RowDefinition Height="3*"></RowDefinition>
                 </Grid.RowDefinitions>
-
-                <Button Text="Iniciar turno" VerticalOptions="Fill" Command="{Binding ActivarTurno}" HorizontalOptions="Fill" ></Button>
-
-                <Grid Grid.Row="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="7*"></RowDefinition>
-                        <RowDefinition Height="3*"></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Label Text="$867.50" Grid.ColumnSpan="3" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" FontSize="60" TextColor="Purple"></Label>
-                    <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Row="1" Grid.Column="0">
-                        <Label Text="Ordenes"  TextColor="Purple"></Label>
-                        <Label Text="20"  TextColor="Purple"></Label>
-                    </StackLayout>
-                    <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Row="1" Grid.Column="1">
-                        <Label Text="Distancia"  TextColor="Purple"></Label>
-                        <Label Text="60.00 km"  TextColor="Purple"></Label>
-                    </StackLayout>
-                    <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Row="1" Grid.Column="2">
-                        <Label Text="Tiempo"  TextColor="Purple"></Label>
-                        <Label Text="01:50"  TextColor="Purple"></Label>
-                    </StackLayout>
-                </Grid>
-                <StackLayout Grid.Row="2" Padding="10">
-                    <StackLayout Orientation="Vertical">
-                        <Button  Text="Historico de caja" BackgroundColor="Purple" x:Name="BtnHistorico" Clicked="BtnHistorico_Clicked"  TextColor="White" FontSize="Large"></Button>
-
-                    </StackLayout>
+                <Label Text="{Binding Total,StringFormat='${0}'}" Grid.ColumnSpan="3" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" FontSize="60" TextColor="Purple"></Label>
+                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Row="1" Grid.Column="0">
+                    <Label Text="Ordenes"  TextColor="Purple"></Label>
+                    <Label Text="{Binding CantidadDeOrdenes}"  HorizontalOptions="Center" TextColor="Purple"></Label>
                 </StackLayout>
-
+                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Row="1" Grid.Column="1">
+                    <Label Text="Total envio"  TextColor="Purple"></Label>
+                    <Label Text="{Binding TotalEnvio,StringFormat='${0}'}"  TextColor="Purple"></Label>
+                </StackLayout>
+                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Row="1" Grid.Column="2">
+                    <Label Text="Total ordenes"  TextColor="Purple"></Label>
+                    <Label Text="{Binding TotalSuministros,StringFormat='${0}'}"  TextColor="Purple"></Label>
+                </StackLayout>
             </Grid>
-        </StackLayout>
+            <StackLayout Grid.Row="2" Padding="10">
+                <StackLayout Orientation="Vertical">
+                    <Button  Text="Historico de caja" BackgroundColor="Purple" x:Name="BtnHistorico" Clicked="BtnHistorico_Clicked"  TextColor="White" FontSize="Large"></Button>
+
+                </StackLayout>
+            </StackLayout>
+
+        </Grid>
+
 
     </ContentPage.Content>
 </ContentPage>

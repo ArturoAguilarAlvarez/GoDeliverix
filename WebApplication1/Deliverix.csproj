@@ -351,6 +351,7 @@
     <Compile Include="Controllers\SucursalesController.cs" />
     <Compile Include="Controllers\TarifarioController.cs" />
     <Compile Include="Controllers\TelefonoController.cs" />
+    <Compile Include="Controllers\TurnoController.cs" />
     <Compile Include="Controllers\UbicacionController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Default.aspx.cs">

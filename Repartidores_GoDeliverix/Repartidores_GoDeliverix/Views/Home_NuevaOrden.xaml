@@ -47,23 +47,23 @@
                         <Label Text="Importe"  FontSize="Medium" TextColor="Purple"  Grid.Column="2" ></Label>
                     </Grid>
                 </StackLayout>
-                <StackLayout Grid.Row="1"  Padding="10,0,0,0"  >
-                    <ScrollView VerticalOptions="StartAndExpand">
-                        <ListView ItemsSource="{Binding ListaProductos}" >
+                <!--<StackLayout Grid.Row="1"  Padding="10,0,0,0"  >-->
+                    <!--<ScrollView VerticalOptions="Fill">-->
+                <ListView RowHeight="100" ItemsSource="{Binding ListaProductos}" >
                             <ListView.ItemTemplate >
                                 <DataTemplate>
                                     <ViewCell >
                                         <Grid>
-                                            <Label TextColor="Purple" Grid.Column="0" HorizontalOptions="Center" FontSize="Large" Text="{Binding StrNombreProducto}" ></Label>
-                                            <Label TextColor="Purple" Grid.Column="1"   HorizontalOptions="Center" FontSize="Large" Text="{Binding IntCantidad}" ></Label>
-                                            <Label TextColor="Purple" Grid.Column="2" HorizontalOptions="Center" FontSize="Large" Text="{Binding MTotal}" ></Label>
+                                            <Label TextColor="Purple" Grid.Column="0" HorizontalOptions="Center" FontSize="Medium" Text="{Binding StrNombreProducto}" ></Label>
+                                            <Label TextColor="Purple" Grid.Column="1"   HorizontalOptions="Center" FontSize="Medium" Text="{Binding IntCantidad}" ></Label>
+                                            <Label TextColor="Purple" Grid.Column="2" HorizontalOptions="Center" FontSize="Medium" Text="{Binding MTotal}" ></Label>
                                         </Grid>
                                     </ViewCell>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
-                    </ScrollView>
-                </StackLayout>
+                    <!--</ScrollView>-->
+                <!--</StackLayout>-->
 
                 <StackLayout  Grid.Row="2" Padding="10,0,0,0"  >
                     <Grid >

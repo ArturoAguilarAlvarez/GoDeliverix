@@ -21,6 +21,14 @@ namespace VistaDelModelo
             set { _uidUsuario = value; }
         }
 
+        private Guid _uidTurnoRepartidor;
+
+        public Guid uidTurnoRepartidor
+        {
+            get { return _uidTurnoRepartidor; }
+            set { _uidTurnoRepartidor = value; }
+        }
+
         private string strUsuario;
 
         public string StrUsuario
@@ -82,7 +90,7 @@ namespace VistaDelModelo
             set { _strNombrePerfil = value; }
         }
 
-        
+
 
         private string _StrEstatus;
 
@@ -432,7 +440,7 @@ namespace VistaDelModelo
 
                     Dt = oDbusuarios.Busquedas(CMD);
                     foreach (DataRow item in Dt.Rows)
-                    { 
+                    {
                         this.Uid = new Guid(item["UidUsuario"].ToString());
                         this.StrNombre = item["Nombre"].ToString().ToUpper();
                         this.StrCotrasena = item["Contrasena"].ToString().ToUpper();
@@ -628,13 +636,21 @@ namespace VistaDelModelo
                 //Varifica que este activo el campo
                 if (item["estatus"].ToString().ToUpper() == "A298B40F-C495-4BD8-A357-4A3209FBC162")
                 {
-                    VMUsuarios usuario = new VMUsuarios()
+                    if (string.IsNullOrEmpty(item["DtmHoraFin"].ToString()))
                     {
-                        Uid = new Guid(item["UidUsuario"].ToString()),
-                        StrNombre = item["Nombre"].ToString(),
-                        StrUsuario = item["usuario"].ToString(),
-                    };
-                    LISTADEUSUARIOS.Add(usuario);
+                        VMUsuarios usuario = new VMUsuarios()
+                        {
+                            Uid = new Guid(item["UidUsuario"].ToString()),
+                            uidTurnoRepartidor = new Guid(item["UidTurnoRepartidor"].ToString()),
+                            
+                            StrNombre = item["Nombre"].ToString(),
+                            StrUsuario = item["usuario"].ToString(),
+                        };
+                        if (!LISTADEUSUARIOS.Exists(u => u.Uid == Uid))
+                        {
+                            LISTADEUSUARIOS.Add(usuario);
+                        }
+                    }
                 }
             }
         }

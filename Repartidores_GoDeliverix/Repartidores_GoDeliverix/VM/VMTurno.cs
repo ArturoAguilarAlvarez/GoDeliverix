@@ -1,4 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using Newtonsoft.Json;
+using Repartidores_GoDeliverix.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -11,9 +13,10 @@ namespace Repartidores_GoDeliverix.VM
     {
         string url = "";
         HttpClient _WebApiGoDeliverix = new HttpClient();
-
-        private string _UidTurnoRepartidor;
-        public string UidTurnoRepartidor
+        VistaDelModelo.VMTurno MVTurno;
+        VistaDelModelo.VMTurno MVTurnoInformacion;
+        private Guid _UidTurnoRepartidor;
+        public Guid UidTurnoRepartidor
         {
             get { return _UidTurnoRepartidor; }
             set { SetValue(ref _UidTurnoRepartidor, value); }
@@ -40,16 +43,93 @@ namespace Repartidores_GoDeliverix.VM
             set { SetValue(ref _LngFolio, value); }
         }
 
+        private string _Texto;
 
-        public ICommand IsReloading { get { return new RelayCommand(ActivarTurno); } }
-
-        private void ActivarTurno()
+        public string Texto
         {
+            get { return _Texto; }
+            set { SetValue(ref _Texto, value); }
+        }
+
+        private decimal _Total;
+
+        public decimal Total
+        {
+            get { return _Total; }
+            set { SetValue(ref _Total, value); }
+        }
+
+        private decimal __TotalEnvio;
+
+        public decimal TotalEnvio
+        {
+            get { return __TotalEnvio; }
+            set { SetValue(ref __TotalEnvio, value); }
+        }
+        private decimal __TotalSuministros;
+
+        public decimal TotalSuministros
+        {
+            get { return __TotalSuministros; }
+            set { SetValue(ref __TotalSuministros, value); }
+        }
+        private int __CantidadDeOrdenes;
+
+        public int CantidadDeOrdenes
+        {
+            get { return __CantidadDeOrdenes; }
+            set { SetValue(ref __CantidadDeOrdenes, value); }
+        }
+
+        public ICommand Activar { get { return new RelayCommand(ActivarTurno); } }
+
+        private async void ActivarTurno()
+        {
+            var AppInstance = MainViewModel.GetInstance();
+            //_WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
+            if (UidTurnoRepartidor == Guid.Empty)
+            {
+                UidTurnoRepartidor = Guid.NewGuid();
+            }
+            url = "http://www.godeliverix.net/api/Turno/GetTurnoRepartidor?UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidTurno=" + UidTurnoRepartidor + "";
+            await _WebApiGoDeliverix.GetStringAsync(url);
+            CargarTurno();
         }
 
         public VMTurno()
         {
+            CargarTurno();
+        }
 
+        public async void CargarTurno()
+        {
+            MVTurno = new VistaDelModelo.VMTurno();
+            var AppInstance = MainViewModel.GetInstance();
+            //_WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
+            url = "http://www.godeliverix.net/api/Turno/GetConsultaUltimoTurno?UidUsuario=" + AppInstance.Session_.UidUsuario + "";
+            var datos = await _WebApiGoDeliverix.GetStringAsync(url);
+            var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
+            MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
+            UidTurnoRepartidor = MVTurno.UidTurno;
+            AppInstance.Session_.UidTurnoRepartidor = MVTurno.UidTurno;
+            if (MVTurno.DtmHoraFin == DateTime.Parse("01/01/0001 12:00:00 a. m."))
+            {
+                Texto = "Cerrar turno";
+                url = "http://www.godeliverix.net/api/Turno/GetInformacionDeOrdenesPorTuno?UidTurno=" + AppInstance.Session_.UidTurnoRepartidor + "";
+                datos = await _WebApiGoDeliverix.GetStringAsync(url);
+                obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
+                MVTurnoInformacion = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
+                CantidadDeOrdenes = MVTurnoInformacion.DTotal;
+                TotalSuministros = MVTurnoInformacion.DTotalSucursal;
+                TotalEnvio = MVTurnoInformacion.DTotalEnvio;
+                Total = TotalSuministros + TotalEnvio;
+
+            }
+            else
+            {
+                UidTurnoRepartidor = Guid.Empty;
+                Texto = "Abrir turno";
+            }
         }
     }
 }

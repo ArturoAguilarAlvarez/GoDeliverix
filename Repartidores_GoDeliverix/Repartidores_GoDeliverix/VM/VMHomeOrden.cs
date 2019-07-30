@@ -250,8 +250,6 @@ namespace Repartidores_GoDeliverix.VM
             mVAcceso = new VMAcceso();
             var AppInstance = MainViewModel.GetInstance();
             _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
-
-
             url = "Profile/GetBitacoraRegistroRepartidores?StrParametro=O&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=A42B2588-D650-4DD9-829D-5978C927E2ED&UidOrdenRepartidor=" + UidordenRepartidor + "";
             await _WebApiGoDeliverix.GetAsync(url);
 
@@ -340,22 +338,9 @@ namespace Repartidores_GoDeliverix.VM
                 url = "Orden/GetObtenerProductosDeOrden?UidOrden=" + StrUidOrden + "";
 
                 string DatosObtenidos = await _WebApiGoDeliverix.GetStringAsync(url);
-                var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
-                JArray blogPostArray = JArray.Parse(DatosGiros.ToString());
-                MVOrden.ListaDeProductos = blogPostArray.Select(p => new VMOrden()
-                {
-                    UidProducto = new Guid(p["UidProducto"].ToString()),
-                    UidProductoEnOrden = new Guid(p["UidProductoEnOrden"].ToString()),
-                    StrNombreSucursal = p["StrNombreSucursal"].ToString(),
-                    StrNombreProducto = p["StrNombreProducto"].ToString(),
-                    //Imagen = item["NVchRuta"].ToString(),
-                    Imagen = p["Imagen"].ToString(),
-                    intCantidad = int.Parse(p["intCantidad"].ToString()),
-                    UidSucursal = new Guid(p["UidSucursal"].ToString()),
-                    MTotal = decimal.Parse(p["MTotal"].ToString()),
-                    MCostoTarifario = double.Parse(p["MCostoTarifario"].ToString())
-
-                }).ToList();
+                var DatosProductos = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
+                 MVOrden = JsonConvert.DeserializeObject<VMOrden>(DatosProductos);
+                
                 StrIdentificadorSucursal = MVOrden.ListaDeProductos[0].StrNombreSucursal;
 
                 MTotal = 0.0m;
@@ -369,7 +354,7 @@ namespace Repartidores_GoDeliverix.VM
                         MTotal = item.MTotal
                     });
                     MTotalTarifario = decimal.Parse(item.MCostoTarifario.ToString());
-                    MTotal = MTotal + (item.MTotal * item.intCantidad);
+                    MTotal = MTotal + item.MTotal;
                 }
                 MTotal = MTotal + MTotalTarifario;
 
@@ -392,11 +377,11 @@ namespace Repartidores_GoDeliverix.VM
             catch (Exception)
             {
 
-                GenerateMessage("Aviso","Sin acceso a los servidores","OK");
+                GenerateMessage("Aviso", "Sin acceso a los servidores", "OK");
             }
 
             //MVOrden.ObtenerProductosDeOrden(StrUidOrden);
-           
+
         }
         protected async void GenerateMessage(string Tittle, string Message, string TextOption)
         {

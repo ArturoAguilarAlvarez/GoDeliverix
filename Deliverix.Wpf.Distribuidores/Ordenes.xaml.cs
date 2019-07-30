@@ -159,6 +159,7 @@ namespace Deliverix.Wpf.Distribuidores
             AgregarRelacionBitacora(UidRepartidor: Usuario.Uid);
             DataGridBitacoraDeAsignaciones.ItemsSource = MVSucursal.ListaDeOrdenesAsignadas;
             LblUidRepartidor.Content = Usuario.Uid;
+            LblUidTurnoRepartidor.Content = Usuario.uidTurnoRepartidor;
             LblNombreRepartidor.Content = Usuario.StrNombre;
         }
 
@@ -176,7 +177,7 @@ namespace Deliverix.Wpf.Distribuidores
         {
             if (AccesoInternet())
             {
-                if (MVOrden.ListaDeOrdenes.Exists(o => o.Uidorden == UidOrden && o.Seleccion == true))
+                if (MVOrden.ListaDeBitacoraDeOrdenes.Exists(o => o.Uidorden == UidOrden && o.Seleccion == true))
                 {
                     VMSucursales objeto = MVSucursal.ListaDeOrdenesAsignadas.Last();
                     if (objeto.UidOrden == UidOrden || objeto.UidUsuario == UidRepartidor)
@@ -232,7 +233,7 @@ namespace Deliverix.Wpf.Distribuidores
 
                 for (int i = 0; i < MVUsuario.LISTADEUSUARIOS.Count; i++)
                 {
-                    if (MVSucursal.ListaDeOrdenesAsignadas.Exists(obj => obj.UidUsuario == MVUsuario.LISTADEUSUARIOS[i].Uid))
+                    if (MVSucursal.ListaDeOrdenesAsignadas.Exists(obj => obj.UidTurnoRepartidor == MVUsuario.LISTADEUSUARIOS[i].uidTurnoRepartidor))
                     {
                         MVUsuario.LISTADEUSUARIOS.RemoveAt(i);
                         i = i - 1;

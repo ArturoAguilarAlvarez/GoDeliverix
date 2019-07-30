@@ -318,7 +318,7 @@ namespace Repartidores_GoDeliverix.VM
             var AppInstance = MainViewModel.GetInstance();
             _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
 
-            url = "Orden/GetBuscarOrdenPorCodigoQR?strCodigo=" + StrCodigo + "&UidRepartidor=" + AppInstance.Session_.UidUsuario.ToString() + "";
+            url = "Orden/GetBuscarOrdenPorCodigoQR?strCodigo=" + StrCodigo + "&UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor.ToString() + "";
             var content = await _WebApiGoDeliverix.GetStringAsync(url);
             var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
             bool Respuesta = bool.Parse(obj.ToString());
@@ -335,7 +335,7 @@ namespace Repartidores_GoDeliverix.VM
                 url = "Orden/GetAgregaEstatusALaOrden?UidEstatus=2FDEE8E7-0D54-4616-B4C1-037F5A37409D&StrParametro=S&UidOrden=" + UidOrdenSucursal + "";
                 await _WebApiGoDeliverix.GetAsync(url);
 
-
+                AppInstance.MVTurno.CargarTurno();
                 // MVOrden.AgregaEstatusALaOrden(new Guid("2FDEE8E7-0D54-4616-B4C1-037F5A37409D"), UidOrden: UidOrdenSucursal, StrParametro: "S");
                 Verifica();
                 GenerateMessage("Orden entregada", "Felicidades, entregaste la orden!!!", "Aceptar");
@@ -422,7 +422,7 @@ namespace Repartidores_GoDeliverix.VM
                 StrUbicacionSucursal = string.Empty;
 
                 IsLoading = true;
-                url = "Orden/GetBuscarOrdenAsiganadaRepartidor?UidUsuario=" + AppInstance.Session_.UidUsuario + "";
+                url = "Orden/GetBuscarOrdenAsiganadaRepartidor?UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor + "";
                 string content = await _WebApiGoDeliverix.GetStringAsync(url);
                 var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                 MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(obj);

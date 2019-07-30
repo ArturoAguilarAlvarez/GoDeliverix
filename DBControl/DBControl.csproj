@@ -61,6 +61,7 @@
     <Compile Include="DbSucursal.cs" />
     <Compile Include="DBTarifario.cs" />
     <Compile Include="DbTelefono.cs" />
+    <Compile Include="DBTurno.cs" />
     <Compile Include="DbUbicacion.cs" />
     <Compile Include="DbUsuarios.cs" />
     <Compile Include="DbVehiculo.cs" />

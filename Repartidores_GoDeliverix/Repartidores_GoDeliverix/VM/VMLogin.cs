@@ -75,7 +75,7 @@ namespace Repartidores_GoDeliverix.VM
             }
         }
 
-        private async void login()
+        private  void login()
         {
             //var supportsUri = false;
             //if (Device.RuntimePlatform == Device.iOS)

@@ -52,7 +52,7 @@ namespace DBControl
             return oConexion.Consultas(query);
         }
 
-        public DataTable ObtenerOrdenRepartidor(Guid uidUsuario)
+        public DataTable ObtenerOrdenRepartidor(Guid UidTurnoRepartidor)
         {
             oConexion = new Conexion();
             string query = " select top 1 OrdR.UidRelacionOrdenRepartidor, ot.UidOrden,ot.UidRelacionOrdenTarifario,os.UidRelacionOrdenSucursal, s.UidSucursal, s.Identificador,os.IntFolio,o.UidDireccion as DireccionCliente," +
@@ -62,7 +62,7 @@ namespace DBControl
                 " join OrdenSucursal os on os.UidRelacionOrdenSucursal = ot.UidOrden inner " +
                 " join Sucursales s on s.UidSucursal = os.UidSucursal inner " +
                 " join OrdenRepartidor OrdR on ot.UidRelacionOrdenTarifario = OrdR.UidOrden inner join ordenes o on o.UidOrden = os.UidOrden " +
-                "where OrdR.UidUsuario = '" + uidUsuario.ToString() + "' order by OrdR.dtmFechaAsignacion desc";
+                "where OrdR.UidTurnoRepartidor = '" + UidTurnoRepartidor.ToString() + "' order by OrdR.dtmFechaAsignacion desc";
             return oConexion.Consultas(query);
         }
 
@@ -73,10 +73,10 @@ namespace DBControl
             return oConexion.Consultas(query);
         }
 
-        public DataTable VerificaCodigoDeEntrega(string strCodigo,string uidrepartidor)
+        public DataTable VerificaCodigoDeEntrega(string strCodigo,string UidTurnoRepartidor)
         {
             oConexion = new Conexion();
-            string query = "select * from ordensucursal os inner join ordentarifario ot on ot.uidorden = os.uidrelacionordensucursal inner join OrdenRepartidor orep on orep.UidOrden = ot.UidRelacionOrdenTarifario where os.BIntCodigoEntrega = "+strCodigo+" and orep.UidUsuario = '"+uidrepartidor+ "' and dbo.asp_ObtenerUltimoEstatusOrdenRepartidor(orep.UidRelacionOrdenRepartidor) != '12748F8A-E746-427D-8836-B54432A38C07'";
+            string query = "select * from ordensucursal os inner join ordentarifario ot on ot.uidorden = os.uidrelacionordensucursal inner join OrdenRepartidor orep on orep.UidOrden = ot.UidRelacionOrdenTarifario where os.BIntCodigoEntrega = "+strCodigo+ " and orep.UidTurnoRepartidor = '" + UidTurnoRepartidor+ "' and dbo.asp_ObtenerUltimoEstatusOrdenRepartidor(orep.UidRelacionOrdenRepartidor) != '12748F8A-E746-427D-8836-B54432A38C07'";
             return oConexion.Consultas(query);
         }
     }

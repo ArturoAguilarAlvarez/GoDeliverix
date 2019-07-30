@@ -7,6 +7,7 @@ namespace Repartidores_GoDeliverix.Modelo
     public class Session :ControlsController
     {
         public Guid UidUsuario { get; set; }
+        public Guid UidTurnoRepartidor { get; set; }
         private string _Nombre;
 
         public string Nombre
