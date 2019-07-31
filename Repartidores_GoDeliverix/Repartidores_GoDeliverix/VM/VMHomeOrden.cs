@@ -147,6 +147,13 @@ namespace Repartidores_GoDeliverix.VM
             set { SetValue(ref _ListaProductos, value); }
         }
 
+        private string _StrCodigo;
+
+        public string StrCodigo
+        {
+            get { return _StrCodigo; }
+            set { SetValue(ref _StrCodigo, value); }
+        }
         #endregion
 
         #region Propiedades de los puntos de direccion
@@ -221,7 +228,7 @@ namespace Repartidores_GoDeliverix.VM
         public ICommand ShowInfoOrder { get { return new RelayCommand(CargaDirecciones); } }
         public ICommand ConfirmOrder { get { return new RelayCommand(ConfirmarOrder); } }
         public ICommand CancelOrder { get { return new RelayCommand(CanelarOrden); } }
-
+        public ICommand GetCode { get { return new RelayCommand(ObtenerCodigo); } }
         private async void CanelarOrden()
         {
             var AppInstance = MainViewModel.GetInstance();
@@ -240,6 +247,36 @@ namespace Repartidores_GoDeliverix.VM
 
         }
 
+        private async void ObtenerCodigo()
+        {
+            MVOrden = new VMOrden();
+            var AppInstance = MainViewModel.GetInstance();
+            _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
+
+            url = "Orden/GetBuscarOrdenPorCodigoQR?strCodigo=" + StrCodigo + "&UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor.ToString() + "";
+            var content = await _WebApiGoDeliverix.GetStringAsync(url);
+            var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+            bool Respuesta = bool.Parse(obj.ToString());
+
+            if (Respuesta)
+            {
+                url = "Profile/GetBitacoraRegistroRepartidores?StrParametro=O&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=7DA3A42F-2271-47B4-B9B8-EDD311F56864&UidOrdenRepartidor=" + AppInstance.MVHome.UidordenRepartidor + "";
+                await _WebApiGoDeliverix.GetAsync(url);
+
+                //Peticion de la api para el cambio del estatus de la orden
+                url = "Orden/GetAgregaEstatusALaOrden?UidEstatus=2FDEE8E7-0D54-4616-B4C1-037F5A37409D&StrParametro=S&UidOrden=" + AppInstance.MVHome.UidOrdenSucursal + "";
+                await _WebApiGoDeliverix.GetAsync(url);
+
+                AppInstance.MVTurno.CargarTurno();
+                // MVOrden.AgregaEstatusALaOrden(new Guid("2FDEE8E7-0D54-4616-B4C1-037F5A37409D"), UidOrden: UidOrdenSucursal, StrParametro: "S");
+                AppInstance.MVHome.Verifica();
+                GenerateMessage("Orden entregada", "Felicidades, entregaste la orden!!!", "Aceptar");
+            }
+            else
+            {
+                GenerateMessage("Mensaje del sistema", "El codigo no coincide con la orden", "Aceptar");
+            }
+        }
 
         #endregion
         /// <summary>

@@ -49,7 +49,7 @@ namespace Repartidores_GoDeliverix.VM
                 case "Cerrar sesion":
                     _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
 
-                    string url = "Orden/GetBuscarOrdenAsiganadaRepartidor?UidUsuario=" + AppInstance.Session_.UidUsuario + "";
+                    string url = "Orden/GetBuscarOrdenAsiganadaRepartidor?UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor + "";
                     string content = await _WebApiGoDeliverix.GetStringAsync(url);
                     var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                     var MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(obj);

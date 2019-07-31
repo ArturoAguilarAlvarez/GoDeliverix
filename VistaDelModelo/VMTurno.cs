@@ -132,9 +132,18 @@ namespace VistaDelModelo
                 oTurno = new Turno() { UidUsuario = UidUsuario };
                 foreach (DataRow item in oTurno.InformacionDeOrdenes(UidTurno).Rows)
                 {
-                    DTotal = int.Parse(item["TotalOrdenes"].ToString());
-                    DTotalEnvio = decimal.Parse(item["totalEnvio"].ToString());
-                    DTotalSucursal = decimal.Parse(item["totalSucursal"].ToString());
+                    if (!string.IsNullOrEmpty(item["TotalOrdenes"].ToString()))
+                    {
+                        DTotal = int.Parse(item["TotalOrdenes"].ToString());
+                    }
+                    if (!string.IsNullOrEmpty(item["totalEnvio"].ToString()))
+                    {
+                        DTotalEnvio = decimal.Parse(item["totalEnvio"].ToString());
+                    }
+                    if (!string.IsNullOrEmpty(item["totalSucursal"].ToString()))
+                    {
+                        DTotalSucursal = decimal.Parse(item["totalSucursal"].ToString());
+                    }
                 }
             }
             catch (Exception)

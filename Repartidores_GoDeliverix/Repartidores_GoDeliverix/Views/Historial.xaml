@@ -13,28 +13,35 @@
                 <RowDefinition Height="2*"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Button Text="{Binding Texto,Mode=TwoWay}" VerticalOptions="Fill" Command="{Binding Activar}" HorizontalOptions="Fill" ></Button>
+            <Button VerticalOptions="Fill" BackgroundColor="{Binding ColorProp}" Text="{Binding Texto}" TextColor="White" Command="{Binding Activar}" HorizontalOptions="Fill" >
+               
+            </Button>
 
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="7*"></RowDefinition>
+                    <RowDefinition Height="2*"></RowDefinition>
+                    <RowDefinition Height="5*"></RowDefinition>
                     <RowDefinition Height="3*"></RowDefinition>
                 </Grid.RowDefinitions>
-                <Label Text="{Binding Total,StringFormat='${0}'}" Grid.ColumnSpan="3" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" FontSize="60" TextColor="Purple"></Label>
-                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Row="1" Grid.Column="0">
+                <StackLayout Grid.Row="0" Orientation="Vertical" Grid.ColumnSpan="3" >
+                    <Label Text="{Binding LngFolio,StringFormat='Nuermo de folio:{0}'}"/>
+                    <Label Text="{Binding DtmHoraInicio,StringFormat='Inicio:{0}'}"/>
+                </StackLayout>
+                <Label Text="{Binding Total,StringFormat='${0}'}" Grid.ColumnSpan="3" Grid.Row="1" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" FontSize="60" TextColor="Purple"></Label>
+                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Row="2" Grid.Column="0">
                     <Label Text="Ordenes"  TextColor="Purple"></Label>
                     <Label Text="{Binding CantidadDeOrdenes}"  HorizontalOptions="Center" TextColor="Purple"></Label>
                 </StackLayout>
-                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Row="1" Grid.Column="1">
+                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Row="2" Grid.Column="1">
                     <Label Text="Total envio"  TextColor="Purple"></Label>
                     <Label Text="{Binding TotalEnvio,StringFormat='${0}'}"  TextColor="Purple"></Label>
                 </StackLayout>
-                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Row="1" Grid.Column="2">
+                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Row="2" Grid.Column="2">
                     <Label Text="Total ordenes"  TextColor="Purple"></Label>
                     <Label Text="{Binding TotalSuministros,StringFormat='${0}'}"  TextColor="Purple"></Label>
                 </StackLayout>
             </Grid>
-            <StackLayout Grid.Row="2" Padding="10">
+            <StackLayout Grid.Row="2" >
                 <StackLayout Orientation="Vertical">
                     <Button  Text="Historico de caja" BackgroundColor="Purple" x:Name="BtnHistorico" Clicked="BtnHistorico_Clicked"  TextColor="White" FontSize="Large"></Button>
 
