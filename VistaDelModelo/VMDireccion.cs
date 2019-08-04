@@ -50,7 +50,7 @@ namespace VistaDelModelo
 
         public string COLONIA;
         public string CIUDAD;
-        
+
 
         private string StrCalle0;
 
@@ -66,7 +66,7 @@ namespace VistaDelModelo
             set { StrCalle1 = value; }
         }
 
-        
+
         private string StrCalle2;
         public string CALLE2
         {
@@ -128,7 +128,7 @@ namespace VistaDelModelo
             Direccion.GuardaDireccion(StoreProcedure, direccion, Usuario);
         }
 
-        public void ActualizaDireccion( Guid uidDireccion, Guid uidPais, Guid uidEstado, Guid uidMunicipio, Guid uidCiudad, Guid uidColonia, string callePrincipal, string calleAux1, string calleAux2, string manzana, string lote, string codigoPostal, string referencia, string identificador)
+        public void ActualizaDireccion(Guid uidDireccion, Guid uidPais, Guid uidEstado, Guid uidMunicipio, Guid uidCiudad, Guid uidColonia, string callePrincipal, string calleAux1, string calleAux2, string manzana, string lote, string codigoPostal, string referencia, string identificador)
         {
             var direccion = new Direccion()
             {
@@ -150,10 +150,10 @@ namespace VistaDelModelo
             Direccion = new Direccion();
             Direccion.GuardaDireccion("asp_ActualizaDireccion", direccion, Guid.Empty);
         }
-        
+
 
         private string _NombreEstado;
-            
+
         public string NombreEstado
         {
             get { return _NombreEstado; }
@@ -203,7 +203,7 @@ namespace VistaDelModelo
             oDbDireccion = new DbDireccion();
             return oDbDireccion.ObtenerPais();
         }
-        public DataTable Estados(Guid Pais,string busqueda = "",string Nombre = "")
+        public DataTable Estados(Guid Pais, string busqueda = "", string Nombre = "")
         {
             oDbDireccion = new DbDireccion();
             return oDbDireccion.ObtenerEstados(Pais, busqueda, Nombre);
@@ -382,7 +382,7 @@ namespace VistaDelModelo
             }
         }
 
-        
+
 
         public string ObtenerCodigoPostal(Guid Colonia)
         {
@@ -466,10 +466,30 @@ namespace VistaDelModelo
             }
             return NOMBRE;
         }
+        /// <summary>
+        /// Obtiene el uid del usuario a travez de su direccion
+        /// </summary>
+        /// <param name="UidDireccion"></param>
+        public string ObtenerUidUsuarioDeUidDireccion(string UidDireccion)
+        {
+            string resultado = "";
+            try
+            {
+                oDbDireccion = new DbDireccion();
+                foreach (DataRow item in oDbDireccion.ObtenerUidDeUsuarioPorUidDireccion(UidDireccion).Rows)
+                {
+                    resultado = item["UidUsuario"].ToString();
+                };
+            }
+            catch (Exception)
+            {
 
-
+                throw;
+            }
+            return resultado;
+        }
         #endregion
-        
+
         #region Listas
         //Zonas de entrega
         public void SeleccionarCiudadEntrega(Guid UidCiudad)
@@ -579,7 +599,7 @@ namespace VistaDelModelo
                 oDbDireccion.AgregaColonia(IdPais, IdEstado, IdMunicipio, IdCiudad, Nombre);
             }
         }
-        
+
         public bool ActualizaListaDireccion(string Id, Guid pais, Guid estado, Guid municipio, Guid Ciudad, Guid colonia, string Calle0, string calle1, string calle2, string manzana, string lote, string CP, string referencia, string IDENTIFICADOR, string NOMBRECIUDAD, string NOMBRECOLONIA)
         {
             bool resultado = false;
@@ -698,7 +718,7 @@ namespace VistaDelModelo
 
         public void AgregaDireccionALista(Guid UidDireccion, Guid pais, Guid estado, Guid municipio, Guid Ciudad, Guid colonia, string Calle0, string calle1, string calle2, string manzana, string lote, string CP, string referencia, string NOMBRECIUDAD, string NOMBRECOLONIA, string IDENTIFICADOR)
         {
-            
+
             if (Ciudad == Guid.Empty)
             {
                 NOMBRECIUDAD = "No hay información";
@@ -839,7 +859,7 @@ namespace VistaDelModelo
         /// </summary>
         /// <param name="uidOrden"></param>
         /// <param name="StrParametroDeBusqueda">Entrega|Recolecta</param>
-        public void ObtenerDireccionDeOrden(string uidOrden,string StrParametroDeBusqueda)
+        public void ObtenerDireccionDeOrden(string uidOrden, string StrParametroDeBusqueda)
         {
             try
             {
@@ -856,7 +876,7 @@ namespace VistaDelModelo
                 ListaDIRECCIONES.Clear();
                 foreach (DataRow item in oConexion.Busquedas(comando).Rows)
                 {
-                    if (!ListaDIRECCIONES.Exists(d=>d.UidDireccion == new Guid(item["UidDireccion"].ToString())))
+                    if (!ListaDIRECCIONES.Exists(d => d.UidDireccion == new Guid(item["UidDireccion"].ToString())))
                     {
                         string NombrePais = ObtenerNombrePais(item["UidPais"].ToString());
                         string NombreEstado = ObtenerNombreDelEstado(item["UidEstado"].ToString());
@@ -867,8 +887,8 @@ namespace VistaDelModelo
                             new VMDireccion()
                             {
                                 ID = new Guid(item["UidDireccion"].ToString()),
-                                PAIS = NombrePais, 
-                                ESTADO = NombreEstado, 
+                                PAIS = NombrePais,
+                                ESTADO = NombreEstado,
                                 MUNICIPIO = NombreMunicipio,
                                 CALLE0 = item["Calle0"].ToString(),
                                 MANZANA = item["Manzana"].ToString(),
@@ -888,7 +908,7 @@ namespace VistaDelModelo
 
                 throw;
             }
-            
+
         }
 
         private string ObtenerNombreDelMunicipio(string UidMunicipio)
@@ -964,7 +984,7 @@ namespace VistaDelModelo
             {
                 Comando.CommandType = CommandType.StoredProcedure;
                 Comando.CommandText = "asp_BuscarZonasHorarias";
-                
+
                 if (!string.IsNullOrEmpty(UidZonaHoraria))
                 {
                     Comando.Parameters.Add("@UidRelacionZonaHorariaPais", SqlDbType.UniqueIdentifier);

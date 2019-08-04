@@ -2,12 +2,13 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              BindingContext="{Binding VMMain, Source={StaticResource Locator}}"
+             Title="Nueva orden"
              x:Class="Repartidores_GoDeliverix.Views.Home_NuevaOrden">
 
     <Grid HorizontalOptions="Fill" BindingContext="{Binding MVHomeOrden}" VerticalOptions="Fill">
         <Grid.RowDefinitions>
-            <RowDefinition Height="3*"></RowDefinition>
-            <RowDefinition Height="6*"></RowDefinition>
+            <RowDefinition Height="4*"></RowDefinition>
+            <RowDefinition Height="4*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
         </Grid.RowDefinitions>
         <StackLayout   VerticalOptions="Center">
@@ -30,7 +31,7 @@
                 </StackLayout>
             </Grid>
         </StackLayout>
-
+    
 
         <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="1">
             <Grid >
@@ -42,21 +43,22 @@
 
                 <StackLayout Grid.Row="0" Padding="10,0,0,0"  >
                     <Grid >
-                        <Label Text="Producto" FontSize="Medium" TextColor="Purple"  Grid.Column="0"></Label>
-                        <Label Text="Cantidad" FontSize="Medium" TextColor="Purple"  Grid.Column="1" ></Label>
-                        <Label Text="Importe"  FontSize="Medium" TextColor="Purple"  Grid.Column="2" ></Label>
+                        <Label Text="Cantidad" FontSize="Medium" TextColor="Black"  Grid.Column="0" HorizontalTextAlignment="Start" ></Label>
+                        <Label Text="Producto" FontSize="Medium" TextColor="Black"  Grid.Column="1" HorizontalTextAlignment="Start"></Label>
+                        <Label Text="Importe"  FontSize="Medium" TextColor="Black"  Grid.Column="2" HorizontalTextAlignment="Start" ></Label>
                     </Grid>
                 </StackLayout>
                 <!--<StackLayout Grid.Row="1"  Padding="10,0,0,0"  >-->
                     <!--<ScrollView VerticalOptions="Fill">-->
-                <ListView RowHeight="100" ItemsSource="{Binding ListaProductos}" >
+                <ListView  Grid.Row="1"  ItemsSource="{Binding ListaProductos}" >
                             <ListView.ItemTemplate >
-                                <DataTemplate>
-                                    <ViewCell >
-                                        <Grid>
-                                            <Label TextColor="Purple" Grid.Column="0" HorizontalOptions="Center" FontSize="Medium" Text="{Binding StrNombreProducto}" ></Label>
-                                            <Label TextColor="Purple" Grid.Column="1"   HorizontalOptions="Center" FontSize="Medium" Text="{Binding IntCantidad}" ></Label>
-                                            <Label TextColor="Purple" Grid.Column="2" HorizontalOptions="Center" FontSize="Medium" Text="{Binding MTotal}" ></Label>
+                        <DataTemplate>
+                            <ViewCell >
+                                        <Grid Padding="10,0,0,0">
+                                    <Label TextColor="Purple" Grid.Column="0"   HorizontalOptions="Center" FontSize="Medium" Text="{Binding IntCantidad}" ></Label>
+
+                                    <Label TextColor="Purple" Grid.Column="1" HorizontalOptions="Center" FontSize="Medium" Text="{Binding StrNombreProducto}"  ></Label>
+                                            <Label TextColor="Purple" Grid.Column="2" HorizontalOptions="Center" FontSize="Medium" Text="{Binding MTotal, StringFormat='${0}'}" ></Label>
                                         </Grid>
                                     </ViewCell>
                                 </DataTemplate>
@@ -67,14 +69,15 @@
 
                 <StackLayout  Grid.Row="2" Padding="10,0,0,0"  >
                     <Grid >
-                        <Label Text="Envio"      FontSize="Large" TextColor="MediumPurple"  Grid.Column="0"></Label>
-                        <Label Text="{Binding MTotalTarifario}"      FontSize="Large" TextColor="MediumPurple"  Grid.Column="1"></Label>
-                        <Label Text="Total" FontSize="Large" TextColor="MediumPurple"  Grid.Column="2"></Label>
-                        <Label Text="{Binding MTotal}"  FontSize="Large" TextColor="MediumPurple"  Grid.Column="3"></Label>
+                        <Label Text="Envio"      FontSize="Medium" TextColor="Black"  Grid.Column="0"></Label>
+                        <Label Text="{Binding MTotalTarifario}"      FontSize="Medium" TextColor="MediumPurple"  Grid.Column="1"></Label>
+                        <Label Text="Total" FontSize="Medium" TextColor="Black"  Grid.Column="2"></Label>
+                        <Label Text="{Binding MTotal}"  FontSize="Medium" TextColor="MediumPurple"  Grid.Column="3"></Label>
                     </Grid>
                 </StackLayout>
             </Grid>
         </StackLayout>
+        
         <StackLayout  Grid.Row="2" VerticalOptions="End">
             <Grid>
                 <Button  Text="Si" FontSize="Large" Command="{Binding ConfirmOrder}" x:Name="btnAceptar" Clicked="BtnAceptar_Clicked" TextColor="White"  Grid.Column="0" BackgroundColor="Green"></Button>

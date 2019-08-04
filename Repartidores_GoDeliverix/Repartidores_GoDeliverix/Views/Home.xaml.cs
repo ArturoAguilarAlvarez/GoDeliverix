@@ -96,9 +96,7 @@ namespace Repartidores_GoDeliverix.Views
 
         private async void BtnEntregar_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new PopoLoading());
-            await Navigation.PopAsync();
-            await Navigation.PushAsync(new Home_Entregar());
+            
         }
 
         private async void BtnMapaEspera_ClickedAsync(object sender, EventArgs e)

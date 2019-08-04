@@ -1,4 +1,5 @@
 ﻿using Repartidores_GoDeliverix.Views;
+using System.Globalization;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -14,6 +15,7 @@ namespace Repartidores_GoDeliverix
         static public float ScreenDensity = 1;
         public App()
         {
+            SetCultureToUSEnglish();
             InitializeComponent();
             MainPage = new NavigationPage(new Login());
         }
@@ -27,7 +29,11 @@ namespace Repartidores_GoDeliverix
         {
             // Handle when your app sleeps
         }
-
+        private void SetCultureToUSEnglish()
+        {
+            CultureInfo englishUSCulture = new CultureInfo("es-MX");
+            CultureInfo.DefaultThreadCurrentCulture = englishUSCulture;
+        }
         protected override void OnResume()
         {
             if (Application.Current.Properties.ContainsKey("IsLogged"))

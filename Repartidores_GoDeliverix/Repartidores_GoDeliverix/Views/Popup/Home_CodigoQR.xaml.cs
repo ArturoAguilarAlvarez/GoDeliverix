@@ -13,6 +13,16 @@ namespace Repartidores_GoDeliverix.Views.Popup
         public Home_CodigoQR()
         {
             InitializeComponent();
+            
+        }
+
+        private async void BtnDetalles_Clicked(object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new Home_DetallesSucursal());
+        }
+
+        private void LblCodigo_BindingContextChanged(object sender, System.EventArgs e)
+        {
             var ImgQrCodigo = new ZXingBarcodeImageView
             {
                 BarcodeFormat = BarcodeFormat.QR_CODE,
@@ -29,15 +39,10 @@ namespace Repartidores_GoDeliverix.Views.Popup
             ImgQrCodigo.WidthRequest = 250;
             ImgQrCodigo.HeightRequest = 250;
 
-            pnlContenido.Children.Add(ImgQrCodigo);
-            Label Mensaje = new Label() {Text="Muestra el codigo para recibir la orden.",VerticalOptions = LayoutOptions.EndAndExpand, TextColor= Color.MediumPurple, HorizontalOptions = LayoutOptions.CenterAndExpand  };
-            pnlContenido.Children.Add(Mensaje);
 
-        }
-
-        private async void BtnDetalles_Clicked(object sender, System.EventArgs e)
-        {
-            await Navigation.PushAsync(new Home_DetallesSucursal());
+            Label Mensaje = new Label() { Text = "Muestra el codigo para recibir la orden.", VerticalOptions = LayoutOptions.EndAndExpand, FontSize = 24, TextColor = Color.Black, HorizontalOptions = LayoutOptions.CenterAndExpand };
+            pnlContenido.Children.Insert(0, Mensaje);
+            pnlContenido.Children.Insert(1, ImgQrCodigo);
         }
     }
 }

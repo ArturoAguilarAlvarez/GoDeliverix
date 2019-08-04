@@ -42,6 +42,20 @@ namespace WebApplication1.Controllers
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;
         }
+        /// <summary>
+        /// Obtiene la el uid de usuario a quien le pertenece la direccion
+        /// </summary>
+        /// <param name="UidDireccion"></param>
+        /// <returns></returns>
+        public ResponseHelper GetObtenerUidUsuarioDeUidDireccion(string UidDireccion)
+        {
+            MVDireccion = new VMDireccion();
+            Respuesta = new ResponseHelper();
+            Respuesta.Data = MVDireccion.ObtenerUidUsuarioDeUidDireccion(UidDireccion); ;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
 
         public ResponseHelper GetObtenerNombreDeLaColonia(string UidColonia)
         {

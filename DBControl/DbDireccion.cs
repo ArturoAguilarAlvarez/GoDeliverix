@@ -232,6 +232,13 @@ namespace DBControl
             return oConexcion.Consultas(sentencia);
         }
 
+        public DataTable ObtenerUidDeUsuarioPorUidDireccion(string uidDireccion)
+        {
+            oConexcion = new Conexion();
+            string sentencia = "select u.UidUsuario from usuarios u inner join DireccionUsuario du on du.UidUsuario = u.UidUsuario where du.UidDireccion = '"+ uidDireccion + "'";
+            return oConexcion.Consultas(sentencia);
+        }
+
         #endregion
     }
 }

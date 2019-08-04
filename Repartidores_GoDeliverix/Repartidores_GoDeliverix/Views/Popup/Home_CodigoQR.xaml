@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Repartidores_GoDeliverix.Views.Popup.Home_CodigoQR"
+             Title="Informacion de recolecta"
                   BindingContext="{Binding VMMain, Source={StaticResource Locator}}">
     <!--<pages:PopupPage.Animation>
         <animations:ScaleAnimation 
@@ -16,29 +17,68 @@
             EasingOut="SinIn"
             HasBackgroundAnimation="True"/>
     </pages:PopupPage.Animation>-->
-    <StackLayout VerticalOptions="Start" BindingContext="{Binding MVHome}" HorizontalOptions="FillAndExpand" Margin="5,5,5,5" >
-        <StackLayout  x:Name="pnlContenido" BackgroundColor="White" Orientation="Vertical">
-            <Label x:Name="lblCodigo" Text="{Binding StrCodigo,Mode=TwoWay}" IsVisible="False"></Label>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="5*"></RowDefinition>
-                    <RowDefinition Height="5*"></RowDefinition>
-                </Grid.RowDefinitions>
-                <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="0">
-                    <Label  Text="Empresa" FontSize="Large"  TextColor="Black"></Label>
-                    <Label  Text="{Binding StrEmpresaNombreComercial}" TextColor="Purple" FontSize="Medium" ></Label>
-                </StackLayout>
-                <StackLayout Orientation="Vertical" Grid.Row="1" HorizontalOptions="Center">
-                    <Label  Text="Numero de orden" FontSize="Large"  TextColor="Black"></Label>
-                    <Label  Text="" TextColor="Purple" FontSize="Medium" ></Label>
-                </StackLayout>
-                <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="1">
-                    <Label  Text="Sucursal" FontSize="Large" TextColor="Black"></Label>
-                    <Label x:Name="lblSucursal" Text="{Binding StrSucursalIdentificador}" TextColor="Purple" FontSize="Medium" ></Label>
-                </StackLayout>
-            </Grid>
-            <!--<Button Text="Detalles de sucursal" Command="{Binding ShowInfoOrder}" HorizontalOptions="FillAndExpand" x:Name="btnDetalles" Clicked="BtnDetalles_Clicked"></Button>-->
-        </StackLayout>
+    <StackLayout VerticalOptions="Start" BindingContext="{Binding MVHomeOrden}" HorizontalOptions="FillAndExpand" Margin="5,5,5,5" >
+        <ScrollView>
+            <StackLayout  x:Name="pnlContenido" BackgroundColor="WhiteSmoke" Orientation="Vertical">
+                <Label x:Name="lblCodigo" Text="{Binding StrCodigo,Mode=TwoWay}" BindingContextChanged="LblCodigo_BindingContextChanged" IsVisible="False"></Label>
+                <Label HorizontalOptions="CenterAndExpand" Text="{Binding MSubTotal,StringFormat='Total a pagar ${0}'}" TextColor="Black" FontSize="Large"></Label>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5*"></RowDefinition>
+                        <RowDefinition Height="5*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="0">
+                        <Label  Text="Empresa" FontSize="Large"  TextColor="Black"></Label>
+                        <Label  Text="{Binding StrEmpresaNombreComercial}" TextColor="Purple" FontSize="Medium" ></Label>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical" Grid.Row="1" HorizontalOptions="Center">
+                        <Label  Text="Numero de orden" FontSize="Large"  TextColor="Black"></Label>
+                        <Label  Text="{Binding LngFolio}" TextColor="Purple" FontSize="Medium" ></Label>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="1">
+                        <Label  Text="Sucursal" FontSize="Large" TextColor="Black"></Label>
+                        <Label x:Name="lblSucursal" Text="{Binding StrIdentificadorSucursal}" TextColor="Purple" FontSize="Medium" ></Label>
+                    </StackLayout>
+                </Grid>
+                <Grid  >
+                    <!--<Grid.RowDefinitions>
+                        <RowDefinition Height="2*"></RowDefinition>
+                        <RowDefinition Height="8*"></RowDefinition>
+                    </Grid.RowDefinitions>-->
+
+
+                    <ScrollView HeightRequest="200">
+                        <StackLayout>
+                            <StackLayout  Padding="10,0,0,0"  >
+                                <Grid >
+                                    <Label Text="Cantidad" FontSize="Medium" TextColor="Black"  Grid.Column="0" HorizontalTextAlignment="Start" ></Label>
+                                    <Label Text="Producto" FontSize="Medium" TextColor="Black"  Grid.Column="1" HorizontalTextAlignment="Start"></Label>
+                                    <Label Text="Importe"  FontSize="Medium" TextColor="Black"  Grid.Column="2" HorizontalTextAlignment="Start" ></Label>
+                                </Grid>
+                            </StackLayout>
+                            <ListView   ItemsSource="{Binding ListaProductos}" VerticalOptions="Start" >
+                                <ListView.ItemTemplate >
+                                    <DataTemplate>
+                                        <ViewCell >
+                                            <Grid Padding="10,0,0,0">
+                                                <Label TextColor="Purple" Grid.Column="0"   HorizontalOptions="Center" FontSize="Medium" Text="{Binding IntCantidad}" ></Label>
+                                                <Label TextColor="Purple" Grid.Column="1" HorizontalOptions="Center" FontSize="Medium" Text="{Binding StrNombreProducto}"  ></Label>
+                                                <Label TextColor="Purple" Grid.Column="2" HorizontalOptions="Center" FontSize="Medium" Text="{Binding MTotal, StringFormat='${0}'}" ></Label>
+                                            </Grid>
+                                        </ViewCell>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackLayout>
+
+                    </ScrollView>
+                </Grid>
+
+                <!--<Button Text="Detalles de sucursal" Command="{Binding ShowInfoOrder}" HorizontalOptions="FillAndExpand" x:Name="btnDetalles" Clicked="BtnDetalles_Clicked"></Button>-->
+            </StackLayout>
+        </ScrollView>
+
     </StackLayout>
 
 </ContentPage>
