@@ -25,7 +25,7 @@
                     <RowDefinition Height="10*"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Label Text="Esperando orden" HorizontalOptions="Center" VerticalOptions="Center" FontSize="Large" TextColor="Purple" IsVisible="{Binding BlSinAsignar}"></Label>
-                <Button  x:Name="btnNuevaOrden" IsVisible="{Binding BlNuevaOrden}" IsEnabled="{Binding IsEnable}" Clicked="BtnNuevaOrden_Clicked" Command="{Binding ShowOrder}"   Image="Alert.png" Text="Nueva!"  HeightRequest = "150" FontSize="Large" TextColor="Purple" BackgroundColor="White">
+                <Button  x:Name="btnNuevaOrden" IsVisible="{Binding BlNuevaOrden}" IsEnabled="{Binding IsEnable}" Clicked="BtnNuevaOrden_Clicked" Command="{Binding ShowOrder}"   Image="Alert.png" Text="Orden asignada"  HeightRequest = "150" FontSize="Large" TextColor="Purple" BackgroundColor="White">
                 </Button>
                 <Button  x:Name="btnQr"   IsVisible="{Binding BlRecolecta}" IsEnabled="{Binding IsEnable}"  Command="{Binding ShowCodeQr}" Clicked="BtnQr_Clicked" Image="qrcode.png" Text="Recolectar"  HeightRequest = "150" FontSize="Large" TextColor="Purple" BackgroundColor="White">
                 </Button>

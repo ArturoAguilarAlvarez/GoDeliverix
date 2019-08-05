@@ -8,16 +8,15 @@
     <ContentPage.Content>
         <Grid HorizontalOptions="Fill" BindingContext="{ Binding MVHomeOrden}" VerticalOptions="Fill">
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*"></RowDefinition>
-                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="3*"></RowDefinition>
                 <RowDefinition Height="5*"></RowDefinition>
                 <RowDefinition Height="2*"></RowDefinition>
             </Grid.RowDefinitions>
-            <StackLayout HorizontalOptions="Center">
+            <!--<StackLayout HorizontalOptions="Center">
                 <Label Text="GoDeliverix" TextColor="Purple"   FontSize="Large"></Label>
-            </StackLayout>
-            <StackLayout Grid.Row="1">
-                <BoxView BackgroundColor="Black" HeightRequest="5" HorizontalOptions="FillAndExpand" ></BoxView>
+            </StackLayout>-->
+            <StackLayout Grid.Row="0">
+                <BoxView BackgroundColor="#333" HeightRequest="5" HorizontalOptions="FillAndExpand" ></BoxView>
 
                 <Grid>
                     <Grid.RowDefinitions>
@@ -25,25 +24,25 @@
                         <RowDefinition Height="5*"></RowDefinition>
                     </Grid.RowDefinitions>
                     <StackLayout Orientation="Vertical" VerticalOptions="Center" Grid.Row="0" Grid.Column="0">
-                        <Label  Text="Empresa" FontSize="Large"  TextColor="Black"></Label>
-                        <Label  Text="{Binding StrEmpresaNombreComercial}" TextColor="Purple" FontSize="Medium" ></Label>
+                        <Label  Text="Empresa" FontSize="Large"  TextColor="#333"></Label>
+                        <Label  Text="{Binding StrEmpresaNombreComercial}" TextColor="#555" FontSize="Medium" ></Label>
                     </StackLayout>
                     <StackLayout Orientation="Vertical" VerticalOptions="Center" Grid.Row="0" Grid.Column="1">
-                        <Label  Text="Sucursal" FontSize="Large" TextColor="Black"></Label>
-                        <Label x:Name="lblSucursal" Text="{Binding StrIdentificadorSucursal}" TextColor="Purple" FontSize="Medium" ></Label>
+                        <Label  Text="Sucursal" FontSize="Large" TextColor="#333"></Label>
+                        <Label x:Name="lblSucursal" Text="{Binding StrIdentificadorSucursal}" TextColor="#555" FontSize="Medium" ></Label>
                     </StackLayout>
 
                     <StackLayout Orientation="Vertical" Grid.Row="1" VerticalOptions="Center"  Grid.Column="0" HorizontalOptions="Center">
-                        <Label  Text="Numero de orden" FontSize="Large"  TextColor="Black"></Label>
-                        <Label  Text="{Binding LngFolio}" TextColor="Purple" FontSize="Medium" ></Label>
+                        <Label  Text="Numero de orden" FontSize="Large"  TextColor="#333"></Label>
+                        <Label  Text="{Binding LngFolio}" TextColor="#555" FontSize="Medium" ></Label>
                     </StackLayout>
                     <StackLayout Orientation="Vertical" VerticalOptions="Center" Grid.Row="1"  Grid.Column="1" HorizontalOptions="Center">
-                        <Label  Text="Cliente" FontSize="Large"  TextColor="Black"></Label>
-                        <Label  Text="{Binding StrNombreUsuario}" TextColor="Purple" FontSize="Medium" ></Label>
+                        <Label  Text="Cliente" FontSize="Large"  TextColor="#333"></Label>
+                        <Label  Text="{Binding StrNombreUsuario}" TextColor="#555" FontSize="Medium" ></Label>
                     </StackLayout>
                 </Grid>
             </StackLayout>
-            <StackLayout  Grid.Row="2" Orientation="Vertical" HorizontalOptions="Fill">
+            <StackLayout  Grid.Row="1" Orientation="Vertical" HorizontalOptions="Fill">
 
 
 
@@ -58,19 +57,19 @@
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="AUTO"></RowDefinition>
                                     </Grid.RowDefinitions>
-                                    <Label Text="Cantidad" FontSize="Medium" HorizontalOptions="Center" TextColor="Black" Grid.Column="0"   ></Label>
-                                    <Label Text="Producto" FontSize="Medium" HorizontalOptions="Center" TextColor="Black"  Grid.Column="1" ></Label>
-                                    <Label Text="Importe"  FontSize="Medium" HorizontalOptions="Center" TextColor="Black"  Grid.Column="2"  ></Label>
+                                    <Label Text="Cantidad" FontSize="Medium" HorizontalOptions="Center" TextColor="#333" Grid.Column="0"   ></Label>
+                                    <Label Text="Producto" FontSize="Medium" HorizontalOptions="Center" TextColor="#333"  Grid.Column="1" ></Label>
+                                    <Label Text="Importe"  FontSize="Medium" HorizontalOptions="Center" TextColor="#333"  Grid.Column="2"  ></Label>
                                 </Grid>
                             </ListView.Header>
                             <ListView.ItemTemplate >
                                 <DataTemplate>
                                     <ViewCell >
                                         <Grid Padding="10,0,0,0">
-                                            <Label TextColor="Purple" Grid.Column="0"   HorizontalOptions="Center" FontSize="Medium" Text="{Binding IntCantidad}" ></Label>
+                                            <Label TextColor="#555" Grid.Column="0"   HorizontalOptions="Center" FontSize="Medium" Text="{Binding IntCantidad}" ></Label>
 
-                                            <Label TextColor="Purple" Grid.Column="1" HorizontalOptions="Center" FontSize="Medium" Text="{Binding StrNombreProducto}"  ></Label>
-                                            <Label TextColor="Purple" Grid.Column="2" HorizontalOptions="Center" FontSize="Medium" Text="{Binding MTotal, StringFormat='${0}'}" ></Label>
+                                            <Label TextColor="#555" Grid.Column="1" HorizontalOptions="Center" FontSize="Medium" Text="{Binding StrNombreProducto}"  ></Label>
+                                            <Label TextColor="#555" Grid.Column="2" HorizontalOptions="Center" FontSize="Medium" Text="{Binding MTotal, StringFormat='${0}'}" ></Label>
                                         </Grid>
                                     </ViewCell>
                                 </DataTemplate>
@@ -88,7 +87,7 @@
                 </StackLayout>
             </StackLayout>
 
-            <StackLayout Grid.Row="3" HorizontalOptions="Center">
+            <StackLayout Grid.Row="2" HorizontalOptions="Center">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="5*"></RowDefinition>

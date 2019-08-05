@@ -1,8 +1,9 @@
 ﻿using Repartidores_GoDeliverix.Views;
+using System;
 using System.Globalization;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-
+using Repartidores_GoDeliverix.VM;
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace Repartidores_GoDeliverix
 {
@@ -17,7 +18,18 @@ namespace Repartidores_GoDeliverix
         {
             SetCultureToUSEnglish();
             InitializeComponent();
-            MainPage = new NavigationPage(new Login());
+            string Usuario = Repartidores_GoDeliverix.Helpers.settings.UserName;
+            string Contrasena = Repartidores_GoDeliverix.Helpers.settings.Password;
+            if (!string.IsNullOrEmpty(Usuario) && !string.IsNullOrEmpty(Contrasena))
+            {
+                VMLogin obj = new VMLogin() { User = Usuario, Password = Contrasena };
+
+            }
+            else
+            {
+                MainPage = new NavigationPage(new Login());
+            }
+
         }
 
         protected override void OnStart()
@@ -38,12 +50,20 @@ namespace Repartidores_GoDeliverix
         {
             if (Application.Current.Properties.ContainsKey("IsLogged"))
             {
-                MainPage = new NavigationPage(new TabbedPageMain()); 
+                MainPage = new NavigationPage(new TabbedPageMain());
             }
             else
             {
                 MainPage = new NavigationPage(new Login());
             }
         }
+        protected async void GenerateMessage(string Tittle, string Message, string TextOption)
+        {
+            await Application.Current.MainPage.DisplayAlert(
+              Tittle,
+              Message,
+              TextOption);
+        }
+
     }
 }

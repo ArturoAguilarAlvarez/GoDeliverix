@@ -75,60 +75,61 @@ namespace Repartidores_GoDeliverix.VM
             }
         }
 
-        private  void login()
+        private async  void login()
         {
-            //var supportsUri = false;
-            //if (Device.RuntimePlatform == Device.iOS)
-            //{
-            //    supportsUri = await Launcher.CanOpenAsync("comgooglemaps://");
-            //}
-            //if (supportsUri)
-            //{
+            var supportsUri = false;
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                supportsUri = await Launcher.CanOpenAsync("comgooglemaps://");
+            }
+            if (supportsUri)
+            {
                 try
-            {
-                this.IsLoading = true;
-                this.IsEnable = false;
-                if (string.IsNullOrEmpty(this.User))
                 {
                     this.IsLoading = true;
                     this.IsEnable = false;
-                    GenerateMessage("Datos invalidos", "Usuario requerido", "Aceptar");
-                    return;
+                    if (string.IsNullOrEmpty(this.User))
+                    {
+                        this.IsLoading = true;
+                        this.IsEnable = false;
+                        GenerateMessage("Datos invalidos", "Usuario requerido", "Aceptar");
+                        return;
+                    }
+                    else
+                    if (string.IsNullOrEmpty(this.Password))
+                    {
+                        this.IsLoading = true;
+                        this.IsEnable = false;
+                        GenerateMessage("Datos invalidos", "Contraseña requerida", "Aceptar");
+                        return;
+                    }
+                    else
+                    {
+
+                        Acceso(User, Password, "Login");
+
+                    }
                 }
-                else
-                if (string.IsNullOrEmpty(this.Password))
+                catch (Exception)
                 {
-                    this.IsLoading = true;
-                    this.IsEnable = false;
-                    GenerateMessage("Datos invalidos", "Contraseña requerida", "Aceptar");
-                    return;
-                }
-                else
-                {
-                    Acceso(User, Password, "Login");
+                    this.IsLoading = false;
+                    this.IsEnable = true;
+
+                    GenerateMessage("Alerta!!", "No hay internet", "Aceptar");
 
                 }
             }
-            catch (Exception)
+            else
             {
-                this.IsLoading = false;
-                this.IsEnable = true;
-
-                GenerateMessage("Alerta!!", "No hay internet", "Aceptar");
-
+                if (Device.RuntimePlatform == Device.iOS)
+                {
+                    var action = await Application.Current.MainPage.DisplayAlert("Aplicacion requerida", "No se encuentra la aplicacion de google maps en este dispositivo, reinicie la aplicacion despues de la instalarla", "Instalar", "Cancelar");
+                    if (action)
+                    {
+                        await Launcher.OpenAsync("https://apps.apple.com/mx/app/google-maps-trafico-y-comida/id585027354");
+                    }
+                }
             }
-            //}
-            //else
-            //{
-            //    if (Device.RuntimePlatform == Device.iOS)
-            //    {
-            //        var action = await Application.Current.MainPage.DisplayAlert("Aplicacion requerida", "No se encuentra la aplicacion de google maps en este dispositivo, reinicie la aplicacion despues de la instalarla", "Instalar", "Cancelar");
-            //        if (action)
-            //        {
-            //            await Launcher.OpenAsync("https://apps.apple.com/mx/app/google-maps-trafico-y-comida/id585027354");
-            //        }
-            //    }
-            //}
         }
 
         public void AccesoGuardado(string Usuario, string password)
@@ -188,15 +189,15 @@ namespace Repartidores_GoDeliverix.VM
 
 
 
-                        //if (IsSavingValues && Modulo == "Login")
-                        //{
-                        //    Repartidores_GoDeliverix.Helpers.settings.UserName = User;
-                        //    Repartidores_GoDeliverix.Helpers.settings.Password = Password;
-                        //}
-                        //else if (!IsSavingValues && Modulo == "Login")
-                        //{
-                        //    Repartidores_GoDeliverix.Helpers.settings.ClearAllData();
-                        //}
+                        if (IsSavingValues)
+                        {
+                            Repartidores_GoDeliverix.Helpers.settings.UserName = User;
+                            Repartidores_GoDeliverix.Helpers.settings.Password = Password;
+                        }
+                        else if (!IsSavingValues)
+                        {
+                            Repartidores_GoDeliverix.Helpers.settings.ClearAllData();
+                        }
                     }
                     else
                     {
