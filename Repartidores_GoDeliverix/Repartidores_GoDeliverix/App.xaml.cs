@@ -22,14 +22,15 @@ namespace Repartidores_GoDeliverix
             string Contrasena = Repartidores_GoDeliverix.Helpers.settings.Password;
             if (!string.IsNullOrEmpty(Usuario) && !string.IsNullOrEmpty(Contrasena))
             {
-                VMLogin obj = new VMLogin() { User = Usuario, Password = Contrasena };
-
+                MainPage = new NavigationPage(new Login());
+                VMLogin obj = new VMLogin();
+                obj.Acceso(Usuario, Contrasena);
             }
             else
             {
                 MainPage = new NavigationPage(new Login());
             }
-
+            
         }
 
         protected override void OnStart()
@@ -50,7 +51,7 @@ namespace Repartidores_GoDeliverix
         {
             if (Application.Current.Properties.ContainsKey("IsLogged"))
             {
-                MainPage = new NavigationPage(new TabbedPageMain());
+                MainPage = new NavigationPage(new TabbedPageMain()); 
             }
             else
             {

@@ -106,7 +106,7 @@ namespace Repartidores_GoDeliverix.VM
                     else
                     {
 
-                        Acceso(User, Password, "Login");
+                        Acceso(User, Password);
 
                     }
                 }
@@ -143,7 +143,7 @@ namespace Repartidores_GoDeliverix.VM
             //    Application.Current.MainPage = new NavigationPage(new Login());
             //}
         }
-        public async void Acceso(string Usuario, string password, string Modulo)
+        public async void Acceso(string Usuario, string password)
         {
 
             try
