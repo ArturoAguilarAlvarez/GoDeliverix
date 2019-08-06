@@ -2,61 +2,35 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Repartidores_GoDeliverix.Views.Historico_Bitacora"
-             Title="Historico de dias">
-    <ContentPage.Content>
-        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="2*"></RowDefinition>
-                <RowDefinition Height="2*"></RowDefinition>
-                <RowDefinition Height="2*"></RowDefinition>
-                <RowDefinition Height="2*"></RowDefinition>
-                <RowDefinition Height="2*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <Grid  Grid.Row="0" BackgroundColor="Purple" >
-                <StackLayout Orientation="Horizontal"  HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="0">
-                    <Image Source="Dia.png" VerticalOptions="Center"></Image>
-                    <Label Text="Fecha"  TextColor="White" FontSize="40" VerticalOptions="Center"></Label>
-                </StackLayout>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1">
-                    <Image Source="Dinero.png" VerticalOptions="Center"></Image>
-                    <Label Text="Monto"  TextColor="White" FontSize="40" VerticalOptions="Center"></Label>
-                </StackLayout>
-            </Grid>
-            <Grid  Grid.Row="1" >
-                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Column="0">
-                    <Button Text="08/04/2019" TextColor="Purple" x:Name="btnver" Clicked="Btnver_Clicked"></Button>
-                </StackLayout>
-                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Column="1">
-                    <Label Text="$1456.00"  TextColor="Purple"></Label>
-                </StackLayout>
-            </Grid>
-            <Grid  Grid.Row="2" >
-                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Column="0">
+             
+             BindingContext="{Binding VMMain, Source={StaticResource Locator}}"
+             Title="Historico de turnos">
+    <ContentPage.Content >
+        <ScrollView BindingContext="{Binding MVTurno}">
 
-                    <Label Text="07/04/2019"  TextColor="Purple"></Label>
-                </StackLayout>
-                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Column="1">
-                    <Label Text="$1256.00"  TextColor="Purple"></Label>
-                </StackLayout>
-            </Grid>
-            <Grid  Grid.Row="3" >
-                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Column="0">
-
-                    <Label Text="06/04/2019"  TextColor="Purple"></Label>
-                </StackLayout>
-                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Column="1">
-                    <Label Text="$856.00"  TextColor="Purple"></Label>
-                </StackLayout>
-            </Grid>
-            <Grid  Grid.Row="4" >
-
-                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Column="0">
-                    <Label Text="05/04/2019"  TextColor="Purple"></Label>
-                </StackLayout>
-                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Column="1">
-                    <Label Text="$2056.00"  TextColor="Purple"></Label>
-                </StackLayout>
-            </Grid>
-        </Grid>
+            <ListView HorizontalOptions="FillAndExpand" SelectedItem ="{Binding TurnoHistorico, Mode=TwoWay}"  ItemsSource="{Binding ListaDeHistoricoDeTurnos}">
+                <ListView.Header>
+                    <Grid HorizontalOptions="Fill" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="AUTO"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Label Text="Folio" FontSize="Medium" HorizontalOptions="Center" TextColor="#333" Grid.Column="0"   ></Label>
+                        <Label Text="Inicio" FontSize="Medium" HorizontalOptions="Center" TextColor="#333"  Grid.Column="1" ></Label>
+                        <Label Text="Fin"  FontSize="Medium" HorizontalOptions="Center" TextColor="#333"  Grid.Column="2"  ></Label>
+                    </Grid>
+                </ListView.Header>
+                <ListView.ItemTemplate >
+                    <DataTemplate>
+                        <ViewCell >
+                            <Grid Padding="10,0,0,0" >
+                                <Label TextColor="#555" Grid.Column="0"   HorizontalOptions="Center" FontSize="Medium" Text="{Binding HLngFolio}" ></Label>
+                                <Label TextColor="#555" Grid.Column="1" HorizontalOptions="Center" FontSize="Medium" Text="{Binding HDtmHoraInicio}"  ></Label>
+                                <Label TextColor="#555" Grid.Column="2" HorizontalOptions="Center" FontSize="Medium" Text="{Binding HDtmHoraFin}" ></Label>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

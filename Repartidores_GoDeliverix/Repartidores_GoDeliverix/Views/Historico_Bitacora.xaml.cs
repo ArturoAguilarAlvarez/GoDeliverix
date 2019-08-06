@@ -18,9 +18,9 @@ namespace Repartidores_GoDeliverix.Views
 			InitializeComponent ();
 		}
 
-        private async void Btnver_Clicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new Historico_DetalleDia());
-        }
+        //private async void Btnver_Clicked(object sender, EventArgs e)
+        //{
+        //    await Navigation.PushAsync(new Historico_DetalleDia());
+        //}
     }
 }

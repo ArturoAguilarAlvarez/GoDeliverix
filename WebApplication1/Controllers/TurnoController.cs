@@ -33,6 +33,37 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
+        /// <summary>
+        /// Obtiene la orden y su total del turno
+        /// </summary>
+        /// <param name="UidTurno"></param>
+        /// <returns></returns>
+        public ResponseHelper GetInformacionHistoricoOrdenesTurno( Guid UidTurno)
+        {
+            Respuesta = new ResponseHelper();
+            MVTurno = new VMTurno();
+            MVTurno.InformacionHistoricoOrdenesTurno( UidTurno);
+            Respuesta.Data = MVTurno;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion obtenida satisfactoriamente";
+            return Respuesta;
+        }
+        /// <summary>
+        /// Obtiene el historico del repartidor
+        /// </summary>
+        /// <param name="UidUsuario"></param>
+        /// <returns></returns>
+        public ResponseHelper GetConsultaHisstorico( Guid UidUsuario)
+        {
+            Respuesta = new ResponseHelper();
+            MVTurno = new VMTurno();
+            MVTurno.ConsultarHistorico(UidUsuario);
+            Respuesta.Data = MVTurno;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion de historico obtenida satisfactoriamente";
+            return Respuesta;
+        }
+
         // GET: api/Turno
         public IEnumerable<string> Get()
         {

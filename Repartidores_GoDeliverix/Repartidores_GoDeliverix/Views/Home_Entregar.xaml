@@ -43,13 +43,8 @@
                 </Grid>
             </StackLayout>
             <StackLayout  Grid.Row="1" Orientation="Vertical" HorizontalOptions="Fill">
-
-
-
                 <StackLayout   Orientation="Vertical" HorizontalOptions="Fill" Margin="0,10,0,0" >
-
                     <BoxView BackgroundColor="Black" HeightRequest="5" HorizontalOptions="FillAndExpand" ></BoxView>
-
                     <ScrollView>
                         <ListView  HorizontalOptions="Fill"  ItemsSource="{Binding ListaProductos}" >
                             <ListView.Header>

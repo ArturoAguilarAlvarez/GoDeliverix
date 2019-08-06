@@ -1,6 +1,8 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using Newtonsoft.Json;
 using Repartidores_GoDeliverix.Helpers;
+using Repartidores_GoDeliverix.Views;
+using Repartidores_GoDeliverix.Views.Popup;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -81,6 +83,21 @@ namespace Repartidores_GoDeliverix.VM
             get { return __TotalSuministros; }
             set { SetValue(ref __TotalSuministros, value); }
         }
+
+        private decimal __HOTotalEnvio;
+
+        public decimal HOTotalEnvio
+        {
+            get { return __HOTotalEnvio; }
+            set { SetValue(ref __HOTotalEnvio, value); }
+        }
+        private decimal __HOTotalSuministros;
+
+        public decimal HOTotalSuministros
+        {
+            get { return __HOTotalSuministros; }
+            set { SetValue(ref __HOTotalSuministros, value); }
+        }
         private int __CantidadDeOrdenes;
 
         public int CantidadDeOrdenes
@@ -89,7 +106,120 @@ namespace Repartidores_GoDeliverix.VM
             set { SetValue(ref __CantidadDeOrdenes, value); }
         }
 
+        #region Propiedades
+        private string _HDtmHoraInicio;
+        public string HDtmHoraInicio
+        {
+            get { return _HDtmHoraInicio; }
+            set { SetValue(ref _HDtmHoraInicio, value); }
+        }
+
+        private string _HDtmHoraFin;
+        public string HDtmHoraFin
+        {
+            get { return _HDtmHoraFin; }
+            set { SetValue(ref _HDtmHoraFin, value); }
+        }
+
+        private string _HLngFolio;
+        public string HLngFolio
+        {
+            get { return _HLngFolio; }
+            set { SetValue(ref _HLngFolio, value); }
+        }
+
+        private string _HOLngFolio;
+        public string HOLngFolio
+        {
+            get { return _HOLngFolio; }
+            set { SetValue(ref _HOLngFolio, value); }
+        }
+        private Guid _HUidTurnoRepartidor;
+        public Guid HUidTurnoRepartidor
+        {
+            get { return _HUidTurnoRepartidor; }
+            set { SetValue(ref _HUidTurnoRepartidor, value); }
+        }
+        #endregion
+        private List<VMTurno> _ListaDeHistoricoDeTurnos;
+
+        public List<VMTurno> ListaDeHistoricoDeTurnos
+        {
+            get { return _ListaDeHistoricoDeTurnos; }
+            set { SetValue(ref _ListaDeHistoricoDeTurnos, value); }
+        }
+
+        private List<VMTurno> _ListaDeHistoricoDeOrdenesTurno;
+
+        public List<VMTurno> ListaDeHistoricoDeOrdenesTurnos
+        {
+            get { return _ListaDeHistoricoDeOrdenesTurno; }
+            set { SetValue(ref _ListaDeHistoricoDeOrdenesTurno, value); }
+        }
+
+
         public ICommand Activar { get { return new RelayCommand(ActivarTurno); } }
+        public ICommand Historico { get { return new RelayCommand(HistoricoTurno); } }
+        public ICommand TurnoHistorico { get { return new RelayCommand(OrdenesHistoricoTurno); } }
+
+        private async void OrdenesHistoricoTurno()
+        {
+            var AppInstance = MainViewModel.GetInstance();
+            if (AppInstance.Session_.UidUsuario != Guid.Empty)
+            {
+                url = "http://www.godeliverix.net/api/Turno/GetInformacionHistoricoOrdenesTurno?UidTurno=" + UidTurnoRepartidor + "";
+                var datos = await _WebApiGoDeliverix.GetStringAsync(url);
+                var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
+                MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
+                ListaDeHistoricoDeTurnos = new List<VMTurno>();
+                foreach (var item in MVTurno.ListaDeTurnos)
+                {
+                    if (!ListaDeHistoricoDeOrdenesTurnos.Exists(t => t.UidTurnoRepartidor == item.UidTurno))
+                    {
+                        ListaDeHistoricoDeOrdenesTurnos.Add(new VMTurno()
+                        {
+                            HOTotalSuministros = item.DTotalSucursal,
+                            HOTotalEnvio = item.DTotalEnvio,
+                            HOLngFolio = item.LngFolio.ToString()
+                        });
+                    }
+                }
+                await Application.Current.MainPage.Navigation.PushAsync(new Historico_DetalleDia());
+            }
+            else
+            {
+            }
+        }
+
+        private async void HistoricoTurno()
+        {
+            var AppInstance = MainViewModel.GetInstance();
+            if (AppInstance.Session_.UidUsuario != Guid.Empty)
+            {
+                url = "http://www.godeliverix.net/api/Turno/GetConsultaHisstorico?UidUsuario=" + AppInstance.Session_.UidUsuario + "";
+                var datos = await _WebApiGoDeliverix.GetStringAsync(url);
+                var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
+                MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
+                ListaDeHistoricoDeTurnos = new List<VMTurno>();
+                foreach (var item in MVTurno.ListaDeTurnos)
+                {
+                    if (!ListaDeHistoricoDeTurnos.Exists(t => t.UidTurnoRepartidor == item.UidTurno))
+                    {
+                        ListaDeHistoricoDeTurnos.Add(new VMTurno()
+                        {
+                            HDtmHoraInicio = item.DtmHoraInicio.ToString(),
+                            HDtmHoraFin = item.DtmHoraFin.ToString(),
+                            HUidTurnoRepartidor = item.UidTurno,
+                            HLngFolio = item.LngFolio.ToString()
+                        });
+                    }
+                }
+                await Application.Current.MainPage.Navigation.PushAsync(new Historico_Bitacora());
+            }
+            else
+            {
+            }
+        }
 
         private async void ActivarTurno()
         {
@@ -155,6 +285,14 @@ namespace Repartidores_GoDeliverix.VM
                 Texto = "Abrir turno";
                 ColorProp = Color.Green;
             }
+        }
+
+        protected async void GenerateMessage(string Tittle, string Message, string TextOption)
+        {
+            await Application.Current.MainPage.DisplayAlert(
+              Tittle,
+              Message,
+              TextOption);
         }
     }
 }

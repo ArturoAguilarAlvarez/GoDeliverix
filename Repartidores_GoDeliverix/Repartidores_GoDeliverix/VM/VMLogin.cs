@@ -145,7 +145,6 @@ namespace Repartidores_GoDeliverix.VM
         }
         public async void Acceso(string Usuario, string password)
         {
-
             try
             {
                 HttpClient _WebApiGoDeliverix = new HttpClient();
