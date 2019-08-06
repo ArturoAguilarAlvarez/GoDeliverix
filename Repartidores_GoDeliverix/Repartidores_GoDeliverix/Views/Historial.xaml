@@ -43,8 +43,7 @@
             </Grid>
             <StackLayout Grid.Row="2" >
                 <StackLayout Orientation="Vertical">
-                    <Button  Text="Historico de caja" BackgroundColor="Purple" x:Name="BtnHistorico" Clicked="BtnHistorico_Clicked"  TextColor="White" FontSize="Large"></Button>
-
+                    <Button  Text="Historico de caja" BackgroundColor="Purple" x:Name="BtnHistorico" Command="{Binding Historico}"  TextColor="White" FontSize="Large"></Button>
                 </StackLayout>
             </StackLayout>
 

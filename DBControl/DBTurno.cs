@@ -25,5 +25,19 @@ namespace DBControl
             oConexion = new Conexion();
             return oConexion.Consultas(query);
         }
+
+        public DataTable HistoricoTurno(Guid uidUsuario)
+        {
+            string query = " select * from turnorepartidor where uidusuario = '"+ uidUsuario.ToString() + "' and dtmhorafin is not null order by lngFolio desc ";
+            oConexion = new Conexion();
+            return oConexion.Consultas(query);
+        }
+
+        public DataTable HistoricoOrdenes(Guid UidTurno)
+        {
+            string query = " select os.IntFolio,os.MTotalSucursal,t.MCosto from OrdenSucursal os inner join OrdenTarifario ot on ot.UidOrden = os.UidRelacionOrdenSucursal inner join OrdenRepartidor orep on orep.UidOrden = ot.UidRelacionOrdenTarifario inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario  inner join TurnoRepartidor tr  on orep.UidTurnoRepartidor = tr.UidTurnoRepartidor  where tr.UidTurnoRepartidor = '"+ UidTurno .ToString()+ "' order by orep.dtmFechaAsignacion desc ";
+            oConexion = new Conexion();
+            return oConexion.Consultas(query);
+        }
     }
 }

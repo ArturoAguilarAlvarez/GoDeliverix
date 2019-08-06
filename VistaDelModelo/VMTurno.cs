@@ -84,6 +84,13 @@ namespace VistaDelModelo
             get { return _lngCantidad; }
             set { _lngCantidad = value; }
         }
+        private List<VMTurno> _ListaDeTurnos;
+
+        public List<VMTurno> ListaDeTurnos
+        {
+            get { return _ListaDeTurnos; }
+            set { _ListaDeTurnos = value; }
+        }
 
 
         #endregion
@@ -125,6 +132,30 @@ namespace VistaDelModelo
             }
         }
 
+        public void ConsultarHistorico(Guid UidUsuario)
+        {
+            try
+            {
+                oTurno = new Turno() { UidUsuario = UidUsuario };
+                ListaDeTurnos = new List<VMTurno>();
+                foreach (DataRow item in oTurno.HistoricoTurno(UidUsuario).Rows)
+                {
+                    ListaDeTurnos.Add(new VMTurno()
+                    {
+                        UidTurno = new Guid(item["UidTurnoRepartidor"].ToString()),
+                        LngFolio = long.Parse(item["LngFolio"].ToString()),
+                        UidUsuario = new Guid(item["UidUsuario"].ToString()),
+                        DtmHoraInicio = DateTime.Parse(item["DtmHoraInicio"].ToString()),
+                        DtmHoraFin = DateTime.Parse(item["DtmHoraFin"].ToString()),
+                    });
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public void InformacionDeOrdenesPorTuno(Guid UidTurno)
         {
             try
@@ -144,6 +175,28 @@ namespace VistaDelModelo
                     {
                         DTotalSucursal = decimal.Parse(item["totalSucursal"].ToString());
                     }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public void InformacionHistoricoOrdenesTurno(Guid UidTurno)
+        {
+            try
+            {
+                oTurno = new Turno() { UidUsuario = UidUsuario };
+                foreach (DataRow item in oTurno.HistoricoOrdenesTurno(UidTurno).Rows)
+                {
+                    ListaDeTurnos = new List<VMTurno>();
+
+                    ListaDeTurnos.Add(new VMTurno()
+                    {
+                        LngFolio = int.Parse(item["IntFolio"].ToString()),
+                        DTotalEnvio = decimal.Parse(item["totalEnvio"].ToString()),
+                        DTotalSucursal = decimal.Parse(item["totalSucursal"].ToString())
+                    });
                 }
             }
             catch (Exception)

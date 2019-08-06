@@ -75,6 +75,17 @@ namespace Modelo
             oDbTurno = new DBTurno();
             return oDbTurno.InformacionDeOrdenesPorTurno(uidTurno);
         }
+
+        public DataTable HistoricoTurno(Guid uidUsuario)
+        {
+            oDbTurno = new DBTurno();
+            return oDbTurno.HistoricoTurno(uidUsuario);
+        }
+        public DataTable HistoricoOrdenesTurno(Guid UidTurno)
+        {
+            oDbTurno = new DBTurno();
+            return oDbTurno.HistoricoOrdenes(UidTurno);
+        }
         #endregion
     }
 }
