@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.companyname.AppCliente" android:installLocation="preferExternal">
-	<uses-sdk android:targetSdkVersion="25" />
+	<uses-sdk android:targetSdkVersion="25" android:minSdkVersion="28" />
 	<application android:label="GoDeliverix" android:icon="@drawable/IconoGoDeliverix">
 		<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyBiWETPG3f-5VYV30iPCAPv-39tu_EjOYo" />
 	</application>

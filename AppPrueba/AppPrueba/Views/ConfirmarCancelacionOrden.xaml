@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="AppPrueba.Views.ConfirmarCancelacionOrden">
+    <ContentPage.Content>
+        <ContentView x:Name="popupLoadingView" Padding="10, 0" IsVisible="True" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
+            <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                <StackLayout Orientation="Vertical" HeightRequest="300" WidthRequest="500" BackgroundColor="White" Padding="20,10,20,0">
+                    <Label Text="Cancelar pedido" HorizontalOptions="Center" FontSize="Large" FontAttributes="Bold" TextColor="Black" Margin="25"></Label>
+                    <Picker Title="Mensaje de cancelacion de orden" TextColor="Black" x:Name="PickeMensaje" ItemDisplayBinding="{Binding StrMensaje}"></Picker>
+                    <Grid Margin="15">
+                        <Button Text="Aceptar" Grid.Column="1" BackgroundColor="Green" TextColor="White" Clicked="ButtonAceptarAccion_Clicked"></Button>
+                        <Button Text="Cancelar" Grid.Column="0" BackgroundColor="Red" TextColor="White" Clicked="ButtonCancelarAccion_Clicked"></Button>
+                    </Grid>
+                </StackLayout>
+            </StackLayout>
+        </ContentView>
+    </ContentPage.Content>
+</ContentPage>

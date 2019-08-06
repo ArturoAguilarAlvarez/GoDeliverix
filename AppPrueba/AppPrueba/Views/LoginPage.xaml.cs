@@ -21,12 +21,12 @@ namespace AppPrueba.Views
 
 
         private async void ButtonLogin_Clicked(object sender, EventArgs e)
-        {           
+        {
 
             HttpClient _client = new HttpClient();
             string url = "";
             btnLogin.IsEnabled = false;
-             //await PopupNavigation.Instance.PushAsync(new AppPrueba.Popup.Loanding());
+            //await PopupNavigation.Instance.PushAsync(new AppPrueba.Popup.Loanding());
 
             string perfil;
             try
@@ -60,10 +60,7 @@ namespace AppPrueba.Views
                                     App.NombreEmpresa = App.MVEmpresas.NOMBRECOMERCIAL;
                                     App.NOmbreUsuario = usuario;
                                     Application.Current.Properties["IsLogged"] = true;
-                                    App.Current.MainPage = new Views.MasterMenu();//Xam.Plugins.Settings
-
-                                    
-
+                                    App.Current.MainPage = new Views.MasterMenu();//Xam.Plugins.Settings                                    
                                 }
                                 else
                                 {
@@ -81,12 +78,14 @@ namespace AppPrueba.Views
                         //Administrador
                         else if (perfil.ToUpper() == "76A96FF6-E720-4092-A217-A77A58A9BF0D")
                         {
+
                             App.NOmbreUsuario = txtUsuario.Text;
                             string Licencia = Helpers.Settings.Licencia;
                             url = RestService.Servidor + "api/Empresa/GetNombreEmpresa?UIdUsuario=" + App.UIdUsuario.ToString();
                             string NombreEmpresa = await _client.GetStringAsync(url);
                             App.NombreEmpresa = JsonConvert.DeserializeObject<ResponseHelper>(NombreEmpresa).Data.ToString();
                             App.NOmbreUsuario = usuario;
+
                             if (string.IsNullOrEmpty(Licencia))
                             {
                                 //Guid UidEmpresa = App.MVUsuarios.ObtenerIdEmpresa(Uidusuario.ToString());
@@ -102,22 +101,30 @@ namespace AppPrueba.Views
                             }
                             else
                             {
-                                App.Perfil = perfil;
-                                AppPrueba.Helpers.Settings.Perfil = perfil;
-                                AppPrueba.Helpers.Settings.Usuario = usuario;
-                                AppPrueba.Helpers.Settings.Contrasena = password;
+                                //string sucursal = App.MVSucursal.ObtenSucursalDeLicencia(AppPrueba.Helpers.Settings.Licencia);
+                                //if (App.MVSucursal.VerificaExistenciaDeSupervisor(Uidusuario.ToString(), sucursal))
+                                //{
+                                    App.Perfil = perfil;
+                                    AppPrueba.Helpers.Settings.Perfil = perfil;
+                                    AppPrueba.Helpers.Settings.Usuario = usuario;
+                                    AppPrueba.Helpers.Settings.Contrasena = password;
 
 
-                                url = RestService.Servidor + "api/Empresa/GetNombreEmpresa?UIdUsuario=" + App.UIdUsuario.ToString();
-                                NombreEmpresa = await _client.GetStringAsync(url);
-                                App.NombreEmpresa = JsonConvert.DeserializeObject<ResponseHelper>(NombreEmpresa).Data.ToString();
+                                    url = RestService.Servidor + "api/Empresa/GetNombreEmpresa?UIdUsuario=" + App.UIdUsuario.ToString();
+                                    NombreEmpresa = await _client.GetStringAsync(url);
+                                    App.NombreEmpresa = JsonConvert.DeserializeObject<ResponseHelper>(NombreEmpresa).Data.ToString();
 
 
-                                //App.MVEmpresas.ObtenerNombreComercial(App.UIdUsuario.ToString());
-                                //App.NombreEmpresa = App.MVEmpresas.NOMBRECOMERCIAL;
+                                    //App.MVEmpresas.ObtenerNombreComercial(App.UIdUsuario.ToString());
+                                    //App.NombreEmpresa = App.MVEmpresas.NOMBRECOMERCIAL;
 
-                                Application.Current.Properties["IsLogged"] = true;
-                                App.Current.MainPage = new Views.MasterMenu();//Perfil
+                                    Application.Current.Properties["IsLogged"] = true;
+                                    App.Current.MainPage = new Views.MasterMenu();//Perfil
+                                //}
+                                //else
+                                //{
+                                //    await DisplayAlert("Error", "este usuario no es de esta sucursal", "ok");
+                                //}
                             }
                         }
                         else

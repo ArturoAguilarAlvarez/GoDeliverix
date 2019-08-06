@@ -134,15 +134,15 @@ namespace AppPrueba.Views
         {
             if (Ordenamiento)
             {
-                App.MVOrden.ListaDeOrdenesPorConfirmar = App.MVOrden.ListaDeOrdenesPorConfirmar.OrderBy(x => x.LNGFolio).ToList();
+                App.MVOrden.ListaDeOrdenesPorConfirmar = App.MVOrden.ListaDeOrdenes.OrderBy(x => x.LNGFolio).ToList();
                 MyListviewOrdenesRecibidas.ItemsSource = null;
-                MyListviewOrdenesRecibidas.ItemsSource = App.MVOrden.ListaDeOrdenesPorConfirmar; Ordenamiento = false;
+                MyListviewOrdenesRecibidas.ItemsSource = App.MVOrden.ListaDeOrdenes; Ordenamiento = false;
             }
             else
             {
-                App.MVOrden.ListaDeOrdenesPorConfirmar = App.MVOrden.ListaDeOrdenesPorConfirmar.OrderByDescending(x => x.LNGFolio).ToList();
+                App.MVOrden.ListaDeOrdenesPorConfirmar = App.MVOrden.ListaDeOrdenes.OrderByDescending(x => x.LNGFolio).ToList();
                 MyListviewOrdenesRecibidas.ItemsSource = null;
-                MyListviewOrdenesRecibidas.ItemsSource = App.MVOrden.ListaDeOrdenesPorConfirmar;
+                MyListviewOrdenesRecibidas.ItemsSource = App.MVOrden.ListaDeOrdenes;
                 Ordenamiento = true;
             }
             TipoBusqueda = "NumeroOrden";
@@ -168,6 +168,7 @@ namespace AppPrueba.Views
 
         private async void Cargar()
         {
+            ActivityIndicatorRun.IsRunning = true;
             string _URL = (RestService.Servidor + "api/Orden/GetOrdenesSucursal?Licencia=" + AppPrueba.Helpers.Settings.Licencia +
                 "&Estatus=Pendientesaconfirmar&tipoSucursal=s");
             var DatosObtenidos = await _client.GetAsync(_URL);
@@ -177,6 +178,8 @@ namespace AppPrueba.Views
 
             //App.MVOrden.BuscarOrdenesAppSucursal("Sucursal", UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), EstatusSucursal: "Pendientes a confirmar", TipoDeSucursal: "S");
             MyListviewOrdenesRecibidas.ItemsSource = App.MVOrden.ListaDeOrdenes;
+            MyListviewOrdenesRecibidas.IsVisible = true;
+            ActivityIndicatorRun.IsVisible = false;
         }
     }
 }

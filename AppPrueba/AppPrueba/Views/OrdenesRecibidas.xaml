@@ -61,8 +61,10 @@
                             Clicked="ButtonOrdenamientoTotal_Clicked"></Button>
 
                     </Grid>
+                    <ActivityIndicator x:Name="ActivityIndicatorRun" IsVisible="True"></ActivityIndicator>
                     <ListView x:Name="MyListviewOrdenesRecibidas"
                             Grid.Row="1"
+                              IsVisible="False"
                             BindingContext="{Binding listaOrden1}"
                             SelectionMode="None"
                             ItemTapped="MyListviewOrdenesRecibidas_ItemTapped"
