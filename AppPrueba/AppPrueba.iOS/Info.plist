@@ -40,5 +40,7 @@
 	<string>New Entry</string>
 	<key>CustomProperty</key>
 	<string></string>
+	<key>MinimumOSVersion</key>
+	<string>12.2</string>
 </dict>
 </plist>
