@@ -18,6 +18,11 @@ namespace Repartidores_GoDeliverix.Views
 			InitializeComponent ();
 		}
 
+        private void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+
+        }
+
         //private async void Btnver_Clicked(object sender, EventArgs e)
         //{
         //    await Navigation.PushAsync(new Historico_DetalleDia());

@@ -8,7 +8,7 @@
     <ContentPage.Content >
         <ScrollView BindingContext="{Binding MVTurno}">
 
-            <ListView HorizontalOptions="FillAndExpand" SelectedItem ="{Binding TurnoHistorico, Mode=TwoWay}"  ItemsSource="{Binding ListaDeHistoricoDeTurnos}">
+            <ListView HorizontalOptions="FillAndExpand"  SelectedItem="{Binding oTurno,Mode=TwoWay}"  ItemsSource="{Binding ListaDeHistoricoDeTurnos}">
                 <ListView.Header>
                     <Grid HorizontalOptions="Fill" >
                         <Grid.RowDefinitions>

@@ -148,8 +148,8 @@ namespace Repartidores_GoDeliverix.VM
             try
             {
                 HttpClient _WebApiGoDeliverix = new HttpClient();
-                _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
-                string url = "Profile/GET?Usuario=" + Usuario + "&Contrasena=" + password + "";
+               // _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
+                string url = "http://www.godeliverix.net/api/Profile/GET?Usuario=" + Usuario + "&Contrasena=" + password + "";
 
                 string content = await _WebApiGoDeliverix.GetStringAsync(url);
                 List<string> lista = JsonConvert.DeserializeObject<List<string>>(content);
@@ -157,7 +157,7 @@ namespace Repartidores_GoDeliverix.VM
                 Guid UidUsuario = new Guid(lista[0].ToString());
                 if (UidUsuario != null && UidUsuario != Guid.Empty)
                 {
-                    url = "Profile/GetProfileType?UidUsuario=" + UidUsuario + "";
+                    url = "http://www.godeliverix.net/api/Profile/GetProfileType?UidUsuario=" + UidUsuario + "";
                     content = await _WebApiGoDeliverix.GetStringAsync(url);
                     var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                     string perfil = obj.ToString();
@@ -165,13 +165,13 @@ namespace Repartidores_GoDeliverix.VM
                     //Entrada solo para perfil de repartidor
                     if (perfil.ToUpper() == "DFC29662-0259-4F6F-90EA-B24E39BE4346")
                     {
-                        url = "Profile/GetBitacoraRegistroRepartidores?StrParametro=S&UidUsuario=" + UidUsuario + "&UidEstatus=A298B40F-C495-4BD8-A357-4A3209FBC162";
+                        url = "http://www.godeliverix.net/api/Profile/GetBitacoraRegistroRepartidores?StrParametro=S&UidUsuario=" + UidUsuario + "&UidEstatus=A298B40F-C495-4BD8-A357-4A3209FBC162";
                         await _WebApiGoDeliverix.GetAsync(url);
                         var AppInstance = MainViewModel.GetInstance();
                         AppInstance.Session_ = new Session() { UidUsuario = UidUsuario };
                         VMUsuarios MVUsuario = new VMUsuarios();
 
-                        url = "Usuario/GetBuscarUsuarios?UidUsuario=" + UidUsuario + "&UIDPERFIL=DFC29662-0259-4F6F-90EA-B24E39BE4346";
+                        url = "http://www.godeliverix.net/api/Usuario/GetBuscarUsuarios?UidUsuario=" + UidUsuario + "&UIDPERFIL=DFC29662-0259-4F6F-90EA-B24E39BE4346";
                         content = await _WebApiGoDeliverix.GetStringAsync(url);
                         obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                         MVUsuario = JsonConvert.DeserializeObject<VistaDelModelo.VMUsuarios>(obj);

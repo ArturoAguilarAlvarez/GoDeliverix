@@ -193,9 +193,9 @@ namespace VistaDelModelo
 
                     ListaDeTurnos.Add(new VMTurno()
                     {
-                        LngFolio = int.Parse(item["IntFolio"].ToString()),
-                        DTotalEnvio = decimal.Parse(item["totalEnvio"].ToString()),
-                        DTotalSucursal = decimal.Parse(item["totalSucursal"].ToString())
+                        LngFolio = long.Parse(item["IntFolio"].ToString()),
+                        DTotalEnvio = decimal.Parse(item["MCosto"].ToString()),
+                        DTotalSucursal = decimal.Parse(item["MTotalSucursal"].ToString())
                     });
                 }
             }

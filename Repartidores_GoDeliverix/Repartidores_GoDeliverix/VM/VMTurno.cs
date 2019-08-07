@@ -156,22 +156,31 @@ namespace Repartidores_GoDeliverix.VM
             get { return _ListaDeHistoricoDeOrdenesTurno; }
             set { SetValue(ref _ListaDeHistoricoDeOrdenesTurno, value); }
         }
-
+        private VMTurno _oTurno;
+        public VMTurno oTurno
+        {
+            get { return _oTurno; }
+            set
+            {
+                SetValue(ref _oTurno, value);
+                _oTurno.OrdenesHistoricoTurno();
+            }
+        }
 
         public ICommand Activar { get { return new RelayCommand(ActivarTurno); } }
         public ICommand Historico { get { return new RelayCommand(HistoricoTurno); } }
-        public ICommand TurnoHistorico { get { return new RelayCommand(OrdenesHistoricoTurno); } }
+        public ICommand HistoricoOrdenTurno { get { return new RelayCommand(OrdenesHistoricoTurno); } }
 
         private async void OrdenesHistoricoTurno()
         {
             var AppInstance = MainViewModel.GetInstance();
             if (AppInstance.Session_.UidUsuario != Guid.Empty)
             {
-                url = "http://www.godeliverix.net/api/Turno/GetInformacionHistoricoOrdenesTurno?UidTurno=" + UidTurnoRepartidor + "";
+                url = "http://www.godeliverix.net/api/Turno/GetInformacionHistoricoOrdenesTurno?UidTurno=" + HUidTurnoRepartidor + "";
                 var datos = await _WebApiGoDeliverix.GetStringAsync(url);
                 var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
                 MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
-                ListaDeHistoricoDeTurnos = new List<VMTurno>();
+                ListaDeHistoricoDeOrdenesTurnos = new List<VMTurno>();
                 foreach (var item in MVTurno.ListaDeTurnos)
                 {
                     if (!ListaDeHistoricoDeOrdenesTurnos.Exists(t => t.UidTurnoRepartidor == item.UidTurno))
