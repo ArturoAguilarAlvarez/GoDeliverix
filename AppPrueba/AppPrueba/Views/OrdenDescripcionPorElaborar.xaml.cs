@@ -69,7 +69,8 @@ namespace AppPrueba.Views
 
         private async void ButtonCancelar_Clicked(object sender, EventArgs e)
         {
-          //  await PopupNavigation.Instance.PushAsync(new AppPuestoTacos.Popup.ConfirmarCancelacionOrden(ObjItem, MyListviewOrdenesPorRealizar));
+            //await Navigation.PopToRootAsync();
+            await Navigation.PushAsync(new ConfirmarCancelacionOrden(ObjItem, MyListviewOrdenesPorRealizar));
         }
     }
 }

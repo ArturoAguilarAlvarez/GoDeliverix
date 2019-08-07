@@ -33,8 +33,8 @@ namespace AppPrueba.Views
 
         private async void ButtonCancelar_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PopToRootAsync();
-            //await PopupNavigation.Instance.PushAsync(new AppPrueba.Popup.ConfirmarCancelacionOrden(ObjItem, MyListviewOrdenesRecibidas));
+            //await Navigation.PopToRootAsync();
+            await Navigation.PushAsync(new ConfirmarCancelacionOrden(ObjItem, MyListviewOrdenesRecibidas));
         }
 
         private async void ButtonConfirmar_Clicked(object sender, EventArgs e)
