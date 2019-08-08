@@ -4,11 +4,11 @@
              x:Class="Repartidores_GoDeliverix.Views.Popup.Historico_DetalleDia"
              
              BindingContext="{Binding VMMain, Source={StaticResource Locator}}"
-             Title="08/04/2019">
+             Title="Informacion del turno">
     <ContentPage.Content>
-        <ScrollView BindingContext="{Binding MVTurno}">
+        <ScrollView BindingContext="{Binding MVTurno}" >
 
-            <ListView HorizontalOptions="FillAndExpand" SelectedItem ="{Binding TurnoHistorico}"  ItemsSource="{Binding ListaDeHistoricoDeTurnos}">
+            <ListView HorizontalOptions="FillAndExpand"  ItemsSource="{Binding ListaDeHistoricoDeOrdenesTurnos}">
                 <ListView.Header>
                     <Grid HorizontalOptions="Fill" >
                         <Grid.RowDefinitions>
@@ -19,7 +19,7 @@
                         <Label Text="$Envios"  FontSize="Medium" HorizontalOptions="Center" TextColor="#333"  Grid.Column="2"  ></Label>
                     </Grid>
                 </ListView.Header>
-                <ListView.ItemTemplate >
+                <ListView.ItemTemplate >                    
                     <DataTemplate>
                         <ViewCell >
                             <Grid Padding="10,0,0,0" >
