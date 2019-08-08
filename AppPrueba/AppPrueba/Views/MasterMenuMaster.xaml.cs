@@ -42,7 +42,7 @@ namespace AppPrueba.Views
                     new MasterMenuMenuItemMenuItem { Id = 1, Title = "Ordenes en preparacion", TargetType = typeof(OrdenesEnPreparacion),UrlResource="IconoOrdenesEnPreparacion" },
                     new MasterMenuMenuItemMenuItem { Id = 2, Title = "Ordenes para entregar", TargetType = typeof(OrdenesEntrega),UrlResource="IconoOrdenesParaEntregar" },
                     new MasterMenuMenuItemMenuItem { Id = 3, Title = "Ordenes canceladas",TargetType = typeof(OrdenesCanceladas),UrlResource="IconoOrdenesCanceladas" },
-                    new MasterMenuMenuItemMenuItem { Id = 4, Title = "Ordenes canceladas permanente",TargetType = typeof(OrdenesCanceladasPermanente),UrlResource="IconoOrdenesCanceladas" },
+                    //new MasterMenuMenuItemMenuItem { Id = 4, Title = "Ordenes canceladas permanente",TargetType = typeof(OrdenesCanceladasPermanente),UrlResource="IconoOrdenesCanceladas" },
                     new MasterMenuMenuItemMenuItem { Id = 5, Title = "Configuracion", TargetType = typeof(Configuracion), UrlResource = "IconoConfigurar" },
                     new MasterMenuMenuItemMenuItem { Id = 6, Title = "Salir", UrlResource="IconoSalir"},
                 });

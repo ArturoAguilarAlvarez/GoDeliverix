@@ -29,8 +29,6 @@
 	<string>LaunchScreen</string>
 	<key>CFBundleName</key>
 	<string>AppPrueba</string>
-	<key>XSAppIconAssets</key>
-	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
