@@ -94,20 +94,19 @@ namespace Repartidores_GoDeliverix.Views
             }
         }
 
-        private async void BtnEntregar_Clicked(object sender, EventArgs e)
+        private  void BtnEntregar_Clicked(object sender, EventArgs e)
         {
             
         }
 
-        private async void BtnMapaEspera_ClickedAsync(object sender, EventArgs e)
+        private  void BtnMapaEspera_ClickedAsync(object sender, EventArgs e)
         {
             
 
             if (Device.RuntimePlatform == Device.iOS)
             {
-               
-                    //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
-                    Device.OpenUri(new Uri("http://maps.apple.com/"));
+                //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
+                Device.OpenUri(new Uri("comgooglemaps:center=0,0"));
             }
             else if (Device.RuntimePlatform == Device.Android)
             {
@@ -122,7 +121,7 @@ namespace Repartidores_GoDeliverix.Views
             if (Device.RuntimePlatform == Device.iOS)
             {
                 //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
-                Device.OpenUri(new Uri("comgooglemaps://?center=" + lblUbicacionSucursal.Text + "&zoom=14&views=traffic"));
+                Device.OpenUri(new Uri("comgooglemaps://? saddr=0,0&daddr=" + lblUbicacionSucursal.Text + "&zoom=12"));
             }
             else if (Device.RuntimePlatform == Device.Android)
             {
@@ -138,7 +137,7 @@ namespace Repartidores_GoDeliverix.Views
             if (Device.RuntimePlatform == Device.iOS)
             {
                 //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
-                Device.OpenUri(new Uri("comgooglemaps://?center=" + lblUbicacionSucursal.Text + "&zoom=14&views=traffic"));
+                Device.OpenUri(new Uri("comgooglemaps://? saddr=0,0&daddr=" + lblUbicacionSucursal.Text + "&zoom=12"));
             }
             else if (Device.RuntimePlatform == Device.Android)
             {
@@ -154,7 +153,7 @@ namespace Repartidores_GoDeliverix.Views
             if (Device.RuntimePlatform == Device.iOS)
             {
                 //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
-                Device.OpenUri(new Uri("comgooglemaps://?center=" + lblUbicacionCliente.Text + "&zoom=14&views=traffic"));
+                Device.OpenUri(new Uri("comgooglemaps://? saddr=0,0&daddr=" + lblUbicacionCliente.Text + "&zoom=12"));
             }
             else if (Device.RuntimePlatform == Device.Android)
             {

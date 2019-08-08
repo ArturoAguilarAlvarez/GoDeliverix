@@ -79,5 +79,18 @@ namespace DBControl
             string query = "select * from ordensucursal os inner join ordentarifario ot on ot.uidorden = os.uidrelacionordensucursal inner join OrdenRepartidor orep on orep.UidOrden = ot.UidRelacionOrdenTarifario where os.BIntCodigoEntrega = "+strCodigo+ " and orep.UidTurnoRepartidor = '" + UidTurnoRepartidor+ "' and dbo.asp_ObtenerUltimoEstatusOrdenRepartidor(orep.UidRelacionOrdenRepartidor) != '12748F8A-E746-427D-8836-B54432A38C07'";
             return oConexion.Consultas(query);
         }
+
+        public DateTime ObtenerHoraSucursal(string UidOrdenSucursal)
+        {
+            DateTime dt = new DateTime();
+
+            oConexion = new Conexion();
+            string query = "select dbo.ObtenerHoraCliente(s.uiddireccion) as hora from sucursales s inner join OrdenSucursal os on os.UidSucursal = s.UidSucursal where os.UidRelacionOrdenSucursal = '"+ UidOrdenSucursal + "'";
+            foreach (DataRow item in oConexion.Consultas(query).Rows)
+            {
+                dt = DateTime.Parse(item["hora"].ToString());
+            };
+            return dt;
+        }
     }
 }

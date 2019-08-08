@@ -413,7 +413,7 @@ namespace Repartidores_GoDeliverix.VM
             try
             {
 
-                _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
+                //_WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
                 var AppInstance = MainViewModel.GetInstance();
                 MVDireccion = new VMDireccion();
                 MVUbicacion = new VMUbicacion();
@@ -421,12 +421,12 @@ namespace Repartidores_GoDeliverix.VM
                 StrUbicacionSucursal = string.Empty;
 
                 IsLoading = true;
-                url = "Orden/GetBuscarOrdenAsiganadaRepartidor?UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor + "";
+                url = "http://www.godeliverix.net/api/Orden/GetBuscarOrdenAsiganadaRepartidor?UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor + "";
                 string content = await _WebApiGoDeliverix.GetStringAsync(url);
                 var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                 MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(obj);
                 //MVOrden.BuscarOrdenAsiganadaRepartidor(AppInstance.Session_.UidUsuario);
-                url = "Profile/GetObtenerUltimoEstatusBitacoraRepartidor?UidUsuario=" + AppInstance.Session_.UidUsuario + "";
+                url = "http://www.godeliverix.net/api/Profile/GetObtenerUltimoEstatusBitacoraRepartidor?UidUsuario=" + AppInstance.Session_.UidUsuario + "";
 
                 content = await _WebApiGoDeliverix.GetStringAsync(url);
                 obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
@@ -473,7 +473,7 @@ namespace Repartidores_GoDeliverix.VM
                         BlRecolecta = false;
                         BlEntrega = false;
 
-                        url = "Ubicacion/GetRecuperaUbicacionSucursal?UidSucursal=" + UidSucursal + "";
+                        url = "http://www.godeliverix.net/api/Ubicacion/GetRecuperaUbicacionSucursal?UidSucursal=" + UidSucursal + "";
                         content = await _WebApiGoDeliverix.GetStringAsync(url);
                         obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                         MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
@@ -481,7 +481,7 @@ namespace Repartidores_GoDeliverix.VM
                         //MVUbicacion.RecuperaUbicacionSucursal(UidSucursal.ToString());
                         StrUbicacionSucursal = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
 
-                        url = "Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
+                        url = "http://www.godeliverix.net/api/Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
                         content = await _WebApiGoDeliverix.GetStringAsync(url);
                         obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                         MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
@@ -496,7 +496,7 @@ namespace Repartidores_GoDeliverix.VM
                     {
                         if (MVOrden.StrEstatusOrdenGeneral.ToUpper() == "B6BFC834-7CC4-4E67-817D-5ECB0EB2FFA7")
                         {
-                            url = "Profile/GetBitacoraRegistroRepartidores?StrParametro=O&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=B6791F2C-FA16-40C6-B5F5-123232773612&UidOrdenRepartidor=" + UidordenRepartidor + "";
+                            url = "http://www.godeliverix.net/api/Profile/GetBitacoraRegistroRepartidores?StrParametro=O&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=B6791F2C-FA16-40C6-B5F5-123232773612&UidOrdenRepartidor=" + UidordenRepartidor + "";
                             await _WebApiGoDeliverix.GetAsync(url);
 
                             //MVAcceso = new VMAcceso();
@@ -506,7 +506,7 @@ namespace Repartidores_GoDeliverix.VM
                             BlRecolecta = false;
                             BlEntrega = true;
 
-                            url = "Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
+                            url = "http://www.godeliverix.net/api/Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
                             content = await _WebApiGoDeliverix.GetStringAsync(url);
                             obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                             MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
@@ -521,7 +521,7 @@ namespace Repartidores_GoDeliverix.VM
                             BlRecolecta = true;
                             BlEntrega = false;
 
-                            url = "Ubicacion/GetRecuperaUbicacionSucursal?UidSucursal=" + UidSucursal + "";
+                            url = "http://www.godeliverix.net/api/Ubicacion/GetRecuperaUbicacionSucursal?UidSucursal=" + UidSucursal + "";
                             content = await _WebApiGoDeliverix.GetStringAsync(url);
                             obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                             MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
@@ -539,7 +539,7 @@ namespace Repartidores_GoDeliverix.VM
                         BlRecolecta = false;
                         BlEntrega = true;
 
-                        url = "Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
+                        url = "http://www.godeliverix.net/api/Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
                         content = await _WebApiGoDeliverix.GetStringAsync(url);
                         obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                         MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
