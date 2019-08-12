@@ -37,28 +37,28 @@ namespace AppCliente
             LimpiarPerfil();
         }
 
-        private async  void Button_Login(object sender, EventArgs e)
+        private async void Button_Login(object sender, EventArgs e)
         {
             btnLogin.IsEnabled = false;
             var current = Connectivity.NetworkAccess;
 
             //await PopupNavigation.Instance.PushAsync(new Popup.PopupLoanding());
- 
+
             if (current == NetworkAccess.Internet)
             {
-            IsBusy = true;
-            //popupLoadingView.IsVisible = true;
-            //activityIndicator.IsRunning = true;
+                IsBusy = true;
+                //popupLoadingView.IsVisible = true;
+                //activityIndicator.IsRunning = true;
 
-            string usuario = txtUsuario.Text;
-            string password = txtIDContraseña.Text;
-            Ingresar(usuario, password);
+                string usuario = txtUsuario.Text;
+                string password = txtIDContraseña.Text;
+                Ingresar(usuario, password);
 
-            }                     
+            }
             else
             {
-                 //await  PopupNavigation.Instance.PopAsync(true);
-                 await DisplayAlert("Sorry", "Revisa tu conexión a internet e intenta otra vez", "ok");
+                //await  PopupNavigation.Instance.PopAsync(true);
+                await DisplayAlert("Sorry", "Revisa tu conexión a internet e intenta otra vez", "ok");
             }
 
             btnLogin.IsEnabled = true;
@@ -80,7 +80,7 @@ namespace AppCliente
             await PopupNavigation.Instance.PushAsync(new Popup.PopupLoanding());
         }
 
-        protected async void Ingresar(string Usuario,string Contrasena)
+        protected async void Ingresar(string Usuario, string Contrasena)
         {
             try
             {
@@ -89,10 +89,14 @@ namespace AppCliente
                 string url = "http://www.godeliverix.net/api/Profile/GET?Usuario=" + Usuario + "&Contrasena=" + Contrasena;
 
                 HttpClient _client = new HttpClient();
-                var content = await  _client.GetAsync(url);
-                string res = await content.Content.ReadAsStringAsync();
-                List<string> listaID = JsonConvert.DeserializeObject<List<string>>(res);                
-                _id =new Guid( listaID[0].ToString());
+                var content = await _client.GetAsync(url);
+
+                if (content.IsSuccessStatusCode)
+                {
+                    string res = await content.Content.ReadAsStringAsync();
+                    List<string> listaID = JsonConvert.DeserializeObject<List<string>>(res);
+                    _id = new Guid(listaID[0].ToString());
+                }
                 if (_id != Guid.Empty)
                 {
                     App.Global1 = _id.ToString();
@@ -100,28 +104,31 @@ namespace AppCliente
                 }
                 if (_acceso)
                 {
-                    var tex = ("http://www.godeliverix.net/api/Direccion/GetObtenerDireccionUsuario?UidUsuario="+_id);
+                    var tex = "http://www.godeliverix.net/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + _id;
                     string strDirecciones = await _client.GetStringAsync(tex);
-                    var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
-                    App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
-                    
-                    if (GuardarContraseña.IsToggled)
+                    if (content.IsSuccessStatusCode)
                     {
-                        AppCliente.Helpers.Settings.UserName = txtUsuario.Text;
-                        AppCliente.Helpers.Settings.Password = txtIDContraseña.Text;
-                        Application.Current.MainPage = new MasterMenu();
-                        //await PopupNavigation.Instance.PopAsync();
+                        var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
+                        App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
+
+                        if (GuardarContraseña.IsToggled && string.IsNullOrEmpty(AppCliente.Helpers.Settings.UserName) && string.IsNullOrEmpty(AppCliente.Helpers.Settings.Password))
+                        {
+                            AppCliente.Helpers.Settings.UserName = txtUsuario.Text;
+                            AppCliente.Helpers.Settings.Password = txtIDContraseña.Text;
+                            Application.Current.MainPage = new MasterMenu();
+                            //await PopupNavigation.Instance.PopAsync();
+                        }
+                        else
+                        {
+                            Application.Current.MainPage = new MasterMenu();
+                            //await PopupNavigation.Instance.PopAsync();
+                        }
+                        Application.Current.Properties["IsLogged"] = true;
                     }
-                    else
-                    {
-                        Application.Current.MainPage = new MasterMenu();
-                        //await PopupNavigation.Instance.PopAsync();
-                    }
-                    Application.Current.Properties["IsLogged"] = true;
                 }
                 else
                 {
-                   // await PopupNavigation.Instance.PopAsync();
+                    // await PopupNavigation.Instance.PopAsync();
 
                     await DisplayAlert("Error", "Contraseña o usuario incorrecto", "ok");
                 }
@@ -131,8 +138,10 @@ namespace AppCliente
             }
             catch (Exception)
             {
+                acLogin.IsRunning = false;
+                acLogin.IsVisible = false;
                 //await PopupNavigation.Instance.PopAsync();
-                await DisplayAlert("sorry", "No hay internet", "ok");
+                await DisplayAlert("Aviso del sistema", "No hay internet", "OK");
             }
         }
 

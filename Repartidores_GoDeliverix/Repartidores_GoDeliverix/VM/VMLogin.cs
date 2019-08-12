@@ -78,6 +78,11 @@ namespace Repartidores_GoDeliverix.VM
         private async  void login()
         {
             var supportsUri = false;
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                supportsUri = true;
+            }
+
             if (Device.RuntimePlatform == Device.iOS)
             {
                 supportsUri = await Launcher.CanOpenAsync("comgooglemaps://");

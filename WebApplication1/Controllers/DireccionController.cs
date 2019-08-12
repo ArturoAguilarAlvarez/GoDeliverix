@@ -11,7 +11,22 @@ namespace WebApplication1.Controllers
         ResponseHelper Respuesta;
         // GET: api/Profile/5
         /// <summary>
-        /// 
+        /// Obtiene los paises del sistema
+        /// </summary>
+        /// <returns></returns>
+        public ResponseHelper GetObtenerPaises()
+        {
+            MVDireccion = new VMDireccion();
+            
+
+            Respuesta = new ResponseHelper();
+            Respuesta.Data = MVDireccion.Paises(); 
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
+        /// <summary>
+        /// Busca una direccion por sucursal
         /// </summary>
         /// <param name="UidSucursal"></param>
         /// <returns></returns>

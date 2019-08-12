@@ -1,8 +1,11 @@
-﻿using System;
+﻿using AppCliente.WebApi;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,15 +19,28 @@ namespace AppCliente
     public partial class MasterMenuMaster : ContentPage
     {
         public ListView ListView;
-
+        HttpClient _client = new HttpClient();
         public MasterMenuMaster()
         {
             InitializeComponent();
 
             BindingContext = new MasterMenuMasterViewModel();
             ListView = MenuItemsListView;
-            App.MVUsuarios.obtenerUsuario(App.Global1);
-            MiNombre.Text = App.MVUsuarios.StrNombre+" "+ App.MVUsuarios.StrApellidoPaterno;
+            cargaUsuario();
+        }
+
+        private async void cargaUsuario()
+        {
+           // App.MVUsuarios.obtenerUsuario(App.Global1);
+
+            string _URL = (@"http://godeliverix.net/api/Usuario/GetBuscarUsuarios?UidUsuario=" + App.Global1.ToString() + "" +
+               "&UidEmpresa=00000000-0000-0000-0000-000000000000" +
+               "&UIDPERFIL=4F1E1C4B-3253-4225-9E46-DD7D1940DA19");
+            var DatosObtenidos = await _client.GetAsync(_URL);
+            string res = await DatosObtenidos.Content.ReadAsStringAsync();
+            var asd = JsonConvert.DeserializeObject<ResponseHelper>(res).Data.ToString();
+            App.MVUsuarios = JsonConvert.DeserializeObject<VistaDelModelo.VMUsuarios>(asd);
+            MiNombre.Text = App.MVUsuarios.StrNombre + " " + App.MVUsuarios.StrApellidoPaterno;
         }
 
         class MasterMenuMasterViewModel : INotifyPropertyChanged
