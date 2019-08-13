@@ -178,7 +178,7 @@ namespace DBControl
         {
             oConexcion = new Conexion();
             string query = "select u.UidUsuario,u.Nombre,u.usuario,dbo.asp_ObtenerUtimoEstatus(u.UidUsuario) as estatus, tr.DtmHoraFin, tr.UidTurnoRepartidor from Usuarios u " +
-                " inner join TurnoRepartidor tr on tr.UidUsuario = u.UidUsuario   where u.UidUsuario in (select UidUsuario from VehiculoUsuario where UidVehiculo in (select UidVehiculo from vehiculoSucursal where uidsucursal in ( select UidSucursal from SucursalLicencia where UidLicencia = '" + licencia + "'))) order by tr.DtmHoraInicio desc";
+                " inner join TurnoRepartidor tr on tr.UidUsuario = u.UidUsuario and  tr.DtmHoraFin is null  where u.UidUsuario in (select UidUsuario from VehiculoUsuario where UidVehiculo in (select UidVehiculo from vehiculoSucursal where uidsucursal in ( select UidSucursal from SucursalLicencia where UidLicencia = '" + licencia + "'))) order by tr.DtmHoraInicio desc";
             return oConexcion.Consultas(query);
         }
 
