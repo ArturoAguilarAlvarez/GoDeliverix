@@ -46,7 +46,7 @@ namespace AppPrueba.Views
             MyListviewOrdenes.ItemsSource = App.MVOrden.ListaDeProductos;
            
             App.MVOrden.Uidorden = new Guid();
-            //this.MyListviewOrdenesPorEnviar = MyListviewOrdenesPorEnviar;
+            this.MyListviewOrdenesPorEnviar = MyListviewOrdenesPorEnviar;
         }
 
         private async void ImageButton_Clicked(object sender, EventArgs e)
@@ -54,7 +54,7 @@ namespace AppPrueba.Views
             var action = await DisplayAlert("", "¿Entregar la orden " + txtNumeroOrdenScaner.Text + "?", "Si", "No");
             if (action)
             {
-                string url = "http://www.godeliverix.net/api/Orden/GetAgregaEstatusALaOrden?UidEstatus=2FDEE8E7-0D54-4616-B4C1-037F5A37409D&StrParametro=S&UidOrden=" + Uidorden + "&UidLicencia=" + AppPrueba.Helpers.Settings.Licencia + "";
+                string url = "http://www.godeliverix.net/api/Orden/GetAgregaEstatusALaOrden?UidEstatus=B6BFC834-7CC4-4E67-817D-5ECB0EB2FFA7&StrParametro=S&UidOrden=" + Uidorden + "&UidLicencia=" + AppPrueba.Helpers.Settings.Licencia + "";
                 await _WebApiGoDeliverix.GetAsync(url);
                 url = string.Empty;
                 url = "http://www.godeliverix.net/api/Orden/GetAgregarEstatusOrdenEnSucursal?UidEstatus=E2BAD7D9-9CD0-4698-959D-0A211800545F&cTipoDeSucursal=S&UidOrden=" + Uidorden + "&UidLicencia=" + AppPrueba.Helpers.Settings.Licencia + "";
@@ -70,8 +70,11 @@ namespace AppPrueba.Views
                 string DatosObtenidos = await _WebApiGoDeliverix.GetStringAsync(url);
                 var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
                 App.MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(DatosGiros);
+                await DisplayAlert("Sorry", "Orden entregada", "Ok");
 
-                await Application.Current.MainPage.Navigation.PopToRootAsync();
+
+                this.MyListviewOrdenesPorEnviar.ItemsSource = App.MVOrden.ListaDeOrdenes;
+                await Navigation.PopToRootAsync();
             }
         }
     }
