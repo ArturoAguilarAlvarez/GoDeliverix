@@ -153,7 +153,7 @@ namespace Deliverix.Wpf.Distribuidores
         }
 
         private void chbxSeleccionRepartidor_Checked(object sender, RoutedEventArgs e)
-        {
+        { 
             VMUsuarios Usuario = (VMUsuarios)DataGridRepartidores.SelectedItem;
             MVUsuario.SeleccionarUsuario(Usuario.Uid);
             AgregarRelacionBitacora(UidRepartidor: Usuario.Uid);
