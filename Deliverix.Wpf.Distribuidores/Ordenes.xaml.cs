@@ -212,72 +212,81 @@ namespace Deliverix.Wpf.Distribuidores
 
         private void CargaDatosVentanaAsignacionDeOrdenes()
         {
-            if (AccesoInternet())
+            try
             {
-                MVLicencia.RecuperaLicencia();
-                string licencia = MVLicencia.Licencia;
-                MVSucursal.ObtenerOrdenesAsignadasARepartidor(licencia);
-                MVOrden.ObtenerOrdenesAsignadas(licencia);
-                //Obtiene los repartidores disponibles para repartir
-                MVUsuario.ObtenerRepartidoresDisponibles(licencia);
-                DataGridBitacoraDeAsignaciones.ItemsSource = MVSucursal.ListaDeOrdenesAsignadas;
-                DataGridBitacoraDeAsignaciones.Items.Refresh();
-                for (int i = 0; i < MVOrden.ListaDeBitacoraDeOrdenes.Count; i++)
+                if (AccesoInternet())
                 {
-                    if (MVSucursal.ListaDeOrdenesAsignadas.Exists(obj => obj.UidOrden == MVOrden.ListaDeBitacoraDeOrdenes[i].Uidorden))
+                    MVLicencia.RecuperaLicencia();
+                    string licencia = MVLicencia.Licencia;
+                    MVSucursal.ObtenerOrdenesAsignadasARepartidor(licencia);
+                    MVOrden.ObtenerOrdenesAsignadas(licencia);
+                    //Obtiene los repartidores disponibles para repartir
+                    MVUsuario.ObtenerRepartidoresDisponibles(licencia);
+                    DataGridBitacoraDeAsignaciones.ItemsSource = MVSucursal.ListaDeOrdenesAsignadas;
+                    DataGridBitacoraDeAsignaciones.Items.Refresh();
+                    for (int i = 0; i < MVOrden.ListaDeBitacoraDeOrdenes.Count; i++)
                     {
-                        MVOrden.ListaDeBitacoraDeOrdenes.RemoveAt(i);
-                        i = i - 1;
-                    }
-                }
-
-                for (int i = 0; i < MVUsuario.LISTADEUSUARIOS.Count; i++)
-                {
-                    if (MVSucursal.ListaDeOrdenesAsignadas.Exists(obj => obj.UidTurnoRepartidor == MVUsuario.LISTADEUSUARIOS[i].uidTurnoRepartidor))
-                    {
-                        MVUsuario.LISTADEUSUARIOS.RemoveAt(i);
-                        i = i - 1;
-                    }
-                }
-                if (DataGridOrdenes.SelectedItem == null)
-                {
-                    DataGridOrdenes.ItemsSource = MVOrden.ListaDeBitacoraDeOrdenes;
-                    DataGridOrdenes.Items.Refresh();
-                }
-                else
-                {
-                    VMOrden registroSeleccionado = (VMOrden)DataGridOrdenes.SelectedItem;
-                    DataGridOrdenes.ItemsSource = MVOrden.ListaDeBitacoraDeOrdenes;
-
-                    for (int i = 0; i < DataGridOrdenes.Items.Count; i++)
-                    {
-                        VMOrden registro = (VMOrden)DataGridOrdenes.Items[i];
-
-                        if (registro.Uidorden == registroSeleccionado.Uidorden)
+                        if (MVSucursal.ListaDeOrdenesAsignadas.Exists(obj => obj.UidOrden == MVOrden.ListaDeBitacoraDeOrdenes[i].Uidorden))
                         {
-                            DataGridOrdenes.SelectedIndex = i;
+                            MVOrden.ListaDeBitacoraDeOrdenes.RemoveAt(i);
+                            i = i - 1;
                         }
                     }
-                }
-                if (DataGridRepartidores.SelectedItem == null)
-                {
-                    DataGridRepartidores.ItemsSource = MVUsuario.LISTADEUSUARIOS;
-                    DataGridRepartidores.Items.Refresh();
-                }
-                else
-                {
-                    VMUsuarios registroSeleccionado = (VMUsuarios)DataGridRepartidores.SelectedItem;
-                    DataGridRepartidores.ItemsSource = MVUsuario.LISTADEUSUARIOS;
-                    for (int i = 0; i < DataGridRepartidores.Items.Count; i++)
+
+                    for (int i = 0; i < MVUsuario.LISTADEUSUARIOS.Count; i++)
                     {
-                        VMUsuarios registro = (VMUsuarios)DataGridRepartidores.Items[i];
-                        if (registro.Uid == registroSeleccionado.Uid)
+                        if (MVSucursal.ListaDeOrdenesAsignadas.Exists(obj => obj.UidTurnoRepartidor == MVUsuario.LISTADEUSUARIOS[i].uidTurnoRepartidor))
                         {
-                            DataGridRepartidores.SelectedIndex = i;
+                            MVUsuario.LISTADEUSUARIOS.RemoveAt(i);
+                            i = i - 1;
+                        }
+                    }
+                    if (DataGridOrdenes.SelectedItem == null)
+                    {
+                        DataGridOrdenes.ItemsSource = MVOrden.ListaDeBitacoraDeOrdenes;
+                        DataGridOrdenes.Items.Refresh();
+                    }
+                    else
+                    {
+                        VMOrden registroSeleccionado = (VMOrden)DataGridOrdenes.SelectedItem;
+                        DataGridOrdenes.ItemsSource = MVOrden.ListaDeBitacoraDeOrdenes;
+
+                        for (int i = 0; i < DataGridOrdenes.Items.Count; i++)
+                        {
+                            VMOrden registro = (VMOrden)DataGridOrdenes.Items[i];
+
+                            if (registro.Uidorden == registroSeleccionado.Uidorden)
+                            {
+                                DataGridOrdenes.SelectedIndex = i;
+                            }
+                        }
+                    }
+                    if (DataGridRepartidores.SelectedItem == null)
+                    {
+                        DataGridRepartidores.ItemsSource = MVUsuario.LISTADEUSUARIOS;
+                        DataGridRepartidores.Items.Refresh();
+                    }
+                    else
+                    {
+                        VMUsuarios registroSeleccionado = (VMUsuarios)DataGridRepartidores.SelectedItem;
+                        DataGridRepartidores.ItemsSource = MVUsuario.LISTADEUSUARIOS;
+                        for (int i = 0; i < DataGridRepartidores.Items.Count; i++)
+                        {
+                            VMUsuarios registro = (VMUsuarios)DataGridRepartidores.Items[i];
+                            if (registro.Uid == registroSeleccionado.Uid)
+                            {
+                                DataGridRepartidores.SelectedIndex = i;
+                            }
                         }
                     }
                 }
             }
+            catch (Exception)
+            {
+                MessageBox.Show("Sin internet");
+               
+            }
+            
 
         }
 
