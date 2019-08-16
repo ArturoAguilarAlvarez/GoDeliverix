@@ -10,6 +10,7 @@ namespace Repartidores_GoDeliverix.VM
         public VMLogin MVLogin { get; set; }
         public VMAjustes MVAjustes { get; set; }
         public VMTurno MVTurno { get; set; }
+        public VMTurnoOrden MVTurnoOrden { get; set; }
         public VMAjustesTelefono MVAjustesTelefono { get; set; }
         public VMHome MVHome { get; set; }
         public VMHomeOrden MVHomeOrden { get; set; }

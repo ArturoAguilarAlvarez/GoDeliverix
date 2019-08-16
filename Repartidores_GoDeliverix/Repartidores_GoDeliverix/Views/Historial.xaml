@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Repartidores_GoDeliverix.Views.Historial"
+              
              BindingContext="{Binding VMMain, Source={StaticResource Locator}}"
              Title="Caja"
              Icon="Caja.png">
@@ -14,7 +15,7 @@
             </Grid.RowDefinitions>
 
             <Button VerticalOptions="Fill" BackgroundColor="{Binding ColorProp}" Text="{Binding Texto}" TextColor="White" Command="{Binding Activar}" HorizontalOptions="Fill" >
-               
+
             </Button>
 
             <Grid Grid.Row="1">
@@ -29,8 +30,7 @@
                 </StackLayout>
                 <Label Text="{Binding Total,StringFormat='${0}'}" Grid.ColumnSpan="3" Grid.Row="1" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" FontSize="60" TextColor="Purple"></Label>
                 <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Row="2" Grid.Column="0">
-                    <Label Text="Ordenes"  TextColor="Purple"></Label>
-                    <Label Text="{Binding CantidadDeOrdenes}"  HorizontalOptions="Center" TextColor="Purple"></Label>
+                    <Button Command="{Binding OrdenesActuales}" BackgroundColor="White" Text="{Binding CantidadDeOrdenes,StringFormat='Ordenes{0}'}"  HorizontalOptions="Center" TextColor="Purple"></Button>
                 </StackLayout>
                 <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Row="2" Grid.Column="1">
                     <Label Text="Total envio"  TextColor="Purple"></Label>

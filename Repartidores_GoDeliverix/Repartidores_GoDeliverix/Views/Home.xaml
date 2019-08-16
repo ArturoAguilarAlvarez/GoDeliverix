@@ -24,7 +24,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="10*"></RowDefinition>
                 </Grid.RowDefinitions>
-                <Label Text="Esperando orden" HorizontalOptions="Center" VerticalOptions="Center" FontSize="Large" TextColor="Purple" IsVisible="{Binding BlSinAsignar}"></Label>
+                <Label Text="{Binding Texto}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="Large" TextColor="Purple" IsVisible="{Binding BlSinAsignar}"></Label>
                 <Button  x:Name="btnNuevaOrden" IsVisible="{Binding BlNuevaOrden}" IsEnabled="{Binding IsEnable}" Clicked="BtnNuevaOrden_Clicked" Command="{Binding ShowOrder}"   Image="Alert.png" Text="Orden asignada"  HeightRequest = "150" FontSize="Large" TextColor="Purple" BackgroundColor="White">
                 </Button>
                 <Button  x:Name="btnQr"   IsVisible="{Binding BlRecolecta}" IsEnabled="{Binding IsEnable}"  Command="{Binding ShowCodeQr}" Clicked="BtnQr_Clicked" Image="qrcode.png" Text="Recolectar"  HeightRequest = "150" FontSize="Large" TextColor="Purple" BackgroundColor="White">
@@ -36,7 +36,6 @@
             <StackLayout x:Name="PanelBotones" HorizontalOptions="Fill" VerticalOptions="Fill">
                 <Label IsVisible="False" x:Name="lblUbicacionSucursal" Text="{Binding StrUbicacionSucursal}"></Label>
                 <Label IsVisible="False" x:Name="lblUbicacionCliente" Text="{Binding StrUbicacionCliente}"></Label>
-                <Button  x:Name="btnMapaEspera" Text="Mi ubicación" Clicked="BtnMapaEspera_ClickedAsync" HorizontalOptions="Fill" VerticalOptions="Fill" IsVisible="{Binding BlSinAsignar}" ></Button>
                 <Button  x:Name="btnMapaSucursalCliente" Text="Trayecto de orden" Clicked="BtnMapaSucursalCliente_ClickedAsync" HorizontalOptions="Fill" VerticalOptions="Fill" IsVisible="{Binding BlNuevaOrden}" ></Button>
                 <Button  x:Name="btnMapaSucursal" Text="Trayecto hacia la sucursal" Clicked="BtnMapaSucursal_ClickedAsync" HorizontalOptions="Fill" VerticalOptions="Fill" IsVisible="{Binding BlRecolecta}" ></Button>
                 <Button  x:Name="btnMapaCliente" Text="Trayeto al cliente" Clicked="BtnMapaCliente_ClickedAsync" HorizontalOptions="Fill" VerticalOptions="Fill" IsVisible="{Binding BlEntrega}" ></Button>

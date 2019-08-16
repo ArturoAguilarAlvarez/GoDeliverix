@@ -15,7 +15,8 @@ namespace Repartidores_GoDeliverix.Views
 		public NavigationMenuPage ()
 		{
 			InitializeComponent ();
-		}
+            
+        }
         
     }
 }

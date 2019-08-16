@@ -1126,7 +1126,7 @@ namespace VistaDelModelo
                 " inner join ZonaDeRecoleccion ZDR on ZDR.UidZonaDeRecolecta = t.UidRelacionZonaRecolecta " +
                 "  inner join OrdenSucursal os on os.UidRelacionOrdenSucursal = ot.UidOrden " +
                 " inner join Sucursales s on s.UidSucursal = os.UidSucursal  inner join ContratoDeServicio CDS on CDS.UidSucursalSuministradora " +
-                "= s.UidSucursal and ZDR.UidSucursal = CDS.UidSucursalDistribuidora  where CDS.UidSucursalDistribuidora = (select Uidsucursal from SucursalLicencia where UidLicencia = '" + UidLicencia + "')";
+                "= s.UidSucursal and ZDR.UidSucursal = CDS.UidSucursalDistribuidora  where CDS.UidSucursalDistribuidora = (select Uidsucursal from SucursalLicencia where UidLicencia = '" + UidLicencia + "') order by os.IntFolio asc";
             foreach (DataRow item in Datos.Consultas(Query).Rows)
             {
                 //Detecta pedidos confirmados

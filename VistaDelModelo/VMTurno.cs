@@ -187,10 +187,9 @@ namespace VistaDelModelo
             try
             {
                 oTurno = new Turno() { UidUsuario = UidUsuario };
+                ListaDeTurnos = new List<VMTurno>();
                 foreach (DataRow item in oTurno.HistoricoOrdenesTurno(UidTurno).Rows)
                 {
-                    ListaDeTurnos = new List<VMTurno>();
-
                     ListaDeTurnos.Add(new VMTurno()
                     {
                         LngFolio = long.Parse(item["IntFolio"].ToString()),

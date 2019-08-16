@@ -6,31 +6,60 @@
              BindingContext="{Binding VMMain, Source={StaticResource Locator}}"
              Title="Informacion del turno">
     <ContentPage.Content>
-        <ScrollView BindingContext="{Binding MVTurno}" >
 
-            <ListView HorizontalOptions="FillAndExpand"  ItemsSource="{Binding ListaDeHistoricoDeOrdenesTurnos}">
-                <ListView.Header>
-                    <Grid HorizontalOptions="Fill" >
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="AUTO"></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <Label Text="Folio" FontSize="Medium" HorizontalOptions="Center" TextColor="#333" Grid.Column="0"   ></Label>
-                        <Label Text="$Ordenes" FontSize="Medium" HorizontalOptions="Center" TextColor="#333"  Grid.Column="1" ></Label>
-                        <Label Text="$Envios"  FontSize="Medium" HorizontalOptions="Center" TextColor="#333"  Grid.Column="2"  ></Label>
-                    </Grid>
-                </ListView.Header>
-                <ListView.ItemTemplate >                    
-                    <DataTemplate>
-                        <ViewCell >
-                            <Grid Padding="10,0,0,0" >
-                                <Label TextColor="#555" Grid.Column="0"   HorizontalOptions="Center" FontSize="Medium" Text="{Binding HOLngFolio}" ></Label>
-                                <Label TextColor="#555" Grid.Column="1" HorizontalOptions="Center" FontSize="Medium" Text="{Binding HOTotalSuministros}"  ></Label>
-                                <Label TextColor="#555" Grid.Column="2" HorizontalOptions="Center" FontSize="Medium" Text="{Binding HOTotalEnvio}" ></Label>
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </ScrollView>
+        <Grid BindingContext="{Binding MVTurnoOrden}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"></RowDefinition>
+                <RowDefinition Height="7*"></RowDefinition>
+                
+            </Grid.RowDefinitions>
+            <StackLayout Orientation="Vertical" >
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Cantidad de ordenes" FontSize="Large" FontAttributes="Bold"></Label>
+                    <Label Text="{Binding IntCantidadDeOrdenes}" FontSize="Large"></Label>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Total de envio" FontSize="Large" FontAttributes="Bold"></Label>
+                    <Label Text="{Binding MTotalEnvio,StringFormat='${0}'}" FontSize="Large"></Label>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Total de ordenes" FontSize="Large" FontAttributes="Bold"></Label>
+                    <Label Text="{Binding MTotalOrdenes,StringFormat='${0}'}" FontSize="Large"></Label>
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Total" FontSize="Large" FontAttributes="Bold"></Label>
+                    <Label Text="{Binding MTotalGeneral,StringFormat='${0}'}" FontSize="Large"></Label>
+                </StackLayout>
+            </StackLayout>
+            <ScrollView Grid.Row="1">
+                <ListView HorizontalOptions="FillAndExpand"  ItemsSource="{Binding ListaDeHistoricoDeOrdenesTurnos}">
+                    <ListView.Header>
+                        <Grid HorizontalOptions="Fill" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="AUTO"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Label Text="Folio" FontSize="Medium" HorizontalOptions="Center" TextColor="#333" Grid.Column="0"   ></Label>
+                            <Label Text="Orden" FontSize="Medium" HorizontalOptions="Center" TextColor="#333"  Grid.Column="1" ></Label>
+                            <Label Text="Envio"  FontSize="Medium" HorizontalOptions="Center" TextColor="#333"  Grid.Column="2"  ></Label>
+                        </Grid>
+                    </ListView.Header>
+                    <ListView.ItemTemplate >
+                        <DataTemplate>
+                            <ViewCell >
+                                <Grid Padding="10,0,0,0" >
+                                    <Label TextColor="#555" Grid.Column="0"   HorizontalOptions="Center" FontSize="Medium" Text="{Binding HOLngFolio}" ></Label>
+                                    <Label TextColor="#555" Grid.Column="1" HorizontalOptions="Center" FontSize="Medium" Text="{Binding HOTotalSuministros,StringFormat='${0}'}"  ></Label>
+                                    <Label TextColor="#555" Grid.Column="2" HorizontalOptions="Center" FontSize="Medium" Text="{Binding HOTotalEnvio,StringFormat='${0}'}" ></Label>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </ScrollView>
+           
+        </Grid>
+        
+        
     </ContentPage.Content>
 </ContentPage>

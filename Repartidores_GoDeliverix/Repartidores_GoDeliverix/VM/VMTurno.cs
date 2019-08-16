@@ -84,20 +84,7 @@ namespace Repartidores_GoDeliverix.VM
             set { SetValue(ref __TotalSuministros, value); }
         }
 
-        private decimal __HOTotalEnvio;
-
-        public decimal HOTotalEnvio
-        {
-            get { return __HOTotalEnvio; }
-            set { SetValue(ref __HOTotalEnvio, value); }
-        }
-        private decimal __HOTotalSuministros;
-
-        public decimal HOTotalSuministros
-        {
-            get { return __HOTotalSuministros; }
-            set { SetValue(ref __HOTotalSuministros, value); }
-        }
+      
         private int __CantidadDeOrdenes;
 
         public int CantidadDeOrdenes
@@ -128,12 +115,6 @@ namespace Repartidores_GoDeliverix.VM
             set { SetValue(ref _HLngFolio, value); }
         }
 
-        private string _HOLngFolio;
-        public string HOLngFolio
-        {
-            get { return _HOLngFolio; }
-            set { SetValue(ref _HOLngFolio, value); }
-        }
         private Guid _HUidTurnoRepartidor;
         public Guid HUidTurnoRepartidor
         {
@@ -149,13 +130,6 @@ namespace Repartidores_GoDeliverix.VM
             set { SetValue(ref _ListaDeHistoricoDeTurnos, value); }
         }
 
-        private List<VMTurno> _ListaDeHistoricoDeOrdenesTurno;
-
-        public List<VMTurno> ListaDeHistoricoDeOrdenesTurnos
-        {
-            get { return _ListaDeHistoricoDeOrdenesTurno; }
-            set { SetValue(ref _ListaDeHistoricoDeOrdenesTurno, value); }
-        }
         private VMTurno _oTurno;
         public VMTurno oTurno
         {
@@ -168,31 +142,29 @@ namespace Repartidores_GoDeliverix.VM
         }
 
         public ICommand Activar { get { return new RelayCommand(ActivarTurno); } }
+        public ICommand OrdenesActuales { get { return new RelayCommand(VerOrdenesActuales); } }
+        
         public ICommand Historico { get { return new RelayCommand(HistoricoTurno); } }
         public ICommand HistoricoOrdenTurno { get { return new RelayCommand(OrdenesHistoricoTurno); } }
 
+        private async void VerOrdenesActuales()
+        {
+            var AppInstance = MainViewModel.GetInstance();
+            if (AppInstance.Session_.UidUsuario != Guid.Empty)
+            {
+                AppInstance.MVTurnoOrden = new VMTurnoOrden(UidTurnoRepartidor.ToString());
+                await Application.Current.MainPage.Navigation.PushAsync(new Historico_DetalleDia());
+            }
+            else
+            {
+            }
+        }
         private async void OrdenesHistoricoTurno()
         {
             var AppInstance = MainViewModel.GetInstance();
             if (AppInstance.Session_.UidUsuario != Guid.Empty)
             {
-                url = "http://www.godeliverix.net/api/Turno/GetInformacionHistoricoOrdenesTurno?UidTurno=" + HUidTurnoRepartidor + "";
-                var datos = await _WebApiGoDeliverix.GetStringAsync(url);
-                var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
-                MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
-                ListaDeHistoricoDeOrdenesTurnos = new List<VMTurno>();
-                foreach (var item in MVTurno.ListaDeTurnos)
-                {
-                    if (!ListaDeHistoricoDeOrdenesTurnos.Exists(t => t.UidTurnoRepartidor == item.UidTurno))
-                    {
-                        ListaDeHistoricoDeOrdenesTurnos.Add(new VMTurno()
-                        {
-                            HOTotalSuministros = item.DTotalSucursal,
-                            HOTotalEnvio = item.DTotalEnvio,
-                            HOLngFolio = item.LngFolio.ToString()
-                        });
-                    }
-                }
+                AppInstance.MVTurnoOrden = new VMTurnoOrden(HUidTurnoRepartidor.ToString());             
                 await Application.Current.MainPage.Navigation.PushAsync(new Historico_DetalleDia());
             }
             else
@@ -267,7 +239,7 @@ namespace Repartidores_GoDeliverix.VM
             LngFolio = MVTurno.LngFolio.ToString();
             DtmHoraInicio = MVTurno.DtmHoraInicio.ToString();
             AppInstance.Session_.UidTurnoRepartidor = MVTurno.UidTurno;
-            if (MVTurno.DtmHoraFin == DateTime.Parse("01/01/0001 12:00:00 a. m."))
+            if (MVTurno.DtmHoraFin == DateTime.Parse("01/01/0001 12:00:00 a. m.") && MVTurno.DtmHoraInicio != DateTime.Parse("01/01/0001 12:00:00 a. m."))
             {
                 Texto = "Cerrar turno";
                 ColorProp = Color.Red;
