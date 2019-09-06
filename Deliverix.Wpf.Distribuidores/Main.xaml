@@ -31,17 +31,29 @@
         </EventTrigger>
     </Window.Triggers>
     <Grid Background="LightGray">
-        <Grid Height="70" VerticalAlignment="Top" MouseLeftButtonDown="Grid_MouseLeftButtonDown"  Background="#FF1368BD"  >
+        <Grid Height="70" VerticalAlignment="Top" MouseLeftButtonDown="Grid_MouseLeftButtonDown"  Background="#20396e"  >
             <Label x:Name="lblUidusuario" Visibility="Hidden"/>
-            <TextBlock x:Name="txtSucursal" Text="Distribuidores" HorizontalAlignment="Center" Foreground="White" VerticalAlignment="Center" FontSize="28"></TextBlock>
+            <Label x:Name="LblUidTurno" Visibility="Hidden"></Label>
+
+            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Vertical" Margin="55,-4,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Hora de inicio:" Foreground="White" FontSize="24" ></Label>
+                    <Label x:Name="lblHoraInicioTurno"  Foreground="White" FontSize="24" ></Label>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Folio" Foreground="White" FontSize="24" ></Label>
+                    <Label x:Name="lblFolioTurno"  Foreground="White" FontSize="24" ></Label>
+                </StackPanel>
+            </StackPanel>
+            <TextBlock x:Name="txtSucursal" Text="Distribuidores" HorizontalAlignment="Center" Foreground="White" VerticalAlignment="Center" FontSize="28" ></TextBlock>
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
-                <TextBlock x:Name="txtUsuario"  Foreground="White" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center"></TextBlock>
+                <TextBlock x:Name="txtUsuario" Text="Sup1dis1" Foreground="White" HorizontalAlignment="Center" FontSize="30" VerticalAlignment="Center"></TextBlock>
                 <materialDesign:PopupBox  Margin="10" Foreground="White" PlacementMode="BottomAndAlignRightEdges" StaysOpen="False">
                     <StackPanel Orientation="Vertical" Width="150">
-                        <Button x:Name="btnInciarSesion" Click="btnInciarSesion_Click" Content="Iniciar sesion"/>
+                        <Button x:Name="btnInciarSesion" Click="btnInciarSesion_Click" Content="Iniciar Turno"/>
                         <Button x:Name="btnConfiguracion" Content="Cuenta"/>
                         <Button x:Name="btnAyuda" Content="Ayuda"/>
-                        <Button x:Name="btnCerrarSesion" Click="btnCerrarSesion_Click" Content="Cerrar sesion"/>
+                        <Button x:Name="btnCerrarSesion" Click="btnCerrarSesion_Click" Content="Cerrar Turno"/>
                         <Separator/>
                         <Button x:Name="btnPopupSalir" Content="Salir" Click="btnPopupSalir_Click"/>
                     </StackPanel>
@@ -94,8 +106,8 @@
                         <StackPanel Orientation="Horizontal">
                             <Button Height="59" Margin="-15" x:Name="btnReportes" Click="btnReportes_Click"  HorizontalAlignment="Left"  Background="{x:Null}" BorderBrush="{x:Null}">
                                 <DockPanel HorizontalAlignment="Left">
-                                    <materialDesign:PackIcon Kind="NoteOutline" Height="30" Width="30" Margin="3" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Reportes" VerticalAlignment="Center" Margin="20 10"/>
+                                    <materialDesign:PackIcon Kind="Bank" Height="30" Width="30" Margin="3" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Liquidacion" VerticalAlignment="Center" Margin="20 10"/>
                                 </DockPanel>
                             </Button>                           
                         </StackPanel>
@@ -118,7 +130,7 @@
                 <RowDefinition Height="17*"/>
                 <RowDefinition Height="308*"/>
             </Grid.RowDefinitions>
-            <Frame Width="1030" x:Name="FrameContenido" Grid.RowSpan="2" NavigationUIVisibility="Hidden">
+            <Frame Width="1030" x:Name="FrameContenido" Grid.RowSpan="2" NavigationUIVisibility="Hidden" Margin="0,-7,0,0">
 
             </Frame>
         </Grid>

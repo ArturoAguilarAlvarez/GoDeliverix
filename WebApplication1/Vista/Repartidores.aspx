@@ -434,6 +434,8 @@
                             <asp:LinkButton runat="server" ID="btnDatosDeConectado" OnClick="PanelContacto"><span class="glyphicon glyphicon-phone"></span> CONTACTO</asp:LinkButton></li>
                         <li role="presentation" id="liDatosDeEmpresa" runat="server">
                             <asp:LinkButton runat="server" ID="btnDatosDeEmpresa" OnClick="PanelDeDatosDeEmpresa"><span class="glyphicon glyphicon-tower"></span> SUCURSAL</asp:LinkButton></li>
+                        <li role="presentation" id="liDatosDePago" runat="server">
+                            <asp:LinkButton runat="server" ID="BtnDatosDePago" OnClick="BtnDatosDePago_Click"><span class="glyphicon glyphicon-tower"></span>Modo de trabajo</asp:LinkButton></li>
                     </ul>
                     <asp:Panel runat="server" ID="pnlDatosGenerales">
                         <div class="row">
@@ -624,7 +626,19 @@
 
                         </div>
                     </asp:Panel>
-
+                    <asp:Panel ID="PanelInformacionDeTrabajo" runat="server">
+                        <div class="col-md-6">
+                            <p>Monto maximo a portar($)</p>
+                            <asp:TextBox class="form-control" TextMode="Number" ID="txtMontoMaximoAPortar" runat="server" />
+                        </div>
+                        <div class="col-md-6">
+                            <p>Tipo de pago</p>
+                            <asp:RadioButtonList runat="server">
+                                <asp:ListItem Text="Porcentaje" />
+                                <asp:ListItem Text="Cantidad" />
+                            </asp:RadioButtonList>
+                        </div>
+                    </asp:Panel>
                 </div>
             </div>
         </div>

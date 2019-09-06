@@ -18,6 +18,7 @@ namespace WebApplication1.Vista
         VMEstatus MVEstatus;
         VMTelefono MVTelefono;
         VMCorreoElectronico MVCorreoElectronico;
+        VMTurno MVTurno;
         string AccionesDeLaPagina = "";
         #endregion
         protected void Page_Load(object sender, EventArgs e)
@@ -31,12 +32,14 @@ namespace WebApplication1.Vista
                 MVSucursales = new VMSucursales();
                 MVDireccion = new VMDireccion();
                 MVEstatus = new VMEstatus();
+                MVTurno = new VMTurno();
                 MVTelefono = new VMTelefono();
                 MVCorreoElectronico = new VMCorreoElectronico();
                 Session["MVUsuarios"] = MVUsuarios;
                 Session["MVDireccion"] = MVDireccion;
                 Session["MVUsuarios"] = MVUsuarios;
                 Session["MVEstatus"] = MVEstatus;
+                Session["MVTurno"] = MVTurno;
                 Session["MVTelefono"] = MVTelefono;
                 Session["MVSucursales"] = MVSucursales;
                 Session["MVCorreoElectronico"] = MVCorreoElectronico;
@@ -50,20 +53,13 @@ namespace WebApplication1.Vista
                 //Botones
                 btnEditar.Enabled = false;
                 //Visibilidad de paneles
-                pnlDatosGenerales.Visible = true;
-                pnlDireccion.Visible = false;
-                pnlContacto.Visible = false;
-                panelDatosEmpresa.Visible = false;
+                MuestraPanel("General");
                 btnGuardar.Visible = false;
                 btnCancelar.Visible = false;
                 btnGuardarTelefono.Visible = false;
                 btnCancelarTelefono.Visible = false;
                 btnEditarTelefono.Enabled = false;
                 btnEdiarDireccion.Enabled = false;
-                //Agregacion de clase 'active' al boton general
-                liDatosGenerales.Attributes.Add("class", "active");
-                liDatosDireccion.Attributes.Add("class", " ");
-                liDatosContacto.Attributes.Add("class", "");
                 //Placeholders
                 txtDManzana.Attributes.Add("placeholder", "Manzana");
                 txtCalle1.Attributes.Add("plcaeholder", "Calle");
@@ -255,6 +251,7 @@ namespace WebApplication1.Vista
                 MVCorreoElectronico = (VMCorreoElectronico)Session["MVCorreoElectronico"];
                 MVUsuarios = (VMUsuarios)Session["MVUsuarios"]; MVUsuarios = (VMUsuarios)Session["MVUsuarios"];
                 MVDireccion = (VMDireccion)Session["MVDireccion"];
+                MVTurno = (VMTurno)Session["MVTurno"];
                 MVEstatus = (VMEstatus)Session["MVEstatus"];
                 MVUsuarios = (VMUsuarios)Session["MVUsuarios"];
                 MVTelefono = (VMTelefono)Session["MVTelefono"];
@@ -843,6 +840,8 @@ namespace WebApplication1.Vista
             // MVUsuarios.ObtenerTelefonos(valor);
             MVDireccion.ObtenerDireccionesUsuario(valor);
             MVTelefono.BuscarTelefonos(UidPropietario: new Guid(valor), ParadetroDeBusqueda: "Usuario");
+            
+            txtMontoMaximoAPortar.Text = MVTurno.ObtenerMontoAPortar(valor); 
             txtUidUsuario.Text = MVUsuarios.Uid.ToString();
 
             txtDNombre.Text = MVUsuarios.StrNombre;
@@ -856,11 +855,8 @@ namespace WebApplication1.Vista
 
             PanelMensaje.Visible = false;
 
-
             CargaGrid("Direccion");
             CargaGrid("Telefono");
-
-
             //Campos de la sucursal asociada
             MVSucursales.ObtenerSucursal(MVSucursales.obtenerUidSucursalRepartidor(valor));
 
@@ -907,7 +903,7 @@ namespace WebApplication1.Vista
             if (txtFApellido.Text == string.Empty && txtFNombreDeUsuario.Text == string.Empty && DDLFEstatus.SelectedItem.Value == "0" && txtFUsuario.Text == string.Empty)
             {
                 MVUsuarios.BusquedaDeUsuario(UIDPERFIL: UidPerfil, UidEmpresa: UidEmpresa);
-                
+
                 CargaGrid("Ampliada");
                 CargaGrid("Normal");
                 lblVisibilidadfiltros.Text = " Mostrar";
@@ -1193,6 +1189,7 @@ namespace WebApplication1.Vista
             btnEdiarDireccion.Enabled = estatus;
             btnEditarTelefono.Enabled = estatus;
             btnBuscarEmpresa.Enabled = estatus;
+            txtMontoMaximoAPortar.Enabled = estatus;
             if (estatus)
             {
                 btnNuevoTelefono.CssClass = "btn btn-sm btn-default";
@@ -1237,68 +1234,15 @@ namespace WebApplication1.Vista
             txtdContrasena.Text = string.Empty;
             txtDFechaDeNacimiento.Text = string.Empty;
             txtDTelefono.Text = string.Empty;
-            
+
             txtdidentificador.Text = string.Empty;
             txtdHoraApertura.Text = string.Empty;
             txtdHoraDeCierre.Text = string.Empty;
 
             DDLDTipoDETelefono.SelectedIndex = -1;
         }
-        protected void PanelGeneral(object sender, EventArgs e)
-        {
-            pnlDatosGenerales.Visible = true;
-            pnlDireccion.Visible = false;
-            pnlContacto.Visible = false;
-            PanelDatosDireccion.Visible = false;
-            panelDatosEmpresa.Visible = false;
-            PanelDeBusqueda.Visible = true;
 
-            liDatosGenerales.Attributes.Add("class", "active");
-            liDatosDireccion.Attributes.Add("class", " ");
-            liDatosContacto.Attributes.Add("class", "");
-            liDatosDeEmpresa.Attributes.Add("class", "");
-            if (Session["Accion"] != null)
-            {
-                AccionesDeLaPagina = Session["Accion"].ToString();
-            }
-            TextboxActivados(ControlDeACcion: "Desactivado");
-        }
-        protected void PanelDireccion(object sender, EventArgs e)
-        {
-            pnlDatosGenerales.Visible = false;
-            pnlDireccion.Visible = true;
-            pnlContacto.Visible = false;
-            panelDatosEmpresa.Visible = false;
 
-            liDatosGenerales.Attributes.Add("class", "");
-            liDatosDireccion.Attributes.Add("class", "active");
-            liDatosContacto.Attributes.Add("class", "");
-            liDatosDeEmpresa.Attributes.Add("class", "");
-            if (Session["Accion"] != null)
-            {
-                AccionesDeLaPagina = Session["Accion"].ToString();
-            }
-            TextboxActivados(ControlDeACcion: "Desactivado");
-        }
-        protected void PanelContacto(object sender, EventArgs e)
-        {
-            pnlDatosGenerales.Visible = false;
-            pnlDireccion.Visible = false;
-            pnlContacto.Visible = true;
-            PanelDatosDireccion.Visible = false;
-            panelDatosEmpresa.Visible = false;
-            PanelDeBusqueda.Visible = true;
-
-            liDatosGenerales.Attributes.Add("class", "");
-            liDatosDireccion.Attributes.Add("class", "");
-            liDatosContacto.Attributes.Add("class", "active");
-            liDatosDeEmpresa.Attributes.Add("class", "");
-            if (Session["Accion"] != null)
-            {
-                AccionesDeLaPagina = Session["Accion"].ToString();
-            }
-            TextboxActivados(ControlDeACcion: "Desactivado");
-        }
         protected void ActivarEdicion(object sender, EventArgs e)
         {
             Session["Edicion"] = "Activado";
@@ -1310,25 +1254,7 @@ namespace WebApplication1.Vista
             TextboxActivados(ControlDeACcion: "Desactivado");
         }
 
-        protected void PanelDeDatosDeEmpresa(object sender, EventArgs e)
-        {
-            pnlDatosGenerales.Visible = false;
-            pnlDireccion.Visible = false;
-            pnlContacto.Visible = false;
-            PanelDatosDireccion.Visible = false;
-            panelDatosEmpresa.Visible = true;
-            PanelDeBusqueda.Visible = true;
 
-            liDatosGenerales.Attributes.Add("class", "");
-            liDatosDireccion.Attributes.Add("class", "");
-            liDatosContacto.Attributes.Add("class", "");
-            liDatosDeEmpresa.Attributes.Add("class", "active");
-            if (Session["Accion"] != null)
-            {
-                AccionesDeLaPagina = Session["Accion"].ToString();
-            }
-            TextboxActivados(ControlDeACcion: "Desactivado");
-        }
 
         #endregion
 
@@ -1517,7 +1443,7 @@ namespace WebApplication1.Vista
                         PanelMensaje.Visible = true;
                         LblMensaje.Text = "No se puede agregar un correo electronico ya existente en el sistema";
                     }
-                    MVUsuarios.BusquedaDeUsuario(USER:usuario);
+                    MVUsuarios.BusquedaDeUsuario(USER: usuario);
                     if (MVUsuarios.LISTADEUSUARIOS.Count > 0)
                     {
                         PanelMensaje.Visible = true;
@@ -1554,6 +1480,8 @@ namespace WebApplication1.Vista
                                     MVTelefono.GuardaTelefono(UidUsuario, "Usuario");
                                 }
                             }
+
+                            MVTurno.AgregarInformacionRepartidor(UidUsuario, txtMontoMaximoAPortar.Text);
                             PanelMensaje.Visible = true;
                             LblMensaje.Text = "Registro agregado!";
                         }
@@ -1612,6 +1540,7 @@ namespace WebApplication1.Vista
                                 MVTelefono.GuardaTelefono(UidUsuario, "Usuario");
                             }
                         }
+                        MVTurno.AgregarInformacionRepartidor(UidUsuario, txtMontoMaximoAPortar.Text);
                         PanelMensaje.Visible = true;
                         LblMensaje.Text = "Registro actualizado!";
                     }
@@ -1894,7 +1823,7 @@ namespace WebApplication1.Vista
                     Eliminar.Enabled = false;
                     Eliminar.CssClass = "btn btn-sm btn-default disabled";
                 }
-                
+
 
                 if (Session["Accion"] != null)
                 {
@@ -1975,7 +1904,7 @@ namespace WebApplication1.Vista
         }
         protected void ActualizaTelefono()
         {
-            MVTelefono.ActualizaRegistroEnListaDeTelefonos(txtIdTelefono.Text,  DDLDTipoDETelefono.SelectedItem.Value.ToString(), txtDTelefono.Text);
+            MVTelefono.ActualizaRegistroEnListaDeTelefonos(txtIdTelefono.Text, DDLDTipoDETelefono.SelectedItem.Value.ToString(), txtDTelefono.Text);
 
             DDLDTipoDETelefono.SelectedIndex = -1;
             txtDTelefono.Text = string.Empty;
@@ -2220,6 +2149,95 @@ namespace WebApplication1.Vista
         }
         #endregion
 
+
+        #region Control de paneles
+        protected void PanelDireccion(object sender, EventArgs e)
+        {
+            MuestraPanel("Direccion");
+
+            liDatosGenerales.Attributes.Add("class", "");
+            liDatosDireccion.Attributes.Add("class", "active");
+            liDatosContacto.Attributes.Add("class", "");
+            liDatosDeEmpresa.Attributes.Add("class", "");
+            if (Session["Accion"] != null)
+            {
+                AccionesDeLaPagina = Session["Accion"].ToString();
+            }
+            TextboxActivados(ControlDeACcion: "Desactivado");
+        }
+        protected void PanelContacto(object sender, EventArgs e)
+        {
+            MuestraPanel("Contacto");
+
+            liDatosGenerales.Attributes.Add("class", "");
+            liDatosDireccion.Attributes.Add("class", "");
+            liDatosContacto.Attributes.Add("class", "active");
+            liDatosDeEmpresa.Attributes.Add("class", "");
+            if (Session["Accion"] != null)
+            {
+                AccionesDeLaPagina = Session["Accion"].ToString();
+            }
+            TextboxActivados(ControlDeACcion: "Desactivado");
+        }
+        protected void PanelDeDatosDeEmpresa(object sender, EventArgs e)
+        {
+            MuestraPanel("Sucursal");
+
+            liDatosGenerales.Attributes.Add("class", "");
+            liDatosDireccion.Attributes.Add("class", "");
+            liDatosContacto.Attributes.Add("class", "");
+            liDatosDeEmpresa.Attributes.Add("class", "active");
+            if (Session["Accion"] != null)
+            {
+                AccionesDeLaPagina = Session["Accion"].ToString();
+            }
+            TextboxActivados(ControlDeACcion: "Desactivado");
+        }
+        protected void BtnDatosDePago_Click(object sender, EventArgs e)
+        {
+            MuestraPanel("Trabajo");
+            if (Session["Accion"] != null)
+            {
+                AccionesDeLaPagina = Session["Accion"].ToString();
+            }
+            TextboxActivados(ControlDeACcion: "Desactivado");
+        }
+        protected void PanelGeneral(object sender, EventArgs e)
+        {
+            MuestraPanel("General");
+
+            if (Session["Accion"] != null)
+            {
+                AccionesDeLaPagina = Session["Accion"].ToString();
+            }
+            TextboxActivados(ControlDeACcion: "Desactivado");
+        }
+        protected void MuestraPanel(string strPanel)
+        {
+            pnlDatosGenerales.Visible = false;
+            pnlDireccion.Visible = false;
+            pnlContacto.Visible = false;
+            PanelDatosDireccion.Visible = false;
+            panelDatosEmpresa.Visible = false;
+            PanelInformacionDeTrabajo.Visible = false;
+            //Estilos para seleccion
+            liDatosGenerales.Attributes.Add("class", "");
+            liDatosDireccion.Attributes.Add("class", "");
+            liDatosContacto.Attributes.Add("class", "");
+            liDatosDeEmpresa.Attributes.Add("class", "");
+            liDatosDePago.Attributes.Add("class", "");
+            switch (strPanel)
+            {
+                case "General": pnlDatosGenerales.Visible = true; liDatosGenerales.Attributes.Add("class", "active"); break;
+                case "Direccion": pnlDireccion.Visible = true; PanelDatosDireccion.Visible = true; liDatosDireccion.Attributes.Add("class", "active"); break;
+                case "Contacto": pnlContacto.Visible = true; liDatosContacto.Attributes.Add("class", "active"); break;
+                case "Sucursal": panelDatosEmpresa.Visible = true; liDatosDeEmpresa.Attributes.Add("class", "active"); break;
+                case "Trabajo": PanelInformacionDeTrabajo.Visible = true; liDatosDePago.Attributes.Add("class", "active"); break;
+                default:
+                    break;
+            }
+        }
+        #endregion
         protected void txtDUsuario_TextChanged(object sender, EventArgs e)
         {
             MVUsuarios.BusquedaDeUsuario(USER: txtDUsuario.Text);

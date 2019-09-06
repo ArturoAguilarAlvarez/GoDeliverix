@@ -9,30 +9,36 @@
 
         <Grid BindingContext="{Binding MVTurnoOrden}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="3*"></RowDefinition>
-                <RowDefinition Height="7*"></RowDefinition>
-                
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="4*"></RowDefinition>
+
             </Grid.RowDefinitions>
-            <StackLayout Orientation="Vertical" >
-                <StackLayout Orientation="Horizontal">
-                    <Label Text="Cantidad de ordenes" FontSize="Large" FontAttributes="Bold"></Label>
+            <StackLayout Orientation="Horizontal" >
+                <StackLayout Orientation="Vertical">
+                    <Label Text="Ordenes" FontSize="Large" FontAttributes="Bold"></Label>
                     <Label Text="{Binding IntCantidadDeOrdenes}" FontSize="Large"></Label>
                 </StackLayout>
-                <StackLayout Orientation="Horizontal">
-                    <Label Text="Total de envio" FontSize="Large" FontAttributes="Bold"></Label>
+                <StackLayout Orientation="Vertical">
+                    <Label Text="Importe de envio" FontSize="Large" FontAttributes="Bold"></Label>
                     <Label Text="{Binding MTotalEnvio,StringFormat='${0}'}" FontSize="Large"></Label>
                 </StackLayout>
-                <StackLayout Orientation="Horizontal">
-                    <Label Text="Total de ordenes" FontSize="Large" FontAttributes="Bold"></Label>
+            </StackLayout>
+            <StackLayout Grid.Row="1" Orientation="Horizontal">
+                <StackLayout Orientation="Vertical">
+                    <Label Text="Importe de ordenes" FontSize="Large" FontAttributes="Bold"></Label>
                     <Label Text="{Binding MTotalOrdenes,StringFormat='${0}'}" FontSize="Large"></Label>
                 </StackLayout>
-
-                <StackLayout Orientation="Horizontal">
+                <StackLayout Orientation="Vertical">
                     <Label Text="Total" FontSize="Large" FontAttributes="Bold"></Label>
                     <Label Text="{Binding MTotalGeneral,StringFormat='${0}'}" FontSize="Large"></Label>
                 </StackLayout>
             </StackLayout>
-            <ScrollView Grid.Row="1">
+            <StackLayout Grid.Row="2">
+                <Button Text="Liquidaciones" BackgroundColor="#20396e" TextColor="White" Command="{Binding Liquidaciones}" HorizontalOptions="Fill" VerticalOptions="Fill"></Button>
+            </StackLayout>
+            <ScrollView Grid.Row="3">
                 <ListView HorizontalOptions="FillAndExpand"  ItemsSource="{Binding ListaDeHistoricoDeOrdenesTurnos}">
                     <ListView.Header>
                         <Grid HorizontalOptions="Fill" >
@@ -57,9 +63,9 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </ScrollView>
-           
+
         </Grid>
-        
-        
+
+
     </ContentPage.Content>
 </ContentPage>

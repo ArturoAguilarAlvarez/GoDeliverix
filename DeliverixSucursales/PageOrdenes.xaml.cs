@@ -1,5 +1,5 @@
 ﻿using Deliverix.Wpf.Distribuidores;
-//using LibPrintTicket;
+using LibPrintTicket;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -115,8 +115,8 @@ namespace DeliverixSucursales
             {
                 Guid UidOrden = new Guid(txtConfirmarUidOrden.Text);
                 VMOrden fila = MVOrden.ListaDeOrdenes.Find(o => o.Uidorden == UidOrden);
-                //MVOrden.BuscarOrdenes("Sucursal",UidOrdenSucursal: fila.Uidorden,EstatusSucursal:"Detalles de orden");
-                //Ticket t = new Ticket();
+                MVOrden.BuscarOrdenes("Sucursal", UidOrdenSucursal: fila.Uidorden, EstatusSucursal: "Detalles de orden");
+                Ticket t = new Ticket();
 
 
                 //QRCodeGenerator qrGenerator = new QRCodeGenerator();
@@ -125,95 +125,95 @@ namespace DeliverixSucursales
                 //Bitmap qrCodeImage = qrCode.GetGraphic(5);
                 //t.HeaderImage = qrCodeImage;
 
-                ////Confirguracion de ticket
+                //Confirguracion de ticket
 
-                ////Configuracion header
-                //MVOrden.ObtenerProductosDeOrden(UidOrden.ToString());
-                //MVSucursal.BuscarSucursales(UidSucursal: MVOrden.ListaDeProductos[0].UidSucursal.ToString());
+                //Configuracion header
+                MVOrden.ObtenerProductosDeOrden(UidOrden.ToString());
+                MVSucursal.BuscarSucursales(UidSucursal: MVOrden.ListaDeProductos[0].UidSucursal.ToString());
 
-                //t.AddHeaderLine("Sucursal: " + MVSucursal.IDENTIFICADOR + "");
-                //t.AddHeaderLine("Horario de " + MVSucursal.HORAAPARTURA + " a " + MVSucursal.HORACIERRE + "");
+                t.AddHeaderLine("Sucursal: " + MVSucursal.IDENTIFICADOR + "");
+                t.AddHeaderLine("Horario de " + MVSucursal.HORAAPARTURA + " a " + MVSucursal.HORACIERRE + "");
 
-                //MVDireccion.ObtenerDireccionDeOrden(UidOrden.ToString(), "Recolecta");
-                //string DireccionAEntregar = "";
-                //string DireccionAEntregar1 = "";
-                //string DireccionAEntregar2 = "";
-                //string DireccionAEntregar3 = "";
-                //Guid UidDireccionAEntregar = new Guid();
-                //foreach (var item in MVDireccion.ListaDIRECCIONES)
-                //{
-                //    UidDireccionAEntregar = item.ID;
-                //    DireccionAEntregar = " " + item.PAIS + ",  " + item.ESTADO + ", ";
-                //    DireccionAEntregar1 = item.MUNICIPIO + ", " + item.COLONIA + ", ";
-                //    DireccionAEntregar2 = item.CodigoPostal + ", Mza " + item.MANZANA + ", Lt " + item.LOTE + ",";
-                //    DireccionAEntregar3 = "Calle " + item.CALLE0; ;
-                //}
+                MVDireccion.ObtenerDireccionDeOrden(UidOrden.ToString(), "Recolecta");
+                string DireccionAEntregar = "";
+                string DireccionAEntregar1 = "";
+                string DireccionAEntregar2 = "";
+                string DireccionAEntregar3 = "";
+                Guid UidDireccionAEntregar = new Guid();
+                foreach (var item in MVDireccion.ListaDIRECCIONES)
+                {
+                    UidDireccionAEntregar = item.ID;
+                    DireccionAEntregar = " " + item.PAIS + ",  " + item.ESTADO + ", ";
+                    DireccionAEntregar1 = item.MUNICIPIO + ", " + item.COLONIA + ", ";
+                    DireccionAEntregar2 = item.CodigoPostal + ", Mza " + item.MANZANA + ", Lt " + item.LOTE + ",";
+                    DireccionAEntregar3 = "Calle " + item.CALLE0; ;
+                }
 
-                //t.AddHeaderLine(DireccionAEntregar);
-                //t.AddHeaderLine(DireccionAEntregar1);
-                //t.AddHeaderLine(DireccionAEntregar2);
-                //t.AddHeaderLine(DireccionAEntregar3);
+                t.AddHeaderLine(DireccionAEntregar);
+                t.AddHeaderLine(DireccionAEntregar1);
+                t.AddHeaderLine(DireccionAEntregar2);
+                t.AddHeaderLine(DireccionAEntregar3);
 
-                //t.AddHeaderLine("Fecha: " + fila.FechaDeOrden + "");
+                t.AddHeaderLine("Fecha: " + fila.FechaDeOrden + "");
 
-                //t.AddSubHeaderLine("Folio: " + fila.LNGFolio.ToString() + "");
-                ////Configuracion body
-                //decimal total = 0.0m;
-                //for (int i = 0; i < MVOrden.ListaDeProductos.Count; i++)
-                //{
-                //    VMOrden item = MVOrden.ListaDeProductos[i];
-                //    t.AddItem(item.intCantidad.ToString(), item.StrNombreProducto.ToString(), item.MTotal.ToString());
-                //    MVOrden.ObtenerNotaDeProductoEnOrden(item.UidProductoEnOrden);
-                //    if (!string.IsNullOrEmpty(MVOrden.StrNota))
-                //    {
-                //        t.AddItem("Nota->", MVOrden.StrNota, "");
-                //    }
-                //    if (i < (MVOrden.ListaDeProductos.Count - 1))
-                //    {
-                //        t.AddItem("------", "--------------------", "-------");
-                //    }
-                //    total = total + item.MTotal;
-                //}
-                //MVDireccion.ObtenerDireccionDeOrden(UidOrden.ToString(), "Entrega");
-                //DireccionAEntregar = "";
-                //DireccionAEntregar1 = "";
-                //DireccionAEntregar2 = "";
-                //DireccionAEntregar3 = "";
+                t.AddSubHeaderLine("Folio: " + fila.LNGFolio.ToString() + "");
+                //Configuracion body
+                decimal total = 0.0m;
+                for (int i = 0; i < MVOrden.ListaDeProductos.Count; i++)
+                {
+                    VMOrden item = MVOrden.ListaDeProductos[i];
+                    t.AddItem(item.intCantidad.ToString(), item.StrNombreProducto.ToString(), item.MTotal.ToString());
+                    MVOrden.ObtenerNotaDeProductoEnOrden(item.UidProductoEnOrden);
+                    if (!string.IsNullOrEmpty(MVOrden.StrNota))
+                    {
+                        t.AddItem("Nota->", MVOrden.StrNota, "");
+                    }
+                    if (i < (MVOrden.ListaDeProductos.Count - 1))
+                    {
+                        t.AddItem("------", "--------------------", "-------");
+                    }
+                    total = total + item.MTotal;
+                }
+                MVDireccion.ObtenerDireccionDeOrden(UidOrden.ToString(), "Entrega");
+                DireccionAEntregar = "";
+                DireccionAEntregar1 = "";
+                DireccionAEntregar2 = "";
+                DireccionAEntregar3 = "";
 
-                //foreach (var item in MVDireccion.ListaDIRECCIONES)
-                //{
-                //    UidDireccionAEntregar = item.ID;
-                //    DireccionAEntregar = " " + item.PAIS + ",  " + item.ESTADO + ", ";
-                //    DireccionAEntregar1 = item.MUNICIPIO + ", " + item.COLONIA + ", ";
-                //    DireccionAEntregar2 = item.CodigoPostal + ", Mza " + item.MANZANA + ", Lt " + item.LOTE + ",";
-                //    DireccionAEntregar3 = "Calle " + item.CALLE0; ;
-                //}
+                foreach (var item in MVDireccion.ListaDIRECCIONES)
+                {
+                    UidDireccionAEntregar = item.ID;
+                    DireccionAEntregar = " " + item.PAIS + ",  " + item.ESTADO + ", ";
+                    DireccionAEntregar1 = item.MUNICIPIO + ", " + item.COLONIA + ", ";
+                    DireccionAEntregar2 = item.CodigoPostal + ", Mza " + item.MANZANA + ", Lt " + item.LOTE + ",";
+                    DireccionAEntregar3 = "Calle " + item.CALLE0; ;
+                }
 
-                ////Configuracion header footer
-                ////Agrega un subtotal
-                //t.AddTotal("Subtotal", total.ToString());
-                ////Busca el tarifario y lo agrega al total
-                //MVTarifario.ObtenerTarifarioDeOrden(UidOrden);
-                //t.AddTotal("Envio", MVTarifario.DPrecio.ToString("N2"));
-                ////Agrega el total general
-                //total = total + MVTarifario.DPrecio;
-                //t.AddTotal("Total", total.ToString("N2"));
-                ////Datos del usuario
-                //VMUsuarios MVUsuario = new VMUsuarios();
-                //MVUsuario.BusquedaDeUsuario(UidUsuario: new Guid(MVOrden.ObtenerUsuarioPorUidOrdenSucursal(UidOrden)), UIDPERFIL: new Guid("4F1E1C4B-3253-4225-9E46-DD7D1940DA19"));
+                //Configuracion header footer
+                //Agrega un subtotal
+                t.AddTotal("Subtotal", total.ToString());
+                //Busca el tarifario y lo agrega al total
+                MVTarifario.ObtenerTarifarioDeOrden(UidOrden);
+                t.AddTotal("Envio", MVTarifario.DPrecio.ToString("N2"));
+                //Agrega el total general
+                total = total + MVTarifario.DPrecio;
+                t.AddTotal("Total", total.ToString("N2"));
+                //Datos del usuario
+                VMUsuarios MVUsuario = new VMUsuarios();
+                MVUsuario.BusquedaDeUsuario(UidUsuario: new Guid(MVOrden.ObtenerUsuarioPorUidOrdenSucursal(UidOrden)), UIDPERFIL: new Guid("4F1E1C4B-3253-4225-9E46-DD7D1940DA19"));
 
-                //t.AddFooterLine("Cliente " + MVUsuario.StrUsuario);
+                t.AddFooterLine("Cliente " + MVUsuario.StrUsuario);
 
 
-                //t.AddFooterLine("Direccion de entrega");
-                //t.AddFooterLine(DireccionAEntregar);
-                //t.AddFooterLine(DireccionAEntregar1);
-                //t.AddFooterLine(DireccionAEntregar2);
-                //t.AddFooterLine(DireccionAEntregar3);
+                t.AddFooterLine("Direccion de entrega");
+                t.AddFooterLine(DireccionAEntregar);
+                t.AddFooterLine(DireccionAEntregar1);
+                t.AddFooterLine(DireccionAEntregar2);
+                t.AddFooterLine(DireccionAEntregar3);
 
-                //t.FontSize = 6;
-                //t.AddFooterLine("www.godeliverix.com.mx");
-                //t.PrintTicket("PDFCreator");
+                t.FontSize = 6;
+                t.AddFooterLine("www.godeliverix.com.mx");
+                t.PrintTicket("PDFCreator");
 
 
                 //Cambia el estatus interno de la sucursal confirmando la orden
@@ -542,6 +542,7 @@ namespace DeliverixSucursales
                         Timer.Interval = new TimeSpan(0, 0, 10);
                         Timer.Start();
                         //Obtiene las ordenes listas para asignar
+                        MVOrden.Uidorden = Guid.Empty;
                         MVOrden.BuscarOrdenes("Sucursal", UidLicencia: new Guid(MVLicencia.Licencia), EstatusSucursal: "Lista a enviar", TipoDeSucursal: "S");
                         VerificaOrdenesEnviadas();
                         //Valida que no este seleccionada una orden.
@@ -613,6 +614,10 @@ namespace DeliverixSucursales
                     MVLicencia = new VMLicencia();
                     MVLicencia.RecuperaLicencia();
                     MVOrden.BuscarOrdenRepartidor(txtLectorCodigo.Text.Replace("'", "-"), MVLicencia.Licencia);
+                    lblUidOrdenAEnviar.Content = string.Empty;
+                    lblNumeroDeOrden.Content = string.Empty;
+                    lblNombreEmpresaDistribuidora.Content = string.Empty;
+                    lblMensajeOrden.Content = string.Empty;
 
                     if (MVOrden.StrEstatusOrdenSucursal != null)
                     {
@@ -621,6 +626,8 @@ namespace DeliverixSucursales
                             lblUidOrdenAEnviar.Content = MVOrden.Uidorden.ToString();
                             lblNumeroDeOrden.Content = MVOrden.LNGFolio;
                             lblNombreEmpresaDistribuidora.Content = MVOrden.StrNombreSucursal;
+                            lblMensajeOrden.Content = "";
+
                         }
                         else if (MVOrden.StrEstatusOrdenSucursal.ToString() == "B6BFC834-7CC4-4E67-817D-5ECB0EB2FFA7".ToLower())
                         {
@@ -640,22 +647,29 @@ namespace DeliverixSucursales
                 {
                     lblMensajeOrden.Content = "Codigo invalido";
                 }
-
+                txtLectorCodigo.Text = string.Empty; txtLectorCodigo.Focus();
             }
         }
 
         private void btnAsignarOrden_Click(object sender, RoutedEventArgs e)
         {
-            MVLicencia = new VMLicencia();
-            MVLicencia.RecuperaLicencia();
-            Guid UidOrden = new Guid(lblUidOrdenAEnviar.Content.ToString());
-            //Cambia elestatus interno de la sucursal confirmando la orden
-            MVOrden.AgregarEstatusOrdenEnSucursal(new Guid("E2BAD7D9-9CD0-4698-959D-0A211800545F"), "S", MVLicencia.Licencia, UidOrden: UidOrden);
-            MVOrden.AgregaEstatusALaOrden(new Guid("B6BFC834-7CC4-4E67-817D-5ECB0EB2FFA7"), UidOrden: UidOrden, UidLicencia: new Guid(MVLicencia.Licencia), StrParametro: "S");
+            if (lblUidOrdenAEnviar.Content != null)
+            {
+                MVLicencia = new VMLicencia();
+                MVLicencia.RecuperaLicencia();
+                Guid UidOrden = new Guid(lblUidOrdenAEnviar.Content.ToString());
+                //Cambia elestatus interno de la sucursal confirmando la orden
+                MVOrden.AgregarEstatusOrdenEnSucursal(new Guid("E2BAD7D9-9CD0-4698-959D-0A211800545F"), "S", MVLicencia.Licencia, UidOrden: UidOrden);
+                MVOrden.AgregaEstatusALaOrden(new Guid("B6BFC834-7CC4-4E67-817D-5ECB0EB2FFA7"), UidOrden: UidOrden, UidLicencia: new Guid(MVLicencia.Licencia), StrParametro: "S");
 
-            lblUidOrdenAEnviar.Content = string.Empty;
-            lblNumeroDeOrden.Content = string.Empty;
-            lblNombreEmpresaDistribuidora.Content = string.Empty;
+                lblUidOrdenAEnviar.Content = string.Empty;
+                lblNumeroDeOrden.Content = string.Empty;
+                lblNombreEmpresaDistribuidora.Content = string.Empty;
+            }
+            else
+            {
+                lblMensajeOrden.Content = "No hay orden alguna para asignar";
+            }
         }
 
         private void btnVerNota_Click(object sender, RoutedEventArgs e)

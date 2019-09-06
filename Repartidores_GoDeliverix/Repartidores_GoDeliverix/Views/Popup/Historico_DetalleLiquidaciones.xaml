@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Repartidores_GoDeliverix.Views.Popup.Historico_DetalleOrdenes"
+             BindingContext="{Binding VMMain, Source={StaticResource Locator}}"
+             Title="Liquidaciones">
+    <ContentPage.Content>
+        <ScrollView BindingContext="{Binding MVTurnoOrden}">
+            <ListView HorizontalOptions="FillAndExpand"  SelectedItem="{Binding oTurno,Mode=TwoWay}"  ItemsSource="{Binding ListaDeLiquidacionesTurno}">
+                <ListView.Header>
+                    <Grid HorizontalOptions="Fill" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="AUTO"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Label Text="Fecha" FontSize="Medium" HorizontalOptions="Center" TextColor="#333" Grid.Column="0"   ></Label>
+                        <Label Text="Sucursal" FontSize="Medium" HorizontalOptions="Center" TextColor="#333"  Grid.Column="1" ></Label>
+                        <Label Text="Supervisor"  FontSize="Medium" HorizontalOptions="Center" TextColor="#333"  Grid.Column="2"  ></Label>
+                        <Label Text="Importe liquidado"  FontSize="Medium" HorizontalOptions="Center" TextColor="#333"  Grid.Column="3"  ></Label>
+                    </Grid>
+                </ListView.Header>
+                <ListView.ItemTemplate >
+                    <DataTemplate>
+                        <ViewCell >
+                            <Grid Padding="10,0,0,0" >
+                                <Label TextColor="#555" Grid.Column="0"   HorizontalOptions="Center" FontSize="Medium" Text="{Binding DtmFechaRegistro}" ></Label>
+                                <Label TextColor="#555" Grid.Column="1" HorizontalOptions="Center" FontSize="Medium" Text="{Binding StrNombreSucursal}"  ></Label>
+                                <Label TextColor="#555" Grid.Column="2" HorizontalOptions="Center" FontSize="Medium" Text="{Binding StrNombreUsuario}" ></Label>
+                                <Label TextColor="#555" Grid.Column="3" HorizontalOptions="Center" FontSize="Medium" Text="{Binding MTotalOrdenes}" ></Label>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

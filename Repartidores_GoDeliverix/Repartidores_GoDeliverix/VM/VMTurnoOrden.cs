@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Newtonsoft.Json;
 using Repartidores_GoDeliverix.Helpers;
+using Repartidores_GoDeliverix.Views.Popup;
 using Xamarin.Forms;
 
 namespace Repartidores_GoDeliverix.VM
@@ -22,7 +24,6 @@ namespace Repartidores_GoDeliverix.VM
             set { SetValue(ref __HOTotalEnvio, value); }
         }
         private decimal __HOTotalSuministros;
-
         public decimal HOTotalSuministros
         {
             get { return __HOTotalSuministros; }
@@ -34,6 +35,18 @@ namespace Repartidores_GoDeliverix.VM
         {
             get { return _HOLngFolio; }
             set { SetValue(ref _HOLngFolio, value); }
+        }
+        private string _StrNombreUsuario;
+        public string StrNombreUsuario
+        {
+            get { return _StrNombreUsuario; }
+            set { SetValue(ref _StrNombreUsuario, value); }
+        }
+        private string _StrNombreSucursal;
+        public string StrNombreSucursal
+        {
+            get { return _StrNombreSucursal; }
+            set { SetValue(ref _StrNombreSucursal, value); }
         }
 
         private Guid _UidTurnoRepartidor;
@@ -63,6 +76,12 @@ namespace Repartidores_GoDeliverix.VM
             get { return _MTotalOrdenes; }
             set { SetValue(ref _MTotalOrdenes, value); }
         }
+        private DateTime _DtmFechaRegistro;
+        public DateTime DtmFechaRegistro
+        {
+            get { return _DtmFechaRegistro; }
+            set { SetValue(ref _DtmFechaRegistro, value); }
+        }
 
         private decimal _MTotalGeneral;
         public decimal MTotalGeneral
@@ -72,14 +91,43 @@ namespace Repartidores_GoDeliverix.VM
         }
 
         private List<VMTurnoOrden> _ListaDeHistoricoDeOrdenesTurno;
-
         public List<VMTurnoOrden> ListaDeHistoricoDeOrdenesTurnos
         {
             get { return _ListaDeHistoricoDeOrdenesTurno; }
             set { SetValue(ref _ListaDeHistoricoDeOrdenesTurno, value); }
         }
 
+        private List<VMTurnoOrden> _ListaDeLiquidacionesTurno;
+        public List<VMTurnoOrden> ListaDeLiquidacionesTurno
+        {
+            get { return _ListaDeLiquidacionesTurno; }
+            set { SetValue(ref _ListaDeLiquidacionesTurno, value); }
+        }
+        public ICommand Liquidaciones { get { return new RelayCommand(InformacionDeLiquidaciones); } }
 
+        private async void InformacionDeLiquidaciones()
+        {
+            var AppInstance = MainViewModel.GetInstance();
+            if (AppInstance.Session_.UidUsuario != Guid.Empty)
+            {
+                string url = "http://www.godeliverix.net/api/Turno/GetConsultaLiquidacionesTurno?UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor + "";
+                var datos = await _WebApiGoDeliverix.GetStringAsync(url);
+                var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
+                MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
+                ListaDeLiquidacionesTurno = new List<VMTurnoOrden>();
+                foreach (var item in MVTurno.ListaDeLiquidaciones)
+                {
+                    ListaDeLiquidacionesTurno.Add(new VMTurnoOrden()
+                    {
+                        StrNombreUsuario = item.strUsuario,
+                        StrNombreSucursal = item.StrNombre,
+                        DtmFechaRegistro = item.DtmHoraInicio,
+                        MTotalOrdenes = item.DTotal
+                    });
+                }
+                await App.Current.MainPage.Navigation.PushAsync(new Historico_DetalleOrdenes());
+            }
+        }
         public VMTurnoOrden(String UidTurnoRepartidor)
         {
             CargaOrdenes(UidTurnoRepartidor);
@@ -94,7 +142,7 @@ namespace Repartidores_GoDeliverix.VM
             var AppInstance = MainViewModel.GetInstance();
             if (AppInstance.Session_.UidUsuario != Guid.Empty)
             {
-                string url = "http://www.godeliverix.net/api/Turno/GetInformacionHistoricoOrdenesTurno?UidTurno=" + UidTurnoRepartidor + "";
+                string url = "http://www.godeliverix.net/api/Turno/GetInformacionHistoricoOrdenesTurno?UidTurno=" + AppInstance.Session_.UidTurnoRepartidor + "";
                 var datos = await _WebApiGoDeliverix.GetStringAsync(url);
                 var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
                 MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);

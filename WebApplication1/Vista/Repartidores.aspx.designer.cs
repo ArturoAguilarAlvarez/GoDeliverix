@@ -643,6 +643,24 @@ namespace WebApplication1.Vista {
         protected global::System.Web.UI.WebControls.LinkButton btnDatosDeEmpresa;
         
         /// <summary>
+        /// Control liDatosDePago.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl liDatosDePago;
+        
+        /// <summary>
+        /// Control BtnDatosDePago.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton BtnDatosDePago;
+        
+        /// <summary>
         /// Control pnlDatosGenerales.
         /// </summary>
         /// <remarks>
@@ -938,5 +956,23 @@ namespace WebApplication1.Vista {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView DGVBUSQUEDADEEMPRESA;
+        
+        /// <summary>
+        /// Control PanelInformacionDeTrabajo.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelInformacionDeTrabajo;
+        
+        /// <summary>
+        /// Control txtMontoMaximoAPortar.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtMontoMaximoAPortar;
     }
 }

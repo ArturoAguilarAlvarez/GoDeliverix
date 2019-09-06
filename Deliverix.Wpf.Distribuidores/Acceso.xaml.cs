@@ -22,10 +22,13 @@ namespace Deliverix.Wpf.Distribuidores
         VMSucursales MVSucursal = new VMSucursales();
         VMEmpresas MVEmpresa = new VMEmpresas();
         VMUsuarios MVUsuario = new VMUsuarios();
+        VMTurno MVTurno = new VMTurno();
+
         Main ventanaPrincial;
         PageLicencia MenuLicencia;
+        Liquidacion ModuloLiquidacion;
         string ModuloAIngresar;
-        public Acceso(string modulo, PageLicencia ventanaLicencia = null, Main VentanaPrincipal = null)
+        public Acceso(string modulo, PageLicencia ventanaLicencia = null, Main VentanaPrincipal = null, Liquidacion VentanaLiquidacion = null)
         {
             InitializeComponent();
             ModuloAIngresar = modulo;
@@ -36,6 +39,10 @@ namespace Deliverix.Wpf.Distribuidores
             if (VentanaPrincipal != null)
             {
                 ventanaPrincial = VentanaPrincipal;
+            }
+            if (VentanaLiquidacion != null)
+            {
+                ModuloLiquidacion = VentanaLiquidacion;
             }
             txtUsuario.Focus();
         }
@@ -138,72 +145,101 @@ namespace Deliverix.Wpf.Distribuidores
         }
         private void btnEntrar_Click(object sender, RoutedEventArgs e)
         {
-            if (VerificaEstatusDeLasucursal())
+            try
             {
-                string usuario = txtUsuario.Text;
-                string password = txtPassword.Password;
-                if (!string.IsNullOrWhiteSpace(usuario) && !string.IsNullOrWhiteSpace(password))
+                if (VerificaEstatusDeLasucursal())
                 {
-                    Guid Uidusuario = MVAcceso.Ingresar(usuario, password);
-                    if (Uidusuario != Guid.Empty)
+                    string usuario = txtUsuario.Text;
+                    string password = txtPassword.Password;
+                    if (!string.IsNullOrWhiteSpace(usuario) && !string.IsNullOrWhiteSpace(password))
                     {
-                        string perfil = MVAcceso.PerfilDeUsuario(Uidusuario.ToString());
-                        if (ModuloAIngresar == "Supervisor")
+                        Guid Uidusuario = MVAcceso.Ingresar(usuario, password);
+                        if (Uidusuario != Guid.Empty)
                         {
-                            //Supervisor
-                            if (perfil.ToUpper() == "81232596-4C6B-4568-9005-8D4A0A382FDA")
+                            string perfil = MVAcceso.PerfilDeUsuario(Uidusuario.ToString());
+                            if (ModuloAIngresar == "Supervisor")
                             {
-                                MVLicencia.RecuperaLicencia();
-                                string sucursal = MVSucursal.ObtenSucursalDeLicencia(MVLicencia.Licencia);
-                                if (MVSucursal.VerificaExistenciaDeSupervisor(Uidusuario.ToString(), sucursal))
+                                //Supervisor
+                                if (perfil.ToUpper() == "81232596-4C6B-4568-9005-8D4A0A382FDA")
                                 {
+                                    MVLicencia.RecuperaLicencia();
+                                    string sucursal = MVSucursal.ObtenSucursalDeLicencia(MVLicencia.Licencia);
 
-                                    Label uidUsuario = ventanaPrincial.FindName("lblUidusuario") as Label;
-                                    TextBlock Usuario = ventanaPrincial.FindName("txtUsuario") as TextBlock;
-                                    TextBlock Sucursal = ventanaPrincial.FindName("txtSucursal") as TextBlock;
-
-                                    MVUsuario.obtenerDatosDeSupervisor(Uidusuario);
-                                    uidUsuario.Content = MVUsuario.Uid;
-                                    Usuario.Text = MVUsuario.StrNombre;
-                                    Sucursal.Text = MVUsuario.Sucursal;
-
-                                    MVAcceso.BitacoraRegistroSupervisores(MVUsuario.Uid, new Guid("C82A94F6-DEB0-4FCD-BCD6-22C1B2603041"));
-
-                                    Close();
-                                }
-
-                                else
-                                {
-                                    LicenciaRequerida VentanaMensaje = new LicenciaRequerida();
-                                    TextBlock lblMensaje = VentanaMensaje.FindName("lblMensaje") as TextBlock;
-                                    lblMensaje.Text = "El usuario no corresponde a la sucursal";
-                                    VentanaMensaje.ShowDialog();
-                                }
-                            }
-                        }
-                        else
-                        if (ModuloAIngresar == "Administrador")
-                        {
-                            LicenciaRequerida VentanaMensaje = new LicenciaRequerida();
-                            //Administrador
-                            if (perfil.ToUpper() == "76A96FF6-E720-4092-A217-A77A58A9BF0D")
-                            {
-                                if (!string.IsNullOrEmpty(MVLicencia.Licencia))
-                                {
-                                    //Valida que la licencia exista en la nube
-                                    if (HostingLicencia.ValidaExistenciaDeLicencia(MVLicencia.Licencia))
+                                    if (MVSucursal.VerificaExistenciaDeSupervisor(Uidusuario.ToString(), sucursal))
                                     {
-                                        //Validacion para determinar si el administrador que ingresa pertenece a la empresa la cual se vincula con la licencia
-                                        if (MVUsuario.ValidaExistenciaDeAdministracidor(MVLicencia.Licencia, Uidusuario))
+
+                                        Label uidUsuario = ventanaPrincial.FindName("lblUidusuario") as Label;
+                                        TextBlock Usuario = ventanaPrincial.FindName("txtUsuario") as TextBlock;
+                                        TextBlock Sucursal = ventanaPrincial.FindName("txtSucursal") as TextBlock;
+                                        Label LblUidTurno = ventanaPrincial.FindName("LblUidTurno") as Label;
+                                        Label lblHoraInicioTurno = ventanaPrincial.FindName("lblHoraInicioTurno") as Label;
+                                        Label lblFolioTurno = ventanaPrincial.FindName("lblFolioTurno") as Label;
+
+                                        MVUsuario.obtenerDatosDeSupervisor(Uidusuario);
+                                        uidUsuario.Content = MVUsuario.Uid;
+                                        Usuario.Text = MVUsuario.StrNombre;
+                                        Sucursal.Text = MVUsuario.Sucursal;
+
+                                        VMTurno MVTurno = new VMTurno();
+                                        MVTurno.ConsultarUltimoTurnoDistribuidora(MVLicencia.Licencia);
+
+                                        if (MVTurno.DtmHoraFin == DateTime.Parse("01/01/0001 12:00:00 a. m.") && MVTurno.DtmHoraInicio != DateTime.Parse("01/01/0001 12:00:00 a. m."))
                                         {
-                                            MenuLicencia.ConfirmacionSupervisor = true;
-                                            Close();
+                                            LblUidTurno.Content = MVTurno.UidTurno;
+                                            lblHoraInicioTurno.Content = MVTurno.DtmHoraInicio;
+                                            lblFolioTurno.Content = MVTurno.LngFolio;
                                         }
                                         else
                                         {
-                                            TextBlock lblMensaje = VentanaMensaje.FindName("lblMensaje") as TextBlock;
-                                            lblMensaje.Text = "Solo los administradores asociados a la sucursal\n pueden quitar la licencia";
-                                            VentanaMensaje.ShowDialog();
+                                            MVTurno = new VMTurno();
+                                            Guid UidTurnoDistribuidor = Guid.NewGuid();
+                                            MVTurno.TurnoDistribuidora(MVUsuario.Uid, UidTurnoDistribuidor);
+
+                                            LblUidTurno.Content = UidTurnoDistribuidor.ToString();
+                                        }
+                                        //MVAcceso.BitacoraRegistroSupervisores(MVUsuario.Uid, new Guid("C82A94F6-DEB0-4FCD-BCD6-22C1B2603041"));
+
+                                        Close();
+                                    }
+
+                                    else
+                                    {
+                                        LicenciaRequerida VentanaMensaje = new LicenciaRequerida();
+                                        TextBlock lblMensaje = VentanaMensaje.FindName("lblMensaje") as TextBlock;
+                                        lblMensaje.Text = "El usuario no corresponde a la sucursal";
+                                        VentanaMensaje.ShowDialog();
+                                    }
+                                }
+                            }
+                            else
+                            if (ModuloAIngresar == "Administrador")
+                            {
+                                LicenciaRequerida VentanaMensaje = new LicenciaRequerida();
+                                //Administrador
+                                if (perfil.ToUpper() == "76A96FF6-E720-4092-A217-A77A58A9BF0D")
+                                {
+                                    if (!string.IsNullOrEmpty(MVLicencia.Licencia))
+                                    {
+                                        //Valida que la licencia exista en la nube
+                                        if (HostingLicencia.ValidaExistenciaDeLicencia(MVLicencia.Licencia))
+                                        {
+                                            //Validacion para determinar si el administrador que ingresa pertenece a la empresa la cual se vincula con la licencia
+                                            if (MVUsuario.ValidaExistenciaDeAdministracidor(MVLicencia.Licencia, Uidusuario))
+                                            {
+                                                MenuLicencia.ConfirmacionSupervisor = true;
+                                                Close();
+                                            }
+                                            else
+                                            {
+                                                TextBlock lblMensaje = VentanaMensaje.FindName("lblMensaje") as TextBlock;
+                                                lblMensaje.Text = "Solo los administradores asociados a la sucursal\n pueden quitar la licencia";
+                                                VentanaMensaje.ShowDialog();
+                                            }
+                                        }
+                                        else
+                                        {
+                                            MenuLicencia.ConfirmacionSupervisor = true;
+                                            Close();
                                         }
                                     }
                                     else
@@ -214,58 +250,114 @@ namespace Deliverix.Wpf.Distribuidores
                                 }
                                 else
                                 {
-                                    MenuLicencia.ConfirmacionSupervisor = true;
-                                    Close();
+                                    MVLicencia.RecuperaLicencia();
+
+                                    TextBlock lblMensaje = VentanaMensaje.FindName("lblMensaje") as TextBlock;
+                                    if (!string.IsNullOrEmpty(MVLicencia.Licencia))
+                                    {
+                                        lblMensaje.Text = "Solo los administradores pueden quitar la licencia";
+                                    }
+                                    else
+                                    {
+                                        lblMensaje.Text = "Solo los administradores pueden ingresar licencias";
+                                    }
+                                    VentanaMensaje.ShowDialog();
+                                }
+                            }
+                            else
+                            if (ModuloAIngresar == "Repartidor")
+                            {
+                                LicenciaRequerida VentanaMensaje = new LicenciaRequerida();
+                                //Repartidor
+                                if (perfil.ToUpper() == "DFC29662-0259-4F6F-90EA-B24E39BE4346")
+                                {
+                                    if (!string.IsNullOrEmpty(MVLicencia.Licencia))
+                                    {
+                                        //Valida que la licencia exista en la nube
+                                        if (HostingLicencia.ValidaExistenciaDeLicencia(MVLicencia.Licencia))
+                                        {
+                                            //Validacion para determinar si el administrador que ingresa pertenece a la empresa la cual se vincula con la licencia
+                                            if (MVUsuario.ValidaExistenciaDeRepartidor(MVLicencia.Licencia, Uidusuario))
+                                            {
+                                                ModuloLiquidacion.ConfirmacionRepartidor = true;
+                                                Close();
+                                            }
+                                            else
+                                            {
+                                                TextBlock lblMensaje = VentanaMensaje.FindName("lblMensaje") as TextBlock;
+                                                lblMensaje.Text = "Solo los repartidores asociados a la sucursal\n pueden liquidar";
+                                                VentanaMensaje.ShowDialog();
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Close();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Close();
+                                    }
+                                }
+                                else
+                                {
+                                    MVLicencia.RecuperaLicencia();
+                                    TextBlock lblMensaje = VentanaMensaje.FindName("lblMensaje") as TextBlock;
+
+                                    if (ModuloLiquidacion != null)
+                                    {
+                                        lblMensaje.Text = "Solo los repartidores pueden autentificarse para liquidar";
+
+                                    }
+                                    else
+                                    {
+                                        if (!string.IsNullOrEmpty(MVLicencia.Licencia))
+                                        {
+                                            lblMensaje.Text = "Solo los administradores pueden quitar la licencia";
+                                        }
+                                        else
+                                        {
+                                            lblMensaje.Text = "Solo los administradores pueden ingresar licencias";
+                                        }
+                                    }
+                                    VentanaMensaje.ShowDialog();
                                 }
                             }
                             else
                             {
-                                MVLicencia.RecuperaLicencia();
-
+                                LicenciaRequerida VentanaMensaje = new LicenciaRequerida();
                                 TextBlock lblMensaje = VentanaMensaje.FindName("lblMensaje") as TextBlock;
-                                if (!string.IsNullOrEmpty(MVLicencia.Licencia))
-                                {
-                                    lblMensaje.Text = "Solo los administradores pueden quitar la licencia";
-                                }
-                                else
-                                {
-                                    lblMensaje.Text = "Solo los administradores pueden ingresar licencias";
-                                }
+                                lblMensaje.Text = "Acceso denegado";
                                 VentanaMensaje.ShowDialog();
                             }
                         }
-
                         else
                         {
                             LicenciaRequerida VentanaMensaje = new LicenciaRequerida();
                             TextBlock lblMensaje = VentanaMensaje.FindName("lblMensaje") as TextBlock;
-                            lblMensaje.Text = "Acceso denegado";
+                            lblMensaje.Text = "Acceso incorrecto";
                             VentanaMensaje.ShowDialog();
                         }
                     }
                     else
                     {
-                        LicenciaRequerida VentanaMensaje = new LicenciaRequerida();
-                        TextBlock lblMensaje = VentanaMensaje.FindName("lblMensaje") as TextBlock;
-                        lblMensaje.Text = "Acceso incorrecto";
-                        VentanaMensaje.ShowDialog();
+                        if (string.IsNullOrWhiteSpace(usuario))
+                        {
+                            txtUsuario.BorderBrush = Brushes.Red;
+                        }
+                        if (string.IsNullOrWhiteSpace(password))
+                        {
+                            txtPassword.BorderBrush = Brushes.Red;
+                        }
                     }
-
 
                 }
-                else
-                {
-                    if (string.IsNullOrWhiteSpace(usuario))
-                    {
-                        txtUsuario.BorderBrush = Brushes.Red;
-                    }
-                    if (string.IsNullOrWhiteSpace(password))
-                    {
-                        txtPassword.BorderBrush = Brushes.Red;
-                    }
-                }
-
             }
+            catch (Exception)
+            {
+                MessageBox.Show("Aviso del sistema", "No hay internet");
+            }
+
         }
     }
 }

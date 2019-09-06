@@ -609,30 +609,30 @@ namespace VistaDelModelo
                                     //if (Diferencia.Minutes < 2)
                                     //{
 
-                                        //Agrega la ordenes y marca cuanto tiempo le queda de vida a la orden.
-                                        //ListaDeOrdenes.Add(new VMOrden()
-                                        //{
-                                        //    Uidorden = new Guid(item["UidRelacionOrdenSucursal"].ToString()),
-                                        //    LNGFolio = long.Parse(item["IntFolio"].ToString()),
-                                        //    MTotal = decimal.Parse(item["MTotalSucursal"].ToString()),
-                                        //    FechaDeOrden = TiempoRestante.Minutes.ToString() + ":" + TiempoRestante.Seconds.ToString(),
-                                        //    Imagen = imagen
-                                        //});
+                                    //Agrega la ordenes y marca cuanto tiempo le queda de vida a la orden.
+                                    //ListaDeOrdenes.Add(new VMOrden()
+                                    //{
+                                    //    Uidorden = new Guid(item["UidRelacionOrdenSucursal"].ToString()),
+                                    //    LNGFolio = long.Parse(item["IntFolio"].ToString()),
+                                    //    MTotal = decimal.Parse(item["MTotalSucursal"].ToString()),
+                                    //    FechaDeOrden = TiempoRestante.Minutes.ToString() + ":" + TiempoRestante.Seconds.ToString(),
+                                    //    Imagen = imagen
+                                    //});
                                     //}
                                     //else
                                     //{
-                                        //Cambia el estatus de la orden al cliente y le mada mensaje del por que se cancelo,
-                                        AgregaEstatusALaOrden(new Guid("EAE7A7E6-3F19-405E-87A9-3162D36CE21B"), "S", Mensaje: new Guid(item["UidMensaje"].ToString()), UidOrden: new Guid(item["UidRelacionOrdenSucursal"].ToString()), UidLicencia: UidLicencia);
-                                        //Agrega a la lista las ordenes canceladas definitivamente
-                                        ListaDeOrdenesCanceladas.Add(new VMOrden()
-                                        {
-                                            Uidorden = new Guid(item["UidRelacionOrdenSucursal"].ToString()),
-                                            LNGFolio = long.Parse(item["IntFolio"].ToString()),
-                                            MTotal = decimal.Parse(item["MTotalSucursal"].ToString()),
-                                            FechaDeOrden = TiempoRestante.Minutes.ToString() + ":" + TiempoRestante.Seconds.ToString(),
-                                            Imagen = imagen
-                                        });
-                                   // }
+                                    //Cambia el estatus de la orden al cliente y le mada mensaje del por que se cancelo,
+                                    AgregaEstatusALaOrden(new Guid("EAE7A7E6-3F19-405E-87A9-3162D36CE21B"), "S", Mensaje: new Guid(item["UidMensaje"].ToString()), UidOrden: new Guid(item["UidRelacionOrdenSucursal"].ToString()), UidLicencia: UidLicencia);
+                                    //Agrega a la lista las ordenes canceladas definitivamente
+                                    ListaDeOrdenesCanceladas.Add(new VMOrden()
+                                    {
+                                        Uidorden = new Guid(item["UidRelacionOrdenSucursal"].ToString()),
+                                        LNGFolio = long.Parse(item["IntFolio"].ToString()),
+                                        MTotal = decimal.Parse(item["MTotalSucursal"].ToString()),
+                                        FechaDeOrden = TiempoRestante.Minutes.ToString() + ":" + TiempoRestante.Seconds.ToString(),
+                                        Imagen = imagen
+                                    });
+                                    // }
                                 }
                             }
                         }
@@ -661,11 +661,9 @@ namespace VistaDelModelo
                     default:
                         break;
                 }
-
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

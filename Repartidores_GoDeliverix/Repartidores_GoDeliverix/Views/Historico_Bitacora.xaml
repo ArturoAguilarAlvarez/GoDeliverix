@@ -7,7 +7,6 @@
              Title="Historico de turnos">
     <ContentPage.Content >
         <ScrollView BindingContext="{Binding MVTurno}">
-
             <ListView HorizontalOptions="FillAndExpand"  SelectedItem="{Binding oTurno,Mode=TwoWay}"  ItemsSource="{Binding ListaDeHistoricoDeTurnos}">
                 <ListView.Header>
                     <Grid HorizontalOptions="Fill" >

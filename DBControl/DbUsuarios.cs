@@ -86,8 +86,7 @@ namespace DBControl
             {
                 //Administrador de empresas
                 case "76a96ff6-e720-4092-a217-a77a58a9bf0d":
-                    sentencia = " SELECT U.UidUsuario as UidUsuario, U.Nombre as Nombre,U.ApellidoPaterno as ApellidoPaterno,U.ApellidoMaterno as ApellidoMaterno, U.Usuario as Usuario,U.Contrasena as Contrasena,"
-                  + " U.FechaDeNacimiento as FechaDeNacimiento,U.UidPerfil as UidPerfil,U.ESTATUS as ESTATUS,U.UidEmpresa as UidEmpresa,CU.UidCorreo as IdCorreo, C.Correo as Correo FROM Usuarios U"
+                    sentencia = " SELECT U.UidUsuario as UidUsuario, U.Nombre as Nombre,U.ApellidoPaterno as ApellidoPaterno,U.ApellidoMaterno as ApellidoMaterno, U.Usuario as Usuario,U.Contrasena as Contrasena, U.FechaDeNacimiento as FechaDeNacimiento,U.UidPerfil as UidPerfil,U.ESTATUS as ESTATUS,U.UidEmpresa as UidEmpresa,CU.UidCorreo as IdCorreo, C.Correo as Correo FROM Usuarios U"
                   + " inner join DireccionUsuario DU on DU.UidUsuario = U.UidUsuario"
                   + " inner join Direccion D on D.UidDireccion = DU.UidDireccion"
                   + " inner join Paises P on p.UidPais = D.UidPais"
@@ -177,8 +176,7 @@ namespace DBControl
         public DataTable ObtenerRepartidoresConVehiculosYTurnoAbierto(string licencia)
         {
             oConexcion = new Conexion();
-            string query = "select u.UidUsuario,u.Nombre,u.usuario,dbo.asp_ObtenerUtimoEstatus(u.UidUsuario) as estatus, tr.DtmHoraFin, tr.UidTurnoRepartidor from Usuarios u " +
-                " inner join TurnoRepartidor tr on tr.UidUsuario = u.UidUsuario and  tr.DtmHoraFin is null  where u.UidUsuario in (select UidUsuario from VehiculoUsuario where UidVehiculo in (select UidVehiculo from vehiculoSucursal where uidsucursal in ( select UidSucursal from SucursalLicencia where UidLicencia = '" + licencia + "'))) order by tr.DtmHoraInicio desc";
+            string query = "select u.UidUsuario,u.Nombre,u.usuario,dbo.asp_ObtenerUtimoEstatus(u.UidUsuario) as estatus,dbo.GD_ObtenerUltimoEstatusTurnoRepartidor(tr.UidTurnoRepartidor) as EstatusTurno, tr.DtmHoraFin, tr.UidTurnoRepartidor from Usuarios u inner join TurnoRepartidor tr on tr.UidUsuario = u.UidUsuario and  tr.DtmHoraFin is null  where u.UidUsuario in (select UidUsuario from VehiculoUsuario where UidVehiculo in (select UidVehiculo from vehiculoSucursal where uidsucursal in ( select UidSucursal from SucursalLicencia where UidLicencia = '" + licencia + "'))) order by tr.DtmHoraInicio desc";
             return oConexcion.Consultas(query);
         }
 
@@ -195,6 +193,15 @@ namespace DBControl
             string query = "  select * from Usuarios where usuario == " + strNombreDeUsuario + "";
             return oConexcion.Consultas(query);
         }
+
+        public DataTable ValidaRepartidorSucursal(string licencia, Guid uidusuario)
+        {
+            oConexcion = new Conexion();
+            string query = " select * from Sucursales s inner join SucursalLicencia sl on sl.UidSucursal = s.UidSucursal inner join UsuarioSucursal us on us.UidSucursal = s.UidSucursal where sl.UidLicencia = '"+ licencia + "' and us.UidUsuario = '"+ uidusuario.ToString() + "'";
+            return oConexcion.Consultas(query);
+        }
+
+
         #endregion
     }
 }

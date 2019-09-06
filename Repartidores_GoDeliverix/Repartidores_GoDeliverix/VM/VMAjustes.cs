@@ -8,6 +8,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Windows.Input;
 using VistaDelModelo;
+using Xamarin.Forms;
+
 namespace Repartidores_GoDeliverix.VM
 {
     public class VMAjustes : ControlsController
@@ -141,16 +143,16 @@ namespace Repartidores_GoDeliverix.VM
         {
             VMUsuarios MVUsuario = new VMUsuarios();
             string PerfilDeUsuario = "DFC29662-0259-4F6F-90EA-B24E39BE4346";
-           // _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
+            // _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
 
             if (!string.IsNullOrEmpty(Nombre) && !string.IsNullOrEmpty(ApellidoPaterno) && !string.IsNullOrEmpty(ApellidoMaterno))
             {
-                url = "http://www.godeliverix.net/api/Usuario/GetActualizarUsuario?UidUsuario=" + UidUsuario + "&Nombre=" + Nombre + "&ApellidoPaterno=" + ApellidoPaterno + "&ApellidoMaterno=" + ApellidoMaterno + "&perfil=" + PerfilDeUsuario + "";
+                url = "https://www.godeliverix.net/api/Usuario/GetActualizarUsuario?UidUsuario=" + UidUsuario + "&Nombre=" + Nombre + "&ApellidoPaterno=" + ApellidoPaterno + "&ApellidoMaterno=" + ApellidoMaterno + "&perfil=" + PerfilDeUsuario + "";
                 // MVUsuario.ActualizarUsuario(UidUsuario: UidUsuario, Nombre: Nombre, ApellidoPaterno: ApellidoPaterno, ApellidoMaterno: ApellidoMaterno, perfil: PerfilDeUsuario);
             }
             if (!string.IsNullOrEmpty(fnacimiento))
             {
-                url = "http://www.godeliverix.net/api/Usuario/GetActualizarUsuario?UidUsuario=" + UidUsuario + "&fnacimiento=" + StrFechaDeNacimiento + "&perfil=" + PerfilDeUsuario + "";
+                url = "https://www.godeliverix.net/api/Usuario/GetActualizarUsuario?UidUsuario=" + UidUsuario + "&fnacimiento=" + StrFechaDeNacimiento + "&perfil=" + PerfilDeUsuario + "";
                 // MVUsuario.ActualizarUsuario(UidUsuario: UidUsuario, fnacimiento: StrFechaDeNacimiento, perfil: PerfilDeUsuario);
             }
             _WebApiGoDeliverix.GetAsync(url);
@@ -159,7 +161,7 @@ namespace Repartidores_GoDeliverix.VM
         {
             VMCorreoElectronico MVCorreoElectronico = new VMCorreoElectronico();
             //_WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
-            url = "http://www.godeliverix.net/api/CorreoElectronico/GetActualizarCorreo?UidPropietario=" + UidUsuario + "&strParametroDeInsercion=Usuario&strCorreoElectronico=" + StrCorreoElectronico + "&UidCorreoElectronico=" + Guid.NewGuid() + "";
+            url = "https://www.godeliverix.net/api/CorreoElectronico/GetActualizarCorreo?UidPropietario=" + UidUsuario + "&strParametroDeInsercion=Usuario&strCorreoElectronico=" + StrCorreoElectronico + "&UidCorreoElectronico=" + Guid.NewGuid() + "";
             _WebApiGoDeliverix.GetAsync(url);
 
             //MVCorreoElectronico.EliminaCorreoUsuario(UidUsuario.ToString());
@@ -171,7 +173,7 @@ namespace Repartidores_GoDeliverix.VM
             VMTelefono MVTelefono = new VMTelefono();
             //_WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
 
-            url = "http://www.godeliverix.net/api/Telefono/GetActualizaTelefonoApi?UidPropietario=" + UidUsuario + "&strParametroDeInsercion=Usuario&strCorreoElectronico=" + StrCorreoElectronico + "&UidCorreoElectronico=" + Guid.NewGuid() + "";
+            url = "https://www.godeliverix.net/api/Telefono/GetActualizaTelefonoApi?UidPropietario=" + UidUsuario + "&strParametroDeInsercion=Usuario&strCorreoElectronico=" + StrCorreoElectronico + "&UidCorreoElectronico=" + Guid.NewGuid() + "";
             _WebApiGoDeliverix.GetAsync(url);
             //MVTelefono.EliminaTelefonosUsuario(UidUsuario);
             //MVTelefono.GuardaTelefono(UidUsuario, "Usuario");
@@ -188,97 +190,42 @@ namespace Repartidores_GoDeliverix.VM
             UidUsuario = AppInstance.Session_.UidUsuario;
             //Declaracion de las vistas del modelo 
             VMUsuarios MVUsuario = new VMUsuarios();
-            VMCorreoElectronico MVCorreoElectronico = new VMCorreoElectronico();
-            VMTelefono MVTelefono = new VMTelefono();
-            VMDireccion MVDireccion = new VMDireccion();
             //Obtiene los datos
-            //_WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
-
-            url = "http://www.godeliverix.net/api/Usuario/GetBuscarUsuarios?UidUsuario=" + UidUsuario + "&UIDPERFIL=DFC29662-0259-4F6F-90EA-B24E39BE4346";
+            url = "https://www.godeliverix.net/api/Usuario/GetBuscarUsuarios?UidUsuario=" + UidUsuario + "&UIDPERFIL=DFC29662-0259-4F6F-90EA-B24E39BE4346";
             string content = await _WebApiGoDeliverix.GetStringAsync(url);
             var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
             MVUsuario = JsonConvert.DeserializeObject<VMUsuarios>(obj);
-
-
-            //MVUsuario.BusquedaDeUsuario(UidUsuario: UidUsuario, UIDPERFIL: new Guid("DFC29662-0259-4F6F-90EA-B24E39BE4346"));
-            url = "http://www.godeliverix.net/api/CorreoElectronico/GetBuscarCorreo?UidPropietario=" + UidUsuario + "&strParametroDebusqueda=Usuario";
-            var contenido = await _WebApiGoDeliverix.GetStringAsync(url);
-            obj = JsonConvert.DeserializeObject<ResponseHelper>(contenido).Data.ToString();
-            MVCorreoElectronico = JsonConvert.DeserializeObject<VMCorreoElectronico>(obj);
-
-            //MVCorreoElectronico.BuscarCorreos(UidPropietario: MVUsuario.Uid, strParametroDebusqueda: "Usuario");
-
-            url = "http://www.godeliverix.net/api/Telefono/GetBuscarTelefonos?UidPropietario=" + UidUsuario + "&ParadetroDeBusqueda=Usuario";
-            var cont = await _WebApiGoDeliverix.GetStringAsync(url);
-
-            var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(cont).Data.ToString();
-            MVTelefono = JsonConvert.DeserializeObject<VMTelefono>(DatosGiros);
-
-
-            //JArray blogPostArray = JArray.Parse(DatosGiros.ToString());
-
-            //MVTelefono.ListaDeTelefonos = blogPostArray.Select(p => new VMTelefono
-            //{
-            //    ID = new Guid(p["ID"].ToString()),
-            //    UidTipo = new Guid(p["UidTipo"].ToString()),
-            //    NUMERO = p["NUMERO"].ToString(),
-            //    StrNombreTipoDeTelefono = p["StrNombreTipoDeTelefono"].ToString(),
-            //    Estado = bool.Parse(p["Estado"].ToString())
-            //}).ToList();
-
-            // MVTelefono.BuscarTelefonos(UidPropietario: UidUsuario, ParadetroDeBusqueda: "Usuario");
-
-
-            url = "http://www.godeliverix.net/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + UidUsuario + "";
-            var c = await _WebApiGoDeliverix.GetStringAsync(url);
-
-            DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(c).Data.ToString();
-            MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(DatosGiros);
-
-            //var blogPostArray = JArray.Parse(DatosGiros.ToString());
-
-            //MVDireccion.ListaDIRECCIONES = blogPostArray.Select(p => new VMDireccion
-            //{
-            //    ID = new Guid(p["ID"].ToString()),
-            //    PAIS = p["PAIS"].ToString(),
-            //    ESTADO = p["ESTADO"].ToString(),
-            //    MUNICIPIO = p["MUNICIPIO"].ToString(),
-            //    CIUDAD = p["CIUDAD"].ToString(),
-            //    COLONIA = p["COLONIA"].ToString(),
-            //    CALLE0 = p["CALLE0"].ToString(),
-            //    CALLE1 = p["CALLE1"].ToString(),
-            //    CALLE2 = p["CALLE2"].ToString(),
-            //    MANZANA = p["MANZANA"].ToString(),
-            //    LOTE = p["LOTE"].ToString(),
-            //    CodigoPostal = p["CodigoPostal"].ToString(),
-            //    REFERENCIA = p["REFERENCIA"].ToString(),
-            //    IDENTIFICADOR = p["IDENTIFICADOR"].ToString()
-            //}).ToList();
-
-
-            //MVDireccion.ObtenerDireccionesUsuario(UidUsuario.ToString());
-            //Asignacion de variables locales
-
-
+            //Datos del usuario
             AppInstance.Nombre = MVUsuario.StrNombre;
-
             StrNombre = MVUsuario.StrNombre;
             StrApellidoMaterno = MVUsuario.StrApellidoPaterno;
             StrApellidoPaterno = MVUsuario.StrApellidoMaterno;
-            StrCorreoElectronico = MVCorreoElectronico.CORREO;
             StrFechaDeNacimiento = DateTime.Parse(MVUsuario.DtmFechaDeNacimiento).ToShortDateString();
+            //Obtiene el correo electronico
+            CargaCorreoElectronico(UidUsuario);
+            //Obtiene los telefonos 
+            CargaTelefonos(UidUsuario);
+            //Obtiene las direcciones
+            CargaDirecciones(UidUsuario);
 
-            LsTelefono = new ObservableCollection<VMAjustesTelefono>();
-            foreach (VMTelefono item in MVTelefono.ListaDeTelefonos)
-            {
-                LsTelefono.Add(new VMAjustesTelefono()
-                {
-                    UidTelefono = item.ID,
-                    intNumeroTelefono = item.NUMERO,
-                    StrTipoDeTelefono = item.StrNombreTipoDeTelefono,
-                    UidTipoDeTelefono = item.UidTipo
-                });
-            }
+            LsAjustes = new ObservableCollection<VMAjustesItem>();
+            LsAjustes.Add(new VMAjustesItem() { StrRuta = "Nombre.png", Titulo = "Nombre", Detalles = StrNombre + " " + StrApellidoMaterno + " " + StrApellidoPaterno });
+            LsAjustes.Add(new VMAjustesItem() { StrRuta = "Usuario.png", Titulo = "Usuario", Detalles = MVUsuario.StrUsuario });
+            LsAjustes.Add(new VMAjustesItem() { StrRuta = "FechaDeNacimiento.png", Titulo = "Fecha de nacimiento", Detalles = StrFechaDeNacimiento });
+            LsAjustes.Add(new VMAjustesItem() { StrRuta = "Mail.png", Titulo = "Correo electronico", Detalles = StrCorreoElectronico });
+            //LsAjustes.Add(new VMAjustesItem() { StrRuta = "Telefono.png", Titulo = "Telefonos", Detalles = LsTelefono.Count.ToString() });
+            //LsAjustes.Add(new VMAjustesItem() { StrRuta = "Direccion.png", Titulo = "Direcciones", Detalles = ListaDireccion.Count.ToString() });
+            LsAjustes.Add(new VMAjustesItem() { StrRuta = "Salida.png", Titulo = "Cerrar sesion", Detalles = "" });
+            IsLoading = false;
+        }
+
+        private async void CargaDirecciones(Guid uidUsuario)
+        {
+            url = "https://www.godeliverix.net/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + uidUsuario + "";
+            var content = await _WebApiGoDeliverix.GetStringAsync(url);
+            var Informacion = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+            VMDireccion MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(Informacion);
+            //Asignacion de variables locales
             ListaDireccion = new ObservableCollection<VMAjustesDireccion>();
             foreach (VMDireccion item in MVDireccion.ListaDIRECCIONES)
             {
@@ -301,16 +248,46 @@ namespace Repartidores_GoDeliverix.VM
                     NombreColonia = item.NOMBRECOLONIA
                 });
             }
+        }
 
-            LsAjustes = new ObservableCollection<VMAjustesItem>();
-            LsAjustes.Add(new VMAjustesItem() { StrRuta = "Nombre.png", Titulo = "Nombre", Detalles = StrNombre + " " + StrApellidoMaterno + " " + StrApellidoPaterno });
-            LsAjustes.Add(new VMAjustesItem() { StrRuta = "Usuario.png", Titulo = "Usuario", Detalles = MVUsuario.StrUsuario });
-            LsAjustes.Add(new VMAjustesItem() { StrRuta = "FechaDeNacimiento.png", Titulo = "Fecha de nacimiento", Detalles = StrFechaDeNacimiento });
-            LsAjustes.Add(new VMAjustesItem() { StrRuta = "Mail.png", Titulo = "Correo electronico", Detalles = StrCorreoElectronico });
-            //LsAjustes.Add(new VMAjustesItem() { StrRuta = "Telefono.png", Titulo = "Telefonos", Detalles = LsTelefono.Count.ToString() });
-            //LsAjustes.Add(new VMAjustesItem() { StrRuta = "Direccion.png", Titulo = "Direcciones", Detalles = ListaDireccion.Count.ToString() });
-            LsAjustes.Add(new VMAjustesItem() { StrRuta = "Salida.png", Titulo = "Cerrar sesion", Detalles = "" });
-            IsLoading = false;
+        private async void CargaTelefonos(Guid uidUsuario)
+        {
+            url = "https://www.godeliverix.net/api/Telefono/GetBuscarTelefonos?UidPropietario=" + uidUsuario + "&ParadetroDeBusqueda=Usuario";
+            string content = await _WebApiGoDeliverix.GetStringAsync(url);
+            var inf = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+            VMTelefono MVTelefono = JsonConvert.DeserializeObject<VMTelefono>(inf);
+
+
+            LsTelefono = new ObservableCollection<VMAjustesTelefono>();
+            foreach (VMTelefono item in MVTelefono.ListaDeTelefonos)
+            {
+                LsTelefono.Add(new VMAjustesTelefono()
+                {
+                    UidTelefono = item.ID,
+                    intNumeroTelefono = item.NUMERO,
+                    StrTipoDeTelefono = item.StrNombreTipoDeTelefono,
+                    UidTipoDeTelefono = item.UidTipo
+                });
+            }
+        }
+
+        private async void CargaCorreoElectronico(Guid uidUsuario)
+        {
+            _WebApiGoDeliverix = new HttpClient();
+            string uril = "https://www.godeliverix.net/api/CorreoElectronico/GetBuscarCorreo?UidPropietario=" + uidUsuario + "&strParametroDebusqueda=Usuario";
+            var content = await _WebApiGoDeliverix.GetStringAsync(uril);
+            var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+            VMCorreoElectronico MVCorreoElectronico = JsonConvert.DeserializeObject<VMCorreoElectronico>(obj);
+
+            StrCorreoElectronico = MVCorreoElectronico.CORREO;
+        }
+
+        protected async void GenerateMessage(string Tittle, string Message, string TextOption)
+        {
+            await Application.Current.MainPage.DisplayAlert(
+              Tittle,
+              Message,
+              TextOption);
         }
 
     }

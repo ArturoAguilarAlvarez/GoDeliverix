@@ -124,8 +124,8 @@ namespace VistaDelModelo
             objeto = new VMLicencia() { VchIdentificador = StrIdentificador, UidLicencia = UidLicencia, Propietario = UIdPropietario, UidEstatus = 1, BLUso = false };
             ListaDeLicencias.Add(objeto);
             //Agrega un objeto vacio al final de la lista
-            objeto = new VMLicencia() { VchIdentificador = string.Empty, UidLicencia = Guid.Empty, Propietario = UIdPropietario, UidEstatus = 1, BLUso = false };
-            ListaDeLicencias.Add(objeto);
+            //objeto = new VMLicencia() { VchIdentificador = string.Empty, UidLicencia = Guid.Empty, Propietario = UIdPropietario, UidEstatus = 1, BLUso = false };
+            //ListaDeLicencias.Add(objeto);
 
         }
 

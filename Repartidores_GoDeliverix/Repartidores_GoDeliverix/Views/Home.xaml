@@ -11,12 +11,10 @@
             <Grid x:Name="GContenedorPrincipal">
 
             </Grid>
-            <Grid VerticalOptions="FillAndExpand" Padding="5" x:Name="GVTitulo"  BackgroundColor="Purple">
+            <Grid VerticalOptions="FillAndExpand" Padding="5" x:Name="GVTitulo"  BackgroundColor="#20396e">
                 <Label FontSize="Large" VerticalOptions="CenterAndExpand" TextColor="White" Text="GoDeliverix"></Label>
                 <StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand" Grid.Column="1"   HorizontalOptions="EndAndExpand"  >
-                    <Label Text="Estatus" FontSize="Large" HorizontalOptions="CenterAndExpand" TextColor="White"></Label>
-                    <Switch HorizontalOptions="CenterAndExpand" IsToggled="{Binding BlEstatus}"   >
-                    </Switch>
+
                 </StackLayout>
             </Grid>
 
@@ -24,12 +22,12 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="10*"></RowDefinition>
                 </Grid.RowDefinitions>
-                <Label Text="{Binding Texto}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="Large" TextColor="Purple" IsVisible="{Binding BlSinAsignar}"></Label>
-                <Button  x:Name="btnNuevaOrden" IsVisible="{Binding BlNuevaOrden}" IsEnabled="{Binding IsEnable}" Clicked="BtnNuevaOrden_Clicked" Command="{Binding ShowOrder}"   Image="Alert.png" Text="Orden asignada"  HeightRequest = "150" FontSize="Large" TextColor="Purple" BackgroundColor="White">
+                <Label Text="{Binding Texto}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="Large" TextColor="Black" IsVisible="{Binding BlSinAsignar}"></Label>
+                <Button  x:Name="btnNuevaOrden" IsVisible="{Binding BlNuevaOrden}" IsEnabled="{Binding IsEnable}" Clicked="BtnNuevaOrden_Clicked" Command="{Binding ShowOrder}"   Image="Alert.png" Text="Orden asignada"  HeightRequest = "150" FontSize="Large" TextColor="Black" BackgroundColor="White">
                 </Button>
-                <Button  x:Name="btnQr"   IsVisible="{Binding BlRecolecta}" IsEnabled="{Binding IsEnable}"  Command="{Binding ShowCodeQr}" Clicked="BtnQr_Clicked" Image="qrcode.png" Text="Recolectar"  HeightRequest = "150" FontSize="Large" TextColor="Purple" BackgroundColor="White">
+                <Button  x:Name="btnQr"   IsVisible="{Binding BlRecolecta}" IsEnabled="{Binding IsEnable}"  Command="{Binding ShowCodeQr}" Clicked="BtnQr_Clicked" Image="qrcode.png" Text="Recolectar"  HeightRequest = "150" FontSize="Large" TextColor="Black" BackgroundColor="White">
                 </Button>
-                <Button  x:Name="btnEntregar" IsVisible="{Binding BlEntrega}" IsEnabled="{Binding IsEnable}" Command="{Binding Entregar}" Clicked="BtnEntregar_Clicked"  Image="Entrega.png" Text="Entregar"  HeightRequest = "150" FontSize="Large" TextColor="Purple" BackgroundColor="White">
+                <Button  x:Name="btnEntregar" IsVisible="{Binding BlEntrega}" IsEnabled="{Binding IsEnable}" Command="{Binding Entregar}" Clicked="BtnEntregar_Clicked"  Image="Entrega.png" Text="Entregar"  HeightRequest = "150" FontSize="Large" TextColor="Black" BackgroundColor="White">
                 </Button>
             </Grid>
 

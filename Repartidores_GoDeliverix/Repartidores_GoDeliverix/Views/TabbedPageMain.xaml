@@ -4,7 +4,8 @@
              x:Class="Repartidores_GoDeliverix.Views.TabbedPageMain"
              NavigationPage.HasNavigationBar="False"
             BindingContext="{Binding VMMain, Source={StaticResource Locator}}"
-            xmlns:tabs="clr-namespace:Repartidores_GoDeliverix.Views">
+            xmlns:tabs="clr-namespace:Repartidores_GoDeliverix.Views" BarBackgroundColor="#20396e"
+            BarTextColor="White">
     <TabbedPage.Children>
         <tabs:Home></tabs:Home>
         <tabs:Historial></tabs:Historial>

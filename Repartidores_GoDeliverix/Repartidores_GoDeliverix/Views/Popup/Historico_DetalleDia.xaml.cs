@@ -15,7 +15,8 @@ namespace Repartidores_GoDeliverix.Views.Popup
 		public Historico_DetalleDia ()
 		{
 			InitializeComponent ();
-		}
+           
+        }
 
         private async void BtnHistorico_Clicked(object sender, EventArgs e)
         {

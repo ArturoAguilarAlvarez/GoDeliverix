@@ -336,6 +336,22 @@ namespace VistaDelModelo
                 StrEstatus = item["ESTATUS"].ToString();
             }
         }
+        /// <summary>
+        /// Valida la existencia del repartidor en la sucursal a logearse
+        /// </summary>
+        /// <param name="licencia"></param>
+        /// <param name="uidusuario"></param>
+        /// <returns></returns>
+        public bool ValidaExistenciaDeRepartidor(string licencia, Guid uidusuario)
+        {
+            bool resultado = false;
+            oDbusuarios = new DbUsuarios();
+            if (oDbusuarios.ValidaRepartidorSucursal(licencia, uidusuario).Rows.Count == 1)
+            {
+                resultado = true;
+            }
+            return resultado;
+        }
 
         /// <summary>
         /// Busqueda de usuarios a partir de diferentes criterios
@@ -627,28 +643,30 @@ namespace VistaDelModelo
             }
         }
 
+
         public void ObtenerRepartidoresDisponibles(string licencia)
         {
             LISTADEUSUARIOS = new List<VMUsuarios>();
             foreach (DataRow item in oDbusuarios.ObtenerRepartidoresConVehiculosYTurnoAbierto(licencia).Rows)
             {
-
                 //Varifica que este activo el campo
                 if (item["estatus"].ToString().ToUpper() == "A298B40F-C495-4BD8-A357-4A3209FBC162")
                 {
-                    if (string.IsNullOrEmpty(item["DtmHoraFin"].ToString()))
+                    if (item["EstatusTurno"].ToString().ToUpper() == "81494F49-F416-4431-99F4-E0AA4CF7E9F6" || item["EstatusTurno"].ToString().ToUpper() == "38FA16DF-4727-41FD-A03E-E2E43FA78F3F")
                     {
-                        VMUsuarios usuario = new VMUsuarios()
+                        if (string.IsNullOrEmpty(item["DtmHoraFin"].ToString()))
                         {
-                            Uid = new Guid(item["UidUsuario"].ToString()),
-                            uidTurnoRepartidor = new Guid(item["UidTurnoRepartidor"].ToString()),
-                            
-                            StrNombre = item["Nombre"].ToString(),
-                            StrUsuario = item["usuario"].ToString(),
-                        };
-                        if (!LISTADEUSUARIOS.Exists(u => u.Uid == Uid))
-                        {
-                            LISTADEUSUARIOS.Add(usuario);
+                            VMUsuarios usuario = new VMUsuarios()
+                            {
+                                Uid = new Guid(item["UidUsuario"].ToString()),
+                                uidTurnoRepartidor = new Guid(item["UidTurnoRepartidor"].ToString()),
+                                StrNombre = item["Nombre"].ToString(),
+                                StrUsuario = item["usuario"].ToString(),
+                            };
+                            if (!LISTADEUSUARIOS.Exists(u => u.Uid == Uid))
+                            {
+                                LISTADEUSUARIOS.Add(usuario);
+                            }
                         }
                     }
                 }

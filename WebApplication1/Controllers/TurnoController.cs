@@ -22,11 +22,11 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
-        public ResponseHelper GetInformacionDeOrdenesPorTuno( Guid UidTurno)
+        public ResponseHelper GetInformacionDeOrdenesPorTuno(Guid UidTurno)
         {
             Respuesta = new ResponseHelper();
             MVTurno = new VMTurno();
-            MVTurno.InformacionDeOrdenesPorTuno( UidTurno);
+            MVTurno.InformacionDeOrdenesPorTuno(UidTurno);
             Respuesta.Data = MVTurno;
             Respuesta.Status = true;
             Respuesta.Message = "Informacion obtenida satisfactoriamente";
@@ -38,11 +38,11 @@ namespace WebApplication1.Controllers
         /// </summary>
         /// <param name="UidTurno"></param>
         /// <returns></returns>
-        public ResponseHelper GetInformacionHistoricoOrdenesTurno( Guid UidTurno)
+        public ResponseHelper GetInformacionHistoricoOrdenesTurno(Guid UidTurno)
         {
             Respuesta = new ResponseHelper();
             MVTurno = new VMTurno();
-            MVTurno.InformacionHistoricoOrdenesTurno( UidTurno);
+            MVTurno.InformacionHistoricoOrdenesTurno(UidTurno);
             Respuesta.Data = MVTurno;
             Respuesta.Status = true;
             Respuesta.Message = "Informacion obtenida satisfactoriamente";
@@ -53,11 +53,26 @@ namespace WebApplication1.Controllers
         /// </summary>
         /// <param name="UidUsuario"></param>
         /// <returns></returns>
-        public ResponseHelper GetConsultaHisstorico( Guid UidUsuario)
+        public ResponseHelper GetConsultaHisstorico(Guid UidUsuario)
         {
             Respuesta = new ResponseHelper();
             MVTurno = new VMTurno();
             MVTurno.ConsultarHistorico(UidUsuario);
+            Respuesta.Data = MVTurno;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion de historico obtenida satisfactoriamente";
+            return Respuesta;
+        }
+        /// <summary>
+        /// Obtiene la informacion de las liquidaciones del turnorepartidor
+        /// </summary>
+        /// <param name="UidTurnoRepartidor"></param>
+        /// <returns></returns>
+        public ResponseHelper GetConsultaLiquidacionesTurno(string UidTurnoRepartidor)
+        {
+            Respuesta = new ResponseHelper();
+            MVTurno = new VMTurno();
+            MVTurno.ObtenerInformacionLiquidacionesTuno(UidTurnoRepartidor);
             Respuesta.Data = MVTurno;
             Respuesta.Status = true;
             Respuesta.Message = "Informacion de historico obtenida satisfactoriamente";
@@ -75,12 +90,64 @@ namespace WebApplication1.Controllers
         {
             Respuesta = new ResponseHelper();
             MVTurno = new VMTurno();
-            MVTurno.ConsultaUltimoTurno(UidUsuario); 
+            MVTurno.ConsultaUltimoTurno(UidUsuario);
             Respuesta.Data = MVTurno;
             Respuesta.Status = true;
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;
         }
+
+        public ResponseHelper GetAgregaEstatusTurnoRepartidor(string UidTurnoRepartidor, string UidEstatusTurno)
+        {
+            Respuesta = new ResponseHelper();
+            MVTurno = new VMTurno();
+            MVTurno.AgregaEstatusTurnoRepartidor(UidTurnoRepartidor, UidEstatusTurno);
+            Respuesta.Data = MVTurno;
+            Respuesta.Status = true;
+            Respuesta.Message = "Estatus turno agregada satisfactoriamente";
+            return Respuesta;
+        }
+        /// <summary>
+        /// Obtiene el estatus del turno del repartidor
+        /// </summary>
+        /// <param name="UidTurnoRepartidor"></param>
+        /// <returns></returns>
+        public ResponseHelper GetConsultaEstatusTurnoRepartidor(string UidTurnoRepartidor)
+        {
+            Respuesta = new ResponseHelper();
+            MVTurno = new VMTurno();
+            Respuesta.Data = MVTurno.ObtenerUltimoEstatusTurno(UidTurnoRepartidor);
+            Respuesta.Status = true;
+            Respuesta.Message = "Estatus turno agregada satisfactoriamente";
+            return Respuesta;
+        }
+        /// <summary>
+        /// Obtiene el estatus del ultimo turno del repartidor
+        /// </summary>
+        /// <param name="UidTurnoRepartidor"></param>
+        /// <returns></returns>
+        public ResponseHelper GetConsultaEstatusUltimoTurnoRepartidor(string UidUsuario)
+        {
+            Respuesta = new ResponseHelper();
+            MVTurno = new VMTurno();
+            Respuesta.Data = MVTurno.ObtenerEstatusUltimoTurno(UidUsuario);
+            Respuesta.Status = true;
+            Respuesta.Message = "Estatus turno agregada satisfactoriamente";
+            return Respuesta;
+        }
+
+        public ResponseHelper GetConsultaCantidadMaximaAPortar(string UidRepartidor)
+        {
+            Respuesta = new ResponseHelper();
+            MVTurno = new VMTurno();
+            Respuesta.Data = MVTurno.ObtenerMontoAPortar(UidRepartidor);
+            Respuesta.Status = true;
+            Respuesta.Message = "Estatus turno agregada satisfactoriamente";
+            return Respuesta;
+        }
+
+
+
 
         // POST: api/Turno
         public void Post([FromBody]string value)

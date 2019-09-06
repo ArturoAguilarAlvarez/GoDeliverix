@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              BindingContext="{Binding VMMain, Source={StaticResource Locator}}"
              Title="Informacion de entrega"
+             
              x:Class="Repartidores_GoDeliverix.Views.Home_Entregar">
 
     <ContentPage.Content>

@@ -49,6 +49,8 @@ namespace Deliverix.Wpf.Distribuidores
                         if (Application.Current.Windows.OfType<Main>().Any())
                         {
                             Application.Current.Windows.OfType<Main>().First().Activate();
+                            InitializeComponent();
+                            HabilitaBotones();
                         }
                         else
                         {

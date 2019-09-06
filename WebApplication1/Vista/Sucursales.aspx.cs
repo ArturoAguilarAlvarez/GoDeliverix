@@ -1068,7 +1068,7 @@ namespace WebApplication1.Vista
                 MVTarifario.ListaDeTarifariosSeleccionados.Clear();
                 foreach (var item in MVContrato.ListaDeSucursalesEnContrato)
                 {
-                    MVTarifario.BuscarTarifario(TipoDeBusqueda:"Contrato", contrato: item.Uid.ToString());
+                    MVTarifario.BuscarTarifario(TipoDeBusqueda: "Contrato", contrato: item.Uid.ToString());
                 }
             }
             else //Si es por distribuidora solo por el uid trae los tarifarios
@@ -1143,7 +1143,7 @@ namespace WebApplication1.Vista
             }
             else
             {
-                MVSucursales.BuscarSucursales(Identificador, HA, HC, Colonia,  Uidempresa: Session["UidEmpresaSistema"].ToString());
+                MVSucursales.BuscarSucursales(Identificador, HA, HC, Colonia, Uidempresa: Session["UidEmpresaSistema"].ToString());
                 cargaGrid("Ampliada");
                 cargaGrid("Normal");
 
@@ -1197,7 +1197,7 @@ namespace WebApplication1.Vista
             chklColonias.DataSource = null;
             chklColonias.DataBind();
             //Limpia los telefonos 
-            MVTelefono.ListaDeTelefonos.Clear();
+            MVTelefono.ListaDeTelefonos = new List<VMTelefono>();
             //Limpia catalogos
             MVCategoria.LISTADECATEGORIASELECIONADA.Clear();
             MVGiro.LISTADEGIROSELECCIONADO.Clear();
@@ -2660,7 +2660,7 @@ namespace WebApplication1.Vista
 
         protected void GuardaTelefono()
         {
-            MVTelefono.AgregaTelefonoALista(DDLDTipoDETelefono.SelectedItem.Value.ToString(),  txtDTelefono.Text, DDLDTipoDETelefono.SelectedItem.Text.ToString());
+            MVTelefono.AgregaTelefonoALista(DDLDTipoDETelefono.SelectedItem.Value.ToString(), txtDTelefono.Text, DDLDTipoDETelefono.SelectedItem.Text.ToString());
 
             DDLDTipoDETelefono.SelectedIndex = -1;
             txtDTelefono.Text = string.Empty;
@@ -3734,16 +3734,15 @@ namespace WebApplication1.Vista
 
 
         #endregion
-
         #region Licencia
         protected void DgvLicencia_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-           
+
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
                 e.Row.Attributes["onclick"] = Page.ClientScript.GetPostBackClientHyperlink(DgvLicencia, "Select$" + e.Row.RowIndex);
                 //Iconos
-                Label lblEstatus = e.Row.FindControl("lblEstatus") as Label;                
+                Label lblEstatus = e.Row.FindControl("lblEstatus") as Label;
                 lblEstatus.Attributes.Add("data-placement", "bottom");
                 lblEstatus.Attributes.Add("data-toggle", "tooltip");
 
@@ -3754,15 +3753,15 @@ namespace WebApplication1.Vista
                 IconoEstatus.Attributes.Add("data-placement", "bottom");
                 IconoEstatus.Attributes.Add("data-toggle", "tooltip");
                 //Botones de acciones
-                LinkButton btnNuevo = e.Row.FindControl("btnNuevoLicencia") as LinkButton;
-                btnNuevo.Attributes.Add("data-placement", "bottom");
-                btnNuevo.Attributes.Add("data-toggle", "tooltip");
+                //LinkButton btnNuevo = e.Row.FindControl("btnNuevoLicencia") as LinkButton;
+                //btnNuevo.Attributes.Add("data-placement", "bottom");
+                //btnNuevo.Attributes.Add("data-toggle", "tooltip");
                 LinkButton btnModificar = e.Row.FindControl("btnModificarLicencia") as LinkButton;
                 btnModificar.Attributes.Add("data-placement", "bottom");
                 btnModificar.Attributes.Add("data-toggle", "tooltip");
-                LinkButton btnEliminar = e.Row.FindControl("btnEliminarLicencia") as LinkButton;
-                btnEliminar.Attributes.Add("data-placement", "bottom");
-                btnEliminar.Attributes.Add("data-toggle", "tooltip");
+                //LinkButton btnEliminar = e.Row.FindControl("btnEliminarLicencia") as LinkButton;
+                //btnEliminar.Attributes.Add("data-placement", "bottom");
+                //btnEliminar.Attributes.Add("data-toggle", "tooltip");
                 LinkButton btnRenovar = e.Row.FindControl("btnRenovarLicencia") as LinkButton;
                 btnRenovar.Attributes.Add("data-placement", "bottom");
                 btnRenovar.Attributes.Add("data-toggle", "tooltip");
@@ -3777,35 +3776,35 @@ namespace WebApplication1.Vista
 
 
                 //Estilos para el boton de estatus 
-                if (e.Row.Cells[7].Text == "0")
+                if (e.Row.Cells[6].Text == "0")
                 {
                     btnestatus.CssClass = "btn btn-sm btn-danger disabled";
                     btnestatus.ToolTip = "Desactivar";
                 }
-                if (e.Row.Cells[7].Text == "1")
+                if (e.Row.Cells[6].Text == "1")
                 {
                     btnestatus.CssClass = "btn btn-sm btn-info disabled";
                     btnestatus.ToolTip = " Activar";
                 }
-                if (e.Row.Cells[5].Text == "True")
+                if (e.Row.Cells[7].Text == "True")
                 {
                     lblDisponibilidad.CssClass = "glyphicon glyphicon-ban-circle";
                     lblDisponibilidad.ToolTip = "No disponible";
                 }
-                if (e.Row.Cells[5].Text == "False")
+                if (e.Row.Cells[7].Text == "False")
                 {
                     lblDisponibilidad.CssClass = "glyphicon glyphicon-record";
                     lblDisponibilidad.ToolTip = "Disponible";
                 }
 
                 //Estilos para la modificacion del icono de estatus del boton de acciones y el icono en la columna
-                if (e.Row.Cells[7].Text == "1")
+                if (e.Row.Cells[6].Text == "1")
                 {
                     lblEstatus.CssClass = "glyphicon glyphicon-ok-sign";
                     lblEstatus.ToolTip = "Activo";
                     IconoEstatus.CssClass = "glyphicon glyphicon-remove";
                 }
-                if (e.Row.Cells[7].Text == "0")
+                if (e.Row.Cells[6].Text == "0")
                 {
                     lblEstatus.CssClass = "glyphicon glyphicon-remove-sign";
                     lblEstatus.ToolTip = "Inactivo";
@@ -3815,25 +3814,25 @@ namespace WebApplication1.Vista
                 if (DgvLicencia.SelectedIndex != e.Row.RowIndex)
                 {
                     //Deshabilita los botones 
-                    btnNuevo.Enabled = false;
+                    //btnNuevo.Enabled = false;
                     btnModificar.Enabled = false;
                     btnestatus.Enabled = false;
-                    btnEliminar.Enabled = false;
+                    //btnEliminar.Enabled = false;
                     btnRenovar.Enabled = false;
                     txtIdentificador.Enabled = false;
                     //Estilos de css para los botones
-                    btnNuevo.CssClass = "btn btn-sm btn-success  disabled";
+                    //btnNuevo.CssClass = "btn btn-sm btn-success  disabled";
                     btnModificar.CssClass = "btn btn-sm disabled";
-                    btnEliminar.CssClass = "btn btn-sm btn-danger disabled";
+                    //btnEliminar.CssClass = "btn btn-sm btn-danger disabled";
                     btnRenovar.CssClass = "btn btn-sm btn-warning disabled";
 
                     //El boton estatus cambia de color dependiendo el estatus de la licencia
-                    if (e.Row.Cells[7].Text == "1")
+                    if (e.Row.Cells[6].Text == "1")
                     {
                         btnestatus.CssClass = "btn btn-sm btn-danger disabled";
                         btnestatus.ToolTip = "Activar";
                     }
-                    if (e.Row.Cells[7].Text == "0")
+                    if (e.Row.Cells[6].Text == "0")
                     {
                         btnestatus.CssClass = "btn btn-sm btn-info disabled";
                         btnestatus.ToolTip = "Desactivar";
@@ -3847,32 +3846,32 @@ namespace WebApplication1.Vista
                         txtIdentificadorEdicion.Enabled = false;
                     }
                     //El boton estatus cambia de color dependiendo el estatus de la licencia
-                    if (e.Row.Cells[7].Text == "1")
+                    if (e.Row.Cells[6].Text == "1")
                     {
                         btnestatus.CssClass = "btn btn-sm btn-danger";
                         btnestatus.ToolTip = "Activar";
                     }
-                    if (e.Row.Cells[7].Text == "0")
+                    if (e.Row.Cells[6].Text == "0")
                     {
                         btnestatus.CssClass = "btn btn-sm btn-info";
                         btnestatus.ToolTip = "Desactivar";
                     }
                 }
-
+                //Muestra los botones dinamicos en el gridview con una fila y varias
                 if ((MVLicencia.ListaDeLicencias.Count - 1) == e.Row.RowIndex)
                 {
-                    btnNuevo.Visible = true;
-                    btnModificar.Visible = false;
-                    btnestatus.Visible = false;
-                    btnEliminar.Visible = false;
-                    btnRenovar.Visible = false;
+                    //btnNuevo.Visible = true;
+                    btnModificar.Visible = true;
+                    btnestatus.Visible = true;
+                    //btnEliminar.Visible = false;
+                    btnRenovar.Visible = true;
                 }
                 else
                 {
-                    btnNuevo.Visible = false;
+                    //btnNuevo.Visible = false;
                     btnModificar.Visible = true;
                     btnestatus.Visible = true;
-                    btnEliminar.Visible = true;
+                    //btnEliminar.Visible = true;
                     btnRenovar.Visible = true;
                 }
 
@@ -3928,7 +3927,7 @@ namespace WebApplication1.Vista
                         DgvLicencia.DataSource = MVLicencia.ListaDeLicencias;
                         DgvLicencia.DataBind();
                         //Obtiene los botones de la fila y los desaparece
-                        LinkButton Eliminar = DgvLicencia.Rows[index].FindControl("btnEliminarLicencia") as LinkButton;
+                        //LinkButton Eliminar = DgvLicencia.Rows[index].FindControl("btnEliminarLicencia") as LinkButton;
                         LinkButton btnAceptar = DgvLicencia.Rows[index].FindControl("btnAceptarLicencia") as LinkButton;
                         LinkButton btnCancelar = DgvLicencia.Rows[index].FindControl("btnCancelarLicencia") as LinkButton;
                         LinkButton btnModificar = DgvLicencia.Rows[index].FindControl("btnModificarLicencia") as LinkButton;
@@ -3942,12 +3941,12 @@ namespace WebApplication1.Vista
                         btnCancelar.Visible = true;
 
 
-                        Eliminar.Enabled = false;
+                        //Eliminar.Enabled = false;
                         btnRenovar.Enabled = false;
                         btnestatus.Enabled = false;
 
                         btnestatus.CssClass = btnestatus.CssClass + " disabled";
-                        Eliminar.CssClass = Eliminar.CssClass + " disabled";
+                        //Eliminar.CssClass = Eliminar.CssClass + " disabled";
                         btnRenovar.CssClass = btnRenovar.CssClass + " disabled";
 
                     }
@@ -3994,38 +3993,37 @@ namespace WebApplication1.Vista
         protected void DgvLicencia_RowUpdating(object sender, GridViewUpdateEventArgs e)
         {
             //Encuentra los botones
-            LinkButton Eliminar = DgvLicencia.Rows[e.RowIndex].FindControl("btnEliminarLicencia") as LinkButton;
+            //LinkButton Eliminar = DgvLicencia.Rows[e.RowIndex].FindControl("btnEliminarLicencia") as LinkButton;
             LinkButton Edita = DgvLicencia.Rows[e.RowIndex].FindControl("btnModificarLicencia") as LinkButton;
-            LinkButton Nuevo = DgvLicencia.Rows[e.RowIndex].FindControl("btnNuevoLicencia") as LinkButton;
+            //LinkButton Nuevo = DgvLicencia.Rows[e.RowIndex].FindControl("btnNuevoLicencia") as LinkButton;
             LinkButton btnAceptar = DgvLicencia.Rows[e.RowIndex].FindControl("btnAceptarLicencia") as LinkButton;
             LinkButton btnCancelar = DgvLicencia.Rows[e.RowIndex].FindControl("btnCancelarLicencia") as LinkButton;
             LinkButton Renova = DgvLicencia.Rows[e.RowIndex].FindControl("btnRenovarLicencia") as LinkButton;
             TextBox txtIdentificador = DgvLicencia.Rows[e.RowIndex].FindControl("txtIdentificador") as TextBox;
             Guid Sucursal = new Guid(txtUidSucursal.Text);
             //Agrega a lista
-            if (Nuevo.Visible)
-            {
+            //if (Nuevo.Visible)
+            //{
+            //    if (!string.IsNullOrWhiteSpace(txtIdentificador.Text))
+            //    {
+            //        Guid UidLicencia = new Guid(DgvLicencia.DataKeys[e.RowIndex].Value.ToString());
+            //        if (UidLicencia == Guid.Empty)
+            //        {
+            //            UidLicencia = Guid.NewGuid();
+            //        }
+            //        MVLicencia.AgregaLicenciaALista(Sucursal, UidLicencia, txtIdentificador.Text);
+            //        DgvLicencia.EditIndex = -1;
+            //        DgvLicencia.SelectedIndex = -1;
+            //        cargaGrid("Licencia");
 
-                if (!string.IsNullOrWhiteSpace(txtIdentificador.Text))
-                {
-                    Guid UidLicencia = new Guid(DgvLicencia.DataKeys[e.RowIndex].Value.ToString());
-                    if (UidLicencia == Guid.Empty)
-                    {
-                        UidLicencia = Guid.NewGuid();
-                    }
-                    MVLicencia.AgregaLicenciaALista(Sucursal, UidLicencia, txtIdentificador.Text);
-                    DgvLicencia.EditIndex = -1;
-                    DgvLicencia.SelectedIndex = -1;
-                    cargaGrid("Licencia");
+            //    }
+            //    else
+            //    {
+            //        txtIdentificador.BorderColor = Color.Red;
+            //        txtIdentificador.ToolTip = "Campo Requerido";
 
-                }
-                else
-                {
-                    txtIdentificador.BorderColor = Color.Red;
-                    txtIdentificador.ToolTip = "Campo Requerido";
-
-                }
-            }
+            //    }
+            //}
             //Modifica
             if (Edita.Enabled && Edita.Visible)
             {
@@ -4034,24 +4032,22 @@ namespace WebApplication1.Vista
                 DgvLicencia.EditIndex = -1;
                 DgvLicencia.SelectedIndex = -1;
                 cargaGrid("Licencia");
-
             }
             //Elimina
-            if (Eliminar.Enabled && Eliminar.Visible)
-            {
-                Guid UidLicencia = new Guid(DgvLicencia.DataKeys[e.RowIndex].Value.ToString());
-                MVLicencia.EliminaLicencia(UidLicencia);
-                DgvLicencia.EditIndex = -1;
-                DgvLicencia.SelectedIndex = -1;
-                cargaGrid("Licencia");
-            }
+            //if (Eliminar.Enabled && Eliminar.Visible)
+            //{
+            //    Guid UidLicencia = new Guid(DgvLicencia.DataKeys[e.RowIndex].Value.ToString());
+            //    MVLicencia.EliminaLicencia(UidLicencia);
+            //    DgvLicencia.EditIndex = -1;
+            //    DgvLicencia.SelectedIndex = -1;
+            //    cargaGrid("Licencia");
+            //}
             if (Renova.Enabled && Renova.Visible)
             {
                 Guid UidLicencia = new Guid(DgvLicencia.DataKeys[e.RowIndex].Value.ToString());
                 MVLicencia.ActualizaDisponibilidadLicenciaSucursal(UidLicencia);
                 cargaGrid("Licencia");
             }
-
         }
 
         protected void btnNuevoLicencia_Click(object sender, EventArgs e)
@@ -4189,14 +4185,14 @@ namespace WebApplication1.Vista
         {
             int index = DgvLicencia.SelectedIndex;
             cargaGrid("Licencia");
-            LinkButton Eliminar = DgvLicencia.Rows[index].FindControl("btnEliminarLicencia") as LinkButton;
+            //LinkButton Eliminar = DgvLicencia.Rows[index].FindControl("btnEliminarLicencia") as LinkButton;
             LinkButton Renova = DgvLicencia.Rows[index].FindControl("btnRenovarLicencia") as LinkButton;
             LinkButton Edita = DgvLicencia.Rows[index].FindControl("btnModificarLicencia") as LinkButton;
             LinkButton Nuevo = DgvLicencia.Rows[index].FindControl("btnNuevoLicencia") as LinkButton;
             LinkButton btnAceptar = DgvLicencia.Rows[index].FindControl("btnAceptarLicencia") as LinkButton;
             LinkButton btnCancelar = DgvLicencia.Rows[index].FindControl("btnCancelarLicencia") as LinkButton;
 
-            Eliminar.Enabled = false;
+            //Eliminar.Enabled = false;
             Edita.Enabled = false;
             Renova.Enabled = true;
 
@@ -4205,7 +4201,7 @@ namespace WebApplication1.Vista
 
             Edita.CssClass = Edita.CssClass + " disabled";
 
-            Eliminar.CssClass = Eliminar.CssClass + " disabled";
+            //Eliminar.CssClass = Eliminar.CssClass + " disabled";
 
 
         }

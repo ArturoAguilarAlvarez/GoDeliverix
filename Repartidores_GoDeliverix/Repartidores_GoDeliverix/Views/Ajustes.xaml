@@ -78,9 +78,7 @@
                         </ListView.ItemTemplate>
                     </ListView>
                     <ImageButton Source="FlecaAgregarDireccion.png" BackgroundColor="Green" HorizontalOptions="End" Command="{Binding AddNumber}" VerticalOptions="EndAndExpand" BorderColor="White" BorderWidth="5" Margin="10" CornerRadius="40" HeightRequest="80" WidthRequest="80" ></ImageButton>
-
                 </StackLayout>
-
             </StackLayout>
         </Grid>
     </ContentPage.Content>

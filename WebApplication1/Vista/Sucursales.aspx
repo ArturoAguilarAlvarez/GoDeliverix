@@ -368,14 +368,14 @@
                                                 </asp:TemplateField>
                                                 <asp:BoundField DataField="BLUso" ItemStyle-CssClass="hide" HeaderStyle-CssClass="hide" />
                                                 <%-- Boton de nuevo --%>
-                                                <asp:TemplateField>
+                                                <%--<asp:TemplateField>
                                                     <ItemStyle CssClass="text-center" />
                                                     <ItemTemplate>
                                                         <asp:LinkButton ID="btnNuevoLicencia" OnClick="btnNuevoLicencia_Click" CssClass="btn btn-sm btn-success" ToolTip="Agregar" runat="server">
                                                             <span class="glyphicon glyphicon-plus"></span>
                                                         </asp:LinkButton>
                                                     </ItemTemplate>
-                                                </asp:TemplateField>
+                                                </asp:TemplateField>--%>
                                                 <asp:BoundField DataField="UidEstatus" ItemStyle-CssClass="hide" HeaderStyle-CssClass="hide" HeaderText="Estatus" />
 
                                                 <asp:BoundField DataField="BLUso" ItemStyle-CssClass="hide" HeaderStyle-CssClass="hide" HeaderText="Disponibilidad" />
@@ -396,14 +396,15 @@
                                                         </asp:LinkButton>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <%-- Boton eliminar --%><asp:TemplateField>
+                                                <%-- Boton eliminar --%>
+                                               <%-- <asp:TemplateField>
                                                     <ItemStyle CssClass="text-center" />
                                                     <ItemTemplate>
                                                         <asp:LinkButton ID="btnEliminarLicencia" CssClass="btn btn-sm btn-danger" ToolTip="Eliminar" CommandName="Delete" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" runat="server">
                                                             <span class="glyphicon glyphicon-trash"></span>
                                                         </asp:LinkButton>
                                                     </ItemTemplate>
-                                                </asp:TemplateField>
+                                                </asp:TemplateField>--%>
                                                 <%-- Boton para renovar --%><asp:TemplateField>
                                                     <ItemStyle CssClass="text-center" />
                                                     <ItemTemplate>
@@ -1014,7 +1015,6 @@
                                     <script>
                                         function MandaInformacionACampos(Identificador) {
                                             var txt = document.getElementById(Identificador);
-
                                         }
                                     </script>
                                     <%--<style type="text/css">
@@ -1115,8 +1115,6 @@
 
                             <%-- Panel de contrato --%>
                             <asp:Panel ID="PanelDeContrato" runat="server">
-
-
                                 <%--Panel de informacion de suscursal--%>
                                 <asp:Panel CssClass="well well-lg col-md-8 col-sm-8 col-xs-8" ID="PanelDeInformacion" Style="margin-bottom: 30px; -webkit-box-shadow: 10px 10px 61px 5px rgba(0,0,0,0.70); -moz-box-shadow: 10px 10px 61px 5px rgba(0,0,0,0.75); box-shadow: 10px 10px 61px 5px rgba(0,0,0,0.75); z-index: 1; position: absolute;" runat="server">
                                     <asp:Label CssClass="hidden" ID="lblIndexContrato" runat="server" />
@@ -1124,7 +1122,6 @@
 
                                         <span class="glyphicon glyphicon-info-sign"></span>
                                         <asp:Label ID="lblMensajeContrato" Text="Mensaje del sistema" Font-Size="Large" runat="server" />
-
 
                                         <asp:LinkButton ID="btnCancelarCambiosSustituirColonia" OnClick="btnCancelarCambiosSustituirColonia_Click" CssClass="btn btn-sm btn-danger" ForeColor="White" runat="server">
                             <span class="glyphicon glyphicon-remove"></span>

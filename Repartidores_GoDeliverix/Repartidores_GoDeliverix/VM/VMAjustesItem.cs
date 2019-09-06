@@ -14,7 +14,6 @@ namespace Repartidores_GoDeliverix.VM
 {
     public class VMAjustesItem
     {
-        ResponseHelper oWebApiResponse;
         public string Titulo { get; set; }
         public string Detalles { get; set; }
         public string StrRuta { get; set; }

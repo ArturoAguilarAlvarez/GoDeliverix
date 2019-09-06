@@ -312,7 +312,7 @@ namespace Deliverix.Wpf.Distribuidores
                     }
                 }
             }
-            catch (Exception z) { }
+            catch (Exception) { }
             finally
             {
                 conn.Close();
