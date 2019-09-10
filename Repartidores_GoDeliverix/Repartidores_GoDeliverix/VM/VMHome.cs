@@ -406,12 +406,14 @@ namespace Repartidores_GoDeliverix.VM
         public VMHome()
         {
             //Verifica();
-            Timer tiempo = new Timer();
-            tiempo.Interval = 6000;
-            //enlazas un metodo al evento elapsed que es el que se ejecutara
-            //cada vez que el intervalo de tiempo se cumpla
-            tiempo.Elapsed += new ElapsedEventHandler(VerificaOrden);
-            tiempo.Start();
+            //Timer tiempo = new Timer();
+            //tiempo.Interval = 60000;
+            ////enlazas un metodo al evento elapsed que es el que se ejecutara
+            ////cada vez que el intervalo de tiempo se cumpla
+            //tiempo.Elapsed += new ElapsedEventHandler(VerificaOrden);
+            //tiempo.Start();
+
+            Verifica();
         }
         private void VerificaOrden(object sender, ElapsedEventArgs e)
         {
@@ -422,31 +424,196 @@ namespace Repartidores_GoDeliverix.VM
         {
             try
             {
-
-                //_WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
                 var AppInstance = MainViewModel.GetInstance();
                 MVDireccion = new VMDireccion();
                 MVUbicacion = new VMUbicacion();
                 StrUbicacionCliente = string.Empty;
                 StrUbicacionSucursal = string.Empty;
-
+                string url = string.Empty;
                 IsLoading = true;
-                url = "https://www.godeliverix.net/api/Orden/GetBuscarOrdenAsiganadaRepartidor?UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor + "";
-                string content = await _WebApiGoDeliverix.GetStringAsync(url);
-                var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(obj);
+                Guid uidUsuario = AppInstance.Session_.UidUsuario;
+                var Consulta = url = "https://www.godeliverix.net/api/Profile/GetObtenerUltimoEstatusBitacoraRepartidor?UidUsuario=" + AppInstance.Session_.UidUsuario + "";
+                var Consulta2 = "https://www.godeliverix.net/api/Turno/GetConsultaUltimoTurno?UidUsuario=" + uidUsuario + "";
+                string UltimoAcceso = string.Empty;
+                using (var _webApi = new HttpClient())
+                {
+                    string content = await _webApi.GetStringAsync(Consulta);
+                    UltimoAcceso = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                }
 
-                string UltimoAcceso = await ObtenerEstatusDelRepartidor(AppInstance.Session_.UidUsuario); obj.ToString();
                 if (UltimoAcceso.ToUpper() == "AAD35D44-5E65-46B6-964F-CD2DF026ECB1")
                 {
                     Application.Current.MainPage = new NavigationPage(new Login());
                 }
                 else
+                {
+                    using (var _webApi = new HttpClient())
+                    {
+                        string datos = await _webApi.GetStringAsync(Consulta2);
+                        var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
+                        MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
+                    }
 
-                    await CargaTurnoRepartidor(AppInstance.Session_.UidUsuario);
+                    if (MVTurno.DtmHoraFin == DateTime.Parse("01/01/0001 12:00:00 a. m.") && MVTurno.DtmHoraInicio != DateTime.Parse("01/01/0001 12:00:00 a. m."))
+                    {
+
+                        using (var _webApi = new HttpClient())
+                        {
+                            url = "https://www.godeliverix.net/api/Orden/GetBuscarOrdenAsiganadaRepartidor?UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor + "";
+                            string content = await _webApi.GetStringAsync(url);
+                            string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                            MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(obj);
+                        }
+
+                        Guid UidEstatusTurno = await ObtenUltimoEstatusDelTurno(uidUsuario);
+                        if (UidEstatusTurno == new Guid("AE28F243-AA0D-43BD-BF10-124256B75B00"))
+                        {
+                            Texto = "Debes liquidar para recibir ordenes";
+                            BlSinAsignar = true;
+                            BlNuevaOrden = false;
+                            BlRecolecta = false;
+                            BlEntrega = false;
+                        }
+                        else
+                        {
+                            if (MVOrden.Uidorden == Guid.Empty)
+                            {
+                                Texto = "Esperando orden";
+                                BlSinAsignar = true;
+                                BlNuevaOrden = false;
+                                BlRecolecta = false;
+                                BlEntrega = false;
+                            }
+                            else
+                            {
+                                UidOrden = MVOrden.Uidorden;
+                                UidOrdenTarifario = MVOrden.UidOrdenTarifario;
+                                UidordenRepartidor = MVOrden.UidordenRepartidor;
+                                UidDireccionCliente = MVOrden.UidDireccionCliente;
+                                UidSucursal = MVOrden.UidSucursal;
+                                UidOrdenSucursal = MVOrden.UidOrdenSucursal;
+                                LngFolio = MVOrden.LNGFolio;
+                                StrIdentificador = MVOrden.StrNombreSucursal;
+
+                                //Obtiene el estatus de al orden asignada al repartidor, aqui tambien se pueden controlar los demas tipos de estatus
+                                UidEstatus = new Guid(MVOrden.StrEstatusOrdenRepartidor);
+                                //Cancelado
+                                if (UidEstatus.ToString().ToUpper() == "12748F8A-E746-427D-8836-B54432A38C07")
+                                {
+                                    BlSinAsignar = true;
+                                    BlNuevaOrden = false;
+                                    BlRecolecta = false;
+                                    BlEntrega = false;
+
+                                }
+                                else//Orden pendiente
+                                if (UidEstatus.ToString().ToUpper() == "6294DACE-C9D1-4F9F-A942-FF12B6E7E957")
+                                {
+                                    BlSinAsignar = false;
+                                    BlNuevaOrden = true;
+                                    BlRecolecta = false;
+                                    BlEntrega = false;
+                                    using (var _webApi = new HttpClient())
+                                    {
+                                        url = "https://www.godeliverix.net/api/Ubicacion/GetRecuperaUbicacionSucursal?UidSucursal=" + UidSucursal + "";
+                                        string content = await _webApi.GetStringAsync(url);
+                                        string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                                        MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
+                                    }
 
 
-                IsLoading = false;
+                                    StrUbicacionSucursal = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
+                                    using (var _webApi = new HttpClient())
+                                    {
+                                        url = "https://www.godeliverix.net/api/Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
+                                        string content = await _webApi.GetStringAsync(url);
+                                        string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                                        MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
+                                    }
+                                    StrUbicacionCliente = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
+                                }
+                                else
+                                //Orden Confirmada
+                                if (UidEstatus.ToString().ToUpper() == "A42B2588-D650-4DD9-829D-5978C927E2ED")
+                                {
+                                    if (MVOrden.StrEstatusOrdenGeneral.ToUpper() == "B6BFC834-7CC4-4E67-817D-5ECB0EB2FFA7")
+                                    {
+                                        using (var _webApi = new HttpClient())
+                                        {
+                                            url = "https://www.godeliverix.net/api/Profile/GetBitacoraRegistroRepartidores?StrParametro=O&UidUsuario=" + uidUsuario + "&UidEstatus=B6791F2C-FA16-40C6-B5F5-123232773612&UidOrdenRepartidor=" + UidordenRepartidor + "";
+                                            await _webApi.GetAsync(url);
+                                        }
+
+                                        BlSinAsignar = false;
+                                        BlNuevaOrden = false;
+                                        BlRecolecta = false;
+                                        BlEntrega = true;
+                                        using (var _webApi = new HttpClient())
+                                        {
+                                            url = "https://www.godeliverix.net/api/Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
+                                            string content = await _webApi.GetStringAsync(url);
+                                            string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                                            MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
+                                        }
+                                        StrUbicacionCliente = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
+                                    }
+                                    else
+                                    {
+                                        BlSinAsignar = false;
+                                        BlNuevaOrden = false;
+                                        BlRecolecta = true;
+                                        BlEntrega = false;
+                                        using (var _webApi = new HttpClient())
+                                        {
+                                            url = "https://www.godeliverix.net/api/Ubicacion/GetRecuperaUbicacionSucursal?UidSucursal=" + UidSucursal + "";
+                                            string content = await _webApi.GetStringAsync(url);
+                                            string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                                            MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
+                                        }
+
+                                        StrUbicacionSucursal = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
+                                    }
+                                }
+                                else
+                                //Entrega
+                                if (UidEstatus.ToString().ToUpper() == "B6791F2C-FA16-40C6-B5F5-123232773612")
+                                {
+                                    BlSinAsignar = false;
+                                    BlNuevaOrden = false;
+                                    BlRecolecta = false;
+                                    BlEntrega = true;
+                                    using (var _webApi = new HttpClient())
+                                    {
+                                        url = "https://www.godeliverix.net/api/Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
+                                        string content = await _webApi.GetStringAsync(url);
+                                        string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                                        MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
+                                    }
+
+                                    StrUbicacionCliente = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
+                                }
+                                else
+                                {
+                                    BlSinAsignar = true;
+                                    BlNuevaOrden = false;
+                                    BlRecolecta = false;
+                                    BlEntrega = false;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Texto = "Inicia turno para recibir ordenes";
+                        BlSinAsignar = true;
+                        BlNuevaOrden = false;
+                        BlRecolecta = false;
+                        BlEntrega = false;
+                    }
+
+                    IsLoading = false;
+                }
+
             }
             catch (Exception)
             {
@@ -454,165 +621,15 @@ namespace Repartidores_GoDeliverix.VM
             }
         }
 
-        private async Task CargaTurnoRepartidor(Guid uidUsuario)
-        {
-            url = "https://www.godeliverix.net/api/Turno/GetConsultaUltimoTurno?UidUsuario=" + uidUsuario + "";
-            var datos = await _WebApiGoDeliverix.GetStringAsync(url);
-            string obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
-            MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
-
-            if (MVTurno.DtmHoraFin == DateTime.Parse("01/01/0001 12:00:00 a. m.") && MVTurno.DtmHoraInicio != DateTime.Parse("01/01/0001 12:00:00 a. m."))
-            {
-
-                Guid UidEstatusTurno = await ObtenUltimoEstatusDelTurno(uidUsuario);
-
-                if (UidEstatusTurno == new Guid("AE28F243-AA0D-43BD-BF10-124256B75B00"))
-                {
-                    Texto = "Debes liquidar para recibir ordenes";
-                    BlSinAsignar = true;
-                    BlNuevaOrden = false;
-                    BlRecolecta = false;
-                    BlEntrega = false;
-                }
-                else
-                {
-                    if (MVOrden.Uidorden == Guid.Empty)
-                    {
-                        Texto = "Esperando orden";
-                        BlSinAsignar = true;
-                        BlNuevaOrden = false;
-                        BlRecolecta = false;
-                        BlEntrega = false;
-                    }
-                    else
-                    {
-                        UidOrden = MVOrden.Uidorden;
-                        UidOrdenTarifario = MVOrden.UidOrdenTarifario;
-                        UidordenRepartidor = MVOrden.UidordenRepartidor;
-                        UidDireccionCliente = MVOrden.UidDireccionCliente;
-                        UidSucursal = MVOrden.UidSucursal;
-                        UidOrdenSucursal = MVOrden.UidOrdenSucursal;
-                        LngFolio = MVOrden.LNGFolio;
-                        StrIdentificador = MVOrden.StrNombreSucursal;
-
-                        //Obtiene el estatus de al orden asignada al repartidor, aqui tambien se pueden controlar los demas tipos de estatus
-                        UidEstatus = new Guid(MVOrden.StrEstatusOrdenRepartidor);
-                        //Cancelado
-                        if (UidEstatus.ToString().ToUpper() == "12748F8A-E746-427D-8836-B54432A38C07")
-                        {
-                            BlSinAsignar = true;
-                            BlNuevaOrden = false;
-                            BlRecolecta = false;
-                            BlEntrega = false;
-
-                        }
-                        else//Orden pendiente
-                        if (UidEstatus.ToString().ToUpper() == "6294DACE-C9D1-4F9F-A942-FF12B6E7E957")
-                        {
-                            BlSinAsignar = false;
-                            BlNuevaOrden = true;
-                            BlRecolecta = false;
-                            BlEntrega = false;
-
-                            url = "https://www.godeliverix.net/api/Ubicacion/GetRecuperaUbicacionSucursal?UidSucursal=" + UidSucursal + "";
-                            string content = await _WebApiGoDeliverix.GetStringAsync(url);
-                            obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                            MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
-
-                            StrUbicacionSucursal = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
-
-                            url = "https://www.godeliverix.net/api/Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
-                            content = await _WebApiGoDeliverix.GetStringAsync(url);
-                            obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                            MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
-
-                            StrUbicacionCliente = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
-
-                        }
-                        else
-                        //Orden Confirmada
-                        if (UidEstatus.ToString().ToUpper() == "A42B2588-D650-4DD9-829D-5978C927E2ED")
-                        {
-                            if (MVOrden.StrEstatusOrdenGeneral.ToUpper() == "B6BFC834-7CC4-4E67-817D-5ECB0EB2FFA7")
-                            {
-                                url = "https://www.godeliverix.net/api/Profile/GetBitacoraRegistroRepartidores?StrParametro=O&UidUsuario=" + uidUsuario + "&UidEstatus=B6791F2C-FA16-40C6-B5F5-123232773612&UidOrdenRepartidor=" + UidordenRepartidor + "";
-                                await _WebApiGoDeliverix.GetAsync(url);
-
-                                BlSinAsignar = false;
-                                BlNuevaOrden = false;
-                                BlRecolecta = false;
-                                BlEntrega = true;
-
-                                url = "https://www.godeliverix.net/api/Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
-                                string content = await _WebApiGoDeliverix.GetStringAsync(url);
-                                obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                                MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
-
-                                StrUbicacionCliente = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
-                            }
-                            else
-                            {
-                                BlSinAsignar = false;
-                                BlNuevaOrden = false;
-                                BlRecolecta = true;
-                                BlEntrega = false;
-
-                                url = "https://www.godeliverix.net/api/Ubicacion/GetRecuperaUbicacionSucursal?UidSucursal=" + UidSucursal + "";
-                                string content = await _WebApiGoDeliverix.GetStringAsync(url);
-                                obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                                MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
-
-                                StrUbicacionSucursal = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
-                            }
-                        }
-                        else
-                        //Entrega
-                        if (UidEstatus.ToString().ToUpper() == "B6791F2C-FA16-40C6-B5F5-123232773612")
-                        {
-                            BlSinAsignar = false;
-                            BlNuevaOrden = false;
-                            BlRecolecta = false;
-                            BlEntrega = true;
-
-                            url = "https://www.godeliverix.net/api/Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
-                            string content = await _WebApiGoDeliverix.GetStringAsync(url);
-                            obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                            MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
-
-                            StrUbicacionCliente = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
-                        }
-                        else
-                        {
-                            BlSinAsignar = true;
-                            BlNuevaOrden = false;
-                            BlRecolecta = false;
-                            BlEntrega = false;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                Texto = "Inicia turno para recibir ordenes";
-                BlSinAsignar = true;
-                BlNuevaOrden = false;
-                BlRecolecta = false;
-                BlEntrega = false;
-            }
-        }
-
-        private async Task<string> ObtenerEstatusDelRepartidor(Guid uidUsuario)
-        {
-            string url = "https://www.godeliverix.net/api/Profile/GetObtenerUltimoEstatusBitacoraRepartidor?UidUsuario=" + uidUsuario + "";
-            string content = await _WebApiGoDeliverix.GetStringAsync(url);
-            return JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-        }
-
         private async Task<Guid> ObtenUltimoEstatusDelTurno(Guid UidUsuario)
         {
-            string url = "https://www.godeliverix.net/api/Turno/GetConsultaEstatusUltimoTurnoRepartidor?UidUsuario=" + UidUsuario + "";
-            string datos = await _WebApiGoDeliverix.GetStringAsync(url);
-            var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
+            string obj = "";
+            using (var _WebApi = new HttpClient())
+            {
+                string url = "https://www.godeliverix.net/api/Turno/GetConsultaEstatusUltimoTurnoRepartidor?UidUsuario=" + UidUsuario + "";
+                string datos = await _WebApiGoDeliverix.GetStringAsync(url);
+                obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
+            }
             return new Guid(obj);
         }
 

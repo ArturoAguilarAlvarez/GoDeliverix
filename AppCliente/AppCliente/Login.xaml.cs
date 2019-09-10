@@ -87,9 +87,12 @@ namespace AppCliente
                 acLogin.IsRunning = true;
                 acLogin.IsVisible = true;
                 string url = "http://www.godeliverix.net/api/Profile/GET?Usuario=" + Usuario + "&Contrasena=" + Contrasena;
+                var content = new HttpResponseMessage;
+                using (HttpClient _client = new HttpClient())
+                {
+                    content = await _client.GetAsync(url);
+                };
 
-                HttpClient _client = new HttpClient();
-                var content = await _client.GetAsync(url);
 
                 if (content.IsSuccessStatusCode)
                 {
@@ -104,8 +107,13 @@ namespace AppCliente
                 }
                 if (_acceso)
                 {
-                    var tex = "http://www.godeliverix.net/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + _id;
-                    string strDirecciones = await _client.GetStringAsync(tex);
+                    string strDirecciones = string.Empty;
+                    using (HttpClient _client = new HttpClient())
+                    {
+                        var tex = "http://www.godeliverix.net/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + _id;
+                        strDirecciones = await _client.GetStringAsync(tex);
+                    }
+
                     if (content.IsSuccessStatusCode)
                     {
                         var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();

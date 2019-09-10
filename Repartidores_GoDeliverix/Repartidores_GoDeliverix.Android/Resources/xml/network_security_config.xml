@@ -1,10 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <network-security-config>
-  <trust-anchors>
-    <certificates src="system" />
-  </trust-anchors>
-  <domain-config cleartextTrafficPermitted="false">
+  <domain-config cleartextTrafficPermitted="True">
     <!-- Debug port -->
-    <domain includeSubdomains="true">godeliverix.net</domain>
+    <domain includeSubdomains="true">https://www.godeliverix.net</domain>
   </domain-config>
 </network-security-config>
