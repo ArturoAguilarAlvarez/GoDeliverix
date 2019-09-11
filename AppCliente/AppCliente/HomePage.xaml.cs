@@ -592,7 +592,7 @@ namespace AppCliente
             acloading.IsVisible = true;
             acloading.IsRunning = true;
             //_client.BaseAddress = new Uri("http://www.godeliverix.net/api/");
-            string _URL = "http://www.godeliverix.net/api/Giro/Get";
+            string _URL = "https://www.godeliverix.net/api/Giro/Get";
             var content = await _client.GetStringAsync(_URL);
             var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
             App.MVGiro = JsonConvert.DeserializeObject<VMGiro>(obj);
@@ -636,7 +636,7 @@ namespace AppCliente
 
                     IDDireccionBusqueda.Text = Colonia.ToString();
 
-                    _URL = "http://www.godeliverix.net/api/Categoria/Get?value=" + App.giro.ToString();
+                    _URL = "https://www.godeliverix.net/api/Categoria/Get?value=" + App.giro.ToString();
                     content = await _client.GetStringAsync(_URL);
                     obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                     App.MVCategoria = JsonConvert.DeserializeObject<VMCategoria>(obj);
@@ -645,12 +645,12 @@ namespace AppCliente
                     App.DireccionABuscar = App.MVDireccion.ListaDIRECCIONES[0].ID.ToString();
 
 
-                    _URL = "http://www.godeliverix.net/api/Producto/GetBuscarProductosCliente?StrParametroBusqueda=" + "Giro" + "&StrDia=" + Dia + "&UidDireccion=" + Direccion + "&UidBusquedaCategorias=" + App.giro + "&StrNombreEmpresa=";
+                    _URL = "https://www.godeliverix.net/api/Producto/GetBuscarProductosCliente?StrParametroBusqueda=" + "Giro" + "&StrDia=" + Dia + "&UidDireccion=" + Direccion + "&UidBusquedaCategorias=" + App.giro + "&StrNombreEmpresa=";
                     content = await _client.GetStringAsync(_URL);
                     obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                     App.MVProducto = JsonConvert.DeserializeObject<VMProducto>(obj);
 
-                    _URL = "http://www.godeliverix.net/api/Empresa/GetObtenerEmpresaCliente?StrParametroBusqueda=Giro&StrDia=" + Dia + "&UidDireccion=" + Direccion + "&UidBusquedaCategorias=" + App.giro;
+                    _URL = "https://www.godeliverix.net/api/Empresa/GetObtenerEmpresaCliente?StrParametroBusqueda=Giro&StrDia=" + Dia + "&UidDireccion=" + Direccion + "&UidBusquedaCategorias=" + App.giro;
                     content = await _client.GetStringAsync(_URL);
                     obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                     App.MVEmpresa = JsonConvert.DeserializeObject<VMEmpresas>(obj);
@@ -658,7 +658,7 @@ namespace AppCliente
                     //ArrayDatosProductos = JArray.Parse(DatosEmpresa.ToString());
                     foreach (var item in App.MVEmpresa.LISTADEEMPRESAS)
                     {
-                        item.StrRuta = "http://godeliverix.net/vista/" + (item.StrRuta.Substring(3));
+                        item.StrRuta = "https://godeliverix.net/vista/" + (item.StrRuta.Substring(3));
                     }
 
                     foreach (VMProducto item in AppCliente.App.MVProducto.ListaDeProductos)

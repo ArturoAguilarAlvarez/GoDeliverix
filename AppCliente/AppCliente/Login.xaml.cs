@@ -86,20 +86,16 @@ namespace AppCliente
             {
                 acLogin.IsRunning = true;
                 acLogin.IsVisible = true;
-                string url = "http://www.godeliverix.net/api/Profile/GET?Usuario=" + Usuario + "&Contrasena=" + Contrasena;
-                var content = new HttpResponseMessage;
+                string url = "https://www.godeliverix.net/api/Profile/GET?Usuario=" + Usuario + "&Contrasena=" + Contrasena;
+                string content = "";
                 using (HttpClient _client = new HttpClient())
                 {
-                    content = await _client.GetAsync(url);
+                    string contenido = await _client.GetStringAsync(url);
+                    content = JsonConvert.DeserializeObject<ResponseHelper>(contenido).Data.ToString();
                 };
 
+                _id = new Guid(content);
 
-                if (content.IsSuccessStatusCode)
-                {
-                    string res = await content.Content.ReadAsStringAsync();
-                    List<string> listaID = JsonConvert.DeserializeObject<List<string>>(res);
-                    _id = new Guid(listaID[0].ToString());
-                }
                 if (_id != Guid.Empty)
                 {
                     App.Global1 = _id.ToString();
@@ -110,29 +106,27 @@ namespace AppCliente
                     string strDirecciones = string.Empty;
                     using (HttpClient _client = new HttpClient())
                     {
-                        var tex = "http://www.godeliverix.net/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + _id;
+                        var tex = "https://www.godeliverix.net/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + _id;
                         strDirecciones = await _client.GetStringAsync(tex);
                     }
 
-                    if (content.IsSuccessStatusCode)
-                    {
-                        var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
-                        App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
+                    var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
+                    App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
 
-                        if (GuardarContraseña.IsToggled && string.IsNullOrEmpty(AppCliente.Helpers.Settings.UserName) && string.IsNullOrEmpty(AppCliente.Helpers.Settings.Password))
-                        {
-                            AppCliente.Helpers.Settings.UserName = txtUsuario.Text;
-                            AppCliente.Helpers.Settings.Password = txtIDContraseña.Text;
-                            Application.Current.MainPage = new MasterMenu();
-                            //await PopupNavigation.Instance.PopAsync();
-                        }
-                        else
-                        {
-                            Application.Current.MainPage = new MasterMenu();
-                            //await PopupNavigation.Instance.PopAsync();
-                        }
-                        Application.Current.Properties["IsLogged"] = true;
+                    if (GuardarContraseña.IsToggled && string.IsNullOrEmpty(AppCliente.Helpers.Settings.UserName) && string.IsNullOrEmpty(AppCliente.Helpers.Settings.Password))
+                    {
+                        AppCliente.Helpers.Settings.UserName = txtUsuario.Text;
+                        AppCliente.Helpers.Settings.Password = txtIDContraseña.Text;
+                        Application.Current.MainPage = new MasterMenu();
+                        //await PopupNavigation.Instance.PopAsync();
                     }
+                    else
+                    {
+                        Application.Current.MainPage = new MasterMenu();
+                        //await PopupNavigation.Instance.PopAsync();
+                    }
+                    Application.Current.Properties["IsLogged"] = true;
+
                 }
                 else
                 {

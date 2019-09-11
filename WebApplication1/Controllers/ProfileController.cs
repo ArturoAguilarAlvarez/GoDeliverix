@@ -13,20 +13,22 @@ namespace WebApplication1.Controllers
         #endregion
 
         // GET: api/Profile
-        public IEnumerable<string> Get(string Usuario, string Contrasena)
+        public ResponseHelper Get(string Usuario, string Contrasena)
         {
+
+            ResponseHelper obj = new ResponseHelper();
             if (!string.IsNullOrEmpty(Usuario) && !string.IsNullOrEmpty(Contrasena))
             {
                 Guid id = Guid.Empty;
                 MVAcceso = new VMAcceso();
                 id = MVAcceso.Ingresar(Usuario, Contrasena);
-                return new string[] { id.ToString() };
+                obj.Data = id.ToString();
             }
             else
             {
-                return new string[] { "No valido" };
+                obj.Data = "No valido";
             }
-
+            return obj;
         }
         /// <summary>
         /// Envia el correo de confirmacion de la cuenta cliente
@@ -108,7 +110,7 @@ namespace WebApplication1.Controllers
                 UidOrdenAsignada = new Guid(UidOrdenRepartidor);
                 MVAcceso.BitacoraRegistroRepartidores(StrParametro, UidUsuario, UidEstatus, UidOrdenAsignada);
             }
-            
+
             Respuesta.Status = true;
             Respuesta.Message = "Estatus actualizado";
             return Respuesta;
