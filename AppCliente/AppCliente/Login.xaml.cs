@@ -25,7 +25,6 @@ namespace AppCliente
         #region Propiedades
         Guid _id = Guid.Empty;
         bool _acceso;
-        bool Isloading;
         #endregion
 
         public Login()
@@ -74,11 +73,7 @@ namespace AppCliente
             Navigation.PushAsync(new RecuperarPassword());
         }
 
-        private async void DoSomething()
-        {
-
-            await PopupNavigation.Instance.PushAsync(new Popup.PopupLoanding());
-        }
+       
 
         protected async void Ingresar(string Usuario, string Contrasena)
         {

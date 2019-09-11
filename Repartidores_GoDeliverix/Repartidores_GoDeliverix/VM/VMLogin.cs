@@ -16,7 +16,6 @@ namespace Repartidores_GoDeliverix.VM
 {
     public class VMLogin : ControlsController
     {
-        VMAcceso mVAcceso = new VMAcceso();
         #region atributos
         private string _strUser;
         private string _Password;
@@ -70,11 +69,11 @@ namespace Repartidores_GoDeliverix.VM
         {
             get
             {
-                return new RelayCommand(this.login);
+                return new RelayCommand(this.Login);
             }
         }
 
-        private async void login()
+        private async void Login()
         {
             var supportsUri = false;
             if (Device.RuntimePlatform == Device.Android)
@@ -136,44 +135,43 @@ namespace Repartidores_GoDeliverix.VM
             }
         }
 
-        public void AccesoGuardado(string Usuario, string password)
-        {
-            //if (Acceso(Usuario, password, "Datoas Guardados"))
-            //{
-            //    Application.Current.MainPage = new NavigationPage(new TabbedPageMain());
-            //}
-            //else
-            //{
-            //    Application.Current.MainPage = new NavigationPage(new Login());
-            //}
-        }
+       
         public async void Acceso(string Usuario, string password)
         {
             try
             {
-                HttpClient _WebApiGoDeliverix = new HttpClient();
-                string url = "https://www.godeliverix.net/api/Profile/GET?Usuario=" + Usuario + "&Contrasena=" + password + "";
+                string Uid;
+                using (HttpClient _WebApiGoDeliverix = new HttpClient())
+                {
+                    string url = "https://www.godeliverix.net/api/Profile/GET?Usuario=" + Usuario + "&Contrasena=" + password + "";
 
-                string content = await _WebApiGoDeliverix.GetStringAsync(url);
-                List<string> lista = JsonConvert.DeserializeObject<List<string>>(content);
+                    string content = await _WebApiGoDeliverix.GetStringAsync(url);
+                    Uid = content = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                }
 
-                Guid UidUsuario = new Guid(lista[0].ToString());
+                Guid UidUsuario = new Guid(Uid);
                 if (UidUsuario != null && UidUsuario != Guid.Empty)
                 {
-                    url = "https://www.godeliverix.net/api/Profile/GetProfileType?UidUsuario=" + UidUsuario + "";
-                    content = await _WebApiGoDeliverix.GetStringAsync(url);
-                    var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                    string perfil = obj.ToString();
+                    string perfil;
+                    using (HttpClient _WebApiGoDeliverix = new HttpClient())
+                    {
+                        string url = "https://www.godeliverix.net/api/Profile/GetProfileType?UidUsuario=" + UidUsuario + "";
+                        string content = await _WebApiGoDeliverix.GetStringAsync(url);
+                        var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                        perfil = obj.ToString();
+                    }
+
+                    
 
                     //Entrada solo para perfil de repartidor
                     if (perfil.ToUpper() == "DFC29662-0259-4F6F-90EA-B24E39BE4346")
                     {
                         using (var _webAppi = new HttpClient())
                         {
-                            url = "https://www.godeliverix.net/api/Profile/GetBitacoraRegistroRepartidores?StrParametro=S&UidUsuario=" + UidUsuario + "&UidEstatus=A298B40F-C495-4BD8-A357-4A3209FBC162";
+                            string url = "https://www.godeliverix.net/api/Profile/GetBitacoraRegistroRepartidores?StrParametro=S&UidUsuario=" + UidUsuario + "&UidEstatus=A298B40F-C495-4BD8-A357-4A3209FBC162";
                             await _webAppi.GetAsync(url);
                         }
-                        
+
                         var AppInstance = MainViewModel.GetInstance();
                         AppInstance.Session_ = new Session() { UidUsuario = UidUsuario };
 
@@ -181,17 +179,19 @@ namespace Repartidores_GoDeliverix.VM
                         VMUsuarios MVUsuario = new VMUsuarios();
                         using (var _webAppi = new HttpClient())
                         {
-                            url = "https://www.godeliverix.net/api/Usuario/GetBuscarUsuarios?UidUsuario=" + UidUsuario + "&UIDPERFIL=DFC29662-0259-4F6F-90EA-B24E39BE4346";
-                            content = await _webAppi.GetStringAsync(url);
-                            obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                         string   url = "https://www.godeliverix.net/api/Usuario/GetBuscarUsuarios?UidUsuario=" + UidUsuario + "&UIDPERFIL=DFC29662-0259-4F6F-90EA-B24E39BE4346";
+                            string content = await _webAppi.GetStringAsync(url);
+                            string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                             MVUsuario = JsonConvert.DeserializeObject<VistaDelModelo.VMUsuarios>(obj);
                         }
 
 
                         AppInstance.Nombre = MVUsuario.StrNombre + " " + MVUsuario.StrApellidoPaterno;
 
-                        AppInstance.MVHome = new VMHome();
-                        AppInstance.MVHome.BlEstatus = true;
+                        AppInstance.MVHome = new VMHome
+                        {
+                            BlEstatus = true
+                        };
                         AppInstance.MVAjustes = new VMAjustes();
                         AppInstance.MVTurno = new VMTurno();
                         Application.Current.Properties["IsLogged"] = true;

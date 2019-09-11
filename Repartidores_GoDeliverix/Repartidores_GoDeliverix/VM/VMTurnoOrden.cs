@@ -13,7 +13,6 @@ namespace Repartidores_GoDeliverix.VM
 {
     public class VMTurnoOrden : ControlsController
     {
-        HttpClient _WebApiGoDeliverix = new HttpClient();
         VistaDelModelo.VMTurno MVTurno;
 
         private decimal __HOTotalEnvio;
@@ -110,10 +109,13 @@ namespace Repartidores_GoDeliverix.VM
             var AppInstance = MainViewModel.GetInstance();
             if (AppInstance.Session_.UidUsuario != Guid.Empty)
             {
-                string url = "http://www.godeliverix.net/api/Turno/GetConsultaLiquidacionesTurno?UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor + "";
-                var datos = await _WebApiGoDeliverix.GetStringAsync(url);
-                var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
-                MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
+                using (var _WebApiGoDeliverix = new HttpClient())
+                {
+                    string url = "https://www.godeliverix.net/api/Turno/GetConsultaLiquidacionesTurno?UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor + "";
+                    var datos = await _WebApiGoDeliverix.GetStringAsync(url);
+                    var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
+                    MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
+                }
                 ListaDeLiquidacionesTurno = new List<VMTurnoOrden>();
                 foreach (var item in MVTurno.ListaDeLiquidaciones)
                 {
@@ -142,10 +144,14 @@ namespace Repartidores_GoDeliverix.VM
             var AppInstance = MainViewModel.GetInstance();
             if (AppInstance.Session_.UidUsuario != Guid.Empty)
             {
-                string url = "http://www.godeliverix.net/api/Turno/GetInformacionHistoricoOrdenesTurno?UidTurno=" + AppInstance.Session_.UidTurnoRepartidor + "";
-                var datos = await _WebApiGoDeliverix.GetStringAsync(url);
-                var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
-                MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
+                using (var _WebApiGoDeliverix = new HttpClient())
+                {
+                    string url = "https://www.godeliverix.net/api/Turno/GetInformacionHistoricoOrdenesTurno?UidTurno=" + UidTurnoRepartidor + "";
+                    var datos = await _WebApiGoDeliverix.GetStringAsync(url);
+                    var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
+                    MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
+                }
+
                 ListaDeHistoricoDeOrdenesTurnos = new List<VMTurnoOrden>();
                 if (MVTurno.ListaDeTurnos != null)
                 {
@@ -159,10 +165,8 @@ namespace Repartidores_GoDeliverix.VM
                             HOTotalEnvio = item.DTotalEnvio,
                             HOLngFolio = item.LngFolio.ToString()
                         });
-
-                        totalenvio = totalenvio + item.DTotalEnvio;
-                        totalOrden = totalOrden + item.DTotalSucursal;
-
+                        totalenvio += item.DTotalEnvio;
+                        totalOrden += item.DTotalSucursal;
                     }
                     this.MTotalEnvio = totalenvio;
                     this.MTotalOrdenes = totalOrden;

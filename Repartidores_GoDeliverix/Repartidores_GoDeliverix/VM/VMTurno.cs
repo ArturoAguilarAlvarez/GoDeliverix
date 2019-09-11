@@ -17,7 +17,6 @@ namespace Repartidores_GoDeliverix.VM
     public class VMTurno : ControlsController
     {
         string url = "";
-        HttpClient _WebApiGoDeliverix = new HttpClient();
         VistaDelModelo.VMTurno MVTurno;
         VistaDelModelo.VMTurno MVTurnoInformacion;
         Timer tiempo;
@@ -142,7 +141,7 @@ namespace Repartidores_GoDeliverix.VM
         }
 
         private VMTurno _oTurno;
-        public VMTurno oTurno
+        public VMTurno OTurno
         {
             get { return _oTurno; }
             set
@@ -154,30 +153,11 @@ namespace Repartidores_GoDeliverix.VM
 
         public ICommand Activar { get { return new RelayCommand(ActivarTurno); } }
         public ICommand OrdenesActuales { get { return new RelayCommand(VerOrdenesActuales); } }
-        public ICommand Liquidar { get { return new RelayCommand(ModoLiquidar); } }
 
         public ICommand Historico { get { return new RelayCommand(HistoricoTurno); } }
         public ICommand HistoricoOrdenTurno { get { return new RelayCommand(OrdenesHistoricoTurno); } }
 
-        private void ModoLiquidar()
-        {
-            //GenerateMessage("Aviso del sistema", "Comenzando liquidacion", "OK");
-            //var AppInstance = MainViewModel.GetInstance();
-            //if (TextoLiquidar == "Liquidando ando")
-            //{
-            //    TextoLiquidar = "Liquidar";
-            //    //Cambia el esstatus a liquidado
-            //    string url = "http://www.godeliverix.net/api/Turno/GetAgregaEstatusTurnoRepartidor?UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor + "&UidEstatusTurno=38FA16DF-4727-41FD-A03E-E2E43FA78F3F";
-            //    await _WebApiGoDeliverix.GetStringAsync(url);
-            //}
-            //else
-            //{
-            //    TextoLiquidar = "Liquidando ando";
-            //    //Cambia el esstatus a liquidando
-            //    string url = "http://www.godeliverix.net/api/Turno/GetAgregaEstatusTurnoRepartidor?UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor + "&UidEstatusTurno=AE28F243-AA0D-43BD-BF10-124256B75B00";
-            //    await _WebApiGoDeliverix.GetStringAsync(url);
-            //}
-        }
+        public Timer Tiempo { get => tiempo; set => tiempo = value; }
 
         private async void VerOrdenesActuales()
         {
@@ -186,9 +166,6 @@ namespace Repartidores_GoDeliverix.VM
             {
                 AppInstance.MVTurnoOrden = new VMTurnoOrden(UidTurnoRepartidor.ToString());
                 await Application.Current.MainPage.Navigation.PushAsync(new Historico_DetalleDia());
-            }
-            else
-            {
             }
         }
         private async void OrdenesHistoricoTurno()
@@ -199,9 +176,6 @@ namespace Repartidores_GoDeliverix.VM
                 AppInstance.MVTurnoOrden = new VMTurnoOrden(HUidTurnoRepartidor.ToString());
                 await Application.Current.MainPage.Navigation.PushAsync(new Historico_DetalleDia());
             }
-            else
-            {
-            }
         }
 
         private async void HistoricoTurno()
@@ -209,10 +183,13 @@ namespace Repartidores_GoDeliverix.VM
             var AppInstance = MainViewModel.GetInstance();
             if (AppInstance.Session_.UidUsuario != Guid.Empty)
             {
-                url = "https://www.godeliverix.net/api/Turno/GetConsultaHisstorico?UidUsuario=" + AppInstance.Session_.UidUsuario + "";
-                var datos = await _WebApiGoDeliverix.GetStringAsync(url);
-                var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
-                MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
+                using (var _WebApiGoDeliverix = new HttpClient())
+                {
+                    url = "https://www.godeliverix.net/api/Turno/GetConsultaHisstorico?UidUsuario=" + AppInstance.Session_.UidUsuario + "";
+                    var datos = await _WebApiGoDeliverix.GetStringAsync(url);
+                    var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
+                    MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
+                }
                 ListaDeHistoricoDeTurnos = new List<VMTurno>();
                 foreach (var item in MVTurno.ListaDeTurnos)
                 {
@@ -229,9 +206,6 @@ namespace Repartidores_GoDeliverix.VM
                 }
                 await Application.Current.MainPage.Navigation.PushAsync(new Historico_Bitacora());
             }
-            else
-            {
-            }
         }
 
         private async void ActivarTurno()
@@ -239,18 +213,15 @@ namespace Repartidores_GoDeliverix.VM
             try
             {
                 var AppInstance = MainViewModel.GetInstance();
-                //_WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
                 if (UidTurnoRepartidor == Guid.Empty)
                 {
                     var obj = string.Empty;
-
                     using (var _webApi = new HttpClient())
                     {
                         url = "https://www.godeliverix.net/api/Turno/GetConsultaEstatusUltimoTurnoRepartidor?UidUsuario=" + AppInstance.Session_.UidUsuario + "";
-                        var datos = await _WebApiGoDeliverix.GetStringAsync(url);
+                        var datos = await _webApi.GetStringAsync(url);
                         obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
                     }
-
                     Guid UidEstatusTurno = new Guid(obj);
                     //Validacion por estatus de turno liquidado o cerrado
                     if (UidEstatusTurno == new Guid("38FA16DF-4727-41FD-A03E-E2E43FA78F3F") || UidEstatusTurno == new Guid("3BE9EF83-4A39-4A60-9FA9-7F50AD60CA3A"))
@@ -271,32 +242,41 @@ namespace Repartidores_GoDeliverix.VM
                 }
                 else
                 {
-                    //Cambia el estatus a cerrado
-                    url = "https://www.godeliverix.net/api/Turno/GetAgregaEstatusTurnoRepartidor?UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor + "&UidEstatusTurno=3BE9EF83-4A39-4A60-9FA9-7F50AD60CA3A";
-                    await _WebApiGoDeliverix.GetStringAsync(url);
-
+                    using (var _webApi = new HttpClient())
+                    {
+                        //Cambia el estatus a cerrado
+                        url = "https://www.godeliverix.net/api/Turno/GetAgregaEstatusTurnoRepartidor?UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor + "&UidEstatusTurno=3BE9EF83-4A39-4A60-9FA9-7F50AD60CA3A";
+                        await _webApi.GetStringAsync(url);
+                    }
                     if (Total > 0)
                     {
-                        //Cambia el estatus a liquidando
-                        url = "https://www.godeliverix.net/api/Turno/GetAgregaEstatusTurnoRepartidor?UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor + "&UidEstatusTurno=AE28F243-AA0D-43BD-BF10-124256B75B00";
-                        await _WebApiGoDeliverix.GetStringAsync(url);
+                        using (var _webApi = new HttpClient())
+                        {
+                            //Cambia el estatus a liquidando
+                            url = "https://www.godeliverix.net/api/Turno/GetAgregaEstatusTurnoRepartidor?UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor + "&UidEstatusTurno=AE28F243-AA0D-43BD-BF10-124256B75B00";
+                            await _webApi.GetStringAsync(url);
+                        }
                     }
                 }
-                url = "https://www.godeliverix.net/api/Turno/GetTurnoRepartidor?UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidTurno=" + UidTurnoRepartidor + "";
-                await _WebApiGoDeliverix.GetStringAsync(url);
+                using (var _webApi = new HttpClient())
+                {
+                    url = "https://www.godeliverix.net/api/Turno/GetTurnoRepartidor?UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidTurno=" + UidTurnoRepartidor + "";
+                    await _webApi.GetStringAsync(url);
+                }
                 CargarTurno();
             }
             catch (Exception)
             {
                 GenerateMessage("Aviso del sistema", "No se puede establecer conexion", "OK");
             }
-
         }
 
         public VMTurno()
         {
-            tiempo = new Timer();
-            tiempo.Interval = 6000;
+            tiempo = new Timer
+            {
+                Interval = 6000
+            };
             //enlazas un metodo al evento elapsed que es el que se ejecutara
             //cada vez que el intervalo de tiempo se cumpla
             tiempo.Elapsed += new ElapsedEventHandler(VerificaEstatusTurno);
@@ -325,7 +305,6 @@ namespace Repartidores_GoDeliverix.VM
                         CargarTurno();
                     }
                 }
-
             }
         }
 
@@ -333,9 +312,7 @@ namespace Repartidores_GoDeliverix.VM
         {
             MVTurno = new VistaDelModelo.VMTurno();
             var AppInstance = MainViewModel.GetInstance();
-
             string consulta2 = "https://www.godeliverix.net/api/Turno/GetInformacionDeOrdenesPorTuno?UidTurno=" + AppInstance.Session_.UidTurnoRepartidor + "";
-
             using (var _webApi = new HttpClient())
             {
                 url = "https://www.godeliverix.net/api/Turno/GetConsultaUltimoTurno?UidUsuario=" + AppInstance.Session_.UidUsuario + "";

@@ -19,13 +19,9 @@ namespace Repartidores_GoDeliverix.VM
         VMOrden MVOrden = new VMOrden();
         VistaDelModelo.VMTurno MVTurno;
         VMSucursales MVSucursal = new VMSucursales();
-        VMEmpresas MVEmpresa = new VMEmpresas();
-        VMAcceso MVAcceso = new VMAcceso();
         VMUbicacion MVUbicacion = new VMUbicacion();
-        VMDireccion MVDireccion = new VMDireccion();
 
         string url = "";
-        HttpClient _WebApiGoDeliverix = new HttpClient();
         private Guid _UidOrdenTarifario;
 
         #region Informacion de la sucursal de la orden
@@ -87,7 +83,6 @@ namespace Repartidores_GoDeliverix.VM
 
                 try
                 {
-                    _WebApiGoDeliverix.BaseAddress = new Uri("https://www.godeliverix.net/api/");
                     url = "";
                     var AppInstance = MainViewModel.GetInstance();
                     SetValue(ref _blEstatus, value);
@@ -294,18 +289,20 @@ namespace Repartidores_GoDeliverix.VM
 
             var AppInstance = MainViewModel.GetInstance();
 
-            AppInstance.MVHomeOrden = new VMHomeOrden();
-            AppInstance.MVHomeOrden.StrUidOrden = UidOrden.ToString();
-            AppInstance.MVHomeOrden.UidDireccionDelCliente = UidDireccionCliente.ToString();
-            AppInstance.MVHomeOrden.UidSucursal = UidSucursal;
-            AppInstance.MVHomeOrden.LngFolio = LngFolio;
-            AppInstance.MVHomeOrden.UidOrdenTarifario = UidOrdenTarifario;
-            AppInstance.MVHomeOrden.UidordenRepartidor = UidordenRepartidor;
-            AppInstance.MVHomeOrden.StrIdentificadorSucursal = MVSucursal.IDENTIFICADOR;
-            AppInstance.MVHomeOrden.StrCodigo = MVOrden.CodigoOrdenTarifario;
+            AppInstance.MVHomeOrden = new VMHomeOrden
+            {
+                StrUidOrden = UidOrden.ToString(),
+                UidDireccionDelCliente = UidDireccionCliente.ToString(),
+                UidSucursal = UidSucursal,
+                LngFolio = LngFolio,
+                UidOrdenTarifario = UidOrdenTarifario,
+                UidordenRepartidor = UidordenRepartidor,
+                StrIdentificadorSucursal = MVSucursal.IDENTIFICADOR,
+                StrCodigo = MVOrden.CodigoOrdenTarifario
+            };
             AppInstance.MVHomeOrden.StrCodigo = string.Empty;
             AppInstance.MVHomeOrden.ListaProductos = new System.Collections.Generic.List<VMHomeOrden>();
-            AppInstance.MVHomeOrden.cargaOrden();
+            AppInstance.MVHomeOrden.CargaOrden();
 
 
             await Application.Current.MainPage.Navigation.PushAsync(new Home_Entregar());
@@ -330,13 +327,15 @@ namespace Repartidores_GoDeliverix.VM
             //}
 
             var AppInstance = MainViewModel.GetInstance();
-            AppInstance.MVHomeOrden = new VMHomeOrden();
-            AppInstance.MVHomeOrden.StrUidOrden = UidOrden.ToString();
-            AppInstance.MVHomeOrden.UidDireccionDelCliente = UidDireccionCliente.ToString();
-            AppInstance.MVHomeOrden.UidSucursal = UidSucursal;
-            AppInstance.MVHomeOrden.UidOrdenTarifario = UidOrdenTarifario;
-            AppInstance.MVHomeOrden.UidordenRepartidor = UidordenRepartidor;
-            AppInstance.MVHomeOrden.cargaOrden();
+            AppInstance.MVHomeOrden = new VMHomeOrden
+            {
+                StrUidOrden = UidOrden.ToString(),
+                UidDireccionDelCliente = UidDireccionCliente.ToString(),
+                UidSucursal = UidSucursal,
+                UidOrdenTarifario = UidOrdenTarifario,
+                UidordenRepartidor = UidordenRepartidor
+            };
+            AppInstance.MVHomeOrden.CargaOrden();
             AppInstance.MVHomeOrden.ShowInfoOrder.Execute(null);
 
         }
@@ -351,31 +350,40 @@ namespace Repartidores_GoDeliverix.VM
             IsEnable = false;
 
             MVOrden = new VMOrden();
-            url = "https://www.godeliverix.net/api/Orden/GetObtenerCodigoOrdenTarifario?uidOrdenTarifario=" + UidOrdenTarifario + "";
-            string content = await _WebApiGoDeliverix.GetStringAsync(url);
-            var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-            MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(obj);
-            StrCodigo = MVOrden.CodigoOrdenTarifario;
+            using (var _WebApiGoDeliverix = new HttpClient())
+            {
+                url = "https://www.godeliverix.net/api/Orden/GetObtenerCodigoOrdenTarifario?uidOrdenTarifario=" + UidOrdenTarifario + "";
+                string content = await _WebApiGoDeliverix.GetStringAsync(url);
+                var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(obj);
+                StrCodigo = MVOrden.CodigoOrdenTarifario;
+            }
 
-            url = string.Empty;
-            url = "https://www.godeliverix.net/api/Sucursales/GetBuscarSucursales?UidSucursal=" + UidSucursal + "";
-            content = await _WebApiGoDeliverix.GetStringAsync(url);
-            obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-            MVSucursal = JsonConvert.DeserializeObject<VistaDelModelo.VMSucursales>(obj);
+            using (var _WebApiGoDeliverix = new HttpClient())
+            {
+                url = string.Empty;
+                url = "https://www.godeliverix.net/api/Sucursales/GetBuscarSucursales?UidSucursal=" + UidSucursal + "";
+                string content = await _WebApiGoDeliverix.GetStringAsync(url);
+                string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                MVSucursal = JsonConvert.DeserializeObject<VistaDelModelo.VMSucursales>(obj);
+            }
+
 
 
             var AppInstance = MainViewModel.GetInstance();
-            AppInstance.MVHomeOrden = new VMHomeOrden();
-            AppInstance.MVHomeOrden.StrUidOrden = UidOrden.ToString();
-            AppInstance.MVHomeOrden.UidDireccionDelCliente = UidDireccionCliente.ToString();
-            AppInstance.MVHomeOrden.UidSucursal = UidSucursal;
-            AppInstance.MVHomeOrden.LngFolio = LngFolio;
-            AppInstance.MVHomeOrden.UidOrdenTarifario = UidOrdenTarifario;
-            AppInstance.MVHomeOrden.UidordenRepartidor = UidordenRepartidor;
-            AppInstance.MVHomeOrden.StrIdentificadorSucursal = MVSucursal.IDENTIFICADOR;
-            AppInstance.MVHomeOrden.StrCodigo = MVOrden.CodigoOrdenTarifario;
-            AppInstance.MVHomeOrden.ListaProductos = new System.Collections.Generic.List<VMHomeOrden>();
-            AppInstance.MVHomeOrden.cargaOrden();
+            AppInstance.MVHomeOrden = new VMHomeOrden
+            {
+                StrUidOrden = UidOrden.ToString(),
+                UidDireccionDelCliente = UidDireccionCliente.ToString(),
+                UidSucursal = UidSucursal,
+                LngFolio = LngFolio,
+                UidOrdenTarifario = UidOrdenTarifario,
+                UidordenRepartidor = UidordenRepartidor,
+                StrIdentificadorSucursal = MVSucursal.IDENTIFICADOR,
+                StrCodigo = MVOrden.CodigoOrdenTarifario,
+                ListaProductos = new System.Collections.Generic.List<VMHomeOrden>()
+            };
+            AppInstance.MVHomeOrden.CargaOrden();
             IsLoading = false;
             IsEnable = true;
 
@@ -389,15 +397,17 @@ namespace Repartidores_GoDeliverix.VM
             IsLoading = true;
             IsEnable = false;
             var AppInstance = MainViewModel.GetInstance();
-            AppInstance.MVHomeOrden = new VMHomeOrden();
-            AppInstance.MVHomeOrden.StrUidOrden = UidOrden.ToString();
-            AppInstance.MVHomeOrden.UidDireccionDelCliente = UidDireccionCliente.ToString();
-            AppInstance.MVHomeOrden.UidSucursal = UidSucursal;
-            AppInstance.MVHomeOrden.LngFolio = LngFolio;
-            AppInstance.MVHomeOrden.UidOrdenTarifario = UidOrdenTarifario;
-            AppInstance.MVHomeOrden.UidordenRepartidor = UidordenRepartidor;
-            AppInstance.MVHomeOrden.ListaProductos = new System.Collections.Generic.List<VMHomeOrden>();
-            AppInstance.MVHomeOrden.cargaOrden();
+            AppInstance.MVHomeOrden = new VMHomeOrden
+            {
+                StrUidOrden = UidOrden.ToString(),
+                UidDireccionDelCliente = UidDireccionCliente.ToString(),
+                UidSucursal = UidSucursal,
+                LngFolio = LngFolio,
+                UidOrdenTarifario = UidOrdenTarifario,
+                UidordenRepartidor = UidordenRepartidor,
+                ListaProductos = new System.Collections.Generic.List<VMHomeOrden>()
+            };
+            AppInstance.MVHomeOrden.CargaOrden();
             IsLoading = false;
             IsEnable = true;
             await Application.Current.MainPage.Navigation.PushAsync(new Home_NuevaOrden());
@@ -425,7 +435,7 @@ namespace Repartidores_GoDeliverix.VM
             try
             {
                 var AppInstance = MainViewModel.GetInstance();
-                MVDireccion = new VMDireccion();
+                VMDireccion MVDireccion = new VMDireccion();
                 MVUbicacion = new VMUbicacion();
                 StrUbicacionCliente = string.Empty;
                 StrUbicacionSucursal = string.Empty;
@@ -627,7 +637,7 @@ namespace Repartidores_GoDeliverix.VM
             using (var _WebApi = new HttpClient())
             {
                 string url = "https://www.godeliverix.net/api/Turno/GetConsultaEstatusUltimoTurnoRepartidor?UidUsuario=" + UidUsuario + "";
-                string datos = await _WebApiGoDeliverix.GetStringAsync(url);
+                string datos = await _WebApi.GetStringAsync(url);
                 obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
             }
             return new Guid(obj);
