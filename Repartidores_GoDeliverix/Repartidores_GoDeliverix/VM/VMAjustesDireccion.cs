@@ -364,7 +364,7 @@ namespace Repartidores_GoDeliverix.VM
                             NombrePais = item["Nombre"].ToString()
                         });
                     }
-                }
+                } 
                 AppInstance.vmAjustesDireccion.ListaEstado.Add(new Estado() { UidEstado = Guid.Empty, NombreEstado = "--Selecciona--" });
                 AppInstance.vmAjustesDireccion.ListaMunicipio.Add(new Municipio() { UidMunicipio = Guid.Empty, NombreMunicipio = "--Selecciona--" });
                 AppInstance.vmAjustesDireccion.ListaCiudad.Add(new Ciudad() { UidCiudad = Guid.Empty, NombreCiudad = "--Selecciona--" });
