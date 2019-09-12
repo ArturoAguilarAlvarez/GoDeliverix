@@ -318,69 +318,70 @@ namespace Repartidores_GoDeliverix.VM
             VMDireccion MVDireccion = new VMDireccion();
             Guid UidUsuario = AppInstance.Session_.UidUsuario;
             MVDireccion.ObtenerDireccionesUsuario(UidUsuario.ToString());
-            _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
+            _WebApiGoDeliverix.BaseAddress = new Uri("https://www.godeliverix.net/api/");
 
             if (UidDireccion == Guid.Empty)
             {
                 url = "Direccion/GetGuardarDireccion?UidUsuario=" + UidUsuario + "&UidPais=" + UidPais + "&UidEstado=" + UidEstado + "&UidMunicipio=" + UidMunicipio + "&UidCiudad=" + UidCiudad + "&UidColonia=" + UidColonia + "&CallePrincipal=" + CallePrincipal + "&CalleAux1=" + CalleAux1 + "&CalleAux2=" + CalleAux2 + "&Manzana=" + Manzana + "&Lote=" + Lote + "&CodigoPostal=" + CodigoPostal + "&Referencia=" + Referencia + "&NOMBRECIUDAD=S&NOMBRECOLONIA=S&Identificador=" + Identificador + "&Latitud=0&Longitud=0";
-                //Guid UidDireccion = Guid.NewGuid();
-                //MVDireccion.AgregaDireccionALista(UidDireccion,UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, "", "", Identificador);
             }
             else
             {
                 url = "Direccion/GetActualizarDireccion?UidPais=" + UidPais + "&UidEstado=" + UidEstado + "&UidMunicipio=" + UidMunicipio + "&UidCiudad=" + UidCiudad + "&UidColonia=" + UidColonia + "&CallePrincipal=" + CallePrincipal + "&CalleAux1=" + CalleAux1 + "&CalleAux2=" + CalleAux2 + "&Manzana=" + Manzana + "&Lote=" + Lote + "&CodigoPostal=" + CodigoPostal + "&Referencia=" + Referencia + "&NOMBRECIUDAD=S&NOMBRECOLONIA=S&Identificador=" + Identificador + "&Latitud=0&Longitud=0&UidDireccion=" + UidDireccion + "";
-                //   MVDireccion.ActualizaListaDireccion(UidDireccion.ToString(), UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador, "", "");
             }
             _WebApiGoDeliverix.GetAsync(url);
-            // MVDireccion.GuardaListaDeDirecciones(MVDireccion.ListaDIRECCIONES, UidUsuario, "asp_AgregaDireccionUsuario", "Usuario");
             AppInstance.MVAjustes.Recargar();
         }
         public async void AgregaDireccion()
         {
-            var AppInstance = MainViewModel.GetInstance();
-            AppInstance.vmAjustesDireccion = new VMAjustesDireccion();
-            AppInstance.vmAjustesDireccion.ListaPais = new List<Pais>();
-            AppInstance.vmAjustesDireccion.ListaEstado = new List<Estado>();
-            AppInstance.vmAjustesDireccion.ListaMunicipio = new List<Municipio>();
-            AppInstance.vmAjustesDireccion.ListaCiudad = new List<Ciudad>();
-            AppInstance.vmAjustesDireccion.ListaColonia = new List<Colonia>();
-            //Datos generales
-            AppInstance.vmAjustesDireccion.UidDireccion = Guid.Empty;
-            AppInstance.vmAjustesDireccion.CallePrincipal = string.Empty;
-            AppInstance.vmAjustesDireccion.CalleAux1 = string.Empty;
-            AppInstance.vmAjustesDireccion.CalleAux2 = string.Empty;
-            AppInstance.vmAjustesDireccion.Manzana = string.Empty;
-            AppInstance.vmAjustesDireccion.Lote = string.Empty;
-            AppInstance.vmAjustesDireccion.CodigoPostal = string.Empty;
-            AppInstance.vmAjustesDireccion.Referencia = string.Empty;
-            AppInstance.vmAjustesDireccion.Identificador = string.Empty;
-
-            VMDireccion MVDireccion = new VMDireccion();
-            //Alimenta lista de Pais
-            foreach (DataRow item in MVDireccion.Paises().Rows)
+            try
             {
-                if (item["UidPais"] != null && (new Guid(item["UidPais"].ToString()) == Guid.Empty || new Guid(item["UidPais"].ToString()) != Guid.Empty))
+                var AppInstance = MainViewModel.GetInstance();
+                AppInstance.vmAjustesDireccion = new VMAjustesDireccion();
+                AppInstance.vmAjustesDireccion.ListaPais = new List<Pais>();
+                AppInstance.vmAjustesDireccion.ListaEstado = new List<Estado>();
+                AppInstance.vmAjustesDireccion.ListaMunicipio = new List<Municipio>();
+                AppInstance.vmAjustesDireccion.ListaCiudad = new List<Ciudad>();
+                AppInstance.vmAjustesDireccion.ListaColonia = new List<Colonia>();
+                //Datos generales
+                AppInstance.vmAjustesDireccion.UidDireccion = Guid.Empty;
+                AppInstance.vmAjustesDireccion.CallePrincipal = string.Empty;
+                AppInstance.vmAjustesDireccion.CalleAux1 = string.Empty;
+                AppInstance.vmAjustesDireccion.CalleAux2 = string.Empty;
+                AppInstance.vmAjustesDireccion.Manzana = string.Empty;
+                AppInstance.vmAjustesDireccion.Lote = string.Empty;
+                AppInstance.vmAjustesDireccion.CodigoPostal = string.Empty;
+                AppInstance.vmAjustesDireccion.Referencia = string.Empty;
+                AppInstance.vmAjustesDireccion.Identificador = string.Empty;
+                VMDireccion MVDireccion = new VMDireccion();
+                //Alimenta lista de Pais
+                foreach (DataRow item in MVDireccion.Paises().Rows)
                 {
-                    AppInstance.vmAjustesDireccion.ListaPais.Add(new Pais()
+                    if (item["UidPais"] != null && (new Guid(item["UidPais"].ToString()) == Guid.Empty || new Guid(item["UidPais"].ToString()) != Guid.Empty))
                     {
-                        UidPais = new Guid(item["UidPais"].ToString()),
-                        NombrePais = item["Nombre"].ToString()
-                    });
+                        AppInstance.vmAjustesDireccion.ListaPais.Add(new Pais()
+                        {
+                            UidPais = new Guid(item["UidPais"].ToString()),
+                            NombrePais = item["Nombre"].ToString()
+                        });
+                    }
                 }
-
+                AppInstance.vmAjustesDireccion.ListaEstado.Add(new Estado() { UidEstado = Guid.Empty, NombreEstado = "--Selecciona--" });
+                AppInstance.vmAjustesDireccion.ListaMunicipio.Add(new Municipio() { UidMunicipio = Guid.Empty, NombreMunicipio = "--Selecciona--" });
+                AppInstance.vmAjustesDireccion.ListaCiudad.Add(new Ciudad() { UidCiudad = Guid.Empty, NombreCiudad = "--Selecciona--" });
+                AppInstance.vmAjustesDireccion.ListaColonia.Add(new Colonia() { UidColonia = Guid.Empty, NombreColonia = "--Selecciona--" });
+                //Datos del control
+                AppInstance.vmAjustesDireccion.IndexPaisSeleccionado = 0;
+                AppInstance.vmAjustesDireccion.IndexEstadoSeleccionado = 0;
+                AppInstance.vmAjustesDireccion.IndexMunicipioSeleccionado = 0;
+                AppInstance.vmAjustesDireccion.IndexCiudadSeleccionado = 0;
+                AppInstance.vmAjustesDireccion.IndexColoniaSeleccionado = 0;
+                //Levanta a la ventana modal
+                await Application.Current.MainPage.Navigation.PushAsync(new Ajustes_DetalleDireccion());
             }
-            AppInstance.vmAjustesDireccion.ListaEstado.Add(new Estado() { UidEstado = Guid.Empty, NombreEstado = "--Selecciona--" });
-            AppInstance.vmAjustesDireccion.ListaMunicipio.Add(new Municipio() { UidMunicipio = Guid.Empty, NombreMunicipio = "--Selecciona--" });
-            AppInstance.vmAjustesDireccion.ListaCiudad.Add(new Ciudad() { UidCiudad = Guid.Empty, NombreCiudad = "--Selecciona--" });
-            AppInstance.vmAjustesDireccion.ListaColonia.Add(new Colonia() { UidColonia = Guid.Empty, NombreColonia = "--Selecciona--" });
-            //Datos del control
-            AppInstance.vmAjustesDireccion.IndexPaisSeleccionado = 0;
-            AppInstance.vmAjustesDireccion.IndexEstadoSeleccionado = 0;
-            AppInstance.vmAjustesDireccion.IndexMunicipioSeleccionado = 0;
-            AppInstance.vmAjustesDireccion.IndexCiudadSeleccionado = 0;
-            AppInstance.vmAjustesDireccion.IndexColoniaSeleccionado = 0;
-            //Levanta a la ventana modal
-            await App.Navigator.PushAsync(new Ajustes_DetalleDireccion());
+            catch (Exception)
+            {
+                GenerateMessage("Aviso del sistema","Servicio no disponible","Ok");
+            }
         }
         private void EliminaDireccion()
         {
