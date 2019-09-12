@@ -9,42 +9,48 @@
     <ContentPage.Content>
         <StackLayout BindingContext="{ Binding MVHome}">
             <Grid x:Name="GContenedorPrincipal">
-
-            </Grid>
-            <Grid VerticalOptions="FillAndExpand" Padding="5" x:Name="GVTitulo"  BackgroundColor="#20396e">
-                <Label FontSize="Large" VerticalOptions="CenterAndExpand" TextColor="White" Text="GoDeliverix"></Label>
-                <StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand" Grid.Column="1"   HorizontalOptions="EndAndExpand"  >
-
-                </StackLayout>
-            </Grid>
-
-            <Grid x:Name="ControlesOperacion" >
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="10*"></RowDefinition>
+                    <RowDefinition Height="1*"></RowDefinition>
+                    <RowDefinition Height="3*"></RowDefinition>
+                    <RowDefinition Height="6*"></RowDefinition>
                 </Grid.RowDefinitions>
-                <Label Text="{Binding Texto}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="Large" TextColor="Black" IsVisible="{Binding BlSinAsignar}"></Label>
-                <Button  x:Name="btnNuevaOrden" IsVisible="{Binding BlNuevaOrden}" IsEnabled="{Binding IsEnable}" Clicked="BtnNuevaOrden_Clicked" Command="{Binding ShowOrder}"   Image="Alert.png" Text="Orden asignada"  HeightRequest = "150" FontSize="Large" TextColor="Black" BackgroundColor="White">
-                </Button>
-                <Button  x:Name="btnQr"   IsVisible="{Binding BlRecolecta}" IsEnabled="{Binding IsEnable}"  Command="{Binding ShowCodeQr}" Clicked="BtnQr_Clicked" Image="qrcode.png" Text="Recolectar"  HeightRequest = "150" FontSize="Large" TextColor="Black" BackgroundColor="White">
-                </Button>
-                <Button  x:Name="btnEntregar" IsVisible="{Binding BlEntrega}" IsEnabled="{Binding IsEnable}" Command="{Binding Entregar}" Clicked="BtnEntregar_Clicked"  Image="Entrega.png" Text="Entregar"  HeightRequest = "150" FontSize="Large" TextColor="Black" BackgroundColor="White">
-                </Button>
-            </Grid>
+                <Grid VerticalOptions="FillAndExpand" Grid.Row="0" Padding="5" x:Name="GVTitulo"  BackgroundColor="#20396e">
+                    <Label FontSize="Large" VerticalOptions="CenterAndExpand" TextColor="White" Text="GoDeliverix"></Label>
+                    <StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand" Grid.Column="1"   HorizontalOptions="EndAndExpand"  >
 
-            <StackLayout x:Name="PanelBotones" HorizontalOptions="Fill" VerticalOptions="Fill">
-                <Label IsVisible="False" x:Name="lblUbicacionSucursal" Text="{Binding StrUbicacionSucursal}"></Label>
-                <Label IsVisible="False" x:Name="lblUbicacionCliente" Text="{Binding StrUbicacionCliente}"></Label>
-                <Button  x:Name="btnMapaSucursalCliente" Text="Trayecto de orden" Clicked="BtnMapaSucursalCliente_ClickedAsync" HorizontalOptions="Fill" VerticalOptions="Fill" IsVisible="{Binding BlNuevaOrden}" ></Button>
-                <Button  x:Name="btnMapaSucursal" Text="Trayecto hacia la sucursal" Clicked="BtnMapaSucursal_ClickedAsync" HorizontalOptions="Fill" VerticalOptions="Fill" IsVisible="{Binding BlRecolecta}" ></Button>
-                <Button  x:Name="btnMapaCliente" Text="Trayeto al cliente" Clicked="BtnMapaCliente_ClickedAsync" HorizontalOptions="Fill" VerticalOptions="Fill" IsVisible="{Binding BlEntrega}" ></Button>
-            </StackLayout>
+                    </StackLayout>
+                </Grid>
 
-
-            <ActivityIndicator 
+                <Grid x:Name="ControlesOperacion" Grid.Row="1" >
+                    <ActivityIndicator 
                 WidthRequest="50" 
                 HeightRequest="50" 
                 IsRunning="{Binding IsLoading}"
                 IsVisible="{Binding IsLoading}"></ActivityIndicator>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Label Text="{Binding Texto}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="Large" TextColor="Black" IsVisible="{Binding BlSinAsignar}"></Label>
+                    <Button  x:Name="btnNuevaOrden" IsVisible="{Binding BlNuevaOrden}" IsEnabled="{Binding IsEnable}" Clicked="BtnNuevaOrden_Clicked" Command="{Binding ShowOrder}"   Image="Alert.png" Text="Orden asignada"  HeightRequest = "150" FontSize="Large" TextColor="Black" BackgroundColor="White">
+                    </Button>
+                    <Button  x:Name="btnQr"   IsVisible="{Binding BlRecolecta}" IsEnabled="{Binding IsEnable}"  Command="{Binding ShowCodeQr}" Clicked="BtnQr_Clicked" Image="qrcode.png" Text="Recolectar"  HeightRequest = "150" FontSize="Large" TextColor="Black" BackgroundColor="White">
+                    </Button>
+                    <Button  x:Name="btnEntregar" IsVisible="{Binding BlEntrega}" IsEnabled="{Binding IsEnable}" Command="{Binding Entregar}" Clicked="BtnEntregar_Clicked"  Image="Entrega.png" Text="Entregar"  HeightRequest = "150" FontSize="Large" TextColor="Black" BackgroundColor="White">
+                    </Button>
+                </Grid>
+
+                <StackLayout x:Name="PanelBotones" Grid.Row="2" HorizontalOptions="Fill" VerticalOptions="Fill">
+                    <Label IsVisible="False" x:Name="lblUbicacionSucursal" Text="{Binding StrUbicacionSucursal}"></Label>
+                    <Label IsVisible="False" x:Name="lblUbicacionCliente" Text="{Binding StrUbicacionCliente}"></Label>
+                    <Button  x:Name="btnMapaSucursalCliente" Text="Trayecto de orden" Clicked="BtnMapaSucursalCliente_ClickedAsync" HorizontalOptions="Fill" VerticalOptions="Fill" IsVisible="{Binding BlNuevaOrden}" ></Button>
+                    <Button  x:Name="btnMapaSucursal" Text="Trayecto hacia la sucursal" Clicked="BtnMapaSucursal_ClickedAsync" HorizontalOptions="Fill" VerticalOptions="Fill" IsVisible="{Binding BlRecolecta}" ></Button>
+                    <Button  x:Name="btnMapaCliente" Text="Trayeto al cliente" Clicked="BtnMapaCliente_ClickedAsync" HorizontalOptions="Fill" VerticalOptions="Fill" IsVisible="{Binding BlEntrega}" ></Button>
+                </StackLayout>
+
+            </Grid>
+            
+
+           
         </StackLayout>
 
 

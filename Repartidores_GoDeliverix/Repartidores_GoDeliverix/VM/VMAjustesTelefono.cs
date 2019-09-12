@@ -66,14 +66,10 @@ namespace Repartidores_GoDeliverix.VM
             var AppInstance = MainViewModel.GetInstance();
             Guid UidUsuario = AppInstance.Session_.UidUsuario;
             VMTelefono MVTelefono = new VMTelefono();
-            //MVTelefono.BuscarTelefonos(UidPropietario: UidUsuario, ParadetroDeBusqueda: "Usuario");
 
             string url = "Telefono/DeleteTelefonoUsuario?UidTelefono=" + UidTelefono + "";
              await _WebApiGoDeliverix.GetStringAsync(url);
             
-            //MVTelefono.QuitaTelefonoDeLista(UidTelefono.ToString());
-            //MVTelefono.EliminaTelefonosUsuario(UidUsuario);
-            //MVTelefono.GuardaTelefono(UidUsuario, "Usuario");
             AppInstance.MVAjustes.Recargar();
         }
         public async void AgregarTelefono()
@@ -122,9 +118,6 @@ namespace Repartidores_GoDeliverix.VM
                 url = "Telefono/GetActualizaTelefonoApi?UidTelefono=" + UidTipoDeTelefono + "&Numero="+ numero + "&UidTipoDeTelefono=" + NombreTipoTelfono + "";
                 await _WebApiGoDeliverix.GetAsync(url);
                 UidUsuario = AppInstance.Session_.UidUsuario;
-                //MVTelefono.BuscarTelefonos(UidPropietario: UidUsuario, ParadetroDeBusqueda: "Usuario");
-                //MVTelefono.ActualizaRegistroEnListaDeTelefonos(UidTelefono.ToString(), UidTipoDeTelefono.ToString(), intNumeroTelefono);
-
             }
             //MVTelefono.EliminaTelefonosUsuario(UidUsuario);
             //MVTelefono.GuardaTelefono(UidUsuario, "Usuario");

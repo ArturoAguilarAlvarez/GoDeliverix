@@ -310,7 +310,6 @@ namespace Repartidores_GoDeliverix.VM
             IsEnable = true;
         }
 
-
         private void MapaEnEsperaAsync()
         {
             //var location = await Geolocation.GetLastKnownLocationAsync();
@@ -339,9 +338,6 @@ namespace Repartidores_GoDeliverix.VM
             AppInstance.MVHomeOrden.ShowInfoOrder.Execute(null);
 
         }
-
-
-
 
         private async void MostrarCodigoQR()
         {
@@ -415,15 +411,13 @@ namespace Repartidores_GoDeliverix.VM
         #endregion
         public VMHome()
         {
-            //Verifica();
-            //Timer tiempo = new Timer();
-            //tiempo.Interval = 60000;
-            ////enlazas un metodo al evento elapsed que es el que se ejecutara
-            ////cada vez que el intervalo de tiempo se cumpla
-            //tiempo.Elapsed += new ElapsedEventHandler(VerificaOrden);
-            //tiempo.Start();
+            Timer tiempo = new Timer();
+            tiempo.Interval = 5000;
+            //enlazas un metodo al evento elapsed que es el que se ejecutara
+            //cada vez que el intervalo de tiempo se cumpla
+            tiempo.Elapsed += new ElapsedEventHandler(VerificaOrden);
+            tiempo.Start();
 
-            Verifica();
         }
         private void VerificaOrden(object sender, ElapsedEventArgs e)
         {
@@ -466,7 +460,6 @@ namespace Repartidores_GoDeliverix.VM
 
                     if (MVTurno.DtmHoraFin == DateTime.Parse("01/01/0001 12:00:00 a. m.") && MVTurno.DtmHoraInicio != DateTime.Parse("01/01/0001 12:00:00 a. m."))
                     {
-
                         using (var _webApi = new HttpClient())
                         {
                             url = "https://www.godeliverix.net/api/Orden/GetBuscarOrdenAsiganadaRepartidor?UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor + "";

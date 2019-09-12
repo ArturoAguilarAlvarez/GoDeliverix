@@ -42,55 +42,54 @@ namespace Repartidores_GoDeliverix.Views
                 GContenedorPrincipal.VerticalOptions = LayoutOptions.FillAndExpand;
 
 
-                if (GContenedorPrincipal.RowDefinitions.Count > 0)
-                {
-                    GContenedorPrincipal.RowDefinitions.Clear();
-                }
-                if (GContenedorPrincipal.ColumnDefinitions.Count > 0)
-                {
-                    GContenedorPrincipal.ColumnDefinitions.Clear();
-                }
+                //if (GContenedorPrincipal.RowDefinitions.Count > 0)
+                //{
+                //    GContenedorPrincipal.RowDefinitions.Clear();
+                //}
+                //if (GContenedorPrincipal.ColumnDefinitions.Count > 0)
+                //{
+                //    GContenedorPrincipal.ColumnDefinitions.Clear();
+                //}
+                //if (GContenedorPrincipal.Children.IndexOf(GVTitulo) != -1)
+                //{
+                //    GContenedorPrincipal.Children.Remove(GVTitulo);
+                //}
+                //if (GContenedorPrincipal.Children.IndexOf(ControlesOperacion) != -1)
+                //{
+                //    GContenedorPrincipal.Children.Remove(ControlesOperacion);
+                //}
+                //if (GContenedorPrincipal.Children.IndexOf(PanelBotones) != -1)
+                //{
+                //    GContenedorPrincipal.Children.Remove(PanelBotones);
+                //}
+                //if (ContentWidth > ContentHeight)
+                //{
 
-                if (GContenedorPrincipal.Children.IndexOf(GVTitulo) != -1)
-                {
-                    GContenedorPrincipal.Children.Remove(GVTitulo);
-                }
-                if (GContenedorPrincipal.Children.IndexOf(ControlesOperacion) != -1)
-                {
-                    GContenedorPrincipal.Children.Remove(ControlesOperacion);
-                }
-                if (GContenedorPrincipal.Children.IndexOf(PanelBotones) != -1)
-                {
-                    GContenedorPrincipal.Children.Remove(PanelBotones);
-                }
-                if (ContentWidth > ContentHeight)
-                {
+                //    GContenedorPrincipal.RowDefinitions.Add(new RowDefinition { Height = new GridLength(2, GridUnitType.Star) });
+                //    GContenedorPrincipal.RowDefinitions.Add(new RowDefinition { Height = new GridLength(8, GridUnitType.Star) });
+                //    Grid.SetRow(GVTitulo, 0);
+                //    Grid.SetColumnSpan(GVTitulo, 2);
+                //    Grid.SetRow(ControlesOperacion, 1);
+                //    Grid.SetColumn(ControlesOperacion, 0);
+                //    Grid.SetRow(PanelBotones, 1);
+                //    Grid.SetColumn(PanelBotones, 1);
+                //}
+                //else
+                //{
+                //    GContenedorPrincipal.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                //    GContenedorPrincipal.RowDefinitions.Add(new RowDefinition { Height = new GridLength(3, GridUnitType.Star) });
+                //    GContenedorPrincipal.RowDefinitions.Add(new RowDefinition { Height = new GridLength(6, GridUnitType.Star) });
 
-                    GContenedorPrincipal.RowDefinitions.Add(new RowDefinition { Height = new GridLength(2, GridUnitType.Star) });
-                    GContenedorPrincipal.RowDefinitions.Add(new RowDefinition { Height = new GridLength(8, GridUnitType.Star) });
-                    Grid.SetRow(GVTitulo, 0);
-                    Grid.SetColumnSpan(GVTitulo, 2);
-                    Grid.SetRow(ControlesOperacion, 1);
-                    Grid.SetColumn(ControlesOperacion, 0);
-                    Grid.SetRow(PanelBotones, 1);
-                    Grid.SetColumn(PanelBotones, 1);
-                }
-                else
-                {
-                    GContenedorPrincipal.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-                    GContenedorPrincipal.RowDefinitions.Add(new RowDefinition { Height = new GridLength(3, GridUnitType.Star) });
-                    GContenedorPrincipal.RowDefinitions.Add(new RowDefinition { Height = new GridLength(6, GridUnitType.Star) });
+                //    Grid.SetRow(GVTitulo, 0); Grid.SetColumnSpan(GVTitulo, 1);
+                //    Grid.SetRow(ControlesOperacion, 1); Grid.SetColumnSpan(ControlesOperacion, 1);
+                //    Grid.SetRow(PanelBotones, 2);
+                //    Grid.SetColumnSpan(PanelBotones, 1);
+                //    Grid.SetColumn(PanelBotones, 0);
+                //}
 
-                    Grid.SetRow(GVTitulo, 0); Grid.SetColumnSpan(GVTitulo, 1);
-                    Grid.SetRow(ControlesOperacion, 1); Grid.SetColumnSpan(ControlesOperacion, 1);
-                    Grid.SetRow(PanelBotones, 2);
-                    Grid.SetColumnSpan(PanelBotones, 1);
-                    Grid.SetColumn(PanelBotones, 0);
-                }
-
-                GContenedorPrincipal.Children.Add(GVTitulo);
-                GContenedorPrincipal.Children.Add(ControlesOperacion);
-                GContenedorPrincipal.Children.Add(PanelBotones);
+                //GContenedorPrincipal.Children.Add(GVTitulo);
+                //GContenedorPrincipal.Children.Add(ControlesOperacion);
+                //GContenedorPrincipal.Children.Add(PanelBotones);
             }
         }
 

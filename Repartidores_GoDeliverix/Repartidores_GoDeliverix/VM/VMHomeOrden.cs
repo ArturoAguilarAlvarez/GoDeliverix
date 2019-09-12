@@ -275,8 +275,7 @@ namespace Repartidores_GoDeliverix.VM
 
             using (var _WebApiGoDeliverix = new HttpClient())
             {
-                _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
-                url = "Orden/GetBuscarOrdenPorCodigoQR?strCodigo=" + StrCodigo + "&UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor.ToString() + "";
+                url = "https://www.godeliverix.net/api/Orden/GetBuscarOrdenPorCodigoQR?strCodigo=" + StrCodigo + "&UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor.ToString() + "";
                 var content = await _WebApiGoDeliverix.GetStringAsync(url);
                 var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                 Respuesta = bool.Parse(obj.ToString());
@@ -286,14 +285,14 @@ namespace Repartidores_GoDeliverix.VM
             {
                 using (var _WebApiGoDeliverix = new HttpClient())
                 {
-                    url = "Profile/GetBitacoraRegistroRepartidores?StrParametro=O&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=7DA3A42F-2271-47B4-B9B8-EDD311F56864&UidOrdenRepartidor=" + AppInstance.MVHome.UidordenRepartidor + "";
+                    url = "https://www.godeliverix.net/api/Profile/GetBitacoraRegistroRepartidores?StrParametro=O&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=7DA3A42F-2271-47B4-B9B8-EDD311F56864&UidOrdenRepartidor=" + AppInstance.MVHome.UidordenRepartidor + "";
                     await _WebApiGoDeliverix.GetAsync(url);
                 }
 
                 using (var _WebApiGoDeliverix = new HttpClient())
                 {
                     //Peticion de la api para el cambio del estatus de la orden
-                    url = "Orden/GetAgregaEstatusALaOrden?UidEstatus=2FDEE8E7-0D54-4616-B4C1-037F5A37409D&StrParametro=S&UidOrden=" + AppInstance.MVHome.UidOrdenSucursal + "";
+                    url = "https://www.godeliverix.net/api/Orden/GetAgregaEstatusALaOrden?UidEstatus=2FDEE8E7-0D54-4616-B4C1-037F5A37409D&StrParametro=S&UidOrden=" + AppInstance.MVHome.UidOrdenSucursal + "";
                     await _WebApiGoDeliverix.GetAsync(url);
                 }
 

@@ -21,7 +21,6 @@ namespace Repartidores_GoDeliverix.VM
         /// Atributos para el popup de los ajustes generales
         /// </summary>
         private string _strNombre;
-
         public string StrNombre
         {
             get { return _strNombre; }
