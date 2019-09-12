@@ -17,7 +17,7 @@ namespace Repartidores_GoDeliverix.Views.Popup
 		}
         public async void CloseWindowsPopup(object sender, EventArgs e)
         {
-            await App.Navigator.PopToRootAsync();
+            await Application.Current.MainPage.Navigation.PopToRootAsync();
         }
     }
 }

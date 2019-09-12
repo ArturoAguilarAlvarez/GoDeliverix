@@ -65,11 +65,9 @@ namespace Repartidores_GoDeliverix.VM
         {
             var AppInstance = MainViewModel.GetInstance();
             Guid UidUsuario = AppInstance.Session_.UidUsuario;
-            VMTelefono MVTelefono = new VMTelefono();
+            string url = "https://www.godeliverix.net/api/Telefono/DeleteTelefonoUsuario?UidTelefono=" + UidTelefono + "";
+            await _WebApiGoDeliverix.GetStringAsync(url);
 
-            string url = "Telefono/DeleteTelefonoUsuario?UidTelefono=" + UidTelefono + "";
-             await _WebApiGoDeliverix.GetStringAsync(url);
-            
             AppInstance.MVAjustes.Recargar();
         }
         public async void AgregarTelefono()
@@ -104,7 +102,7 @@ namespace Repartidores_GoDeliverix.VM
                 string NombreTipoTelfono = AppInstance.MVAjustesTelefono.LsTipoDeTelefono[intSelectTelefono].StrTipoDeTelefono;
                 UidUsuario = AppInstance.Session_.UidUsuario;
 
-                 url = "Telefono/GetGuardaTelefonoApi?uidUsuario="+ UidUsuario + "&Parametro, Guid UidTelefono, string Numero, string UidTipoDeTelefono &UidTelefono=" + UidTelefono + "";
+                url = "https://www.godeliverix.net/api/Telefono/GetGuardaTelefonoApi?uidUsuario=" + UidUsuario + "&Parametro, Guid UidTelefono, string Numero, string UidTipoDeTelefono &UidTelefono=" + UidTelefono + "";
                 await _WebApiGoDeliverix.GetStringAsync(url);
 
                 //MVTelefono.BuscarTelefonos(UidPropietario: UidUsuario, ParadetroDeBusqueda: "Usuario");
@@ -115,7 +113,7 @@ namespace Repartidores_GoDeliverix.VM
                 Guid UidTipoDeTelefono = AppInstance.MVAjustesTelefono.LsTipoDeTelefono[intSelectTelefono].UidTipoDeTelefono;
                 string NombreTipoTelfono = AppInstance.MVAjustesTelefono.LsTipoDeTelefono[intSelectTelefono].StrTipoDeTelefono;
                 string numero = AppInstance.MVAjustesTelefono.LsTipoDeTelefono[intSelectTelefono].intNumeroTelefono;
-                url = "Telefono/GetActualizaTelefonoApi?UidTelefono=" + UidTipoDeTelefono + "&Numero="+ numero + "&UidTipoDeTelefono=" + NombreTipoTelfono + "";
+                url = "https://www.godeliverix.net/api/Telefono/GetActualizaTelefonoApi?UidTelefono=" + UidTipoDeTelefono + "&Numero=" + numero + "&UidTipoDeTelefono=" + NombreTipoTelfono + "";
                 await _WebApiGoDeliverix.GetAsync(url);
                 UidUsuario = AppInstance.Session_.UidUsuario;
             }
