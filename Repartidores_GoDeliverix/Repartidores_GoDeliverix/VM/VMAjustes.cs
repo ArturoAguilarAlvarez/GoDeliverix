@@ -134,7 +134,7 @@ namespace Repartidores_GoDeliverix.VM
             Recargar();
         }
 
-        public void ActualizaUsuario(string Nombre = "", string ApellidoPaterno = "", string ApellidoMaterno = "", string fnacimiento = "")
+        public async void ActualizaUsuario(string Nombre = "", string ApellidoPaterno = "", string ApellidoMaterno = "", string fnacimiento = "")
         {
             var AppInstance = MainViewModel.GetInstance();
             string UidUsuario = AppInstance.Session_.UidUsuario.ToString();
@@ -152,7 +152,7 @@ namespace Repartidores_GoDeliverix.VM
                     {
                         url = "https://www.godeliverix.net/api/Usuario/GetActualizarUsuario?UidUsuario=" + UidUsuario + "&fnacimiento=" + fnacimiento + "&perfil=" + PerfilDeUsuario + "";
                     }
-                    _webApi.GetAsync(url);
+                    await _webApi.GetAsync(url);
                 }
                 catch (Exception e)
                 {
