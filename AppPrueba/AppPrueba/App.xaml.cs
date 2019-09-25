@@ -1,11 +1,9 @@
 ﻿using System;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
-using AppPrueba.Services;
 using AppPrueba.Views;
 using VistaDelModelo;
 using System.Collections.Generic;
-
+using Com.OneSignal;
 namespace AppPrueba
 {
     public partial class App : Application
@@ -32,8 +30,7 @@ namespace AppPrueba
         public static VMUsuarios MVUsuarios = new VMUsuarios();
         public static VMMensaje MVMensaje = new VMMensaje();
         public static VMEmpresas MVEmpresas = new VMEmpresas();
-        int IdNotificacion;
-
+       
 
         public App()
         {
@@ -41,6 +38,10 @@ namespace AppPrueba
 
            // DependencyService.Register<MockDataStore>();
             MainPage = new NavigationPage(new LoginPage());
+
+
+            OneSignal.Current.StartInit("170c0582-a7c3-4b75-b1a8-3fe4a952351f")
+                            .EndInit();
         }
 
         protected override void OnStart()

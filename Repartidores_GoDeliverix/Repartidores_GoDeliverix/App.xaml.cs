@@ -4,6 +4,7 @@ using System.Globalization;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Repartidores_GoDeliverix.VM;
+using Com.OneSignal;
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace Repartidores_GoDeliverix
 {
@@ -30,7 +31,8 @@ namespace Repartidores_GoDeliverix
             {
                 MainPage = new NavigationPage(new Login());
             }
-            
+            OneSignal.Current.StartInit("170c0582-a7c3-4b75-b1a8-3fe4a952351f")
+                  .EndInit();
         }
 
         protected override void OnStart()

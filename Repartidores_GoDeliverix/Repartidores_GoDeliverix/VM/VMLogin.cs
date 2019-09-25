@@ -11,7 +11,7 @@ using System.Windows.Input;
 using VistaDelModelo;
 using Xamarin.Essentials;
 using Xamarin.Forms;
-
+using Com.OneSignal;
 namespace Repartidores_GoDeliverix.VM
 {
     public class VMLogin : ControlsController
@@ -161,8 +161,6 @@ namespace Repartidores_GoDeliverix.VM
                         perfil = obj.ToString();
                     }
 
-                    
-
                     //Entrada solo para perfil de repartidor
                     if (perfil.ToUpper() == "DFC29662-0259-4F6F-90EA-B24E39BE4346")
                     {
@@ -194,6 +192,8 @@ namespace Repartidores_GoDeliverix.VM
                         };
                         AppInstance.MVAjustes = new VMAjustes();
                         AppInstance.MVTurno = new VMTurno();
+                        //OneSignal.Current.SetExternalUserId(UidUsuario.ToString());
+
                         Application.Current.Properties["IsLogged"] = true;
                         Application.Current.MainPage = new NavigationPage(new TabbedPageMain());
 

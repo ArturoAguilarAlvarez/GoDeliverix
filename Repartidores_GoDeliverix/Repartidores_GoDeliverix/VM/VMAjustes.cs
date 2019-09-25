@@ -231,7 +231,7 @@ namespace Repartidores_GoDeliverix.VM
                 StrNombre = MVUsuario.StrNombre;
                 StrApellidoMaterno = MVUsuario.StrApellidoPaterno;
                 StrApellidoPaterno = MVUsuario.StrApellidoMaterno;
-                StrFechaDeNacimiento = DateTime.Parse(MVUsuario.DtmFechaDeNacimiento).ToShortDateString();
+                this.StrFechaDeNacimiento = DateTime.Parse(MVUsuario.DtmFechaDeNacimiento).ToString();
                 //Obtiene el correo electronico
                 using (var _webApi = new HttpClient())
                 {

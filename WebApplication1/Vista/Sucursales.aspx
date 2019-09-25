@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="MasterDeliverix.Master" AutoEventWireup="true" CodeBehind="Sucursales.aspx.cs" Inherits="WebApplication1.Vista.Sucursales" %>
+﻿<%@ Page Language="C#" MasterPageFile="MasterDeliverix.Master" AutoEventWireup="true" CodeBehind="Sucursales.aspx.cs" Inherits="WebApplication1.Vista.Sucursales" %>
 
 <%@ Register Assembly="GMaps" Namespace="Subgurim.Controles" TagPrefix="cc1" %>
 <%@ MasterType VirtualPath="~/Vista/MasterDeliverix.Master" %>
@@ -397,7 +397,7 @@
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <%-- Boton eliminar --%>
-                                               <%-- <asp:TemplateField>
+                                                <%-- <asp:TemplateField>
                                                     <ItemStyle CssClass="text-center" />
                                                     <ItemTemplate>
                                                         <asp:LinkButton ID="btnEliminarLicencia" CssClass="btn btn-sm btn-danger" ToolTip="Eliminar" CommandName="Delete" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" runat="server">

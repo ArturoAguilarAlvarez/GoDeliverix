@@ -8,6 +8,7 @@ using Xamarin.Forms.Xaml;
 using Newtonsoft.Json;
 using AppPrueba.WebApi;
 using System.Net.Http;
+using Com.OneSignal;
 
 namespace AppPrueba.Views
 {
@@ -24,7 +25,7 @@ namespace AppPrueba.Views
         {
 
             HttpClient _client = new HttpClient();
-            string url = "";
+            string url;
             btnLogin.IsEnabled = false;
             //await PopupNavigation.Instance.PushAsync(new AppPrueba.Popup.Loanding());
 
@@ -35,10 +36,15 @@ namespace AppPrueba.Views
                 string password = txtIDContraseña.Text;
                 if (!string.IsNullOrWhiteSpace(usuario) && !string.IsNullOrWhiteSpace(password))
                 {
-                    url = RestService.Servidor + "api/Profile/GET?Usuario=" + usuario + "&Contrasena=" + password;
-                    string content = await _client.GetStringAsync(url);
-                    List<string> listaID = JsonConvert.DeserializeObject<List<string>>(content);
-                    Guid Uidusuario = new Guid(listaID[0].ToString());
+                    string Uid;
+                    using (HttpClient _WebApiGoDeliverix = new HttpClient())
+                    {
+                        url = "https://www.godeliverix.net/api/Profile/GET?Usuario=" + usuario + "&Contrasena=" + password + "";
+
+                        string content = await _WebApiGoDeliverix.GetStringAsync(url);
+                        Uid = content = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                    }
+                    Guid Uidusuario = new Guid(Uid);
                     App.UIdUsuario = Uidusuario;
                     if (Uidusuario != Guid.Empty)
                     {
@@ -60,6 +66,7 @@ namespace AppPrueba.Views
                                     App.NombreEmpresa = App.MVEmpresas.NOMBRECOMERCIAL;
                                     App.NOmbreUsuario = usuario;
                                     Application.Current.Properties["IsLogged"] = true;
+                                    OneSignal.Current.SetExternalUserId(Uidusuario.ToString());
                                     App.Current.MainPage = new Views.MasterMenu();//Xam.Plugins.Settings                                    
                                 }
                                 else

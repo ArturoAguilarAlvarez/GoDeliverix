@@ -7,12 +7,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 using Rg.Plugins.Popup.Services;
-
+using Com.OneSignal;
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace AppCliente
 {
     public partial class App : Application
     {
+        #region Propiedades globales
         public static string Global1 = "";
         public static string Usuario = "";
         public static string Contrasena = "";
@@ -44,6 +45,8 @@ namespace AppCliente
         public static VMDireccion MVDireccion = new VMDireccion();
         public static List<VMProducto> ListaDeProductos = new List<VMProducto>();
         public static List<VMEmpresas> LISTADEEMPRESAS = new List<VMEmpresas>();
+        #endregion
+
         public App()
         {
             InitializeComponent();
@@ -64,25 +67,9 @@ namespace AppCliente
                     {
                         MVDireccion.ObtenerDireccionesUsuario(Global1);
 
-
                         MainPage = new MasterMenu();
-                        //switch (Device.RuntimePlatform)
-                        //{
-                        //    case Device.iOS:
-                        //        MainPage = new TabsMain();    
-                        //        //Application.Current.MainPage = new NavigationPage(new TabsMain());
-                        //        break;
-                        //    case Device.Android:
-                        //        MainPage = new NavigationPage(new TabsMain());
-                        //        //MainPage = new MasterDetailPage1();
-                        //        break;
-                        //    case Device.UWP:
-                        //    case Device.macOS:
-                        //    default:
-                        //        // This is just an example. You wouldn't actually need to do this, since Padding is already 0 by default.
-                        //        break;
-                        //}
-                        //MainPage = new MasterDetailPage1();
+                        OneSignal.Current.StartInit("YOUR_ONESIGNAL_APP_ID")
+                  .EndInit();
                     }
                     else
                     {

@@ -97,6 +97,13 @@ namespace VistaDelModelo
         public int Cantidad { get; set; }
         public decimal Subtotal { get; set; }
         public decimal CostoEnvio { get; set; }
+        private decimal _DPropina;
+        public decimal DPropina
+        {
+            get { return _DPropina; }
+            set { _DPropina = value; }
+        }
+
         public Guid UidTarifario { get; set; }
         public decimal Total { get; set; }
         public string StrIdentificador { get; set; }
@@ -419,13 +426,21 @@ namespace VistaDelModelo
 
         }
 
-        public void AgregaAlCarrito(Guid uidProducto, Guid UidSucursal, Guid UidSeccion, string cantidad, decimal CostoDeEnvio = 0.0m, Guid UidTarifario = new Guid(), string strNota = "", Guid RegistroProductoEnCarrito = new Guid(), string URLEmpresa = "")
+        public void AgregaAlCarrito(Guid uidProducto, Guid UidSucursal, Guid UidSeccion, string cantidad, decimal CostoDeEnvio = 0.0m, Guid UidTarifario = new Guid(), string strNota = "", Guid RegistroProductoEnCarrito = new Guid(), string URLEmpresa = "",string dPropina = "")
         {
             //Agrega un registro sin nota
             //Agrega un registro con una nota
             string nota = "";
             Guid uidNota = Guid.Empty;
-
+            decimal dpropina = new decimal();
+            if (!string.IsNullOrEmpty(dPropina))
+            {
+                dpropina = decimal.Parse(dPropina, System.Globalization.NumberStyles.Float);
+            }
+            else
+            {
+                dpropina = 0.0m;
+            }
             if (RegistroProductoEnCarrito == Guid.Empty)
             {
 
@@ -475,7 +490,8 @@ namespace VistaDelModelo
                             Total = Total,
                             CostoEnvio = CostoDeEnvio,
                             Subtotal = SubTotal,
-                            Cantidad = int.Parse(cantidad)
+                            Cantidad = int.Parse(cantidad),
+                            DPropina =dpropina
                         });
                     }
                     else
@@ -486,6 +502,7 @@ namespace VistaDelModelo
                             Sucursal.Subtotal = (Sucursal.Subtotal + SubTotal);
                             Sucursal.Cantidad = Sucursal.Cantidad + int.Parse(cantidad);
                             Sucursal.Total = (Sucursal.Subtotal + Sucursal.CostoEnvio);
+                            Sucursal.DPropina = dpropina;
                         }
                     }
 

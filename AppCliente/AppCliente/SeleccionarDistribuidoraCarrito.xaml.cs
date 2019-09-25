@@ -9,9 +9,9 @@ using Xamarin.Forms.Xaml;
 
 namespace AppCliente
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class SeleccionarDistribuidoraCarrito : ContentPage
-	{
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class SeleccionarDistribuidoraCarrito : ContentPage
+    {
 
         VMProducto ObjItem;
         ListView listaEmpresa;
@@ -24,16 +24,15 @@ namespace AppCliente
         decimal TotalEnvio = 0;
         decimal TotalPagar = 0;
 
-        public SeleccionarDistribuidoraCarrito (VMProducto ObjItem)
-		{
-			InitializeComponent ();
+        public SeleccionarDistribuidoraCarrito(VMProducto ObjItem)
+        {
+            InitializeComponent();
             this.ObjItem = ObjItem;
             MyListViewDistribuidora.ItemsSource = null;
-
             MyListViewDistribuidora.ItemsSource = App.MVTarifario.ListaDeTarifarios;
         }
 
-        public SeleccionarDistribuidoraCarrito(VMProducto ObjItem,ListView listaEmpresasDelCarrito,Label txtTotalEnvio, Button btnPagar, Button btnPagar2)
+        public SeleccionarDistribuidoraCarrito(VMProducto ObjItem, ListView listaEmpresasDelCarrito, Label txtTotalEnvio, Button btnPagar, Button btnPagar2)
         {
             InitializeComponent();
             this.txtTotalEnvio = txtTotalEnvio;
@@ -51,13 +50,12 @@ namespace AppCliente
 
         private void MyListViewDistribuidora_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            
+
             var item = ((ItemTappedEventArgs)e);
             listaEmpresa.ItemsSource = null;
-            listaEmpresa.ItemsSource= App.MVProducto.ListaDelInformacionSucursales; 
+            listaEmpresa.ItemsSource = App.MVProducto.ListaDelInformacionSucursales;
             VMTarifario registro = (VMTarifario)item.Item;
             App.MVProducto.AgregaTarifarioOrden(ObjItem.UidSucursal, registro.UidTarifario, registro.DPrecio);
-
 
             cantidad = 0;
             subtotal = 0;
@@ -74,7 +72,6 @@ namespace AppCliente
                 TotalPagar = TotalPagar + App.MVProducto.ListaDelInformacionSucursales[i].Total;
                 subtotal = subtotal + App.MVProducto.ListaDelInformacionSucursales[i].Subtotal;
             }
-
 
             txtTotalEnvio.Text = "Total de envio " + TotalEnvio.ToString();
 

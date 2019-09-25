@@ -14,12 +14,12 @@ namespace WebApplication1.Controllers
         /// <param name="UidOrdenSucursal"></param>
         /// <param name="UidTarifario"></param>
         /// <returns></returns>
-        public ResponseHelper GetGuardarTarifario(Guid UidOrdenSucursal, Guid UidTarifario)
-        {
+        public ResponseHelper GetGuardarTarifario(Guid UidOrdenSucursal, Guid UidTarifario, string DPropina)
+        {  
             MVTarifario = new VMTarifario();
             Respuesta = new ResponseHelper();
-            MVTarifario.AgregarTarifarioOrden(UidOrden: UidOrdenSucursal, UidTarifario: UidTarifario);
-            
+            MVTarifario.AgregarTarifarioOrden(UidOrden: UidOrdenSucursal, UidTarifario: UidTarifario, DPropina:decimal.Parse(DPropina));
+
             Respuesta.Data = "Registro guardado";
             Respuesta.Status = true;
             Respuesta.Message = "Informacion agregada satisfactoriamente";
@@ -30,8 +30,8 @@ namespace WebApplication1.Controllers
         {
             MVTarifario = new VMTarifario();
             Respuesta = new ResponseHelper();
-            MVTarifario.AgregarCodigoAOrdenTarifario(UidCodigo,UidLicencia,uidorden);
-            
+            MVTarifario.AgregarCodigoAOrdenTarifario(UidCodigo, UidLicencia, uidorden);
+
             Respuesta.Data = "Registro guardado";
             Respuesta.Status = true;
             Respuesta.Message = "Informacion agregada satisfactoriamente";

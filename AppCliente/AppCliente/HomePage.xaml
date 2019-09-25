@@ -9,7 +9,6 @@
              x:Class="AppCliente.HomePage">
     <NavigationPage.TitleView>
         <Grid>
-
             <!--IsClippedToBounds="True"-->
             <Grid x:Name="PanelNavegacionBuscar" IsVisible="True">
                 <Grid.ColumnDefinitions>
@@ -77,17 +76,16 @@
                              Clicked="ButtonFiltros_Clicked" 
                              x:Name="btnFitltrosBusquedas"></ImageButton>
             </Grid>
-
         </Grid>
     </NavigationPage.TitleView>
     <ContentPage.Content>
         <Grid VerticalOptions="Fill">
             <StackLayout Orientation="Vertical" x:Name="PanelDireccionesVacias">
-                
+
                 <Label Text=" Agrega una direccion y encuentra productos cerca de ti." FontAttributes="Bold" TextDecorations="None" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Start" Margin="20" FontSize="Large"></Label>
                 <Button Text="Agregar direccion" HorizontalOptions="FillAndExpand" x:Name="btnAgregarDireccion" TextColor="White" FontSize="Medium"  BackgroundColor="Green" Clicked="BtnAgregarDireccion_Clicked"></Button>
             </StackLayout>
-            
+
             <StackLayout x:Name="PanelProductos">
                 <Grid VerticalOptions="FillAndExpand">
                     <Grid.RowDefinitions>
@@ -122,7 +120,7 @@
                                                     </Grid.RowDefinitions>
 
                                                     <StackLayout Grid.Row="0" Orientation="Horizontal">
-                                                       
+
                                                         <ff:CachedImage
                                                     Source="{Binding STRRUTA}"
                                                     HorizontalOptions="Start"
@@ -146,8 +144,7 @@
                                                             <Label Text="{Binding Empresa}"></Label>
                                                             <Label  Text="{Binding STRDESCRIPCION}"
                                            FontSize="Micro"
-                                                                HorizontalOptions="Start"
-                                           />
+                                                                HorizontalOptions="Start"/>
 
                                                             <Label Text="{Binding StrCosto, StringFormat='Desde ${0}'}"
                                                            Margin="0,50,0,0"
@@ -155,8 +152,7 @@
                                                                HorizontalOptions="End"
                                                                 VerticalOptions="End"
                                                                 FontSize="Medium"
-                                                               TextColor="Black"
-                                           />
+                                                               TextColor="Black"/>
 
 
                                                         </StackLayout>
@@ -262,7 +258,7 @@
                     x:Name="btnSeleccionarDireccion" 
                     Grid.Row="3" VerticalOptions="End" 
                     Clicked="BtnSeleccionarDireccion_Clicked"
-                    BackgroundColor="Purple" 
+                    BackgroundColor="#20396e" 
                     HorizontalOptions="FillAndExpand"  
                     TextColor="White" ></Button>
                     <Label Text="" x:Name="IDDireccionBusqueda" IsVisible="False"></Label>

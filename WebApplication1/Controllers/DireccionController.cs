@@ -17,10 +17,10 @@ namespace WebApplication1.Controllers
         public ResponseHelper GetObtenerPaises()
         {
             MVDireccion = new VMDireccion();
-            
+
 
             Respuesta = new ResponseHelper();
-            Respuesta.Data = MVDireccion.Paises(); 
+            Respuesta.Data = MVDireccion.Paises();
             Respuesta.Status = true;
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;
@@ -154,11 +154,6 @@ namespace WebApplication1.Controllers
         // POST: api/Profile
         public void Post([FromBody]string value)
         {
-            bool aguilarEsChoto = true;
-            if (aguilarEsChoto)
-            {
-                String manuel = "rechoto";
-            }
         }
 
         // PUT: api/Profile/5

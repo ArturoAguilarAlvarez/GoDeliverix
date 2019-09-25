@@ -67,7 +67,7 @@ namespace WebApplication1.Controllers
         /// <param name="UidLicencia"></param>
         /// <param name="UidSucursal"></param>
         /// <returns></returns>
-        public ResponseHelper GetAgregaEstatusALaOrden(Guid UidEstatus, string StrParametro, string Mensaje = "", string UidOrden = "", long LngFolio = 0, string UidLicencia = "", string UidSucursal ="")
+        public ResponseHelper GetAgregaEstatusALaOrden(Guid UidEstatus, string StrParametro, string Mensaje = "", string UidOrden = "", long LngFolio = 0, string UidLicencia = "", string UidSucursal = "")
         {
             MVOrden = new VMOrden();
 
@@ -87,7 +87,7 @@ namespace WebApplication1.Controllers
             {
                 Mensaje = Guid.Empty.ToString();
             }
-            MVOrden.AgregaEstatusALaOrden(UidEstatus, StrParametro,new Guid(Mensaje),new Guid(UidOrden), LngFolio,new Guid(UidLicencia),new Guid(UidSucursal));
+            MVOrden.AgregaEstatusALaOrden(UidEstatus, StrParametro, new Guid(Mensaje), new Guid(UidOrden), LngFolio, new Guid(UidLicencia), new Guid(UidSucursal));
             Respuesta = new ResponseHelper();
             Respuesta.Data = "Registro guardado";
             Respuesta.Status = true;
@@ -219,7 +219,7 @@ namespace WebApplication1.Controllers
             Respuesta.Message = "Informacion agregada satisfactoriamente";
             return Respuesta;
         }
-        public ResponseHelper GetBuscarOrdenRepartidor(string UidCodigo,string UidLicencia)
+        public ResponseHelper GetBuscarOrdenRepartidor(string UidCodigo, string UidLicencia)
         {
             MVOrden = new VMOrden();
             MVOrden.BuscarOrdenRepartidor(UidCodigo, UidLicencia);
@@ -252,9 +252,9 @@ namespace WebApplication1.Controllers
             VMOrden MVOrden = new VMOrden();
             Respuesta = new ResponseHelper();
             MVOrden.BuscarOrdenes(
-                "Sucursal", 
-                UidLicencia: new Guid(Licencia), 
-                EstatusSucursal: Estatus, 
+                "Sucursal",
+                UidLicencia: new Guid(Licencia),
+                EstatusSucursal: Estatus,
                 TipoDeSucursal: tipoSucursal);
             Respuesta.Data = MVOrden;
             return Respuesta;
@@ -264,9 +264,9 @@ namespace WebApplication1.Controllers
         public ResponseHelper GetBuscarOrdenPorCodigoQR(string strCodigo, string UidTurnoRepartidor)
         {
             MVOrden = new VMOrden();
-            
+
             Respuesta = new ResponseHelper();
-            Respuesta.Data = MVOrden.ValidarCodigoUsuario(strCodigo, UidTurnoRepartidor); 
+            Respuesta.Data = MVOrden.ValidarCodigoUsuario(strCodigo, UidTurnoRepartidor);
             Respuesta.Status = true;
             Respuesta.Message = "Informacion agregada satisfactoriamente";
             return Respuesta;
@@ -286,16 +286,15 @@ namespace WebApplication1.Controllers
 
 
 
-        public ResponseHelper GetCancelarOrden(string Licencia, string LNGFolio,string IdMensaje)
+        public ResponseHelper GetCancelarOrden(string Licencia, string LNGFolio, string IdMensaje)
         {
             VMOrden MVOrden = new VMOrden();
             Respuesta = new ResponseHelper();
-            VMTarifario MVTarifario = new VMTarifario();
-            MVOrden.AgregarEstatusOrdenEnSucursal(new Guid("EAE7A7E6-3F19-405E-87A9-3162D36CE21B"), "S", Licencia, LngFolio: long.Parse(LNGFolio), UidMensaje:new Guid (IdMensaje));
+            MVOrden.AgregarEstatusOrdenEnSucursal(new Guid("EAE7A7E6-3F19-405E-87A9-3162D36CE21B"), "S", Licencia, LngFolio: long.Parse(LNGFolio), UidMensaje: new Guid(IdMensaje));
             return Respuesta;
         }
 
-        public ResponseHelper GetFinalizarOrden(string Licencia,string Uidorden)
+        public ResponseHelper GetFinalizarOrden(string Licencia, string Uidorden)
         {
             VMOrden MVOrden = new VMOrden();
             Respuesta = new ResponseHelper();

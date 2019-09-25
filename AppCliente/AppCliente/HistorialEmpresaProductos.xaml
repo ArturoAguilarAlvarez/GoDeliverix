@@ -28,17 +28,6 @@
                                         <ColumnDefinition Width="4*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
 
-                                    <!--<Image
-                                                Grid.Row="0"
-                                        Grid.RowSpan="4"
-                                        Grid.Column="0"
-                                                HorizontalOptions="Center"
-                                                VerticalOptions="Center"
-                                                Aspect="Fill"
-                                                Source="{Binding Imagen}"
-                                                >
-                                    </Image>-->
-
                                     <ff:CachedImage
                                                     Source="{Binding Imagen}"
                                                     HorizontalOptions="Center"
@@ -53,8 +42,6 @@
                                                     RetryDelay           = "3"
                                                     DownsampleToViewSize = "False">
                                     </ff:CachedImage>
-
-
 
                                     <Label Text="{Binding StrNombreProducto}" HorizontalOptions="Center" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" FontSize="Large" TextColor="Black" FontAttributes="Bold"></Label>
 

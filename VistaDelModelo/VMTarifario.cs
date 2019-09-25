@@ -12,31 +12,93 @@ namespace VistaDelModelo
         #region Propiedades
         Tarifario oTarifario;
         DBTarifario oDbTarifario;
-        public Guid UidTarifario { get; set; }
+        private Guid _UidTarifario;
+
+        public Guid UidTarifario
+        {
+            get { return _UidTarifario; }
+            set { _UidTarifario = value; }
+        }
+
         /// <summary>
         /// Relacion de zona de recoleccion
         /// </summary>
-        public Guid UidRelacionZR { get; set; }
-        public string StrNombreColoniaZR { get; set; }
+        private Guid _UidRelacionZR;
+        public Guid UidRelacionZR
+        {
+            get { return _UidRelacionZR; }
+            set { _UidRelacionZR = value; }
+        }
+
+        private string _StrNombreColoniaZR;
+
+        public string StrNombreColoniaZR
+        {
+            get { return _StrNombreColoniaZR; }
+            set { _StrNombreColoniaZR = value; }
+        }
 
         /// <summary>
         /// Relacion de zona de entrega
         /// </summary>
-        public Guid UidRelacionZE { get; set; }
-        public string StrNombreColoniaZE { get; set; }
+        private Guid _UidRelacionZE;
+
+        public Guid UidRelacionZE
+        {
+            get { return _UidRelacionZE; }
+            set { _UidRelacionZE = value; }
+        }
+
+        private string _StrNombreColoniaZE;
+        public string StrNombreColoniaZE
+        {
+            get { return _StrNombreColoniaZE; }
+            set { _StrNombreColoniaZE = value; }
+        }
         /// <summary>
         /// Precio de la tafira
         /// </summary>
-        public decimal DPrecio { get; set; }
-        public Guid GuidSucursalDistribuidora { get; set; }
+        private decimal _DPrecio;
+        public decimal DPrecio
+        {
+            get { return _DPrecio; }
+            set { _DPrecio = value; }
+        }
+
+        private Guid _GuidSucursalDistribuidora;
+        public Guid GuidSucursalDistribuidora
+        {
+            get { return _GuidSucursalDistribuidora; }
+            set { _GuidSucursalDistribuidora = value; }
+        }
         /// <summary>
         /// La ruta de la imagen de la empresa distribuidora
         /// </summary>
-        public string StrRuta { get; set; }
+        private string _StrRuta;
+
+        public string StrRuta
+        {
+            get { return _StrRuta; }
+            set { _StrRuta = value; }
+        }
         /// <summary>
         /// Nombre de la sucursal de tarifario
         /// </summary>
-        public string StrNombreSucursal { get; set; }
+        private string _StrNombreSucursal;
+        public string StrNombreSucursal
+        {
+            get { return _StrNombreSucursal; }
+            set { _StrNombreSucursal = value; }
+        }
+
+        private decimal _MPropina;
+
+        public decimal MPropina
+        {
+            get { return _MPropina; }
+            set { _MPropina = value; }
+        }
+
         public List<VMTarifario> ListaDeTarifarios = new List<VMTarifario>();
         public List<VMTarifario> ListaDeTarifariosSeleccionados = new List<VMTarifario>();
 
@@ -284,8 +346,6 @@ namespace VistaDelModelo
                         }
                     }
                 }
-
-
             }
             catch (Exception e)
             {
@@ -353,10 +413,10 @@ namespace VistaDelModelo
             oDbTarifario.EliminaTarifarioDeSuministradora(UidSucursal.ToString());
         }
 
-        public void AgregarTarifarioOrden(Guid UidOrden, Guid UidTarifario)
+        public void AgregarTarifarioOrden(Guid UidOrden, Guid UidTarifario,decimal DPropina)
         {
             oTarifario = new Tarifario();
-            oTarifario.RelacionConOrden(uidorden: UidOrden, uidTarifario: UidTarifario);
+            oTarifario.RelacionConOrden(uidorden: UidOrden, uidTarifario: UidTarifario,DPropina: DPropina);
         }
 
         #endregion

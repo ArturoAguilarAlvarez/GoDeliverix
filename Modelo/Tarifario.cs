@@ -88,7 +88,7 @@ namespace Modelo
             return resultado;
         }
 
-        public bool RelacionConOrden(Guid uidorden, Guid uidTarifario)
+        public bool RelacionConOrden(Guid uidorden, Guid uidTarifario,decimal DPropina)
         {
             bool resultado = false;
             SqlCommand Comando = new SqlCommand();
@@ -102,6 +102,9 @@ namespace Modelo
 
                 Comando.Parameters.Add("@UidTarifario", SqlDbType.UniqueIdentifier);
                 Comando.Parameters["@UidTarifario"].Value = uidTarifario;
+
+                Comando.Parameters.Add("@DPropina", SqlDbType.Money);
+                Comando.Parameters["@DPropina"].Value = DPropina;
 
                 resultado = CN.ModificarDatos(Comando);
             }

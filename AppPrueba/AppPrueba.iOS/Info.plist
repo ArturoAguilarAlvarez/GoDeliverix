@@ -22,7 +22,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>GoDeliverix_Suministradora</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.companyname.App1Sucursal</string>
+	<string>com.companyname.sucursal</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>UILaunchStoryboardName</key>
@@ -38,7 +38,9 @@
 	<string>New Entry</string>
 	<key>CustomProperty</key>
 	<string></string>
-	<key>MinimumOSVersion</key>
-	<string>12.2</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 </dict>
 </plist>

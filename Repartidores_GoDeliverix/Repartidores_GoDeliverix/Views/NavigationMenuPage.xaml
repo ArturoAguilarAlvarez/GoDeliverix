@@ -6,6 +6,7 @@
              BindingContext="{Binding VMMain, Source={StaticResource Locator}}"
              Title="Menu">
     <ContentPage.Padding>
+        
         <OnPlatform iOS="0,20,0,10" Android="10,10,10,10"></OnPlatform>
     </ContentPage.Padding>
     <ContentPage.Content>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Com.OneSignal;
 using Foundation;
 using UIKit;
 
@@ -22,6 +22,7 @@ namespace AppPrueba.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
+            OneSignal.Current.StartInit("170c0582-a7c3-4b75-b1a8-3fe4a952351f").EndInit();
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();

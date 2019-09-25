@@ -4,170 +4,170 @@
              xmlns:popo="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
              xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              x:Class="AppCliente.ProductoDescripcionPage">
-    <!--<NavigationPage.TitleView>
+  <!--<NavigationPage.TitleView>
     <StackLayout Orientation="Horizontal" HorizontalOptions="End" Spacing="10">
       <ImageButton Source="IconCarrito.png" HeightRequest="50" WidthRequest="30"  HorizontalOptions="End"
               BackgroundColor="Transparent"  ></ImageButton>
     </StackLayout>
   </NavigationPage.TitleView>-->
-    <ContentPage.Content>
-        <ScrollView>
-            <StackLayout>
-                <Grid ColumnSpacing="0" VerticalOptions="FillAndExpand" RowSpacing="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="AUTO" />
-                        <RowDefinition Height="AUTO" />
-                        <RowDefinition Height="AUTO" />
-                        <RowDefinition Height="AUTO" />
-                    </Grid.RowDefinitions>
+  <ContentPage.Content>
+    <ScrollView>
+      <StackLayout>
+        <Grid ColumnSpacing="0" VerticalOptions="FillAndExpand" RowSpacing="0">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="AUTO" />
+            <RowDefinition Height="AUTO" />
+            <RowDefinition Height="AUTO" />
+            <RowDefinition Height="AUTO" />
+          </Grid.RowDefinitions>
 
-                    <Image x:Name="ImagenProducto"  HeightRequest="250" Margin="5" VerticalOptions="Center" Grid.Row="0" Aspect="Fill"></Image>
+          <Image x:Name="ImagenProducto"  HeightRequest="250" Margin="5" VerticalOptions="Center" Grid.Row="0" Aspect="Fill"></Image>
 
-                    <StackLayout Orientation="Horizontal" Margin="10,0" Grid.Row="1" HorizontalOptions="Center">
-                        <StackLayout Orientation="Vertical">
-                            <Label Margin="0,0" HorizontalOptions="Center" Text="" FontSize="Medium" FontAttributes="Bold" x:Name="txtNombreProducto" Grid.Row="1"></Label>
-                            <Label Margin="0,0" HorizontalOptions="Center" Text="" FontSize="Default" FontAttributes="Italic" x:Name="txtDescripcionProducto" Grid.Row="2" Style="{DynamicResource bodystyle }" ></Label>
+          <StackLayout Orientation="Horizontal" Margin="10,0" Grid.Row="1" HorizontalOptions="Center">
+            <StackLayout Orientation="Vertical">
+              <Label Margin="0,0" HorizontalOptions="Center" Text="" FontSize="Medium" FontAttributes="Bold" x:Name="txtNombreProducto" Grid.Row="1"></Label>
+              <Label Margin="0,0" HorizontalOptions="Center" Text="" FontSize="Default" FontAttributes="Italic" x:Name="txtDescripcionProducto" Grid.Row="2" Style="{DynamicResource bodystyle }" ></Label>
 
-                            <Grid>
-                                <!--Orientation="Horizontal" HorizontalOptions="Center"-->
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="3*"></ColumnDefinition>
-                                    <ColumnDefinition Width="4*"></ColumnDefinition>
-                                    <ColumnDefinition Width="3*"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
+              <Grid>
+                <!--Orientation="Horizontal" HorizontalOptions="Center"-->
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="3*"></ColumnDefinition>
+                  <ColumnDefinition Width="4*"></ColumnDefinition>
+                  <ColumnDefinition Width="3*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
 
-                                <Button 
-                                    Grid.Column="0"
-                                     x:Name="btnMenos"
-                                    Text="-"  
-                                    Clicked="ButtonMenos_Clicked"
-                                    WidthRequest="80"
-                                    HeightRequest="80" 
-                                    FontSize="40" 
-                                    Padding="0"
-                                    FontAttributes="Bold" 
-                                    BorderColor="Black" 
-                                    BorderWidth="2" 
-                                    BackgroundColor="#cb2d3e" 
-                                    TextColor="White"  
-                                    FontFamily="Roboto-Bold" 
-                                    HorizontalOptions="Center">
-                                    <Button.BorderRadius>
-                                        <OnPlatform x:TypeArguments="x:Int32"  iOS="40" Android="40">
-                                        </OnPlatform>
-                                    </Button.BorderRadius>
-                                </Button>
-                                <!--<Button x:Name="btnMenos" Text="-" CornerRadius="30" TextColor="White" BackgroundColor="Red" Clicked="ButtonMenos_Clicked" IsEnabled="False"></Button>-->
+                <Button
+                    Grid.Column="0"
+                     x:Name="btnMenos"
+                    Text="-"
+                    Clicked="ButtonMenos_Clicked"
+                    WidthRequest="80"
+                    HeightRequest="80"
+                    FontSize="40"
+                    Padding="0"
+                    FontAttributes="Bold"
+                    BorderColor="Black"
+                    BorderWidth="2"
+                    BackgroundColor="#cb2d3e"
+                    TextColor="White"
+                    FontFamily="Roboto-Bold"
+                    HorizontalOptions="Center">
+                  <Button.BorderRadius>
+                    <OnPlatform x:TypeArguments="x:Int32"  iOS="40" Android="40">
+                    </OnPlatform>
+                  </Button.BorderRadius>
+                </Button>
+                <!--<Button x:Name="btnMenos" Text="-" CornerRadius="30" TextColor="White" BackgroundColor="Red" Clicked="ButtonMenos_Clicked" IsEnabled="False"></Button>-->
 
-                                <!--<Label
+                <!--<Label
                                     FontSize="Large"
                                      x:Name="_displayLabel"
                                     Text="1" VerticalOptions="Center"/>-->
-                                <Entry       
-                                    Grid.Column="1"
-                                    Keyboard="Numeric"
-                                    FontSize="Large"
-                                    x:Name="_displayLabel"
+                <Entry
+                    Grid.Column="1"
+                    Keyboard="Numeric"
+                    FontSize="Large"
+                    x:Name="_displayLabel"
                                     
-                                    TextChanged="_displayLabel_TextChanged"
-                                    HorizontalTextAlignment="Center"
-                                    Text="1" VerticalOptions="Center"
+                    TextChanged="_displayLabel_TextChanged"
+                    HorizontalTextAlignment="Center"
+                    Text="1" VerticalOptions="Center"
                                     ></Entry>
 
-                                <Button 
-                                    Grid.Column="2"
-                                    Text="+"  
-                                    Clicked="ButtonMas_Clicked"
-                                    WidthRequest="80" 
-                                    HeightRequest="80" 
-                                    FontSize="40" 
-                                    Padding="0"
-                                    FontAttributes="Bold"  
-                                    BorderWidth="2" 
-                                    BackgroundColor="#56ab2f"    
-                                    BorderColor="Black" 
-                                    TextColor="White"  
-                                    FontFamily="Roboto-Bold" 
-                                    HorizontalOptions="Center">
-                                    <Button.BorderRadius>
-                                        <OnPlatform x:TypeArguments="x:Int32"  iOS="40" Android="40">
-                                        </OnPlatform>
-                                    </Button.BorderRadius>
-                                </Button>
+                <Button
+                    Grid.Column="2"
+                    Text="+"
+                    Clicked="ButtonMas_Clicked"
+                    WidthRequest="80"
+                    HeightRequest="80"
+                    FontSize="40"
+                    Padding="0"
+                    FontAttributes="Bold"
+                    BorderWidth="2"
+                    BackgroundColor="#56ab2f"
+                    BorderColor="Black"
+                    TextColor="White"
+                    FontFamily="Roboto-Bold"
+                    HorizontalOptions="Center">
+                  <Button.BorderRadius>
+                    <OnPlatform x:TypeArguments="x:Int32"  iOS="40" Android="40">
+                    </OnPlatform>
+                  </Button.BorderRadius>
+                </Button>
 
-                                <!--<Button Text="+" CornerRadius="30" TextColor="White" BackgroundColor="Green" Clicked="ButtonMas_Clicked"></Button>-->
-                            </Grid>
+                <!--<Button Text="+" CornerRadius="30" TextColor="White" BackgroundColor="Green" Clicked="ButtonMas_Clicked"></Button>-->
+              </Grid>
 
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                                <Label Text="defaoult" x:Name="txtEmpresaCosto" FontSize="Medium" TextColor="Black"></Label>
-                            </StackLayout>
-                            <StackLayout Orientation="Vertical" HorizontalOptions="Start" >
-                                <StackLayout Orientation="Horizontal">
-                                    <Label Text="Sucursal: " VerticalOptions="Center" x:Name="txtSucursall"></Label>
-                                    <!--<Label Text="Sucursal seleccionada" x:Name="txtSucursalSeleccionada" VerticalOptions="Center" ></Label>
+              <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                <Label Text="defaoult" x:Name="txtEmpresaCosto" FontSize="Medium" TextColor="Black"></Label>
+              </StackLayout>
+              <StackLayout Orientation="Vertical" HorizontalOptions="Start" >
+                <StackLayout Orientation="Horizontal">
+                  <Label Text="Sucursal: " VerticalOptions="Center" x:Name="txtSucursall"></Label>
+                  <!--<Label Text="Sucursal seleccionada" x:Name="txtSucursalSeleccionada" VerticalOptions="Center" ></Label>
                                     <Button x:Name="btnCambioDeSucursal" Text=">>"   Grid.Row="5" Clicked="BtnCambioDeSucursal_Clicked" VerticalOptions="Center" CornerRadius="20" TextColor="White" BackgroundColor="Black"></Button>-->
-                                    <Button  Text="Sucursal seleccionada" x:Name="txtSucursalSeleccionada" Clicked="BtnCambioDeSucursal_Clicked" BackgroundColor="Transparent"></Button>
-                                </StackLayout>
-                            </StackLayout>
+                  <Button  Text="Sucursal seleccionada" x:Name="txtSucursalSeleccionada" Clicked="BtnCambioDeSucursal_Clicked" BackgroundColor="Transparent"></Button>
+                </StackLayout>
+              </StackLayout>
 
-                        </StackLayout>
-                    </StackLayout>
-                    <StackLayout Grid.Row="2">
-                        <Entry x:Name="txtComentario" Placeholder="Agregar Notas" Margin="5,0" ></Entry>
-                        <ListView x:Name="MyListViewBusquedaEmpresaDelProducto" Margin="5,0" IsVisible="False"
-            ItemsSource="{Binding VMTelefono}"
-                      SelectionMode="Single"
-                      SeparatorVisibility="None"
-            IsPullToRefreshEnabled="False"
-            HasUnevenRows="True">
-                            <ListView.RowHeight>
-                                <OnPlatform x:TypeArguments="x:Int32">
-                                    <On Platform="iOS, Android" Value="80" />
-                                </OnPlatform>
-                            </ListView.RowHeight>
-                            <!--Custom View Cells-->
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <ContentView Padding="8">
-                                            <Frame OutlineColor="Accent"
+            </StackLayout>
+          </StackLayout>
+          <StackLayout Grid.Row="2">
+            <Entry x:Name="txtComentario" Placeholder="Agregar Notas" Margin="5,0" ></Entry>
+            <ListView x:Name="MyListViewBusquedaEmpresaDelProducto" Margin="5,0" IsVisible="False"
+ItemsSource="{Binding VMTelefono}"
+          SelectionMode="Single"
+          SeparatorVisibility="None"
+IsPullToRefreshEnabled="False"
+HasUnevenRows="True">
+              <ListView.RowHeight>
+                <OnPlatform x:TypeArguments="x:Int32">
+                  <On Platform="iOS, Android" Value="80" />
+                </OnPlatform>
+              </ListView.RowHeight>
+              <!--Custom View Cells-->
+              <ListView.ItemTemplate>
+                <DataTemplate>
+                  <ViewCell>
+                    <ContentView Padding="8">
+                      <Frame OutlineColor="Accent"
                      Padding="10">
-                                                <Grid>
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="Auto"/>
-                                                        <RowDefinition Height="Auto"/>
-                                                    </Grid.RowDefinitions>
-                                                    <StackLayout Grid.Row="0" Orientation="Horizontal">
-                                                        <StackLayout>
-                                                            <Label Text="{Binding StrIdentificador }"
+                        <Grid>
+                          <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                          </Grid.RowDefinitions>
+                          <StackLayout Grid.Row="0" Orientation="Horizontal">
+                            <StackLayout>
+                              <Label Text="{Binding StrIdentificador }"
                          FontSize="22"
                          VerticalOptions="StartAndExpand" />
-                                                            <Label Text="{Binding StrCosto, StringFormat='Costo ${0}'}"
+                              <Label Text="{Binding StrCosto, StringFormat='Costo ${0}'}"
                          FontSize="16"
                          VerticalOptions="CenterAndExpand" />
-                                                        </StackLayout>
-                                                    </StackLayout>
+                            </StackLayout>
+                          </StackLayout>
 
-                                                </Grid>
+                        </Grid>
 
-                                            </Frame>
-                                        </ContentView>
+                      </Frame>
+                    </ContentView>
 
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
+                  </ViewCell>
+                </DataTemplate>
+              </ListView.ItemTemplate>
 
 
-                        </ListView>
-                    </StackLayout>
- 
-                    
-                    <Label x:Name="idSeucursalSeleccionada" Text="" IsVisible="False"></Label>
-                    <Button Text="Agregar carrito $0" x:Name="btnAgregarCarrito"  BackgroundColor="Purple" TextColor="White"  Grid.Row="3"  HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand" Clicked="ButtonCarrito_Clicked"></Button>
-                    <Label IsVisible="False" x:Name="txtIDSeccion" Text=""></Label>
-                </Grid>
-            </StackLayout>
-        </ScrollView>
-    </ContentPage.Content>
+            </ListView>
+          </StackLayout>
+
+
+          <Label x:Name="idSeucursalSeleccionada" Text="" IsVisible="False"></Label>
+          <Button Text="Agregar carrito $0" x:Name="btnAgregarCarrito"  BackgroundColor="#20396e" TextColor="White"  Grid.Row="3"  HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand" Clicked="ButtonCarrito_Clicked"></Button>
+          <Label IsVisible="False" x:Name="txtIDSeccion" Text=""></Label>
+        </Grid>
+      </StackLayout>
+    </ScrollView>
+  </ContentPage.Content>
 
 </ContentPage>

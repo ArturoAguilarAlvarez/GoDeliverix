@@ -79,6 +79,14 @@ namespace Repartidores_GoDeliverix.VM
             set { SetValue(ref _Total, value); }
         }
 
+        private decimal _DPropina;
+
+        public decimal DPropina
+        {
+            get { return _DPropina; }
+            set { SetValue(ref _DPropina, value); }
+        }
+
         private decimal __TotalEnvio;
 
         public decimal TotalEnvio
@@ -223,8 +231,8 @@ namespace Repartidores_GoDeliverix.VM
                         obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
                     }
                     Guid UidEstatusTurno = new Guid(obj);
-                    //Validacion por estatus de turno liquidado o cerrado
-                    if (UidEstatusTurno == new Guid("38FA16DF-4727-41FD-A03E-E2E43FA78F3F") || UidEstatusTurno == new Guid("3BE9EF83-4A39-4A60-9FA9-7F50AD60CA3A"))
+                    //Validacion por estatus de turno liquidado o cerrado o es el primer turno que abre
+                    if (UidEstatusTurno == new Guid("38FA16DF-4727-41FD-A03E-E2E43FA78F3F") || UidEstatusTurno == new Guid("3BE9EF83-4A39-4A60-9FA9-7F50AD60CA3A") || UidEstatusTurno == Guid.Empty)
                     {
                         UidTurnoRepartidor = Guid.NewGuid();
                         AppInstance.Session_.UidTurnoRepartidor = UidTurnoRepartidor;
@@ -303,6 +311,14 @@ namespace Repartidores_GoDeliverix.VM
                     {
                         TextoLiquidar = "Liquidando";
                         CargarTurno();
+                    }else if (obj.ToUpper() == "81494F49-F416-4431-99F4-E0AA4CF7E9F6")
+                    {
+                        TextoLiquidar = "Abierto";
+                        CargarTurno();
+                    }else if (obj.ToUpper() == "3BE9EF83-4A39-4A60-9FA9-7F50AD60CA3A")
+                    {
+                        TextoLiquidar = "Cerrado";
+                        CargarTurno();
                     }
                 }
             }
@@ -320,7 +336,6 @@ namespace Repartidores_GoDeliverix.VM
                 var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
                 MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
             }
-
 
             UidTurnoRepartidor = MVTurno.UidTurno;
             LngFolio = MVTurno.LngFolio.ToString();
@@ -341,7 +356,7 @@ namespace Repartidores_GoDeliverix.VM
                 TotalSuministros = MVTurnoInformacion.DTotalSucursal;
                 TotalEnvio = MVTurnoInformacion.DTotalEnvio;
                 Total = TotalSuministros + TotalEnvio;
-
+                DPropina = MVTurnoInformacion.DPropina;
                 //Obtiene el monto maximo a cargar por repartidor
                 decimal montoMaximo = await ObtenMontoRepartidor(AppInstance.Session_.UidUsuario);
 
@@ -366,8 +381,6 @@ namespace Repartidores_GoDeliverix.VM
                     string obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
                     UidEstatusTurno = new Guid(obj);
                 }
-
-
 
                 if (UidEstatusTurno == new Guid("AE28F243-AA0D-43BD-BF10-124256B75B00"))
                 {

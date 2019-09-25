@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             Title="Propina"
+             x:Class="AppCliente.ModificarPropina">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="8*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Label 
+                Text="Agregar un extra para el repartidor" 
+                Grid.Row="0"
+                FontSize="Large"                
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="EndAndExpand"></Label>
+            <StackLayout 
+                Orientation="Vertical" 
+                         Grid.Row="1">
+                <Label 
+                    Text="Seleccione cantidad"
+                    HorizontalOptions="CenterAndExpand"
+                    FontSize="Medium"></Label>
+                <Picker x:Name="PCantidadDePropina" >
+                    <Picker.Items>
+                        <x:String>Monto de propina</x:String>
+                        <x:String>$10.00</x:String>
+                        <x:String>$20.00</x:String>
+                        <x:String>$30.00</x:String>
+                        <x:String>$40.00</x:String>
+                    </Picker.Items>
+                </Picker>
+                <Label 
+                    Text="Ingrese otra cantidad"
+                    HorizontalOptions="CenterAndExpand"
+                    FontSize="Medium"></Label>
+                <Entry 
+                    x:Name="lblMontoPropina"
+                    HorizontalOptions="FillAndExpand" 
+                    Keyboard="Numeric"
+                    Placeholder="Monto de propina"></Entry>
+                <Button 
+                    x:Name="btnAgregarPropina"
+                    Text="Agregar" 
+                    FontSize="Large"  
+                    TextColor="White" 
+                    HorizontalOptions="FillAndExpand" 
+                    BackgroundColor="Green"
+                    Clicked="BtnAgregarPropina_Clicked"></Button>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

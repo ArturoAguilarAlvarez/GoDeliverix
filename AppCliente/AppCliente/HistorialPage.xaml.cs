@@ -38,7 +38,6 @@ namespace AppCliente
                     App.MVOrden.ListaDeOrdenes[i].FechaDeOrden = App.MVOrden.ListaDeOrdenes[i].FechaDeOrden.Substring(0, 10);
                 }
             }
-
             MyListViewHistorial.ItemsSource = App.MVOrden.ListaDeOrdenes;
         }
 

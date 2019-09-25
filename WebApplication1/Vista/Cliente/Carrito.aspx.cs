@@ -115,10 +115,11 @@ namespace WebApplication1.Vista.Cliente
                         //Envia la orden a la sucursal suministradora
                         //Crea el codigo de entrega
                         Random Codigo = new Random();
+                        decimal DPropina = 0.0m;
                         long CodigoDeEnrega = Codigo.Next(00001, 99999);
                         MVOrden.GuardaOrden(UidOrden, total, UidUsuario, UidDireccion, objeto.UidSucursal, totalSucursal, UidOrdenSucursal, CodigoDeEnrega);
                         // Envia la orden a la sucursal distribuidora
-                        MVTarifario.AgregarTarifarioOrden(UidOrden: UidOrdenSucursal, UidTarifario: objeto.UidTarifario);
+                        //MVTarifario.AgregarTarifarioOrden(UidOrden: UidOrdenSucursal, UidTarifario: objeto.UidTarifario, DPropina: DPropina);
                         //Una vez que se haya guardado ella base de datos se le cambia el estatus a la orden
                         MVOrden.AgregaEstatusALaOrden(new Guid("DE294EFC-C549-4DDD-A0D1-B0E1E2039ECC"), UidOrden: UidOrdenSucursal, StrParametro: "U", UidSucursal: objeto.UidSucursal);
                         MVProducto.ListaDelCarrito.RemoveAll(sucursal => sucursal.UidSucursal == objeto.UidSucursal);

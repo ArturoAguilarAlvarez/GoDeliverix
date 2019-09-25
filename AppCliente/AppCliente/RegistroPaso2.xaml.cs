@@ -51,12 +51,12 @@ namespace AppCliente
                         }
                         else
                         {
-                            DisplayAlert("Error", "Los campos de contraseña no coninciden", "OK");
+                            await DisplayAlert("Error", "Los campos de contraseña no coninciden", "OK");
                         }
                     }
                     else
                     {
-                         DisplayAlert("Error", "Usuario existente", "OK");
+                         await DisplayAlert("Error", "Usuario existente", "OK");
                     }
                 }
                 else

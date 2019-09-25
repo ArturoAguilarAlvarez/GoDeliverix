@@ -20,11 +20,21 @@ namespace AppCliente
         decimal subtotal = 0;
         decimal TotalEnvio = 0;
         decimal TotalPagar = 0;
+        decimal TotalPropina = 0;
+        VMDireccion MDireccion;
         HttpClient _client = new HttpClient();
 
         public CarritoPage()
         {
             InitializeComponent();
+            //using (var _webApi = new HttpClient())
+            //{
+            //    string url = "https://www.godeliverix.net/api/Direccion/GetBuscarDireccion?UidDireccion=" + App.DireccionABuscar + "";
+            //    var content = _webApi.GetStringAsync(url);
+            //    var obj = JsonConvert.DeserializeObject<ResponseHelper>(content.ToString()).Data.ToString();
+            //    MDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
+            //}
+
             if (App.MVProducto.ListaDelCarrito.Count > 0)
             {
                 MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDelCarrito;
@@ -44,29 +54,37 @@ namespace AppCliente
                     TotalEnvio = TotalEnvio + App.MVProducto.ListaDelInformacionSucursales[i].CostoEnvio;
                     TotalPagar = TotalPagar + App.MVProducto.ListaDelInformacionSucursales[i].Total;
                     subtotal = subtotal + App.MVProducto.ListaDelInformacionSucursales[i].Subtotal;
+                    TotalPropina += App.MVProducto.ListaDelInformacionSucursales[i].DPropina;
                 }
                 ViewListaProductoVacio.IsVisible = false;
                 ScrollView_Productos.IsVisible = false;
 
                 #region mostrar los datos al usuario
-                txtTotalEnvio.Text = "Total de envio: " + TotalEnvio.ToString();
-                txtCantidad.Text = "Total de articulos: " + cantidad;
-                txtsubtotal.Text = "SubTotal: $" + subtotal;
-
-
+                txtTotalEnvio.Text = "$" + TotalEnvio.ToString();
+                txtCantidad.Text = cantidad.ToString();
+                txtsubtotal.Text = "$" + subtotal.ToString();
+                txtCantidadSucursales.Text = App.MVProducto.ListaDelInformacionSucursales.Count.ToString();
+                txtPropina.Text = "$" + TotalPropina;
                 btnPagar.Text = "Pagar  $" + TotalPagar;
                 btnPagar2.Text = "Pagar  $" + TotalPagar;
-                //panelCarrito.Title = " Carrito (" + cantidad + ")";
                 #endregion
             }
             else
             {
+                #region mostrar los datos al usuario
+                txtTotalEnvio.Text = "$0.00";
+                txtCantidad.Text = "0";
+                txtsubtotal.Text = "$0.00";
+                txtCantidadSucursales.Text = "0";
+                txtPropina.Text = "$0.00";
+                btnPagar.Text = "Pagar  $0.00";
+                btnPagar2.Text = "Pagar  $0.00";
+                #endregion
                 ViewListaProductoVacio.IsVisible = true;
                 ScrollView_Productos.IsVisible = false;
             }
 
         }
-
 
         private void BtnPagar_Clicked(object sender, EventArgs e)
         {
@@ -116,14 +134,6 @@ namespace AppCliente
                                 mensaje = "sin nota";
                             }
 
-                            //App.MVOrden.GuardaProducto(
-                            //    UidOrdenSucursal,
-                            //    item.UidSeccionPoducto,
-                            //    item.Cantidad,
-                            //    item.StrCosto,
-                            //    item.UidSucursal,
-                            //    item.UidRegistroProductoEnCarrito,
-                            //    Uidnota, mensaje);
 
                             string _Url = $"http://godeliverix.net/api/Orden/GetGuardarProductos?" +
                                 $"UIDORDEN={UidOrdenSucursal}" +
@@ -140,15 +150,7 @@ namespace AppCliente
                         //Envia la orden a la sucursal suministradora
                         Random Codigo = new Random();
                         long CodigoDeEnrega = Codigo.Next(00001, 99999);
-                        //App.MVOrden.GuardaOrden(
-                        //    UidOrden,
-                        //    total,
-                        //    UidUsuario,
-                        //    UidDireccion,
-                        //    objeto.UidSucursal,
-                        //    totalSucursal,
-                        //    UidOrdenSucursal,
-                        //    CodigoDeEnrega);
+                       
 
                         string _Url1 = $"http://godeliverix.net/api/Orden/GetGuardarOrden?" +
                             $"UIDORDEN={UidOrden}" +
@@ -168,6 +170,7 @@ namespace AppCliente
 
                         string _Url2 = $@"http://godeliverix.net/api/Tarifario/GetGuardarTarifario?" +
                             $"UidOrdenSucursal={UidOrdenSucursal}" +
+                            $"&DPropina={objeto.DPropina}" +
                             $"&UidTarifario={objeto.UidTarifario}";
                         var content2 = await _client.GetAsync(_Url2);
 
@@ -210,7 +213,6 @@ namespace AppCliente
             await PopupNavigation.Instance.PopAsync();
         }
 
-
         private void LimpiarCarrito()
         {
 
@@ -228,7 +230,7 @@ namespace AppCliente
 
         private async void BtnLimpiarCarrito_Clicked(object sender, EventArgs e)
         {
-            var action = await DisplayAlert("Oooops!", "¿Desea eliminar el contenido del carrito?", "Si", "No");
+            var action = await DisplayAlert("Vaciar carrito", "¿Desea eliminar el contenido del carrito?", "Si", "No");
             if (action)
             {
                 LimpiarCarrito();
@@ -240,7 +242,6 @@ namespace AppCliente
             await PopupNavigation.Instance.PushAsync(new Popup.PopupLoanding());
             var item = sender as Button;
             var ObjItem = item.BindingContext as VMProducto;
-
             App.MVTarifario.BuscarTarifario("Cliente", ZonaEntrega: App.DireccionABuscar, uidSucursal: ObjItem.UidSucursal.ToString());
             await Navigation.PushAsync(new SeleccionarDistribuidoraCarrito(ObjItem, MyListViewCarritoEmpresa, txtTotalEnvio, btnPagar, btnPagar2));
             await PopupNavigation.Instance.PopAsync();
@@ -251,5 +252,17 @@ namespace AppCliente
             var item = sender as Button;
             var ObjItem = item.BindingContext as VMProducto;
         }
+
+        private async void BtnAgregarPropina_Clicked(object sender, EventArgs e)
+        {
+            await PopupNavigation.Instance.PushAsync(new Popup.PopupLoanding());
+            var item = sender as Button;
+            var ObjItem = item.BindingContext as VMProducto;
+            await Navigation.PushAsync(new ModificarPropina(UidSucursal: ObjItem.UidSucursal, MyListViewCarritoEmpresa, btnPagar, btnPagar2, txtPropina));
+            await PopupNavigation.Instance.PopAsync();
+
+        }
+
+
     }
 }

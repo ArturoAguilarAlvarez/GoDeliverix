@@ -263,7 +263,6 @@ namespace AppCliente
 
         private async void BtnSeleccionarDireccion_Clicked(object sender, EventArgs e)
         {
-            //await Navigation.PushAsync(new PerfilDireccionesPage(btnSeleccionarDireccion, IDDireccionBusqueda));
             await Navigation.PushAsync(new SeleccionarDirecciones(btnSeleccionarDireccion, IDDireccionBusqueda, MyListViewBusquedaProductosHome, lbCantidad, CantidadProductosMostrados, PanelProductoNoEncontrados, MyListViewBusquedaEmpresas, ScrollView_Productos, ScrollView_Empresas));
         }
 

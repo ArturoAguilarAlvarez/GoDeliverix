@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Com.OneSignal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,6 +31,7 @@ namespace AppPrueba.Views
             {
 
                 AppPrueba.Helpers.Settings.CerrarSesion();
+                OneSignal.Current.RemoveExternalUserId();
                 App.Current.MainPage = new NavigationPage(new LoginPage());
             }
             else

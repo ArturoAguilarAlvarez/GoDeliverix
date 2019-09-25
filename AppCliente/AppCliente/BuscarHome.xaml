@@ -233,7 +233,7 @@
                     x:Name="btnSeleccionarDireccion" 
                 VerticalOptions="End" 
                     Clicked="BtnSeleccionarDireccion_Clicked"
-                    BackgroundColor="Purple" 
+                    BackgroundColor="#20396e" 
                     HorizontalOptions="FillAndExpand"  
                     TextColor="White" ></Button>
             

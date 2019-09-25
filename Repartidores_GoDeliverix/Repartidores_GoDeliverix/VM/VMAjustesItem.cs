@@ -9,7 +9,7 @@ using Xamarin.Forms;
 using Newtonsoft.Json;
 using Repartidores_GoDeliverix.Helpers;
 using System.Net.Http;
-
+using Com.OneSignal;
 namespace Repartidores_GoDeliverix.VM
 {
     public class VMAjustesItem
@@ -59,6 +59,7 @@ namespace Repartidores_GoDeliverix.VM
                             await _WebApiGoDeliverix.GetAsync(url);
                             AppInstance.MVLogin = new VMLogin();
                             AppInstance.Session_ = new Session();
+                           // OneSignal.Current.RemoveExternalUserId();
                             Application.Current.MainPage = new NavigationPage(new Login());
                         }
                         else
@@ -71,6 +72,7 @@ namespace Repartidores_GoDeliverix.VM
                                 await _WebApiGoDeliverix.GetAsync(url);
                                 AppInstance.MVLogin = new VMLogin();
                                 AppInstance.Session_ = new Session();
+                               // OneSignal.Current.RemoveExternalUserId();
                                 Application.Current.MainPage = new NavigationPage(new Login());
                             }
                             else//Orden pendiente

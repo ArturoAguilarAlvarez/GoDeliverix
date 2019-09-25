@@ -22,14 +22,14 @@ namespace AppCliente
             MyListViewHistorial.ItemsSource =  null;
             MyListViewHistorial.ItemsSource = App.MVOrden.ListaDeOrdenesEmpresa;
             this.ObjItem = ObjItem;
-            Device.StartTimer(TimeSpan.FromSeconds(60), () =>
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    //MetodoConsulta();
-                });
-                return true;
-            });
+            //Device.StartTimer(TimeSpan.FromSeconds(60), () =>
+            //{
+            //    Device.BeginInvokeOnMainThread(() =>
+            //    {
+            //        //MetodoConsulta();
+            //    });
+            //    return true;
+            //});
         }
 
         public void MetodoConsulta()

@@ -19,9 +19,8 @@ namespace WebApplication1.Controllers
             ResponseHelper obj = new ResponseHelper();
             if (!string.IsNullOrEmpty(Usuario) && !string.IsNullOrEmpty(Contrasena))
             {
-                Guid id = Guid.Empty;
                 MVAcceso = new VMAcceso();
-                id = MVAcceso.Ingresar(Usuario, Contrasena);
+                Guid id = MVAcceso.Ingresar(Usuario, Contrasena);
                 obj.Data = id.ToString();
             }
             else
@@ -100,17 +99,15 @@ namespace WebApplication1.Controllers
         {
             MVAcceso = new VMAcceso();
             Respuesta = new ResponseHelper();
-            Guid UidOrdenAsignada = new Guid();
             if (string.IsNullOrEmpty(UidOrdenRepartidor))
             {
                 MVAcceso.BitacoraRegistroRepartidores(StrParametro, UidUsuario, UidEstatus);
             }
             else
             {
-                UidOrdenAsignada = new Guid(UidOrdenRepartidor);
+                Guid UidOrdenAsignada = new Guid(UidOrdenRepartidor);
                 MVAcceso.BitacoraRegistroRepartidores(StrParametro, UidUsuario, UidEstatus, UidOrdenAsignada);
             }
-
             Respuesta.Status = true;
             Respuesta.Message = "Estatus actualizado";
             return Respuesta;

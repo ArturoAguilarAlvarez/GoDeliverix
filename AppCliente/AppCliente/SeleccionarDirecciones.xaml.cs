@@ -11,9 +11,9 @@ using Xamarin.Forms.Xaml;
 
 namespace AppCliente
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class SeleccionarDirecciones : ContentPage
-	{
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class SeleccionarDirecciones : ContentPage
+    {
         bool tap = true;
         Button Button;
         StackLayout PanelProductoNoEncontrados;
@@ -47,7 +47,6 @@ namespace AppCliente
             this.myListProduct = myListProduct;
             this.lbCantidad = lbCantidad;
             this.CantidadProductosMostrados = CantidadProductosMostrados;
-
             MyListViewDirecciones.SelectedItem = index;
 
             Inicializar(button, IDDireccionBusqueda, myListProduct, lbCantidad, CantidadProductosMostrados);
@@ -64,13 +63,13 @@ namespace AppCliente
         {
             var action = false;
 
-            if (App.MVProducto.ListaDelCarrito.Count>0)
+            if (App.MVProducto.ListaDelCarrito.Count > 0)
             {
-                 action = await DisplayAlert("Oooops!", "¿Al cambiar de direccion se eliminara tu carrito?", "Si", "No");
+                action = await DisplayAlert("Oooops!", "¿Al cambiar de direccion se eliminara tu carrito?", "Si", "No");
             }
             else
             {
-                 action = true;
+                action = true;
             }
             if (action)
             {
@@ -82,7 +81,6 @@ namespace AppCliente
                     await PopupNavigation.Instance.PushAsync(new Popup.PopupLoanding());
                     var item = ((ItemTappedEventArgs)e);
                     VMDireccion ObjItem = (VMDireccion)item.Item;
-
 
                     try
                     {
@@ -159,7 +157,7 @@ namespace AppCliente
 
 
             Guid Direccion = new Guid(IDDireccionBusqueda.Text);
-            
+
 
             CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
             string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);

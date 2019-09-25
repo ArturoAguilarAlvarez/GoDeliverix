@@ -54,7 +54,7 @@ namespace WebApplication1.Controllers
         //    //return Respuesta;
 
         //}
-        public ResponseHelper GetGuardarUsuario(string UidUsuario, string perfil, string Nombre = "", string ApellidoPaterno = "", string ApellidoMaterno = "", string usuario = "", string password = "", string fnacimiento = "",  string estatus = "", string TIPODEUSUARIO = "", string UidEmpresa = "", string UidSucursal = "")
+        public ResponseHelper GetGuardarUsuario(string UidUsuario, string perfil, string Nombre = "", string ApellidoPaterno = "", string ApellidoMaterno = "", string usuario = "", string password = "", string fnacimiento = "", string estatus = "", string TIPODEUSUARIO = "", string UidEmpresa = "", string UidSucursal = "")
         {
             if (string.IsNullOrEmpty(UidEmpresa))
             {
@@ -70,27 +70,23 @@ namespace WebApplication1.Controllers
             Respuesta = new ResponseHelper();
 
             Respuesta.Data = "Registro guardado";
-            
+
             Respuesta.Status = true;
             Respuesta.Message = "Informacion agregada satisfactoriamente";
             return Respuesta;
         }
 
-        public ResponseHelper GetGuardarusuarioCliente(string UidUsuario,string nombre,string apellidoP,string apellidoM,string usuario,string contrasena,string fechaNacimiento,string correo)
+        public ResponseHelper GetGuardarusuarioCliente(string UidUsuario, string nombre, string apellidoP, string apellidoM, string usuario, string contrasena, string fechaNacimiento, string correo)
         {
             ResponseHelper respuesta = new ResponseHelper();
             VMUsuarios MVUsuarios = new VMUsuarios();
-            VMTelefono MVTelefono = new VMTelefono();
             VMAcceso MVAcceso = new VMAcceso();
 
             Guid uidusuaro = new Guid(UidUsuario);
-            Guid uidcorreo = Guid.NewGuid();
-
-            VMCorreoElectronico MVCorreoElectronico = new VMCorreoElectronico();
 
             respuesta.Data = MVUsuarios.GuardaUsuario(UidUsuario: uidusuaro, Nombre: nombre, ApellidoPaterno: apellidoP, ApellidoMaterno: apellidoM, usuario: usuario, password: contrasena, fnacimiento: fechaNacimiento, perfil: "4f1e1c4b-3253-4225-9e46-dd7d1940da19", estatus: "2", TIPODEUSUARIO: "Cliente");
             //MVTelefono.AgregaTelefonoALista("f7bdd1d0-28e5-4f52-bc26-a17cd5c297de", telefono, "Principal");
-           // MVCorreoElectronico.AgregarCorreo(uidusuaro, "Usuario", correo, uidcorreo);
+            // MVCorreoElectronico.AgregarCorreo(uidusuaro, "Usuario", correo, uidcorreo);
             MVAcceso.CorreoDeConfirmacion(uidusuaro, correo, usuario, contrasena, nombre, apellidoM + " " + apellidoM);
             return respuesta;
         }
@@ -113,13 +109,13 @@ namespace WebApplication1.Controllers
             string UidUsuario,
             string perfil,
             string Nombre = "",
-            string ApellidoPaterno = "", 
-            string ApellidoMaterno = "", 
-            string usuario = "", 
-            string password = "", 
-            string fnacimiento = "",              
+            string ApellidoPaterno = "",
+            string ApellidoMaterno = "",
+            string usuario = "",
+            string password = "",
+            string fnacimiento = "",
             string estatus = "",
-            string UidEmpresa = "", 
+            string UidEmpresa = "",
             string UidSucursal = "")
         {
             if (string.IsNullOrEmpty(UidEmpresa))
@@ -141,7 +137,7 @@ namespace WebApplication1.Controllers
                 fnacimiento: fnacimiento,
                 perfil: perfil);
         }
-        
+
 
     }
 }

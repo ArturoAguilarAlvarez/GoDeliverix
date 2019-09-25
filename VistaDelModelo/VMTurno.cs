@@ -85,6 +85,13 @@ namespace VistaDelModelo
             set { _DTotalSucursal = value; }
         }
 
+        private decimal _DPropina;
+
+        public decimal DPropina
+        {
+            get { return _DPropina; }
+            set { _DPropina = value; }
+        }
 
 
         private decimal _DTotalEnvio;
@@ -214,7 +221,7 @@ namespace VistaDelModelo
         public string ObtenerEstatusUltimoTurno(object UidRepartidor)
         {
             oTurno = new Turno();
-            string resultado = "";
+            string resultado = Guid.Empty.ToString();
             foreach (DataRow item in oTurno.ObtenerEstatusUltimoTurnoRepartidor(UidRepartidor).Rows)
             {
                 resultado = item["EstatusTurno"].ToString();
@@ -325,6 +332,10 @@ namespace VistaDelModelo
                     if (!string.IsNullOrEmpty(item["totalSucursal"].ToString()))
                     {
                         DTotalSucursal = decimal.Parse(item["totalSucursal"].ToString());
+                    }
+                    if (!string.IsNullOrEmpty(item["propina"].ToString()))
+                    {
+                        DPropina = decimal.Parse(item["propina"].ToString());
                     }
                 }
             }
