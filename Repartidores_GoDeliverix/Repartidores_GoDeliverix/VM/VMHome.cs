@@ -229,8 +229,6 @@ namespace Repartidores_GoDeliverix.VM
             set { SetValue(ref _LngFolio, value); }
         }
 
-
-
         #endregion
 
         #region Propiedades de los controles
@@ -273,14 +271,9 @@ namespace Repartidores_GoDeliverix.VM
 
         public ICommand ShowInfoOrder { get { return new RelayCommand(MapaEnEsperaAsync); } }
 
-
         public ICommand Entregar { get { return new RelayCommand(Entregarorden); } }
 
-
-
         public ICommand BtnMapaEspera { get { return new RelayCommand(MapaEnEsperaAsync); } }
-
-
 
         private async void Entregarorden()
         {

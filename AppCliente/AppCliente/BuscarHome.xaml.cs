@@ -47,20 +47,12 @@ namespace AppCliente
         {
             //await Task.Factory.StartNew(() =>
             //{
-            string Buscado = ""; string Hora = string.Empty;
-            if (DateTime.Now.Hour < 10)
-            {
-                Hora = "0" + DateTime.Now.Hour.ToString();
-            }
-            else
-            {
-                Hora = DateTime.Now.Hour.ToString();
-            }
+            string Buscado = ""; 
+           
             if (!string.IsNullOrEmpty(searchFor.Text))
             {
                 Buscado = searchFor.Text;
             }
-            string hora = Hora + ":" + DateTime.Now.Minute.ToString();
             CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
             string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
             ScrollView_Productos.Orientation = 0;

@@ -229,6 +229,17 @@ namespace WebApplication1.Controllers
             Respuesta.Message = "Informacion agregada satisfactoriamente";
             return Respuesta;
         }
+        
+        public ResponseHelper GetObtenerNotaDeProducto(string uidProductoEnOrden)
+        {
+            MVOrden = new VMOrden();
+            MVOrden.ObtenerNotaDeProductoEnOrden(new Guid(uidProductoEnOrden));
+            Respuesta = new ResponseHelper();
+            Respuesta.Data = MVOrden;
+            Respuesta.Status = true;
+            Respuesta.Message = "Nota Obtenida satisfactoriamente";
+            return Respuesta;
+        }
 
         public ResponseHelper GetOrdenesSucursal(string Licencia, string Estatus, string tipoSucursal)
         {
@@ -271,6 +282,7 @@ namespace WebApplication1.Controllers
             Respuesta.Message = "Informacion agregada satisfactoriamente";
             return Respuesta;
         }
+       
 
 
         public ResponseHelper GetObtenerCodigoOrdenTarifario(Guid uidOrdenTarifario)
@@ -286,10 +298,11 @@ namespace WebApplication1.Controllers
 
 
 
-        public ResponseHelper GetCancelarOrden(string Licencia, string LNGFolio, string IdMensaje)
+        public ResponseHelper GetCancelarOrden(string Licencia, string LNGFolio, string IdMensaje, string UidOrden = "")
         {
             VMOrden MVOrden = new VMOrden();
             Respuesta = new ResponseHelper();
+            MVOrden.AgregaEstatusALaOrden(new Guid("A2D33D7C-2E2E-4DC6-97E3-73F382F30D93"),"S", Mensaje: new Guid(IdMensaje), UidOrden: new Guid(UidOrden),LngFolio:  long.Parse(LNGFolio), UidLicencia: new Guid(Licencia));
             MVOrden.AgregarEstatusOrdenEnSucursal(new Guid("EAE7A7E6-3F19-405E-87A9-3162D36CE21B"), "S", Licencia, LngFolio: long.Parse(LNGFolio), UidMensaje: new Guid(IdMensaje));
             return Respuesta;
         }

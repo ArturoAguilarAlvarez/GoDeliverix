@@ -37,5 +37,22 @@ namespace WebApplication1.Controllers
             Respuesta.Message = "Informacion agregada satisfactoriamente";
             return Respuesta;
         }
+        /// <summary>
+        /// Modifica la cantidad del tarifario
+        /// </summary>
+        /// <param name="UidOrdenSucursal"></param>
+        /// <param name="MPropina"></param>
+        /// <returns></returns>
+        public ResponseHelper GetModificarPropina(Guid UidOrdenSucursal, string MPropina)
+        {
+            MVTarifario = new VMTarifario();
+            Respuesta = new ResponseHelper();
+            MVTarifario.ModificarTarifario(UidOrdenSucursal, MPropina);
+
+            Respuesta.Data = "Registro actualizado";
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion actualizada satisfactoriamente";
+            return Respuesta;
+        }
     }
 }

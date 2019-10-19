@@ -105,7 +105,6 @@ namespace VistaDelModelo
         #endregion
         public void ObtenerNombreComercial(string UidUsuario, string IdEmpresa = "")
         {
-
             if (UidUsuario == "" && UidUsuario == string.Empty)
             {
                 UidUsuario = Guid.Empty.ToString();
@@ -116,7 +115,6 @@ namespace VistaDelModelo
                 UIDEMPRESA = new Guid(item["UidEmpresa"].ToString());
                 NOMBRECOMERCIAL = item["NombreComercial"].ToString();
             }
-
         }
 
         public void BuscarEmpresas(Guid UidEmpresa = new Guid(), string RazonSocial = "", string NombreComercial = "", string RFC = "", int tipo = 0, int status = 0)
@@ -130,7 +128,6 @@ namespace VistaDelModelo
                     CommandType = CommandType.StoredProcedure,
                     CommandText = "asp_buscarEmpresas"
                 };
-
                 if (UidEmpresa != Guid.Empty)
                 {
                     CMD.Parameters.Add("@UidEmpresa", SqlDbType.UniqueIdentifier);

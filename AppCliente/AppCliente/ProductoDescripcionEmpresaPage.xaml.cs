@@ -28,6 +28,7 @@ namespace AppCliente
             InitializeComponent();
             this.UidDireccion = UidDireccion;
             this.ObjItem = ObjItem;
+            Title = ObjItem.NOMBRECOMERCIAL;
             //obtener el Dia del dispositivo
             CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
             string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
@@ -41,11 +42,11 @@ namespace AppCliente
 
             if (App.MVSucursales.LISTADESUCURSALES.Count > 1)
             {
-                txtCantidadDeSucursales.Text = App.MVSucursales.LISTADESUCURSALES.Count.ToString() + " sucursales disponibles";
+                txtCantidadDeSucursales.Text = "Sucursales disponibles " + App.MVSucursales.LISTADESUCURSALES.Count.ToString();
             }
             else
             {
-                txtCantidadDeSucursales.Text = App.MVSucursales.LISTADESUCURSALES.Count.ToString() + " sucursal disponible";
+                txtCantidadDeSucursales.Text =  App.MVSucursales.LISTADESUCURSALES.Count.ToString() + " sucursal disponible";
             }
 
             #region foto de portada y foto de perfil

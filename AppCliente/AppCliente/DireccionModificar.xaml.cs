@@ -17,32 +17,33 @@ using Xamarin.Forms.Xaml;
 
 namespace AppCliente
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class DireccionModificar : ContentPage
-	{
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class DireccionModificar : ContentPage
+    {
 
         public List<VMDireccion> DireccionesListaEstados = new List<VMDireccion>();
         public List<VMDireccion> DireccionesListaMunicipios = new List<VMDireccion>();
         public List<VMDireccion> DireccionesListaCiudad = new List<VMDireccion>();
         public List<VMDireccion> DireccionesListaColonia = new List<VMDireccion>();
-        string Longitud = "0";  
+        string Longitud = "0";
         string Latitud = "0";
         double Longitud1 = 0;
         double Latitud1 = 0;
         Button Button;
         Label IDDireccionBusqueda;
+        ListView LVDirecciones;
         Xamarin.Forms.GoogleMaps.Position MyPosicion;
         HttpClient _client = new HttpClient();
 
 
-        public DireccionModificar (Xamarin.Forms.GoogleMaps.Position MyPosicion)
-		{
-			InitializeComponent ();
+        public DireccionModificar(Xamarin.Forms.GoogleMaps.Position MyPosicion,ListView LvDireccion)
+        {
+            InitializeComponent();
             this.MyPosicion = MyPosicion;
             MIDireccion();
             Latitud = MyPosicion.Latitude.ToString();
             Longitud = MyPosicion.Longitude.ToString();
-
+            LVDirecciones = LvDireccion;
         }
 
         public DireccionModificar(Xamarin.Forms.GoogleMaps.Position MyPosicion, VMDireccion objDireccion)
@@ -55,8 +56,6 @@ namespace AppCliente
             Longitud = MyPosicion.Longitude.ToString();
 
         }
-
-
 
         private void MypickerPais_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -211,12 +210,12 @@ namespace AppCliente
                     $"SubAdminArea:    {placemark.SubAdminArea}\n" +
                     $"SubLocality:     {placemark.SubLocality}\n" +
                     $"SubThoroughfare: {placemark.SubThoroughfare}\n" +
-                    $"XD: {placemark.Location}\n"+
+                    $"XD: {placemark.Location}\n" +
                     $"Thoroughfare:    {placemark.Thoroughfare}\n";
                 MypickerPais.SelectedIndex = 1;
                 try
                 {
-                    
+
                     MypickerEstado.SelectedItem = placemark.AdminArea.ToString().ToUpper();
                     //pickerMunicipio.SelectedItem = placemark.SubAdminArea.ToString().ToUpper();
                     //int index = DireccionesListaEstados.FindIndex(t => t.ESTADO == placemark.AdminArea.ToString().ToUpper());                   
@@ -279,7 +278,8 @@ namespace AppCliente
 
 
         public async void GuardarDireccion()
-        {          try
+        {
+            try
             {
                 Guid UidPais = new Guid("afd6c3b7-f5be-40c9-8385-936d275a8d6b");
 
@@ -296,49 +296,7 @@ namespace AppCliente
                 Guid UidColonia = c.ID;
 
                 string NOMBRECOLONIA = AppCliente.App.MVDireccion.ObtenerNombreDeLaColonia(UidColonia.ToString());
-
-
-
-                //string NOMBRECIUDAD = AppCliente.App.MVDireccion.ObtenerNombreDeLaCiudad(UidCiudad.ToString());
-
-                //if (txtID.Text != string.Empty && txtID.Text != null)
-                //{
-                //    AppCliente.App.MVDireccion.ActualizaListaDireccion(txtID.Text, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, txtCalle.Text, txtEntreCalle.Text, txtYCalle.Text, txtManzana.Text, txtLote.Text, txtCodigoPostal.Text, txtReferencia.Text, txtIdentificador.Text, NOMBRECIUDAD, NOMBRECOLONIA, Latitud.ToString(), Longitud.ToString());
-                //}
-                //else
-                //{
-                //    AppCliente.App.MVDireccion.AgregaDireccionALista(UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, txtCalle.Text, txtEntreCalle.Text, txtYCalle.Text, txtManzana.Text, txtLote.Text, txtCodigoPostal.Text, txtReferencia.Text, NOMBRECIUDAD, NOMBRECOLONIA, txtIdentificador.Text, Latitud.ToString(), Longitud.ToString());
-                //}
-
-                //AppCliente.App.MVDireccion.GuardaListaDeDirecciones(AppCliente.App.MVDireccion.ListaDIRECCIONES, new Guid(AppCliente.App.Global1), "asp_AgregaDireccionUsuario", "Usuario");
-
-
-                //for (int i = 0; i < AppCliente.App.MVDireccion.ListaDIRECCIONES.Count; i++)
-                //{
-                //    Guid guid = Guid.NewGuid();
-                //    if (AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Latitud != null)
-                //    {
-                //        Latitud = AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Latitud;
-                //    }
-                //    else
-                //    {
-                //        Latitud = "0";
-                //    }
-
-                //    if (AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Longitud != null)
-                //    {
-                //        Longitud = AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Longitud;
-                //    }
-                //    else
-                //    {
-                //        Latitud = "0";
-                //    }
-
-                //    AppCliente.App.MVUbicacion.GuardaUbicacionDireccion(AppCliente.App.MVDireccion.ListaDIRECCIONES[i].ID, guid, Latitud, Longitud);
-                //}
-
-
-
+                
                 string _Url = $"http://godeliverix.net/api/Direccion/GetGuardarDireccion?UidUsuario={App.Global1}&UidPais={UidPais}&UidEstado={UidEstado}&UidMunicipio={UidMunicipio}&UidCiudad={UidCiudad}&UidColonia={UidColonia}&CallePrincipal={txtCalle.Text}&CalleAux1={txtEntreCalle.Text}&CalleAux2={txtYCalle.Text}&Manzana={txtManzana.Text}&Lote={txtLote.Text}&CodigoPostal={txtCodigoPostal.Text}&Referencia={txtReferencia.Text}&NOMBRECIUDAD=s&NOMBRECOLONIA=s&Identificador={txtIdentificador.Text}&Latitud={Latitud}&Longitud={Longitud}";
                 var content = await _client.GetAsync(_Url);
 
@@ -346,24 +304,17 @@ namespace AppCliente
                 string strDirecciones = await _client.GetStringAsync(_Url);
                 var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
                 App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
-
-                //AppCliente.App.MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
-
+                LVDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;
                 await Navigation.PopToRootAsync();
-                //MyListViewDirecciones.ItemsSource = null;
-
-                //MyListViewDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;
-
                 txtID.Text = null;
 
-                //limpiarFormulario();
             }
             catch (Exception)
             {
-                await DisplayAlert("sorry","Agrege todos los datos","ok");
-    }
+                await DisplayAlert("Mensaje del sistema", "Agrege todos los datos", "ok");
+            }
 
 
-}
+        }
     }
 }

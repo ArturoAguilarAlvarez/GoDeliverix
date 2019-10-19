@@ -6,8 +6,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using VistaDelModelo;
 
-
-
 namespace Deliverix.Wpf.Distribuidores
 {
     /// <summary>
@@ -64,7 +62,6 @@ namespace Deliverix.Wpf.Distribuidores
             bool estatus = false;
             if (MVLicencia.VerificaExistenciaDeLicenciaLocal().Rows.Count < 1)
             {
-
                 if (ModuloAIngresar == "Administrador")
                 {
                     estatus = true;
@@ -75,7 +72,6 @@ namespace Deliverix.Wpf.Distribuidores
                     //  ventanaLicencia.ShowDialog();
                     estatus = false;
                 }
-
             }
             else
             {
@@ -93,7 +89,6 @@ namespace Deliverix.Wpf.Distribuidores
                     {
                         estatus = true;
                     }
-
                 }
                 else
                 {

@@ -102,7 +102,6 @@ namespace AppCliente
 
             if (App.MVProducto.ListaDelCarrito.Count > 0)
             {
-
                 if (!App.MVProducto.ListaDelInformacionSucursales.Exists(t => t.UidTarifario == Guid.Empty))
                 {                    //Guarda la orden con la sucursal
                     for (int i = 0; i < App.MVProducto.ListaDelCarrito.Count; i++)
@@ -133,8 +132,6 @@ namespace AppCliente
                             {
                                 mensaje = "sin nota";
                             }
-
-
                             string _Url = $"http://godeliverix.net/api/Orden/GetGuardarProductos?" +
                                 $"UIDORDEN={UidOrdenSucursal}" +
                                 $"&UIDSECCIONPRODUCTO={item.UidSeccionPoducto}" +
@@ -193,7 +190,7 @@ namespace AppCliente
                     }
                     LimpiarCarrito();
                     App.MVOrden.ObtenerInformacionDeLaUltimaOrden(UidUsuario);
-                    await DisplayAlert("Que bien!", "Su orden esta en camino", "ok");
+                    await DisplayAlert("Felicidades!", "Se ha enviado su orden", "OK");
                 }
                 else
                 {
@@ -215,17 +212,17 @@ namespace AppCliente
 
         private void LimpiarCarrito()
         {
-
             App.MVProducto.ListaDelCarrito.Clear();
             App.MVProducto.ListaDelInformacionSucursales.Clear();
             MyListViewBusquedaProductos.ItemsSource = null;
             MyListViewCarritoEmpresa.ItemsSource = null;
             txtCantidad.Text = "Total de articulos: 0";
+            txtPropina.Text = "$0.00";
+            txtCantidadSucursales.Text = "0";
             txtsubtotal.Text = "SubTotal: $0.00";
             txtTotalEnvio.Text = "Total de envio : $0.00";
             btnPagar.Text = "pagar $0.00";
             btnPagar2.Text = "pagar $0.00";
-
         }
 
         private async void BtnLimpiarCarrito_Clicked(object sender, EventArgs e)

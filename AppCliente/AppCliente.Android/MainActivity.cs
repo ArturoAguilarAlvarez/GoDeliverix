@@ -1,5 +1,5 @@
 ﻿using System;
-
+using Com.OneSignal;
 using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
@@ -7,6 +7,8 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using ImageCircle.Forms.Plugin.Droid;
+using Com.OneSignal.Abstractions;
+using System.Collections.Generic;
 
 namespace AppCliente.Droid
 {
@@ -26,6 +28,8 @@ namespace AppCliente.Droid
             global::Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.FormsMaps.Init(this, savedInstanceState);
             Xamarin.FormsGoogleMaps.Init(this, savedInstanceState);
+            OneSignal.Current.StartInit("170c0582-a7c3-4b75-b1a8-3fe4a952351f").Settings(settings: new Dictionary<string, bool>() { { IOSSettings.kOSSettingsKeyAutoPrompt, true }, { IOSSettings.kOSSettingsKeyInAppLaunchURL, true } })
+                  .EndInit();
             ImageCircleRenderer.Init();
             LoadApplication(new App());
         }

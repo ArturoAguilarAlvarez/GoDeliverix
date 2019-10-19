@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using VistaDelModelo;
 using Application = System.Windows.Application;
-
+using LibPrintTicket;
 namespace Deliverix.Wpf.Distribuidores
 {
     /// <summary>
@@ -45,18 +45,44 @@ namespace Deliverix.Wpf.Distribuidores
                 {
                     if (PruebaConexionRegistro(SourceRegistro))
                     {
-                        DeliverixSucursales.Properties.Settings.Default["Source"] = SourceRegistro;
+                        InitializeComponent();
                         if (Application.Current.Windows.OfType<Main>().Any())
                         {
                             Application.Current.Windows.OfType<Main>().First().Activate();
-                            InitializeComponent();
                             HabilitaBotones();
                         }
                         else
                         {
-                            InitializeComponent();
                             HabilitaBotones();
                         }
+                        DeliverixSucursales.Properties.Settings.Default["Source"] = SourceRegistro;
+
+                        VMTurno MVTurno = new VMTurno();
+                        MVLicencia = new DeliverixSucursales.VMLicencia();
+                        MVLicencia.RecuperaLicencia();
+                        MVTurno.ConsultarUltimoTurnoSuministradora(MVLicencia.Licencia);
+
+                        if (MVTurno.DtmHoraFin == DateTime.MinValue && MVTurno.DtmHoraInicio != DateTime.MinValue)
+                        {
+                            lblHoraInicioTurno.Content = MVTurno.DtmHoraInicio;
+                            lblFolioTurno.Content = MVTurno.LngFolio;
+                            lblUidusuario.Content = MVTurno.UidUsuario;
+                            LblUidTurno.Content = MVTurno.UidTurno;
+                            VMUsuarios MVUsuario = new VMUsuarios();
+                            MVUsuario.obtenerDatosDeSupervisor(MVTurno.UidUsuario);
+                            txtUsuario.Text = MVUsuario.StrNombre;
+                            txtSucursal.Text = MVUsuario.Sucursal;
+                            lblEmpresa.Text = MVUsuario.NombreEmpresa;
+                            if (!string.IsNullOrEmpty(lblUidusuario.Content.ToString()))
+                            {
+                                btnordenes.IsEnabled = true;
+                                btnReportes.IsEnabled = true;
+                                btnConfiguracion.Visibility = Visibility.Visible;
+                                btnAyuda.Visibility = Visibility.Visible;
+                                btnCerrarSesion.Visibility = Visibility.Visible;
+                            }
+                        }
+
                     }
                     else
                     {
@@ -99,7 +125,7 @@ namespace Deliverix.Wpf.Distribuidores
             }
             return aux;
         }
-        
+
         public void Redireccionar()
         {
             try
@@ -283,13 +309,29 @@ namespace Deliverix.Wpf.Distribuidores
                 HabilitaBotones();
                 if (lblUidusuario.Content != null)
                 {
-                    if (!string.IsNullOrEmpty(lblUidusuario.Content.ToString()))
+                    MVLicencia.RecuperaLicencia();
+                    VMTurno MVTurno = new VMTurno();
+                    MVTurno.ConsultarUltimoTurnoSuministradora(MVLicencia.Licencia);
+
+                    if (MVTurno.DtmHoraFin == DateTime.MinValue && MVTurno.DtmHoraInicio != DateTime.MinValue)
                     {
-                        btnordenes.IsEnabled = true;
-                        btnReportes.IsEnabled = true;
-                        btnConfiguracion.Visibility = Visibility.Visible;
-                        btnAyuda.Visibility = Visibility.Visible;
-                        btnCerrarSesion.Visibility = Visibility.Visible;
+                        lblHoraInicioTurno.Content = MVTurno.DtmHoraInicio;
+                        lblFolioTurno.Content = MVTurno.LngFolio;
+                        lblUidusuario.Content = MVTurno.UidUsuario;
+                        LblUidTurno.Content = MVTurno.UidTurno;
+                        VMUsuarios MVUsuario = new VMUsuarios();
+                        MVUsuario.obtenerDatosDeSupervisor(MVTurno.UidUsuario);
+                        txtUsuario.Text = MVUsuario.StrNombre;
+                        txtSucursal.Text = MVUsuario.Sucursal;
+                        lblEmpresa.Text = MVUsuario.NombreEmpresa;
+                        if (!string.IsNullOrEmpty(lblUidusuario.Content.ToString()))
+                        {
+                            btnordenes.IsEnabled = true;
+                            btnReportes.IsEnabled = true;
+                            btnConfiguracion.Visibility = Visibility.Visible;
+                            btnAyuda.Visibility = Visibility.Visible;
+                            btnCerrarSesion.Visibility = Visibility.Visible;
+                        }
                     }
                 }
             }
@@ -321,10 +363,14 @@ namespace Deliverix.Wpf.Distribuidores
             if (AccesoInternet())
             {
                 MVAcceso.BitacoraRegistroSupervisores(new Guid(lblUidusuario.Content.ToString()), new Guid("83D5135E-95A4-4FFB-8F74-B6BAC980DFA3"));
-
+                var MVTurno = new VMTurno();
+                MVTurno.TurnoSuministradora(new Guid(lblUidusuario.Content.ToString()), new Guid(LblUidTurno.Content.ToString()));
                 lblUidusuario.Content = string.Empty;
                 txtUsuario.Text = string.Empty;
                 txtSucursal.Text = string.Empty;
+                LblUidTurno.Content = string.Empty;
+                lblFolioTurno.Content = string.Empty;
+                lblHoraInicioTurno.Content = string.Empty;
                 HabilitaBotones();
                 if (lblUidusuario.Content != null)
                 {

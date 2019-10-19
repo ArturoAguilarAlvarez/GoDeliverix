@@ -26,6 +26,11 @@ namespace AppPrueba.Helpers
             get => AppSettings.GetValueOrDefault(nameof(Licencia), string.Empty);
             set => AppSettings.AddOrUpdateValue(nameof(Licencia), value);
         }
+        public static string Uidusuario
+        {
+            get => AppSettings.GetValueOrDefault(nameof(Uidusuario), string.Empty);
+            set => AppSettings.AddOrUpdateValue(nameof(Uidusuario), value);
+        }
 
         public static string NombreSucursal
         {
@@ -54,6 +59,11 @@ namespace AppPrueba.Helpers
         {
             get => AppSettings.GetValueOrDefault(nameof(Contrasena), string.Empty);
             set => AppSettings.AddOrUpdateValue(nameof(Contrasena), value);
+        }
+        public static string UidTurno
+        {
+            get => AppSettings.GetValueOrDefault(nameof(UidTurno), string.Empty);
+            set => AppSettings.AddOrUpdateValue(nameof(UidTurno), value);
         }
         public static void ClearAllData()
         {

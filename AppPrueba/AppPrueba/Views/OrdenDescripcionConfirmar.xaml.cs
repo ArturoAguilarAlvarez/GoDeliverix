@@ -24,8 +24,19 @@ namespace AppPrueba.Views
         public OrdenDescripcionConfirmar(VMOrden ObjItem, ListView MyListviewOrdenesRecibidas)
         {
             InitializeComponent();
-
+            foreach (VMOrden item in App.MVOrden.ListaDeProductos)
+            {
+                if (item.VisibilidadNota == "Visible")
+                {
+                    item.VisibilidadNota = "True";
+                }
+                else
+                {
+                    item.VisibilidadNota = "False";
+                }
+            }
             MyListviewOrdenesConfirmar.ItemsSource = App.MVOrden.ListaDeProductos;
+
             this.ObjItem = ObjItem;
             this.MyListviewOrdenesRecibidas = MyListviewOrdenesRecibidas;
 
@@ -33,7 +44,6 @@ namespace AppPrueba.Views
 
         private async void ButtonCancelar_Clicked(object sender, EventArgs e)
         {
-            //await Navigation.PopToRootAsync();
             await Navigation.PushAsync(new ConfirmarCancelacionOrden(ObjItem, MyListviewOrdenesRecibidas));
         }
 
@@ -48,15 +58,9 @@ namespace AppPrueba.Views
 
         public async void ConfirmarOrden()
         {
-            //App.MVOrden.AgregarEstatusOrdenEnSucursal(new Guid("EC09BCDE-ADAC-441D-8CC1-798BC211E46E"), "S", AppPuestoTacos.Helpers.Settings.Licencia, UidOrden: ObjItem.Uidorden);
-            //App.MVOrden.AgregaEstatusALaOrden(new Guid("2d2f38b8-7757-45fb-9ca6-6ecfe20356ed"), UidOrden: ObjItem.Uidorden, UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), StrParametro: "S");
-            //App.MVTarifario.AgregarCodigoAOrdenTarifario(UidCodigo: Guid.NewGuid(), UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), uidorden: ObjItem.Uidorden);
 
             _url = (RestService.Servidor + "api/Orden/GetConfirmarOrden?Licencia=" + AppPrueba.Helpers.Settings.Licencia + "&Uidorden=" + ObjItem.Uidorden);
             var DatosObtenidos = await _client.GetStringAsync(_url);
-
-            //App.MVOrden.BuscarOrdenes("Sucursal", UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), EstatusSucursal: "Pendientes a confirmar", TipoDeSucursal: "S");
-
             string _URL = (RestService.Servidor + "api/Orden/GetOrdenesSucursal?Licencia=" + AppPrueba.Helpers.Settings.Licencia +
             "&Estatus=Pendientes%20a%20confirmar&tipoSucursal=s");
             var DatosObtenidos3 = await _client.GetAsync(_URL);
@@ -67,9 +71,14 @@ namespace AppPrueba.Views
             MyListviewOrdenesRecibidas.ItemsSource = null;
             MyListviewOrdenesRecibidas.ItemsSource = App.MVOrden.ListaDeOrdenesPorConfirmar;
 
-
             await Navigation.PopToRootAsync();
         }
 
+        private async void Button_Clicked(object sender, EventArgs e)
+        {
+            var item = sender as Button;
+            var obj = item.BindingContext as VMOrden;
+            await Navigation.PushAsync(new Notas(obj.UidProductoEnOrden));
+        }
     }
 }

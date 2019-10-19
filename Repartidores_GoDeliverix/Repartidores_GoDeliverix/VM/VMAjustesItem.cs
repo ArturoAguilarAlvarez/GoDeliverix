@@ -59,7 +59,7 @@ namespace Repartidores_GoDeliverix.VM
                             await _WebApiGoDeliverix.GetAsync(url);
                             AppInstance.MVLogin = new VMLogin();
                             AppInstance.Session_ = new Session();
-                           // OneSignal.Current.RemoveExternalUserId();
+                            // OneSignal.Current.RemoveExternalUserId();
                             Application.Current.MainPage = new NavigationPage(new Login());
                         }
                         else
@@ -72,7 +72,9 @@ namespace Repartidores_GoDeliverix.VM
                                 await _WebApiGoDeliverix.GetAsync(url);
                                 AppInstance.MVLogin = new VMLogin();
                                 AppInstance.Session_ = new Session();
-                               // OneSignal.Current.RemoveExternalUserId();
+                                // OneSignal.Current.RemoveExternalUserId();
+                                Repartidores_GoDeliverix.Helpers.settings.UserName = string.Empty;
+                                Repartidores_GoDeliverix.Helpers.settings.Password = string.Empty;
                                 Application.Current.MainPage = new NavigationPage(new Login());
                             }
                             else//Orden pendiente
@@ -98,14 +100,13 @@ namespace Repartidores_GoDeliverix.VM
                                 await _WebApiGoDeliverix.GetAsync(url);
                                 AppInstance.MVLogin = new VMLogin();
                                 AppInstance.Session_ = new Session();
+
+                                Repartidores_GoDeliverix.Helpers.settings.UserName = string.Empty;
+                                Repartidores_GoDeliverix.Helpers.settings.Password = string.Empty;
+
                                 Application.Current.MainPage = new NavigationPage(new Login());
                             }
                         }
-
-
-
-
-
                         break;
                     default:
                         break;

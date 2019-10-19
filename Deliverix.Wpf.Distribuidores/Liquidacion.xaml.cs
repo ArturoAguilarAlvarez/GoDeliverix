@@ -17,7 +17,6 @@ using System.Windows.Threading;
 using VistaDelModelo;
 using LibPrintTicket;
 using System.Data;
-
 namespace Deliverix.Wpf.Distribuidores
 {
     /// <summary>
@@ -84,7 +83,6 @@ namespace Deliverix.Wpf.Distribuidores
             {
                 MessageBox.Show("Aviso del sistema", "Se debe abrir un turno para consultar este modulo");
             }
-
         }
         private void DataGridRepartidores_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -104,17 +102,39 @@ namespace Deliverix.Wpf.Distribuidores
 
             if (!string.IsNullOrEmpty(lblUidTurnoRepartidor.Content.ToString()))
             {
-                //ConfirmacionRepartidor = false;
-                //Acceso Login = new Acceso("Repartidor", VentanaLiquidacion: this);
-                //Login.ShowDialog();
-
-                //if (ConfirmacionRepartidor)
-                //{
-                //Contenido de la ventana despues de que se loguea correctamente
                 MVTurno = new VMTurno();
+                //Cotroles de la master page
                 Label TurnoDistribuidora = PaginaPrincipal.FindName("LblUidTurno") as Label;
+                Label lblUidusuario = PaginaPrincipal.FindName("lblUidusuario") as Label;
                 MVTurno.LiquidarARepartidor(lblUidTurnoRepartidor.Content.ToString(), TurnoDistribuidora.Content.ToString(), lblMontoALiquidar.Content.ToString().Substring(1));
                 MVTurno.AgregaEstatusTurnoRepartidor(lblUidTurnoRepartidor.Content.ToString(), "38FA16DF-4727-41FD-A03E-E2E43FA78F3F");
+
+                Ticket t = new Ticket();
+                VMUsuarios MVusuario = new VMUsuarios();
+                MVusuario.obtenerDatosDeSupervisor(new Guid(lblUidusuario.Content.ToString()));
+                
+                //Informacion de la empresa
+                t.AddHeaderLine("" + MVusuario.NombreEmpresa + "");
+                t.AddHeaderLine("Sucursal: " + MVusuario.Sucursal + "");
+
+                t.AddHeaderLine("Usuario: " + MVusuario.StrNombre + "");
+                //Obtene informacion del turno
+                MVTurno = new VMTurno();
+                MVLicencia = new DeliverixSucursales.VMLicencia();
+                MVLicencia.RecuperaLicencia();
+                MVTurno.ConsultarUltimoTurnoDistribuidora(MVLicencia.Licencia);
+                t.AddSubHeaderLine("");
+                t.AddHeaderLine("Informacion del liquidacion");
+                //Informacion del turno
+                t.AddHeaderLine("Repartidor: "+lblNombreRepartidor.Content+"");
+                t.AddTotal("Total liquidado ", lblMontoALiquidar.Content.ToString());
+                t.AddSubHeaderLine("");
+                t.AddTotal("Firma de Supervisor ","__________");
+                t.AddTotal("Firma de Repartidor ","__________");
+                t.FontSize = 6;
+                t.AddFooterLine("www.godeliverix.com.mx");
+                t.PrintTicket("PDFCreator");
+
 
                 lblNombreRepartidor.Content = string.Empty;
                 lblMontoALiquidar.Content = string.Empty;
@@ -124,12 +144,6 @@ namespace Deliverix.Wpf.Distribuidores
                 VentanaMensaje.ShowDialog();
                 RefrescarDatosLiquidadores();
                 RefrescaBitacora();
-                //}
-                //else
-                //{
-                //    lblMensaje.Text = "No ingresaste";
-                //    VentanaMensaje.ShowDialog();
-                //}
             }
             else
             {

@@ -289,9 +289,6 @@ namespace VistaDelModelo
                         NUMERO = item["Numero"].ToString();
                     }
                 }
-
-
-
             }
             catch (Exception)
             {
@@ -350,6 +347,14 @@ namespace VistaDelModelo
                 ListaDeTipoDeTelefono.Add(new VMTelefono() { UidTipo = id, StrNombreTipoDeTelefono = nombre });
             }
 
+        }
+        public void ObtenerTelefonoPrincipalDelCliente(string UidCliente)
+        {
+            oDbTelefono = new DbTelefono();
+            foreach (DataRow item in oDbTelefono.ObtenerTelefonoPrincipalUsuario(UidCliente).Rows)
+            {
+               NUMERO = item["Numero"].ToString();
+            }
         }
 
         public void EliminaTelefonosUsuario(Guid uidUsuario)

@@ -179,19 +179,15 @@ namespace VistaDelModelo
                 {
                     if (i == 10)
                     {
-                        NuevaDescripcion = NuevaDescripcion + Nombre.Substring(i, 1) + "\n";
+                        NuevaDescripcion += Nombre.Substring(i, 1) + "\n";
                     }
                     if (i < 10 || i > 10)
                     {
-                        NuevaDescripcion = NuevaDescripcion + Nombre.Substring(i, 1);
+                        NuevaDescripcion += Nombre.Substring(i, 1);
                     }
                 }
                 Nombre = NuevaDescripcion;
-
-
                 RutaDeImagen = "../" + RutaDeImagen;
-
-
                 VMGiro Objeto = new VMGiro() { UIDVM = UidGiro, STRNOMBRE = Nombre, STRDESCRIPCION = Descripcion, RUTAIMAGEN = RutaDeImagen };
                 LISTADEGIRO.Add(Objeto);
             }

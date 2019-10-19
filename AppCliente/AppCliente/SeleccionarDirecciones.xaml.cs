@@ -210,19 +210,10 @@ namespace AppCliente
 
 
                 myListProduct.ItemsSource = null;
-                if (App.MVProducto.ListaDeProductos.Count > 10)
-                {
-                    myListProduct.ItemsSource = AppCliente.App.MVProducto.ListaDeProductos.GetRange(0, 5);
-                    CantidadProductosMostrados = 5;
-                    lbCantidad.Text = "1-5/" + App.MVProducto.ListaDeProductos.Count;
-                }
-                else
-                {
-                    myListProduct.ItemsSource = AppCliente.App.MVProducto.ListaDeProductos;
-                    CantidadProductosMostrados = AppCliente.App.MVProducto.ListaDeProductos.Count;
-                    lbCantidad.Text = "1-" + App.MVProducto.ListaDeProductos.Count + "/" + App.MVProducto.ListaDeProductos.Count;
 
-                }
+                myListProduct.ItemsSource = AppCliente.App.MVProducto.ListaDeProductos;
+                CantidadProductosMostrados = AppCliente.App.MVProducto.ListaDeProductos.Count;
+                lbCantidad.Text =  App.MVProducto.ListaDeProductos.Count + " Productos disponibles";
 
                 MyListViewBusquedaEmpresas.ItemsSource = null;
 

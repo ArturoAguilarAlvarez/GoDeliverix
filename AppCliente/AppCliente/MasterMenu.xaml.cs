@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Com.OneSignal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,6 +31,7 @@ namespace AppCliente
                 AppCliente.App.ListaDeProductos.Clear();
                 AppCliente.App.LISTADEEMPRESAS.Clear();
                 //AppCliente.App.MVDireccion = null;
+                OneSignal.Current.RemoveExternalUserId();
                 Application.Current.Properties.Remove("IsLogged");
                 App.Current.MainPage = new NavigationPage(new Login());
 

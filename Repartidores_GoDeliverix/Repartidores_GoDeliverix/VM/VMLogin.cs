@@ -58,8 +58,6 @@ namespace Repartidores_GoDeliverix.VM
         #region Constructor
         public VMLogin()
         {
-            this.User = "Rep1dis1";
-            this.Password = "12345";
             IsSavingValues = true;
         }
         #endregion
@@ -135,7 +133,7 @@ namespace Repartidores_GoDeliverix.VM
             }
         }
 
-       
+
         public async void Acceso(string Usuario, string password)
         {
             try
@@ -177,7 +175,7 @@ namespace Repartidores_GoDeliverix.VM
                         VMUsuarios MVUsuario = new VMUsuarios();
                         using (var _webAppi = new HttpClient())
                         {
-                         string   url = "https://www.godeliverix.net/api/Usuario/GetBuscarUsuarios?UidUsuario=" + UidUsuario + "&UIDPERFIL=DFC29662-0259-4F6F-90EA-B24E39BE4346";
+                            string url = "https://www.godeliverix.net/api/Usuario/GetBuscarUsuarios?UidUsuario=" + UidUsuario + "&UIDPERFIL=DFC29662-0259-4F6F-90EA-B24E39BE4346";
                             string content = await _webAppi.GetStringAsync(url);
                             string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                             MVUsuario = JsonConvert.DeserializeObject<VistaDelModelo.VMUsuarios>(obj);

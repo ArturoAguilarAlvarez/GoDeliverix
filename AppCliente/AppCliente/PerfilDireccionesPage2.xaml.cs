@@ -55,7 +55,7 @@ namespace AppCliente
 
         private void BtnNuevo_Clicked(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new SeleccionTuUbicacionMapa());
+            Navigation.PushAsync(new SeleccionTuUbicacionMapa(MyListViewDirecciones));
         }
 
         private void Button_Clicked(object sender, EventArgs e)

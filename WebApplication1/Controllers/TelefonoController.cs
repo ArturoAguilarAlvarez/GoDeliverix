@@ -73,6 +73,17 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
+        public ResponseHelper GetObtenerNumeroCliente(string UidCliente)
+        {
+            Respuesta = new ResponseHelper();
+            MVTelefono = new VMTelefono();
+            MVTelefono.ObtenerTelefonoPrincipalDelCliente(UidCliente);
+            Respuesta.Data = MVTelefono;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion agregada satisfactoriamente";
+            return Respuesta;
+        }
+
         public ResponseHelper GetBuscarTelefonos(string UidPropietario, string ParadetroDeBusqueda, string UidTelefono = "", string strTelefono = "")
         {
             Respuesta = new ResponseHelper();

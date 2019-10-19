@@ -114,7 +114,14 @@ namespace VistaDelModelo
         public string VisibilidadNota { get; set; }
         public bool Seleccion { get; set; }
 
-        public string UidRelacionOrdenSucursal { get; set; }
+        private string _UidRelacionOrdenSucursal;
+
+        public string UidRelacionOrdenSucursal
+        {
+            get { return _UidRelacionOrdenSucursal; }
+            set { _UidRelacionOrdenSucursal = value; }
+        }
+
         public string Identificador { get; set; }
         public string MTotalSucursal { get; set; }
         public string CostoEnvio { get; set; }
@@ -149,6 +156,17 @@ namespace VistaDelModelo
         public Guid UidProductoEnOrden { get; set; }
         public Guid UidDireccionSucursal { get; set; }
         public Guid UidDireccionCliente { get; set; }
+
+        private decimal _MPropina;
+
+        public decimal MPropina
+        {
+            get { return _MPropina; }
+            set { _MPropina = value; }
+        }
+
+
+
         private List<VMOrden> _ListaDeProductos;
 
         public List<VMOrden> ListaDeProductos
@@ -242,11 +260,9 @@ namespace VistaDelModelo
                 {
                     resultado = true;
                 }
-
             }
             catch (Exception)
             {
-
                 throw;
             }
             return resultado;
@@ -273,7 +289,7 @@ namespace VistaDelModelo
             DataTable DatoQuery = new DataTable();
             try
             {
-                string Query = $"select distinct OS.UidRelacionOrdenSucursal,os.BintCodigoEntrega, i.NVchRuta, S.Identificador, (cast(os.MTotalSucursal as decimal(10, 2)) + cast(t.MCosto as decimal(10, 2))) as MTotal, os.IntFolio as LNGFolio, cast(os.MTotalSucursal as decimal(10, 2)) as MTotalSucursal,s.uidSucursal,cast(t.MCosto as decimal(10, 2)) as CostoEnvio from Ordenes o inner   join OrdenSucursal OS on o.UidOrden = OS.UidOrden                                                                                                                   inner  join Sucursales S on s.UidSucursal = OS.UidSucursal inner  join OrdenTarifario ot on ot.UidOrden = os.UidRelacionOrdenSucursal                                                                                                                   inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario                                                                                                                   inner join OrdenProducto op on op.UidOrden = os.UidRelacionOrdenSucursal inner join SeccionProducto sp on sp.UidSeccionProducto = op.UidSeccionProducto inner join ImagenEmpresa IE on IE.UidEmpresa = S.UidEmpresa inner join Imagenes i on i.UIdImagen = IE.UidImagen where o.UidOrden = '{ UidOrden.ToString()}' and i.NVchRuta like '%FotoPerfil%' ";
+                string Query = $"select distinct OS.UidRelacionOrdenSucursal,os.BintCodigoEntrega, i.NVchRuta, S.Identificador,ot.MPropina, cast(cast(os.MTotalSucursal as decimal(10, 2)) + cast(t.MCosto as decimal(10, 2)) as decimal(10, 2)) as MTotal, os.IntFolio as LNGFolio, cast(os.MTotalSucursal as decimal(10, 2)) as MTotalSucursal,s.uidSucursal,cast(t.MCosto as decimal(10, 2)) as CostoEnvio, cast(ot.MPropina as decimal(10, 2)) as MPropina  from Ordenes o inner   join OrdenSucursal OS on o.UidOrden = OS.UidOrden inner  join Sucursales S on s.UidSucursal = OS.UidSucursal inner  join OrdenTarifario ot on ot.UidOrden = os.UidRelacionOrdenSucursal inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario  inner join OrdenProducto op on op.UidOrden = os.UidRelacionOrdenSucursal inner join SeccionProducto sp on sp.UidSeccionProducto = op.UidSeccionProducto inner join ImagenEmpresa IE on IE.UidEmpresa = S.UidEmpresa inner join Imagenes i on i.UIdImagen = IE.UidImagen where o.UidOrden = '{ UidOrden.ToString()}' and i.NVchRuta like '%FotoPerfil%' ";
                 DatoQuery = Datos.Consultas(Query);
             }
             catch (Exception)
@@ -320,7 +336,7 @@ namespace VistaDelModelo
             Datos = new Conexion();
             try
             {
-                string Query = "select distinct s.UidSucursal,op.UidListaDeProductosEnOrden,i.NVchRuta,p.uidproducto, s.Identificador,p.VchNombre,op.IntCantidad,op.MTotal,t.MCosto as tarifario from Ordenes o inner join OrdenSucursal os on os.UidOrden = o.UidOrden inner join Sucursales s on s.UidSucursal = os.UidSucursal inner join OrdenProducto op on os.UidRelacionOrdenSucursal = op.UidOrden inner join SeccionProducto sp on sp.UidSeccionProducto = op.UidSeccionProducto inner join Productos p on p.UidProducto = sp.UidProducto inner join OrdenTarifario ot on ot.UidOrden = os.UidRelacionOrdenSucursal inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario inner join ImagenProducto iproduc on iproduc.UidProducto = p.UidProducto  inner join Imagenes i on i.UIdImagen = iproduc.UidImagen where os.UidRelacionOrdenSucursal = '" + uidRelacionordenSucursal + "'";
+                string Query = "select distinct s.UidSucursal,op.UidListaDeProductosEnOrden,i.NVchRuta,p.uidproducto, s.Identificador,ot.MPropina,p.VchNombre,op.IntCantidad,op.MTotal,t.MCosto as tarifario from Ordenes o inner join OrdenSucursal os on os.UidOrden = o.UidOrden inner join Sucursales s on s.UidSucursal = os.UidSucursal inner join OrdenProducto op on os.UidRelacionOrdenSucursal = op.UidOrden inner join SeccionProducto sp on sp.UidSeccionProducto = op.UidSeccionProducto inner join Productos p on p.UidProducto = sp.UidProducto inner join OrdenTarifario ot on ot.UidOrden = os.UidRelacionOrdenSucursal inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario inner join ImagenProducto iproduc on iproduc.UidProducto = p.UidProducto  inner join Imagenes i on i.UIdImagen = iproduc.UidImagen where os.UidRelacionOrdenSucursal = '" + uidRelacionordenSucursal + "'";
 
                 ListaDeProductos = new List<VMOrden>();
                 foreach (DataRow item in Datos.Consultas(Query).Rows)
@@ -343,6 +359,7 @@ namespace VistaDelModelo
                         Imagen = "http://godeliverix.net/Vista/" + item["NVchRuta"].ToString(),
                         intCantidad = int.Parse(item["IntCantidad"].ToString()),
                         UidSucursal = new Guid(item["UidSucursal"].ToString()),
+                        MPropina = decimal.Parse(item["MPropina"].ToString()),
                         MTotal = decimal.Parse(Total),
                         MCostoTarifario = double.Parse(item["tarifario"].ToString()),
                         VisibilidadNota = TieneNota
@@ -400,7 +417,6 @@ namespace VistaDelModelo
 
                 ListaDeOrdenes = new List<VMOrden>();
 
-
                 foreach (DataRow item in Datos.Busquedas(comando).Rows)
                 {
                     long CodigoEntrega = 00000;
@@ -408,7 +424,7 @@ namespace VistaDelModelo
                     {
                         CodigoEntrega = long.Parse(item["BIntCodigoEntrega"].ToString());
                     }
-                    VMOrden orden = new VMOrden() { Uidorden = new Guid(item["UidOrden"].ToString()), LngCodigoDeEntrega = CodigoEntrega, FechaDeOrden = item["DtmFechaDeCreacion"].ToString(), MTotal = decimal.Parse(item["MTotal"].ToString()), LNGFolio = int.Parse(item["intFolio"].ToString()) };
+                    VMOrden orden = new VMOrden() { Uidorden = new Guid(item["UidOrden"].ToString()), LngCodigoDeEntrega = CodigoEntrega, FechaDeOrden = item["DtmFechaDeCreacion"].ToString(), MTotal = decimal.Parse(item["MTotal"].ToString()) + decimal.Parse(item["MPropina"].ToString()), LNGFolio = int.Parse(item["intFolio"].ToString()),  };
                     ListaDeOrdenes.Add(orden);
                 }
             }

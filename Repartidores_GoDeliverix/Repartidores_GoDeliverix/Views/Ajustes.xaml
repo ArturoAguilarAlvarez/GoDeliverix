@@ -6,25 +6,25 @@
              Title="Configuracion"
              Icon="Settings.png">
     <ContentPage.Content>
-        <Grid HorizontalOptions="Fill" VerticalOptions="Fill">
+        <Grid HorizontalOptions="Fill" BindingContext="{Binding MVAjustes}" VerticalOptions="Fill">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"></RowDefinition>
                 <RowDefinition Height="9*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Grid.ColumnSpan="3" >
                 <StackLayout  Grid.Column="0">
-                    <Button x:Name="BtnGeneral" Clicked="BtnGeneral_Clicked"  HeightRequest="50" TextColor="Purple"  FlowDirection="MatchParent" Text="General"></Button>
+                    <Button x:Name="BtnGeneral" BackgroundColor="{ Binding CGeneral,Mode=TwoWay}" Command="{Binding oPanelGeneral}" Clicked="BtnGeneral_Clicked" HorizontalOptions="FillAndExpand"  HeightRequest="50"   FlowDirection="MatchParent" Text="General" TextColor="White"></Button>
                 </StackLayout>
                 <StackLayout Grid.Column="1">
-                    <Button x:Name="BtnDireccion" Clicked="BtnDireccion_Clicked"  HeightRequest="50" TextColor="Purple" FlowDirection="MatchParent" Text="Direccion"></Button>
+                    <Button x:Name="BtnDireccion" BackgroundColor="{ Binding CTelefono,Mode=TwoWay}" Command="{Binding oPanelTelefono}"  Clicked="BtnDireccion_Clicked" HorizontalOptions="FillAndExpand"  HeightRequest="50"  FlowDirection="MatchParent" Text="Direccion" TextColor="White"></Button>
                 </StackLayout>
                 <StackLayout Grid.Column="2">
-                    <Button x:Name="BtnTelefono" Clicked="BtnTelefono_Clicked"  HeightRequest="50" TextColor="Purple" FlowDirection="MatchParent" Text="Telefonos"></Button>
+                    <Button x:Name="BtnTelefono" BackgroundColor="{ Binding CDireccion,Mode=TwoWay}" Command="{Binding oPanelDireccion}" Clicked="BtnTelefono_Clicked" HorizontalOptions="FillAndExpand"  HeightRequest="50"  FlowDirection="MatchParent" Text="Telefonos" TextColor="White"></Button>
                 </StackLayout>
             </Grid>
             <StackLayout Grid.Row="1" Grid.ColumnSpan="3">
 
-                <StackLayout x:Name="PanelGeneral" BindingContext="{Binding MVAjustes}">
+                <StackLayout x:Name="PanelGeneral" IsVisible="{ Binding CGeneral,Mode=TwoWay}">
                     <ListView ItemsSource="{Binding LsAjustes}" IsRefreshing="{Binding IsLoading,Mode=TwoWay}" 
                       RefreshCommand="{Binding IsReloading}" IsPullToRefreshEnabled="True" >
                         <ListView.ItemTemplate >
@@ -35,7 +35,7 @@
                     </ListView>
                 </StackLayout>
 
-                <StackLayout x:Name="PanelDireccion" BindingContext="{Binding MVAjustes}">
+                <StackLayout x:Name="PanelDireccion"  IsVisible="{ Binding CDireccion,Mode=TwoWay}">
                     <ListView ItemsSource="{Binding ListaDireccion}" IsRefreshing="{Binding IsLoading,Mode=TwoWay}" 
                       RefreshCommand="{Binding IsReloading}"  RowHeight="70" IsPullToRefreshEnabled="True">
                         <ListView.ItemTemplate>
@@ -59,7 +59,7 @@
                     <ImageButton Source="FlecaAgregarDireccion.png" BackgroundColor="Green" HorizontalOptions="End" Command="{Binding AddAddres}" VerticalOptions="EndAndExpand" BorderWidth="5" BorderColor="White"  Margin="10" CornerRadius="40" HeightRequest="80" WidthRequest="80" ></ImageButton>
                 </StackLayout>
 
-                <StackLayout x:Name="PanelTelefono" BindingContext="{Binding MVAjustes}">
+                <StackLayout x:Name="PanelTelefono"  IsVisible="{ Binding CTelefono,Mode=TwoWay}">
                     <ListView ItemsSource="{Binding LsTelefono}" IsRefreshing="{Binding IsLoading,Mode=TwoWay}" 
                       RefreshCommand="{Binding IsReloading}"  RowHeight="70" IsPullToRefreshEnabled="True">
                         <ListView.ItemTemplate>

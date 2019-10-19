@@ -21,6 +21,17 @@ namespace WebApplication1.Controllers
             Respuesta.Message = "Informacion actualizada satisfactoriamente";
             return Respuesta;
         }
+        
+        
+        public ResponseHelper GetTurnoSuministradora(Guid UidUsuario, Guid UidTurno)
+        {
+            Respuesta = new ResponseHelper();
+            MVTurno = new VMTurno();
+            MVTurno.TurnoSuministradora(UidUsuario, UidTurno);
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion actualizada satisfactoriamente";
+            return Respuesta;
+        }
 
         public ResponseHelper GetInformacionDeOrdenesPorTuno(Guid UidTurno)
         {

@@ -183,8 +183,7 @@ namespace Modelo
                 if (Uidorden != Guid.Empty)
                 {
                     Comando.Parameters.Add("@UidOrden", SqlDbType.UniqueIdentifier);
-                    Comando.Parameters["@UidOrden"].Value = Uidorden
-                        ;
+                    Comando.Parameters["@UidOrden"].Value = Uidorden ;
                 }
 
                 if (oMensaje.Uid != Guid.Empty && oMensaje != null)
@@ -209,12 +208,11 @@ namespace Modelo
                     Comando.Parameters["@UidLicencia"].Value = UidLicencia;
                 }
 
-
                 Comando.Parameters.Add("@UidEstatusEnOrden", SqlDbType.UniqueIdentifier);
                 Comando.Parameters["@UidEstatusEnOrden"].Value = Estatus;
 
                 Comando.Parameters.Add("@Parametro", SqlDbType.Char, 1);
-                Comando.Parameters["@Parametro"].Value = Parametro;
+                Comando.Parameters["@Parametro"].Value = char.Parse(Parametro);
 
                 resultado = Datos.ModificarDatos(Comando);
             }

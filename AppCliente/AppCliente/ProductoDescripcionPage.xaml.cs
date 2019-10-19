@@ -35,10 +35,11 @@ namespace AppCliente
         public ProductoDescripcionPage(VMProducto objProducto, List<VMProducto> lista)
         {
             InitializeComponent();
+            Title = objProducto.STRNOMBRE;
             UIDEmpresa = objProducto.UIDEMPRESA.ToString();
             this.objProducto = objProducto;
-            string url = objProducto.STRRUTA;
-            ImagenProducto.Source = url;
+            ImagenProducto.Source = objProducto.STRRUTA;
+                   
             txtNombreProducto.Text = objProducto.STRNOMBRE;
             txtDescripcionProducto.Text = objProducto.STRDESCRIPCION;
             txtIDSeccion.Text = lista[0].UID.ToString();
@@ -60,7 +61,7 @@ namespace AppCliente
             UIDEmpresa = objProducto.UIDEMPRESA.ToString();
             this.objProducto = objProducto;
             string url = objProducto.STRRUTA;
-            ImagenProducto.Source = url;
+            ImagenProducto.Source = ImageSource.FromResource(url);
             txtNombreProducto.Text = objProducto.STRNOMBRE;
             txtDescripcionProducto.Text = objProducto.STRDESCRIPCION;
 
@@ -357,7 +358,6 @@ namespace AppCliente
                 _displayLabel.Text = string.Format("{0}", cantidad);
                 btnAgregarCarrito.Text = "Agregar carrito $" + costo;
             }
-
         }
 
         private void ButtonMas_Clicked(object sender, EventArgs e)
@@ -445,7 +445,6 @@ namespace AppCliente
             {
             }
         }
-
 
     }
 }

@@ -12,7 +12,8 @@
             ItemsSource="{Binding VMProducto}"
                       SelectionMode="None"
                       SeparatorVisibility="Default"
-            IsPullToRefreshEnabled="False"
+            IsPullToRefreshEnabled="True"
+                      Refreshing="MyListViewHistorial_Refreshing"
             HasUnevenRows="True">
                 <!--Custom View Cells-->
                 <ListView.ItemTemplate>
@@ -24,57 +25,47 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="4*"></ColumnDefinition>
-                                        <ColumnDefinition Width="2*"></ColumnDefinition>
-                                        <ColumnDefinition Width="4*"></ColumnDefinition>
+                                        <ColumnDefinition Width="5*"></ColumnDefinition>
+                                        <ColumnDefinition Width="5*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-
-                                    <Label Text="{Binding StrNota}"  HorizontalOptions="Center" Grid.Column="0" Grid.ColumnSpan="3"></Label>
-
-                                    <ff:CachedImage
+                                    <!--Control del estatus-->
+                                    <Label Text="{Binding StrNota}"  HorizontalOptions="Center" Grid.Column="0" Grid.ColumnSpan="2"></Label>
+                                    <StackLayout Orientation="Vertical" VerticalOptions="CenterAndExpand" Grid.Column="0" Grid.Row="1">
+                                        <ff:CachedImage
                                                     Source="{Binding Imagen}"
                                                     HorizontalOptions="Center"
                                                     VerticalOptions="Center"
                                                     LoadingPlaceholder   = "IconoCajaVacia"
                                                     ErrorPlaceholder     = "Error"
-                                                    Grid.Row="1"
-                                                    Grid.RowSpan="4"
-                                                    Grid.Column="0"
                                                     RetryCount           = "3"
                                                     RetryDelay           = "3"
                                                     DownsampleToViewSize = "False">
-                                    </ff:CachedImage>
+                                        </ff:CachedImage>
 
-                                    <Label Text="{Binding Identificador}" HorizontalOptions="Center" Grid.Column="0" Grid.Row="5" FontSize="Micro"></Label>
+                                        <Label Text="{Binding Identificador}" HorizontalOptions="Center" FontAttributes="Bold" VerticalOptions="End"  FontSize="Medium" ></Label>
+                                    </StackLayout>
 
-                                    <Label Text="Numero de orden:" FontSize="Micro" FontAttributes="Bold" TextColor="Black" Grid.Row="1" Grid.Column="1"></Label>
-                                    <Label Text="{Binding LNGFolio}" HorizontalOptions="Center" Grid.Column="2" Grid.Row="1" FontSize="Micro" ></Label>
+                                    <StackLayout Orientation="Vertical" Grid.Column="1" Grid.Row="1">
+                                        <Grid>
+                                            <Label Grid.ColumnSpan="2" Grid.Row="0" Text="No.orden:" HorizontalOptions="Center"  FontAttributes="Bold" TextColor="Black" FontSize="Medium" ></Label>
+                                            <Label Grid.ColumnSpan="2" Grid.Row="1" Text="{Binding LNGFolio}" HorizontalOptions="Center"  FontSize="Medium" ></Label>
 
-                                    <Label Text="Codigo de entrega:" FontSize="Micro" FontAttributes="Bold" TextColor="Black" Grid.Row="2" Grid.Column="1"></Label>
-                                    <Label x:Name="txtCodigoEnvio" Text="{Binding LngCodigoDeEntrega}" HorizontalOptions="Center" Grid.Column="2" Grid.Row="2"  IsVisible="False"></Label>
-                                    <Button Text="{Binding LngCodigoDeEntrega}" HorizontalOptions="Center" Grid.Column="2" Grid.Row="2" Clicked="ButtonCopiarNumeroEnvio_Clicked_2"></Button>
+                                            <Label Grid.Column="0" Grid.Row="2" Text="Subtotal:" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" TextColor="Black" ></Label>
+                                            <Label Grid.Column="1" Grid.Row="2" Text="{Binding MTotalSucursal,StringFormat='${0}'}" HorizontalOptions="End" ></Label>
 
-                                    <!--<Label Text="Sucursal:" FontSize="Micro" FontAttributes="Bold" TextColor="Black" Grid.Row="2" Grid.Column="1"></Label>
-                                    <Label Text="{Binding Identificador,StringFormat='${0}'}" HorizontalOptions="Center" Grid.Column="2" Grid.Row="2" FontSize="Micro"></Label>-->
+                                            <Label Grid.Column="0" Grid.Row="3" Text="Envio:" FontSize="Medium" FontAttributes="Bold"  HorizontalOptions="Start" TextColor="Black" ></Label>
+                                            <Label Grid.Column="1" Grid.Row="3" Text="{Binding CostoEnvio,StringFormat='${0}'}" HorizontalOptions="End" ></Label>
 
-                                    <Label Text="Subtotal:" FontSize="Micro" FontAttributes="Bold" TextColor="Black" Grid.Row="3" Grid.Column="1"></Label>
-                                    <Label Text="{Binding MTotalSucursal,StringFormat='${0}'}" HorizontalOptions="Center" Grid.Column="2"  Grid.Row="3"></Label>
+                                            <Label Grid.Column="0" Grid.Row="4" Text="Propina:" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" TextColor="Black" ></Label>
+                                            <Label Grid.Column="1" Grid.Row="4" Text="{Binding MPropina,StringFormat='${0:F2} '}" HorizontalOptions="End" ></Label>
 
-                                    <Label Text="Costo envio:" FontSize="Micro" FontAttributes="Bold" TextColor="Black" Grid.Row="4" Grid.Column="1"></Label>
-                                    <Label Text="{Binding CostoEnvio,StringFormat='${0}'}" HorizontalOptions="Center" Grid.Column="2" Grid.Row="4"></Label>
+                                            <Label Grid.Column="0" Grid.Row="5" Text="Total:" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" TextColor="Black"></Label>
+                                            <Label Grid.Column="1" Grid.Row="5" Text="{Binding MTotal,StringFormat='${0:F2} '}" HorizontalOptions="End"></Label>
+                                        </Grid>
+                                        <!--<Label x:Name="txtCodigoEnvio" Text="{Binding LngCodigoDeEntrega}" HorizontalOptions="Center"   IsVisible="False"></Label>-->
+                                        <Button Text="Codigo de entrega" HorizontalOptions="Fill"  Clicked="ButtonCopiarNumeroEnvio_Clicked_2"></Button>
 
-
-                                    <Label Text="Total" FontSize="Micro" FontAttributes="Bold" TextColor="Black" Grid.Row="5" Grid.Column="1"></Label>
-                                    <Label Text="{Binding MTotal,StringFormat='${0}'}" HorizontalOptions="Center" Grid.Column="2" Grid.Row="5"></Label>
-
-                                    <!--
-
-                                    <Label Text="{Binding MTotal, StringFormat='Total ${0}'}" HorizontalOptions="Center" Grid.Column="1" Grid.Row="3"></Label>
-                                    
-                                    <Button Grid.Row="4" TextColor="White" BackgroundColor="Blue" Grid.Column="0"  HorizontalOptions="Center" Text="Productos..." FontSize="Small" Clicked="Button_Clicked"></Button>
-                                    <Button Grid.Row="4" TextColor="White" BackgroundColor="Blue" Grid.Column="1"  HorizontalOptions="Center" Text="Seguimiento..." FontSize="Small" Clicked="Button_Clicked_1"></Button>-->
-
-
+                                    </StackLayout>
                                 </Grid>
                             </ContentView>
                         </ViewCell>

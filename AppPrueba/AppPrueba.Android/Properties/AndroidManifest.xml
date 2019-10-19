@@ -3,17 +3,17 @@
 	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="28" />
 	<application android:label="GoDeliverix" android:usesCleartextTraffic="true">
 		<meta-data android:name="com.samsung.knoxlicense.permissions" android:value="true" />
-		<receiver android:name="com.onesignal.GcmBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
+		<!--<receiver android:name="com.onesignal.GcmBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
 			<intent-filter>
 				<action android:name="com.google.android.c2dm.intent.RECEIVE" />
 				<category android:name="AppPrueba.Android" />
 			</intent-filter>
-		</receiver>
+		</receiver>-->
 	</application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
-	<permission android:name="AppPrueba.Android.permission.C2D_MESSAGE" android:protectionLevel="signature" />
-	<uses-permission android:name="AppPrueba.Android.permission.C2D_MESSAGE" />
+	<!--<permission android:name="AppPrueba.Android.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+	<uses-permission android:name="AppPrueba.Android.permission.C2D_MESSAGE" />-->
 	<!-- Declare Knox permissions required by this app -->
 	<uses-permission android:name="com.samsung.android.knox.permission.KNOX_HW_CONTROL" />
 	<!-- Declare Android permissions required by this app -->

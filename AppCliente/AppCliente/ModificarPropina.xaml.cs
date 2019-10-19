@@ -25,6 +25,8 @@ namespace AppCliente
             btndetalle = btnPagarDetalle;
             LblPropina = lblPropina;
             InitializeComponent();
+            var sucursal = App.MVProducto.ListaDelInformacionSucursales.Find(s => s.UidSucursal == UidSucursal);
+            lblpropina.Text = sucursal.DPropina.ToString();
             PCantidadDePropina.SelectedIndex = 0;
         }
 
@@ -53,7 +55,6 @@ namespace AppCliente
                     TotalPropina += App.MVProducto.ListaDelInformacionSucursales[i].DPropina;
                 }
                 
-
                 LblPropina.Text = "$" + TotalPropina;
                 btnresumen.Text = "Pagar  $" + TotalPagar;
                 btndetalle.Text = "Pagar  $" + TotalPagar;
@@ -81,7 +82,6 @@ namespace AppCliente
                         TotalPropina += App.MVProducto.ListaDelInformacionSucursales[i].DPropina;
                     }
                     
-
                     LblPropina.Text = TotalPropina.ToString();
                     btnresumen.Text = "Pagar  $" + TotalPagar;
                     btndetalle.Text = "Pagar  $" + TotalPagar;

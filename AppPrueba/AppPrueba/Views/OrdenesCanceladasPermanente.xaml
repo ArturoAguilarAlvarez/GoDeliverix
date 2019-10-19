@@ -16,7 +16,7 @@
                     <Label Text="Orden" Grid.Column="0" HorizontalOptions="Center"></Label>
                     <Label Text="Estatus" Grid.Column="1" HorizontalOptions="Center"></Label>
                     <!--<Label Text="Tiempo de vida" Grid.Column="2" HorizontalOptions="Center"></Label>-->
-                    <Label Text="Acciones" Grid.Column="2" HorizontalOptions="Center"></Label>
+                    <!--<Label Text="Acciones" Grid.Column="2" HorizontalOptions="Center"></Label>-->
                 </Grid>
                 <ListView x:Name="MyListviewOrdenesCanceladas"
                           Grid.Row="1"

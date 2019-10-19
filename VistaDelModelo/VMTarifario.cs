@@ -72,6 +72,17 @@ namespace VistaDelModelo
             set { _GuidSucursalDistribuidora = value; }
         }
         /// <summary>
+        /// Actualiza el tarifario despues de haber sida entregada la orden
+        /// </summary>
+        /// <param name="uidOrdenSucursal"></param>
+        /// <param name="mPropina"></param>
+        public void ModificarTarifario(Guid uidOrdenSucursal, string mPropina)
+        {
+            oDbTarifario = new DBTarifario();
+            oDbTarifario.ActualizaTarifario(uidOrdenSucursal, mPropina);
+        }
+
+        /// <summary>
         /// La ruta de la imagen de la empresa distribuidora
         /// </summary>
         private string _StrRuta;

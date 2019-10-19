@@ -69,6 +69,13 @@ namespace DBControl
             string query = "delete from Telefono where UidTelefono in (select UidTelefono from TelefonoUsuario where uidusuario = '" + UidUsuario + "')delete from TelefonoUsuario where uidusuario ='" + UidUsuario + "' ";
             oConexion.Consultas(query);
         }
+
+        public DataTable ObtenerTelefonoPrincipalUsuario(string uidCliente)
+        {
+            oConexion = new Conexion();
+            string query = "select top 1 Numero from Telefono t inner join TipoDeTelefono tdt on t.UidTipoDeTelefono = tdt.UidTipoDeTelefono inner join TelefonoUsuario tu on tu.UidTelefono = t.UidTelefono where tu.UidUsuario = '"+uidCliente+"' and tdt.Nombre = 'Principal' ";
+            return oConexion.Consultas(query);
+        }
         #endregion
 
     }

@@ -3,26 +3,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              BindingContext="{Binding VMMain, Source={StaticResource Locator}}"
              Title="Informacion de entrega"
-             
              x:Class="Repartidores_GoDeliverix.Views.Home_Entregar">
-
     <ContentPage.Content>
         <Grid HorizontalOptions="Fill" BindingContext="{ Binding MVHomeOrden}" VerticalOptions="Fill">
             <Grid.RowDefinitions>
                 <RowDefinition Height="3*"></RowDefinition>
-                <RowDefinition Height="5*"></RowDefinition>
-                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="3*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="3*"></RowDefinition>
             </Grid.RowDefinitions>
-            <!--<StackLayout HorizontalOptions="Center">
-                <Label Text="GoDeliverix" TextColor="Purple"   FontSize="Large"></Label>
-            </StackLayout>-->
             <StackLayout Grid.Row="0">
                 <BoxView BackgroundColor="#333" HeightRequest="5" HorizontalOptions="FillAndExpand" ></BoxView>
-
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="5*"></RowDefinition>
-                        <RowDefinition Height="5*"></RowDefinition>
+                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="4*"></RowDefinition>
                     </Grid.RowDefinitions>
                     <StackLayout Orientation="Vertical" VerticalOptions="Center" Grid.Row="0" Grid.Column="0">
                         <Label  Text="Empresa" FontSize="Large"  TextColor="#333"></Label>
@@ -40,6 +36,8 @@
                     <StackLayout Orientation="Vertical" VerticalOptions="Center" Grid.Row="1"  Grid.Column="1" HorizontalOptions="Center">
                         <Label  Text="Cliente" FontSize="Large"  TextColor="#333"></Label>
                         <Label  Text="{Binding StrNombreUsuario}" TextColor="#555" FontSize="Medium" ></Label>
+                        <Button BackgroundColor="White" TextColor="Blue"  Text="{Binding StrNumeroCliente}" x:Name="lblNumeroCliente"  Clicked="LblNumeroCliente_Clicked" FontSize="Medium" >
+                        </Button>
                     </StackLayout>
                 </Grid>
             </StackLayout>
@@ -79,31 +77,26 @@
                 <StackLayout Orientation="Vertical" HorizontalOptions="End">
                     <Label  Text="{Binding MSubTotal,StringFormat='Subtotal: ${0}'}" TextColor="Black" FontSize="Large"></Label>
                     <Label  Text="{Binding MTotalTarifario,StringFormat='Costo de envio: ${0}'}" TextColor="Black" FontSize="Large"></Label>
-                    <Label  Text="{Binding MTotal,StringFormat='Total: ${0}'}" TextColor="Black" FontSize="Large"></Label>
+                    <Label  Text="{Binding MPropina,StringFormat='Propina: ${0}'}" TextColor="Black" FontSize="Large"></Label>
+                    <Label  Text="{Binding MTotalConPropina,StringFormat='Total: ${0}'}" TextColor="Black" FontSize="Large"></Label>
                 </StackLayout>
             </StackLayout>
+            <Button Grid.Row="2" Text="Escanear codigo" Command="{Binding RefreshAll}" x:Name="btnEscanearCodigo" Clicked="btnEscanearCodigo_Clicked" TextColor="White" BackgroundColor="CadetBlue"></Button>
 
-            <StackLayout Grid.Row="2" HorizontalOptions="Center">
+            <StackLayout Grid.Row="3" HorizontalOptions="Center">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="5*"></RowDefinition>
                         <RowDefinition Height="5*"></RowDefinition>
                     </Grid.RowDefinitions>
                     <StackLayout Grid.Row="0">
-                        <Entry  Text="{Binding StrCodigo,Mode=TwoWay}" Placeholder="Ingresa el codigo para finalizar" HorizontalOptions="Fill"></Entry>
+                        <Entry  Text="{Binding StrCodigo,Mode=TwoWay}" x:Name="ECodigo" Placeholder="Ingresa el codigo para finalizar" HorizontalOptions="Fill"></Entry>
                     </StackLayout>
-                    <StackLayout Grid.Row="1">
-                        <Grid>
-                            <Button Text="Finalizar" Command="{ Binding GetCode}" x:Name="BtnFinalizar" Clicked="BtnFinalizar_Clicked" TextColor="White"  BackgroundColor="Green"></Button>
-
-                        </Grid>
+                    <StackLayout Grid.Row="1" Orientation="Vertical">
+                        <Button Text="Finalizar" Command="{ Binding GetCode}" x:Name="BtnFinalizar" Clicked="BtnFinalizar_Clicked" TextColor="White"  BackgroundColor="Green"></Button>
                     </StackLayout>
                 </Grid>
-
             </StackLayout>
-            <!--<StackLayout Grid.Row="3" HorizontalOptions="Center">
-                <Button Text="Otra persona recibe?" TextColor="Purple"  FontSize="Large"></Button>
-            </StackLayout>-->
         </Grid>
     </ContentPage.Content>
 </ContentPage>

@@ -40,16 +40,16 @@ namespace AppCliente
             foreach (var item in App.MVProducto.ListaDelInformacionSucursales)
             {
 
-                string _URL = "http://www.godeliverix.net/api/Sucursales/GetBuscarSucursales?UidSucursal=" + item.UidSucursal + "";
+                string _URL = "https://www.godeliverix.net/api/Sucursales/GetBuscarSucursales?UidSucursal=" + item.UidSucursal + "";
                 string content = await _client.GetStringAsync(_URL);
                 var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                 App.MVSucursales = JsonConvert.DeserializeObject<VMSucursales>(obj);
 
-                _URL = "http://www.godeliverix.net/api/Imagen/GetImagenDePerfilEmpresa?UidEmpresa=" + App.MVSucursales.UidEmpresa + "";
+                _URL = "https://www.godeliverix.net/api/Imagen/GetImagenDePerfilEmpresa?UidEmpresa=" + App.MVSucursales.UidEmpresa + "";
                 content = await _client.GetStringAsync(_URL);
                 obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                 App.MVImagen = JsonConvert.DeserializeObject<VMImagen>(obj);
-                item.STRRUTA = "http://www.godeliverix.net/vista/" + App.MVImagen.STRRUTA;
+                item.STRRUTA = "https://www.godeliverix.net/vista/" + App.MVImagen.STRRUTA;
             }
             await Navigation.PushAsync(new CarritoPage());
             //Navigation.PushAsync(new CarritoPage());
@@ -234,7 +234,7 @@ namespace AppCliente
                 MyListViewBusquedaProductosHome.ItemsSource = null;
                 for (int i = 0; i < a; i++)
                 {
-                    AppCliente.App.MVEmpresa.LISTADEEMPRESAS[i].StrRuta = "http://www.godeliverix.net/vista" + AppCliente.App.MVEmpresa.LISTADEEMPRESAS[i].StrRuta.Substring(2);
+                    AppCliente.App.MVEmpresa.LISTADEEMPRESAS[i].StrRuta = "https://www.godeliverix.net/vista" + AppCliente.App.MVEmpresa.LISTADEEMPRESAS[i].StrRuta.Substring(2);
                 }
 
 
@@ -296,15 +296,12 @@ namespace AppCliente
             CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
             string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
 
-            string hora = Hora + ":" + DateTime.Now.Minute.ToString();
 
             //Guid Direccion = App.MVDireccion.ListaDIRECCIONES[0].ID;
             Guid Direccion = new Guid(App.DireccionABuscar);
 
             App.MVProducto.BuscarProductoPorSucursal("Giro", Dia, Direccion, new Guid(App.giro), ObjItem.UID);
-            //string StrParametroBusqueda, string StrDia, Guid UidDireccion, Guid UidBusquedaCategorias, object UidProducto
-            string uiseccion = App.MVProducto.ListaDePreciosSucursales[0].UidSeccion.ToString();
-            string asd = App.MVProducto.ListaDePreciosSucursales[0].UID.ToString();
+
             await Navigation.PushAsync(new ProductoDescripcionPage(ObjItem, App.MVProducto.ListaDePreciosSucursales));
             await PopupNavigation.Instance.PopAllAsync();
         }
@@ -590,7 +587,6 @@ namespace AppCliente
         {
             acloading.IsVisible = true;
             acloading.IsRunning = true;
-            //_client.BaseAddress = new Uri("http://www.godeliverix.net/api/");
             string _URL = "https://www.godeliverix.net/api/Giro/Get";
             var content = await _client.GetStringAsync(_URL);
             var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
@@ -608,21 +604,12 @@ namespace AppCliente
             App.giro = AppCliente.App.MVGiro.LISTADEGIRO[0].UIDVM.ToString();
 
 
-            string Hora = string.Empty;
-            if (DateTime.Now.Hour < 10)
-            {
-                Hora = "0" + DateTime.Now.Hour.ToString();
-            }
-            else
-            {
-                Hora = DateTime.Now.Hour.ToString();
-            }
+           
 
 
             CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
             string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
 
-            string hora = Hora + ":" + DateTime.Now.Minute.ToString();
 
             if (App.MVDireccion.ListaDIRECCIONES.Count != 0)
             {

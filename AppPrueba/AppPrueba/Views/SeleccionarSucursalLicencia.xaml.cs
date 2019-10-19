@@ -81,7 +81,8 @@ namespace AppPrueba.Views
                 AppPrueba.Helpers.Settings.NombreSucursal = objSucursal.IDENTIFICADOR;
                 AppPrueba.Helpers.Settings.Licencia = objLicencia.UidLicencia.ToString();
                 AppPrueba.Helpers.Settings.UidSucursal = objSucursal.ID.ToString();
-                AppPrueba.Helpers.Settings.NombreSucursal = App.MVSucursal.LISTADESUCURSALES[0].IDENTIFICADOR;
+                var sucursal = App.MVSucursal.LISTADESUCURSALES.Find(s=>s.ID == objSucursal.ID);
+                AppPrueba.Helpers.Settings.NombreSucursal = sucursal.IDENTIFICADOR;
                 AppPrueba.Helpers.Settings.Perfil = perfil;
                 App.Current.MainPage = new MasterMenu();
                 //App.MVEmpresas.ObtenerNombreComercial(App.UIdUsuario.ToString());

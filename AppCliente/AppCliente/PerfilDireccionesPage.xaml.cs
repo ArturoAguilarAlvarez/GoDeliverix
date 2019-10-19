@@ -62,8 +62,6 @@ namespace AppCliente
             this.Button = button;
             this.IDDireccionBusqueda = IDDireccionBusqueda;
             Title = "seleccionar Direccion";
-
-
         }
 
         private void MenuItem_Editar(object sender, EventArgs e)
@@ -71,7 +69,6 @@ namespace AppCliente
             var item = (MenuItem)sender;
             VMDireccion ObjItem = (VMDireccion)item.CommandParameter;
             MypickerPais.SelectedIndex = 0;
-
 
             //string tipo = "Gestion";
             Guid Pais = new Guid("afd6c3b7-f5be-40c9-8385-936d275a8d6b");
@@ -98,7 +95,6 @@ namespace AppCliente
             string Estado = DireccionesListaEstados.Find(t => t.ID.ToString() == ObjItem.ESTADO).ESTADO;
             MypickerEstado.SelectedItem = Estado;
 
-
             Guid IDEstado = DireccionesListaEstados.Find(t => t.ID.ToString() == ObjItem.ESTADO).ID;
             dt = AppCliente.App.MVDireccion.Municipios(IDEstado);
             DireccionesListaMunicipios.Clear();
@@ -117,7 +113,6 @@ namespace AppCliente
             string Municipio = DireccionesListaMunicipios.Find(t => t.ID.ToString() == ObjItem.MUNICIPIO).ESTADO;
             MypickerMunicipio.SelectedItem = Municipio;
 
-
             Guid IDMunicipio = DireccionesListaMunicipios.Find(t => t.ID.ToString() == ObjItem.MUNICIPIO).ID;
             dt = AppCliente.App.MVDireccion.Ciudades(IDMunicipio);
             DireccionesListaCiudad.Clear();
@@ -134,7 +129,6 @@ namespace AppCliente
             }
             string Ciudad = DireccionesListaCiudad.Find(t => t.ID.ToString() == ObjItem.CIUDAD).ESTADO;
             MypickerCiudad.SelectedItem = Ciudad;
-
 
             Guid IDCiudad = DireccionesListaCiudad.Find(t => t.ID.ToString() == ObjItem.CIUDAD).ID;
             dt = AppCliente.App.MVDireccion.Colonias(IDCiudad);

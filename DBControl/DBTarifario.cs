@@ -54,6 +54,17 @@ namespace DBControl
             string query = "select Uidregistrotarifario,UidRelacionZonaRecolecta,UidRelacionZonaEntrega, MCosto from Tarifario where UidRegistroTarifario = '" + uidTarifario.ToString() + "'";
             return oConexion.Consultas(query);
         }
+        /// <summary>
+        /// Actualiza la propina del tarifario
+        /// </summary>
+        /// <param name="uidOrdenSucursal"></param>
+        /// <param name="mPropina"></param>
+        public void ActualizaTarifario(Guid uidOrdenSucursal, string mPropina)
+        {
+            oConexion = new Conexion();
+            string query = "update OrdenTarifario set MPropina = "+ mPropina + " where UidOrden = '"+ uidOrdenSucursal + "'";
+            oConexion.Consultas(query);
+        }
 
         public void EliminaTarifarioDeSuministradora(string UidSucursal)
         {

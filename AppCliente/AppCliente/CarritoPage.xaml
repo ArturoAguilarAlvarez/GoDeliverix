@@ -55,7 +55,7 @@
                             <Label Text="Total de articulos: " FontSize="Large"
                             FontAttributes="Bold" HorizontalOptions="Start"></Label>
                             <!--Cantidad de ordenes-->
-                            <Label  Text="Ordenes: " FontSize="Large"
+                            <Label  Text="Total de ordenes: " FontSize="Large"
                             FontAttributes="Bold" HorizontalOptions="Start"></Label>
                             <!--Propina-->
                             <Label Text="Propina:"  FontSize="Large"

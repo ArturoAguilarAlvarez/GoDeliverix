@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-
 using Xamarin.Forms.Maps;
 using VistaDelModelo;
 using System.Data;
@@ -20,7 +19,7 @@ namespace AppCliente
         {
             InitializeComponent();
             Cargar();
-         }
+        }
         public void Cargar()
         {
             App.MVOrden.ObtenerOrdenesCliente(App.Global1.ToString(), "Usuario");
@@ -45,17 +44,14 @@ namespace AppCliente
         {
             var item = ((ItemTappedEventArgs)e);
             VMOrden ObjItem = (VMOrden)item.Item;
-
             App.MVOrden.ListaDeOrdenesEmpresa.Clear();
-
-           //Navigation.PushAsync(new DetalleHistorial(ObjItem));
-            DataTable DatoQuery=App.MVOrden.ObtenerSucursaleDeOrden(ObjItem.Uidorden);
+            DataTable DatoQuery = App.MVOrden.ObtenerSucursaleDeOrden(ObjItem.Uidorden);
             string Status;
             foreach (DataRow itemm in DatoQuery.Rows)
             {
                 Status = "";
                 //App.MVOrden.ObtenerEstatusOrden();
-                DataTable datoStatus= App.MVOrden.ObtenerEstatusOrden(itemm["UidRelacionOrdenSucursal"].ToString());
+                DataTable datoStatus = App.MVOrden.ObtenerEstatusOrden(itemm["UidRelacionOrdenSucursal"].ToString());
                 //datoStatus.Rows[0][""].ToString();
                 foreach (DataRow item2 in datoStatus.Rows)
                 {
@@ -65,18 +61,19 @@ namespace AppCliente
                 {
                     UidRelacionOrdenSucursal = itemm["UidRelacionOrdenSucursal"].ToString(),
                     Identificador = itemm["Identificador"].ToString(),
-                    MTotal = decimal.Parse(itemm["MTotal"].ToString()),
+                    MTotal = decimal.Parse(itemm["MTotal"].ToString()) + decimal.Parse(itemm["MPropina"].ToString()),
                     LNGFolio = long.Parse(itemm["LNGFolio"].ToString()),
                     MTotalSucursal = itemm["MTotalSucursal"].ToString(),
                     UidSucursal = new Guid(itemm["uidSucursal"].ToString()),
                     CostoEnvio = itemm["CostoEnvio"].ToString(),
-                    LngCodigoDeEntrega=long.Parse(itemm["BintCodigoEntrega"].ToString()),
+                    LngCodigoDeEntrega = long.Parse(itemm["BintCodigoEntrega"].ToString()),
                     StrNota = Status,
-                    Imagen= "http://godeliverix.net/Vista/"+itemm["NVchRuta"].ToString(),
+                    MPropina = decimal.Parse(itemm["MPropina"].ToString()),
+                    Imagen = "http://godeliverix.net/Vista/" + itemm["NVchRuta"].ToString(),
                 });
             }
-   
-            Navigation.PushAsync( new  HistorialDetalleEmpresa(ObjItem));
+
+            Navigation.PushAsync(new HistorialDetalleEmpresa(ObjItem));
             //App.MVOrden.ObtenerProductosDeOrden(ObjItem.UidRelacionOrdenSucursal.ToString());
         }
     }

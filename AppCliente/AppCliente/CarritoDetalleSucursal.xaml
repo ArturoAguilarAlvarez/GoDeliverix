@@ -64,6 +64,8 @@
                   
                   <Entry Grid.Row="1" Text="{Binding StrNota}"
                          Placeholder="Sin nota"
+                         x:Name="ENotas"
+                         TextChanged="ENotas_TextChanged"
                          Margin="20,5,20,0"
                          HorizontalOptions="Fill" />
 

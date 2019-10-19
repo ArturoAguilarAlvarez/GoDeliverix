@@ -829,7 +829,7 @@ namespace WebApplication1.Vista
         }
         protected void MuestraEmpresaEnGestion(string valor)
         {
-            
+
             MVUsuarios.obtenerUsuario(valor);
             // MVUsuarios.ObtenerTelefonos(valor);
             MVDireccion.ObtenerDireccionesUsuario(valor);
@@ -924,7 +924,7 @@ namespace WebApplication1.Vista
                 string Estatus = DDLFEstatus.SelectedItem.Value;
 
                 MVUsuarios.BusquedaDeUsuario(NOMBRE: Nombre, USER: Usuario, APELLIDO: Apellido, ESTATUS: Estatus, UIDPERFIL: UidPerfil, UidEmpresa: UidEmpresa);
-                
+
                 CargaGrid("Ampliada");
                 CargaGrid("Normal");
 
@@ -1123,7 +1123,7 @@ namespace WebApplication1.Vista
             txtDReferencia.Enabled = estatus;
             txtDApellidoPaterno.Enabled = estatus;
             txtDApellidoMaterno.Enabled = estatus;
-            
+
             txtIdentificadorDeDireccion.Enabled = estatus;
             btnNuevaDireccion.Enabled = estatus;
             btnNuevoTelefono.Enabled = estatus;
@@ -1195,7 +1195,7 @@ namespace WebApplication1.Vista
                 btnNuevo.CssClass = "btn btn-sm btn-default ";
             }
         }
-      
+
         private void LimpiarCajasDeTexto()
         {
             //Borrar datos de textbox
@@ -1494,7 +1494,7 @@ namespace WebApplication1.Vista
                         lblEstado.Text = "No se puede agregar un correo electronico ya existente en el sistema";
                     }
                     MVUsuarios.BusquedaDeUsuario(USER: usuario);
-                    if (MVUsuarios.LISTADEUSUARIOS.Count >0)
+                    if (MVUsuarios.LISTADEUSUARIOS.Count > 0)
                     {
                         lblEstado.Text = "No se puede agregar un nombre de usuario ya existente en el sistema ";
                     }
@@ -1537,7 +1537,7 @@ namespace WebApplication1.Vista
                         BorrarCamposDeGestion();
                         Session.Remove("Accion");
                         MVUsuarios = new VMUsuarios();
-                        MVUsuarios.BusquedaDeUsuario( UIDPERFIL:new Guid("81232596-4c6b-4568-9005-8d4a0a382fda"), UidEmpresa: new Guid(Session["UidEmpresaSistema"].ToString()));
+                        MVUsuarios.BusquedaDeUsuario(UIDPERFIL: new Guid("81232596-4c6b-4568-9005-8d4a0a382fda"), UidEmpresa: new Guid(Session["UidEmpresaSistema"].ToString()));
                         CargaGrid("Normal");
                         Session["MVUsuarios"] = MVUsuarios;
                         AccionesDeLaPagina = string.Empty;
@@ -1551,22 +1551,18 @@ namespace WebApplication1.Vista
                 {
                     #region Actualizar datos
                     Guid UidUsuario = new Guid(txtUidUsuario.Text);
-
-
-                    if (MVUsuarios.ActualizarUsuario(UidUsuario, Nombre, ApellidoPaterno, ApellidoMaterno, usuario, password, fechaDeNacimiento, PerfilDeUsuario, estatus, UidSucursal, UidSucursal))
+                    if (MVUsuarios.ActualizarUsuario(UidUsuario, Nombre, ApellidoPaterno, ApellidoMaterno, usuario, password, fechaDeNacimiento, PerfilDeUsuario, estatus, SUCURSAL: UidSucursal))
                     {
                         if (MVDireccion.ListaDIRECCIONES.Count > 0)
                         {
                             MVDireccion.GuardaListaDeDirecciones(MVDireccion.ListaDIRECCIONES, UidUsuario, "asp_AgregaDireccionUsuario", "Usuario");
                         }
-
                         //Elimina y guarda los correos electronicos
                         MVCorreoElectronico.EliminaCorreoUsuario(UidUsuario.ToString());
                         if (!string.IsNullOrEmpty(txtDCorreoElectronico.Text))
                         {
                             MVCorreoElectronico.AgregarCorreo(UidUsuario, "Usuario", txtDCorreoElectronico.Text, Guid.NewGuid());
                         }
-
                         //Elimina y Guarda los telefonos
                         if (MVTelefono.ListaDeTelefonos != null)
                         {
@@ -1580,13 +1576,11 @@ namespace WebApplication1.Vista
                         {
                             lblEstado.Text = "registro actualizada";
                         }
-
                     }
                     else
                     {
                         lblEstado.Text = "Ocurrio un problema.";
                     }
-
                     Session.Remove("Edicion");
                     Session.Remove("Accion");
                     MVUsuarios.BusquedaDeUsuario(UIDPERFIL: new Guid("81232596-4c6b-4568-9005-8d4a0a382fda"), UidEmpresa: new Guid(Session["UidEmpresaSistema"].ToString()));
@@ -1628,7 +1622,6 @@ namespace WebApplication1.Vista
                     txtdHoraApertura.BorderColor = System.Drawing.Color.Red;
                 }
             }
-
         }
         protected void QuitaEstiloACamposObligatorios()
         {
@@ -1725,7 +1718,7 @@ namespace WebApplication1.Vista
             else
             {
                 Guid UidDireccion = Guid.NewGuid();
-                MVDireccion.AgregaDireccionALista(UidDireccion, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, txtCalle0.Text, txtCalle1.Text, txtCalle2.Text, txtDManzana.Text, txtDLote.Text, txtDCodigoPostal.Text, txtDReferencia.Text,  NOMBRECIUDAD, NOMBRECOLONIA,txtIdentificadorDeDireccion.Text);
+                MVDireccion.AgregaDireccionALista(UidDireccion, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, txtCalle0.Text, txtCalle1.Text, txtCalle2.Text, txtDManzana.Text, txtDLote.Text, txtDCodigoPostal.Text, txtDReferencia.Text, NOMBRECIUDAD, NOMBRECOLONIA, txtIdentificadorDeDireccion.Text);
             }
 
             Session["MVUsuarios"] = MVUsuarios;
@@ -1960,7 +1953,7 @@ namespace WebApplication1.Vista
         }
         protected void ActualizaTelefono()
         {
-            MVTelefono.ActualizaRegistroEnListaDeTelefonos(txtIdTelefono.Text,  DDLDTipoDETelefono.SelectedItem.Value.ToString(), txtDTelefono.Text);
+            MVTelefono.ActualizaRegistroEnListaDeTelefonos(txtIdTelefono.Text, DDLDTipoDETelefono.SelectedItem.Value.ToString(), txtDTelefono.Text);
             Session["MVUsuarios"] = MVUsuarios;
             DDLDTipoDETelefono.SelectedIndex = -1;
             txtDTelefono.Text = string.Empty;

@@ -114,6 +114,7 @@ namespace Repartidores_GoDeliverix.VM
                 UidUsuario = AppInstance.Session_.UidUsuario;
                 AppInstance.MVAjustes.Recargar();
             }
+            AppInstance.MVAjustes.Recargar();
         }
         private async void EditaTelefono()
         {

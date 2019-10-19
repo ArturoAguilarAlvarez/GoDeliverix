@@ -93,7 +93,14 @@ namespace VistaDelModelo
         public Guid UidSeccion { get; set; }
         public Guid UidSeccionPoducto { get; set; }
         public Guid UidNota { get; set; }
-        public string StrNota { get; set; }
+        private string _StrNota;
+
+        public string StrNota
+        {
+            get { return _StrNota; }
+            set { _StrNota = value; }
+        }
+
         public int Cantidad { get; set; }
         public decimal Subtotal { get; set; }
         public decimal CostoEnvio { get; set; }
@@ -781,7 +788,7 @@ namespace VistaDelModelo
                     Guid uidproducto = new Guid(item["UidProducto"].ToString());
                     string nombre = item["VchNombre"].ToString().ToUpper();
                     string descripcion = item["VchDescripcion"].ToString();
-                    string ruta = "http://www.godeliverix.net/vista/" + item["NVchRuta"].ToString();
+                    string ruta = "https://www.godeliverix.net/vista/" + item["NVchRuta"].ToString();
                     //string ruta = "../" + item["NVchRuta"].ToString();
                     Guid UidEmpresa = new Guid(item["UidEmpresa"].ToString());
 

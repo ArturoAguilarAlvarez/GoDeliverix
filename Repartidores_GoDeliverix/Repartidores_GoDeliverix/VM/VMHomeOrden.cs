@@ -52,6 +52,7 @@ namespace Repartidores_GoDeliverix.VM
         protected VMOrden MVOrden;
         protected VMDireccion MVDireccion;
         protected VMUsuarios MVUsuario;
+        protected VMTelefono MVTelefono;
         protected VMSucursales MVSucursal;
         protected VMEmpresas MVEmpresa;
         protected VMAcceso mVAcceso;
@@ -131,12 +132,27 @@ namespace Repartidores_GoDeliverix.VM
             get { return _MTotal; }
             set { SetValue(ref _MTotal, value); }
         }
+        
+        private decimal _MPropina;
+
+        public decimal MPropina
+        {
+            get { return _MPropina; }
+            set { SetValue(ref _MPropina, value); }
+        }
         private decimal _MSubTotal;
 
         public decimal MSubTotal
         {
             get { return _MSubTotal; }
             set { SetValue(ref _MSubTotal, value); }
+        }
+        private decimal _MTotalPropina;
+
+        public decimal MTotalConPropina
+        {
+            get { return _MTotalPropina; }
+            set { SetValue(ref _MTotalPropina, value); }
         }
         private decimal _MTotalTarifario;
 
@@ -227,6 +243,14 @@ namespace Repartidores_GoDeliverix.VM
             set { SetValue(ref _UbicacionCliente, value); }
         }
 
+        private string _StrNumeroCliente;
+
+        public string StrNumeroCliente
+        {
+            get { return _StrNumeroCliente; }
+            set { SetValue(ref _StrNumeroCliente, value); }
+        }
+
         #endregion
 
 
@@ -247,6 +271,7 @@ namespace Repartidores_GoDeliverix.VM
         public ICommand ConfirmOrder { get { return new RelayCommand(ConfirmarOrder); } }
         public ICommand CancelOrder { get { return new RelayCommand(CanelarOrden); } }
         public ICommand GetCode { get { return new RelayCommand(ObtenerCodigo); } }
+        public ICommand RefreshAll { get { return new RelayCommand(CargaOrden); } }
         private async void CanelarOrden()
         {
             using (var _WebApiGoDeliverix = new HttpClient())
@@ -272,40 +297,57 @@ namespace Repartidores_GoDeliverix.VM
         {
             bool Respuesta = false;
             var AppInstance = MainViewModel.GetInstance();
-
-            using (var _WebApiGoDeliverix = new HttpClient())
+            if (!string.IsNullOrEmpty(StrCodigo))
             {
-                url = "https://www.godeliverix.net/api/Orden/GetBuscarOrdenPorCodigoQR?strCodigo=" + StrCodigo + "&UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor.ToString() + "";
-                var content = await _WebApiGoDeliverix.GetStringAsync(url);
-                var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                Respuesta = bool.Parse(obj.ToString());
-            }
-
-            if (Respuesta)
-            {
-                using (var _WebApiGoDeliverix = new HttpClient())
+                long codigo = 0;
+                if (long.TryParse(StrCodigo, out codigo))
                 {
-                    url = "https://www.godeliverix.net/api/Profile/GetBitacoraRegistroRepartidores?StrParametro=O&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=7DA3A42F-2271-47B4-B9B8-EDD311F56864&UidOrdenRepartidor=" + AppInstance.MVHome.UidordenRepartidor + "";
-                    await _WebApiGoDeliverix.GetAsync(url);
+                    using (var _WebApiGoDeliverix = new HttpClient())
+                    {
+                        url = "https://www.godeliverix.net/api/Orden/GetBuscarOrdenPorCodigoQR?strCodigo=" + StrCodigo + "&UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor.ToString() + "";
+                        var content = await _WebApiGoDeliverix.GetStringAsync(url);
+                        var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                        Respuesta = bool.Parse(obj.ToString());
+                    }
+
+                    if (Respuesta)
+                    {
+                        using (var _WebApiGoDeliverix = new HttpClient())
+                        {
+                            url = "https://www.godeliverix.net/api/Profile/GetBitacoraRegistroRepartidores?StrParametro=O&UidUsuario=" + AppInstance.Session_.UidUsuario + "&UidEstatus=7DA3A42F-2271-47B4-B9B8-EDD311F56864&UidOrdenRepartidor=" + AppInstance.MVHome.UidordenRepartidor + "";
+                            await _WebApiGoDeliverix.GetAsync(url);
+                        }
+
+                        using (var _WebApiGoDeliverix = new HttpClient())
+                        {
+                            //Peticion de la api para el cambio del estatus de la orden
+                            url = "https://www.godeliverix.net/api/Orden/GetAgregaEstatusALaOrden?UidEstatus=2FDEE8E7-0D54-4616-B4C1-037F5A37409D&StrParametro=S&UidOrden=" + AppInstance.MVHome.UidOrdenSucursal + "";
+                            await _WebApiGoDeliverix.GetAsync(url);
+                        }
+
+
+                        AppInstance.MVTurno.CargarTurno();
+                        // MVOrden.AgregaEstatusALaOrden(new Guid("2FDEE8E7-0D54-4616-B4C1-037F5A37409D"), UidOrden: UidOrdenSucursal, StrParametro: "S");
+                        AppInstance.MVHome.Verifica();
+                        await Application.Current.MainPage.Navigation.PopAsync();
+                        GenerateMessage("Orden entregada", "Felicidades, entregaste la orden!!!", "Aceptar");
+                    }
+                    else
+                    {
+                        GenerateMessage("Mensaje del sistema", "El codigo no coincide con la orden", "Aceptar");
+                    }
+                }
+                else
+                {
+                    GenerateMessage("Mensaje del sistema", "El codigo no debe de contener letras o simbolos especiales", "Aceptar");
                 }
 
-                using (var _WebApiGoDeliverix = new HttpClient())
-                {
-                    //Peticion de la api para el cambio del estatus de la orden
-                    url = "https://www.godeliverix.net/api/Orden/GetAgregaEstatusALaOrden?UidEstatus=2FDEE8E7-0D54-4616-B4C1-037F5A37409D&StrParametro=S&UidOrden=" + AppInstance.MVHome.UidOrdenSucursal + "";
-                    await _WebApiGoDeliverix.GetAsync(url);
-                }
-
-
-                AppInstance.MVTurno.CargarTurno();
-                // MVOrden.AgregaEstatusALaOrden(new Guid("2FDEE8E7-0D54-4616-B4C1-037F5A37409D"), UidOrden: UidOrdenSucursal, StrParametro: "S");
-                AppInstance.MVHome.Verifica();
-                GenerateMessage("Orden entregada", "Felicidades, entregaste la orden!!!", "Aceptar");
             }
             else
             {
-                GenerateMessage("Mensaje del sistema", "El codigo no coincide con la orden", "Aceptar");
+                GenerateMessage("Mensaje del sistema", "Debes de introducir un codigo", "Aceptar");
             }
+
         }
 
         #endregion
@@ -417,7 +459,6 @@ namespace Repartidores_GoDeliverix.VM
                     MVOrden = JsonConvert.DeserializeObject<VMOrden>(DatosProductos);
                 }
 
-
                 using (var _WebApiGoDeliverix = new HttpClient())
                 {
                     url = "http://www.godeliverix.net/api/Sucursales/GetBuscarSucursales?UidSucursal=" + UidSucursal + "";
@@ -459,11 +500,17 @@ namespace Repartidores_GoDeliverix.VM
                         MVUsuario = JsonConvert.DeserializeObject<VistaDelModelo.VMUsuarios>(obj);
                     }
 
+                    using (var _WebApiGoDeliverix = new HttpClient())
+                    {
+                        url = "http://www.godeliverix.net/api/Telefono/GetObtenerNumeroCliente?UidCliente=" + UidUsuario + "";
+                        content = await _WebApiGoDeliverix.GetStringAsync(url);
+                        obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                        MVTelefono = JsonConvert.DeserializeObject<VistaDelModelo.VMTelefono>(obj);
+                    }
+                    StrNumeroCliente = MVTelefono.NUMERO;
 
                     StrNombreUsuario = MVUsuario.StrNombre + " " + MVUsuario.StrApellidoPaterno;
                 }
-
-
                 MTotal = 0.0m;
                 ListaProductos = new List<VMHomeOrden>();
                 foreach (VMOrden item in MVOrden.ListaDeProductos)
@@ -473,17 +520,16 @@ namespace Repartidores_GoDeliverix.VM
                     {
                         StrNombreProducto = item.StrNombreProducto,
                         IntCantidad = item.intCantidad,
+                        
                         MTotal = item.MTotal
                     });
+                    MPropina = item.MPropina;
                     MTotalTarifario = decimal.Parse(item.MCostoTarifario.ToString());
                     MTotal += item.MTotal;
                 }
+                MTotalConPropina = MTotal + MPropina;
                 MSubTotal = MTotal;
                 MTotal += MTotalTarifario;
-
-
-
-
 
             }
             catch (Exception)

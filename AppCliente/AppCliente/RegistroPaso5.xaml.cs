@@ -71,23 +71,15 @@ namespace AppCliente
                         GenerateMessage("Registro existoso!","Se ha enviado un correo de activacion al correo \n"+correo+"","OK");
                         Application.Current.MainPage = new NavigationPage(new Login());
 
-                        //if (MVTelefono.ListaDeTelefonos != null)
-                        //{
-                        //    if (MVTelefono.ListaDeTelefonos.Count != 0)
-                        //    {
-                        //        var tex = ("Telefono/GuardaTelefonoWepApi?uidUsuario=" + uidusuaro + "&Parametro=Usuario&UidTelefono=" + MVTelefono.ListaDeTelefonos[0].ID + "&Numero=" + MVTelefono.ListaDeTelefonos[0].NUMERO + "&UidTipoDeTelefono=F7BDD1D0-28E5-4F52-BC26-A17CD5C297DE");
-                        //        string strDirecciones = await _client.GetStringAsync(tex);
-                        //        //MVTelefono.GuardaTelefono(uidusuaro, "Usuario");
-                        //    }
-                        //}
+                        Guid UidTelefono = Guid.NewGuid();
+                        url = "http://godeliverix.net/api/Telefono/GetGuardaTelefonoApi?uidUsuario=" + uidusuaro + "&Parametro=Usuario&UidTelefono=" + UidTelefono + "&Numero=" + telefono + "&UidTipoDeTelefono=f7bdd1d0-28e5-4f52-bc26-a17cd5c297de";
+                        await _client.GetStringAsync(url);
 
+                        await Navigation.PopToRootAsync();
                     }
 
                 }
-
             }
-
-
         }
 
         protected async void GenerateMessage(string Tittle, string Message, string TextOption)

@@ -230,7 +230,16 @@ namespace Repartidores_GoDeliverix.VM
                         var datos = await _webApi.GetStringAsync(url);
                         obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
                     }
-                    Guid UidEstatusTurno = new Guid(obj);
+                    Guid UidEstatusTurno = new Guid();
+                    if (string.IsNullOrEmpty(obj))
+                    {
+                        UidEstatusTurno = Guid.Empty;
+                    }
+                    else
+                    {
+                        UidEstatusTurno = new Guid(obj);
+                    }
+                     
                     //Validacion por estatus de turno liquidado o cerrado o es el primer turno que abre
                     if (UidEstatusTurno == new Guid("38FA16DF-4727-41FD-A03E-E2E43FA78F3F") || UidEstatusTurno == new Guid("3BE9EF83-4A39-4A60-9FA9-7F50AD60CA3A") || UidEstatusTurno == Guid.Empty)
                     {
@@ -311,11 +320,13 @@ namespace Repartidores_GoDeliverix.VM
                     {
                         TextoLiquidar = "Liquidando";
                         CargarTurno();
-                    }else if (obj.ToUpper() == "81494F49-F416-4431-99F4-E0AA4CF7E9F6")
+                    }
+                    else if (obj.ToUpper() == "81494F49-F416-4431-99F4-E0AA4CF7E9F6")
                     {
                         TextoLiquidar = "Abierto";
                         CargarTurno();
-                    }else if (obj.ToUpper() == "3BE9EF83-4A39-4A60-9FA9-7F50AD60CA3A")
+                    }
+                    else if (obj.ToUpper() == "3BE9EF83-4A39-4A60-9FA9-7F50AD60CA3A")
                     {
                         TextoLiquidar = "Cerrado";
                         CargarTurno();
@@ -379,9 +390,16 @@ namespace Repartidores_GoDeliverix.VM
                     url = "https://www.godeliverix.net/api/Turno/GetConsultaEstatusUltimoTurnoRepartidor?UidUsuario=" + AppInstance.Session_.UidUsuario + "";
                     string datos = await _webApi.GetStringAsync(url);
                     string obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
-                    UidEstatusTurno = new Guid(obj);
+                    if (obj != null && obj != string.Empty)
+                    {
+                        UidEstatusTurno = new Guid(obj);
+                    }
+                    else
+                    {
+                        UidEstatusTurno = Guid.Empty;
+                    }
                 }
-
+                TextoLiquidar = string.Empty;
                 if (UidEstatusTurno == new Guid("AE28F243-AA0D-43BD-BF10-124256B75B00"))
                 {
                     using (var _webApi = new HttpClient())
@@ -391,14 +409,27 @@ namespace Repartidores_GoDeliverix.VM
                         string obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
                         MVTurnoInformacion = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
                     }
+                    DPropina = 0.0m;
+                    LngFolio = string.Empty;
+                    DtmHoraInicio = string.Empty;
+                    if (MVTurnoInformacion.DTotal.ToString() == "0.0")
+                    {
+                        CantidadDeOrdenes = 0;
+                    }
+                    else
+                    {
+                        CantidadDeOrdenes = int.Parse(MVTurnoInformacion.DTotal.ToString());
+                    }
 
-                    CantidadDeOrdenes = int.Parse(MVTurnoInformacion.DTotal.ToString());
                     TotalSuministros = MVTurnoInformacion.DTotalSucursal;
                     TotalEnvio = MVTurnoInformacion.DTotalEnvio;
                     Total = TotalSuministros + TotalEnvio;
+                    Texto = "Liquidando turno";
+                    ColorProp = Color.Gray;
                 }
                 else
                 {
+                    DPropina = 0.0m;
                     UidTurnoRepartidor = Guid.Empty;
                     LngFolio = string.Empty;
                     DtmHoraInicio = string.Empty;

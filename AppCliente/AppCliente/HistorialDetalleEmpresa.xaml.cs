@@ -11,25 +11,18 @@ using Xamarin.Forms.Xaml;
 
 namespace AppCliente
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class HistorialDetalleEmpresa : ContentPage
-	{
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class HistorialDetalleEmpresa : ContentPage
+    {
         VMOrden ObjItem;
 
         public HistorialDetalleEmpresa(VMOrden ObjItem)
-		{
-			InitializeComponent ();
-            MyListViewHistorial.ItemsSource =  null;
+        {
+            InitializeComponent();
+            MyListViewHistorial.ItemsSource = null;
             MyListViewHistorial.ItemsSource = App.MVOrden.ListaDeOrdenesEmpresa;
             this.ObjItem = ObjItem;
-            //Device.StartTimer(TimeSpan.FromSeconds(60), () =>
-            //{
-            //    Device.BeginInvokeOnMainThread(() =>
-            //    {
-            //        //MetodoConsulta();
-            //    });
-            //    return true;
-            //});
+            Title = "Orden " + ObjItem.LNGFolio;
         }
 
         public void MetodoConsulta()
@@ -51,12 +44,13 @@ namespace AppCliente
                 {
                     UidRelacionOrdenSucursal = itemm["UidRelacionOrdenSucursal"].ToString(),
                     Identificador = itemm["Identificador"].ToString(),
-                    MTotal = decimal.Parse(itemm["MTotal"].ToString()),
+                    MTotal = decimal.Parse(itemm["MTotal"].ToString()) + decimal.Parse(itemm["MPropina"].ToString()),
                     LNGFolio = long.Parse(itemm["LNGFolio"].ToString()),
-                    MTotalSucursal = itemm["MTotalSucursal"].ToString(),
                     UidSucursal = new Guid(itemm["uidSucursal"].ToString()),
                     CostoEnvio = itemm["CostoEnvio"].ToString(),
                     StrNota = Status,
+                    MPropina = decimal.Parse(itemm["MPropina"].ToString()),
+                    MTotalSucursal = itemm["MTotalSucursal"].ToString(),
                     Imagen = "http://godeliverix.net/Vista/" + itemm["NVchRuta"].ToString(),
                 });
             }
@@ -65,16 +59,13 @@ namespace AppCliente
             MyListViewHistorial.ItemsSource = App.MVOrden.ListaDeOrdenesEmpresa;
         }
 
-
-
         private void Button_Clicked(object sender, EventArgs e)
         {
             var item = sender as Button;
             var ObjItem = item.BindingContext as VMOrden;
 
-
             App.MVOrden.ObtenerProductosDeOrden(ObjItem.UidRelacionOrdenSucursal.ToString());
-            Navigation.PushAsync(new HistorialEmpresaProductos());
+            Navigation.PushAsync(new HistorialEmpresaProductos(ObjItem.LNGFolio));
 
         }
 
@@ -89,23 +80,36 @@ namespace AppCliente
             VMOrden ObjItem = (VMOrden)item.Item;
             App.MVOrden.ObtenerProductosDeOrden(ObjItem.UidRelacionOrdenSucursal.ToString());
 
-            if (ObjItem.StrNota== "Enviando")
+            if (ObjItem.StrNota == "Enviando")
             {
                 Navigation.PushAsync(new HistorialEmpresaProductosMapa());
             }
             else
             {
-                Navigation.PushAsync(new HistorialEmpresaProductos());
+                Navigation.PushAsync(new HistorialEmpresaProductos(ObjItem.LNGFolio));
             }
 
         }
 
-        private void ButtonCopiarNumeroEnvio_Clicked_2(object sender, EventArgs e)
+        private async void ButtonCopiarNumeroEnvio_Clicked_2(object sender, EventArgs e)
         {
             var item = sender as Button;
             var ObjItem = item.BindingContext as VMOrden;
-            CrossClipboard.Current.SetText(ObjItem.LngCodigoDeEntrega.ToString());
-            DisplayAlert("!", "Codigo copiado", "Ok");
+            var action = await DisplayAlert("", "Confirmar " + ObjItem.MPropina.ToString("N2") + " propina?", "Si", "No");
+            if (action)
+            {
+                await Navigation.PushAsync(new CodigoDeEntrega(ObjItem.LngCodigoDeEntrega));
+            }
+            else if (!action)
+            {
+                await Navigation.PushAsync(new ModificaPropina(ObjItem, MyListViewHistorial, this.ObjItem.Uidorden));
+            }
+        }
+
+        private void MyListViewHistorial_Refreshing(object sender, EventArgs e)
+        {
+            MetodoConsulta();
+            MyListViewHistorial.IsRefreshing = false;
         }
     }
 }

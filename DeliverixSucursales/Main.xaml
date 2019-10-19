@@ -34,26 +34,38 @@
         <Border  Background="Transparent" MouseLeftButtonDown="Border_MouseLeftButtonDown" >
             <Grid Height="70" VerticalAlignment="Top" Background="Purple"  >
                 <Label x:Name="lblUidusuario" Visibility="Hidden"/>
-                <StackPanel Orientation="Horizontal" Margin="100,0,0,0">
+                <Label x:Name="LblUidTurno" Visibility="Hidden"></Label>
+                <StackPanel Orientation="Horizontal" Margin="50,0,0,0">
                     <StackPanel Orientation="Vertical">
-                        <Label Content="Empresa" Foreground="White"  FontSize="20"></Label>
-                        <TextBlock x:Name="lblEmpresa"   Foreground="White"  FontSize="23"></TextBlock>
-                        <Label x:Name="LblUidTurno" Visibility="Hidden"></Label>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Turno" Foreground="White" FontSize="20" ></Label>
+                            <Label x:Name="lblFolioTurno"  Foreground="White" FontSize="20" ></Label>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Hora de inicio:" Foreground="White" FontSize="20" ></Label>
+                            <Label x:Name="lblHoraInicioTurno"  Foreground="White" FontSize="20" ></Label>
+                        </StackPanel>
                     </StackPanel>
-                    <StackPanel Orientation="Vertical" Margin="400,0,0,0">
-                        <Label Content="Sucursal" Foreground="White"  FontSize="20"></Label>
-                        <TextBlock x:Name="txtSucursal"   Foreground="White"  FontSize="20"></TextBlock>
-                    </StackPanel>
+                    <StackPanel Orientation="Vertical" >
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Empresa:" Foreground="White"  FontSize="20" Margin="100,0,0,0"></Label>
+                            <TextBlock x:Name="lblEmpresa"   Foreground="White"  FontSize="20" Margin="0,5,0,0"></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="100,0,0,0">
+                            <Label Content="Sucursal:" Foreground="White"  FontSize="20"></Label>
+                            <TextBlock x:Name="txtSucursal"   Foreground="White"  FontSize="20" Margin="0,5,0,0"></TextBlock>
+                        </StackPanel>
+                    </StackPanel>                    
                 </StackPanel>
                
                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
                     <TextBlock x:Name="txtUsuario"  Foreground="White" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center"></TextBlock>
                     <materialDesign:PopupBox  Margin="10" Foreground="White" PlacementMode="BottomAndAlignRightEdges" StaysOpen="False">
                         <StackPanel Orientation="Vertical" Width="150">
-                            <Button x:Name="btnInciarSesion" Click="BtnInciarSesion_Click" Content="Iniciar sesion"/>
+                            <Button x:Name="btnInciarSesion" Click="BtnInciarSesion_Click" Content="Iniciar turno"/>
                             <Button x:Name="btnConfiguracion" Content="Cuenta"/>
                             <Button x:Name="btnAyuda" Content="Ayuda"/>
-                            <Button x:Name="btnCerrarSesion" Click="BtnCerrarSesion_Click" Content="Cerrar sesion"/>
+                            <Button x:Name="btnCerrarSesion" Click="BtnCerrarSesion_Click" Content="Cerrar turno"/>
                             <Separator/>
                             <Button x:Name="btnPopupSalir" Content="Salir" Click="BtnPopupSalir_Click"/>
                         </StackPanel>

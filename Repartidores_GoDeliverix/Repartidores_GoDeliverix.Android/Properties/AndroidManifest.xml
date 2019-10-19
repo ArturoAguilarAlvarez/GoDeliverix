@@ -2,23 +2,24 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.companyname.Repartidores_GoDeliverix" android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="28" />
 	<application android:label="GoDeliverix_Run" android:icon="@drawable/Repartidores" android:usesCleartextTraffic="true">
-    <receiver android:name="com.onesignal.GcmBroadcastReceiver"
+		<!--<receiver android:name="com.onesignal.GcmBroadcastReceiver"
               android:permission="com.google.android.c2dm.permission.SEND" >
       <intent-filter>
         <action android:name="com.google.android.c2dm.intent.RECEIVE" />
         <category android:name="GoDeliverix_Run" />
       </intent-filter>
-    </receiver>
-  </application>
+    </receiver>-->
+	</application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
-  <permission android:name="GoDeliverix_Run.permission.C2D_MESSAGE"
+	<!--<permission android:name="GoDeliverix_Run.permission.C2D_MESSAGE"
             android:protectionLevel="signature" />
-  <uses-permission android:name="GoDeliverix_Run.permission.C2D_MESSAGE" />
+  <uses-permission android:name="GoDeliverix_Run.permission.C2D_MESSAGE" />-->
 	<!-- Declare Knox permissions required by this app -->
 	<uses-permission android:name="com.samsung.android.knox.permission.KNOX_HW_CONTROL" />
 	<!-- Declare Android permissions required by this app -->
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<uses-permission android:name="android.permission.CAMERA" />
 	<!-- Mandatory: Declare the <meta-data /> permissions switch to enable Knox permissions -->
 	<application>
 		<meta-data android:name="com.samsung.knoxlicense.permissions" android:value="true" />

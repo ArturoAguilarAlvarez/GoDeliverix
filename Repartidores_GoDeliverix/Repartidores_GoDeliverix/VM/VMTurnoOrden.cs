@@ -89,6 +89,20 @@ namespace Repartidores_GoDeliverix.VM
             set { SetValue(ref _MTotalGeneral, value); }
         }
 
+        private decimal _DPropina;
+        public decimal DPropina
+        {
+            get { return _DPropina; }
+            set { SetValue(ref _DPropina, value); }
+        }
+
+        private decimal _DTotalPropina;
+        public decimal DTotalPropina
+        {
+            get { return _DTotalPropina; }
+            set { SetValue(ref _DTotalPropina, value); }
+        }
+
         private List<VMTurnoOrden> _ListaDeHistoricoDeOrdenesTurno;
         public List<VMTurnoOrden> ListaDeHistoricoDeOrdenesTurnos
         {
@@ -144,35 +158,43 @@ namespace Repartidores_GoDeliverix.VM
             var AppInstance = MainViewModel.GetInstance();
             if (AppInstance.Session_.UidUsuario != Guid.Empty)
             {
-                using (var _WebApiGoDeliverix = new HttpClient())
+                if (UidTurnoRepartidor != Guid.Empty.ToString())
                 {
-                    string url = "https://www.godeliverix.net/api/Turno/GetInformacionHistoricoOrdenesTurno?UidTurno=" + UidTurnoRepartidor + "";
-                    var datos = await _WebApiGoDeliverix.GetStringAsync(url);
-                    var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
-                    MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
+                    using (var _WebApiGoDeliverix = new HttpClient())
+                    {
+                        string url = "https://www.godeliverix.net/api/Turno/GetInformacionHistoricoOrdenesTurno?UidTurno=" + UidTurnoRepartidor + "";
+                        var datos = await _WebApiGoDeliverix.GetStringAsync(url);
+                        var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
+                        MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
+                    }
+
+                    ListaDeHistoricoDeOrdenesTurnos = new List<VMTurnoOrden>();
+                    if (MVTurno.ListaDeTurnos != null)
+                    {
+                        decimal totalenvio = 0.0m;
+                        decimal totalOrden = 0.0m;
+                        decimal totalPropina = 0.0m;
+                        foreach (var item in MVTurno.ListaDeTurnos)
+                        {
+                            ListaDeHistoricoDeOrdenesTurnos.Add(new VMTurnoOrden()
+                            {
+                                HOTotalSuministros = item.DTotalSucursal,
+                                HOTotalEnvio = item.DTotalEnvio,
+                                HOLngFolio = item.LngFolio.ToString(),
+                                DPropina = item.DPropina
+                            });
+                            totalenvio += item.DTotalEnvio;
+                            totalOrden += item.DTotalSucursal;
+                            totalPropina += item.DPropina;
+                        }
+                        this.DTotalPropina = totalPropina;
+                        this.MTotalEnvio = totalenvio;
+                        this.MTotalOrdenes = totalOrden;
+                        MTotalGeneral = this.MTotalEnvio + this.MTotalOrdenes;
+                        IntCantidadDeOrdenes = ListaDeHistoricoDeOrdenesTurnos.Count;
+                    }
                 }
 
-                ListaDeHistoricoDeOrdenesTurnos = new List<VMTurnoOrden>();
-                if (MVTurno.ListaDeTurnos != null)
-                {
-                    decimal totalenvio = 0.0m;
-                    decimal totalOrden = 0.0m;
-                    foreach (var item in MVTurno.ListaDeTurnos)
-                    {
-                        ListaDeHistoricoDeOrdenesTurnos.Add(new VMTurnoOrden()
-                        {
-                            HOTotalSuministros = item.DTotalSucursal,
-                            HOTotalEnvio = item.DTotalEnvio,
-                            HOLngFolio = item.LngFolio.ToString()
-                        });
-                        totalenvio += item.DTotalEnvio;
-                        totalOrden += item.DTotalSucursal;
-                    }
-                    this.MTotalEnvio = totalenvio;
-                    this.MTotalOrdenes = totalOrden;
-                    MTotalGeneral = this.MTotalEnvio + this.MTotalOrdenes;
-                    IntCantidadDeOrdenes = ListaDeHistoricoDeOrdenesTurnos.Count;
-                }
             }
             else
             {

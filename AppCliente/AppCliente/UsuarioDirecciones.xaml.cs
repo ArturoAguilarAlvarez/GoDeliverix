@@ -13,19 +13,18 @@ using Xamarin.Forms.Xaml;
 
 namespace AppCliente
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class UsuarioDirecciones : ContentPage
-	{
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class UsuarioDirecciones : ContentPage
+    {
 
         HttpClient _client = new HttpClient();
 
 
-        public UsuarioDirecciones ()
-		{
-			InitializeComponent ();
+        public UsuarioDirecciones()
+        {
+            InitializeComponent();
             Iniciar();
         }
-
 
         private void MyListViewDirecciones_ItemTapped(object sender, ItemTappedEventArgs e)
         {
@@ -51,7 +50,7 @@ namespace AppCliente
 
         private void BtnNuevo_Clicked(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new SeleccionTuUbicacionMapa());
+            Navigation.PushAsync(new SeleccionTuUbicacionMapa(MyListViewDirecciones));
         }
 
         private void Button_Clicked_Eliminar(object sender, EventArgs e)
@@ -81,7 +80,6 @@ namespace AppCliente
 
                     // AppCliente.App.MVDireccion.EliminaDireccionUsuario(txtIDDireccionn.Text);
 
-
                     string _Url = $"http://godeliverix.net/api/Direccion/DeleteDireccionUsuario?UidDireccion={txtIDDireccionn.Text}";
                     var content = await _client.DeleteAsync(_Url);
 
@@ -91,7 +89,6 @@ namespace AppCliente
                     txtIDDireccionn.Text = "0";
                 }
             }
-
         }
 
         public async void Iniciar()
@@ -118,7 +115,7 @@ namespace AppCliente
                 MyListViewDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;
             }
 
-          
+
         }
     }
 }

@@ -18,40 +18,42 @@
                     <DataTemplate>
                         <ViewCell>
                             <ContentView Margin="5" Padding="0">
-                                <Grid Margin="0" Padding="0">
+                                <Grid Margin="0" HorizontalOptions="Fill" Padding="0">
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="2*"></RowDefinition>
+                                        <RowDefinition Height="AUTO"></RowDefinition>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="4*"></ColumnDefinition>
-                                        <ColumnDefinition Width="2*"></ColumnDefinition>
-                                        <ColumnDefinition Width="4*"></ColumnDefinition>
+                                        <ColumnDefinition Width="5*"></ColumnDefinition>
+                                        <ColumnDefinition Width="5*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-
-                                    <ff:CachedImage
+                                    <StackLayout Grid.Row="0" Grid.ColumnSpan="2" HorizontalOptions="Center">
+                                        <Label Text="{Binding StrNombreProducto}" HorizontalOptions="Center" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" FontSize="Large" TextColor="Black" FontAttributes="Bold"></Label>
+                                    </StackLayout>
+                                    <StackLayout Grid.Column="0" Grid.Row="1" Orientation="Vertical">
+                                        <ff:CachedImage
                                                     Source="{Binding Imagen}"
                                                     HorizontalOptions="Center"
                                                     Aspect="Fill"
                                                     VerticalOptions="Center"
                                                     LoadingPlaceholder   = "IconoCajaVacia"
                                                     ErrorPlaceholder     = "Error"
-                                                    Grid.Row="0"
-                                                    Grid.RowSpan="4"
-                                                    Grid.Column="0"
                                                     RetryCount           = "3"
                                                     RetryDelay           = "3"
                                                     DownsampleToViewSize = "False">
-                                    </ff:CachedImage>
+                                        </ff:CachedImage>
+                                    </StackLayout>
+                                    <StackLayout Grid.Column="1" Grid.Row="1" Orientation="Vertical">
+                                        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                                            <Label Grid.Column="0" Grid.Row="0" Text="Cantidad:  " FontSize="Medium" FontAttributes="Bold" TextColor="Black" ></Label>
+                                            <Label Grid.Column="0" Grid.Row="1" Text="Total:  " FontSize="Medium" FontAttributes="Bold" TextColor="Black" ></Label>
 
-                                    <Label Text="{Binding StrNombreProducto}" HorizontalOptions="Center" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" FontSize="Large" TextColor="Black" FontAttributes="Bold"></Label>
+                                            <Label Grid.Column="1" Grid.Row="0" Text="{Binding intCantidad}" VerticalOptions="Center" HorizontalOptions="Center"   FontSize="Small" ></Label>
+                                            <Label Grid.Column="1" Grid.Row="1" Text="{Binding MTotal,StringFormat='${0}'}" VerticalOptions="Center" HorizontalOptions="Center"   FontSize="Small" ></Label>
 
-                                    <Label Text="Cantidad:  " FontSize="Micro" FontAttributes="Bold" TextColor="Black" Grid.Row="1" Grid.Column="1"></Label>
-                                    <Label Text="{Binding intCantidad}" HorizontalOptions="Center" Grid.Column="2" Grid.Row="1"  FontSize="Micro" ></Label>
-
-                                    <Label Text="Total:  " FontSize="Micro" FontAttributes="Bold" TextColor="Black" Grid.Row="2" Grid.Column="1"></Label>
-                                    <Label Text="{Binding MTotal,StringFormat='${0}'}" HorizontalOptions="Center" Grid.Column="2"  Grid.Row="2"  FontSize="Micro" ></Label>
-
-                                    <Label Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding VisibilidadNota}" HorizontalOptions="Center"></Label>
+                                        </Grid>
+                                        <Label   Grid.ColumnSpan="2" Text="{Binding VisibilidadNota}" HorizontalOptions="Center"></Label>
+                                    </StackLayout>
                                 </Grid>
                             </ContentView>
                         </ViewCell>

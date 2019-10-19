@@ -179,7 +179,7 @@ namespace Deliverix.Wpf.Distribuidores
         {
             if (AccesoInternet())
             {
-                //Inhabilita los botones del menu y de las opciones de la ventana dialog            
+                //Inhabilita los botones del menu y de las opciones de la ventana dialog      
                 btnordenes.IsEnabled = false;
                 btnReportes.IsEnabled = false;
                 btnRepartidores.IsEnabled = false;
@@ -210,8 +210,6 @@ namespace Deliverix.Wpf.Distribuidores
                         {
                             btnInciarSesion.IsEnabled = false;
                             btnLicencias.IsEnabled = true;
-
-
                             Label lblMensaje = VentanaMensaje.FindName("lblMensaje") as Label;
                             lblMensaje.Content = "Licencia inactiva!";
                             VentanaMensaje.ShowDialog();
@@ -348,9 +346,6 @@ namespace Deliverix.Wpf.Distribuidores
                 //MVAcceso.BitacoraRegistroSupervisores(new Guid(lblUidusuario.Content.ToString()), new Guid("83D5135E-95A4-4FFB-8F74-B6BAC980DFA3"));
                 MVTurno = new VMTurno();
                 MVTurno.TurnoDistribuidora(new Guid(lblUidusuario.Content.ToString()), new Guid(LblUidTurno.Content.ToString()));
-
-
-
 
                 Ticket t = new Ticket();
                 VMUsuarios MVusuario = new VMUsuarios();

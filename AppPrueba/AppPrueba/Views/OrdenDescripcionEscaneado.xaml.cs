@@ -25,9 +25,6 @@ namespace AppPrueba.Views
             //App.MVOrden.ObtenerProductosDeOrden(.ToString());
 
             CargaListaDeProductos(App.MVOrden.Uidorden, MyListviewOrdenesPorEnviar);
-
-
-
         }
 
         private async void CargaListaDeProductos(Guid uidorden, ListView MyListviewOrdenesPorEnviar)
@@ -60,17 +57,12 @@ namespace AppPrueba.Views
                 url = "http://www.godeliverix.net/api/Orden/GetAgregarEstatusOrdenEnSucursal?UidEstatus=E2BAD7D9-9CD0-4698-959D-0A211800545F&cTipoDeSucursal=S&UidOrden=" + Uidorden + "&UidLicencia=" + AppPrueba.Helpers.Settings.Licencia + "";
                 await _WebApiGoDeliverix.GetAsync(url);
 
-                //App.MVOrden.AgregarEstatusOrdenEnSucursal(new Guid("0E08DE81-DED2-41BE-93A5-A3742C3C411F"), "S", AppPrueba.Helpers.Settings.Licencia, UidOrden: Uidorden);
-
-                //App.MVOrden.AgregaEstatusALaOrden(new Guid("B6BFC834-7CC4-4E67-817D-5ECB0EB2FFA7"), UidOrden: Uidorden, UidLicencia: new Guid(AppPrueba.Helpers.Settings.Licencia), StrParametro: "S");
-
-                //App.MVOrden.BuscarOrdenes("Sucursal", UidLicencia: new Guid(AppPrueba.Helpers.Settings.Licencia), EstatusSucursal: "Lista a enviar", TipoDeSucursal: "S");
                 url = string.Empty;
                 url = ("http://www.godeliverix.net/api/Orden/GetOrdenesSucursal?Licencia=" + AppPrueba.Helpers.Settings.Licencia.ToString() + "&Estatus=Listaaenviar&tipoSucursal=s");
                 string DatosObtenidos = await _WebApiGoDeliverix.GetStringAsync(url);
                 var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
                 App.MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(DatosGiros);
-                await DisplayAlert("Sorry", "Orden entregada", "Ok");
+                await DisplayAlert("Excelente", "La orden se ha entregado al repartidor", "Ok");
 
 
                 this.MyListviewOrdenesPorEnviar.ItemsSource = App.MVOrden.ListaDeOrdenes;

@@ -157,6 +157,7 @@ namespace DeliverixSucursales
                                 //Supervisor
                                 if (perfil.ToUpper() == "81232596-4C6B-4568-9005-8D4A0A382FDA")
                                 {
+                                    MVLicencia = new VMLicencia();
                                     MVLicencia.RecuperaLicencia();
                                     string sucursal = MVSucursal.ObtenSucursalDeLicencia(MVLicencia.Licencia);
                                     if (MVSucursal.VerificaExistenciaDeSupervisor(Uidusuario.ToString(), sucursal))
@@ -166,7 +167,9 @@ namespace DeliverixSucursales
                                         TextBlock Usuario = ventanaPrincial.FindName("txtUsuario") as TextBlock;
                                         TextBlock Sucursal = ventanaPrincial.FindName("txtSucursal") as TextBlock;
                                         TextBlock lblEmpresa = ventanaPrincial.FindName("lblEmpresa") as TextBlock;
-
+                                        Label LblUidTurno = ventanaPrincial.FindName("LblUidTurno") as Label;
+                                        Label lblHoraInicioTurno = ventanaPrincial.FindName("lblHoraInicioTurno") as Label;
+                                        Label lblFolioTurno = ventanaPrincial.FindName("lblFolioTurno") as Label;
 
                                         MVUsuario.obtenerDatosDeSupervisor(Uidusuario);
                                         uidUsuario.Content = MVUsuario.Uid;
@@ -177,6 +180,24 @@ namespace DeliverixSucursales
                                         //Bitacora de supervisor
 
                                         lblEmpresa.Text = MVUsuario.NombreEmpresa;
+
+                                        VMTurno MVTurno = new VMTurno();
+                                        MVTurno.ConsultarUltimoTurnoSuministradora(MVLicencia.Licencia);
+
+                   if (MVTurno.DtmHoraFin == DateTime.MinValue && MVTurno.DtmHoraInicio != DateTime.MinValue)
+                                        {
+                                            LblUidTurno.Content = MVTurno.UidTurno;
+                                            lblHoraInicioTurno.Content = MVTurno.DtmHoraInicio;
+                                            lblFolioTurno.Content = MVTurno.LngFolio;
+                                        }
+                                        else
+                                        {
+                                            MVTurno = new VMTurno();
+                                            Guid UidTurnoDistribuidor = Guid.NewGuid();
+                                            MVTurno.TurnoSuministradora(MVUsuario.Uid, UidTurnoDistribuidor);
+
+                                            LblUidTurno.Content = UidTurnoDistribuidor.ToString();
+                                        }
 
                                         Close();
                                     }
@@ -263,10 +284,10 @@ namespace DeliverixSucursales
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception es)
             {
 
-                MessageBox.Show("Aviso del sistema", "Sin internet");
+                MessageBox.Show("Aviso del sistema", "Sin internet " + es.Message);
             }
         }
     }

@@ -197,6 +197,39 @@ namespace Modelo
             return oConexion.Consultas(query);
         }
 
+        public void TurnoSuministradora()
+        {
+            SqlCommand cmd = new SqlCommand();
+            try
+            {
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.CommandText = "asp_ControlTurnoSuministradora";
+                //Dato1
+                cmd.Parameters.Add("@UidTurnoSuministradora", SqlDbType.UniqueIdentifier);
+                cmd.Parameters["@UidTurnoSuministradora"].Value = UidTurno;
+
+                cmd.Parameters.Add("@UidUsuario", SqlDbType.UniqueIdentifier);
+                cmd.Parameters["@UidUsuario"].Value = UidUsuario;
+
+                oConexion = new Conexion();
+                //Mandar comando a ejecución
+                oConexion.ModificarDatos(cmd);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public DataTable VerificaUltimoTurnoSuministradora(object UidLicencia)
+        {
+            oConexion = new Conexion();
+            string query = "select top 1 * from TurnoSuministradora td " +
+                "left join sucursallicencia sl on sl.UidSucursal = td.UidSucursal where sl.uidlicencia = '" + UidLicencia + "' order by td.DtmHoraInicio desc";
+            return oConexion.Consultas(query);
+        }
+
         #endregion
     }
 }

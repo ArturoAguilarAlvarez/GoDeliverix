@@ -37,16 +37,16 @@
                                         <StackLayout Grid.Row="0" Orientation="Horizontal">
                                             <StackLayout HorizontalOptions="FillAndExpand" >
                                                 <Label Text="{Binding IDENTIFICADOR }"
-                                                               HorizontalOptions="Center"
+                                                               HorizontalOptions="Start"
                                            FontSize="22"
                                            VerticalOptions="End" />
                                             </StackLayout>
                                         </StackLayout>
-                                        <StackLayout Grid.Row="1" Orientation="Horizontal">
-                                            <Label Text="{Binding HORAAPARTURA,StringFormat='Desde  ${0}'}"
+                                        <StackLayout Grid.Row="1" HorizontalOptions="Center" Orientation="Horizontal">
+                                            <Label Text="{Binding HORAAPARTURA,StringFormat='Horario de  {0}'}"
                                            FontSize="15" 
                                            VerticalOptions="Center" />
-                                            <Label  Text="{Binding HORACIERRE, StringFormat='hasta ${0}'}"
+                                            <Label  Text="{Binding HORACIERRE, StringFormat='a {0}'}"
                                            FontSize="15"
                                            VerticalOptions="Center" />
                                         </StackLayout>

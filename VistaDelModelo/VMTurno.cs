@@ -60,13 +60,11 @@ namespace VistaDelModelo
         //Propiedades para el control del turno
         private decimal _DTotal;
 
-
         public decimal DTotal
         {
             get { return _DTotal; }
             set { _DTotal = value; }
         }
-
 
         private int _intTotalOrdenes;
 
@@ -356,7 +354,8 @@ namespace VistaDelModelo
                     {
                         LngFolio = long.Parse(item["IntFolio"].ToString()),
                         DTotalEnvio = decimal.Parse(item["MCosto"].ToString()),
-                        DTotalSucursal = decimal.Parse(item["MTotalSucursal"].ToString())
+                        DTotalSucursal = decimal.Parse(item["MTotalSucursal"].ToString()),
+                        DPropina = decimal.Parse(item["MPropina"].ToString())
                     });
                 }
             }
@@ -394,6 +393,30 @@ namespace VistaDelModelo
                 }
             }
         }
+
+        public void ConsultarUltimoTurnoSuministradora(string UidLicencia)
+        {
+            try
+            {
+                oTurno = new Turno() { UidUsuario = UidUsuario };
+                foreach (DataRow item in oTurno.VerificaUltimoTurnoSuministradora(UidLicencia).Rows)
+                {
+                    UidTurno = new Guid(item["UidTurnoSuministradora"].ToString());
+                    LngFolio = long.Parse(item["LngFolio"].ToString());
+                    this.UidUsuario = new Guid(item["UidUsuario"].ToString());
+                    DtmHoraInicio = DateTime.Parse(item["DtmHoraInicio"].ToString());
+                    if (!string.IsNullOrEmpty(item["DtmHoraFin"].ToString()))
+                    {
+                        DtmHoraFin = DateTime.Parse(item["DtmHoraFin"].ToString());
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public void TurnoDistribuidora(Guid uid, Guid uidTurnoDistribuidor)
         {
             oTurno = new Turno()
@@ -402,6 +425,16 @@ namespace VistaDelModelo
                 UidUsuario = uid
             };
             oTurno.TurnoDistribuidora();
+        }
+        
+        public void TurnoSuministradora(Guid uid, Guid uidTurnoDistribuidor)
+        {
+            oTurno = new Turno()
+            {
+                UidTurno = uidTurnoDistribuidor,
+                UidUsuario = uid
+            };
+            oTurno.TurnoSuministradora();
         }
         public DataTable ObtenerLiquidacionesDeTurnoDistribuidora(string UidTurnoDistribuidora)
         {

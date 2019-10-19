@@ -116,7 +116,6 @@ namespace Repartidores_GoDeliverix.Views
 
         private void BtnMapaSucursalCliente_ClickedAsync(object sender, EventArgs e)
         {
-            
             if (Device.RuntimePlatform == Device.iOS)
             {
                 //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
@@ -124,7 +123,7 @@ namespace Repartidores_GoDeliverix.Views
             }
             else if (Device.RuntimePlatform == Device.Android)
             {
-                Device.OpenUri(new Uri("geo:0,0?q=" + lblUbicacionSucursal.Text+"&mode=d&avoid=h"));
+                Device.OpenUri(new Uri("geo:0,0?q=" + lblUbicacionSucursal.Text+""));
                 // opens the Maps app directly
                 // Device.OpenUri(new Uri("geo:" + location.Latitude + "," + location.Longitude + ""));
             }
@@ -132,7 +131,6 @@ namespace Repartidores_GoDeliverix.Views
 
         private void BtnMapaSucursal_ClickedAsync(object sender, EventArgs e)
         {
-            
             if (Device.RuntimePlatform == Device.iOS)
             {
                 //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
@@ -147,8 +145,6 @@ namespace Repartidores_GoDeliverix.Views
 
         private void BtnMapaCliente_ClickedAsync(object sender, EventArgs e)
         {
-            
-
             if (Device.RuntimePlatform == Device.iOS)
             {
                 //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html

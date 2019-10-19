@@ -18,9 +18,11 @@ namespace AppCliente
     {
         Position MyPosicion= new Position(0, 0);
         VMDireccion objDireccion=null;
-        public SeleccionTuUbicacionMapa()
+        ListView ListDirecciones;
+        public SeleccionTuUbicacionMapa(ListView LVDirecciones)
         {
             InitializeComponent();
+            ListDirecciones = LVDirecciones;
         }
 
         public SeleccionTuUbicacionMapa(VMDireccion objDireccion)
@@ -89,7 +91,7 @@ namespace AppCliente
             {
                 if (objDireccion==null)
                 {
-                    Navigation.PushAsync(new DireccionModificar(MyPosicion));
+                    Navigation.PushAsync(new DireccionModificar(MyPosicion, ListDirecciones));
                 }
                 else
                 {

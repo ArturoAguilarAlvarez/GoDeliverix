@@ -12,9 +12,10 @@ namespace AppCliente
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class HistorialEmpresaProductos : ContentPage
 	{
-		public HistorialEmpresaProductos ()
+		public HistorialEmpresaProductos (long Folio)
 		{
 			InitializeComponent ();
+            Title = "Suborden " + Folio;
             MyListViewHistorial.ItemsSource = App.MVOrden.ListaDeProductos;
         }
 	}

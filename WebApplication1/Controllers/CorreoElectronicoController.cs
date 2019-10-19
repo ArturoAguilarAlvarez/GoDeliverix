@@ -52,6 +52,18 @@ namespace WebApplication1.Controllers
             Respuesta.Data = MVCorreoElectronico.AgregarCorreo(new Guid(UidPropietario), strParametroDeInsercion, strCorreoElectronico, UidCorreoElectronico);
             return Respuesta;
         }
+        /// <summary>
+        /// Obtiene la contrasena del usuario
+        /// </summary>
+        /// <param name="strCorreoElectronico"></param>
+        /// <returns></returns>
+        public ResponseHelper GetRecuperarContrasena( string strCorreoElectronico)
+        {
+            Respuesta = new ResponseHelper();
+            VMAcceso MVAcceso = new VMAcceso();
+            Respuesta.Data = MVAcceso.RecuperarCuenta(strCorreoElectronico);
+            return Respuesta;
+        }
 
         // POST: api/Profile
         public void Post([FromBody]string value)

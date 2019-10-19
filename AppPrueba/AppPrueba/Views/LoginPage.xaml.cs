@@ -18,6 +18,16 @@ namespace AppPrueba.Views
         public LoginPage()
         {
             InitializeComponent();
+            AILoading.IsVisible = false;
+
+            if (string.IsNullOrEmpty(AppPrueba.Helpers.Settings.NombreSucursal))
+            {
+                lblSucursal.Text = "Sin sucursal asignada";
+            }
+            else
+            {
+                lblSucursal.Text = "Sucursal " + AppPrueba.Helpers.Settings.NombreSucursal;
+            }
         }
 
 
@@ -27,6 +37,8 @@ namespace AppPrueba.Views
             HttpClient _client = new HttpClient();
             string url;
             btnLogin.IsEnabled = false;
+            AILoading.IsVisible = true;
+            AILoading.IsRunning = true;
             //await PopupNavigation.Instance.PushAsync(new AppPrueba.Popup.Loanding());
 
             string perfil;
@@ -40,7 +52,6 @@ namespace AppPrueba.Views
                     using (HttpClient _WebApiGoDeliverix = new HttpClient())
                     {
                         url = "https://www.godeliverix.net/api/Profile/GET?Usuario=" + usuario + "&Contrasena=" + password + "";
-
                         string content = await _WebApiGoDeliverix.GetStringAsync(url);
                         Uid = content = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                     }
@@ -61,23 +72,34 @@ namespace AppPrueba.Views
                                 {
                                     AppPrueba.Helpers.Settings.Perfil = perfil;
                                     AppPrueba.Helpers.Settings.Usuario = usuario;
+                                    AppPrueba.Helpers.Settings.Uidusuario = Uidusuario.ToString();
                                     AppPrueba.Helpers.Settings.Contrasena = password;
+                                    Guid UidTurno = Guid.NewGuid();
+                                    AppPrueba.Helpers.Settings.UidTurno = UidTurno.ToString();
+                                    //Inicio deturno movil
+                                    url = RestService.Servidor + "api/Turno/GetTurnoSuministradora?UidUsuario=" + Uidusuario.ToString()+ "&UidTurno="+ UidTurno.ToString();
+                                    await _client.GetStringAsync(url);
+
                                     App.MVEmpresas.ObtenerNombreComercial(App.UIdUsuario.ToString());
                                     App.NombreEmpresa = App.MVEmpresas.NOMBRECOMERCIAL;
                                     App.NOmbreUsuario = usuario;
                                     Application.Current.Properties["IsLogged"] = true;
                                     OneSignal.Current.SetExternalUserId(Uidusuario.ToString());
-                                    App.Current.MainPage = new Views.MasterMenu();//Xam.Plugins.Settings                                    
+                                    App.Current.MainPage = new Views.MasterMenu();
+                                    AILoading.IsVisible = false;
+                                    AILoading.IsRunning = false;
                                 }
                                 else
                                 {
-                                    // await PopupNavigation.Instance.PopAsync();
+                                    AILoading.IsVisible = false;
+                                    AILoading.IsRunning = false;
                                     await DisplayAlert("Error", "este usuario no es de esta sucursal", "ok");
                                 }
                             }
                             else
                             {
-                                // await PopupNavigation.Instance.PopAllAsync();
+                                AILoading.IsVisible = false;
+                                AILoading.IsRunning = false;
                                 await DisplayAlert("Error", "Debe ingresar como Administrador por primera vez", "ok");
                             }
                             App.NOmbreUsuario = txtUsuario.Text;
@@ -95,72 +117,56 @@ namespace AppPrueba.Views
 
                             if (string.IsNullOrEmpty(Licencia))
                             {
-                                //Guid UidEmpresa = App.MVUsuarios.ObtenerIdEmpresa(Uidusuario.ToString());
-
-                                //App.MVSucursal.DatosGridViewBusquedaNormal(UidEmpresa.ToString());
-
-
                                 Helpers.Settings.Perfil = perfil;
                                 AppPrueba.Helpers.Settings.Usuario = usuario;
                                 AppPrueba.Helpers.Settings.Contrasena = password;
                                 await Navigation.PushAsync(new Views.SeleccionarSucursalLicencia(perfil));
-                                //await Navigation.PushAsync(new Views.SeleccionarSucursalLicencia());
                             }
                             else
                             {
-                                //string sucursal = App.MVSucursal.ObtenSucursalDeLicencia(AppPrueba.Helpers.Settings.Licencia);
-                                //if (App.MVSucursal.VerificaExistenciaDeSupervisor(Uidusuario.ToString(), sucursal))
-                                //{
-                                    App.Perfil = perfil;
-                                    AppPrueba.Helpers.Settings.Perfil = perfil;
-                                    AppPrueba.Helpers.Settings.Usuario = usuario;
-                                    AppPrueba.Helpers.Settings.Contrasena = password;
+                                App.Perfil = perfil;
+                                AppPrueba.Helpers.Settings.Perfil = perfil;
+                                AppPrueba.Helpers.Settings.Usuario = usuario;
+                                AppPrueba.Helpers.Settings.Contrasena = password;
 
 
-                                    url = RestService.Servidor + "api/Empresa/GetNombreEmpresa?UIdUsuario=" + App.UIdUsuario.ToString();
-                                    NombreEmpresa = await _client.GetStringAsync(url);
-                                    App.NombreEmpresa = JsonConvert.DeserializeObject<ResponseHelper>(NombreEmpresa).Data.ToString();
-
-
-                                    //App.MVEmpresas.ObtenerNombreComercial(App.UIdUsuario.ToString());
-                                    //App.NombreEmpresa = App.MVEmpresas.NOMBRECOMERCIAL;
-
-                                    Application.Current.Properties["IsLogged"] = true;
-                                    App.Current.MainPage = new Views.MasterMenu();//Perfil
-                                //}
-                                //else
-                                //{
-                                //    await DisplayAlert("Error", "este usuario no es de esta sucursal", "ok");
-                                //}
+                                url = RestService.Servidor + "api/Empresa/GetNombreEmpresa?UIdUsuario=" + App.UIdUsuario.ToString();
+                                NombreEmpresa = await _client.GetStringAsync(url);
+                                App.NombreEmpresa = JsonConvert.DeserializeObject<ResponseHelper>(NombreEmpresa).Data.ToString();
+                                AILoading.IsVisible = false;
+                                AILoading.IsRunning = false;
+                                Application.Current.Properties["IsLogged"] = true;
+                                App.Current.MainPage = new Views.MasterMenu();//Perfil
                             }
                         }
                         else
                         {
-                            //  await PopupNavigation.Instance.PopAllAsync();
+                            AILoading.IsVisible = false;
+                            AILoading.IsRunning = false;
                             await DisplayAlert("", "Usuario invalido", "OK");
                         }
-
                     }
                     else
                     {
-                        // await PopupNavigation.Instance.PopAllAsync();
+                        AILoading.IsVisible = false;
+                        AILoading.IsRunning = false;
                         await DisplayAlert("", "Usuario o contraseña incorrecta", "OK");
                     }
                 }
                 else
                 {
-
-                    // await PopupNavigation.Instance.PopAllAsync();
                     await NewMethod();
                 }
-
             }
             catch (Exception)
             {
                 btnLogin.IsEnabled = true;
+                AILoading.IsVisible = false;
+                AILoading.IsRunning = false;
                 await DisplayAlert("", "No tiene Internet", "ok");
             }
-
+            AILoading.IsVisible = false;
+            AILoading.IsRunning = false;
             btnLogin.IsEnabled = true;
         }
 

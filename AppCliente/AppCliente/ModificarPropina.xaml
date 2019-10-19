@@ -10,7 +10,8 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"></RowDefinition>
-                <RowDefinition Height="8*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="4*"></RowDefinition>
             </Grid.RowDefinitions>
             <Label 
                 Text="Agregar un extra para el repartidor" 
@@ -18,9 +19,20 @@
                 FontSize="Large"                
                 HorizontalOptions="CenterAndExpand"
                 VerticalOptions="EndAndExpand"></Label>
+            <StackLayout Grid.Row="1" Orientation="Vertical">
+                <Label Text="Propina actual" FontSize="Large" HorizontalOptions="CenterAndExpand"
+                       VerticalOptions="Start" ></Label>
+                <Label x:Name="lblpropina" 
+                       FontSize="Large"  
+                       HorizontalOptions="CenterAndExpand"
+                       VerticalOptions="Center"></Label>
+            </StackLayout>
+            
+            
+            
             <StackLayout 
                 Orientation="Vertical" 
-                         Grid.Row="1">
+                         Grid.Row="2">
                 <Label 
                     Text="Seleccione cantidad"
                     HorizontalOptions="CenterAndExpand"

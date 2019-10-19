@@ -1,11 +1,10 @@
 ﻿using Deliverix.Wpf.Distribuidores;
-using LibPrintTicket;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using VistaDelModelo;
-
+using LibPrintTicket;
 namespace DeliverixSucursales
 {
     /// <summary>
@@ -203,7 +202,6 @@ namespace DeliverixSucursales
                 MVUsuario.BusquedaDeUsuario(UidUsuario: new Guid(MVOrden.ObtenerUsuarioPorUidOrdenSucursal(UidOrden)), UIDPERFIL: new Guid("4F1E1C4B-3253-4225-9E46-DD7D1940DA19"));
 
                 t.AddFooterLine("Cliente " + MVUsuario.StrUsuario);
-
 
                 t.AddFooterLine("Direccion de entrega");
                 t.AddFooterLine(DireccionAEntregar);

@@ -88,8 +88,94 @@ namespace Repartidores_GoDeliverix.VM
             set { SetValue(ref _IsLoading, value); }
         }
 
+        #region Propiedades de controles
+        //Colores
+        private Color _CGeneral;
+        public Color CGeneral
+        {
+            get { return _CGeneral; }
+            set { SetValue(ref _CGeneral, value); }
+        }
+        private Color _CTelefono;
+        public Color CTelefono
+        {
+            get { return _CTelefono; }
+            set { SetValue(ref _CTelefono, value); }
+        }
+        private Color _CDireccion;
+        public Color CDireccion
+        {
+            get { return _CDireccion; }
+            set { SetValue(ref _CDireccion, value); }
+        }
+        //Visibilidad de paneles
+        private bool _BGeneral;
+        public bool BGeneral
+        {
+            get { return _BGeneral; }
+            set { SetValue(ref _BGeneral, value); }
+        }
+        private bool _BTelefono;
+        public bool BTelefono
+        {
+            get { return _BTelefono; }
+            set { SetValue(ref _BTelefono, value); }
+        }
+        private bool _BDireccion;
+        public bool BDireccion
+        {
+            get { return _BDireccion; }
+            set { SetValue(ref _BDireccion, value); }
+        }
+        public ICommand oPanelGeneral { get { return new RelayCommand(Panelgeneral); } }
+
+        public ICommand oPanelTelefono { get { return new RelayCommand(Paneltelefono); } }
+        public ICommand oPanelDireccion { get { return new RelayCommand(Paneldireccion); } }
+        private void Paneltelefono()
+        {
+            muestraPanel("Telefono");
+        }
+        private void Paneldireccion()
+        {
+            muestraPanel("Direccion");
+        }
+        private void Panelgeneral()
+        {
+            muestraPanel("General");
+        }
+
+        protected void muestraPanel(string Panel)
+        {
+            CTelefono = Color.Gray;
+            CDireccion = Color.Gray;
+            CGeneral = Color.Gray;
+
+            BGeneral = false;
+            BTelefono = false;
+            BDireccion = false;
+            switch (Panel)
+            {
+                case "General":
+                    CGeneral = Color.Blue;
+                    BGeneral = true;
+                    break;
+                case "Telefono":
+                    CTelefono = Color.Blue;
+                    BTelefono = true;
+                    break;
+                case "Direccion":
+                    CDireccion = Color.Blue;
+                    BDireccion = true;
+                    break;
+                default:
+                    break;
+            }
+        }
+        #endregion
+
         public VMAjustes()
         {
+            muestraPanel("General");
             Obtendatos();
         }
         public ICommand IsReloading { get { return new RelayCommand(Recargar); } }

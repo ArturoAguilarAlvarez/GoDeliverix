@@ -112,7 +112,7 @@ namespace VistaDelModelo
         public void CorreoDeInformacionDeCambioDeTarifario(string EmpresaDistribuidora, string EmpresaSuministradora, string NombreSucursal, List<VMTarifario> ListaDeCambiosDeColonias, string correo)
         {
             //Obtener los nombres de las empresas,
-            MailMessage mail = new MailMessage("sistemas@compuandsoft.com", correo);
+            MailMessage mail = new MailMessage("website@compuandsoft.com", correo);
             mail.Subject = "Informacion de cambios en el tarifario";
             //Se crea el contenido del correo eletronico
             string contenido = "Hola empresa " + EmpresaDistribuidora + ",";
@@ -133,7 +133,7 @@ namespace VistaDelModelo
             smtp.EnableSsl = false;
 
             //Activacion de la cuenta de la que se enviaran los correos electronicos
-            NetworkCredential credenciales = new NetworkCredential("sistemas@compuandsoft.com", "S15t3m45");
+            NetworkCredential credenciales = new NetworkCredential("website@compuandsoft.com", "W3bs1t35@");
             // asignacion de las credenciales al protocolo smtp
             smtp.UseDefaultCredentials = true;
             smtp.Credentials = credenciales;
@@ -221,7 +221,7 @@ namespace VistaDelModelo
         private void EnviarDatosDeCuentaPorCorreo(Guid guid, string correo, string usuario, string password, string nombre, string v)
         {
             Guid CodigoActivacion = Guid.NewGuid();
-            MailMessage mail = new MailMessage("sistemas@compuandsoft.com", correo);
+            MailMessage mail = new MailMessage("website@compuandsoft.com", correo);
             mail.Subject = "Informacion de cuenta";
             //Se crea el contenido del correo eletronico
             string contenido = "Estos son los datos de tu cuenta " + nombre + ",";
@@ -239,7 +239,7 @@ namespace VistaDelModelo
             smtp.EnableSsl = false;
 
             //Activacion de la cuenta de la que se enviaran los correos electronicos
-            NetworkCredential credenciales = new NetworkCredential("sistemas@compuandsoft.com", "S15t3m45");
+            NetworkCredential credenciales = new NetworkCredential("website@compuandsoft.com", "W3bs1t35@");
             // asignacion de las credenciales al protocolo smtp
             smtp.UseDefaultCredentials = true;
             smtp.Credentials = credenciales;

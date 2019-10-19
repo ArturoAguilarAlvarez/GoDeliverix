@@ -28,7 +28,7 @@ namespace AppPrueba.Views
 
 
 
-        public async void MetodoConsulta()//object sender, EventArgs e
+        public async void MetodoConsulta()
         {
             try
             {
@@ -176,7 +176,6 @@ namespace AppPrueba.Views
             var asd = JsonConvert.DeserializeObject<ResponseHelper>(res).Data.ToString();
             App.MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(asd);
 
-            //App.MVOrden.BuscarOrdenesAppSucursal("Sucursal", UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), EstatusSucursal: "Pendientes a confirmar", TipoDeSucursal: "S");
             MyListviewOrdenesRecibidas.ItemsSource = App.MVOrden.ListaDeOrdenes;
             MyListviewOrdenesRecibidas.IsVisible = true;
             ActivityIndicatorRun.IsVisible = false;

@@ -216,5 +216,14 @@ namespace AppCliente
             ActualizarCarrito();
             MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeDetallesDeOrden;
         }
+
+        private void ENotas_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var item = sender as Entry;
+            var ObjItem = item.BindingContext as VMProducto;
+
+            var objeto = App.MVProducto.ListaDeDetallesDeOrden.Find(s => s.UidRegistroProductoEnCarrito == ObjItem.UidRegistroProductoEnCarrito);
+            objeto.StrNota = item.Text;
+        }
     }
 }

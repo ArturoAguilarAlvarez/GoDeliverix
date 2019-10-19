@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using AppCliente.WebApi;
 using Newtonsoft.Json.Linq;
 using Foundation;
+using Com.OneSignal;
 
 namespace AppCliente
 {
@@ -107,7 +108,7 @@ namespace AppCliente
 
                     var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
                     App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
-
+                    OneSignal.Current.SetExternalUserId(App.Global1);
                     if (GuardarContraseña.IsToggled && string.IsNullOrEmpty(AppCliente.Helpers.Settings.UserName) && string.IsNullOrEmpty(AppCliente.Helpers.Settings.Password))
                     {
                         AppCliente.Helpers.Settings.UserName = txtUsuario.Text;

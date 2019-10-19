@@ -40,7 +40,7 @@ namespace AppPrueba.Views
         }
         private async void ButtonAceptarAccion_Clicked(object sender, EventArgs e)
         {
-            CancelarOrden();                      
+            CancelarOrden();
         }
 
         private void ButtonCancelarAccion_Clicked(object sender, EventArgs e)
@@ -60,24 +60,10 @@ namespace AppPrueba.Views
             {
                 try
                 {
-
                     _url = (RestService.Servidor + "api/Orden/GetCancelarOrden?Licencia=" + AppPrueba.Helpers.Settings.Licencia +
                        "&LNGFolio=" + ObjItem.LNGFolio.ToString()
-                       + "&IdMensaje=" + ObjSeccion.Uid);
+                       + "&IdMensaje=" + ObjSeccion.Uid + "&UidOrden=" + ObjItem.Uidorden);
                     var DatosObtenidos = await _client.GetAsync(_url);
-
-                    //_url = (RestService.Servidor + "api/Orden/GetAgregaEstatusALaOrden?Licencia=" + AppPrueba.Helpers.Settings.Licencia +
-                    //   "&LNGFolio=" + ObjItem.LNGFolio.ToString()
-                    //   + "&IdMensaje=" + ObjSeccion.Uid);
-                    //var DatosObtenidos = await _client.GetAsync(_url);
-
-                    //string url = "http://www.godeliverix.net/api/Orden/GetAgregaEstatusALaOrden?UidEstatus="+
-                    //    "EAE7A7E6-3F19-405E-87A9-3162D36CE21B" + "&StrParametro=S&UidOrden=" + ObjItem.LNGFolio.ToString() +
-                    //    "&UidLicencia=" + AppPrueba.Helpers.Settings.Licencia + "";
-                    //await _client.GetAsync(url);
-                    
-                    // App.MVOrden.BuscarOrdenes("Sucursal", UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), EstatusSucursal: "Pendientes a confirmar", TipoDeSucursal: "S");
-                    // App.MVOrden.BuscarOrdenes("Sucursal", UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), EstatusSucursal: "Pendiente para elaborar", TipoDeSucursal: "S");
 
                     string _URL = (RestService.Servidor + "api/Orden/GetOrdenesSucursal?Licencia=" + AppPrueba.Helpers.Settings.Licencia +
                         "&Estatus=Pendientes%20a%20confirmar&tipoSucursal=s");
