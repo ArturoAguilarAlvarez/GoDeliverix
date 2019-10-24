@@ -27,10 +27,10 @@ namespace AppCliente
         public List<VMDireccion> DireccionesListaColonia = new List<VMDireccion>();
         string Longitud = "0";
         string Latitud = "0";
-        double Longitud1 = 0;
-        double Latitud1 = 0;
-        Button Button;
-        Label IDDireccionBusqueda;
+        //double Longitud1 = 0;
+        //double Latitud1 = 0;
+        //Button Button;
+        //Label IDDireccionBusqueda;
         ListView LVDirecciones;
         Xamarin.Forms.GoogleMaps.Position MyPosicion;
         HttpClient _client = new HttpClient();

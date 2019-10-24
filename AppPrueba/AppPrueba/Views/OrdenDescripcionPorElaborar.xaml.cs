@@ -20,7 +20,7 @@ namespace AppPrueba.Views
         VMOrden ObjItem;
         ListView MyListviewOrdenesPorRealizar;
         HttpClient _client = new HttpClient();
-        string url = "";
+        
         public OrdenDescripcionPorElaborar(VMOrden ObjItem, ListView MyListviewOrdenesPorRealizar)
         {
             InitializeComponent();

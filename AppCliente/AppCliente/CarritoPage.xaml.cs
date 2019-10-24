@@ -21,7 +21,6 @@ namespace AppCliente
         decimal TotalEnvio = 0;
         decimal TotalPagar = 0;
         decimal TotalPropina = 0;
-        VMDireccion MDireccion;
         HttpClient _client = new HttpClient();
 
         public CarritoPage()
@@ -142,7 +141,6 @@ namespace AppCliente
                                 $"&UidNota={Uidnota}" +
                                 $"&StrMensaje={mensaje}";
                             var content = await _client.GetAsync(_Url);
-
                         }
                         //Envia la orden a la sucursal suministradora
                         Random Codigo = new Random();
@@ -161,10 +159,6 @@ namespace AppCliente
                         var content1 = await _client.GetAsync(_Url1);
 
                         // Envia la orden a la sucursal distribuidora
-                        //App.MVTarifario.AgregarTarifarioOrden(
-                        //    UidOrden: UidOrdenSucursal,
-                        //    UidTarifario: objeto.UidTarifario);
-
                         string _Url2 = $@"http://godeliverix.net/api/Tarifario/GetGuardarTarifario?" +
                             $"UidOrdenSucursal={UidOrdenSucursal}" +
                             $"&DPropina={objeto.DPropina}" +
@@ -172,12 +166,6 @@ namespace AppCliente
                         var content2 = await _client.GetAsync(_Url2);
 
                         //Una vez que se haya guardado ella basededatosse le cambia el estatus a la orden
-                        //App.MVOrden.AgregaEstatusALaOrden(
-                        //new Guid("DE294EFC-C549-4DDD-A0D1-B0E1E2039ECC"),
-                        //UidOrden: UidOrdenSucursal,
-                        //StrParametro: "U",
-                        //UidSucursal: objeto.UidSucursal);
-
                         string _Url3 = $"http://godeliverix.net/api/Orden/GetAgregaEstatusALaOrden?" +
                             $"UidEstatus=DE294EFC-C549-4DDD-A0D1-B0E1E2039ECC" +
                             $"&StrParametro=U" +
@@ -197,7 +185,6 @@ namespace AppCliente
                     await DisplayAlert("NO a escogido distribuidora", "No se ha elegido una empresa distribuidora dentro de la orden", "ok");
                 }
             }
-
         }
 
         private async void MyListViewCarritoEmpresa_ItemTapped(object sender, ItemTappedEventArgs e)
@@ -216,11 +203,11 @@ namespace AppCliente
             App.MVProducto.ListaDelInformacionSucursales.Clear();
             MyListViewBusquedaProductos.ItemsSource = null;
             MyListViewCarritoEmpresa.ItemsSource = null;
-            txtCantidad.Text = "Total de articulos: 0";
+            txtCantidad.Text = "0";
             txtPropina.Text = "$0.00";
             txtCantidadSucursales.Text = "0";
-            txtsubtotal.Text = "SubTotal: $0.00";
-            txtTotalEnvio.Text = "Total de envio : $0.00";
+            txtsubtotal.Text = "$0.00";
+            txtTotalEnvio.Text = "$0.00";
             btnPagar.Text = "pagar $0.00";
             btnPagar2.Text = "pagar $0.00";
         }

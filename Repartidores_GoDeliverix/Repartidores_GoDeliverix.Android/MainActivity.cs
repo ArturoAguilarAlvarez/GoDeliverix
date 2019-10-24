@@ -11,7 +11,7 @@ using Com.OneSignal.Abstractions;
 
 namespace Repartidores_GoDeliverix.Droid
 {
-    [Activity(Label = "Repartidores_GoDeliverix", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "Repartidores_GoDeliverix", Icon = "@drawable/logo48", Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)

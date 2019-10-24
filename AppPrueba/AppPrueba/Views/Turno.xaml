@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="AppPrueba.Views.Turno">
+    <ContentPage.Content>
+        <Grid>
+            <Label Grid.Row="0" Grid.Column="0" Text="Hora de apartura :" HorizontalOptions="End" FontAttributes="Bold" FontSize="Medium"></Label>
+            <Label Grid.Row="0" Grid.Column="1" x:Name="lblHoraInicio" HorizontalOptions="Start" FontSize="Medium"></Label>
+
+            <Label Grid.Row="1" Grid.Column="0" Text="Folio:" HorizontalOptions="End" FontAttributes="Bold" FontSize="Medium"></Label>
+            <Label Grid.Row="1" Grid.Column="1" x:Name="lblFolio" HorizontalOptions="Start" FontSize="Medium"></Label>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

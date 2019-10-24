@@ -38,7 +38,7 @@ namespace AppPrueba.Views
             App.MVMensaje = JsonConvert.DeserializeObject<VistaDelModelo.VMMensaje>(asd);
             PickeMensaje.ItemsSource = App.MVMensaje.ListaDeMensajes;
         }
-        private async void ButtonAceptarAccion_Clicked(object sender, EventArgs e)
+        private  void ButtonAceptarAccion_Clicked(object sender, EventArgs e)
         {
             CancelarOrden();
         }

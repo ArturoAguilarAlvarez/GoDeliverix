@@ -42,51 +42,45 @@
                             <RowDefinition Height="6*"></RowDefinition>
                         </Grid.RowDefinitions>
                     </Grid>
-                    <StackLayout Grid.Row="0">
-                        <!--<Label Text="Entregar en" FontSize="Large"
-                            FontAttributes="Bold" ></Label>
-                        <Label FontSize="Large"
-                            FontAttributes="Bold" x:Name="lblDireccionAEntregar"></Label>-->
+                    <StackLayout Orientation="Vertical" Grid.Row="0">
+                        <Label FontSize="Large" HorizontalOptions="Center" Text="Direccion de entrega: "></Label>
+                        <Label FontSize="Medium" Text="Informacion de direccion de entrega del cliente"></Label>
                     </StackLayout>
-                    <StackLayout  HorizontalOptions="Fill" Orientation="Horizontal" Grid.Row="1">
-                        <!--Etiquetas de precios-->
-                        <StackLayout Orientation="Vertical" >
-                            <!--Total de articulos-->
-                            <Label Text="Total de articulos: " FontSize="Large"
-                            FontAttributes="Bold" HorizontalOptions="Start"></Label>
-                            <!--Cantidad de ordenes-->
-                            <Label  Text="Total de ordenes: " FontSize="Large"
-                            FontAttributes="Bold" HorizontalOptions="Start"></Label>
-                            <!--Propina-->
-                            <Label Text="Propina:"  FontSize="Large"
-                            FontAttributes="Bold" HorizontalOptions="Start"></Label>
-                            <!--Subtotal-->
-                            <Label TextColor="Black" FontSize="Large"
-                            FontAttributes="Bold" Text="SubTotal: " HorizontalOptions="Start"></Label>
-                            <!--Envio-->
-                            <Label TextColor="Black" Text="Envio: "
-                            FontSize="Large" FontAttributes="Bold" HorizontalOptions="Start"></Label>
-                        </StackLayout>
 
-                        <!--Controles de precios-->
-                        <StackLayout Orientation="Vertical" HorizontalOptions="End">
-                            <!--Total de articulos-->
-                            <Label x:Name="txtCantidad" FontSize="Large"
+                    <Grid Grid.Row="1">
+                        <!--Total de articulos-->
+                        <Label Grid.Row="0" Grid.Column="0"  Text="Total de articulos: " FontSize="Large"
+                            FontAttributes="Bold" HorizontalOptions="Start"></Label>
+                        <!--Cantidad de ordenes-->
+                        <Label Grid.Row="1" Grid.Column="0" Text="Total de ordenes: " FontSize="Large"
+                            FontAttributes="Bold" HorizontalOptions="Start"></Label>
+                        <!--Propina-->
+                        <Label Grid.Row="2" Grid.Column="0" Text="Propina:"  FontSize="Large"
+                            FontAttributes="Bold" HorizontalOptions="Start"></Label>
+                        <!--Subtotal-->
+                        <Label Grid.Row="3" Grid.Column="0" TextColor="Black" FontSize="Large"
+                            FontAttributes="Bold" Text="SubTotal: " HorizontalOptions="Start"></Label>
+                        <!--Envio-->
+                        <Label Grid.Row="4" Grid.Column="0" TextColor="Black" Text="Envio: "
+                            FontSize="Large" FontAttributes="Bold" HorizontalOptions="Start"></Label>
+
+
+                        <!--Total de articulos-->
+                        <Label Grid.Row="0" Grid.Column="1" x:Name="txtCantidad" FontSize="Large"
                             FontAttributes="Bold" HorizontalOptions="End"></Label>
-                            <!--Cantidad de ordenes-->
-                            <Label x:Name="txtCantidadSucursales" FontSize="Large"
+                        <!--Cantidad de ordenes-->
+                        <Label Grid.Row="1" Grid.Column="1" x:Name="txtCantidadSucursales" FontSize="Large"
                             FontAttributes="Bold" HorizontalOptions="End"></Label>
-                            <!--Propina-->
-                            <Label  x:Name="txtPropina"  FontSize="Large"
+                        <!--Propina-->
+                        <Label Grid.Row="2" Grid.Column="1"  x:Name="txtPropina"  FontSize="Large"
                             FontAttributes="Bold" HorizontalOptions="End"></Label>
-                            <!--Subtotal-->
-                            <Label x:Name="txtsubtotal" TextColor="Black"
+                        <!--Subtotal-->
+                        <Label Grid.Row="3" Grid.Column="1" x:Name="txtsubtotal" TextColor="Black"
                              FontSize="Large" FontAttributes="Bold" HorizontalOptions="End"></Label>
-                            <!--Envio-->
-                            <Label x:Name="txtTotalEnvio" TextColor="Black" Text=" $0.00"
+                        <!--Envio-->
+                        <Label Grid.Row="4" Grid.Column="1" x:Name="txtTotalEnvio" TextColor="Black" Text=" $0.00"
                             FontSize="Large"  FontAttributes="Bold" HorizontalOptions="End"></Label>
-                        </StackLayout>
-                    </StackLayout>
+                    </Grid>
                 </StackLayout>
 
                 <Button

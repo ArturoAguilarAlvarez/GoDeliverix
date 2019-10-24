@@ -19,7 +19,6 @@ namespace AppPrueba.Views
         bool Ordenamiento = false;
         string TipoBusqueda = "";
         HttpClient _client = new HttpClient();
-        string url = "";
         public OrdenesRecibidas()
         {
             InitializeComponent();
@@ -84,7 +83,7 @@ namespace AppPrueba.Views
 
         private async void MyListviewOrdenesRecibidas_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-           // await PopupNavigation.Instance.PushAsync(new AppPuestoTacos.Popup.Loanding());
+            // await PopupNavigation.Instance.PushAsync(new AppPuestoTacos.Popup.Loanding());
             var item = ((ItemTappedEventArgs)e);
             VMOrden ObjItem = (VMOrden)item.Item;
 
@@ -107,7 +106,7 @@ namespace AppPrueba.Views
             //GridViewDetalleOrdenConfirmar.ItemsSource = MVOrden.ListaDeProductos;
         }
 
-        private async void ImageButtonBuscar_Clicked(object sender, EventArgs e)
+        private void ImageButtonBuscar_Clicked(object sender, EventArgs e)
         {
             //await PopupNavigation.Instance.PushAsync(new AppPuestoTacos.Popup.BuscarRecibidas(MyListviewOrdenesRecibidas, txtBusqueda));
         }

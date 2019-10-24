@@ -17,10 +17,24 @@ namespace WebApplication1.Controllers
         public ResponseHelper GetObtenerPaises()
         {
             MVDireccion = new VMDireccion();
-
-
             Respuesta = new ResponseHelper();
             Respuesta.Data = MVDireccion.Paises();
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
+
+        /// <summary>
+        /// Obtiene la direccion completa con los nombres del pais, estado,municipio,ciudad
+        /// </summary>
+        /// <param name="UidDireccion"></param>
+        /// <returns></returns>
+        public ResponseHelper GetDireccionCompleta(string UidDireccion)
+        {
+            MVDireccion = new VMDireccion();
+            Respuesta = new ResponseHelper();
+            MVDireccion.ObtenerDireccionCompleta(UidDireccion);
+            Respuesta.Data = MVDireccion;
             Respuesta.Status = true;
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;
@@ -34,7 +48,6 @@ namespace WebApplication1.Controllers
         {
             MVDireccion = new VMDireccion();
             MVDireccion.ObtenerDireccionSucursal(UidSucursal);
-
             Respuesta = new ResponseHelper();
             Respuesta.Data = MVDireccion;
             Respuesta.Status = true;
@@ -50,7 +63,6 @@ namespace WebApplication1.Controllers
         {
             MVDireccion = new VMDireccion();
             MVDireccion.BuscarDireccionPorUid(UidDireccion);
-
             Respuesta = new ResponseHelper();
             Respuesta.Data = MVDireccion;
             Respuesta.Status = true;
@@ -91,7 +103,6 @@ namespace WebApplication1.Controllers
         {
             MVDireccion = new VMDireccion();
             MVDireccion.ObtenerDireccionesUsuario(UidUsuario);
-
             Respuesta = new ResponseHelper();
             Respuesta.Data = MVDireccion;
             Respuesta.Status = true;
@@ -131,7 +142,6 @@ namespace WebApplication1.Controllers
             MVDireccion.AgregaDireccion("asp_AgregaDireccionUsuario", UidUsuario, uidDirecion, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador);
             MVUbicacion.GuardaUbicacionDireccion(uidDirecion, Guid.NewGuid(), Latitud, Longitud);
             Respuesta.Message = "Informacion agregada satisfactoriamente";
-
             Respuesta.Data = "";
             Respuesta.Status = true;
             return Respuesta;
@@ -145,7 +155,6 @@ namespace WebApplication1.Controllers
             MVDireccion.ActualizaDireccion(new Guid(UidDireccion), UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador);
             MVUbicacion.GuardaUbicacionDireccion(new Guid(UidDireccion), Guid.NewGuid(), Latitud, Longitud);
             Respuesta.Message = "Informacion actualizada satisfactoriamente";
-
             Respuesta.Data = "";
             Respuesta.Status = true;
             return Respuesta;

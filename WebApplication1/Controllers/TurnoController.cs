@@ -43,6 +43,21 @@ namespace WebApplication1.Controllers
             Respuesta.Message = "Informacion obtenida satisfactoriamente";
             return Respuesta;
         }
+        /// <summary>
+        /// Obtiene la informacion del turno actual
+        /// </summary>
+        /// <param name="UidLicencia"></param>
+        /// <returns></returns>
+        public ResponseHelper GetUltimoTurnoSuministradora(Guid UidLicencia)
+        {
+            Respuesta = new ResponseHelper();
+            MVTurno = new VMTurno();
+            MVTurno.ConsultarUltimoTurnoSuministradora(UidLicencia.ToString());
+            Respuesta.Data = MVTurno;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion obtenida satisfactoriamente";
+            return Respuesta;
+        }
 
         /// <summary>
         /// Obtiene la orden y su total del turno

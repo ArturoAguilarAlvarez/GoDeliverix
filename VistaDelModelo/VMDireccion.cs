@@ -42,18 +42,37 @@ namespace VistaDelModelo
         public Guid UidEstado { get; set; }
 
 
-        public string PAIS;
-        public string ESTADO;
-        public string MUNICIPIO;
-
-
-
-        public string COLONIA;
-        public string CIUDAD;
-
-
+        private string _PAIS;
+        public string PAIS
+        {
+            get { return _PAIS; }
+            set { _PAIS = value; }
+        }
+        private string _ESTADO;
+        public string ESTADO
+        {
+            get { return _ESTADO; }
+            set { _ESTADO = value; }
+        }
+        private string _MUNICIPIO;
+        public string MUNICIPIO
+        {
+            get { return _MUNICIPIO; }
+            set { _MUNICIPIO = value; }
+        }
+        private string _COLONIA;
+        public string COLONIA
+        {
+            get { return _COLONIA; }
+            set { _COLONIA = value; }
+        }
+        private string _CIUDAD;
+        public string CIUDAD
+        {
+            get { return _CIUDAD; }
+            set { _CIUDAD = value; }
+        }
         private string StrCalle0;
-
         public string CALLE0
         {
             get { return StrCalle0; }
@@ -65,8 +84,6 @@ namespace VistaDelModelo
             get { return StrCalle1; }
             set { StrCalle1 = value; }
         }
-
-
         private string StrCalle2;
         public string CALLE2
         {
@@ -104,53 +121,6 @@ namespace VistaDelModelo
             get { return _NombrePais; }
             set { _NombrePais = value; }
         }
-
-        public void AgregaDireccion(string StoreProcedure, Guid Usuario, Guid uidDireccion, Guid uidPais, Guid uidEstado, Guid uidMunicipio, Guid uidCiudad, Guid uidColonia, string callePrincipal, string calleAux1, string calleAux2, string manzana, string lote, string codigoPostal, string referencia, string identificador)
-        {
-            var direccion = new Direccion()
-            {
-                ID = uidDireccion,
-                PAIS = new Pais() { ID = uidPais },
-                ESTADO = new Estado() { IDESTADO = uidEstado },
-                MUNICIPIO = new Municipio() { IDMUNICIPIO = uidMunicipio },
-                CIUDAD = new Ciudad() { ID = uidCiudad },
-                COLONIA = new Colonia() { UID = uidColonia },
-                CALLE0 = callePrincipal,
-                CALLE1 = calleAux1,
-                CALLE2 = calleAux2,
-                MANZANA = manzana,
-                LOTE = lote,
-                CodigoPostal = codigoPostal,
-                REFERENCIA = referencia,
-                IDENTIFICADOR = identificador
-            };
-            Direccion = new Direccion();
-            Direccion.GuardaDireccion(StoreProcedure, direccion, Usuario);
-        }
-
-        public void ActualizaDireccion(Guid uidDireccion, Guid uidPais, Guid uidEstado, Guid uidMunicipio, Guid uidCiudad, Guid uidColonia, string callePrincipal, string calleAux1, string calleAux2, string manzana, string lote, string codigoPostal, string referencia, string identificador)
-        {
-            var direccion = new Direccion()
-            {
-                ID = uidDireccion,
-                PAIS = new Pais() { ID = uidPais },
-                ESTADO = new Estado() { IDESTADO = uidEstado },
-                MUNICIPIO = new Municipio() { IDMUNICIPIO = uidMunicipio },
-                CIUDAD = new Ciudad() { ID = uidCiudad },
-                COLONIA = new Colonia() { UID = uidColonia },
-                CALLE0 = callePrincipal,
-                CALLE1 = calleAux1,
-                CALLE2 = calleAux2,
-                MANZANA = manzana,
-                LOTE = lote,
-                CodigoPostal = codigoPostal,
-                REFERENCIA = referencia,
-                IDENTIFICADOR = identificador
-            };
-            Direccion = new Direccion();
-            Direccion.GuardaDireccion("asp_ActualizaDireccion", direccion, Guid.Empty);
-        }
-
 
         private string _NombreEstado;
 
@@ -208,7 +178,6 @@ namespace VistaDelModelo
             oDbDireccion = new DbDireccion();
             return oDbDireccion.ObtenerEstados(Pais, busqueda, Nombre);
         }
-
         public void BuscarDireccionPorUid(string UidDireccion)
         {
             oDbDireccion = new DbDireccion();
@@ -230,7 +199,6 @@ namespace VistaDelModelo
                 IDENTIFICADOR = item["Identificador"].ToString();
             }
         }
-
         public DataTable Municipios(Guid Estado)
         {
             oDbDireccion = new DbDireccion();
@@ -259,14 +227,36 @@ namespace VistaDelModelo
             return tabla;
         }
 
-        #region Catalogo Telefono
-
-        #endregion
         #endregion
 
         #region Metodos
 
         #region Busquedas
+        /// <summary>
+        /// Obtiene la direccion completa con los nombres del pais, estado,municipio,ciudad
+        /// </summary>
+        /// <param name="UidDireccion"></param>
+        public void ObtenerDireccionCompleta(string UidDireccion)
+        {
+            oDbDireccion = new DbDireccion();
+            foreach (DataRow item in oDbDireccion.ObtenerDireccion(new Guid(UidDireccion)).Rows)
+            {
+                Guid IDDIRECCION = new Guid(item["UidDireccion"].ToString());
+                PAIS = ObtenerNombrePais(item["UidPais"].ToString());
+                ESTADO = ObtenerNombreDelEstado(item["UidEstado"].ToString());
+                MUNICIPIO = ObtenerNombreDelMunicipio(item["UidMunicipio"].ToString());
+                CIUDAD = ObtenerNombreDeLaCiudad(item["UidCiudad"].ToString());
+                COLONIA = ObtenerNombreDeLaColonia(item["UidColonia"].ToString());
+                CALLE0 = item["Calle0"].ToString();
+                CALLE1 = item["Calle1"].ToString();
+                CALLE2 = item["Calle2"].ToString();
+                MANZANA = item["Manzana"].ToString();
+                LOTE = item["Lote"].ToString();
+                CodigoPostal = item["CodigoPostal"].ToString();
+                REFERENCIA = item["Referencia"].ToString();
+                IDENTIFICADOR = item["Identificador"].ToString();
+            }
+        }
         public void QuitaDireeccionDeLista(string id)
         {
             var direccion = new VMDireccion();
@@ -321,7 +311,6 @@ namespace VistaDelModelo
                 ListaDIRECCIONES.Add(new VMDireccion() { ID = IDDIRECCION, PAIS = PAIS.ToString(), ESTADO = ESTADO.ToString(), MUNICIPIO = MUNICIPIO.ToString(), CIUDAD = CIUDAD.ToString(), COLONIA = COLONIA.ToString(), CALLE0 = CALLE0, CALLE1 = CALLE1, CALLE2 = CALLE2, MANZANA = MANZANA, LOTE = LOTE, CodigoPostal = CP, REFERENCIA = Referencia, IDENTIFICADOR = Identificador, NOMBRECIUDAD = NombreCiudad, NOMBRECOLONIA = NombreColonia });
             }
         }
-
         public Guid ObtenerUidColonia(string UidDireccion)
         {
             var objeto = ListaDIRECCIONES.Find(Dir => Dir.ID.ToString() == UidDireccion);
@@ -332,7 +321,6 @@ namespace VistaDelModelo
             }
             return Uid;
         }
-
         public void ObtenerDireccionesUsuario(string id)
         {
             ListaDIRECCIONES = new List<VMDireccion>();
@@ -381,9 +369,6 @@ namespace VistaDelModelo
                 ListaDIRECCIONES.Add(new VMDireccion() { ID = IDDIRECCION, PAIS = PAIS.ToString(), ESTADO = ESTADO.ToString(), MUNICIPIO = MUNICIPIO.ToString(), CIUDAD = CIUDAD.ToString(), COLONIA = COLONIA.ToString(), CALLE0 = CALLE0, CALLE1 = CALLE1, CALLE2 = CALLE2, MANZANA = MANZANA, LOTE = LOTE, CodigoPostal = CP, REFERENCIA = Referencia, IDENTIFICADOR = Identificador, NOMBRECIUDAD = NombreCiudad, NOMBRECOLONIA = NombreColonia });
             }
         }
-
-
-
         public string ObtenerCodigoPostal(Guid Colonia)
         {
             string CP = string.Empty;
@@ -506,13 +491,11 @@ namespace VistaDelModelo
                 }
             }
         }
-
         public void DeseleccionarCiudadEntrega(Guid UidCiudad)
         {
             var Ciudad = ListaCiudadesSeleccionadasEntrega.Find(ciudad => ciudad.ID == UidCiudad);
             ListaCiudadesSeleccionadasEntrega.Remove(Ciudad);
         }
-
         public void SeleccionarColoniaEntrega(Guid UidReguistro, Guid UidColonia, Guid UidCiudad, string StrNombreColonia)
         {
             if (!ListaColoniasSeleccionadasEntrega.Exists(Col => Col.ID == UidColonia))
@@ -551,13 +534,11 @@ namespace VistaDelModelo
                 }
             }
         }
-
         public void DeseleccionarCiudadRecolecta(Guid UidCiudad)
         {
             var Ciudad = ListaCiudadesSeleccionadasRecolecta.Find(ciudad => ciudad.ID == UidCiudad);
             ListaCiudadesSeleccionadasRecolecta.Remove(Ciudad);
         }
-
         public void SeleccionarColoniaRecolecta(Guid UidRegistro, Guid UidColonia, Guid UidCiudad, string StrNombreColonia)
         {
             if (!ListaColoniasSeleccionadasRecolecta.Exists(Col => Col.ID == UidColonia))
@@ -581,7 +562,6 @@ namespace VistaDelModelo
                 }
             }
         }
-
         public void InciaTarifario()
         {
         }
@@ -820,13 +800,57 @@ namespace VistaDelModelo
         }
 
 
+        public void AgregaDireccion(string StoreProcedure, Guid Usuario, Guid uidDireccion, Guid uidPais, Guid uidEstado, Guid uidMunicipio, Guid uidCiudad, Guid uidColonia, string callePrincipal, string calleAux1, string calleAux2, string manzana, string lote, string codigoPostal, string referencia, string identificador)
+        {
+            var direccion = new Direccion()
+            {
+                ID = uidDireccion,
+                PAIS = new Pais() { ID = uidPais },
+                ESTADO = new Estado() { IDESTADO = uidEstado },
+                MUNICIPIO = new Municipio() { IDMUNICIPIO = uidMunicipio },
+                CIUDAD = new Ciudad() { ID = uidCiudad },
+                COLONIA = new Colonia() { UID = uidColonia },
+                CALLE0 = callePrincipal,
+                CALLE1 = calleAux1,
+                CALLE2 = calleAux2,
+                MANZANA = manzana,
+                LOTE = lote,
+                CodigoPostal = codigoPostal,
+                REFERENCIA = referencia,
+                IDENTIFICADOR = identificador
+            };
+            Direccion = new Direccion();
+            Direccion.GuardaDireccion(StoreProcedure, direccion, Usuario);
+        }
+
+        public void ActualizaDireccion(Guid uidDireccion, Guid uidPais, Guid uidEstado, Guid uidMunicipio, Guid uidCiudad, Guid uidColonia, string callePrincipal, string calleAux1, string calleAux2, string manzana, string lote, string codigoPostal, string referencia, string identificador)
+        {
+            var direccion = new Direccion()
+            {
+                ID = uidDireccion,
+                PAIS = new Pais() { ID = uidPais },
+                ESTADO = new Estado() { IDESTADO = uidEstado },
+                MUNICIPIO = new Municipio() { IDMUNICIPIO = uidMunicipio },
+                CIUDAD = new Ciudad() { ID = uidCiudad },
+                COLONIA = new Colonia() { UID = uidColonia },
+                CALLE0 = callePrincipal,
+                CALLE1 = calleAux1,
+                CALLE2 = calleAux2,
+                MANZANA = manzana,
+                LOTE = lote,
+                CodigoPostal = codigoPostal,
+                REFERENCIA = referencia,
+                IDENTIFICADOR = identificador
+            };
+            Direccion = new Direccion();
+            Direccion.GuardaDireccion("asp_ActualizaDireccion", direccion, Guid.Empty);
+        }
 
         public void EliminaDireccion(string uidsucursal)
         {
             oDbDireccion = new DbDireccion();
             oDbDireccion.EliminaDireccionSucursal(new Guid(uidsucursal));
         }
-
 
         public void EliminaColoniasDeZonaDeServicio(Guid uidmunicipio, string uidsucursal)
         {

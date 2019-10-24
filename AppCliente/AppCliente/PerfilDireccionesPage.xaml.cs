@@ -286,7 +286,7 @@ namespace AppCliente
             MypickerCiudad.Items.Clear();
             MypickerColonia.Items.Clear();
 
-            string tipo = "Gestion";
+            //string tipo = "Gestion";
             Guid Pais = new Guid("afd6c3b7-f5be-40c9-8385-936d275a8d6b");
             DataTable dt = new DataTable();
 

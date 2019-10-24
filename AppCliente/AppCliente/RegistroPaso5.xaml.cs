@@ -19,9 +19,8 @@ namespace AppCliente
     {
         VMAcceso MVAcceso = new VMAcceso() { };
         VMUsuarios MVUsuarios = new VMUsuarios();
-        VMCorreoElectronico MVCorreoElectronico;
         VMDireccion MVDireccion = new VMDireccion();
-        VMTelefono MVTelefono;
+        
         HttpClient _client = new HttpClient();
 
         string usuario;

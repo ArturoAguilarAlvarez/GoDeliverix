@@ -16,8 +16,8 @@ namespace AppPrueba.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class OrdenesCanceladasPermanente : ContentPage
     {
-        bool Ordenamiento = false;
-        string escaneado;
+        //bool Ordenamiento = false;
+        //string escaneado;
         HttpClient _client = new HttpClient();
         string url = "";
         public OrdenesCanceladasPermanente()

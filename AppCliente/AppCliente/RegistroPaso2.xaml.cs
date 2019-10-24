@@ -61,12 +61,12 @@ namespace AppCliente
                 }
                 else
                 {
-                     DisplayAlert("Error", "Seleccione otra contraseña mas segura que sea igual o mayor a 8 digitos ", "OK");
+                    await DisplayAlert("Error", "Seleccione otra contraseña mas segura que sea igual o mayor a 8 digitos ", "OK");
                 }
             }
             else
             {
-                DisplayAlert("Error", "Ingrese todos los datos", "OK");
+                await  DisplayAlert("Error", "Ingrese todos los datos", "OK");
             }
         }
 

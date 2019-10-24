@@ -111,10 +111,37 @@ namespace VistaDelModelo
             set { _DPropina = value; }
         }
 
-        public Guid UidTarifario { get; set; }
-        public decimal Total { get; set; }
-        public string StrIdentificador { get; set; }
-        public Guid UidRegistroProductoEnCarrito { get; set; }
+        private Guid _UidTarifario;
+
+        public Guid UidTarifario
+        {
+            get { return _UidTarifario; }
+            set { _UidTarifario = value; }
+        }
+
+        private decimal _Total;
+
+        public decimal Total
+        {
+            get { return _Total; }
+            set { _Total = value; }
+        }
+
+        private string _StrIdentificador;
+
+        public string StrIdentificador
+        {
+            get { return _StrIdentificador; }
+            set { _StrIdentificador = value; }
+        }
+
+        private Guid _UidRegistroProductoEnCarrito;
+
+        public Guid UidRegistroProductoEnCarrito
+        {
+            get { return _UidRegistroProductoEnCarrito; }
+            set { _UidRegistroProductoEnCarrito = value; }
+        }
 
         public List<VMProducto> ListaDeProductos = new List<VMProducto>();
         public List<VMProducto> ListaDeDetallesDeOrden = new List<VMProducto>();

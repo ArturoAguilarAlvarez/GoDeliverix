@@ -11,7 +11,7 @@ using Com.OneSignal.Abstractions;
 
 namespace AppPrueba.Droid
 {
-    [Activity(Label = "GoDeliverix_Suministadora", Icon = "@mipmap/icon", MainLauncher = true, Theme = "@style/MainTheme", ScreenOrientation = ScreenOrientation.Landscape)]
+    [Activity(Label = "Suministradora", Icon = "@drawable/logo48", MainLauncher = true, Theme = "@style/MainTheme", ScreenOrientation = ScreenOrientation.Landscape)]
     //[Activity(Label = "GoDeliverix_Suministradora", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {

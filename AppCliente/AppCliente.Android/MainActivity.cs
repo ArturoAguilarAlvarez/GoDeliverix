@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace AppCliente.Droid
 {
-    [Activity(Label = "GoDeliverix", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,  ScreenOrientation = ScreenOrientation.Portrait)]
+    [Activity(Label = "GoDeliverix", Icon = "@drawable/logo48", Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,  ScreenOrientation = ScreenOrientation.Portrait)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)
