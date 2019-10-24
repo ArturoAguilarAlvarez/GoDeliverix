@@ -14,7 +14,6 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using AppCliente.WebApi;
 using Newtonsoft.Json.Linq;
-using Foundation;
 using Com.OneSignal;
 
 namespace AppCliente

@@ -65,7 +65,7 @@ namespace AppCliente
 
         private async void Button_MiUbicacion(object sender, EventArgs e)
         {
-            var location = await Geolocation.GetLastKnownLocationAsync();
+            var location = await Geolocation.GetLocationAsync();
             if (location != null)
             {
                 double Latitud = location.Latitude;
@@ -82,6 +82,10 @@ namespace AppCliente
                 };
                 map.Pins.Clear();
                 map.Pins.Add(AquiEstoy);
+            }
+            else
+            {
+                await DisplayAlert("No sé a podido encontrar su ubicación", "Seleccione el mapa", "Ok");
             }
         }
 
