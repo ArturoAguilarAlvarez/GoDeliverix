@@ -27,19 +27,15 @@ namespace AppCliente
         public HomePage()
         {
             InitializeComponent();
-
-
             Iniciar();
-
-
         }
 
         private async void MenuItem1_Activted(object sender, EventArgs e)
         {
+            NavigationPage navigationPage = ((NavigationPage)((MasterDetailPage)App.Current.MainPage).Detail);
 
             foreach (var item in App.MVProducto.ListaDelInformacionSucursales)
             {
-
                 string _URL = "https://www.godeliverix.net/api/Sucursales/GetBuscarSucursales?UidSucursal=" + item.UidSucursal + "";
                 string content = await _client.GetStringAsync(_URL);
                 var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
@@ -51,7 +47,7 @@ namespace AppCliente
                 App.MVImagen = JsonConvert.DeserializeObject<VMImagen>(obj);
                 item.STRRUTA = "https://www.godeliverix.net/vista/" + App.MVImagen.STRRUTA;
             }
-            await Navigation.PushAsync(new CarritoPage());
+            await navigationPage.PushAsync(new CarritoPage());
             //Navigation.PushAsync(new CarritoPage());
         }
 
@@ -61,7 +57,7 @@ namespace AppCliente
             //ContenidoSearch.IsVisible = true;
         }
 
-        private void MenuItemBuscar_Activted(object sender, EventArgs e)
+        private  void MenuItemBuscar_Activted(object sender, EventArgs e)
         {
             //PanelNavegacionBuscar.IsVisible = false;
             //PanelNavegacionCarrito.IsVisible = true;

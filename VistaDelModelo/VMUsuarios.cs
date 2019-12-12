@@ -174,8 +174,6 @@ namespace VistaDelModelo
         {
 
             DataSet ds = new DataSet();
-
-
             PropertyDescriptorCollection properties =
              TypeDescriptor.GetProperties(typeof(Usuarios));
             DataTable table = new DataTable();

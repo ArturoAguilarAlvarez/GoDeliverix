@@ -9,7 +9,7 @@
     <ContentPage.Content>
         <ScrollView BindingContext="{Binding MVLogin}">
             <StackLayout>
-                <Image Source="goDeliverix.jpg"></Image>
+                <Image Source="IconoGoDeliverix.png"></Image>
 
                 <Label Text="Usuario"></Label>
                 <Entry Text="{Binding User,Mode=TwoWay}"></Entry>

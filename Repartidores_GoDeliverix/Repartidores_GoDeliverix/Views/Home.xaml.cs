@@ -17,87 +17,7 @@ namespace Repartidores_GoDeliverix.Views
         {
             InitializeComponent();
         }
-
-        private async void BtnNuevaOrden_Clicked(object sender, EventArgs e)
-        {
-            //await Navigation.PushAsync(new PopoLoading());
-            //await Navigation.PopAsync();
-            //await Navigation.PushAsync(new Home_NuevaOrden());
-
-        }
-
-        private async void BtnQr_Clicked(object sender, EventArgs e)
-        {
-
-
-        }
-        protected override void OnSizeAllocated(double width, double height)
-        {
-            base.OnSizeAllocated(width, height);
-            if (width != ContentWidth || height != ContentHeight)
-            {
-                ContentWidth = (int)width;
-                ContentHeight = (int)height;
-                GContenedorPrincipal.HorizontalOptions = LayoutOptions.FillAndExpand;
-                GContenedorPrincipal.VerticalOptions = LayoutOptions.FillAndExpand;
-
-
-                //if (GContenedorPrincipal.RowDefinitions.Count > 0)
-                //{
-                //    GContenedorPrincipal.RowDefinitions.Clear();
-                //}
-                //if (GContenedorPrincipal.ColumnDefinitions.Count > 0)
-                //{
-                //    GContenedorPrincipal.ColumnDefinitions.Clear();
-                //}
-                //if (GContenedorPrincipal.Children.IndexOf(GVTitulo) != -1)
-                //{
-                //    GContenedorPrincipal.Children.Remove(GVTitulo);
-                //}
-                //if (GContenedorPrincipal.Children.IndexOf(ControlesOperacion) != -1)
-                //{
-                //    GContenedorPrincipal.Children.Remove(ControlesOperacion);
-                //}
-                //if (GContenedorPrincipal.Children.IndexOf(PanelBotones) != -1)
-                //{
-                //    GContenedorPrincipal.Children.Remove(PanelBotones);
-                //}
-                //if (ContentWidth > ContentHeight)
-                //{
-
-                //    GContenedorPrincipal.RowDefinitions.Add(new RowDefinition { Height = new GridLength(2, GridUnitType.Star) });
-                //    GContenedorPrincipal.RowDefinitions.Add(new RowDefinition { Height = new GridLength(8, GridUnitType.Star) });
-                //    Grid.SetRow(GVTitulo, 0);
-                //    Grid.SetColumnSpan(GVTitulo, 2);
-                //    Grid.SetRow(ControlesOperacion, 1);
-                //    Grid.SetColumn(ControlesOperacion, 0);
-                //    Grid.SetRow(PanelBotones, 1);
-                //    Grid.SetColumn(PanelBotones, 1);
-                //}
-                //else
-                //{
-                //    GContenedorPrincipal.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-                //    GContenedorPrincipal.RowDefinitions.Add(new RowDefinition { Height = new GridLength(3, GridUnitType.Star) });
-                //    GContenedorPrincipal.RowDefinitions.Add(new RowDefinition { Height = new GridLength(6, GridUnitType.Star) });
-
-                //    Grid.SetRow(GVTitulo, 0); Grid.SetColumnSpan(GVTitulo, 1);
-                //    Grid.SetRow(ControlesOperacion, 1); Grid.SetColumnSpan(ControlesOperacion, 1);
-                //    Grid.SetRow(PanelBotones, 2);
-                //    Grid.SetColumnSpan(PanelBotones, 1);
-                //    Grid.SetColumn(PanelBotones, 0);
-                //}
-
-                //GContenedorPrincipal.Children.Add(GVTitulo);
-                //GContenedorPrincipal.Children.Add(ControlesOperacion);
-                //GContenedorPrincipal.Children.Add(PanelBotones);
-            }
-        }
-
-        private  void BtnEntregar_Clicked(object sender, EventArgs e)
-        {
-            
-        }
-
+        
         private  void BtnMapaEspera_ClickedAsync(object sender, EventArgs e)
         {
             
@@ -114,46 +34,49 @@ namespace Repartidores_GoDeliverix.Views
             }
         }
 
-        private void BtnMapaSucursalCliente_ClickedAsync(object sender, EventArgs e)
+        private async void BtnMapaSucursalCliente_ClickedAsync(object sender, EventArgs e)
         {
+            var location = await Geolocation.GetLocationAsync();
             if (Device.RuntimePlatform == Device.iOS)
             {
                 //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
-                Device.OpenUri(new Uri("comgooglemaps://? saddr=0,0&daddr=" + lblUbicacionSucursal.Text + "&zoom=12"));
+                Device.OpenUri(new Uri("comgooglemaps://? saddr="+location.Longitude+","+location.Latitude+"&daddr=" + lblUbicacionSucursal.Text + "&zoom=12"));
             }
             else if (Device.RuntimePlatform == Device.Android)
             {
-                Device.OpenUri(new Uri("geo:0,0?q=" + lblUbicacionSucursal.Text+""));
+                Device.OpenUri(new Uri("geo:" + location.Longitude + "," + location.Latitude + "?q=" + lblUbicacionSucursal.Text+""));
                 // opens the Maps app directly
                 // Device.OpenUri(new Uri("geo:" + location.Latitude + "," + location.Longitude + ""));
             }
         }
 
-        private void BtnMapaSucursal_ClickedAsync(object sender, EventArgs e)
+        private async void BtnMapaSucursal_ClickedAsync(object sender, EventArgs e)
         {
+            var location = await Geolocation.GetLocationAsync();
             if (Device.RuntimePlatform == Device.iOS)
             {
                 //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
-                Device.OpenUri(new Uri("comgooglemaps://? saddr=0,0&daddr=" + lblUbicacionSucursal.Text + "&zoom=12"));
+                Device.OpenUri(new Uri("comgooglemaps://? saddr=" + location.Longitude + "," + location.Latitude + "&daddr=" + lblUbicacionSucursal.Text + "&zoom=12"));
             }
             else if (Device.RuntimePlatform == Device.Android)
             {
                 // opens the Maps app directly
-                Device.OpenUri(new Uri("geo:0,0?q=" + lblUbicacionSucursal.Text + ""));
+                Device.OpenUri(new Uri("geo:" + location.Longitude + "," + location.Latitude + "?q=" + lblUbicacionSucursal.Text + ""));
             }
         }
 
-        private void BtnMapaCliente_ClickedAsync(object sender, EventArgs e)
+        private async void BtnMapaCliente_ClickedAsync(object sender, EventArgs e)
         {
+            var location = await Geolocation.GetLocationAsync();
             if (Device.RuntimePlatform == Device.iOS)
             {
                 //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
-                Device.OpenUri(new Uri("comgooglemaps://? saddr=0,0&daddr=" + lblUbicacionCliente.Text + "&zoom=12"));
+                Device.OpenUri(new Uri("comgooglemaps://? saddr=" + location.Longitude + "," + location.Latitude + "&daddr=" + lblUbicacionCliente.Text + "&zoom=12"));
             }
             else if (Device.RuntimePlatform == Device.Android)
             {
                 // opens the Maps app directly
-                Device.OpenUri(new Uri("geo:0,0?q=" + lblUbicacionCliente.Text + ""));
+                Device.OpenUri(new Uri("geo:" + location.Longitude + "," + location.Latitude + "?q=" + lblUbicacionCliente.Text + ""));
             }
         }
     }

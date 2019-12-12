@@ -95,7 +95,7 @@ namespace AppCliente
        
         private void Button_PerfilTelefonos(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new PerfilTelefonoPage());
+           Navigation.PushAsync(new PerfilTelefonoPage());
         }
 
         private void Button_PerfilDirecciones(object sender, EventArgs e)

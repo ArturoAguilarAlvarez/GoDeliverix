@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             Title="Detalle de orden"
+             x:Class="AppCliente.Pagos.InformacionDeCompra">
+    <ContentPage.Content>
+        <Grid HorizontalOptions="Fill" VerticalOptions="Fill" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="7*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="AUTO"></RowDefinition>
+            </Grid.RowDefinitions>
+
+
+            <StackLayout Orientation="Vertical" Grid.Row="0" Margin="10,10,10,10" BackgroundColor="WhiteSmoke">
+                <StackLayout Orientation="Vertical"   >
+                    <Label FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" Text="Direccion de entrega: "></Label>
+                    <Label FontSize="Medium" x:Name="lblDireccionAEntregar" HorizontalOptions="CenterAndExpand" ></Label>
+                </StackLayout>
+
+                <Grid >
+
+                    <!--Total de articulos-->
+                    <Label Grid.Row="0" Grid.Column="0"  Text="Total de articulos: " FontSize="Large"
+                            FontAttributes="Bold" HorizontalOptions="Fill"></Label>
+                    <!--Cantidad de ordenes-->
+                    <Label Grid.Row="1" Grid.Column="0" Text="Total de pedidos: " FontSize="Large"
+                            FontAttributes="Bold" HorizontalOptions="Fill"></Label>
+                    <!--Propina-->
+                    <Label Grid.Row="2" Grid.Column="0" Text="Propina:"  FontSize="Large"
+                            FontAttributes="Bold" HorizontalOptions="Start"></Label>
+                    <!--Subtotal-->
+                    <Label Grid.Row="3" Grid.Column="0" TextColor="Black" FontSize="Large"
+                            FontAttributes="Bold" Text="SubTotal: " HorizontalOptions="Start"></Label>
+                    <!--Envio-->
+                    <Label Grid.Row="4" Grid.Column="0" TextColor="Black" Text="Envio: "
+                            FontSize="Large" FontAttributes="Bold" HorizontalOptions="Start"></Label>
+                    <!--Total-->
+                    <Label Grid.Row="5" Grid.Column="0" TextColor="Black" Text="Total: "
+                            FontSize="Large" FontAttributes="Bold" HorizontalOptions="Start"></Label>
+
+
+                    <!--Total de articulos-->
+                    <Label Grid.Row="0" Grid.Column="1" x:Name="txtCantidad" FontSize="Large"
+                            FontAttributes="Bold" HorizontalOptions="End"></Label>
+                    <!--Cantidad de ordenes-->
+                    <Label Grid.Row="1" Grid.Column="1" x:Name="txtCantidadSucursales" FontSize="Large"
+                            FontAttributes="Bold" HorizontalOptions="End"></Label>
+                    <!--Propina-->
+                    <Label Grid.Row="2" Grid.Column="1"  x:Name="txtPropina"  FontSize="Large"
+                            FontAttributes="Bold" HorizontalOptions="End"></Label>
+                    <!--Subtotal-->
+                    <Label Grid.Row="3" Grid.Column="1" x:Name="txtsubtotal" TextColor="Black"
+                             FontSize="Large" FontAttributes="Bold" HorizontalOptions="End"></Label>
+                    <!--Envio-->
+                    <Label Grid.Row="4" Grid.Column="1" x:Name="txtTotalEnvio" TextColor="Black" Text=" $0.00"
+                            FontSize="Large"  FontAttributes="Bold" HorizontalOptions="End"></Label>
+                    <!--Total-->
+                    <Label Grid.Row="5" Grid.Column="1" x:Name="txtTotal" TextColor="Black" Text=" $0.00"
+                            FontSize="Large"  FontAttributes="Bold" HorizontalOptions="End"></Label>
+                </Grid>
+
+                <StackLayout x:Name="InformacionMonedero" BackgroundColor="LightBlue" Orientation="Vertical">
+                    <Label TextColor="Black" FontSize="20" x:Name="lblCantidadEnMonedero"></Label>
+                </StackLayout>
+                
+            </StackLayout>
+            
+
+
+            <Button Grid.Row="2" x:Name="btnConfirmarPago" Clicked="btnConfirmarPago_Clicked" TextColor="White" FontSize="Medium" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="ForestGreen"></Button>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

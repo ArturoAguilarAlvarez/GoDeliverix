@@ -54,7 +54,28 @@ namespace AppCliente
                 this.ObjItem = ObjItem;
             }
             MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeDetallesDeOrden;
+        }
+        
+        public CarritoDetalleSucursal(VMProducto ObjItem,  ListView MyListViewCarritoEmpresa, Button btnPagar)
+        {
+            InitializeComponent();
 
+            this.btnPagar = btnPagar;
+            
+
+
+            this.MyListViewCarritoEmpresa = MyListViewCarritoEmpresa;
+            App.MVProducto.ListaDeDetallesDeOrden.Clear();
+            for (int i = 0; i < App.MVProducto.ListaDelCarrito.Count; i++)
+            {
+                App.MVProducto.ListaDelCarrito[i].IsVisible = false;
+                if (ObjItem.UidSucursal == App.MVProducto.ListaDelCarrito[i].UidSucursal)
+                {
+                    App.MVProducto.ListaDeDetallesDeOrden.Add(App.MVProducto.ListaDelCarrito[i]);
+                }
+                this.ObjItem = ObjItem;
+            }
+            MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeDetallesDeOrden;
         }
 
         private void BtnDistribuidora_Clicked(object sender, EventArgs e)

@@ -15,7 +15,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WebApplication1</RootNamespace>
     <AssemblyName>WebApplication1</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -89,6 +89,9 @@
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework" />
+    <Reference Include="RestSharp, Version=106.6.10.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.106.6.10\lib\net452\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
       <HintPath>..\packages\Swashbuckle.Core.5.6.0\lib\net40\Swashbuckle.Core.dll</HintPath>
     </Reference>
@@ -103,9 +106,9 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
     </Reference>
@@ -279,6 +282,7 @@
     <Content Include="Vista\Default.aspx" />
     <Content Include="Vista\EmpresaSite\Default.aspx" />
     <Content Include="Vista\EnviarCorreoDeConfirmacion.aspx" />
+    <Content Include="Vista\fichadepago.xml" />
     <Content Include="Vista\Img\alert-246-759619.png" />
     <Content Include="Vista\Img\Cargando.gif" />
     <Content Include="Vista\Img\Categoria\149542552Hogar.png" />
@@ -329,6 +333,7 @@
     <Content Include="Vista\Img\Subcategoria\965108152Formal.png" />
     <Content Include="Vista\Img\Subcategoria\Default.jpg" />
     <Content Include="Vista\Menus.aspx" />
+    <Content Include="Vista\pago.aspx" />
     <Content Include="Vista\Productos.aspx" />
     <Content Include="Vista\Registro.aspx" />
     <Content Include="Vista\Repartidores.aspx" />
@@ -351,6 +356,9 @@
     <Content Include="Brandon\appson\assets\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Brandon\appson\assets\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Brandon\appson\assets\fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="Vista\FichaPago.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\PublishProfiles\deliverix - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\deliverix - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\Deliverix.pubxml" />
@@ -423,8 +431,10 @@
     <Compile Include="Controllers\GiroController.cs" />
     <Compile Include="Controllers\ImagenController.cs" />
     <Compile Include="Controllers\LicenciaController.cs" />
+    <Compile Include="Controllers\MonederoController.cs" />
     <Compile Include="Controllers\OfertaController.cs" />
     <Compile Include="Controllers\OrdenController.cs" />
+    <Compile Include="Controllers\PagosController.cs" />
     <Compile Include="Controllers\ProductoController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\SeccionController.cs" />
@@ -454,6 +464,7 @@
     <Compile Include="Vista\ActivacionDeCuenta.aspx.designer.cs">
       <DependentUpon>ActivacionDeCuenta.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Vista\AESCrypto.cs" />
     <Compile Include="Vista\Catalogos.aspx.cs">
       <DependentUpon>Catalogos.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -566,6 +577,13 @@
     <Compile Include="Vista\Menus.aspx.designer.cs">
       <DependentUpon>Menus.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Vista\pago.aspx.cs">
+      <DependentUpon>pago.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Vista\pago.aspx.designer.cs">
+      <DependentUpon>pago.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Vista\Productos.aspx.cs">
       <DependentUpon>Productos.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -640,7 +658,9 @@
       <Name>VistaDelModelo</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\Mit\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

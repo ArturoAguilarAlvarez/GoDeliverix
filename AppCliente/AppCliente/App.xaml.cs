@@ -8,12 +8,15 @@ using System.Globalization;
 using System.Threading;
 using Rg.Plugins.Popup.Services;
 using Com.OneSignal;
+using System.Net.Http;
+
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace AppCliente
 {
     public partial class App : Application
     {
         #region Propiedades globales
+        private HttpClient _client = new HttpClient();
         public static string Global1 = "";
         public static string Usuario = "";
         public static string Contrasena = "";
@@ -32,6 +35,7 @@ namespace AppCliente
         public static VMTelefono MVTelefono = new VMTelefono();
         public static VMUbicacion MVUbicacion = new VMUbicacion();
         public static VMGiro MVGiro = new VMGiro();
+        public static VMPagos oPago = new VMPagos(); 
         public static VMCategoria MVCategoria = new VMCategoria();
         public static VMSubCategoria MVSubCategoria = new VMSubCategoria();
         public static VMImagen MVImagen = new VMImagen();
@@ -46,8 +50,10 @@ namespace AppCliente
         public static List<VMProducto> ListaDeProductos = new List<VMProducto>();
         public static List<VMEmpresas> LISTADEEMPRESAS = new List<VMEmpresas>();
         #endregion
-
+        public static NavigationPage Navegacion { get; internal set; }
         public static string MessageFromNotification = "";
+        
+
         public App()
         {
             InitializeComponent();
@@ -152,5 +158,6 @@ namespace AppCliente
             }
             return acceso;
         }
+       
     }
 }

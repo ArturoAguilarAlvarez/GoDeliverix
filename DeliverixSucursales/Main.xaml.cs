@@ -32,19 +32,19 @@ namespace Deliverix.Wpf.Distribuidores
                 //DeliverixSucursales.Properties.Settings.Default.Reset();
                 //DeliverixSucursales.Properties.Settings.Default.Reload();
 
-                SourceRegistro = string.Empty;
-                try
-                {
-                    SourceRegistro = Registry.GetValue(@"HKEY_CURRENT_USER\GoDeliverixSuministradora", "Source", "").ToString();
-                }
-                catch (Exception)
-                {
-                    SourceRegistro = string.Empty;
-                }
-                if (!string.IsNullOrEmpty(SourceRegistro))
-                {
-                    if (PruebaConexionRegistro(SourceRegistro))
-                    {
+                //SourceRegistro = string.Empty;
+                //try
+                //{
+                //    SourceRegistro = Registry.GetValue(@"HKEY_CURRENT_USER\GoDeliverixSuministradora", "Source", "").ToString();
+                //}
+                //catch (Exception)
+                //{
+                //    SourceRegistro = string.Empty;
+                //}
+                //if (!string.IsNullOrEmpty(SourceRegistro))
+                //{
+                //    if (PruebaConexionRegistro(SourceRegistro))
+                //    {
                         InitializeComponent();
                         if (Application.Current.Windows.OfType<Main>().Any())
                         {
@@ -83,18 +83,18 @@ namespace Deliverix.Wpf.Distribuidores
                             }
                         }
 
-                    }
-                    else
-                    {
-                        DataBase wBDLocal = new DataBase();
-                        wBDLocal.Show();
-                    }
-                }
-                else
-                {
-                    DataBase wBDLocal = new DataBase();
-                    wBDLocal.Show();
-                }
+                //    }
+                //    else
+                //    {
+                //        DataBase wBDLocal = new DataBase();
+                //        wBDLocal.Show();
+                //    }
+                //}
+                //else
+                //{
+                //    DataBase wBDLocal = new DataBase();
+                //    wBDLocal.Show();
+                //}
 
             }
         }
@@ -188,7 +188,7 @@ namespace Deliverix.Wpf.Distribuidores
                 btnCerrarSesion.Visibility = Visibility.Hidden;
                 LicenciaRequerida VentanaMensaje = new LicenciaRequerida();
                 //Verifica la existencia de la licencia de manera local
-                if (MVLicencia.VerificaExistenciaDeLicenciaLocal().Rows.Count < 1)
+                if (!MVLicencia.VerificaExistenciaDeLicenciaLocal())
                 {
                     btnInciarSesion.IsEnabled = false;
                     btnLicencias.IsEnabled = true;

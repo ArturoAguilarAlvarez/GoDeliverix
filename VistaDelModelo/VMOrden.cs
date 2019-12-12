@@ -165,7 +165,23 @@ namespace VistaDelModelo
             set { _MPropina = value; }
         }
 
+        #region Atributos de pagos
+        private string _strEstatusCobro;
 
+        public string EstatusCobro
+        {
+            get { return _strEstatusCobro; }
+            set { _strEstatusCobro = value; }
+        }
+        private string _StrFormaDeCobro;
+
+        public string StrFormaDeCobro
+        {
+            get { return _StrFormaDeCobro; }
+            set { _StrFormaDeCobro = value; }
+        }
+
+        #endregion
 
         private List<VMOrden> _ListaDeProductos;
 
@@ -424,7 +440,9 @@ namespace VistaDelModelo
                     {
                         CodigoEntrega = long.Parse(item["BIntCodigoEntrega"].ToString());
                     }
-                    VMOrden orden = new VMOrden() { Uidorden = new Guid(item["UidOrden"].ToString()), LngCodigoDeEntrega = CodigoEntrega, FechaDeOrden = item["DtmFechaDeCreacion"].ToString(), MTotal = decimal.Parse(item["MTotal"].ToString()) + decimal.Parse(item["MPropina"].ToString()), LNGFolio = int.Parse(item["intFolio"].ToString()),  };
+                    VMOrden orden = new VMOrden() { Uidorden = new Guid(item["UidOrden"].ToString()),
+                        EstatusCobro = item["EstatusCobro"].ToString(),LngCodigoDeEntrega = CodigoEntrega, FechaDeOrden = item["DtmFechaDeCreacion"].ToString(), MTotal = decimal.Parse(item["MTotal"].ToString()) + decimal.Parse(item["MPropina"].ToString()),
+                        StrFormaDeCobro = item["FormaDeCobro"].ToString(), LNGFolio = int.Parse(item["intFolio"].ToString()),  };
                     ListaDeOrdenes.Add(orden);
                 }
             }

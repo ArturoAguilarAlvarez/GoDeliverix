@@ -40,7 +40,6 @@ namespace AppCliente
                     string url = "https://www.godeliverix.net/api/Tarifario/GetModificarPropina?UidOrdenSucursal=" + MVORden.UidRelacionOrdenSucursal + "&MPropina=" + mpropina + "";
                     MetodoConsulta();
                     await _WebApi.GetStringAsync(url);
-
                     Navigation.InsertPageBefore(new CodigoDeEntrega(MVORden.LngCodigoDeEntrega), this);
                     await Navigation.PopAsync();
                 }

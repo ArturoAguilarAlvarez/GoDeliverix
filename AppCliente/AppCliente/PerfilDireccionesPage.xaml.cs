@@ -724,7 +724,7 @@ namespace AppCliente
         private void Button_Clicked_seleccionar(object sender, EventArgs e)
         {
             App.DireccionABuscar = txtIDDireccionn.Text;
-            Navigation.PopAsync(false);
+            App.Current.MainPage.Navigation.PopAsync(false);
             try
             {
                 this.Button.Text = "ENTREGAR EN " + AppCliente.App.MVDireccion.ListaDIRECCIONES.Find(x => x.ID == new Guid(txtIDDireccionn.Text)).IDENTIFICADOR + " >";

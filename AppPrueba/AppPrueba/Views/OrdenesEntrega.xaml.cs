@@ -59,7 +59,6 @@ namespace AppPrueba.Views
             };
             //await PopupNavigation.Instance.PushAsync(new AppPuestoTacos.Popup.Escaner());
         }
-
         private async void BuscarOrdenCodigo()
         {
             try

@@ -140,6 +140,7 @@
                         <StackPanel Orientation="Horizontal" Background="Purple" Height="30">
                             <TextBlock Text="Orden: "  Foreground="White" FontSize="20"   TextAlignment="Left"/>
                             <TextBlock x:Name="txtConfirmarUidOrden" Visibility="Hidden" ></TextBlock>
+                            <TextBlock x:Name="txtCMMonto" Visibility="Hidden" ></TextBlock>
                             <TextBlock  Background="Purple" Foreground="White" FontSize="20"  x:Name="txtCNumeroOrden" VerticalAlignment="Top" TextAlignment="Center"/>
                         </StackPanel>
                         <DataGrid  IsReadOnly="True" x:Name="GridViewDetalleOrdenConfirmar"  AutoGenerateColumns="False" ColumnWidth="*"  Height="300"  Width="500" >
@@ -271,6 +272,7 @@
 
                             <TextBlock x:Name="txbNumerodeOrden" Height="30"  Foreground="White" FontSize="20"  VerticalAlignment="Top" TextAlignment="Center"/>
                             <TextBlock x:Name="txtElaborarUidOrden" Visibility="Hidden"></TextBlock>
+                            <TextBlock x:Name="txtEMmonto" Visibility="Hidden"></TextBlock>
                         </DockPanel>
                         <DataGrid x:Name="DGCDetallesOrden" IsReadOnly="True"  AutoGenerateColumns="False" ColumnWidth="*"  Height="210"  Width="500" >
                             <DataGrid.Columns>

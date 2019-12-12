@@ -47,6 +47,21 @@ namespace AppCliente
             var item = App.MVTarifario.ListaDeTarifarios.Find(t => t.UidTarifario == ObjItem.UidTarifario);
             MyListViewDistribuidora.SelectedItem = item;
         }
+        
+        
+        public SeleccionarDistribuidoraCarrito(VMProducto ObjItem, ListView listaEmpresasDelCarrito,  Button btnPagar)
+        {
+            InitializeComponent();
+            this.btnPagar = btnPagar;
+
+            listaEmpresa = listaEmpresasDelCarrito;
+            this.ObjItem = ObjItem;
+            MyListViewDistribuidora.ItemsSource = null;
+
+            MyListViewDistribuidora.ItemsSource = App.MVTarifario.ListaDeTarifarios;
+            var item = App.MVTarifario.ListaDeTarifarios.Find(t => t.UidTarifario == ObjItem.UidTarifario);
+            MyListViewDistribuidora.SelectedItem = item;
+        }
 
         private void MyListViewDistribuidora_ItemTapped(object sender, ItemTappedEventArgs e)
         {

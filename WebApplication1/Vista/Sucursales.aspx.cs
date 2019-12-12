@@ -1851,6 +1851,8 @@ namespace WebApplication1.Vista
             AccionesDeLaPagina = "Edicion";
             Session["Accion"] = AccionesDeLaPagina;
             textboxActivados(ControlDeACcion: "Desactivado");
+            ActivarCajasDeTextoGestor();
+            ActivarCamposDeDireccion();
         }
 
         #endregion

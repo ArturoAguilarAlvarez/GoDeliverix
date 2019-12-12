@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<P>
+  <business>
+    <id_company>SNBX</id_company>
+    <id_branch>01SNBXBRNCH</id_branch>
+    <user>SNBXUSR01</user>
+    <pwd>SECRETO</pwd>
+  </business>
+  <url>
+    <reference>FACTURA999</reference>
+    <amount>2500.00</amount>
+    <moneda>MXN</moneda>
+    <canal>W</canal>
+    <omitir_notif_default>1</omitir_notif_default>
+    <st_correo>1</st_correo>
+    <fh_vigencia>28/11/2019</fh_vigencia>
+    <mail_cliente>nospam@gmail.com</mail_cliente>
+    <st_cr>A</st_cr>
+    <datos_adicionales>
+      <data id="1" display="false">
+        <label>PRINCIPAL</label>
+        <value>ID_DE_TU_CLIENTE</value>
+      </data>
+      <data id="2" display="true">
+        <label>Talla</label>
+        <value>Grande</value>
+      </data>
+      <data id="3" display="false">
+        <label>Color</label>
+        <value>Azul</value>
+      </data>
+    </datos_adicionales>
+  </url>
+</P>

@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="FichaPago"
+    targetNamespace="http://tempuri.org/FichaPago.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://tempuri.org/FichaPago.xsd"
+    xmlns:mstns="http://tempuri.org/FichaPago.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+
+  <P>
+    <business>
+      <id_company>SNBX</id_company>
+      <id_branch>01SNBXBRNCH</id_branch>
+      <user>SNBXUSR01</user>
+      <pwd>SECRETO</pwd>
+    </business>
+    <url>
+      <reference>FACTURA666</reference>
+      <amount>550.00</amount>
+      <moneda>MXN</moneda>
+      <canal>W</canal>
+      <omitir_notif_default>1</omitir_notif_default>
+      <st_correo>1</st_correo>
+      <fh_vigencia>29/11/2019</fh_vigencia>
+      <mail_cliente>softwareapps@compuandsoft.com</mail_cliente>
+      <st_cr>A</st_cr>
+      <datos_adicionales>
+        <data id="1" display="true">
+          <label>Cliente</label>
+          <value> Cliente117</value>
+        </data>
+        <data id="2" display="true">
+          <label>Cantidad de productos</label>
+          <value>30</value>
+        </data>
+        <data id="3" display="true">
+          <label>Ordenes en pedido</label>
+          <value>4</value>
+        </data>
+      </datos_adicionales>
+    </url>
+  </P>
+</xs:schema>

@@ -30,6 +30,18 @@ namespace AppCliente
             PCantidadDePropina.SelectedIndex = 0;
         }
 
+
+        public ModificarPropina(Guid UidSucursal, ListView LVCarrito, Button btnPagarResumen)
+        {
+            this.UidSucursal = UidSucursal;
+            Carrito = LVCarrito;
+            btnresumen = btnPagarResumen;
+            InitializeComponent();
+            var sucursal = App.MVProducto.ListaDelInformacionSucursales.Find(s => s.UidSucursal == UidSucursal);
+            lblpropina.Text = sucursal.DPropina.ToString();
+            PCantidadDePropina.SelectedIndex = 0;
+        }
+
         private async void BtnAgregarPropina_Clicked(object sender, EventArgs e)
         {
             Carrito.ItemsSource = null;
@@ -54,10 +66,9 @@ namespace AppCliente
                     subtotal += App.MVProducto.ListaDelInformacionSucursales[i].Subtotal;
                     TotalPropina += App.MVProducto.ListaDelInformacionSucursales[i].DPropina;
                 }
-                
-                LblPropina.Text = "$" + TotalPropina;
+                //LblPropina.Text = "$" + TotalPropina;
                 btnresumen.Text = "Pagar  $" + TotalPagar;
-                btndetalle.Text = "Pagar  $" + TotalPagar;
+                //btndetalle.Text = "Pagar  $" + TotalPagar;
 
                 await Navigation.PopAsync();
             }
@@ -81,21 +92,17 @@ namespace AppCliente
                         subtotal += App.MVProducto.ListaDelInformacionSucursales[i].Subtotal;
                         TotalPropina += App.MVProducto.ListaDelInformacionSucursales[i].DPropina;
                     }
-                    
-                    LblPropina.Text = TotalPropina.ToString();
+                    //LblPropina.Text = TotalPropina.ToString();
                     btnresumen.Text = "Pagar  $" + TotalPagar;
-                    btndetalle.Text = "Pagar  $" + TotalPagar;
+                    //btndetalle.Text = "Pagar  $" + TotalPagar;
 
                     await Navigation.PopAsync();
-
                 }
                 else
                 {
                     GenerateMessage("Numero invalido", "El formato de la propina no es correcto", "Ok");
                 }
             }
-
-
         }
 
         protected async void GenerateMessage(string Tittle, string Message, string TextOption)

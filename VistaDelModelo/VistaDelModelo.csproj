@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VMMonedero.cs" />
     <Compile Include="VMCorreoElectronico.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VMAcceso.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="VMMensaje.cs" />
     <Compile Include="VMOferta.cs" />
     <Compile Include="VMOrden.cs" />
+    <Compile Include="VMPagos.cs" />
     <Compile Include="VMProducto.cs" />
     <Compile Include="VMSeccion.cs" />
     <Compile Include="VMSubCategoria.cs" />

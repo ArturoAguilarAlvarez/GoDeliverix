@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             Title="Monedero"
+             x:Class="AppCliente.Monedero">
+    <ContentPage.Content>
+        <Grid >
+            <Grid Margin="10,20,10,10" RowSpacing="10" Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackLayout Grid.Row="0">
+                    <Frame CornerRadius="10" BackgroundColor="LightBlue">
+                        <Label TextColor="Black" FontSize="20" HorizontalTextAlignment="Center" x:Name="lblDineroMonedero"/>
+                    </Frame>
+                </StackLayout>
+
+                <Grid Grid.Row="1">
+                    <StackLayout Orientation="Vertical">
+                        <Label Text="Tipo de movimientos."/>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                            <StackLayout VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand" Orientation="Horizontal" Padding="0" Spacing="16">
+                                <BoxView HeightRequest="20" WidthRequest="20" BackgroundColor="#B0F2C2" HorizontalOptions="StartAndExpand"/>
+                                <Label Text="Abonos" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" VerticalOptions="StartAndExpand" HorizontalOptions="EndAndExpand" />
+                            </StackLayout>
+                            <StackLayout VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand" Orientation="Horizontal" Padding="0" Spacing="16">
+                                <BoxView HeightRequest="20" WidthRequest="20" BackgroundColor="#FFB6AE" HorizontalOptions="StartAndExpand"/>
+                                <Label Text="Pagos" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" VerticalOptions="StartAndExpand" HorizontalOptions="EndAndExpand" />
+                            </StackLayout>
+                            <StackLayout VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand" Orientation="Horizontal" Padding="0" Spacing="16">
+                                <BoxView HeightRequest="20" WidthRequest="20" BackgroundColor="LightGoldenrodYellow" HorizontalOptions="StartAndExpand"/>
+                                <Label Text="Reembolsos" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" VerticalOptions="StartAndExpand" HorizontalOptions="EndAndExpand" />
+                            </StackLayout>
+                        </StackLayout>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="AUTO"/>
+                                <!--<ColumnDefinition Width="*"/>-->
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="AUTO"/>
+                            </Grid.RowDefinitions>
+
+                            <Label TextColor="Black" Grid.Column="0" Grid.Row="1" HorizontalTextAlignment="Center" Text="Folio"/>
+                            <Label TextColor="Black" Grid.Column="1" Grid.Row="1" HorizontalTextAlignment="Center" Text="Fecha/Hora"/>
+                            <Label TextColor="Black" Grid.Column="2" Grid.Row="1" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Text="Monto"/>
+
+                        </Grid>
+                    </StackLayout>
+                </Grid>
+
+                <StackLayout Grid.Row="2">
+                    <ListView x:Name="lvMovimientos"
+                              IsPullToRefreshEnabled="True"                              
+                              HasUnevenRows="True"
+                              SelectionMode="None"
+                              SeparatorVisibility="Default"
+                              SeparatorColor="Black">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Grid>
+                                        <StackLayout Orientation="Vertical">
+                                            <StackLayout>
+                                                <Frame x:Name="FListaMovimientos" BackgroundColor="{Binding CColor}" CornerRadius="5" Padding="8">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="AUTO"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <!--<ColumnDefinition Width="*"/>-->
+                                                        </Grid.ColumnDefinitions>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="AUTO"/>
+                                                        </Grid.RowDefinitions>
+
+                                                        <Label LineBreakMode="TailTruncation" TextColor="Black" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Grid.Column="0" Grid.Row="1" Text="{Binding LngFolio}"/>
+                                                        <Label LineBreakMode="TailTruncation" TextColor="Black" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Grid.Column="1" Grid.Row="1" Text="{Binding DtmFechaDeRegistro,StringFormat='{0:dd/MM/yyyy HH:mm:ss}'}"/>
+                                                        <Label LineBreakMode="TailTruncation" TextColor="#03357d" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Grid.Column="2" Grid.Row="1" Text="{Binding MMonto,StringFormat='${0}'}"/>
+                                                        <!--<Label LineBreakMode="TailTruncation" TextColor="Black" VerticalTextAlignment="Center" HorizontalTextAlignment="End"  Grid.Column="3" Grid.Row="1" Text="{Binding StrConcepto}"/>-->
+                                                    </Grid>
+                                                </Frame>
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </Grid>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                    </ListView>
+                    <!--<Button x:Name="btnTodosLosMovimientos" CornerRadius="20" BackgroundColor="LightGray" TextColor="Black" Text="Ver todos los movimientos"/>-->
+                </StackLayout>
+            </Grid>
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

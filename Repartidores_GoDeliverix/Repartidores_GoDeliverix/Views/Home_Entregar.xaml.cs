@@ -27,21 +27,20 @@ namespace Repartidores_GoDeliverix.Views
         {
             try
             {
-                ; PhoneDialer.Open(lblNumeroCliente.Text);
+                 PhoneDialer.Open(lblNumeroCliente.Text);
             }
-            catch (ArgumentNullException anEx)
-            {
-                // Number was null or white space
-            }
-            catch (FeatureNotSupportedException ex)
-            {
-                // Phone Dialer is not supported on this device.
-            }
+            //catch (ArgumentNullException anEx)
+            //{
+            //    // Number was null or white space
+            //}
+            //catch (FeatureNotSupportedException ex)
+            //{
+            //    // Phone Dialer is not supported on this device.
+            //}
             catch (Exception ex)
             {
                 // Other error has occurred.
             }
-
         }
 
         private void btnEscanearCodigo_Clicked(object sender, EventArgs e)

@@ -64,7 +64,7 @@ namespace DeliverixSucursales
             Window1 ventanaLicencia = new Window1();
             LicenciaRequerida VentanaMensaje = new LicenciaRequerida();
             bool estatus = false;
-            if (MVLicencia.VerificaExistenciaDeLicenciaLocal().Rows.Count < 1)
+            if (!MVLicencia.VerificaExistenciaDeLicenciaLocal())
             {
 
                 if (ModuloAIngresar == "Administrador")

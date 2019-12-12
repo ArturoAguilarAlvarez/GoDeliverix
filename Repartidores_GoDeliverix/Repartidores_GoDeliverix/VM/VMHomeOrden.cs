@@ -132,7 +132,7 @@ namespace Repartidores_GoDeliverix.VM
             get { return _MTotal; }
             set { SetValue(ref _MTotal, value); }
         }
-        
+
         private decimal _MPropina;
 
         public decimal MPropina
@@ -263,6 +263,17 @@ namespace Repartidores_GoDeliverix.VM
             set { SetValue(ref _StrNombreUsuario, value); }
         }
         #endregion
+
+        #region Propiedades de pagos
+        private string _StrEstatusCobro;
+
+        public string StrEstatusCobro
+        {
+            get { return _StrEstatusCobro; }
+            set { SetValue(ref _StrEstatusCobro, value); }
+        }
+
+        #endregion
         #endregion
 
 
@@ -322,6 +333,13 @@ namespace Repartidores_GoDeliverix.VM
                         {
                             //Peticion de la api para el cambio del estatus de la orden
                             url = "https://www.godeliverix.net/api/Orden/GetAgregaEstatusALaOrden?UidEstatus=2FDEE8E7-0D54-4616-B4C1-037F5A37409D&StrParametro=S&UidOrden=" + AppInstance.MVHome.UidOrdenSucursal + "";
+                            await _WebApiGoDeliverix.GetAsync(url);
+                        }
+
+                        using (var _WebApiGoDeliverix = new HttpClient())
+                        {
+                            //Peticion de la api para el cambio del estatus de la orden
+                            url = "https://www.godeliverix.net/api/Pagos/GetCambiarEstatusPago?Estatus=afe0ffaa-3ab8-4ecf-962d-cba4f79d9e34&UidOrden=" + AppInstance.MVHome.UidOrdenSucursal + "";
                             await _WebApiGoDeliverix.GetAsync(url);
                         }
 
@@ -458,7 +476,15 @@ namespace Repartidores_GoDeliverix.VM
                     var DatosProductos = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
                     MVOrden = JsonConvert.DeserializeObject<VMOrden>(DatosProductos);
                 }
+                string estatus = string.Empty;
+                using (var _WebApiGoDeliverix = new HttpClient())
+                {
+                    url = "http://www.godeliverix.net/api/Pagos/GetObtenerEstatusDeCobro?UidOrden=" + StrUidOrden + "";
+                    string DatosObtenidos = await _WebApiGoDeliverix.GetStringAsync(url);
+                    estatus = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
 
+                }
+                StrEstatusCobro = estatus;
                 using (var _WebApiGoDeliverix = new HttpClient())
                 {
                     url = "http://www.godeliverix.net/api/Sucursales/GetBuscarSucursales?UidSucursal=" + UidSucursal + "";
@@ -520,14 +546,14 @@ namespace Repartidores_GoDeliverix.VM
                     {
                         StrNombreProducto = item.StrNombreProducto,
                         IntCantidad = item.intCantidad,
-                        
+
                         MTotal = item.MTotal
                     });
                     MPropina = item.MPropina;
                     MTotalTarifario = decimal.Parse(item.MCostoTarifario.ToString());
                     MTotal += item.MTotal;
                 }
-                MTotalConPropina = MTotal + MPropina;
+                MTotalConPropina = MTotal + MPropina + MTotalTarifario;
                 MSubTotal = MTotal;
                 MTotal += MTotalTarifario;
 

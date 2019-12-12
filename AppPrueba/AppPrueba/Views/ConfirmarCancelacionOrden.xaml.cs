@@ -38,7 +38,7 @@ namespace AppPrueba.Views
             App.MVMensaje = JsonConvert.DeserializeObject<VistaDelModelo.VMMensaje>(asd);
             PickeMensaje.ItemsSource = App.MVMensaje.ListaDeMensajes;
         }
-        private  void ButtonAceptarAccion_Clicked(object sender, EventArgs e)
+        private void ButtonAceptarAccion_Clicked(object sender, EventArgs e)
         {
             CancelarOrden();
         }
@@ -64,6 +64,18 @@ namespace AppPrueba.Views
                        "&LNGFolio=" + ObjItem.LNGFolio.ToString()
                        + "&IdMensaje=" + ObjSeccion.Uid + "&UidOrden=" + ObjItem.Uidorden);
                     var DatosObtenidos = await _client.GetAsync(_url);
+
+                    string _Url = $"https://godeliverix.net/api/Monedero/GetMovimientosMonedero?" +
+                                $"UidOrdenSucursal={ObjItem.Uidorden}" + $"&TipoDeMovimiento=E85F0486-1FBE-494C-86A2-BFDDC733CA5D" +
+                                $"&Concepto=2AABDF7F-EDCE-455F-B775-6283654D7DA0" +
+                                $"&Monto=" + ObjItem.MTotal + "";
+                    var content = "";
+                    using (HttpClient _client = new HttpClient())
+                    {
+                        content = await _client.GetStringAsync(_Url);
+                    }
+
+
 
                     string _URL = (RestService.Servidor + "api/Orden/GetOrdenesSucursal?Licencia=" + AppPrueba.Helpers.Settings.Licencia +
                         "&Estatus=Pendientes%20a%20confirmar&tipoSucursal=s");

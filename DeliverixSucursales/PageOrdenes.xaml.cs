@@ -97,6 +97,7 @@ namespace DeliverixSucursales
                     string sucursal = MVSucursal.ObtenSucursalDeLicencia(MVLicencia.Licencia);
                     txtConfirmarUidOrden.Text = fila.Uidorden.ToString();
                     txtCNumeroOrden.Text = fila.LNGFolio.ToString();
+                    txtCMMonto.Text = fila.MTotal.ToString();
                     MVOrden.ObtenerProductosDeOrden(fila.Uidorden.ToString());
                     GridViewDetalleOrdenConfirmar.ItemsSource = MVOrden.ListaDeProductos;
                 }

@@ -7,33 +7,7 @@
 
     <ContentPage.Content>
         <StackLayout>
-            <!--<Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition>
-                        <RowDefinition.Height>
-                            <OnPlatform x:TypeArguments="GridLength">
-                                <On Platform="Android" Value="50" />
-                                <On Platform="iOS" Value="35" />
-                            </OnPlatform>
-                        </RowDefinition.Height>
-                    </RowDefinition>
-                </Grid.RowDefinitions>
-                <Label Text="Folio" HorizontalOptions="Center" Grid.Column="0" Grid.Row="0" Margin="0"></Label>
-                <Label Text="Fecha Orden" HorizontalOptions="Center" Grid.Column="1" Grid.Row="0" Margin="0"></Label>
-                <Label Text="Total" HorizontalOptions="Center" Grid.Column="2" Grid.Row="0" Margin="0"></Label>
-            </Grid>-->
-            <!--<ListView x:Name="MyListViewHistorial"
-                          Margin="0"
-                           Grid.Column="0"
-                            Grid.ColumnSpan="3"
-                           Grid.Row="1"
-                              VerticalScrollBarVisibility="Always"
-            ItemsSource="{Binding VMProducto}"
-                      SelectionMode="None"
-                     
-                      SeparatorVisibility="Default"
-            IsPullToRefreshEnabled="False"
-                HasUnevenRows="False">-->
+          
             <ListView x:Name="MyListViewHistorial"
                                    ItemTapped="MyListViewHistorial_ItemTapped"
                         IsPullToRefreshEnabled="False"
@@ -78,6 +52,18 @@
                                             Text="{Binding MTotal,StringFormat='${0:F2}'}" 
                                             HorizontalOptions="Start" 
                                             Grid.Row="2" 
+                                            Grid.Column="1"></Label>
+                                            <Label Grid.Row="3" Grid.Column="0" Text="Estatus de pago:"></Label>
+                                            <Label 
+                                            Text="{Binding EstatusCobro}" 
+                                            HorizontalOptions="Start" 
+                                            Grid.Row="3" 
+                                            Grid.Column="1"></Label>
+                                            <Label Grid.Row="4" Grid.Column="0" Text="Forma de pago:"></Label>
+                                            <Label 
+                                            Text="{Binding StrFormaDeCobro}" 
+                                            HorizontalOptions="Start" 
+                                            Grid.Row="4" 
                                             Grid.Column="1"></Label>
                                         </Grid>
                                     </StackLayout>
