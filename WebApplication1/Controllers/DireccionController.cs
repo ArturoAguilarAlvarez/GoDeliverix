@@ -93,6 +93,78 @@ namespace WebApplication1.Controllers
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;
         }
+        public ResponseHelper GetPais()
+        {
+            MVDireccion = new VMDireccion();
+            Respuesta = new ResponseHelper();
+            MVDireccion.Paises();
+            Respuesta.Data = MVDireccion;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
+        public ResponseHelper GetEstado(Guid Pais, string busqueda = "", string Nombre = "")
+        {
+            MVDireccion = new VMDireccion();
+            Respuesta = new ResponseHelper();
+            MVDireccion.Estados(Pais, busqueda, Nombre);
+            Respuesta.Data = MVDireccion;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
+        public ResponseHelper GetMunicipio(Guid Estado)
+        {
+            MVDireccion = new VMDireccion();
+            Respuesta = new ResponseHelper();
+            MVDireccion.Municipios(Estado);
+            Respuesta.Data = MVDireccion;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
+        public ResponseHelper GetCiudad(Guid Municipio)
+        {
+            MVDireccion = new VMDireccion();
+            Respuesta = new ResponseHelper();
+            MVDireccion.Ciudades(Municipio);
+            Respuesta.Data = MVDireccion;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
+        public ResponseHelper GetObtenerColonias(Guid Ciudad, string ubicacion = "", string Nombre = "")
+        {
+            MVDireccion = new VMDireccion();
+            Respuesta = new ResponseHelper();
+            MVDireccion.Colonias(Ciudad, ubicacion, Nombre);
+            Respuesta.Data = MVDireccion;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
+
+        public ResponseHelper GetObtenerDireccionConDatosDeGoogle(string StrNombreCiudad, string Latitud, string Longitud)
+        {
+            MVDireccion = new VMDireccion();
+            Respuesta = new ResponseHelper();
+            MVUbicacion = new VMUbicacion();
+            MVDireccion.ObtenerDireccionConGoogle(StrNombreCiudad);
+
+            if (MVDireccion.ListaDIRECCIONES.Count != 0)
+            {
+                if (MVDireccion.ListaDIRECCIONES[0].ID != Guid.Empty || MVDireccion.ListaDIRECCIONES[0].ID != null)
+                {
+                    //MVUbicacion.GuardaUbicacionDireccion(MVDireccion.ListaDIRECCIONES[0].ID, Guid.NewGuid(), Latitud, Longitud);
+                }
+            }
+
+
+            Respuesta.Data = MVDireccion;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
 
         /// <summary>
         /// 
@@ -133,12 +205,21 @@ namespace WebApplication1.Controllers
         /// <param name="Longitud"></param>
         /// <param name="UidDireccion"></param>
         /// <returns></returns>
-        public ResponseHelper GetGuardarDireccion(Guid UidUsuario, Guid UidPais, Guid UidEstado, Guid UidMunicipio, Guid UidCiudad, Guid UidColonia, string CallePrincipal, string CalleAux1, string CalleAux2, string Manzana, string Lote, string CodigoPostal, string Referencia, string NOMBRECIUDAD, string NOMBRECOLONIA, string Identificador, string Latitud, string Longitud)
+        public ResponseHelper GetGuardarDireccion(Guid UidUsuario, Guid UidPais, Guid UidEstado, Guid UidMunicipio, Guid UidCiudad, Guid UidColonia, string CallePrincipal, string CalleAux1, string CalleAux2, string Manzana, string Lote, string CodigoPostal, string Referencia, string NOMBRECIUDAD, string NOMBRECOLONIA, string Identificador, string Latitud, string Longitud, string UidDireccion = "")
         {
             MVDireccion = new VMDireccion();
             MVUbicacion = new VMUbicacion();
             Respuesta = new ResponseHelper();
-            Guid uidDirecion = Guid.NewGuid();
+            Guid uidDirecion = new Guid();
+            if (string.IsNullOrEmpty(UidDireccion))
+            {
+                uidDirecion = Guid.NewGuid();
+            }
+            else
+            {
+                uidDirecion = new Guid(UidDireccion);
+            }
+
             MVDireccion.AgregaDireccion("asp_AgregaDireccionUsuario", UidUsuario, uidDirecion, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador);
             MVUbicacion.GuardaUbicacionDireccion(uidDirecion, Guid.NewGuid(), Latitud, Longitud);
             Respuesta.Message = "Informacion agregada satisfactoriamente";
@@ -175,6 +256,16 @@ namespace WebApplication1.Controllers
         {
             MVDireccion = new VMDireccion();
             MVDireccion.EliminaDireccionUsuario(UidDireccion);
+            Respuesta = new ResponseHelper();
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion eliminada satisfactoriamente";
+            return Respuesta;
+        }
+
+        public ResponseHelper GetDireccionConUbicacion(string UidDireccion)
+        {
+            MVDireccion = new VMDireccion();
+            MVDireccion.EliminarDireccionUbicacion(UidDireccion);
             Respuesta = new ResponseHelper();
             Respuesta.Status = true;
             Respuesta.Message = "Informacion eliminada satisfactoriamente";

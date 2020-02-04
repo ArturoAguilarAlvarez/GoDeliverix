@@ -40,6 +40,30 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
+        public ResponseHelper GetObtenerFolioCliente(string UidUsuario = "")
+        {
+            MVUsuario = new VMUsuarios();
+
+            Respuesta = new ResponseHelper();
+            Respuesta.Data = MVUsuario.ObtenerFolio(UidUsuario);
+
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
+        
+        public ResponseHelper GetObtenerHora(string UidEstado = "")
+        {
+            MVUsuario = new VMUsuarios();
+
+            Respuesta = new ResponseHelper();
+            Respuesta.Data = MVUsuario.ObtenerHoraActual(UidEstado);
+
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
+
         //public ResponseHelper GetUsuario(string UidUsuario)
         //{
         //    //MVUsuario = new VMUsuarios();

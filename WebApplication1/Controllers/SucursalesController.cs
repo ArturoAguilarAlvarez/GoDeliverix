@@ -9,13 +9,13 @@ namespace WebApplication1.Controllers
         VMSucursales MVSucursales;
         ResponseHelper Respuesta;
         // GET: api/Profile/5
-        public ResponseHelper GetBuscarSucursalesDeUnProducto(Guid uidEmpresa, string day, Guid UidDireccion)
+        public ResponseHelper GetBuscarSucursalesDeUnProducto(Guid uidEmpresa, string day, Guid UidEstado, Guid UidColonia)
         {
             MVSucursales = new VMSucursales();
-            MVSucursales.BuscarSucursalesCliente(uidEmpresa, day, UidDireccion);
+            MVSucursales.BuscarSucursalesCliente(uidEmpresa, day, UidEstado, UidColonia);
 
             Respuesta = new ResponseHelper();
-            Respuesta.Data = MVSucursales.LISTADESUCURSALES;
+            Respuesta.Data = MVSucursales;
             Respuesta.Status = true;
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;

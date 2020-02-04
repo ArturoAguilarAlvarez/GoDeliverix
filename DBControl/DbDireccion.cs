@@ -58,7 +58,7 @@ namespace DBControl
 
             oConexcion.ModificarDatos(CMD);
         }
-        
+
 
         public DataTable obtenerNombreColonia(string UidColonia)
         {
@@ -91,11 +91,11 @@ namespace DBControl
             string sentencia = "(select '00000000-0000-0000-0000-000000000000' as UidPais,'-- Seleccionar --' as Nombre)union all (select UidPais,Nombre from Paises where  Nombre != 'INDEFINIDO' and Nombre != 'INDETERMINADO' ) ";
             return oConexcion.Consultas(sentencia);
         }
-        public DataTable ObtenerEstados(Guid Pais,string busqueda = "", string NombreABuscar = "")
+        public DataTable ObtenerEstados(Guid Pais, string busqueda = "", string NombreABuscar = "")
         {
             oConexcion = new Conexion();
             string Sentencia = string.Empty;
-            if (busqueda =="")
+            if (busqueda == "")
             {
                 Sentencia = "(select '00000000-0000-0000-0000-000000000000' as IdEstado, '-- Seleccionar --' as Nombre,-1 as Orden) union all(select UidEstado as IdEstado, Nombre, Orden from estados where UidPais = '" + Pais + "' and Nombre != 'INDEFINIDO' and Nombre != 'INDETERMINADO') order by Nombre ";
             }
@@ -112,14 +112,14 @@ namespace DBControl
 
                 }
             }
-             
+
             return oConexcion.Consultas(Sentencia);
         }
 
         public DataTable ObtenerDireccion(Guid uidDireccion)
         {
             oConexcion = new Conexion();
-            string query = "select * from Direccion where UidDireccion  = '"+uidDireccion.ToString()+"'";
+            string query = "select * from Direccion where UidDireccion  = '" + uidDireccion.ToString() + "'";
             return oConexcion.Consultas(query);
         }
 
@@ -213,6 +213,13 @@ namespace DBControl
             oConexcion.Consultas(query);
         }
 
+        public void EliminaDireccionCompleta(string uidDireccion)
+        {
+            oConexcion = new Conexion();
+            string query = "delete from Ubicacion where UidUbicacion in (select top 1 UidUbicacion from DireccionUbicacion where UidDireccion = '" + uidDireccion + "');delete from DireccionUbicacion where UidDireccion = '" + uidDireccion + "';delete from Direccion where UidDireccion = '" + uidDireccion + "'";
+            oConexcion.Consultas(query);
+        }
+
         public DataTable ObtenerNombrePais(string uidPais)
         {
             oConexcion = new Conexion();
@@ -235,7 +242,7 @@ namespace DBControl
         public DataTable ObtenerUidDeUsuarioPorUidDireccion(string uidDireccion)
         {
             oConexcion = new Conexion();
-            string sentencia = "select u.UidUsuario from usuarios u inner join DireccionUsuario du on du.UidUsuario = u.UidUsuario where du.UidDireccion = '"+ uidDireccion + "'";
+            string sentencia = "select u.UidUsuario from usuarios u inner join DireccionUsuario du on du.UidUsuario = u.UidUsuario where du.UidDireccion = '" + uidDireccion + "'";
             return oConexcion.Consultas(sentencia);
         }
 

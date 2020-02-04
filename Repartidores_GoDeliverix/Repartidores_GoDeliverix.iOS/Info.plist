@@ -5,11 +5,11 @@
 	<key>UIDeviceFamily</key>
 	<array>
 		<integer>1</integer>
-		<integer>2</integer>
 	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
@@ -25,9 +25,9 @@
 		<string>comgooglemaps</string>
 	</array>
 	<key>CFBundleDisplayName</key>
-	<string>GoDeliverix_Run</string>
+	<string>GoDeliverixRepartidorPrueba</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.companyname.gdr</string>
+	<string>compuandsoft.GoDeliverixRepartidor</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>UILaunchStoryboardName</key>
@@ -44,6 +44,8 @@
 	<key>UIMainStoryboardFile</key>
 	<string>LaunchScreen</string>
 	<key>MinimumOSVersion</key>
-	<string>12.2</string>
+	<string>13.0</string>
+	<key>XSAppIconAssets</key>
+	<string>Assets.xcassets/AppIcon.appiconset</string>
 </dict>
 </plist>

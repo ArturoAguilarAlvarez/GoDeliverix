@@ -42,37 +42,32 @@
             </Grid>
         </Grid>
     </NavigationPage.TitleView>
-    
+
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="5*"></ColumnDefinition>
-                    <ColumnDefinition Width="5*"></ColumnDefinition>                    
+                    <ColumnDefinition Width="5*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Button BackgroundColor="Transparent" Grid.Column="0" Text="Producto" TextColor="Red" Clicked="ButtonCambiarBusquedaProducto_Clicked" x:Name="btnProducto"></Button>
                 <Button BackgroundColor="Transparent" Grid.Column="1" Text="Empresa" TextColor="Black" Clicked="ButtonCambiarBusqEmpresadaProducto_Clicked" x:Name="btnEmpresa"></Button>
             </Grid>
+            <ActivityIndicator x:Name="AILoading" Grid.Row="1" ></ActivityIndicator>
             <StackLayout Grid.Row="1" x:Name="ScrollView_Productos">
-                <ListView x:Name="MyListViewBusquedaProductosHome"
-                              ItemTapped="MyListViewBusquedaProductosHome_ItemTapped"
-                              VerticalScrollBarVisibility="Always"
-            ItemsSource="{Binding ListaDeProductos}"
-                      SelectionMode="None"
-                      SeparatorVisibility="None"
-            IsPullToRefreshEnabled="False"
-            HasUnevenRows="True">
+
+                <ListView x:Name="MyListViewBusquedaProductosHome" ItemTapped="MyListViewBusquedaProductosHome_ItemTapped" VerticalScrollBarVisibility="Always" ItemsSource="{Binding ListaDeProductos}" SelectionMode="None" SeparatorVisibility="None" IsPullToRefreshEnabled="False" HasUnevenRows="True">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
                                 <ContentView>
-                                    <Frame Margin="0,5"     
-                               >
+                                    <Frame Margin="0,5">
                                         <Grid Margin="0" Padding="0">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto"/>
@@ -80,16 +75,6 @@
                                             </Grid.RowDefinitions>
 
                                             <StackLayout Grid.Row="0" Orientation="Horizontal">
-                                                <!--<Image
-                                                       HorizontalOptions="Start"
-                                                        VerticalOptions="Center"
-                                                   Source="{Binding STRRUTA,TargetNullValue='IconoEmail.png'}"
-                                                   
-                                                        Margin="5"
-                                                    WidthRequest="150"
-                                                    HeightRequest="150">
-
-                                                </Image>-->
                                                 <ff:CachedImage
                                                     Source="{Binding STRRUTA}"
                                                     HorizontalOptions="Start"
@@ -106,26 +91,10 @@
                                                     </ff:CachedImage.Transformations>
                                                 </ff:CachedImage>
                                                 <StackLayout HorizontalOptions="Fill" VerticalOptions="Fill">
-                                                    <Label Text="{Binding STRNOMBRE}"
-                                                               HorizontalOptions="Start"
-                                                           VerticalOptions="Start"
-                                           FontSize="Medium"/>
+                                                    <Label Text="{Binding STRNOMBRE}" HorizontalOptions="Start" VerticalOptions="Start" FontSize="Medium"/>
                                                     <Label Text="{Binding Empresa}"></Label>
-                                                    <Label  Text="{Binding STRDESCRIPCION}"
-                                           FontSize="Micro"
-                                                                HorizontalOptions="Start"
-                                           />
-
-                                                    <Label Text="{Binding StrCosto, StringFormat='Desde ${0}'}"
-                                                           Margin="0,50,0,0"
-                                                               x:Name="txtProductoPrecio"
-                                                               HorizontalOptions="End"
-                                                                VerticalOptions="End"
-                                                                FontSize="Medium"
-                                                               TextColor="Black"
-                                           />
-
-
+                                                    <Label  Text="{Binding STRDESCRIPCION}" FontSize="Micro" HorizontalOptions="Start"/>
+                                                    <Label Text="{Binding StrCosto, StringFormat='Desde ${0}'}" Margin="0,50,0,0" x:Name="txtProductoPrecio" HorizontalOptions="End" VerticalOptions="End" FontSize="Medium"  TextColor="Black" />
                                                 </StackLayout>
                                             </StackLayout>
 
@@ -140,13 +109,7 @@
             </StackLayout>
 
             <StackLayout Grid.Row="1" x:Name="ScrollView_Empresas"  IsVisible="False">
-                <ListView x:Name="MyListViewBusquedaEmpresas"
-                              VerticalScrollBarVisibility="Always"
-                      SelectionMode="None"                              
-                              ItemTapped="MyListViewBusquedaEmpresas_ItemTapped"
-                      SeparatorVisibility="None"
-            IsPullToRefreshEnabled="False"
-            HasUnevenRows="True">
+                <ListView x:Name="MyListViewBusquedaEmpresas" VerticalScrollBarVisibility="Always" SelectionMode="None" ItemTapped="MyListViewBusquedaEmpresas_ItemTapped" SeparatorVisibility="None" IsPullToRefreshEnabled="False" HasUnevenRows="True">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
@@ -159,12 +122,6 @@
                                             </Grid.RowDefinitions>
 
                                             <StackLayout Grid.Row="0" Orientation="Horizontal">
-
-                                                <!--<Image
-                                                   Source="{Binding StrRuta}"                                                   
-                                                    WidthRequest="80"
-                                                    HeightRequest="80">
-                                                </Image>-->
 
                                                 <ff:CachedImage
                                                     Source="{Binding StrRuta}"
@@ -182,19 +139,14 @@
                                                         <ffTrans:RoundedTransformation Radius="20" />
                                                     </ff:CachedImage.Transformations>
                                                 </ff:CachedImage>
-
                                                 <StackLayout HorizontalOptions="FillAndExpand" >
-                                                    <Label Text="{Binding NOMBRECOMERCIAL}"
-                                                               HorizontalOptions="Center"
-                                           FontSize="22"
-                                           VerticalOptions="End" />
+                                                    <Label Text="{Binding NOMBRECOMERCIAL}" HorizontalOptions="Center" FontSize="22" VerticalOptions="End" />
                                                 </StackLayout>
                                             </StackLayout>
                                             <Label Grid.Row="1" Text="{Binding STRDESCRIPCION}"
                                            FontSize="15"
                                            VerticalOptions="Center" />
                                         </Grid>
-
                                     </Frame>
                                 </ContentView>
 
@@ -206,39 +158,20 @@
                 </ListView>
             </StackLayout>
 
-            <StackLayout IsVisible="False" x:Name="PanelProductoNoEncontrados" Grid.Row="1
-                         " VerticalOptions="Center">
+            <StackLayout IsVisible="False" x:Name="PanelProductoNoEncontrados" Grid.Row="1" VerticalOptions="Center">
                 <Image Source="IconoCajaVacia" HorizontalOptions="Center" VerticalOptions="Center"></Image>
                 <Label Text="No hay productos disponibles en esta ubicacion" HorizontalOptions="Center" VerticalOptions="Center"></Label>
             </StackLayout>
- 
-            <StackLayout Orientation="Horizontal" Grid.Row="2" HorizontalOptions="FillAndExpand"  x:Name="PanelNavegacion">
 
-                <!--<ImageButton  Source="IconoAtras" HeightRequest="30" WidthRequest="80" HorizontalOptions="Start" BackgroundColor="Transparent" x:Name="btnAtras" Clicked="BtnAtras_Clicked"></ImageButton>-->
+            <StackLayout Orientation="Horizontal" Grid.Row="2" HorizontalOptions="FillAndExpand"  x:Name="PanelNavegacion">
                 <Label Text="0-0/0" HorizontalOptions="CenterAndExpand" x:Name="lbCantidad"></Label>
-                <!--<ImageButton Source="IconoAdelante" HeightRequest="30" WidthRequest="80" HorizontalOptions="End" BackgroundColor="Transparent" x:Name="btnAdelante" Clicked="BtnAdelante_Clicked"></ImageButton>-->
             </StackLayout>
-            
-            <!--<Button 
-                    Text="Mas"                     
-                    Grid.Row="2" 
-                VerticalOptions="End" 
-                    BackgroundColor="Transparent" 
-                    HorizontalOptions="FillAndExpand"  
-                Clicked="ButtonMasDeLaLista_Clicked"
-                    TextColor="Black" ></Button>-->
-            
-            <Button 
-                    Text="NO hay direcciones disponibles" 
-                    x:Name="btnSeleccionarDireccion" 
-                VerticalOptions="End" 
-                    Clicked="BtnSeleccionarDireccion_Clicked"
-                    BackgroundColor="#20396e" 
-                    HorizontalOptions="FillAndExpand"  
-                    TextColor="White" ></Button>
-            
+
+            <Button  Text="NO hay direcciones disponibles"  x:Name="btnSeleccionarDireccion" Grid.Row="3"
+                VerticalOptions="End"  Clicked="BtnSeleccionarDireccion_Clicked" BackgroundColor="#20396e" HorizontalOptions="FillAndExpand" TextColor="White" ></Button>
+
             <Label Text="" x:Name="IDDireccionBusqueda" IsVisible="False"></Label>
-            
+
         </Grid>
     </ContentPage.Content>
 </ContentPage>

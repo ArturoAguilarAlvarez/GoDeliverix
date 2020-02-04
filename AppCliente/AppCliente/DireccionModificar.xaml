@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="Informacion de la direccion"
              x:Class="AppCliente.DireccionModificar">
     <ContentPage.Content>
 
@@ -32,7 +33,7 @@
                         <RowDefinition Height="AUTO" />
                     </Grid.RowDefinitions>
 
-                    <Entry Grid.Row="1"  x:Name="txtIdentificador" Placeholder="Identificador*" FontSize="Medium"   HorizontalTextAlignment="Center"></Entry>
+                    <Entry Grid.Row="1"  x:Name="txtIdentificador" Placeholder="Identificador*" FontSize="Medium"   HorizontalTextAlignment="Start"></Entry>
 
                     <Picker Grid.Row="2"  x:Name="MypickerPais" Title="Pais" SelectedIndexChanged="MypickerPais_SelectedIndexChanged">
                         <Picker.Items>
@@ -44,31 +45,23 @@
 
                     <Picker Grid.Row="4"  x:Name="MypickerMunicipio" Title="Municipio*" SelectedIndexChanged="MypickerMunicipio_SelectedIndexChanged"></Picker>
 
-
-
                     <Picker Grid.Row="5"  x:Name="MypickerCiudad" Title="Ciudad*" SelectedIndexChanged="MypickerCiudad_SelectedIndexChanged"></Picker>
 
-                    <Picker Grid.Row="6"  x:Name="MypickerColonia" Title="Colonia*" ></Picker>
+                    <Picker Grid.Row="6"  x:Name="MypickerColonia" Title="Colonia*" SelectedIndexChanged="MypickerColonia_SelectedIndexChanged"></Picker>
 
+                    <Entry Grid.Row="7"  x:Name="txtCalle" Placeholder="calle*" FontSize="Medium"   HorizontalTextAlignment="Start"></Entry>
 
-                    <Entry Grid.Row="7"  x:Name="txtCalle" Placeholder="calle*" FontSize="Medium"   HorizontalTextAlignment="Center"></Entry>
+                    <Entry Grid.Row="8"  x:Name="txtEntreCalle" Placeholder="Entre calle" FontSize="Medium"   HorizontalTextAlignment="Start"></Entry>
 
-                    <Entry Grid.Row="8"  x:Name="txtEntreCalle" Placeholder="Entre calle*" FontSize="Medium"   HorizontalTextAlignment="Center"></Entry>
+                    <Entry Grid.Row="9"  x:Name="txtYCalle" Placeholder="Y calle" FontSize="Medium"   HorizontalTextAlignment="Start"></Entry>
 
+                    <Entry Grid.Row="10"  x:Name="txtManzana" Placeholder="Manzana o numero exterior*" FontSize="Medium"   HorizontalTextAlignment="Start"></Entry>
 
+                    <Entry Grid.Row="11"  x:Name="txtLote" Placeholder="Lote o numero interior" FontSize="Medium"  HorizontalTextAlignment="Start"></Entry>
 
-                    <Entry Grid.Row="9"  x:Name="txtYCalle" Placeholder="Y calle*" FontSize="Medium"   HorizontalTextAlignment="Center"></Entry>
+                    <Entry Grid.Row="12"  x:Name="txtCodigoPostal" Placeholder="Codigo Postal*" FontSize="Medium"   HorizontalTextAlignment="Start"></Entry>
 
-                    <Entry Grid.Row="10"  x:Name="txtManzana" Placeholder="Manzana o numero interior*" FontSize="Medium"   HorizontalTextAlignment="Center"></Entry>
-
-
-                    <Entry Grid.Row="11"  x:Name="txtLote" Placeholder="Lote" FontSize="Medium"  HorizontalTextAlignment="Center"></Entry>
-
-                    <Entry Grid.Row="12"  x:Name="txtCodigoPostal" Placeholder="Codigo Postal*" FontSize="Medium"   HorizontalTextAlignment="Center"></Entry>
-
-
-
-                    <Entry Grid.Row="13"  x:Name="txtReferencia" Placeholder="Referencias*" FontSize="Medium"  HorizontalTextAlignment="Center"></Entry>
+                    <Entry Grid.Row="13"  x:Name="txtReferencia" Placeholder="Referencias" FontSize="Medium"  HorizontalTextAlignment="Start"></Entry>
 
                     <StackLayout HorizontalOptions="Center" Grid.Row="14" Orientation="Horizontal">
                         <Button x:Name="btnCancelar" Text="CANCELAR"   WidthRequest="150" BackgroundColor="Red" CornerRadius="20" TextColor="White" Clicked="BtnCancelar_Clicked"/>

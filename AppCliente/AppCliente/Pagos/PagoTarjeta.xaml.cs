@@ -28,25 +28,27 @@ namespace AppCliente.Pagos
         Guid UidOrdenPago;
         string TipoDeFormaDePago = string.Empty;
         Timer tiempo = new Timer();
-        public PagoTarjeta(string formadepago)
+        //public PagoTarjeta(string formadepago,string FolioCliente, string FolioPagoTarjeta)
+        public PagoTarjeta(string formadepago, string FolioCliente)
         {
             InitializeComponent();
             TipoDeFormaDePago = formadepago;
             for (int i = 0; i < App.MVProducto.ListaDelCarrito.Count; i++)
             {
-                cantidad = cantidad + App.MVProducto.ListaDelCarrito[i].Cantidad;
+                cantidad += App.MVProducto.ListaDelCarrito[i].Cantidad;
                 decimal a = decimal.Parse(App.MVProducto.ListaDelCarrito[i].StrCosto);
             }
             for (int i = 0; i < App.MVProducto.ListaDelInformacionSucursales.Count; i++)
             {
-                TotalEnvio = TotalEnvio + App.MVProducto.ListaDelInformacionSucursales[i].CostoEnvio;
-                TotalPagar = TotalPagar + App.MVProducto.ListaDelInformacionSucursales[i].Total;
-                subtotal = subtotal + App.MVProducto.ListaDelInformacionSucursales[i].Subtotal;
+                TotalEnvio += App.MVProducto.ListaDelInformacionSucursales[i].CostoEnvio;
+                TotalPagar += App.MVProducto.ListaDelInformacionSucursales[i].Total;
+                subtotal += App.MVProducto.ListaDelInformacionSucursales[i].Subtotal;
                 TotalPropina += App.MVProducto.ListaDelInformacionSucursales[i].DPropina;
             }
 
             UidOrden = Guid.NewGuid();
             UidOrdenPago = Guid.NewGuid();
+
             App.MVCorreoElectronico.BuscarCorreos(UidPropietario: new Guid(App.Global1), strParametroDebusqueda: "Usuario");
             string ArchivoXml = "" +
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" +
@@ -67,7 +69,7 @@ namespace AppCliente.Pagos
                 "    <datos_adicionales>\r\n" +
                 "      <data id=\"1\" display=\"false\">\r\n" +
                 "        <label>PRINCIPAL</label>\r\n" +
-                "        <value>" + App.Global1 + "</value>\r\n" +
+                "        <value>" + FolioCliente + "</value>\r\n" +
                 "      </data>\r\n" +
                 "      <data id=\"2\" display=\"true\">\r\n" +
                 "        <label>Concepto:</label>\r\n" +
@@ -85,7 +87,6 @@ namespace AppCliente.Pagos
             AESCrypto o = new AESCrypto();
             string encryptedString = o.encrypt(originalString, key);
             string finalString = encryptedString.Replace("%", "%25").Replace(" ", "%20").Replace("+", "%2B").Replace("=", "%3D").Replace("/", "%2F");
-
 
             string encodedString = HttpUtility.UrlEncode("<pgs><data0>9265655113</data0><data>" + encryptedString + "</data></pgs>");
             string postParam = "xml=" + encodedString;
@@ -106,11 +107,12 @@ namespace AppCliente.Pagos
 
             WVWebPay.Source = new UrlWebViewSource { Url = url };
 
-            tiempo.Interval = 5000;
+            tiempo.Interval = 2000;
             tiempo.Elapsed += new ElapsedEventHandler(VerificaPago);
             tiempo.Start();
 
         }
+
 
         protected void VerificaPago(object sender, ElapsedEventArgs e)
         {
@@ -122,7 +124,7 @@ namespace AppCliente.Pagos
                 //{
                 using (var _webApi = new HttpClient())
                 {
-                    string url = "https://www.godeliverix.net/api/Pagos/GetValidarPagoOrdenTarjeta?UidOrdenFormaDeCobro=" + UidOrdenPago.ToString() + "";
+                    string url = "" + Helpers.Settings.sitio + "/api/Pagos/GetValidarPagoOrdenTarjeta?UidOrdenFormaDeCobro=" + UidOrdenPago.ToString() + "";
                     var datos = await _webApi.GetStringAsync(url);
                     string obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
                     respuesta = bool.Parse(obj);
@@ -132,7 +134,7 @@ namespace AppCliente.Pagos
 
                     using (var _webApi = new HttpClient())
                     {
-                        string url = "http://www.godeliverix.net/api/Pagos/GetObtenerPagoTarjeta?UidOrdenFormaDeCobro=" + UidOrdenPago.ToString() + "";
+                        string url = "" + Helpers.Settings.sitio + "/api/Pagos/GetObtenerPagoTarjeta?UidOrdenFormaDeCobro=" + UidOrdenPago.ToString() + "";
                         var datos = await _webApi.GetStringAsync(url);
                         var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
                         App.oPago = JsonConvert.DeserializeObject<VMPagos>(obj);

@@ -10,8 +10,11 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using VistaDelModelo;
+using Xamarin.Essentials;
 using Xamarin.Forms;
+using Xamarin.Forms.GoogleMaps;
 using Xamarin.Forms.Xaml;
+using AppCliente.ViewModel;
 
 namespace AppCliente
 {
@@ -23,7 +26,6 @@ namespace AppCliente
 
         int CantidadProductosMostrados = 0;
         HttpClient _client = new HttpClient();
-
         public HomePage()
         {
             InitializeComponent();
@@ -36,16 +38,16 @@ namespace AppCliente
 
             foreach (var item in App.MVProducto.ListaDelInformacionSucursales)
             {
-                string _URL = "https://www.godeliverix.net/api/Sucursales/GetBuscarSucursales?UidSucursal=" + item.UidSucursal + "";
+                string _URL = "" + Helpers.Settings.sitio + "/api/Sucursales/GetBuscarSucursales?UidSucursal=" + item.UidSucursal + "";
                 string content = await _client.GetStringAsync(_URL);
                 var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                 App.MVSucursales = JsonConvert.DeserializeObject<VMSucursales>(obj);
 
-                _URL = "https://www.godeliverix.net/api/Imagen/GetImagenDePerfilEmpresa?UidEmpresa=" + App.MVSucursales.UidEmpresa + "";
+                _URL = "" + Helpers.Settings.sitio + "/api/Imagen/GetImagenDePerfilEmpresa?UidEmpresa=" + App.MVSucursales.UidEmpresa + "";
                 content = await _client.GetStringAsync(_URL);
                 obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                 App.MVImagen = JsonConvert.DeserializeObject<VMImagen>(obj);
-                item.STRRUTA = "https://www.godeliverix.net/vista/" + App.MVImagen.STRRUTA;
+                item.STRRUTA = "" + Helpers.Settings.sitio + "/vista/" + App.MVImagen.STRRUTA;
             }
             await navigationPage.PushAsync(new CarritoPage());
             //Navigation.PushAsync(new CarritoPage());
@@ -53,14 +55,10 @@ namespace AppCliente
 
         private void MenuBuscar_Activated(object sender, EventArgs e)
         {
-
-            //ContenidoSearch.IsVisible = true;
         }
 
-        private  void MenuItemBuscar_Activted(object sender, EventArgs e)
+        private void MenuItemBuscar_Activted(object sender, EventArgs e)
         {
-            //PanelNavegacionBuscar.IsVisible = false;
-            //PanelNavegacionCarrito.IsVisible = true;
             Navigation.PushAsync(new BuscarHome());
         }
 
@@ -75,49 +73,40 @@ namespace AppCliente
             PopupNavigation.Instance.PushAsync(new Popup.PupupFiltroBusqueda(btnFitltrosBusquedas, ScrollView_Productos, ScrollView_Empresas, MyListViewBusquedaProductosHome, MyListViewBusquedaEmpresas, PanelProductoNoEncontrados, lbCantidad));
         }
 
-        private void SearchFor_SearchButtonPressed(object sender, EventArgs e)
+        private async void SearchFor_SearchButtonPressed(object sender, EventArgs e)
         {
-            //btnAdelante.IsEnabled = true;
-            //btnAtras.IsEnabled = true;
-            //btnAdelante.IsVisible = true;
-            //btnAtras.IsVisible = true;
-
             string Buscado = "";
 
-            string Hora = string.Empty;
-            if (DateTime.Now.Hour < 10)
-            {
-                Hora = "0" + DateTime.Now.Hour.ToString();
-            }
-            else
-            {
-                Hora = DateTime.Now.Hour.ToString();
-            }
             if (!string.IsNullOrEmpty(searchFor.Text))
             {
                 Buscado = searchFor.Text;
             }
+            Guid UidEstado;
+            Guid UidColonia;
 
-            string hora = Hora + ":" + DateTime.Now.Minute.ToString();
+            if (Helpers.Settings.UidDireccion != string.Empty)
+            {
+                UidEstado = new Guid(App.MVDireccion.ListaDIRECCIONES[0].ESTADO);
+                UidColonia = new Guid(App.MVDireccion.ListaDIRECCIONES[0].COLONIA);
+            }
+            else
+            {
+                UidEstado = new Guid(Helpers.Settings.StrESTADO);
+                UidColonia = new Guid(Helpers.Settings.StrCOLONIA);
+            }
 
             CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
             string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
 
             ScrollView_Productos.Orientation = 0;
 
-            //App.MVProducto.buscarProductosEmpresaDesdeCliente("Giro", hora, Dia, new Guid("d14a0380-e972-4013-a89b-586f54d4e381"), new Guid("63cd1aa3-74ef-4112-8835-fd4400706256"), Buscado);    
             string giro = App.giro;
             string categoria = App.categoria;
             string subcategoria = App.subcategoria;
 
             if (giro == "")
             {
-                giro = AppCliente.App.MVGiro.LISTADEGIRO[0].UIDVM.ToString();
-                //giro = "63cd1aa3-74ef-4112-8835-fd4400706256";
-            }
-            else
-            {
-
+                giro = App.MVGiro.LISTADEGIRO[0].UIDVM.ToString();
             }
             if (categoria == "")
             {
@@ -135,83 +124,92 @@ namespace AppCliente
             {
                 subcategoria = App.subcategoria;
             }
-
             if (App.buscarPor == "")
             {
                 App.buscarPor = "Productos";
             }
 
-
-            Guid Direccion = new Guid(IDDireccionBusqueda.Text);
-
-
             //Busqueda por giro
             if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
             {
                 //giro
-                App.MVProducto.buscarProductosEmpresaDesdeCliente("Giro", Dia, Direccion, new Guid(giro), searchFor.Text);
-                App.MVEmpresa.BuscarEmpresaBusquedaCliente("Giro", Dia, Direccion, new Guid(giro), searchFor.Text);
+                BuscarProductos("Giro", Dia, UidEstado, UidColonia, new Guid(giro), searchFor.Text);
+                BuscarEmpresas("Giro", Dia, UidEstado, UidColonia, new Guid(giro), searchFor.Text);
             }
             else
             //// Busqueda por categoria
             if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
             {
-                App.MVProducto.buscarProductosEmpresaDesdeCliente("Categoria", Dia, Direccion, new Guid(categoria), searchFor.Text);
-                App.MVEmpresa.BuscarEmpresaBusquedaCliente("Giro", Dia, Direccion, new Guid(categoria), searchFor.Text);
+                BuscarProductos("Categoria", Dia, UidEstado, UidColonia, new Guid(categoria), searchFor.Text);
+                BuscarEmpresas("Categoria", Dia, UidEstado, UidColonia, new Guid(giro), searchFor.Text);
             }
             else
             //Busqueda por subcategoria
             if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || !string.IsNullOrWhiteSpace(subcategoria)))
             {
-                App.MVProducto.buscarProductosEmpresaDesdeCliente("Subcategoria", Dia, Direccion, new Guid(subcategoria), searchFor.Text);
-                App.MVEmpresa.BuscarEmpresaBusquedaCliente("Giro", Dia, Direccion, new Guid(subcategoria), searchFor.Text);
+                BuscarProductos("Subcategoria", Dia, UidEstado, UidColonia, new Guid(subcategoria), searchFor.Text);
+                BuscarEmpresas("Subcategoria", Dia, UidEstado, UidColonia, new Guid(giro), searchFor.Text);
             }
             if (App.buscarPor == "Productos")
             {
-
                 foreach (VMProducto item in AppCliente.App.MVProducto.ListaDeProductos)
                 {
                     if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
                     {
-                        App.MVProducto.BuscarProductoPorSucursal("Giro", Dia, Direccion, new Guid(giro), item.UID);
+                        using (HttpClient _WebApi = new HttpClient())
+                        {
+                            string _URL = "" + Helpers.Settings.sitio + "/api/Producto/GetObtenerInformacionDeProductoDeLaSucursal?StrParametroBusqueda=Giro&StrDia=" + Dia + "&UidEstado=" + UidEstado + "&UidColonia=" + UidColonia + "&UidBusquedaCategorias=" + giro + "&UidProducto=" + item.UID + "";
+                            var content = await _WebApi.GetStringAsync(_URL);
+                            var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                            var VProducto = JsonConvert.DeserializeObject<VMProducto>(obj);
+                            item.StrCosto = VProducto.ListaDePreciosSucursales[0].StrCosto;
+                        }
                     }
                     else
                     if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
                     {
-                        App.MVProducto.BuscarProductoPorSucursal("Categoria", Dia, Direccion, new Guid(categoria), item.UID);
+                        using (HttpClient _WebApi = new HttpClient())
+                        {
+                            string _URL = "" + Helpers.Settings.sitio + "/api/Producto/GetObtenerInformacionDeProductoDeLaSucursal?StrParametroBusqueda=Categoria&StrDia=" + Dia + "&UidEstado=" + UidEstado + "&UidColonia=" + UidColonia + "&UidBusquedaCategorias=" + categoria + "&UidProducto=" + item.UID + "";
+                            var content = await _WebApi.GetStringAsync(_URL);
+                            var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                            var VProducto = JsonConvert.DeserializeObject<VMProducto>(obj);
+                            item.StrCosto = VProducto.ListaDePreciosSucursales[0].StrCosto;
+                        }
                     }
                     else
                     if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || !string.IsNullOrWhiteSpace(subcategoria)))
                     {
-                        App.MVProducto.BuscarProductoPorSucursal("Subcategoria", Dia, Direccion, new Guid(subcategoria), item.UID);
+                        using (HttpClient _WebApi = new HttpClient())
+                        {
+                            string _URL = "" + Helpers.Settings.sitio + "/api/Producto/GetObtenerInformacionDeProductoDeLaSucursal?StrParametroBusqueda=Subcategoria&StrDia=" + Dia + "&UidEstado=" + UidEstado + "&UidColonia=" + UidColonia + "&UidBusquedaCategorias=" + subcategoria + "&UidProducto=" + item.UID + "";
+                            var content = await _WebApi.GetStringAsync(_URL);
+                            var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                            var VProducto = JsonConvert.DeserializeObject<VMProducto>(obj);
+                            item.StrCosto = VProducto.ListaDePreciosSucursales[0].StrCosto;
+                        }
                     }
-                    item.StrCosto = App.MVProducto.ListaDePreciosSucursales[0].StrCosto;
                 }
-
-
                 ScrollView_Empresas.IsVisible = false;
                 ScrollView_Productos.IsVisible = true;
 
                 MyListViewBusquedaProductosHome.ItemsSource = null;
                 if (App.MVProducto.ListaDeProductos.Count > 10)
                 {
-                    MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.MVProducto.ListaDeProductos.GetRange(0, 10);
+                    MyListViewBusquedaProductosHome.ItemsSource = App.MVProducto.ListaDeProductos.GetRange(0, 10);
                     CantidadProductosMostrados = 10;
                     lbCantidad.Text = "1-10/" + App.MVProducto.ListaDeProductos.Count;
-                    //btnAtras.IsEnabled = false;
                 }
                 else
                 {
-                    MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.MVProducto.ListaDeProductos;
-                    CantidadProductosMostrados = AppCliente.App.MVProducto.ListaDeProductos.Count;
+                    MyListViewBusquedaProductosHome.ItemsSource = App.MVProducto.ListaDeProductos;
+                    CantidadProductosMostrados = App.MVProducto.ListaDeProductos.Count;
                     lbCantidad.Text = "1-" + App.MVProducto.ListaDeProductos.Count + "/" + App.MVProducto.ListaDeProductos.Count;
-                    //btnAtras.IsVisible = false;
-                    //btnAdelante.IsVisible = false;
                 }
 
                 MyListViewBusquedaEmpresas.ItemsSource = null;
 
-                if (AppCliente.App.MVProducto.ListaDeProductos.Count == 0)
+                if (App.MVProducto.ListaDeProductos.Count == 0)
                 {
                     PanelProductoNoEncontrados.IsVisible = true;
                     ScrollView_Productos.IsVisible = false;
@@ -221,25 +219,22 @@ namespace AppCliente
                     PanelProductoNoEncontrados.IsVisible = false;
                     ScrollView_Productos.IsVisible = true;
                 }
-
             }
             else if (App.buscarPor == "Empresas")
             {
-                int a = AppCliente.App.MVEmpresa.LISTADEEMPRESAS.Count;
+                int a = App.MVEmpresa.LISTADEEMPRESAS.Count;
                 MyListViewBusquedaEmpresas.ItemsSource = null;
                 MyListViewBusquedaProductosHome.ItemsSource = null;
                 for (int i = 0; i < a; i++)
                 {
-                    AppCliente.App.MVEmpresa.LISTADEEMPRESAS[i].StrRuta = "https://www.godeliverix.net/vista" + AppCliente.App.MVEmpresa.LISTADEEMPRESAS[i].StrRuta.Substring(2);
+                    App.MVEmpresa.LISTADEEMPRESAS[i].StrRuta = "" + Helpers.Settings.sitio + "/vista" + App.MVEmpresa.LISTADEEMPRESAS[i].StrRuta.Substring(2);
                 }
 
-
-                MyListViewBusquedaEmpresas.ItemsSource = AppCliente.App.MVEmpresa.LISTADEEMPRESAS;
+                MyListViewBusquedaEmpresas.ItemsSource = App.MVEmpresa.LISTADEEMPRESAS;
                 ScrollView_Empresas.IsVisible = true;
                 ScrollView_Productos.IsVisible = false;
 
-
-                if (AppCliente.App.MVEmpresa.LISTADEEMPRESAS.Count == 0)
+                if (App.MVEmpresa.LISTADEEMPRESAS.Count == 0)
                 {
                     PanelProductoNoEncontrados.IsVisible = true;
                     ScrollView_Empresas.IsVisible = false;
@@ -249,9 +244,7 @@ namespace AppCliente
                     PanelProductoNoEncontrados.IsVisible = false;
                     ScrollView_Empresas.IsVisible = true;
                 }
-
             }
-
             PanelNavegacionCarrito.IsVisible = false;
             PanelNavegacionBuscar.IsVisible = true;
             txtBusquedaActual.Text = Buscado;
@@ -259,47 +252,50 @@ namespace AppCliente
 
         private async void BtnSeleccionarDireccion_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new SeleccionarDirecciones(btnSeleccionarDireccion, IDDireccionBusqueda, MyListViewBusquedaProductosHome, lbCantidad, CantidadProductosMostrados, PanelProductoNoEncontrados, MyListViewBusquedaEmpresas, ScrollView_Productos, ScrollView_Empresas));
+            if (App.Global1 == string.Empty)
+            {
+                await DisplayAlert("Acceso denegado", "No puedes cambiar la direccion sin haber accesado", "Aceptar");
+            }
+            else
+            {
+                await Navigation.PushAsync(new SeleccionarDirecciones(btnSeleccionarDireccion, IDDireccionBusqueda, MyListViewBusquedaProductosHome, lbCantidad, CantidadProductosMostrados, PanelProductoNoEncontrados, MyListViewBusquedaEmpresas, ScrollView_Productos, ScrollView_Empresas));
+            }
+
         }
 
         private async void MyListViewBusquedaEmpresas_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             await PopupNavigation.Instance.PushAsync(new Popup.PopupLoanding());
-            var item = ((ItemTappedEventArgs)e);
+            var item = e;
             VMEmpresas ObjItem = (VMEmpresas)item.Item;
-
-            await Navigation.PushAsync(new ProductoDescripcionEmpresaPage(ObjItem, new Guid(IDDireccionBusqueda.Text)));
+            await Navigation.PushAsync(new ProductoDescripcionEmpresaPage(ObjItem));
             await PopupNavigation.Instance.PopAllAsync();
         }
 
         private async void MyListViewBusquedaProductosHome_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             await PopupNavigation.Instance.PushAsync(new Popup.PopupLoanding());
-            var item = ((ItemTappedEventArgs)e);
+            var item = e;
             VMProducto ObjItem = (VMProducto)item.Item;
-
-            string Hora = string.Empty;
-            if (DateTime.Now.Hour < 10)
+            if (ObjItem != null)
             {
-                Hora = "0" + DateTime.Now.Hour.ToString();
+                CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
+                string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
+
+                //Guid Direccion = App.MVDireccion.ListaDIRECCIONES[0].ID;
+                Guid UidColonia = new Guid(App.UidColoniaABuscar);
+                Guid UidEstado = new Guid(App.UidEstadoABuscar);
+
+                using (HttpClient _WebApi = new HttpClient())
+                {
+                    string _URL = "" + Helpers.Settings.sitio + "/api/Producto/GetObtenerInformacionDeProductoDeLaSucursal?StrParametroBusqueda=Giro&StrDia=" + Dia + "&UidEstado=" + UidEstado + "&UidColonia=" + UidColonia + "&UidBusquedaCategorias=" + App.giro + "&UidProducto=" + ObjItem.UID + "";
+                    var content = await _WebApi.GetStringAsync(_URL);
+                    var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                    var VProducto = JsonConvert.DeserializeObject<VMProducto>(obj);
+                    await Navigation.PushAsync(new ProductoDescripcionPage(ObjItem, VProducto.ListaDePreciosSucursales));
+                    await PopupNavigation.Instance.PopAllAsync();
+                }
             }
-            else
-            {
-                Hora = DateTime.Now.Hour.ToString();
-            }
-
-
-            CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
-            string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
-
-
-            //Guid Direccion = App.MVDireccion.ListaDIRECCIONES[0].ID;
-            Guid Direccion = new Guid(App.DireccionABuscar);
-
-            App.MVProducto.BuscarProductoPorSucursal("Giro", Dia, Direccion, new Guid(App.giro), ObjItem.UID);
-
-            await Navigation.PushAsync(new ProductoDescripcionPage(ObjItem, App.MVProducto.ListaDePreciosSucursales));
-            await PopupNavigation.Instance.PopAllAsync();
         }
 
         private void ButtonMasDeLaLista_Clicked(object sender, EventArgs e)
@@ -324,256 +320,14 @@ namespace AppCliente
 
         }
 
-        private void ImageButton_Clicked_1(object sender, EventArgs e)
-        {
-
-        }
 
         private void SearchFor_TextChanged(object sender, TextChangedEventArgs e)
         {
-
             txtBusquedaActual.Text = searchFor.Text;
         }
 
-        //private void BtnAtras_Clicked(object sender, EventArgs e)
-        //{
-        //    if (CantidadProductosMostrados > 0)
-        //    {
-        //        int mod = CantidadProductosMostrados % 10;
-        //        if (mod==0)
-        //        {
-        //            if (CantidadProductosMostrados>10)
-        //            {
-        //                lbCantidad.Text = ((CantidadProductosMostrados - (20)) + 1) + "-" + (CantidadProductosMostrados-10 ) + "/" + App.ListaDeProductos.Count;
-        //                MyListViewBusquedaProductosHome.ItemsSource = null;
-        //                MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos.GetRange((CantidadProductosMostrados - (20)), 10);
-        //                CantidadProductosMostrados = CantidadProductosMostrados - (10);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            lbCantidad.Text = (CantidadProductosMostrados - (9 + mod )) + "-" + (CantidadProductosMostrados - mod)+"/"+ App.ListaDeProductos.Count;
-        //            MyListViewBusquedaProductosHome.ItemsSource = null;
-        //            MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos.GetRange((CantidadProductosMostrados - (10 + mod)), 10);
-        //            CantidadProductosMostrados = CantidadProductosMostrados - (mod);
-        //        }
-        //    }
-        //    else
-        //    {
-
-        //    }
-        //}
-
-        //private void BtnAdelante_Clicked(object sender, EventArgs e)
-        //{
-        //    if (AppCliente.App.ListaDeProductos.Count> CantidadProductosMostrados)
-        //    {
-        //        if (App.ListaDeProductos.Count>=(CantidadProductosMostrados+10))
-        //        {
-        //            lbCantidad.Text = (CantidadProductosMostrados+1) + "-" + (CantidadProductosMostrados + 10) + "/" + App.ListaDeProductos.Count;
-        //            MyListViewBusquedaProductosHome.ItemsSource = null;
-        //            MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos.GetRange(CantidadProductosMostrados,10);
-        //            CantidadProductosMostrados = CantidadProductosMostrados + 10;
-        //        }
-        //        else
-        //        {
-        //            lbCantidad.Text = CantidadProductosMostrados+"-"+ App.ListaDeProductos.Count + "/" + App.ListaDeProductos.Count;
-        //            MyListViewBusquedaProductosHome.ItemsSource = null;
-        //            int posicion = CantidadProductosMostrados;
-        //            int cantidad= App.ListaDeProductos.Count-CantidadProductosMostrados;
-        //            MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos.GetRange(posicion,cantidad);
-        //            CantidadProductosMostrados = App.ListaDeProductos.Count;
-        //        }
-        //    }
-        //    else
-        //    {
-
-        //    }
-        //}
-
         private void ImageButton_Clicked_2(object sender, EventArgs e)
         {
-
-            //if (string.IsNullOrEmpty(searchFor.Text))
-            //{
-            //    btnAdelante.IsEnabled = true;
-            //    btnAtras.IsEnabled = true;
-            //    btnAdelante.IsVisible = true;
-            //    btnAtras.IsVisible = true;
-
-            //    string Buscado = "";
-
-            //    string Hora = string.Empty;
-            //    if (DateTime.Now.Hour < 10)
-            //    {
-            //        Hora = "0" + DateTime.Now.Hour.ToString();
-            //    }
-            //    else
-            //    {
-            //        Hora = DateTime.Now.Hour.ToString();
-            //    }
-            //    if (!string.IsNullOrEmpty(searchFor.Text))
-            //    {
-            //        Buscado = searchFor.Text;
-            //    }
-
-            //    string hora = Hora + ":" + DateTime.Now.Minute.ToString();
-
-            //    CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
-            //    string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
-
-            //    ScrollView_Productos.Orientation = 0;
-
-            //    //App.MVProducto.buscarProductosEmpresaDesdeCliente("Giro", hora, Dia, new Guid("d14a0380-e972-4013-a89b-586f54d4e381"), new Guid("63cd1aa3-74ef-4112-8835-fd4400706256"), Buscado);    
-            //    string giro = App.giro;
-            //    string categoria = App.categoria;
-            //    string subcategoria = App.subcategoria;
-
-            //    if (giro == "")
-            //    {
-            //        giro = AppCliente.App.MVGiro.LISTADEGIRO[0].UIDVM.ToString();
-            //        //giro = "63cd1aa3-74ef-4112-8835-fd4400706256";
-            //    }
-            //    else
-            //    {
-
-            //    }
-            //    if (categoria == "")
-            //    {
-            //        categoria = "00000000-0000-0000-0000-000000000000";
-            //    }
-            //    else
-            //    {
-            //        categoria = App.categoria;
-            //    }
-            //    if (subcategoria == "")
-            //    {
-            //        subcategoria = "00000000-0000-0000-0000-000000000000";
-            //    }
-            //    else
-            //    {
-            //        subcategoria = App.subcategoria;
-            //    }
-
-            //    if (App.buscarPor == "")
-            //    {
-            //        App.buscarPor = "Productos";
-            //    }
-
-
-            //    Guid Direccion = new Guid(IDDireccionBusqueda.Text);
-
-
-            //    //Busqueda por giro
-            //    if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
-            //    {
-            //        //giro
-            //        App.MVProducto.buscarProductosEmpresaDesdeCliente("Giro", Dia, Direccion, new Guid(giro), searchFor.Text);
-            //        App.MVEmpresa.BuscarEmpresaBusquedaCliente("Giro", Dia, Direccion, new Guid(giro), searchFor.Text);
-            //    }
-            //    else
-            //    //// Busqueda por categoria
-            //    if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
-            //    {
-            //        App.MVProducto.buscarProductosEmpresaDesdeCliente("Categoria", Dia, Direccion, new Guid(categoria), searchFor.Text);
-            //        App.MVEmpresa.BuscarEmpresaBusquedaCliente("Giro", Dia, Direccion, new Guid(categoria), searchFor.Text);
-            //    }
-            //    else
-            //    //Busqueda por subcategoria
-            //    if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || !string.IsNullOrWhiteSpace(subcategoria)))
-            //    {
-            //        App.MVProducto.buscarProductosEmpresaDesdeCliente("Subcategoria", Dia, Direccion, new Guid(subcategoria), searchFor.Text);
-            //        App.MVEmpresa.BuscarEmpresaBusquedaCliente("Giro", Dia, Direccion, new Guid(subcategoria), searchFor.Text);
-            //    }
-            //    if (App.buscarPor == "Productos")
-            //    {
-
-            //        foreach (VMProducto item in AppCliente.App.MVProducto.ListaDeProductos)
-            //        {
-            //            if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
-            //            {
-            //                App.MVProducto.BuscarProductoPorSucursal("Giro", Dia, Direccion, new Guid(giro), item.UID);
-            //            }
-            //            else
-            //            if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
-            //            {
-            //                App.MVProducto.BuscarProductoPorSucursal("Categoria", Dia, Direccion, new Guid(categoria), item.UID);
-            //            }
-            //            else
-            //            if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || !string.IsNullOrWhiteSpace(subcategoria)))
-            //            {
-            //                App.MVProducto.BuscarProductoPorSucursal("Subcategoria", Dia, Direccion, new Guid(subcategoria), item.UID);
-            //            }
-
-            //            item.StrCosto = App.MVProducto.ListaDePreciosSucursales[0].StrCosto;
-            //        }
-
-
-            //        ScrollView_Empresas.IsVisible = false;
-            //        ScrollView_Productos.IsVisible = true;
-
-            //        MyListViewBusquedaProductosHome.ItemsSource = null;
-            //        if (App.MVProducto.ListaDeProductos.Count > 10)
-            //        {
-            //            MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.MVProducto.ListaDeProductos.GetRange(0, 10);
-            //            CantidadProductosMostrados = 10;
-            //            lbCantidad.Text = "1-10/" + App.MVProducto.ListaDeProductos.Count;
-            //            btnAtras.IsEnabled = false;
-            //        }
-            //        else
-            //        {
-            //            MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.MVProducto.ListaDeProductos;
-            //            CantidadProductosMostrados = AppCliente.App.MVProducto.ListaDeProductos.Count;
-            //            lbCantidad.Text = "1-" + App.MVProducto.ListaDeProductos.Count + "/" + App.MVProducto.ListaDeProductos.Count;
-            //            btnAtras.IsVisible = false;
-            //            btnAdelante.IsVisible = false;
-            //        }
-
-            //        MyListViewBusquedaEmpresas.ItemsSource = null;
-
-            //        if (AppCliente.App.MVProducto.ListaDeProductos.Count == 0)
-            //        {
-            //            lbCantidad.Text = "0-0/0";
-            //            PanelProductoNoEncontrados.IsVisible = true;
-            //            ScrollView_Productos.IsVisible = false;
-            //        }
-            //        else
-            //        {
-            //            PanelProductoNoEncontrados.IsVisible = false;
-            //            ScrollView_Productos.IsVisible = true;
-            //        }
-
-            //    }
-            //    else if (App.buscarPor == "Empresas")
-            //    {
-            //        int a = AppCliente.App.MVEmpresa.LISTADEEMPRESAS.Count;
-            //        MyListViewBusquedaEmpresas.ItemsSource = null;
-            //        MyListViewBusquedaProductosHome.ItemsSource = null;
-            //        for (int i = 0; i < a; i++)
-            //        {
-            //            AppCliente.App.MVEmpresa.LISTADEEMPRESAS[i].StrRuta = "http://www.godeliverix.net/vista" + AppCliente.App.MVEmpresa.LISTADEEMPRESAS[i].StrRuta.Substring(2);
-            //        }
-
-
-            //        MyListViewBusquedaEmpresas.ItemsSource = AppCliente.App.MVEmpresa.LISTADEEMPRESAS;
-            //        ScrollView_Empresas.IsVisible = true;
-            //        ScrollView_Productos.IsVisible = false;
-
-
-            //        if (AppCliente.App.MVEmpresa.LISTADEEMPRESAS.Count == 0)
-            //        {
-            //            lbCantidad.Text = "0-0/0";
-            //            PanelProductoNoEncontrados.IsVisible = true;
-            //            ScrollView_Empresas.IsVisible = false;
-            //        }
-            //        else
-            //        {
-            //            PanelProductoNoEncontrados.IsVisible = false;
-            //            ScrollView_Empresas.IsVisible = true;
-            //        }
-
-            //    }
-            //}
             PanelNavegacionCarrito.IsVisible = false;
             PanelNavegacionBuscar.IsVisible = true;
         }
@@ -581,112 +335,260 @@ namespace AppCliente
 
         private async void Iniciar()
         {
-            acloading.IsVisible = true;
-            acloading.IsRunning = true;
-            string _URL = "https://www.godeliverix.net/api/Giro/Get";
+        Iniciar:
+            // Uid de la aplicacion 87b2dcfd-205a-4260-9092-1ce48b28aa4a
+            string _URL = "" + Helpers.Settings.sitio + "/api/Version/Get?id=87b2dcfd-205a-4260-9092-1ce48b28aa4a";
             var content = await _client.GetStringAsync(_URL);
             var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-            App.MVGiro = JsonConvert.DeserializeObject<VMGiro>(obj);
-            //JArray blogPostArray = JArray.Parse(DatosGiros.ToString());
+            var oversion = JsonConvert.DeserializeObject<VMVersion>(obj);
+            string version = VersionTracking.CurrentVersion;
 
-            //App.MVGiro.LISTADEGIRO = blogPostArray.Select(p => new VMGiro
-            //{
-            //    UIDVM = (Guid)p["UIDVM"],
-            //    STRNOMBRE = (string)p["STRNOMBRE"],
-            //    STRDESCRIPCION = (string)p["RUTAIMAGEN"],
-            //    RUTAIMAGEN = (string)p["REFERENCIA"]
-            //}).ToList();
-
-            App.giro = AppCliente.App.MVGiro.LISTADEGIRO[0].UIDVM.ToString();
-
-
-           
-
-
-            CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
-            string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
-
-
-            if (App.MVDireccion.ListaDIRECCIONES.Count != 0)
+            if (oversion.StrVersion == version)
             {
-                PanelProductos.IsVisible = true;
-                PanelDireccionesVacias.IsVisible = false;
-
-                if (AppCliente.App.ListaDeProductos.Count == 0)
+                acloading.IsVisible = true;
+                acloading.IsRunning = true;
+                bool direccionagregada = false;
+                if (string.IsNullOrEmpty(App.Global1))
                 {
-                    Guid Colonia = App.MVDireccion.ListaDIRECCIONES[0].ID;
+                    btnAcceder.IsVisible = true;
+                }
+                else
+                {
+                    btnAcceder.IsVisible = false;
+                }
+                _URL = "" + Helpers.Settings.sitio + "/api/Giro/Get";
+                content = await _client.GetStringAsync(_URL);
+                obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                App.MVGiro = JsonConvert.DeserializeObject<VMGiro>(obj);
 
-                    IDDireccionBusqueda.Text = Colonia.ToString();
+                App.giro = App.MVGiro.LISTADEGIRO[0].UIDVM.ToString();
+                Guid UidEstado = new Guid();
+                Guid UidColonia = new Guid();
 
-                    _URL = "https://www.godeliverix.net/api/Categoria/Get?value=" + App.giro.ToString();
+
+                CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
+                string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
+                //Busca si un usuario no esta registrado
+
+                if (string.IsNullOrEmpty(App.Global1))
+                {
+                    if (Helpers.Settings.UidDireccion != string.Empty)
+                    {
+                        App.MVDireccion.ListaDIRECCIONES.Add(new VMDireccion()
+                        {
+                            ID = new Guid(Helpers.Settings.UidDireccion),
+                            PAIS = Helpers.Settings.StrPAIS,
+                            ESTADO = Helpers.Settings.StrESTADO,
+                            MUNICIPIO = Helpers.Settings.StrMUNICIPIO,
+                            CIUDAD = Helpers.Settings.StrCIUDAD,
+                            COLONIA = Helpers.Settings.StrCOLONIA,
+                            CALLE0 = Helpers.Settings.StrCALLE0,
+                            CALLE1 = Helpers.Settings.StrCALLE1,
+                            CALLE2 = Helpers.Settings.StrCALLE2,
+                            MANZANA = Helpers.Settings.StrMANZANA,
+                            LOTE = Helpers.Settings.StrLOTE,
+                            CodigoPostal = Helpers.Settings.StrCodigoPostal,
+                            REFERENCIA = Helpers.Settings.StrREFERENCIA,
+                            IDENTIFICADOR = Helpers.Settings.StrIDENTIFICADOR,
+                            NOMBRECIUDAD = Helpers.Settings.StrNombreCiudad,
+                            NOMBRECOLONIA = Helpers.Settings.StrNombreColonia
+                        });
+                    }
+                    else
+                    {
+                        App.MVDireccion.ListaDIRECCIONES.Clear();
+                        PanelProductos.IsVisible = false;
+                        PanelDireccionesVacias.IsVisible = true;
+                    }
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(Helpers.Settings.UidDireccion))
+                    {
+                        var action = await DisplayAlert("Nueva direccion ", "Detectamos una nueva ubicacion en " + Helpers.Settings.StrNombreColonia + ", deseas agregarla a tu lista de direcciones?", "Si", "No");
+                        if (action)
+                        {
+                            string _Url = "" + Helpers.Settings.sitio + "/api/Direccion/GetGuardarDireccion?" +
+                                "UidUsuario=" + App.Global1 + "&UidPais=" + Helpers.Settings.StrPAIS + "&UidEstado=" + Helpers.Settings.StrESTADO + "&UidMunicipio=" + Helpers.Settings.StrMUNICIPIO + "&UidCiudad=" + Helpers.Settings.StrCIUDAD + "&UidColonia=" + Helpers.Settings.StrCOLONIA + "&CallePrincipal=" + Helpers.Settings.StrCALLE0 + "&CalleAux1=" + Helpers.Settings.StrCALLE1 + "&CalleAux2=" + Helpers.Settings.StrCALLE2 + "&Manzana=" + Helpers.Settings.StrMANZANA + "&Lote=" + Helpers.Settings.StrLOTE + "&CodigoPostal=" + Helpers.Settings.StrCodigoPostal + "&Referencia=" + Helpers.Settings.StrREFERENCIA + "&NOMBRECIUDAD=s&NOMBRECOLONIA=s&Identificador=" + Helpers.Settings.StrIDENTIFICADOR + "&Latitud=" + Helpers.Settings.StrLatitud + "&Longitud=" + Helpers.Settings.StrLongitud + "&UidDireccion=" + Helpers.Settings.UidDireccion + "";
+                            await _client.GetAsync(_Url);
+
+                            _Url = ("" + Helpers.Settings.sitio + "/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + App.Global1);
+                            string strDirecciones = await _client.GetStringAsync(_Url);
+                            obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
+                            App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
+
+                            Helpers.Settings.StrPAIS = string.Empty;
+                            Helpers.Settings.StrMUNICIPIO = string.Empty;
+                            Helpers.Settings.StrCIUDAD = string.Empty;
+                            Helpers.Settings.StrCALLE0 = string.Empty;
+                            Helpers.Settings.StrCALLE1 = string.Empty;
+                            Helpers.Settings.StrCALLE2 = string.Empty;
+                            Helpers.Settings.StrMANZANA = string.Empty;
+                            Helpers.Settings.StrLongitud = string.Empty;
+                            Helpers.Settings.StrLatitud = string.Empty;
+                            Helpers.Settings.StrLOTE = string.Empty;
+                            Helpers.Settings.StrCodigoPostal = string.Empty;
+                            Helpers.Settings.StrREFERENCIA = string.Empty;
+                            Helpers.Settings.StrIDENTIFICADOR = string.Empty;
+                            Helpers.Settings.StrNombreCiudad = string.Empty;
+                            Helpers.Settings.StrNombreColonia = string.Empty;
+
+                            await DisplayAlert("Direccion agregada", "Se ha agregado la direccion a tus direcciones", "Aceptar");
+                            direccionagregada = true;
+                        }
+                        else
+                        {
+                            Helpers.Settings.UidDireccion = string.Empty;
+                            Helpers.Settings.StrPAIS = string.Empty;
+                            Helpers.Settings.StrESTADO = string.Empty;
+                            Helpers.Settings.StrMUNICIPIO = string.Empty;
+                            Helpers.Settings.StrCIUDAD = string.Empty;
+                            Helpers.Settings.StrCOLONIA = string.Empty;
+                            Helpers.Settings.StrCALLE0 = string.Empty;
+                            Helpers.Settings.StrCALLE1 = string.Empty;
+                            Helpers.Settings.StrCALLE2 = string.Empty;
+                            Helpers.Settings.StrMANZANA = string.Empty;
+                            Helpers.Settings.StrLongitud = string.Empty;
+                            Helpers.Settings.StrLatitud = string.Empty;
+                            Helpers.Settings.StrLOTE = string.Empty;
+                            Helpers.Settings.StrCodigoPostal = string.Empty;
+                            Helpers.Settings.StrREFERENCIA = string.Empty;
+                            Helpers.Settings.StrIDENTIFICADOR = string.Empty;
+                            Helpers.Settings.StrNombreCiudad = string.Empty;
+                            Helpers.Settings.StrNombreColonia = string.Empty;
+
+                            if (App.MVProducto.ListaDelCarrito.Count > 0)
+                            {
+                                App.MVProducto.ListaDelCarrito.Clear();
+                                App.MVProducto.ListaDelInformacionSucursales.Clear();
+                            }
+
+                        }
+                    }
+                }
+                if (App.MVDireccion.ListaDIRECCIONES.Count != 0)
+                {
+                    PanelProductos.IsVisible = true;
+                    PanelDireccionesVacias.IsVisible = false;
+
+                    if (!string.IsNullOrEmpty(App.UidColoniaABuscar) && !string.IsNullOrEmpty(App.UidEstadoABuscar))
+                    {
+                        UidEstado = new Guid(App.UidEstadoABuscar);
+                        UidColonia = new Guid(App.UidColoniaABuscar);
+                    }
+                    else
+                    {
+                        UidEstado = new Guid(App.MVDireccion.ListaDIRECCIONES[0].ESTADO);
+                        UidColonia = new Guid(App.MVDireccion.ListaDIRECCIONES[0].COLONIA);
+                    }
+
+                    _URL = "" + Helpers.Settings.sitio + "/api/Categoria/Get?value=" + App.giro.ToString();
                     content = await _client.GetStringAsync(_URL);
                     obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                     App.MVCategoria = JsonConvert.DeserializeObject<VMCategoria>(obj);
 
-                    Guid Direccion = App.MVDireccion.ListaDIRECCIONES[0].ID;
-                    App.DireccionABuscar = App.MVDireccion.ListaDIRECCIONES[0].ID.ToString();
-
-
-                    _URL = "https://www.godeliverix.net/api/Producto/GetBuscarProductosCliente?StrParametroBusqueda=" + "Giro" + "&StrDia=" + Dia + "&UidDireccion=" + Direccion + "&UidBusquedaCategorias=" + App.giro + "&StrNombreEmpresa=";
-                    content = await _client.GetStringAsync(_URL);
-                    obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                    App.MVProducto = JsonConvert.DeserializeObject<VMProducto>(obj);
-
-                    _URL = "https://www.godeliverix.net/api/Empresa/GetObtenerEmpresaCliente?StrParametroBusqueda=Giro&StrDia=" + Dia + "&UidDireccion=" + Direccion + "&UidBusquedaCategorias=" + App.giro;
-                    content = await _client.GetStringAsync(_URL);
-                    obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                    App.MVEmpresa = JsonConvert.DeserializeObject<VMEmpresas>(obj);
-
-                    //ArrayDatosProductos = JArray.Parse(DatosEmpresa.ToString());
-                    foreach (var item in App.MVEmpresa.LISTADEEMPRESAS)
+                    if (direccionagregada)
                     {
-                        item.StrRuta = "https://godeliverix.net/vista/" + (item.StrRuta.Substring(3));
-                    }
+                        App.UidColoniaABuscar = Helpers.Settings.StrCOLONIA;
+                        App.UidEstadoABuscar = Helpers.Settings.StrESTADO;
+                        App.DireccionABuscar = Helpers.Settings.UidDireccion;
 
-                    foreach (VMProducto item in AppCliente.App.MVProducto.ListaDeProductos)
+                        Helpers.Settings.StrCOLONIA = string.Empty;
+                        Helpers.Settings.StrESTADO = string.Empty;
+                        Helpers.Settings.UidDireccion = string.Empty;
+                    }
+                    else
                     {
-                        App.MVProducto.BuscarProductoPorSucursal("Giro", Dia, Colonia, new Guid(App.giro), item.UID);
-                        item.StrCosto = App.MVProducto.ListaDePreciosSucursales[0].StrCosto;
+                        App.UidColoniaABuscar = App.MVDireccion.ListaDIRECCIONES[0].COLONIA;
+                        App.UidEstadoABuscar = App.MVDireccion.ListaDIRECCIONES[0].ESTADO;
+                        App.DireccionABuscar = App.MVDireccion.ListaDIRECCIONES[0].ID.ToString();
                     }
-                    for (int i = 0; i < AppCliente.App.MVProducto.ListaDeProductos.Count; i++)
+                    VMProducto oBusquedaproducto = new VMProducto();
+                    using (HttpClient _WebApi = new HttpClient())
                     {
-                        App.ListaDeProductos.Add(App.MVProducto.ListaDeProductos[i]);
+                        _URL = "" + Helpers.Settings.sitio + "/api/Producto/GetBuscarProductosCliente?StrParametroBusqueda=Giro&StrDia=" + Dia + "&UidEstado=" + UidEstado + "&UidColonia=" + UidColonia + "&UidBusquedaCategorias=" + App.giro + "&StrNombreEmpresa=" + txtBusquedaActual.Text + "";
+                        content = await _WebApi.GetStringAsync(_URL);
+                        obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                        oBusquedaproducto = JsonConvert.DeserializeObject<VMProducto>(obj);
                     }
-                    for (int i = 0; i < App.MVEmpresa.LISTADEEMPRESAS.Count; i++)
+                    if (oBusquedaproducto.ListaDeProductos != null)
                     {
-                        App.LISTADEEMPRESAS.Add(App.MVEmpresa.LISTADEEMPRESAS[i]);
+                        foreach (VMProducto item in oBusquedaproducto.ListaDeProductos)
+                        {
+                            using (HttpClient _WebApi = new HttpClient())
+                            {
+                                string Cadena = "" + Helpers.Settings.sitio + "/api/Producto/GetObtenerInformacionDeProductoDeLaSucursal?StrParametroBusqueda=Giro&StrDia=" + Dia + "&UidEstado=" + UidEstado + "&UidColonia=" + UidColonia + "&UidBusquedaCategorias=" + App.giro + "&UidProducto=" + item.UID + "";
+                                content = await _WebApi.GetStringAsync(Cadena);
+                                obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                                var VProducto = JsonConvert.DeserializeObject<VMProducto>(obj);
+                                item.StrCosto = VProducto.ListaDePreciosSucursales[0].StrCosto;
+                            }
+                        }
+                        for (int i = 0; i < oBusquedaproducto.ListaDeProductos.Count; i++)
+                        {
+                            App.ListaDeProductos.Add(oBusquedaproducto.ListaDeProductos[i]);
+                        }
+                        PanelProductoNoEncontrados.IsVisible = false;
+                        ListaDeProductosHome = App.ListaDeProductos;
+
+                        MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos;
+                        CantidadProductosMostrados = App.ListaDeProductos.Count;
+                        lbCantidad.Text = App.ListaDeProductos.Count + " Productos disponibles";
                     }
-                }
+                    if (string.IsNullOrEmpty(App.Global1))
+                    {
 
-
-                ListaDeProductosHome = AppCliente.App.ListaDeProductos;
-
-                MyListViewBusquedaProductosHome.ItemsSource = AppCliente.App.ListaDeProductos;
-                CantidadProductosMostrados = AppCliente.App.ListaDeProductos.Count;
-                lbCantidad.Text = App.ListaDeProductos.Count + " Productos disponibles";
-
-                if (App.DireccionABuscar != "")
-                {
-                    btnSeleccionarDireccion.Text = "ENTREGAR EN " + AppCliente.App.MVDireccion.ListaDIRECCIONES.Find(x => x.ID == new Guid(App.DireccionABuscar)).IDENTIFICADOR + " >";
+                        btnSeleccionarDireccion.Text = "ENTREGAR EN " + App.MVDireccion.ListaDIRECCIONES.Find(x => x.ID == new Guid(App.DireccionABuscar)).IDENTIFICADOR + " >";
+                    }
+                    else
+                    if (App.DireccionABuscar != "")
+                    {
+                        btnSeleccionarDireccion.Text = "ENTREGAR A " + App.MVUsuarios.StrUsuario + " EN " + App.MVDireccion.ListaDIRECCIONES.Find(x => x.ID == new Guid(App.DireccionABuscar)).IDENTIFICADOR + " >";
+                    }
+                    else
+                    {
+                        btnSeleccionarDireccion.Text = "ENTREGAR A " + App.MVUsuarios.StrUsuario + " EN " + App.MVDireccion.ListaDIRECCIONES[0].IDENTIFICADOR + " >";
+                    }
+                    if (App.ListaDeProductos.Count == 0)
+                    {
+                        lbCantidad.Text = "0-0/0";
+                        PanelProductoNoEncontrados.IsVisible = true;
+                    }
+                    acloading.IsRunning = false;
+                    acloading.IsVisible = false;
                 }
                 else
                 {
-                    btnSeleccionarDireccion.Text = "ENTREGAR EN " + AppCliente.App.MVDireccion.ListaDIRECCIONES[0].IDENTIFICADOR + " >";
-                }
-                if (AppCliente.App.ListaDeProductos.Count == 0)
-                {
-                    lbCantidad.Text = "0-0/0";
-                    PanelProductoNoEncontrados.IsVisible = true;
-                }
-                acloading.IsRunning = false;
-                acloading.IsVisible = false;
+                    acloading.IsRunning = false;
+                    acloading.IsVisible = false;
 
+                    PanelProductos.IsVisible = false;
+                    PanelDireccionesVacias.IsVisible = true;
+                }
             }
             else
             {
-                PanelProductos.IsVisible = false;
-                PanelDireccionesVacias.IsVisible = true;
+                var action = await DisplayAlert("Actualizacion disponible", "Actualizar a la version " + oversion.StrVersion + "", "Aceptar", "Cancelar");
+                if (action)
+                {
+                    var urlStore = "";
+                    if (Device.RuntimePlatform == Device.Android)
+                    {
+                        urlStore = "https://play.google.com/store/apps/details?id=com.CompuAndSoft.GDCliente";
+                    }
+                    if (Device.RuntimePlatform == Device.iOS)
+                    {
+                        urlStore = "";
+                    }
+                    Device.OpenUri(new Uri(urlStore));
+                }
+                else
+                {
+                    goto Iniciar;
+                }
             }
+
+
         }
 
         private void BtnAgregarDireccion_Clicked(object sender, EventArgs e)
@@ -694,8 +596,81 @@ namespace AppCliente
             var objeto = new MasterMenuMenuItem { Id = 3, Title = "Direcciones", TargetType = typeof(UsuarioDirecciones) };
             var Page = (Page)Activator.CreateInstance(objeto.TargetType);
             App app = Application.Current as App;
-            MasterDetailPage md = (MasterDetailPage) app.MainPage;
+            App.Navegacion = Page.GetType().Name;
+            MasterDetailPage md = (MasterDetailPage)app.MainPage;
+            md.Detail = new NavigationPage(Page);
+        }
 
+        protected async void BuscarProductos(string StrParametroBusqueda, string StrDia, Guid UidEstado, Guid UidColonia, Guid UidBusquedaCategorias, string StrNombreEmpresa)
+        {
+            acloading.IsRunning = true;
+            acloading.IsVisible = true;
+            using (HttpClient _WebApi = new HttpClient())
+            {
+                string _URL = "" + Helpers.Settings.sitio + "/api/Producto/GetBuscarProductosCliente?StrParametroBusqueda=" + StrParametroBusqueda + "&StrDia=" + StrDia + "&UidEstado=" + UidEstado + "&UidColonia=" + UidColonia + "&UidBusquedaCategorias=" + UidBusquedaCategorias + "&StrNombreEmpresa=" + StrNombreEmpresa + "";
+                var content = await _WebApi.GetStringAsync(_URL);
+                var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                App.MVProducto = JsonConvert.DeserializeObject<VMProducto>(obj);
+            }
+            if (App.MVProducto.ListaDeProductos != null)
+            {
+                foreach (VMProducto item in App.MVProducto.ListaDeProductos)
+                {
+                    using (HttpClient _WebApi = new HttpClient())
+                    {
+                        string Cadena = "" + Helpers.Settings.sitio + "/api/Producto/GetObtenerInformacionDeProductoDeLaSucursal?StrParametroBusqueda=Giro&StrDia=" + StrDia + "&UidEstado=" + UidEstado + "&UidColonia=" + UidColonia + "&UidBusquedaCategorias=" + App.giro + "&UidProducto=" + item.UID + "";
+                        var content = await _WebApi.GetStringAsync(Cadena);
+                        var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                        var VProducto = JsonConvert.DeserializeObject<VMProducto>(obj);
+                        item.StrCosto = VProducto.ListaDePreciosSucursales[0].StrCosto;
+                    }
+                }
+                for (int i = 0; i < App.MVProducto.ListaDeProductos.Count; i++)
+                {
+                    App.ListaDeProductos.Add(App.MVProducto.ListaDeProductos[i]);
+                }
+                PanelProductoNoEncontrados.IsVisible = false;
+
+                ListaDeProductosHome = App.ListaDeProductos;
+
+                MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos;
+                CantidadProductosMostrados = App.ListaDeProductos.Count;
+                lbCantidad.Text = App.ListaDeProductos.Count + " Productos disponibles";
+            }
+            acloading.IsRunning = false;
+            acloading.IsVisible = false;
+        }
+        protected async void BuscarEmpresas(string StrParametroBusqueda, string StrDia, Guid UidEstado, Guid UidColonia, Guid UidBusquedaCategorias, string StrNombreEmpresa)
+        {
+            string _URL = "" + Helpers.Settings.sitio + "/api/Empresa/GetObtenerEmpresaCliente?StrParametroBusqueda=" + StrParametroBusqueda + "&StrDia=" + StrDia + "&UidColonia=" + UidColonia + "&UidEstado=" + UidEstado + "&UidBusquedaCategorias=" + UidBusquedaCategorias + "&StrNombreEmpresa=" + StrNombreEmpresa + "";
+            string content;
+            using (HttpClient _webApi = new HttpClient())
+            {
+                content = await _webApi.GetStringAsync(_URL);
+            }
+            string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+            App.MVEmpresa = JsonConvert.DeserializeObject<VMEmpresas>(obj);
+
+            if (App.MVEmpresa.LISTADEEMPRESAS != null)
+            {
+                foreach (var item in App.MVEmpresa.LISTADEEMPRESAS)
+                {
+                    item.StrRuta = "" + Helpers.Settings.sitio + "/vista/" + (item.StrRuta.Substring(3));
+                }
+                for (int i = 0; i < App.MVEmpresa.LISTADEEMPRESAS.Count; i++)
+                {
+                    App.LISTADEEMPRESAS.Add(App.MVEmpresa.LISTADEEMPRESAS[i]);
+                }
+            }
+        }
+
+        private void btnAcceder_Clicked(object sender, EventArgs e)
+        {
+            var objeto = new MasterMenuMenuItem { Id = 3, Title = "Login", TargetType = typeof(Login) };
+            var Page = (Page)Activator.CreateInstance(objeto.TargetType);
+            App app = Application.Current as App;
+            App.Navegacion = Page.GetType().Name;
+            MasterDetailPage md = (MasterDetailPage)app.MainPage;
             md.Detail = new NavigationPage(Page);
         }
     }

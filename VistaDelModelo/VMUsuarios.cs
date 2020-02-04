@@ -68,6 +68,8 @@ namespace VistaDelModelo
             set { _apellllidoMaterno = value; }
         }
 
+
+
         private string _fechaDeNacimiento;
 
         public string DtmFechaDeNacimiento
@@ -160,6 +162,11 @@ namespace VistaDelModelo
 
         #region Metodos
 
+        public string ObtenerFolio(string uidUsuario)
+        {
+            oDbusuarios = new DbUsuarios();
+            return oDbusuarios.ObtenerFolioUsuario(uidUsuario);
+        }
         public void CargaPerfilesDeUsuario(string perfil)
         {
             Perfil = new List<Perfiles>();
@@ -466,6 +473,38 @@ namespace VistaDelModelo
                         this.StrPerfil = item["Perfil"].ToString().ToUpper();
                     }
                 }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public string ObtenerHoraActual(string UidEstado)
+        {
+            LISTADEUSUARIOS = new List<VMUsuarios>();
+            DataTable Dt = new DataTable();
+            string Hora = "";
+            try
+            {
+                SqlCommand CMD = new SqlCommand()
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    CommandText = "asp_ObtenerHoraActual"
+                };
+                if (!string.IsNullOrEmpty(UidEstado))
+                {
+                    CMD.Parameters.Add("@UidEstado", SqlDbType.UniqueIdentifier);
+                    CMD.Parameters["@UidEstado"].Value = new Guid(UidEstado);
+                }
+
+                Dt = oDbusuarios.Busquedas(CMD);
+                foreach (DataRow item in Dt.Rows)
+                {
+                    Hora = item["HoraActual"].ToString();
+                }
+                return Hora;
             }
             catch (Exception)
             {

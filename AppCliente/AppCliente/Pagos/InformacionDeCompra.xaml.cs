@@ -74,7 +74,7 @@ namespace AppCliente.Pagos
         }
         private async void cargaMonedero()
         {
-            string _Url = $"http://godeliverix.net/api/Monedero/Get?" +
+            string _Url = $""+Helpers.Settings.sitio+"/api/Monedero/Get?" +
                                 $"id={App.Global1}";
             var content = "";
             using (HttpClient _client = new HttpClient())
@@ -89,7 +89,7 @@ namespace AppCliente.Pagos
         {
             using (var _webApi = new HttpClient())
             {
-                string url = "https://www.godeliverix.net/api/Direccion/GetDireccionCompleta?UidDireccion=" + App.DireccionABuscar + "";
+                string url = "" + Helpers.Settings.sitio + "/api/Direccion/GetDireccionCompleta?UidDireccion=" + App.DireccionABuscar + "";
                 var content = await _webApi.GetStringAsync(url);
                 var obj = JsonConvert.DeserializeObject<ResponseHelper>(content.ToString()).Data.ToString();
                 var MDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
@@ -104,6 +104,8 @@ namespace AppCliente.Pagos
 
         private async void btnConfirmarPago_Clicked(object sender, EventArgs e)
         {
+            string _Url = string.Empty;
+            var content = "";
             switch (TipoDeFormaDePago)
             {
                 //Efectivo
@@ -115,7 +117,28 @@ namespace AppCliente.Pagos
                     break;
                 //Tarjeta
                 case "30545834-7FFE-4D1A-AA94-D6E569371C60":
-                    await Navigation.PushAsync(new PagoTarjeta(TipoDeFormaDePago));
+
+                    _Url = $"" + Helpers.Settings.sitio + "/api/Usuario/GetObtenerFolioCliente?" +
+                                 $"UidUsuario={App.Global1}" + "";
+                    var FolioCliente = "";
+                    using (HttpClient _client = new HttpClient())
+                    {
+                        content = await _client.GetStringAsync(_Url);
+                        FolioCliente = JsonConvert.DeserializeObject<ResponseHelper>(content.ToString()).Data.ToString();
+                    }
+                    //_Url = string.Empty;
+                    //content = string.Empty;
+                    //_Url = $"http://godeliverix.net/api/Pagos/GetObtenerFolioPagoConTarjeta";
+                    //VMPagos opago = new VMPagos();
+                    //using (HttpClient _client = new HttpClient())
+                    //{
+                    //    content = await _client.GetStringAsync(_Url);
+                    //    var obj = JsonConvert.DeserializeObject<ResponseHelper>(content.ToString()).Data.ToString();
+                    //    opago = JsonConvert.DeserializeObject<VMPagos>(obj);
+                    //}
+
+                    //await Navigation.PushAsync(new PagoTarjeta(TipoDeFormaDePago, FolioCliente,opago.StrFolioPagoTarjeta));
+                    await Navigation.PushAsync(new PagoTarjeta(TipoDeFormaDePago, FolioCliente));
                     //await Navigation.PopAsync();
                     break;
                 //Monedero
@@ -129,12 +152,12 @@ namespace AppCliente.Pagos
                     {
                         MVPago.EnviarOrdenASucursales(TotalPagar, App.Global1, App.DireccionABuscar, TipoDeFormaDePago, Guid.NewGuid(), Guid.NewGuid());
 
-                        string _Url = $"http://godeliverix.net/api/Monedero/GetMovimientoMonedero?" +
-                                $"UidUsuario={App.Global1}" + $"&TipoDeMovimiento=6C7F4C2E-0D27-4200-9485-7BE331066D33" +
-                                $"&Concepto=DCA75F23-5DDC-4EA5-B088-6D5B187F76F4" +
-                                $"&DireccionMovimiento=" + App.DireccionABuscar + "" +
-                                $"&Monto=" + TotalPagar + "";
-                        var content = "";
+                        _Url = $"" + Helpers.Settings.sitio + "/api/Monedero/GetMovimientoMonedero?" +
+                               $"UidUsuario={App.Global1}" + $"&TipoDeMovimiento=6C7F4C2E-0D27-4200-9485-7BE331066D33" +
+                               $"&Concepto=DCA75F23-5DDC-4EA5-B088-6D5B187F76F4" +
+                               $"&DireccionMovimiento=" + App.DireccionABuscar + "" +
+                               $"&Monto=" + TotalPagar + "";
+                        content = "";
                         using (HttpClient _client = new HttpClient())
                         {
                             content = await _client.GetStringAsync(_Url);

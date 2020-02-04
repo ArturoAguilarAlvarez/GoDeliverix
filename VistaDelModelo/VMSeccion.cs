@@ -107,7 +107,36 @@ namespace VistaDelModelo
             }
         }
 
-        public void Buscar(Guid UIDSECCION = new Guid(), Guid UIDOFERTA = new Guid(), string NOMBRE = "", string HORAINICIO = "", string HORAFIN = "", string Estatus = "", Guid UidDirecccion = new Guid())
+        public void BuscarSeccion(string UidSeccionProducto)
+        {
+            SqlCommand Comando = new SqlCommand();
+            ListaDeSeccion.Clear();
+            Consultas = new Conexion();
+            try
+            {
+                Comando.CommandType = CommandType.StoredProcedure;
+                Comando.CommandText = "asp_ObtenerHoraFinalDeSeccion";
+
+                if (!string.IsNullOrEmpty(UidSeccionProducto))
+                {
+
+                    Comando.Parameters.Add("@UidSeccionProducto", SqlDbType.UniqueIdentifier);
+                    Comando.Parameters["@UidSeccionProducto"].Value = new Guid(UidSeccionProducto);
+
+                    foreach (DataRow item in Consultas.Busquedas(Comando).Rows)
+                    {
+                        StrHoraFin = item["HoraFinal"].ToString();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public void Buscar(Guid UIDSECCION = new Guid(), Guid UIDOFERTA = new Guid(), string NOMBRE = "", string HORAINICIO = "", string HORAFIN = "", string Estatus = "", Guid UidDirecccion = new Guid(), string UidEstado = "", string UidColonia = "")
         {
             SqlCommand Comando = new SqlCommand();
             ListaDeSeccion.Clear();
@@ -127,6 +156,16 @@ namespace VistaDelModelo
                     {
                         Comando.Parameters.Add("@UidDireccion", SqlDbType.UniqueIdentifier);
                         Comando.Parameters["@UidDireccion"].Value = UidDirecccion;
+                    }
+                    if (!string.IsNullOrEmpty(UidEstado))
+                    {
+                        Comando.Parameters.Add("@UidEstado", SqlDbType.UniqueIdentifier);
+                        Comando.Parameters["@UidEstado"].Value = new Guid(UidEstado);
+                    }
+                    if (!string.IsNullOrEmpty(UidColonia))
+                    {
+                        Comando.Parameters.Add("@UidColonia", SqlDbType.UniqueIdentifier);
+                        Comando.Parameters["@UidColonia"].Value = new Guid(UidColonia);
                     }
 
                     if (NOMBRE != string.Empty && NOMBRE != "")

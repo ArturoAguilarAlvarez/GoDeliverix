@@ -12,28 +12,28 @@ using Xamarin.Forms.Xaml;
 
 namespace AppCliente
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PerfilDireccionesPage2 : ContentPage
-	{
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class PerfilDireccionesPage2 : ContentPage
+    {
         HttpClient _client = new HttpClient();
 
-        public PerfilDireccionesPage2 ()
-		{
-			InitializeComponent ();
+        public PerfilDireccionesPage2()
+        {
+            InitializeComponent();
 
 
-            for (int i = 0; i < AppCliente.App.MVDireccion.ListaDIRECCIONES.Count; i++)
+            for (int i = 0; i < App.MVDireccion.ListaDIRECCIONES.Count; i++)
             {
-                AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Clicked = false;
+                App.MVDireccion.ListaDIRECCIONES[i].Clicked = false;
             }
 
-            MyListViewDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;
+            MyListViewDirecciones.ItemsSource = App.MVDireccion.ListaDIRECCIONES;
 
         }
 
         private void MyListViewDirecciones_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            var item = ((ItemTappedEventArgs)e);
+            var item = e;
             VMDireccion ObjItem = (VMDireccion)item.Item;
             if (ObjItem.Clicked)
             {
@@ -42,15 +42,15 @@ namespace AppCliente
             }
             else
             {
-                for (int i = 0; i < AppCliente.App.MVDireccion.ListaDIRECCIONES.Count; i++)
+                for (int i = 0; i < App.MVDireccion.ListaDIRECCIONES.Count; i++)
                 {
-                    AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Clicked = false;
+                    App.MVDireccion.ListaDIRECCIONES[i].Clicked = false;
                 }
                 ObjItem.Clicked = true;
                 txtIDDireccionn.Text = ObjItem.ID.ToString();
             }
             MyListViewDirecciones.ItemsSource = null;
-            MyListViewDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;
+            MyListViewDirecciones.ItemsSource = App.MVDireccion.ListaDIRECCIONES;
         }
 
         private void BtnNuevo_Clicked(object sender, EventArgs e)
@@ -89,28 +89,20 @@ namespace AppCliente
                 if (action)
                 {
                     Guid Gui = new Guid(txtIDDireccionn.Text);
-                    int index = AppCliente.App.MVDireccion.ListaDIRECCIONES.FindIndex(x => x.ID == Gui);
-                    //int index = MVTelefono.ListaDeTelefonos.FindIndex(x => x.ID == Gui);
-
-
-                    //AppCliente.App.MVDireccion.QuitaDireeccionDeLista(txtIDDireccionn.Text);
-                    //AppCliente.App.MVDireccion.EliminaDireccionUsuario(txtIDDireccionn.Text);
-
-                    var tex = ("http://www.godeliverix.net/api/Direccion/DeleteDireccionUsuario?UidDireccion=" + txtIDDireccionn.Text);
+                    int index = App.MVDireccion.ListaDIRECCIONES.FindIndex(x => x.ID == Gui);
+                    //Elimina direccion
+                    var tex = ("" + Helpers.Settings.sitio + "/api/Direccion/DeleteDireccionUsuario?UidDireccion=" + txtIDDireccionn.Text);
                     string strDirecciones = await _client.GetStringAsync(tex);
-
-                    tex = ("http://www.godeliverix.net/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + AppCliente.App.Global1);
+                    //Obtiene direcciones
+                    tex = ("" + Helpers.Settings.sitio + "/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + App.Global1);
                     strDirecciones = await _client.GetStringAsync(tex);
                     var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
                     App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
-
-                   // AppCliente.App.MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
                     MyListViewDirecciones.ItemsSource = null;
-                    MyListViewDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;
+                    MyListViewDirecciones.ItemsSource = App.MVDireccion.ListaDIRECCIONES;
                     txtIDDireccionn.Text = "0";
                 }
             }
-
         }
     }
 }

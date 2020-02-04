@@ -1,6 +1,10 @@
-﻿using System;
+﻿using AppCliente.ViewModel;
+using AppCliente.WebApi;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using VistaDelModelo;
@@ -12,7 +16,7 @@ namespace AppCliente
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class CarritoDetalleSucursal : ContentPage
     {
-        VMProducto ObjItem;
+        MVMProductos ObjItem;
         Label txtCantidad;
         Label txtsubtotal;
         Label txtTotalEnvio;
@@ -31,7 +35,7 @@ namespace AppCliente
 
         }
 
-        public CarritoDetalleSucursal(VMProducto ObjItem, Label txtCantidad, Label txtSubtotal, Label txtTotalEnvio, ListView MyListViewCarritoEmpresa, Button btnPagar, Button btnPagar2)
+        public CarritoDetalleSucursal(MVMProductos ObjItem, Label txtCantidad, Label txtSubtotal, Label txtTotalEnvio, ListView MyListViewCarritoEmpresa, Button btnPagar, Button btnPagar2)
         {
             InitializeComponent();
 
@@ -55,39 +59,98 @@ namespace AppCliente
             }
             MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeDetallesDeOrden;
         }
-        
-        public CarritoDetalleSucursal(VMProducto ObjItem,  ListView MyListViewCarritoEmpresa, Button btnPagar)
+
+        public CarritoDetalleSucursal(MVMProductos ObjItem, ListView MyListViewCarritoEmpresa, Button btnPagar)
         {
             InitializeComponent();
 
             this.btnPagar = btnPagar;
-            
-
-
             this.MyListViewCarritoEmpresa = MyListViewCarritoEmpresa;
+            this.ObjItem = ObjItem;
+            CargaProductos();
+        }
+        protected async void CargaProductos()
+        {
             App.MVProducto.ListaDeDetallesDeOrden.Clear();
+            List<MVMProductos> ListaDeDetallesDeOrden = new List<MVMProductos>();
+            List<MVMProductos> listaDelCarrito = new List<MVMProductos>();
+
             for (int i = 0; i < App.MVProducto.ListaDelCarrito.Count; i++)
             {
-                App.MVProducto.ListaDelCarrito[i].IsVisible = false;
-                if (ObjItem.UidSucursal == App.MVProducto.ListaDelCarrito[i].UidSucursal)
-                {
-                    App.MVProducto.ListaDeDetallesDeOrden.Add(App.MVProducto.ListaDelCarrito[i]);
-                }
-                this.ObjItem = ObjItem;
-            }
-            MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeDetallesDeOrden;
-        }
+                HttpClient _WebApi = new HttpClient();
+                string _URL = "" + Helpers.Settings.sitio + "/api/Seccion/GetBuscaSeccion?UIDSECCIONProducto=" + App.MVProducto.ListaDelCarrito[i].UidSeccionPoducto.ToString() + "";
+                var content = await _WebApi.GetStringAsync(_URL);
+                var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                var oSeccion = JsonConvert.DeserializeObject<VMSeccion>(obj);
 
-        private void BtnDistribuidora_Clicked(object sender, EventArgs e)
+                _URL = "" + Helpers.Settings.sitio + "/api/Usuario/GetObtenerHora?UidEstado=" + App.UidEstadoABuscar + "";
+                content = await _WebApi.GetStringAsync(_URL);
+                obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                DateTime HoraActual = DateTime.Parse(obj);
+
+                DateTime HoraSeccion = DateTime.Parse(oSeccion.StrHoraFin);
+                TimeSpan TiempoRestante = new TimeSpan(0, 10, 0);
+                TimeSpan Diferencia = new TimeSpan();
+                Diferencia = (HoraSeccion - HoraActual);
+                Color ocolor = new Color();
+                if (HoraActual > HoraSeccion)
+                {
+                    ocolor = Color.Red;
+                }
+                else
+                {
+                    ocolor = Color.BlanchedAlmond;
+                }
+                cantidad = cantidad + App.MVProducto.ListaDelCarrito[i].Cantidad;
+                decimal a = decimal.Parse(App.MVProducto.ListaDelCarrito[i].StrCosto);
+                listaDelCarrito.Add(new MVMProductos()
+                {
+                    UidRegistroProductoEnCarrito = App.MVProducto.ListaDelCarrito[i].UidRegistroProductoEnCarrito,
+                    UidSeccionPoducto = App.MVProducto.ListaDelCarrito[i].UidSeccionPoducto,
+                    Total = App.MVProducto.ListaDelCarrito[i].Total,
+                    Subtotal = App.MVProducto.ListaDelCarrito[i].Subtotal,
+                    CostoEnvio = App.MVProducto.ListaDelCarrito[i].CostoEnvio,
+                    UID = App.MVProducto.ListaDelCarrito[i].UID,
+                    UidSucursal = App.MVProducto.ListaDelCarrito[i].UidSucursal,
+                    STRNOMBRE = App.MVProducto.ListaDelCarrito[i].STRNOMBRE,
+                    StrCosto = App.MVProducto.ListaDelCarrito[i].StrCosto.ToString(),
+                    Empresa = App.MVProducto.ListaDelCarrito[i].Empresa,
+                    STRRUTA = App.MVProducto.ListaDelCarrito[i].STRRUTA,
+                    Cantidad = App.MVProducto.ListaDelCarrito[i].Cantidad,
+                    UidNota = App.MVProducto.ListaDelCarrito[i].UidNota,
+                    StrNota = App.MVProducto.ListaDelCarrito[i].StrNota,
+                    CColor = ocolor
+                });
+            }
+            for (int i = 0; i < listaDelCarrito.Count; i++)
+            {
+                listaDelCarrito[i].IsVisible = false;
+                if (ObjItem.UidSucursal == listaDelCarrito[i].UidSucursal)
+                {
+                    ListaDeDetallesDeOrden.Add(listaDelCarrito[i]);
+                }
+            }
+            MyListViewBusquedaProductos.ItemsSource = ListaDeDetallesDeOrden;
+        }
+        private async void BtnDistribuidora_Clicked(object sender, EventArgs e)
         {
 
-            App.MVTarifario.BuscarTarifario("Cliente", ZonaEntrega: App.DireccionABuscar, uidSucursal: ObjItem.UidSucursal.ToString());
-            Navigation.PushAsync(new SeleccionarDistribuidoraCarrito(ObjItem));
+            using (HttpClient _WebApiGoDeliverix = new HttpClient())
+            {
+                string url = "" + Helpers.Settings.sitio + "/api/Tarifario/GetBuscarTarifario?TipoDeBusqueda=Cliente&ZonaEntrega=" + App.UidColoniaABuscar + "&uidSucursal=" + ObjItem.UidSucursal.ToString() + "";
+
+                string content = await _WebApiGoDeliverix.GetStringAsync(url);
+                string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                App.MVTarifario = JsonConvert.DeserializeObject<VMTarifario>(obj);
+            }
+
+            //App.MVTarifario.BuscarTarifario("Cliente", ZonaEntrega: App.UidColoniaABuscar, uidSucursal: ObjItem.UidSucursal.ToString());
+            //await Navigation.PushAsync(new SeleccionarDistribuidoraCarrito(ObjItem));
         }
 
         private void ButtonMenos_Clicked(object sender, EventArgs e)
         {
-            var item = AppCliente.App.MVProducto.ListaDeDetallesDeOrden.Find(x => x.IsVisible == true);
+            var item = App.MVProducto.ListaDeDetallesDeOrden.Find(x => x.IsVisible == true);
 
             App.MVProducto.QuitarDelCarrito(item.UidRegistroProductoEnCarrito);
             MyListViewBusquedaProductos.ItemsSource = null;
@@ -97,14 +160,13 @@ namespace AppCliente
 
             ActualizarCarrito();
 
-            MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeDetallesDeOrden;
+            //MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeDetallesDeOrden;
 
         }
 
         private void ButtonMas_Clicked_1(object sender, EventArgs e)
         {
-
-            var item = AppCliente.App.MVProducto.ListaDeDetallesDeOrden.Find(x => x.IsVisible == true);
+            var item = App.MVProducto.ListaDeDetallesDeOrden.Find(x => x.IsVisible == true);
             Guid seccion = new Guid();
             App.MVProducto.AgregaAlCarrito(item.UidRegistroProductoEnCarrito, item.UidSucursal, seccion, "1", RegistroProductoEnCarrito: item.UidRegistroProductoEnCarrito);
 
@@ -118,7 +180,7 @@ namespace AppCliente
 
         private void ButtonEliminar_Clicked(object sender, EventArgs e)
         {
-            var item = AppCliente.App.MVProducto.ListaDeDetallesDeOrden.Find(x => x.IsVisible == true);
+            var item = App.MVProducto.ListaDeDetallesDeOrden.Find(x => x.IsVisible == true);
 
             App.MVProducto.EliminaProductoDelCarrito(item.UidRegistroProductoEnCarrito);
 
@@ -129,29 +191,7 @@ namespace AppCliente
             MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeDetallesDeOrden;
 
             ActualizarCarrito();
-
         }
-
-        private void MyListViewBusquedaProductos_ItemTapped(object sender, ItemTappedEventArgs e)
-        {
-            //var item = ((ItemTappedEventArgs)e);
-            //VMProducto ObjItem = (VMProducto)item.Item;
-            //if (ObjItem.IsVisible)
-            //{
-            //    ObjItem.IsVisible = false;
-            //}
-            //else
-            //{
-            //    for (int i = 0; i < App.MVProducto.ListaDeDetallesDeOrden.Count; i++)
-            //    {
-            //        App.MVProducto.ListaDeDetallesDeOrden[i].IsVisible = false;
-            //    }
-            //    ObjItem.IsVisible = true;
-            //}
-            //MyListViewBusquedaProductos.ItemsSource = null;
-            //MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeDetallesDeOrden;
-        }
-
 
         public void ActualizarCarrito()
         {
@@ -174,15 +214,8 @@ namespace AppCliente
                 TotalPagar = TotalPagar + App.MVProducto.ListaDelInformacionSucursales[i].Total;
                 subtotal = subtotal + App.MVProducto.ListaDelInformacionSucursales[i].Subtotal;
             }
-
-
-            txtTotalEnvio.Text = "Total de envio: " + TotalEnvio.ToString();
-            txtCantidad.Text = "Total de articulos: " + cantidad;
-            txtsubtotal.Text = "SubTotal: $" + subtotal;
-
-
+            CargaProductos();
             btnPagar.Text = "Pagar  $" + TotalPagar;
-            btnPagar2.Text = "Pagar  $" + TotalPagar;
         }
 
         private async void ImageButtonEliminarProducto_Clicked(object sender, EventArgs e)
@@ -191,7 +224,7 @@ namespace AppCliente
             if (action)
             {
                 var item = sender as ImageButton;
-                var ObjItem = item.BindingContext as VMProducto;
+                var ObjItem = item.BindingContext as MVMProductos;
 
                 App.MVProducto.EliminaProductoDelCarrito(ObjItem.UidRegistroProductoEnCarrito);
 
@@ -208,14 +241,12 @@ namespace AppCliente
         private void ButtonEliminarUnProducto_Clicked(object sender, EventArgs e)
         {
             var item = sender as Button;
-            var ObjItem = item.BindingContext as VMProducto;
-
+            var ObjItem = item.BindingContext as MVMProductos;
 
             App.MVProducto.QuitarDelCarrito(ObjItem.UidRegistroProductoEnCarrito);
             MyListViewBusquedaProductos.ItemsSource = null;
             App.MVProducto.ListaDeDetallesDeOrden = null;
             App.MVProducto.ListaDeDetallesDeOrden = App.MVProducto.ListaDelCarrito.Where(p => p.UidSucursal == ObjItem.UidSucursal).ToList();
-
 
             ActualizarCarrito();
 
@@ -225,7 +256,7 @@ namespace AppCliente
         private void ButtonAgregarUnProducto_Clicked_1(object sender, EventArgs e)
         {
             var item = sender as Button;
-            var ObjItem = item.BindingContext as VMProducto;
+            var ObjItem = item.BindingContext as MVMProductos;
 
             Guid seccion = new Guid();
             App.MVProducto.AgregaAlCarrito(ObjItem.UidRegistroProductoEnCarrito, ObjItem.UidSucursal, seccion, "1", RegistroProductoEnCarrito: ObjItem.UidRegistroProductoEnCarrito);
@@ -241,7 +272,7 @@ namespace AppCliente
         private void ENotas_TextChanged(object sender, TextChangedEventArgs e)
         {
             var item = sender as Entry;
-            var ObjItem = item.BindingContext as VMProducto;
+            var ObjItem = item.BindingContext as MVMProductos;
             if (ObjItem != null)
             {
                 var objeto = App.MVProducto.ListaDelCarrito.Find(s => s.UidRegistroProductoEnCarrito == ObjItem.UidRegistroProductoEnCarrito);

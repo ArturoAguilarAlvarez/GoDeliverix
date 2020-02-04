@@ -3,12 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Repartidores_GoDeliverix.Views.Login"
              BindingContext="{Binding VMMain, Source={StaticResource Locator}}">
-    <ContentPage.Padding>
-        <OnPlatform iOS="20,40,20,20" Android="20,20,20,20"></OnPlatform>
-    </ContentPage.Padding>
+
     <ContentPage.Content>
+
         <ScrollView BindingContext="{Binding MVLogin}">
-            <StackLayout>
+            <StackLayout Padding="20,20,20,20">
                 <Image Source="IconoGoDeliverix.png"></Image>
 
                 <Label Text="Usuario"></Label>
@@ -22,8 +21,7 @@
                 <Button 
                 Text="Ingresar"
                 IsEnabled="{Binding IsEnable,Mode=TwoWay}"
-                Command="{Binding LoginCommand}"  BackgroundColor="purple" TextColor="White"></Button>
-
+                Command="{Binding LoginCommand}"  BackgroundColor="#f15a23" TextColor="White"></Button>
                 <ActivityIndicator 
                 WidthRequest="50" 
                 HeightRequest="50" 

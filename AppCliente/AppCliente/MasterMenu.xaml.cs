@@ -24,24 +24,41 @@ namespace AppCliente
             var item = e.SelectedItem as MasterMenuMenuItem;
             if (item == null)
                 return;
-
             string Salir = item.TargetType.ToString();
-            if (Salir == "AppCliente.MasterMenuDetail")
+            string NombreMenu = item.Title.ToString();
+            if (NombreMenu == "Inciar session")
             {
-                AppCliente.App.ListaDeProductos.Clear();
-                AppCliente.App.LISTADEEMPRESAS.Clear();
-                //AppCliente.App.MVDireccion = null;
-                OneSignal.Current.RemoveExternalUserId();
-                Application.Current.Properties.Remove("IsLogged");
-                App.Current.MainPage = new NavigationPage(new Login());
+                var page = (Page)Activator.CreateInstance(item.TargetType);
+                page.Title = item.Title;
 
+                Detail = new NavigationPage(new Login());
+                IsPresented = false;
+
+                MasterPage.ListView.SelectedItem = null;
+            }
+            else
+            if (NombreMenu == "Salir")
+            {
+                App.ListaDeProductos.Clear();
+                App.LISTADEEMPRESAS.Clear();
+                if (App.MVDireccion.ListaDIRECCIONES.Count > 0)
+                {
+                    App.MVDireccion.ListaDIRECCIONES.Clear();
+                }
+                //OneSignal.Current.RemoveExternalUserId();
+                Application.Current.Properties.Remove("IsLogged");
+                App.Global1 = string.Empty;
+                Application.Current.MainPage = new MasterMenu();
+
+                IsPresented = false;
+                MasterPage.ListView.SelectedItem = null;
+                //Detail = new NavigationPage(new Login());
             }
             else
             {
                 var page = (Page)Activator.CreateInstance(item.TargetType);
                 page.Title = item.Title;
-
-
+                App.Navegacion = page.GetType().Name;
                 Detail = new NavigationPage(page);
                 IsPresented = false;
 

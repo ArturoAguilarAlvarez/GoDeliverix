@@ -2,12 +2,12 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:popup="clr-namespace:Rg.Plugins.Popup.Converters.TypeConverters;assembly=Rg.Plugins.Popup"
+             Title="Direcciones"
              x:Class="AppCliente.UsuarioDirecciones">
     <StackLayout>
 
         <StackLayout x:Name="PanelSinDirecciones" VerticalOptions="Fill">
             <Label Text="Sin direcciones" FontAttributes="Bold" VerticalOptions="Fill" TextDecorations="None" VerticalTextAlignment="Center" HorizontalOptions="Center"  Margin="20" FontSize="Large"></Label>
-
         </StackLayout>
         <StackLayout x:Name="PanelDirecciones">
             <ListView x:Name="MyListViewDirecciones"
@@ -19,11 +19,7 @@
                     <DataTemplate>
                         <ViewCell>
                             <ContentView Padding="8">
-
-                                <Frame OutlineColor="Accent"
-                                                  x:Name="FrameDireccionColor"
-                               Padding="10">
-
+                                <Frame OutlineColor="Accent" x:Name="FrameDireccionColor" Padding="10">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -44,7 +40,6 @@
                                            FontSize="16"
                                            VerticalOptions="CenterAndExpand" />
                                             </StackLayout>
-
                                         </StackLayout>
                                         <StackLayout Grid.Row="1" Orientation="Horizontal" HorizontalOptions="Center">
                                             <Button IsVisible="{Binding Clicked}" BackgroundColor="Transparent" TextColor="Black" Text="Eliminar" Clicked="Button_Clicked_Eliminar" ></Button>
@@ -52,7 +47,6 @@
                                         </StackLayout>
                                     </Grid>
                                 </Frame>
-
                             </ContentView>
                         </ViewCell>
                     </DataTemplate>

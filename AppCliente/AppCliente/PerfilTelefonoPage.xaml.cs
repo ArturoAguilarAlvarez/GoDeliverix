@@ -50,22 +50,18 @@ namespace AppCliente
 
         public void CargarNombreTelefono()
         {
-            int a = AppCliente.App.MVTelefono.ListaDeTelefonos.Count();
+            int a = App.MVTelefono.ListaDeTelefonos.Count();
             a = a - 1;
-            MyListView.ItemsSource = AppCliente.App.MVTelefono.ListaDeTelefonos;
+            MyListView.ItemsSource = App.MVTelefono.ListaDeTelefonos;
             for (int i = 0; i <= a; i++)
             {
-                AppCliente.App.MVTelefono.ListaDeTelefonos[i].StrNombreTipoDeTelefono = AppCliente.App.MVTelefono.ListaDeTipoDeTelefono.Where(t => t.ID == AppCliente.App.MVTelefono.ListaDeTelefonos[i].UidTipo).FirstOrDefault().StrNombreTipoDeTelefono;
-
-                //int index = MVTelefono.TIPOTELEFONO.FindIndex(x => x.ID == MVTelefono.ListaDeTelefonos[i].ID);
-                //MVTelefono.ListaDeTelefonos[i].StrNombreTipoDeTelefono = MVTelefono.TIPOTELEFONO[index].NOMBRE;
+                App.MVTelefono.ListaDeTelefonos[i].StrNombreTipoDeTelefono = App.MVTelefono.ListaDeTipoDeTelefono.Where(t => t.ID == App.MVTelefono.ListaDeTelefonos[i].UidTipo).FirstOrDefault().StrNombreTipoDeTelefono;
             }
         }
 
         public void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-
-            var item = ((ItemTappedEventArgs)e);
+            var item = e;
             VMTelefono ObjItem = (VMTelefono)item.Item;
             if (ObjItem.Estado)
             {
@@ -74,25 +70,15 @@ namespace AppCliente
             }
             else
             {
-                for (int i = 0; i < AppCliente.App.MVTelefono.ListaDeTelefonos.Count; i++)
+                for (int i = 0; i < App.MVTelefono.ListaDeTelefonos.Count; i++)
                 {
-                    AppCliente.App.MVTelefono.ListaDeTelefonos[i].Estado = false;
+                    App.MVTelefono.ListaDeTelefonos[i].Estado = false;
                 }
                 ObjItem.Estado = true;
                 txtIDTelefono.Text = ObjItem.ID.ToString();
             }
             MyListView.ItemsSource = null;
-            MyListView.ItemsSource = AppCliente.App.MVTelefono.ListaDeTelefonos;
-            //var item = ((VMTelefono)sender);
-            //VMTelefono ObjItem = (VMTelefono)item.CommandParameter;
-
-            ////if (e.Item == null)
-            ////    return;
-            ////string a=((VMTelefono)((MenuItem)sender).CommandParameter).TIPOTELEFONO.ToString();
-            //await DisplayAlert("Item Tapped","An item was tapped.", "OK");
-
-            ////Deselect Item
-            ////((ListView)sender).SelectedItem = null;
+            MyListView.ItemsSource = App.MVTelefono.ListaDeTelefonos;
         }
 
         private void OnMore(object sender, EventArgs e)
@@ -105,7 +91,7 @@ namespace AppCliente
             txtNumeroTelefonico.Text = ObjItem.NUMERO;
 
             txtIDTelefono.Text = ObjItem.ID.ToString();
-            int query1 = AppCliente.App.MVTelefono.ListaDeTipoDeTelefono.FindIndex(t => t.StrNombreTipoDeTelefono == ObjItem.StrNombreTipoDeTelefono);
+            int query1 = App.MVTelefono.ListaDeTipoDeTelefono.FindIndex(t => t.StrNombreTipoDeTelefono == ObjItem.StrNombreTipoDeTelefono);
             MyPicker.SelectedIndex = query1;
         }
 
@@ -121,15 +107,13 @@ namespace AppCliente
             var action = await DisplayAlert("Exit?", "Are you sure to close", "Yes", "No");
             if (action)
             {
-
                 Guid Gui = ObjItem.ID;
-                int index = AppCliente.App.MVTelefono.ListaDeTelefonos.FindIndex(x => x.ID == Gui);
-                AppCliente.App.MVTelefono.EliminaTelefonoUsuario(ObjItem.ID.ToString());
-                //MVTelefono.ListaDeTelefonos[index].NUMERO = "1234";
-                AppCliente.App.MVTelefono.BuscarTelefonos(UidPropietario: new Guid(AppCliente.App.Global1), ParadetroDeBusqueda: "Usuario");
-                MyListView.ItemsSource = null;
-                CargarNombreTelefono();
-                MyListView.ItemsSource = AppCliente.App.MVTelefono.ListaDeTelefonos;
+                using (HttpClient _WebApi = new HttpClient())
+                {
+                    string url = "" + Helpers.Settings.sitio + "/api/Telefono/DeleteTelefonoUsuario?UidTelefono=" + Gui.ToString() + "";
+                    await _WebApi.DeleteAsync(url);
+                }
+                CargarAsync();
             }
         }
 
@@ -152,21 +136,6 @@ namespace AppCliente
                     {
                         GuardarTelefono("Nuevo");
                     }
-
-                    //Guarda los telefonos
-                    //if (AppCliente.App.MVTelefono.ListaDeTelefonos != null)
-                    //{
-                    //    if (AppCliente.App.MVTelefono.ListaDeTelefonos.Count != 0)
-                    //    {
-                    //        AppCliente.App.MVTelefono.EliminaTelefonosUsuario(new Guid(AppCliente.App.Global1));
-                    //        AppCliente.App.MVTelefono.GuardaTelefono(new Guid(AppCliente.App.Global1), "Usuario");
-                    //    }
-                    //}
-                    // AppCliente.App.MVTelefono.BuscarTelefonos(UidPropietario: new Guid(AppCliente.App.Global1), ParadetroDeBusqueda: "Usuario");
-                    //CargarNombreTelefono();
-                    //MyListView.ItemsSource = null;
-                    //MyListView.ItemsSource = AppCliente.App.MVTelefono.ListaDeTelefonos;
-                    //MyPicker.ItemsSource = AppCliente.App.MVTelefono.TIPOTELEFONO;
 
                     txtNumeroTelefonico.Text = "";
                     txtIDTelefono.Text = "";
@@ -219,23 +188,12 @@ namespace AppCliente
                 var action = await DisplayAlert("Eliminar?", "Estas seguro de eliminar este Telefono", "Si", "No");
                 if (action)
                 {
-
-                    //Guid Gui = new Guid(txtIDTelefono.Text);
-                    //int index = AppCliente.App.MVTelefono.ListaDeTelefonos.FindIndex(x => x.ID == Gui);
-                    //AppCliente.App.MVTelefono.EliminaTelefonoUsuario(txtIDTelefono.Text);
-                    //MVTelefono.ListaDeTelefonos[index].NUMERO = "1234";
-
-                    string _Url = $"http://godeliverix.net/api/Telefono/DeleteTelefonoUsuario?UidTelefono={txtIDTelefono.Text}";
+                    string _Url = $"" + Helpers.Settings.sitio + "/api/Telefono/DeleteTelefonoUsuario?UidTelefono={txtIDTelefono.Text}";
                     await _client.DeleteAsync(_Url);
 
                     CargarAsync();
-                    //AppCliente.App.MVTelefono.BuscarTelefonos(UidPropietario: new Guid(AppCliente.App.Global1), ParadetroDeBusqueda: "Usuario");
-                    //MyListView.ItemsSource = null;
-                    //CargarNombreTelefono();
-                    //MyListView.ItemsSource = AppCliente.App.MVTelefono.ListaDeTelefonos;
                 }
             }
-
         }
 
         private void Button_Clicked_Editar(object sender, EventArgs e)
@@ -244,33 +202,32 @@ namespace AppCliente
             btnCancelar.IsVisible = true;
             btnGuardarEditar.IsVisible = true;
             cajaDatosTelefono.IsVisible = true;
-            var item = AppCliente.App.MVTelefono.ListaDeTelefonos.Find(t => t.ID == new Guid(txtIDTelefono.Text));
-            txtNumeroTelefonico.Text = AppCliente.App.MVTelefono.ListaDeTelefonos.Find(t => t.ID == new Guid(txtIDTelefono.Text)).NUMERO;
+            var item = App.MVTelefono.ListaDeTelefonos.Find(t => t.ID == new Guid(txtIDTelefono.Text));
+            txtNumeroTelefonico.Text = App.MVTelefono.ListaDeTelefonos.Find(t => t.ID == new Guid(txtIDTelefono.Text)).NUMERO;
             txtIDTelefono.Text = txtIDTelefono.Text;
-            int query1 = AppCliente.App.MVTelefono.ListaDeTipoDeTelefono.FindIndex(t => t.StrNombreTipoDeTelefono == item.StrNombreTipoDeTelefono);
+            int query1 = App.MVTelefono.ListaDeTipoDeTelefono.FindIndex(t => t.StrNombreTipoDeTelefono == item.StrNombreTipoDeTelefono);
             MyPicker.SelectedIndex = query1;
             btnNuevoNumero.IsVisible = false;
-
         }
 
         public async void CargarAsync()
         {
             //lista
             HttpClient _client = new HttpClient();
-            var _URL = ("http://godeliverix.net/api/Telefono/GetBuscarTelefonos?UidPropietario=" + App.Global1 + "&ParadetroDeBusqueda=Usuario&UidTelefono=00000000-0000-0000-0000-000000000000&strTelefono=");
+            var _URL = ("" + Helpers.Settings.sitio + "/api/Telefono/GetBuscarTelefonos?UidPropietario=" + App.Global1 + "&ParadetroDeBusqueda=Usuario&UidTelefono=00000000-0000-0000-0000-000000000000&strTelefono=");
             string DatosObtenidos = await _client.GetStringAsync(_URL);
             var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
             App.MVTelefono = JsonConvert.DeserializeObject<VMTelefono>(DatosGiros);
 
-            for (int i = 0; i < AppCliente.App.MVTelefono.ListaDeTelefonos.Count; i++)
+            for (int i = 0; i < App.MVTelefono.ListaDeTelefonos.Count; i++)
             {
-                AppCliente.App.MVTelefono.ListaDeTelefonos[i].Estado = false;
+                App.MVTelefono.ListaDeTelefonos[i].Estado = false;
             }
 
             if (App.MVTelefono.ListaDeTipoDeTelefono == null)
             {
                 _client = new HttpClient();
-                _URL = ("http://godeliverix.net/api/Telefono/GetObtenerTipoDetelefono");
+                _URL = ("" + Helpers.Settings.sitio + "/api/Telefono/GetObtenerTipoDetelefono");
                 DatosObtenidos = await _client.GetStringAsync(_URL);
                 DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
                 JArray blogPostArray = JArray.Parse(DatosGiros.ToString());
@@ -280,7 +237,6 @@ namespace AppCliente
                     StrNombreTipoDeTelefono = (string)p["StrNombreTipoDeTelefono"]
                 }).ToList();
             }
-
             MyPicker.ItemsSource = App.MVTelefono.ListaDeTipoDeTelefono;
             MyListView.ItemsSource = App.MVTelefono.ListaDeTelefonos;
         }
@@ -294,13 +250,13 @@ namespace AppCliente
             string _Url = string.Empty;
             if (tipo == "actualizar")
             {
-                _Url = "http://godeliverix.net/api/Telefono/GetActualizaTelefonoApi?UidTelefono=" + txtIDTelefono.Text + "&Numero=" + Numero + "&UidTipoDeTelefono=" + TipoTelefono + "";
+                _Url = "" + Helpers.Settings.sitio + "/api/Telefono/GetActualizaTelefonoApi?UidTelefono=" + txtIDTelefono.Text + "&Numero=" + Numero + "&UidTipoDeTelefono=" + TipoTelefono + "";
                 var s = await _client.GetStringAsync(_Url);
             }
             else if (tipo == "Nuevo")
             {
                 Guid UidTelefono = Guid.NewGuid();
-                _Url = "http://godeliverix.net/api/Telefono/GetGuardaTelefonoApi?uidUsuario=" + App.Global1 + "&Parametro=Usuario&UidTelefono=" + UidTelefono + "&Numero=" + txtNumeroTelefonico.Text + "&UidTipoDeTelefono=" + TipoTelefono + "";
+                _Url = "" + Helpers.Settings.sitio + "/api/Telefono/GetGuardaTelefonoApi?uidUsuario=" + App.Global1 + "&Parametro=Usuario&UidTelefono=" + UidTelefono + "&Numero=" + txtNumeroTelefonico.Text + "&UidTipoDeTelefono=" + TipoTelefono + "";
                 var s = await _client.GetStringAsync(_Url);
             }
             CargarAsync();

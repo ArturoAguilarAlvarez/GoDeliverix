@@ -6,7 +6,7 @@
              Title="Configuracion"
              Icon="Settings.png">
     <ContentPage.Content>
-        <Grid HorizontalOptions="Fill" BindingContext="{Binding MVAjustes}" VerticalOptions="Fill">
+        <Grid HorizontalOptions="Fill" BindingContext="{Binding MVAjustes}" VerticalOptions="Fill" x:Name="SLContenido">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"></RowDefinition>
                 <RowDefinition Height="9*"></RowDefinition>
@@ -35,7 +35,7 @@
                     </ListView>
                 </StackLayout>
 
-                <StackLayout x:Name="PanelDireccion"  IsVisible="{ Binding CDireccion,Mode=TwoWay}">
+                <StackLayout x:Name="PanelDireccion"  IsVisible="{ Binding CDireccion,Mode=TwoWay}" Padding="20,20,20,20">
                     <ListView ItemsSource="{Binding ListaDireccion}" IsRefreshing="{Binding IsLoading,Mode=TwoWay}" 
                       RefreshCommand="{Binding IsReloading}"  RowHeight="70" IsPullToRefreshEnabled="True">
                         <ListView.ItemTemplate>
@@ -59,7 +59,7 @@
                     <ImageButton Source="FlecaAgregarDireccion.png" BackgroundColor="Green" HorizontalOptions="End" Command="{Binding AddAddres}" VerticalOptions="EndAndExpand" BorderWidth="5" BorderColor="White"  Margin="10" CornerRadius="40" HeightRequest="80" WidthRequest="80" ></ImageButton>
                 </StackLayout>
 
-                <StackLayout x:Name="PanelTelefono"  IsVisible="{ Binding CTelefono,Mode=TwoWay}">
+                <StackLayout x:Name="PanelTelefono"  IsVisible="{ Binding CTelefono,Mode=TwoWay}" Padding="20,20,20,20">
                     <ListView ItemsSource="{Binding LsTelefono}" IsRefreshing="{Binding IsLoading,Mode=TwoWay}" 
                       RefreshCommand="{Binding IsReloading}"  RowHeight="70" IsPullToRefreshEnabled="True">
                         <ListView.ItemTemplate>

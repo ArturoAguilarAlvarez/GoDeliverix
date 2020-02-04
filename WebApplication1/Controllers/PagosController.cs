@@ -88,9 +88,17 @@ namespace WebApplication1.Controllers
             respuesta.Data = MVPago.BitacoraEstatusCobro(UidOrden, Estatus);
             return respuesta;
         }
+
+        public ResponseHelper GetObtenerFolioPagoConTarjeta()
+        {
+            respuesta = new ResponseHelper();
+            MVPago = new VMPagos();
+            MVPago.ObtenerFolioPagoTarjeta();
+            respuesta.Data = MVPago;
+            return respuesta;
+        }
         // POST: api/Pagos/PostPagosTarjeta
-        
-        //public ResponseHelper GetPagosTarjeta([FromBody]RespuestaPago StrResponse = null)
+
         [HttpPost]
         public ResponseHelper PostPagosTarjeta([FromBody] RespuestaPago strResponse)
         {
@@ -120,11 +128,32 @@ namespace WebApplication1.Controllers
                 string amount = string.Empty;
                 string fecha = string.Empty;
                 string Hora = string.Empty;
+                string nb_company = string.Empty;
+                string bn_merchant = string.Empty;
+                string id_url = string.Empty;
+                string cd_error = string.Empty;
+                string nb_error = string.Empty;
+                string cc_mask = string.Empty;
 
                 for (int i = 0; i < RespuestaWebPayPlus[0].ChildNodes.Count; i++)
                 {
                     switch (RespuestaWebPayPlus[0].ChildNodes[i].Name)
                     {
+                        case "nb_company":
+                            nb_company = RespuestaWebPayPlus[0].ChildNodes[i].InnerText;
+                            break;
+                        case "bn_merchant":
+                            bn_merchant = RespuestaWebPayPlus[0].ChildNodes[i].InnerText;
+                            break;
+                        case "id_url":
+                            id_url = RespuestaWebPayPlus[0].ChildNodes[i].InnerText;
+                            break;
+                        case "nb_error":
+                            nb_error = RespuestaWebPayPlus[0].ChildNodes[i].InnerText;
+                            break;
+                        case "cd_error":
+                            cd_error = RespuestaWebPayPlus[0].ChildNodes[i].InnerText;
+                            break;
                         case "reference":
                             reference = RespuestaWebPayPlus[0].ChildNodes[i].InnerText;
                             break;
@@ -152,6 +181,9 @@ namespace WebApplication1.Controllers
                         case "cc_number":
                             cc_number = RespuestaWebPayPlus[0].ChildNodes[i].InnerText;
                             break;
+                        case "cc_mask":
+                            cc_mask = RespuestaWebPayPlus[0].ChildNodes[i].InnerText;
+                            break;
                         case "amount":
                             amount = RespuestaWebPayPlus[0].ChildNodes[i].InnerText;
                             break;
@@ -171,11 +203,9 @@ namespace WebApplication1.Controllers
                         auth = "denied";
                         tp_operation = "denied";
                         amount = "0.0";
-                        respuesta.Data = MVPagos.AgregarInformacionTarjeta(auth, reference, fechaRegistro, response, cc_type, tp_operation);
                         break;
                     case "approved":
                         fechaRegistro = DateTime.Parse(fecha1);
-                        respuesta.Data = MVPagos.AgregarInformacionTarjeta(auth, reference, fechaRegistro, response, cc_type, tp_operation, amount);
                         break;
                     case "error":
                         fechaRegistro = DateTime.Now;
@@ -183,21 +213,17 @@ namespace WebApplication1.Controllers
                         auth = "error";
                         tp_operation = "error";
                         amount = "0.0";
-                        respuesta.Data = MVPagos.AgregarInformacionTarjeta(auth, reference, fechaRegistro, response, cc_type, tp_operation);
                         break;
                 }
-
+                respuesta.Data = MVPagos.AgregarInformacionTarjeta(auth, reference, fechaRegistro, response, cc_type, tp_operation, nb_company, bn_merchant, id_url, cd_error, nb_error, cc_number, cc_mask, foliocpagos, monto: amount);
             }
             else
             {
                 respuesta.Data = "la cadena no se puede desifrar " + cadena;
             }
-
-
-
             return respuesta;
         }
-        
+
         //[HttpPost]        
         //public ResponseHelper PostPagosTarjeta([FromBody] RespuestaPago strResponse)
         //{
@@ -312,7 +338,7 @@ namespace WebApplication1.Controllers
         }
     }
 
-    public class RespuestaPago 
+    public class RespuestaPago
     {
         private string _strResponse;
 

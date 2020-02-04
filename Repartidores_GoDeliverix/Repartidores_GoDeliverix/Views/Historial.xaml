@@ -7,7 +7,7 @@
              Title="Caja"
              Icon="Caja.png">
     <ContentPage.Content>
-        <Grid BindingContext="{Binding MVTurno}" >
+        <Grid BindingContext="{Binding MVTurno}" x:Name="SLContenido" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"></RowDefinition>
                 <RowDefinition Height="7*"></RowDefinition>

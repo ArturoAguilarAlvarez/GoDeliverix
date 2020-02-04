@@ -34,14 +34,43 @@ namespace AppCliente
         public PerfilDireccionesPage()
         {
             InitializeComponent();
-            App.MVDireccion.ObtenerDireccionesUsuario(App.Global1);
-            for (int i = 0; i < AppCliente.App.MVDireccion.ListaDIRECCIONES.Count; i++)
+            if (App.Global1 != string.Empty)
             {
-                AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Clicked = false;
+                //App.MVDireccion.ObtenerDireccionesUsuario(App.Global1);
+                for (int i = 0; i < App.MVDireccion.ListaDIRECCIONES.Count; i++)
+                {
+                    App.MVDireccion.ListaDIRECCIONES[i].Clicked = false;
+                }
             }
+            else
+            {
+                if (!string.IsNullOrEmpty(Helpers.Settings.UidDireccion))
+                {
+                    App.MVDireccion.ListaDIRECCIONES.Clear();
+                    App.MVDireccion.ListaDIRECCIONES.Add(new VMDireccion()
+                    {
+                        ID = new Guid(Helpers.Settings.UidDireccion),
+                        PAIS = Helpers.Settings.StrPAIS,
+                        ESTADO = Helpers.Settings.StrESTADO,
+                        MUNICIPIO = Helpers.Settings.StrMUNICIPIO,
+                        CIUDAD = Helpers.Settings.StrCIUDAD,
+                        COLONIA = Helpers.Settings.StrCOLONIA,
+                        CALLE0 = Helpers.Settings.StrCALLE0,
+                        CALLE1 = Helpers.Settings.StrCALLE1,
+                        CALLE2 = Helpers.Settings.StrCALLE2,
+                        MANZANA = Helpers.Settings.StrMANZANA,
+                        LOTE = Helpers.Settings.StrLOTE,
+                        CodigoPostal = Helpers.Settings.StrCodigoPostal,
+                        REFERENCIA = Helpers.Settings.StrREFERENCIA,
+                        IDENTIFICADOR = Helpers.Settings.StrIDENTIFICADOR,
+                        NOMBRECIUDAD = Helpers.Settings.StrNombreCiudad,
+                        NOMBRECOLONIA = Helpers.Settings.StrNombreColonia
+                    });
+                }
 
-            MyListViewDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;
+            }
             //MiUbicacion();
+            MyListViewDirecciones.ItemsSource = App.MVDireccion.ListaDIRECCIONES;
             MyListViewDirecciones.TabIndex = 0;
         }
 
@@ -51,12 +80,12 @@ namespace AppCliente
         {
             InitializeComponent();
 
-            for (int i = 0; i < AppCliente.App.MVDireccion.ListaDIRECCIONES.Count; i++)
+            for (int i = 0; i < App.MVDireccion.ListaDIRECCIONES.Count; i++)
             {
-                AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Clicked = false;
+                App.MVDireccion.ListaDIRECCIONES[i].Clicked = false;
             }
 
-            MyListViewDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;
+            MyListViewDirecciones.ItemsSource = App.MVDireccion.ListaDIRECCIONES;
             //MiUbicacion();
             MyListViewDirecciones.TabIndex = 0;
             this.Button = button;
@@ -64,6 +93,7 @@ namespace AppCliente
             Title = "seleccionar Direccion";
         }
 
+        [Obsolete]
         private void MenuItem_Editar(object sender, EventArgs e)
         {
             var item = (MenuItem)sender;
@@ -74,7 +104,7 @@ namespace AppCliente
             Guid Pais = new Guid("afd6c3b7-f5be-40c9-8385-936d275a8d6b");
             DataTable dt = new DataTable();
 
-            dt = AppCliente.App.MVDireccion.Estados(Pais);
+            dt = App.MVDireccion.Estados(Pais);
 
             DireccionesListaEstados.Clear();
             MypickerEstado.ItemsSource = null;
@@ -88,7 +118,6 @@ namespace AppCliente
                   {
                       ID = new Guid(item2["IdEstado"].ToString()),
                       ESTADO = item2["Nombre"].ToString()
-
                   });
                 MypickerEstado.Items.Add(item2["Nombre"].ToString());
             }
@@ -96,7 +125,7 @@ namespace AppCliente
             MypickerEstado.SelectedItem = Estado;
 
             Guid IDEstado = DireccionesListaEstados.Find(t => t.ID.ToString() == ObjItem.ESTADO).ID;
-            dt = AppCliente.App.MVDireccion.Municipios(IDEstado);
+            dt = App.MVDireccion.Municipios(IDEstado);
             DireccionesListaMunicipios.Clear();
             MypickerMunicipio.ItemsSource = null;
             foreach (DataRow item2 in dt.Rows)
@@ -114,7 +143,7 @@ namespace AppCliente
             MypickerMunicipio.SelectedItem = Municipio;
 
             Guid IDMunicipio = DireccionesListaMunicipios.Find(t => t.ID.ToString() == ObjItem.MUNICIPIO).ID;
-            dt = AppCliente.App.MVDireccion.Ciudades(IDMunicipio);
+            dt = App.MVDireccion.Ciudades(IDMunicipio);
             DireccionesListaCiudad.Clear();
             MypickerCiudad.ItemsSource = null;
             foreach (DataRow item2 in dt.Rows)
@@ -131,7 +160,7 @@ namespace AppCliente
             MypickerCiudad.SelectedItem = Ciudad;
 
             Guid IDCiudad = DireccionesListaCiudad.Find(t => t.ID.ToString() == ObjItem.CIUDAD).ID;
-            dt = AppCliente.App.MVDireccion.Colonias(IDCiudad);
+            dt = App.MVDireccion.Colonias(IDCiudad);
             DireccionesListaColonia.Clear();
             MypickerColonia.ItemsSource = null;
             foreach (DataRow item2 in dt.Rows)
@@ -184,15 +213,13 @@ namespace AppCliente
             var item = (MenuItem)sender;
             VMDireccion ObjItem = (VMDireccion)item.CommandParameter;
             Guid Gui = ObjItem.ID;
-            int index = AppCliente.App.MVDireccion.ListaDIRECCIONES.FindIndex(x => x.ID == Gui);
-            //int index = MVTelefono.ListaDeTelefonos.FindIndex(x => x.ID == Gui);
-            AppCliente.App.MVDireccion.QuitaDireeccionDeLista(ObjItem.ID.ToString());
-            AppCliente.App.MVDireccion.EliminaDireccionUsuario(ObjItem.ID.ToString());
+            int index = App.MVDireccion.ListaDIRECCIONES.FindIndex(x => x.ID == Gui);
+            App.MVDireccion.QuitaDireeccionDeLista(ObjItem.ID.ToString());
+            App.MVDireccion.EliminaDireccionUsuario(ObjItem.ID.ToString());
 
-            AppCliente.App.MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
+            App.MVDireccion.ObtenerDireccionesUsuario(App.Global1);
             MyListViewDirecciones.ItemsSource = null;
-            MyListViewDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;// MVTelefono.TIPOTELEFONO;
-
+            MyListViewDirecciones.ItemsSource = App.MVDireccion.ListaDIRECCIONES;
         }
 
         private void Button_Clicked_NuevaDireccion(object sender, EventArgs e)
@@ -223,42 +250,31 @@ namespace AppCliente
             VMDireccion c = DireccionesListaColonia.Find(t => t.ESTADO == MypickerColonia.SelectedItem.ToString());
             Guid UidColonia = c.ID;
 
-            string NOMBRECOLONIA = AppCliente.App.MVDireccion.ObtenerNombreDeLaColonia(UidColonia.ToString());
+            string NOMBRECOLONIA = App.MVDireccion.ObtenerNombreDeLaColonia(UidColonia.ToString());
 
             string url = string.Empty;
 
-            string NOMBRECIUDAD = AppCliente.App.MVDireccion.ObtenerNombreDeLaCiudad(UidCiudad.ToString());
+            string NOMBRECIUDAD = App.MVDireccion.ObtenerNombreDeLaCiudad(UidCiudad.ToString());
 
             if (txtID.Text != string.Empty && txtID.Text != null)
             {
-                url = "http://www.godeliverix.net/api/Direccion/GetActualizarDireccion?UidPais=" + UidPais + "&UidEstado=" + UidEstado + "&UidMunicipio=" + UidMunicipio + "&UidCiudad=" + UidCiudad + "&UidColonia=" + UidColonia + "&CallePrincipal=" + txtCalle.Text + "&CalleAux1=" + txtEntreCalle.Text + "&CalleAux2=" + txtYCalle.Text + "&Manzana=" + txtManzana.Text + "&Lote=" + txtLote.Text + "&CodigoPostal=" + txtCodigoPostal.Text + "&Referencia=" + txtReferencia.Text + "&NOMBRECIUDAD=S&NOMBRECOLONIA=S&Identificador=" + txtIdentificador.Text + "&Latitud=0&Longitud=0&UidDireccion=" + txtID.Text + "";
-
-                // AppCliente.App.MVDireccion.ActualizaListaDireccion(txtID.Text, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, txtCalle.Text, txtEntreCalle.Text, txtYCalle.Text, txtManzana.Text, txtLote.Text, txtCodigoPostal.Text, txtReferencia.Text, txtIdentificador.Text, NOMBRECIUDAD, NOMBRECOLONIA, Latitud1.ToString(), Longitud1.ToString());
+                url = "" + Helpers.Settings.sitio + "/api/Direccion/GetActualizarDireccion?UidPais=" + UidPais + "&UidEstado=" + UidEstado + "&UidMunicipio=" + UidMunicipio + "&UidCiudad=" + UidCiudad + "&UidColonia=" + UidColonia + "&CallePrincipal=" + txtCalle.Text + "&CalleAux1=" + txtEntreCalle.Text + "&CalleAux2=" + txtYCalle.Text + "&Manzana=" + txtManzana.Text + "&Lote=" + txtLote.Text + "&CodigoPostal=" + txtCodigoPostal.Text + "&Referencia=" + txtReferencia.Text + "&NOMBRECIUDAD=S&NOMBRECOLONIA=S&Identificador=" + txtIdentificador.Text + "&Latitud=0&Longitud=0&UidDireccion=" + txtID.Text + "";
             }
             else
             {
-                url = "http://www.godeliverix.net/api/Direccion/GetGuardarDireccion?UidUsuario=" + AppCliente.App.Global1 + "&UidPais=" + UidPais + "&UidEstado=" + UidEstado + "&UidMunicipio=" + UidMunicipio + "&UidCiudad=" + UidCiudad + "&UidColonia=" + UidColonia + "&CallePrincipal=" + txtCalle.Text + "&CalleAux1=" + txtEntreCalle.Text + "&CalleAux2=" + txtYCalle.Text + "&Manzana=" + txtManzana.Text + "&Lote=" + txtLote.Text + "&CodigoPostal=" + txtCodigoPostal.Text + "&Referencia=" + txtReferencia.Text + "&NOMBRECIUDAD=S&NOMBRECOLONIA=S&Identificador=" + txtIdentificador.Text + "&Latitud=0&Longitud=0";
-
-                //AppCliente.App.MVDireccion.AgregaDireccionALista(UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, txtCalle.Text, txtEntreCalle.Text, txtYCalle.Text, txtManzana.Text, txtLote.Text, txtCodigoPostal.Text, txtReferencia.Text, NOMBRECIUDAD, NOMBRECOLONIA, txtIdentificador.Text, Latitud.ToString(), Longitud.ToString());
+                url = "" + Helpers.Settings.sitio + "/api/Direccion/GetGuardarDireccion?UidUsuario=" + App.Global1 + "&UidPais=" + UidPais + "&UidEstado=" + UidEstado + "&UidMunicipio=" + UidMunicipio + "&UidCiudad=" + UidCiudad + "&UidColonia=" + UidColonia + "&CallePrincipal=" + txtCalle.Text + "&CalleAux1=" + txtEntreCalle.Text + "&CalleAux2=" + txtYCalle.Text + "&Manzana=" + txtManzana.Text + "&Lote=" + txtLote.Text + "&CodigoPostal=" + txtCodigoPostal.Text + "&Referencia=" + txtReferencia.Text + "&NOMBRECIUDAD=S&NOMBRECOLONIA=S&Identificador=" + txtIdentificador.Text + "&Latitud=0&Longitud=0";
             }
 
             await _WebApiGoDeliverix.GetAsync(url);
-            //AppCliente.App.MVDireccion.GuardaListaDeDirecciones(AppCliente.App.MVDireccion.ListaDIRECCIONES, new Guid(AppCliente.App.Global1), "asp_AgregaDireccionUsuario", "Usuario");
 
-            //for (int i = 0; i < AppCliente.App.MVDireccion.ListaDIRECCIONES.Count; i++)
-            //{
-            //    Guid guid = Guid.NewGuid();
-            //   AppCliente.App.MVUbicacion.GuardaUbicacionDireccion(AppCliente.App.MVDireccion.ListaDIRECCIONES[i].ID, guid, Latitud.ToString(), Longitud.ToString());
-            //}
-            url = ("http://www.godeliverix.net/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + AppCliente.App.Global1);
+            url = ("" + Helpers.Settings.sitio + "/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + App.Global1);
             var strDirecciones = await _WebApiGoDeliverix.GetStringAsync(url);
             var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
             App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
 
-            // AppCliente.App.MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
             MyListViewDirecciones.ItemsSource = null;
 
-            MyListViewDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;
+            MyListViewDirecciones.ItemsSource = App.MVDireccion.ListaDIRECCIONES;
 
             txtID.Text = null;
 
@@ -290,7 +306,7 @@ namespace AppCliente
             Guid Pais = new Guid("afd6c3b7-f5be-40c9-8385-936d275a8d6b");
             DataTable dt = new DataTable();
 
-            dt = AppCliente.App.MVDireccion.Estados(Pais);
+            dt = App.MVDireccion.Estados(Pais);
 
             DireccionesListaEstados.Clear();
             MypickerEstado.ItemsSource = null;
@@ -316,7 +332,7 @@ namespace AppCliente
                 Guid estado = x.ID; ;
                 DataTable dt = new DataTable();
 
-                dt = AppCliente.App.MVDireccion.Municipios(estado);
+                dt = App.MVDireccion.Municipios(estado);
 
                 DireccionesListaMunicipios.Clear();
                 DireccionesListaCiudad.Clear();
@@ -355,7 +371,7 @@ namespace AppCliente
                 Guid estado = x.ID; ;
                 DataTable dt = new DataTable();
 
-                dt = AppCliente.App.MVDireccion.Ciudades(estado);
+                dt = App.MVDireccion.Ciudades(estado);
 
                 DireccionesListaCiudad.Clear();
 
@@ -363,7 +379,6 @@ namespace AppCliente
                 MypickerColonia.ItemsSource = null;
                 foreach (DataRow item in dt.Rows)
                 {
-
                     DireccionesListaCiudad.Add(
                       new VMDireccion()
                       {
@@ -385,7 +400,7 @@ namespace AppCliente
                 VMDireccion x = DireccionesListaCiudad.Find(t => t.ESTADO == MypickerCiudad.SelectedItem.ToString());
                 Guid estado = x.ID; ;
                 DataTable dt = new DataTable();
-                dt = AppCliente.App.MVDireccion.Colonias(estado);
+                dt = App.MVDireccion.Colonias(estado);
                 DireccionesListaColonia.Clear();
                 MypickerColonia.ItemsSource = null;
                 foreach (DataRow item in dt.Rows)
@@ -395,7 +410,6 @@ namespace AppCliente
                       {
                           ID = new Guid(item["IdColonia"].ToString()),
                           ESTADO = item["Nombre"].ToString()
-
                       });
                     MypickerColonia.Items.Add(item["Nombre"].ToString());
                 }
@@ -505,7 +519,6 @@ namespace AppCliente
             {
                 Latitud = location.Latitude;
                 Longitud = location.Longitude;
-                //Console.WriteLine($"Latitude: , Longitude: {location.Longitude}, Altitude: {location.Altitude}");
             }
             MIDireccion();
         }
@@ -533,7 +546,7 @@ namespace AppCliente
 
         private void MyListViewDirecciones_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            var item = ((ItemTappedEventArgs)e);
+            var item = e;
             VMDireccion ObjItem = (VMDireccion)item.Item;
             if (ObjItem.Clicked)
             {
@@ -542,15 +555,15 @@ namespace AppCliente
             }
             else
             {
-                for (int i = 0; i < AppCliente.App.MVDireccion.ListaDIRECCIONES.Count; i++)
+                for (int i = 0; i < App.MVDireccion.ListaDIRECCIONES.Count; i++)
                 {
-                    AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Clicked = false;
+                    App.MVDireccion.ListaDIRECCIONES[i].Clicked = false;
                 }
                 ObjItem.Clicked = true;
                 txtIDDireccionn.Text = ObjItem.ID.ToString();
             }
             MyListViewDirecciones.ItemsSource = null;
-            MyListViewDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;
+            MyListViewDirecciones.ItemsSource = App.MVDireccion.ListaDIRECCIONES;
         }
 
         public async void EliminarDireccion()
@@ -562,33 +575,19 @@ namespace AppCliente
                 {
                     Guid Gui = new Guid(txtIDDireccionn.Text);
 
-                    int index = AppCliente.App.MVDireccion.ListaDIRECCIONES.FindIndex(x => x.ID == Gui);
-                    //int index = MVTelefono.ListaDeTelefonos.FindIndex(x => x.ID == Gui);
-                    //AppCliente.App.MVDireccion.QuitaDireeccionDeLista(txtIDDireccionn.Text);
-                    //AppCliente.App.MVDireccion.EliminaDireccionUsuario(txtIDDireccionn.Text);
+                    int index = App.MVDireccion.ListaDIRECCIONES.FindIndex(x => x.ID == Gui);
 
-                    var tex = ("http://www.godeliverix.net/api/Direccion/DeleteDireccionUsuario?UidDireccion=" + txtIDDireccionn.Text);
+                    var tex = ("" + Helpers.Settings.sitio + "/api/Direccion/DeleteDireccionUsuario?UidDireccion=" + txtIDDireccionn.Text);
                     string strDirecciones = await _WebApiGoDeliverix.GetStringAsync(tex);
 
-                    tex = ("http://www.godeliverix.net/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + AppCliente.App.Global1);
+                    tex = ("" + Helpers.Settings.sitio + "/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + App.Global1);
                     strDirecciones = await _WebApiGoDeliverix.GetStringAsync(tex);
                     var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
                     App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
 
-                    //AppCliente.App.MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
                     MyListViewDirecciones.ItemsSource = null;
-                    MyListViewDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;
+                    MyListViewDirecciones.ItemsSource = App.MVDireccion.ListaDIRECCIONES;
                     txtIDDireccionn.Text = "0";
-                    // MVTelefono.TIPOTELEFONO;
-
-                    ////Guid Gui = new Guid(txtIDTelefono.Text);
-                    ////int index = AppCliente.App.MVTelefono.ListaDeTelefonos.FindIndex(x => x.ID == Gui);
-                    //AppCliente.App.MVDireccion.EliminaDireccion(txtIDDireccionn.Text);
-                    ////MVTelefono.ListaDeTelefonos[index].NUMERO = "1234";
-                    //AppCliente.App.MVTelefono.BuscarTelefonos(UidPropietario: new Guid(AppCliente.App.Global1), ParadetroDeBusqueda: "Usuario");
-                    //MyListViewDirecciones.ItemsSource = null;
-                    //CargarNombreTelefono();
-                    //MyListViewDirecciones.ItemsSource = AppCliente.App.MVTelefono.ListaDeTelefonos;
                 }
             }
 
@@ -613,7 +612,7 @@ namespace AppCliente
             Guid Pais = new Guid("afd6c3b7-f5be-40c9-8385-936d275a8d6b");
             DataTable dt = new DataTable();
 
-            dt = AppCliente.App.MVDireccion.Estados(Pais);
+            dt = App.MVDireccion.Estados(Pais);
 
             DireccionesListaEstados.Clear();
             MypickerEstado.ItemsSource = null;
@@ -631,12 +630,12 @@ namespace AppCliente
                   });
                 MypickerEstado.Items.Add(item2["Nombre"].ToString());
             }
-            string Estado = DireccionesListaEstados.Find(t => t.ID.ToString() == AppCliente.App.MVDireccion.ListaDIRECCIONES[index].ESTADO).ESTADO;
+            string Estado = DireccionesListaEstados.Find(t => t.ID.ToString() == App.MVDireccion.ListaDIRECCIONES[index].ESTADO).ESTADO;
             MypickerEstado.SelectedItem = Estado;
 
 
-            Guid IDEstado = DireccionesListaEstados.Find(t => t.ID.ToString() == AppCliente.App.MVDireccion.ListaDIRECCIONES[index].ESTADO).ID;
-            dt = AppCliente.App.MVDireccion.Municipios(IDEstado);
+            Guid IDEstado = DireccionesListaEstados.Find(t => t.ID.ToString() == App.MVDireccion.ListaDIRECCIONES[index].ESTADO).ID;
+            dt = App.MVDireccion.Municipios(IDEstado);
             DireccionesListaMunicipios.Clear();
             MypickerMunicipio.ItemsSource = null;
             foreach (DataRow item2 in dt.Rows)
@@ -650,12 +649,12 @@ namespace AppCliente
                   });
                 MypickerMunicipio.Items.Add(item2["Nombre"].ToString());
             }
-            string Municipio = DireccionesListaMunicipios.Find(t => t.ID.ToString() == AppCliente.App.MVDireccion.ListaDIRECCIONES[index].MUNICIPIO).ESTADO;
+            string Municipio = DireccionesListaMunicipios.Find(t => t.ID.ToString() == App.MVDireccion.ListaDIRECCIONES[index].MUNICIPIO).ESTADO;
             MypickerMunicipio.SelectedItem = Municipio;
 
 
-            Guid IDMunicipio = DireccionesListaMunicipios.Find(t => t.ID.ToString() == AppCliente.App.MVDireccion.ListaDIRECCIONES[index].MUNICIPIO).ID;
-            dt = AppCliente.App.MVDireccion.Ciudades(IDMunicipio);
+            Guid IDMunicipio = DireccionesListaMunicipios.Find(t => t.ID.ToString() == App.MVDireccion.ListaDIRECCIONES[index].MUNICIPIO).ID;
+            dt = App.MVDireccion.Ciudades(IDMunicipio);
             DireccionesListaCiudad.Clear();
             MypickerCiudad.ItemsSource = null;
             foreach (DataRow item2 in dt.Rows)
@@ -668,12 +667,11 @@ namespace AppCliente
                   });
                 MypickerCiudad.Items.Add(item2["Nombre"].ToString());
             }
-            string Ciudad = DireccionesListaCiudad.Find(t => t.ID.ToString() == AppCliente.App.MVDireccion.ListaDIRECCIONES[index].CIUDAD).ESTADO;
+            string Ciudad = DireccionesListaCiudad.Find(t => t.ID.ToString() == App.MVDireccion.ListaDIRECCIONES[index].CIUDAD).ESTADO;
             MypickerCiudad.SelectedItem = Ciudad;
 
-
-            Guid IDCiudad = DireccionesListaCiudad.Find(t => t.ID.ToString() == AppCliente.App.MVDireccion.ListaDIRECCIONES[index].CIUDAD).ID;
-            dt = AppCliente.App.MVDireccion.Colonias(IDCiudad);
+            Guid IDCiudad = DireccionesListaCiudad.Find(t => t.ID.ToString() == App.MVDireccion.ListaDIRECCIONES[index].CIUDAD).ID;
+            dt = App.MVDireccion.Colonias(IDCiudad);
             DireccionesListaColonia.Clear();
             MypickerColonia.ItemsSource = null;
             foreach (DataRow item2 in dt.Rows)
@@ -686,18 +684,18 @@ namespace AppCliente
                   });
                 MypickerColonia.Items.Add(item2["Nombre"].ToString());
             }
-            string Colonia = DireccionesListaColonia.Find(t => t.ID.ToString() == AppCliente.App.MVDireccion.ListaDIRECCIONES[index].COLONIA).ESTADO;
+            string Colonia = DireccionesListaColonia.Find(t => t.ID.ToString() == App.MVDireccion.ListaDIRECCIONES[index].COLONIA).ESTADO;
             MypickerColonia.SelectedItem = Colonia;
 
-            txtIdentificador.Text = AppCliente.App.MVDireccion.ListaDIRECCIONES[index].IDENTIFICADOR;
-            txtCalle.Text = AppCliente.App.MVDireccion.ListaDIRECCIONES[index].CALLE0;
-            txtEntreCalle.Text = AppCliente.App.MVDireccion.ListaDIRECCIONES[index].CALLE1;
-            txtYCalle.Text = AppCliente.App.MVDireccion.ListaDIRECCIONES[index].CALLE2;
-            txtManzana.Text = AppCliente.App.MVDireccion.ListaDIRECCIONES[index].MANZANA;
-            txtLote.Text = AppCliente.App.MVDireccion.ListaDIRECCIONES[index].LOTE;
-            txtCodigoPostal.Text = AppCliente.App.MVDireccion.ListaDIRECCIONES[index].CodigoPostal;
-            txtReferencia.Text = AppCliente.App.MVDireccion.ListaDIRECCIONES[index].REFERENCIA;
-            txtID.Text = AppCliente.App.MVDireccion.ListaDIRECCIONES[index].ID.ToString();
+            txtIdentificador.Text = App.MVDireccion.ListaDIRECCIONES[index].IDENTIFICADOR;
+            txtCalle.Text = App.MVDireccion.ListaDIRECCIONES[index].CALLE0;
+            txtEntreCalle.Text = App.MVDireccion.ListaDIRECCIONES[index].CALLE1;
+            txtYCalle.Text = App.MVDireccion.ListaDIRECCIONES[index].CALLE2;
+            txtManzana.Text = App.MVDireccion.ListaDIRECCIONES[index].MANZANA;
+            txtLote.Text = App.MVDireccion.ListaDIRECCIONES[index].LOTE;
+            txtCodigoPostal.Text = App.MVDireccion.ListaDIRECCIONES[index].CodigoPostal;
+            txtReferencia.Text = App.MVDireccion.ListaDIRECCIONES[index].REFERENCIA;
+            txtID.Text = App.MVDireccion.ListaDIRECCIONES[index].ID.ToString();
             PanelDatos.IsVisible = true;
             btnNuevo.IsVisible = false;
             PanelListView.IsVisible = false;
@@ -706,15 +704,15 @@ namespace AppCliente
                 var pin = new Pin
                 {
                     Type = PinType.Place,
-                    Position = new Position(double.Parse(AppCliente.App.MVDireccion.ListaDIRECCIONES[index].Latitud), double.Parse(AppCliente.App.MVDireccion.ListaDIRECCIONES[index].Longitud)),
+                    Position = new Position(double.Parse(App.MVDireccion.ListaDIRECCIONES[index].Latitud), double.Parse(App.MVDireccion.ListaDIRECCIONES[index].Longitud)),
                     Label = "hoasd",
                     Address = "dasd",
                     Id = "MI ubicación actual"
                 };
                 MyMap.Pins.Add(pin);
-                MyMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(double.Parse(AppCliente.App.MVDireccion.ListaDIRECCIONES[index].Latitud), double.Parse(AppCliente.App.MVDireccion.ListaDIRECCIONES[index].Longitud)), Distance.FromMiles(1.0)));
-                Latitud1 = double.Parse(AppCliente.App.MVDireccion.ListaDIRECCIONES[index].Latitud);
-                Longitud1 = double.Parse(AppCliente.App.MVDireccion.ListaDIRECCIONES[index].Longitud);
+                MyMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(double.Parse(App.MVDireccion.ListaDIRECCIONES[index].Latitud), double.Parse(App.MVDireccion.ListaDIRECCIONES[index].Longitud)), Distance.FromMiles(1.0)));
+                Latitud1 = double.Parse(App.MVDireccion.ListaDIRECCIONES[index].Latitud);
+                Longitud1 = double.Parse(App.MVDireccion.ListaDIRECCIONES[index].Longitud);
             }
             catch (Exception)
             {
@@ -727,8 +725,8 @@ namespace AppCliente
             App.Current.MainPage.Navigation.PopAsync(false);
             try
             {
-                this.Button.Text = "ENTREGAR EN " + AppCliente.App.MVDireccion.ListaDIRECCIONES.Find(x => x.ID == new Guid(txtIDDireccionn.Text)).IDENTIFICADOR + " >";
-                this.IDDireccionBusqueda.Text = AppCliente.App.MVDireccion.ListaDIRECCIONES.Find(x => x.ID == new Guid(txtIDDireccionn.Text)).ID.ToString();
+                Button.Text = "ENTREGAR EN " + App.MVDireccion.ListaDIRECCIONES.Find(x => x.ID == new Guid(txtIDDireccionn.Text)).IDENTIFICADOR + " >";
+                IDDireccionBusqueda.Text = App.MVDireccion.ListaDIRECCIONES.Find(x => x.ID == new Guid(txtIDDireccionn.Text)).ID.ToString();
             }
             catch (Exception)
             {

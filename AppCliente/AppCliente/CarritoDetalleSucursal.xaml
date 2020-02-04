@@ -2,88 +2,87 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AppCliente.CarritoDetalleSucursal"
+             xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"             
+             xmlns:ffTrans="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
              Title="Detalle productos sucursal">
 
-  <ContentPage.Content>
-    <StackLayout>
-      <ListView x:Name="MyListViewBusquedaProductos"
+    <ContentPage.Content>
+        <StackLayout>
+            <ListView x:Name="MyListViewBusquedaProductos"
                         VerticalScrollBarVisibility="Always"
-                ItemTapped="MyListViewBusquedaProductos_ItemTapped"
       ItemsSource="{Binding VMProducto}"
                 SelectionMode="None"
                 SeparatorVisibility="Default"
       IsPullToRefreshEnabled="False"
       HasUnevenRows="True">
-        <ListView.ItemTemplate>
-          <DataTemplate>
-            <ViewCell >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell >
 
-              <ContentView Margin="0" Padding="0">
+                            <ContentView Margin="0" Padding="0">
 
-                <Grid Margin="0" Padding="0">
-                  <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                  </Grid.RowDefinitions>
+                                <Grid Margin="0" Padding="0" BackgroundColor="{Binding CColor}">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
 
-                  <StackLayout Grid.Row="0" Orientation="Horizontal">
-                    <Image
+                                    <StackLayout Grid.Row="0" Orientation="Horizontal">
+                                        <!--<Image
                                    HorizontalOptions="Start"
                                     VerticalOptions="Start"
                                Source="{Binding STRRUTA}"
                                     Margin="15"
                                 WidthRequest="130"
                                 HeightRequest="130">
-                    </Image>
+                                        </Image>-->
+                                        <ff:CachedImage
+                                                            Source="{Binding STRRUTA}"
+                                                            HorizontalOptions="Center"
+                                                            VerticalOptions="Center"
+                                                            LoadingPlaceholder   = "IconoCajaVacia"
+                                                            ErrorPlaceholder     = "Error"
+                                                            WidthRequest         = "130"
+                                                            HeightRequest        = "130"
+                                                            CacheDuration        = "30"
+                                                            RetryCount           = "3"
+                                                            RetryDelay           = "250"
+                                                            DownsampleToViewSize = "False">
+                                            <ff:CachedImage.Transformations>
+                                                <ffTrans:RoundedTransformation Radius="20" />
+                                            </ff:CachedImage.Transformations>
+                                        </ff:CachedImage>
+                                        <StackLayout HorizontalOptions="FillAndExpand" >
+                                            <Label Text="{Binding STRNOMBRE}" HorizontalOptions="Start" FontSize="Medium" TextColor="Black"/>
+                                            <Label  Text="{Binding Cantidad, StringFormat='Cantidad {0}'}" FontSize="Small" HorizontalOptions="Start" TextColor="Black" />
 
-                    <StackLayout HorizontalOptions="FillAndExpand" >
-                      <Label Text="{Binding STRNOMBRE}"
-                                         HorizontalOptions="Start"
-                     FontSize="Medium"/>
+                                            <Label Text="{Binding Subtotal, StringFormat='Importe $ {0}'}" x:Name="txtProductoPrecio"  HorizontalOptions="Start" FontSize="Medium" TextColor="Black" VerticalOptions="End" />
 
+                                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                                                <ImageButton Source="IconoEliminar" HeightRequest="40" WidthRequest="40" BackgroundColor="Transparent" Clicked="ImageButtonEliminarProducto_Clicked"></ImageButton>
+                                                <Button CornerRadius="25" TextColor="Black" FontAttributes="Bold" FontSize="24" Padding="0" BackgroundColor="Red" Text="-" WidthRequest="50" HeightRequest="50" Clicked="ButtonEliminarUnProducto_Clicked"></Button>
+                                                <Button CornerRadius="25" TextColor="Black" FontAttributes="Bold" FontSize="24" BackgroundColor="Green" Text="+" WidthRequest="50" HeightRequest="50" Clicked="ButtonAgregarUnProducto_Clicked_1"></Button>
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </StackLayout>
 
-                      <Label  Text="{Binding Cantidad, StringFormat='Cantidad {0}'}"
-                     FontSize="Small"
-                                          HorizontalOptions="Start"
-                                           />
+                                    <Entry Grid.Row="1" Text="{Binding StrNota}" Placeholder="Sin nota" x:Name="ENotas" TextChanged="ENotas_TextChanged" Margin="20,5,20,0" HorizontalOptions="Fill" />
 
-                      <Label Text="{Binding Subtotal, StringFormat='Importe $ {0}'}"
-                                         x:Name="txtProductoPrecio"
-                                         HorizontalOptions="Start"
-                     FontSize="Medium"
-                                         TextColor="Black"
-                     VerticalOptions="End" />
+                                    <StackLayout Orientation="Horizontal" Grid.Row="2" HorizontalOptions="Center" IsVisible="{Binding IsVisible}">
+                                        <Button Text="menos" Clicked="ButtonMenos_Clicked"></Button>
+                                        <Button Text="mas" Clicked="ButtonMas_Clicked_1"></Button>
+                                        <Button Text="Eliminar" Clicked="ButtonEliminar_Clicked"></Button>
+                                    </StackLayout>
 
-                      <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                        <ImageButton Source="IconoEliminar" HeightRequest="40" WidthRequest="40" BackgroundColor="Transparent" Clicked="ImageButtonEliminarProducto_Clicked"></ImageButton>
-                        <Button CornerRadius="25" TextColor="White" FontAttributes="Bold" FontSize="Large" Padding="0" BackgroundColor="Red" Text="-" WidthRequest="50" HeightRequest="50" Clicked="ButtonEliminarUnProducto_Clicked"></Button>
-                        <Button CornerRadius="25" TextColor="White" FontAttributes="Bold" FontSize="Large" BackgroundColor="Green" Text="+" WidthRequest="50" HeightRequest="50" Clicked="ButtonAgregarUnProducto_Clicked_1"></Button>
-                      </StackLayout>
-                    </StackLayout>
-                  </StackLayout>
-                  
-                  <Entry Grid.Row="1" Text="{Binding StrNota}"
-                         Placeholder="Sin nota"
-                         x:Name="ENotas"
-                         TextChanged="ENotas_TextChanged"
-                         Margin="20,5,20,0"
-                         HorizontalOptions="Fill" />
+                                </Grid>
 
-                  <StackLayout Orientation="Horizontal" Grid.Row="2" HorizontalOptions="Center" IsVisible="{Binding IsVisible}">
-                    <Button Text="menos" Clicked="ButtonMenos_Clicked"></Button>
-                    <Button Text="mas" Clicked="ButtonMas_Clicked_1"></Button>
-                    <Button Text="Eliminar" Clicked="ButtonEliminar_Clicked"></Button>
-                  </StackLayout>
-
-                </Grid>
-
-              </ContentView>
-            </ViewCell>
-          </DataTemplate>
-        </ListView.ItemTemplate>
+                            </ContentView>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
 
 
-      </ListView>
-    </StackLayout>  
-  </ContentPage.Content>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
 </ContentPage>

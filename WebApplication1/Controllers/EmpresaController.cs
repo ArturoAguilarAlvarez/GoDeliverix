@@ -11,10 +11,10 @@ namespace WebApplication1.Controllers
         ResponseHelper Respuesta;
 
         // GET:
-        public ResponseHelper GetObtenerEmpresaCliente(string StrParametroBusqueda, string StrDia, Guid UidDireccion, Guid UidBusquedaCategorias, string StrNombreEmpresa = "")
+        public ResponseHelper GetObtenerEmpresaCliente(string StrParametroBusqueda, string StrDia, Guid UidColonia, Guid UidEstado, Guid UidBusquedaCategorias, string StrNombreEmpresa = "")
         {
             MVEmpresa = new VMEmpresas();
-            MVEmpresa.BuscarEmpresaBusquedaCliente(StrParametroBusqueda, StrDia, UidDireccion, UidBusquedaCategorias, StrNombreEmpresa);
+            MVEmpresa.BuscarEmpresaBusquedaCliente(StrParametroBusqueda, StrDia, UidEstado, UidColonia, UidBusquedaCategorias, StrNombreEmpresa);
             Respuesta = new ResponseHelper();
             Respuesta.Data = MVEmpresa;
             Respuesta.Status = true;

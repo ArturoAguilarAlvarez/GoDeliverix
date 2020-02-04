@@ -69,6 +69,7 @@
     <Compile Include="VMUsuarios.cs" />
     <Compile Include="VMValidaciones.cs" />
     <Compile Include="VMVehiculo.cs" />
+    <Compile Include="VMVersion.cs" />
     <Compile Include="VMZonaHoraria.cs" />
   </ItemGroup>
   <ItemGroup>

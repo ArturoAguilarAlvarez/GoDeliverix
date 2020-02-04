@@ -1,9 +1,13 @@
-﻿using System;
+﻿using AppCliente.WebApi;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Rg.Plugins.Popup.Services;
 using VistaDelModelo;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -15,18 +19,9 @@ namespace AppCliente
     {
         VMEmpresas ObjItem;
         Guid UidEmpresa;
-        Guid UiSucursal;
-        Guid UidDireccion;
-
-        public ProductoDescripcionEmpresaPage()
+        public ProductoDescripcionEmpresaPage(VMEmpresas ObjItem)
         {
             InitializeComponent();
-        }
-
-        public ProductoDescripcionEmpresaPage(VMEmpresas ObjItem, Guid UidDireccion)
-        {
-            InitializeComponent();
-            this.UidDireccion = UidDireccion;
             this.ObjItem = ObjItem;
             Title = ObjItem.NOMBRECOMERCIAL;
             //obtener el Dia del dispositivo
@@ -34,69 +29,86 @@ namespace AppCliente
             string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
             txtNombreEmpresa.Text = ObjItem.NOMBRECOMERCIAL;
             UidEmpresa = ObjItem.UIDEMPRESA;
+            CargaPerfilEmpresa(Dia);
 
-            App.MVSucursales.BuscarSucursalesCliente(ObjItem.UIDEMPRESA, Dia, UidDireccion);
+        }
+        protected async void CargaPerfilEmpresa(string Dia)
+        {
+            string uril = "" + Helpers.Settings.sitio + "/api/Sucursales/GetBuscarSucursalesDeUnProducto?uidEmpresa=" + ObjItem.UIDEMPRESA + "&day=" + Dia + "&UidEstado=" + App.UidEstadoABuscar + "&UidColonia=" + App.UidColoniaABuscar + "";
+            string content = "";
+            using (HttpClient _webClient = new HttpClient())
+            {
+                content = await _webClient.GetStringAsync(uril);
+            }
+            string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+            App.MVSucursales = JsonConvert.DeserializeObject<VMSucursales>(obj);
+            #region foto de portada y foto de perfil
+            //Imagen de portada 
+            App.MVImagen.obtenerImagenDePortadaEmpresa(UidEmpresa.ToString());
+            imgFotoPortada.Source = "" + Helpers.Settings.sitio + "/vista/" + App.MVImagen.STRRUTA;
+            //Imagen de perfil
+            App.MVImagen.ObtenerImagenPerfilDeEmpresa(UidEmpresa.ToString());
+            imgFotoPerfilEmpresa.Source = "" + Helpers.Settings.sitio + "/vista/" + App.MVImagen.STRRUTA;
+            #endregion
+            Guid UidColonia = new Guid(App.UidColoniaABuscar);
+            Guid UidEstado = new Guid(App.UidEstadoABuscar);
+            CantidadSucursales(Dia);
+            #region busqueda de ListaOferta
+            var registro = App.MVSucursales.LISTADESUCURSALES[0];
+            txtNombreSucursal.Text = registro.IDENTIFICADOR;
+
+            CargaOfertas();
+
+            #endregion
+        }
+        protected async void CargaOfertas()
+        {
+            using (HttpClient _webClient = new HttpClient())
+            {
+                string uril = "" + Helpers.Settings.sitio + "/api/Oferta/GetBuscarOferta?UIDSUCURSAL=" + App.MVSucursales.LISTADESUCURSALES[0].ID + "&ESTATUS=1";
+                string content = await _webClient.GetStringAsync(uril);
+                string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                App.MVOferta = JsonConvert.DeserializeObject<VMOferta>(obj);
+            }
             idSucursal.Text = App.MVSucursales.LISTADESUCURSALES[0].ID.ToString();
-
-            App.MVSucursales.BuscarSucursalesCliente(UidEmpresa, Dia, UidDireccion);
-
+            MypickerMenu.ItemsSource = App.MVOferta.ListaDeOfertas;
+            MypickerMenu.SelectedIndex = 0;
+        }
+        private async void CantidadSucursales(string Dia)
+        {
+            using (HttpClient _webClient = new HttpClient())
+            {
+                string uril = "" + Helpers.Settings.sitio + "/api/Sucursales/GetBuscarSucursalesDeUnProducto?uidEmpresa=" + ObjItem.UIDEMPRESA + "&day=" + Dia + "&UidEstado=" + App.UidEstadoABuscar + "&UidColonia=" + App.UidColoniaABuscar + "";
+                string content = await _webClient.GetStringAsync(uril);
+                string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                App.MVSucursales = JsonConvert.DeserializeObject<VMSucursales>(obj);
+            }
+            idSucursal.Text = App.MVSucursales.LISTADESUCURSALES[0].ID.ToString();
             if (App.MVSucursales.LISTADESUCURSALES.Count > 1)
             {
                 txtCantidadDeSucursales.Text = "Sucursales disponibles " + App.MVSucursales.LISTADESUCURSALES.Count.ToString();
             }
             else
             {
-                txtCantidadDeSucursales.Text =  App.MVSucursales.LISTADESUCURSALES.Count.ToString() + " sucursal disponible";
+                txtCantidadDeSucursales.Text = App.MVSucursales.LISTADESUCURSALES.Count.ToString() + " sucursal disponible";
             }
-
-            #region foto de portada y foto de perfil
-            //Imagen de portada 
-            App.MVImagen.obtenerImagenDePortadaEmpresa(UidEmpresa.ToString());
-            imgFotoPortada.Source = "http://www.godeliverix.net/vista/" + App.MVImagen.STRRUTA;
-            //Imagen de perfil
-            App.MVImagen.ObtenerImagenPerfilDeEmpresa(UidEmpresa.ToString());
-            imgFotoPerfilEmpresa.Source = "http://www.godeliverix.net/vista/" + App.MVImagen.STRRUTA;
-            #endregion
-            Guid Colonia = new Guid(App.MVDireccion.ListaDIRECCIONES[0].COLONIA);
-
-            App.MVProducto.BuscarProductoPorSucursal("Giro", Dia, Colonia, new Guid(App.giro), ObjItem.UIDEMPRESA);
-
-            #region busqueda de ListaOferta
-            var registro = App.MVSucursales.LISTADESUCURSALES[0];
-            txtNombreSucursal.Text = registro.IDENTIFICADOR;
-            App.MVOferta.Buscar(UIDSUCURSAL: registro.ID, ESTATUS: "1");
-            MypickerMenu.ItemsSource = App.MVOferta.ListaDeOfertas;
-            MypickerMenu.SelectedIndex = 0;
-            #endregion
-
-
-            #region Busqueda de Seccion4
-            //VMOferta objMenu = MypickerMenu.SelectedItem as VMOferta;
-            //App.MVSeccion.Buscar(UIDOFERTA: objMenu.UID, UidDirecccion: UidDireccion);
-            // Carrusel.ItemsSource= App.MVSeccion.ListaDeSeccion;
-            //MypickerSeccion.ItemsSource = App.MVSeccion.ListaDeSeccion;
-            //MypickerSeccion.SelectedIndex = 0;
-            #endregion
-
-
-
-
-            #region buscar productos region
-            //VMOferta ovjSeccion = MypickerMenu.SelectedItem as VMOferta;
-            //App.MVProducto.BuscarProductosSeccion(App.MVSeccion.ListaDeSeccion[0].UID);
-            //MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeProductos;
-            #endregion
         }
 
-        private void MypickerSeccion_SelectedIndexChanged(object sender, EventArgs e)
+        private async void MypickerSeccion_SelectedIndexChanged(object sender, EventArgs e)
         {
             VMSeccion ovjSeccion = MypickerSeccion.SelectedItem as VMSeccion;
             if (ovjSeccion != null)
             {
+                VMProducto Busquedaproducto = new VMProducto();
+                using (HttpClient _webClient = new HttpClient())
+                {
+                    string uril = "" + Helpers.Settings.sitio + "/api/Producto/GetObtenerProductosDeLaSeccion?UidSeccion=" + ovjSeccion.UID + "";
+                    string content = await _webClient.GetStringAsync(uril);
+                    string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                    Busquedaproducto = JsonConvert.DeserializeObject<VMProducto>(obj);
 
-                App.MVProducto.BuscarProductosSeccion(ovjSeccion.UID);
-                MyListViewBusquedaProductos.ItemsSource = null;
-                MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeProductos;
+                    MyListViewBusquedaProductos.ItemsSource = Busquedaproducto.ListaDeProductos;
+                }
             }
             else
             {
@@ -104,45 +116,41 @@ namespace AppCliente
             }
         }
 
-        private void MypickerMenu_SelectedIndexChanged(object sender, EventArgs e)
+        private async void MypickerMenu_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
                 VMOferta objMenu = MypickerMenu.SelectedItem as VMOferta;
-                // App.MVSeccion.Buscar(UIDOFERTA: objMenu.UID, UidDirecccion: UidDireccion);
-                App.MVSeccion.Buscar(UIDOFERTA: objMenu.UID);
-                MypickerSeccion.ItemsSource = null;
-                MypickerSeccion.ItemsSource = App.MVSeccion.ListaDeSeccion;
-                if (App.MVSeccion.ListaDeSeccion.Count > 0)
+                using (HttpClient _webClient = new HttpClient())
                 {
-                    MypickerSeccion.SelectedIndex = 0;
+                    string uril = "" + Helpers.Settings.sitio + "/api/Seccion/GetBuscarSeccion?UIDOFERTA=" + objMenu.UID.ToString() + "";
+                    string content = await _webClient.GetStringAsync(uril);
+                    string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                    App.MVSeccion = JsonConvert.DeserializeObject<VMSeccion>(obj);
+                    MypickerSeccion.ItemsSource = null;
+                    MypickerSeccion.ItemsSource = App.MVSeccion.ListaDeSeccion;
+                    if (App.MVSeccion.ListaDeSeccion.Count > 0)
+                    {
+                        MypickerSeccion.SelectedIndex = 0;
+                    }
                 }
             }
             catch (Exception)
             {
-
-
             }
-
         }
 
         private void MyListViewBusquedaProductos_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             try
             {
-                var item = ((ItemTappedEventArgs)e);
+                var item = e;
                 VMProducto ObjItem = (VMProducto)item.Item;
-
-
                 VMSeccion ovjSeccion = MypickerSeccion.SelectedItem as VMSeccion;
-
-                //Navigation.PushAsync(new ProductoDescripcionPage(ObjItem, UiSucursal, ovjSeccion));
                 Navigation.PushAsync(new ProductoDescripcionPage(ObjItem, new Guid(idSucursal.Text), ovjSeccion));
-
             }
             catch (Exception)
             {
-
             }
         }
 
@@ -153,7 +161,6 @@ namespace AppCliente
 
         private void BtnCarrito_Clicked(object sender, EventArgs e)
         {
-
         }
     }
 }

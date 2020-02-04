@@ -16,7 +16,15 @@ namespace Repartidores_GoDeliverix.Views
 		public Historial ()
 		{
 			InitializeComponent ();
-		}
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                SLContenido.Padding = new Thickness(0, 0, 0, 0);
+            }
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                SLContenido.Padding = new Thickness(20, 20, 20, 0);
+            }
+        }
 
         private async void BtnHistorico_Clicked(object sender, EventArgs e)
         {

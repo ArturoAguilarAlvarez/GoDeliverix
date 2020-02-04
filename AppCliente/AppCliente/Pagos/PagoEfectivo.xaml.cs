@@ -50,7 +50,7 @@ namespace AppCliente.Pagos
         {
             using (var _webApi = new HttpClient())
             {
-                string url = "https://www.godeliverix.net/api/Direccion/GetDireccionCompleta?UidDireccion=" + App.DireccionABuscar + "";
+                string url = "" + Helpers.Settings.sitio + "/api/Direccion/GetDireccionCompleta?UidDireccion=" + App.DireccionABuscar + "";
                 var content = await _webApi.GetStringAsync(url);
                 var obj = JsonConvert.DeserializeObject<ResponseHelper>(content.ToString()).Data.ToString();
                 var MDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);

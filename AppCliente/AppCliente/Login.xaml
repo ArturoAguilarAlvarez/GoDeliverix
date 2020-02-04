@@ -1,53 +1,54 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             NavigationPage.HasNavigationBar="False"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
+             Title="Acceso"
              x:Class="AppCliente.Login">
-    <Grid VerticalOptions="Fill" Padding="40,0,40,0" HorizontalOptions="Fill">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Image Source="IconoGoDeliverix.png"
-                  VerticalOptions="End"
+    <ContentPage.Content>
+        <Grid VerticalOptions="Fill" Padding="40,0,40,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Image Source="IconoGoDeliverix.png"
+                  VerticalOptions="Center"
                   HorizontalOptions="Center"
                   HeightRequest="150"
                   WidthRequest="150"
                   Grid.Row="1"></Image>
-        <Label Grid.Row="2" >Usuario</Label>
-        <Entry Placeholder="Usuario"  Text="" x:Name="txtUsuario" Grid.Row="3"/>
-        <Label Grid.Row="4" >Password</Label>
-        <Entry Grid.Row="5"  Placeholder="Password" Text="" IsPassword="True" x:Name="txtIDContraseña"/>
-        <StackLayout x:Name="CuadroRecordar" IsVisible="True" Orientation="Horizontal" Grid.Row="6" Spacing="0">
-            <Label Text="Recordar Contraseña" FontSize="Micro" VerticalOptions="Center" HorizontalOptions="StartAndExpand" />
-            <Switch  x:Name="GuardarContraseña" HorizontalOptions="End" IsToggled="false" VerticalOptions="Center" />
-        </StackLayout>
-        <ActivityIndicator IsRunning="False"  Grid.Row="6" x:Name="LoderLogin" IsVisible="False"/>
-        <Button Text="Login" BackgroundColor="#f15a23" Clicked="Button_Login" Grid.Row="7" TextColor="White" x:Name="btnLogin"/>
-        <Grid Grid.Row="8">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Label BackgroundColor="#bababa" HeightRequest="1" HorizontalOptions="FillAndExpand" VerticalOptions="Center" />
-            <Label Text="OR" Grid.Column="1" VerticalOptions="Center" Margin="10,0,10,0" />
-            <Label BackgroundColor="#bababa" Grid.Column="2" HeightRequest="1" HorizontalOptions="FillAndExpand" VerticalOptions="Center" />
-        </Grid>
+            <Label Grid.Row="2" >Usuario</Label>
+            <Entry Placeholder="Usuario"  Text="" x:Name="txtUsuario" Grid.Row="3"/>
+            <Label Grid.Row="4" >Password</Label>
+            <Entry Grid.Row="5"  Placeholder="Password" Text="" IsPassword="True" x:Name="txtIDContraseña"/>
+            <StackLayout x:Name="CuadroRecordar" IsVisible="True" Orientation="Horizontal" Grid.Row="6" Spacing="0">
+                <Label Text="Recordar Contraseña" FontSize="Micro" VerticalOptions="Center" HorizontalOptions="StartAndExpand" />
+                <Switch  x:Name="GuardarContraseña" HorizontalOptions="End" IsToggled="false" VerticalOptions="Center" />
+            </StackLayout>
+            <ActivityIndicator IsRunning="False"  Grid.Row="6" x:Name="LoderLogin" IsVisible="False"/>
+            <Button Text="Login" BackgroundColor="#f15a23" Clicked="Button_Login" Grid.Row="7" TextColor="White" x:Name="btnLogin"/>
+            <Grid Grid.Row="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label BackgroundColor="#bababa" HeightRequest="1" HorizontalOptions="FillAndExpand" VerticalOptions="Center" />
+                <Label Text="OR" Grid.Column="1" VerticalOptions="Center" Margin="10,0,10,0" />
+                <Label BackgroundColor="#bababa" Grid.Column="2" HeightRequest="1" HorizontalOptions="FillAndExpand" VerticalOptions="Center" />
+            </Grid>
 
-        <Button BackgroundColor="#51406A" Text="Registro" TextColor="White" Clicked="Button_Siguiente" Grid.Row="9"/>
+            <Button BackgroundColor="#51406A" Text="Registro" TextColor="White" Clicked="Button_Siguiente" Grid.Row="9"/>
 
-        <ActivityIndicator x:Name="acLogin"></ActivityIndicator>
-        <Button 
+            <ActivityIndicator x:Name="acLogin"></ActivityIndicator>
+            <Button 
                     Text="¿Olvidaste tu contraseña?"                   
                     VerticalOptions="End"
                     HorizontalOptions="End"
@@ -56,5 +57,7 @@
                     BackgroundColor="Transparent" 
                     Clicked="Button_RecuperarContrasena"
                      Grid.Row="10"></Button>
-    </Grid>
+        </Grid>
+    </ContentPage.Content>
+
 </ContentPage>

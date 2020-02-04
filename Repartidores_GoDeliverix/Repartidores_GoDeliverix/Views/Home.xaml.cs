@@ -16,6 +16,14 @@ namespace Repartidores_GoDeliverix.Views
         public Home()
         {
             InitializeComponent();
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                SLHome.Padding = new Thickness(0,0,0,0);
+            }
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                SLHome.Padding = new Thickness(20,20,20,0);
+            }
         }
         
         private  void BtnMapaEspera_ClickedAsync(object sender, EventArgs e)

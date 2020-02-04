@@ -16,6 +16,13 @@ namespace Repartidores_GoDeliverix.VM
         VistaDelModelo.VMTurno MVTurno;
 
         private decimal __HOTotalEnvio;
+        private string _UidTurnoSeleccionado;
+
+        public string UidTurnoSeleccionado
+        {
+            get { return _UidTurnoSeleccionado; }
+            set { _UidTurnoSeleccionado = value; }
+        }
 
         public decimal HOTotalEnvio
         {
@@ -125,7 +132,7 @@ namespace Repartidores_GoDeliverix.VM
             {
                 using (var _WebApiGoDeliverix = new HttpClient())
                 {
-                    string url = "https://www.godeliverix.net/api/Turno/GetConsultaLiquidacionesTurno?UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor + "";
+                    string url = "https://www.godeliverix.net/api/Turno/GetConsultaLiquidacionesTurno?UidTurnoRepartidor=" + UidTurnoSeleccionado + "";
                     var datos = await _WebApiGoDeliverix.GetStringAsync(url);
                     var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
                     MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
@@ -147,6 +154,7 @@ namespace Repartidores_GoDeliverix.VM
         public VMTurnoOrden(String UidTurnoRepartidor)
         {
             CargaOrdenes(UidTurnoRepartidor);
+            UidTurnoSeleccionado = UidTurnoRepartidor;
         }
 
         public VMTurnoOrden()

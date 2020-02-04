@@ -9,6 +9,9 @@ using Xamarin.Forms.Xaml;
 using Xamarin.Forms.Maps;
 using VistaDelModelo;
 using System.Data;
+using System.Net.Http;
+using Newtonsoft.Json;
+using AppCliente.WebApi;
 
 namespace AppCliente
 {
@@ -20,9 +23,16 @@ namespace AppCliente
             InitializeComponent();
             Cargar();
         }
-        public void Cargar()
+        public async void Cargar()
         {
-            App.MVOrden.ObtenerOrdenesCliente(App.Global1.ToString(), "Usuario");
+            //App.MVOrden.ObtenerOrdenesCliente(App.Global1.ToString(), "Usuario");
+            using (HttpClient _WebApiGoDeliverix = new HttpClient())
+            {
+                string url = "" + Helpers.Settings.sitio + "/api/Orden/GetObtenerOrdenesCliente?UidUsuario=" + App.Global1.ToString() + "&parametro=Usuario";
+                string content = await _WebApiGoDeliverix.GetStringAsync(url);
+                string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                App.MVOrden = JsonConvert.DeserializeObject<VMOrden>(obj);
+            }
             for (int i = 0; i < App.MVOrden.ListaDeOrdenes.Count; i++)
             {
                 int letras = App.MVOrden.ListaDeOrdenes[i].FechaDeOrden.Length;
@@ -42,7 +52,7 @@ namespace AppCliente
 
         private void MyListViewHistorial_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            var item = ((ItemTappedEventArgs)e);
+            var item = e;
             VMOrden ObjItem = (VMOrden)item.Item;
             App.MVOrden.ListaDeOrdenesEmpresa.Clear();
             DataTable DatoQuery = App.MVOrden.ObtenerSucursaleDeOrden(ObjItem.Uidorden);
@@ -50,9 +60,8 @@ namespace AppCliente
             foreach (DataRow itemm in DatoQuery.Rows)
             {
                 Status = "";
-                //App.MVOrden.ObtenerEstatusOrden();
                 DataTable datoStatus = App.MVOrden.ObtenerEstatusOrden(itemm["UidRelacionOrdenSucursal"].ToString());
-                //datoStatus.Rows[0][""].ToString();
+
                 foreach (DataRow item2 in datoStatus.Rows)
                 {
                     Status = item2["VchNombre"].ToString();
@@ -69,12 +78,10 @@ namespace AppCliente
                     LngCodigoDeEntrega = long.Parse(itemm["BintCodigoEntrega"].ToString()),
                     StrNota = Status,
                     MPropina = decimal.Parse(itemm["MPropina"].ToString()),
-                    Imagen = "http://godeliverix.net/Vista/" + itemm["NVchRuta"].ToString(),
+                    Imagen = "" + Helpers.Settings.sitio + "/Vista/" + itemm["NVchRuta"].ToString(),
                 });
             }
-
             Navigation.PushAsync(new HistorialDetalleEmpresa(ObjItem));
-            //App.MVOrden.ObtenerProductosDeOrden(ObjItem.UidRelacionOrdenSucursal.ToString());
         }
     }
 }

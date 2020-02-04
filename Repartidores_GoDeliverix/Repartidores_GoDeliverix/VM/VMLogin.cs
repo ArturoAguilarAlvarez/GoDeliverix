@@ -106,7 +106,8 @@ namespace Repartidores_GoDeliverix.VM
                     }
                     else
                     {
-
+                        this.IsLoading = true;
+                        this.IsEnable = false;
                         Acceso(User, Password);
 
                     }
@@ -194,8 +195,6 @@ namespace Repartidores_GoDeliverix.VM
 
                         Application.Current.Properties["IsLogged"] = true;
                         Application.Current.MainPage = new NavigationPage(new TabbedPageMain());
-
-                        //await Application.Current.MainPage.Navigation.PushAsync(new Prueba());
 
                         if (IsSavingValues)
                         {

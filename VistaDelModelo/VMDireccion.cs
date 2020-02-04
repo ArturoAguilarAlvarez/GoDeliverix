@@ -20,6 +20,14 @@ namespace VistaDelModelo
         public List<VMDireccion> ListaColoniasSeleccionadasRecolecta = new List<VMDireccion>();
         public List<VMDireccion> ListaDeTarifa = new List<VMDireccion>();
         public List<VMDireccion> ListaDeEstadosSeleccionados = new List<VMDireccion>();
+
+
+        // Listas de los catalogos
+        public List<VMDireccion> ListaPais = new List<VMDireccion>();
+        public List<VMDireccion> ListaEstado = new List<VMDireccion>();
+        public List<VMDireccion> ListaCiudad = new List<VMDireccion>();
+        public List<VMDireccion> ListaMunicipio = new List<VMDireccion>();
+        public List<VMDireccion> ListaColonia = new List<VMDireccion>();
         private Direccion _direccion;
 
         public string Longitud { get; set; }
@@ -156,6 +164,7 @@ namespace VistaDelModelo
             get { return _identificador; }
             set { _identificador = value; }
         }
+
         #endregion
 
         //public VMDireccion()
@@ -167,15 +176,64 @@ namespace VistaDelModelo
         //    }
         //}
 
+        public void ObtenerDireccionConGoogle(string strNombreCiudad)
+        {
+            SqlCommand cmd = new SqlCommand();
+
+            try
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "asp_ObtenerDireccion";
+
+                //Dato 1
+                cmd.Parameters.Add("@VchNombreCiudad", SqlDbType.NVarChar, 200);
+                cmd.Parameters["@VchNombreCiudad"].Value = strNombreCiudad;
+                oConexion = new Conexion();
+                ListaDIRECCIONES = new List<VMDireccion>();
+                foreach (DataRow item in oConexion.Busquedas(cmd).Rows)
+                {
+                    ListaDIRECCIONES.Add(new VMDireccion()
+                    {
+                        ID = Guid.NewGuid(),
+                        PAIS = item["UidPais"].ToString(),
+                        ESTADO = item["UidEstado"].ToString(),
+                        MUNICIPIO = item["UidMunicipio"].ToString(),
+                        CIUDAD = item["UidCiudad"].ToString(),
+                        NOMBRECIUDAD = ObtenerNombreDeLaCiudad(item["UidCiudad"].ToString())
+                    });
+                }
+                //foreach (var item in ListaDIRECCIONES)
+                //{
+                //    GuardaDireccion(item.ID,new Guid(item.PAIS),new Guid(item.ESTADO),new Guid(item.MUNICIPIO), new Guid(item.CIUDAD),new Guid(item.COLONIA),item.CALLE0,item.CALLE1,item.CALLE2,item.MANZANA,item.LOTE,item.CodigoPostal,item.REFERENCIA,item.IDENTIFICADOR);
+                //}
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         #region Catalogos
         public DataTable Paises()
         {
             oDbDireccion = new DbDireccion();
+            ListaPais = new List<VMDireccion>();
+            foreach (DataRow item in oDbDireccion.ObtenerPais().Rows)
+            {
+                ListaPais.Add(new VMDireccion() { ID = new Guid(item["UidPais"].ToString()), NombrePais = item["Nombre"].ToString() });
+            }
             return oDbDireccion.ObtenerPais();
         }
         public DataTable Estados(Guid Pais, string busqueda = "", string Nombre = "")
         {
             oDbDireccion = new DbDireccion();
+            ListaEstado = new List<VMDireccion>();
+            foreach (DataRow item in oDbDireccion.ObtenerEstados(Pais, busqueda, Nombre).Rows)
+            {
+                ListaEstado.Add(new VMDireccion() { ID = new Guid(item["IdEstado"].ToString()), NombreEstado = item["Nombre"].ToString() });
+            }
             return oDbDireccion.ObtenerEstados(Pais, busqueda, Nombre);
         }
         public void BuscarDireccionPorUid(string UidDireccion)
@@ -202,11 +260,24 @@ namespace VistaDelModelo
         public DataTable Municipios(Guid Estado)
         {
             oDbDireccion = new DbDireccion();
+            ListaMunicipio = new List<VMDireccion>();
+            foreach (DataRow item in oDbDireccion.ObtenerMunicipio(Estado).Rows)
+            {
+                ListaMunicipio.Add(new VMDireccion() { ID = new Guid(item["IdMunicipio"].ToString()), NombreMunicipio = item["Nombre"].ToString() });
+            }
             return oDbDireccion.ObtenerMunicipio(Estado);
         }
+
+
+
         public DataTable Ciudades(Guid Municipio)
         {
             oDbDireccion = new DbDireccion();
+            ListaCiudad = new List<VMDireccion>();
+            foreach (DataRow item in oDbDireccion.ObtenerCiudades(Municipio).Rows)
+            {
+                ListaCiudad.Add(new VMDireccion() { ID = new Guid(item["IdCiudad"].ToString()), NOMBRECIUDAD = item["Nombre"].ToString() });
+            }
             return oDbDireccion.ObtenerCiudades(Municipio);
         }
         public DataTable Colonias(Guid Ciudad, string ubicacion = "", string Nombre = "")
@@ -220,7 +291,7 @@ namespace VistaDelModelo
                 {
                     if (!ListaCiudades.Exists(objeto => objeto.ID == new Guid(item["IdColonia"].ToString())))
                     {
-                        ListaCiudades.Add(new VMDireccion() { ID = new Guid(item["IdColonia"].ToString()) });
+                        ListaCiudades.Add(new VMDireccion() { ID = new Guid(item["IdColonia"].ToString()), NOMBRECOLONIA = item["Nombre"].ToString() });
                     }
                 }
             }
@@ -230,6 +301,12 @@ namespace VistaDelModelo
         #endregion
 
         #region Metodos
+
+        public void EliminarDireccionUbicacion(string uidDireccion)
+        {
+            oDbDireccion = new DbDireccion();
+            oDbDireccion.EliminaDireccionCompleta(uidDireccion);
+        }
 
         #region Busquedas
         /// <summary>

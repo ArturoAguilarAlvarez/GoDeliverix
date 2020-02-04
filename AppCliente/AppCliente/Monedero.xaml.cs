@@ -24,7 +24,7 @@ namespace AppCliente
 
         private async void cargaMonedero()
         {
-            string _Url = $"https://godeliverix.net/api/Monedero/Get?" +
+            string _Url = $"" + Helpers.Settings.sitio + "/api/Monedero/Get?" +
                                 $"id={App.Global1}";
             var content = "";
             using (HttpClient _client = new HttpClient())
@@ -35,8 +35,8 @@ namespace AppCliente
             MVMonedero = JsonConvert.DeserializeObject<VMMonedero>(obj);
             lblDineroMonedero.Text = "Saldo actual $" + MVMonedero.MMonto.ToString("N2") + "";
 
-            string _datosMovimientos = $"https://godeliverix.net/api/Monedero/GetObtenerMovimientos?" +
-                                $"id={App.Global1}"; 
+            string _datosMovimientos = $"" + Helpers.Settings.sitio + "/api/Monedero/GetObtenerMovimientos?" +
+                                $"id={App.Global1}";
 
             using (HttpClient _client = new HttpClient())
             {
@@ -48,7 +48,7 @@ namespace AppCliente
             oMovimientos.ListaDeMovimientos = new List<MVMovimientos>();
             foreach (var item in VMovimientos.ListaDeMoviento)
             {
-                oMovimientos.ListaDeMovimientos.Add(new MVMovimientos() 
+                oMovimientos.ListaDeMovimientos.Add(new MVMovimientos()
                 {
                     LngFolio = item.LngFolio,
                     StrConcepto = item.StrConcepto,
@@ -58,7 +58,6 @@ namespace AppCliente
                     MMonto = item.MMonto
                 });
             }
-
             lvMovimientos.ItemsSource = oMovimientos.ListaDeMovimientos;
         }
     }

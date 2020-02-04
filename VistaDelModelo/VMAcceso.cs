@@ -89,7 +89,80 @@ namespace VistaDelModelo
             contenido += "<br/><br/><a href='http://www.godeliverix.net/Vista/Activaciondecuenta.aspx?CodigoActivacionCuentaDeliverixxdxdxdxd=" + CodigoActivacion.ToString() + "&UidUsuarioxdxdxdxdDDxD=" + UidUsuario.ToString() + "'>Verificar mi cuenta ahora!</a>";
             contenido += "<br/><br/> Muchas gracias.";
 
-            mail.Body = contenido;
+            string ho = "<!DOCTYPE html>\r\n" +
+               "<html xmlns=\"http://www.w3.org/1999/xhtml\">\r\n" +
+               "<head>\r\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\r\n" +
+               "<title></title>\r\n" +
+               "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\r\n" +
+               "</head>\r\n" +
+               "<body style=\"margin: 0; padding: 0;\">\r\n" +
+               "\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\t\r\n" +
+               "\t\t<tr>\r\n" +
+               "\t\t\t<td style=\"padding: 10px 0 30px 0;\">\r\n" +
+               "\t\t\t\t<table align=\"center\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"600\" style=\"border: 1px solid #cccccc; border-collapse: collapse;\">\r\n" +
+               "\t\t\t\t\t<tr>\r\n" +
+               "\t\t\t\t\t\t<td align=\"center\" bgcolor=\"#03357d\" style=\"padding: 40px 0 30px 0; color: #153643; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;\">\r\n" +
+               "\t\t\t\t\t\t\t<a href=\"https://godeliverix.net/\"><img src=\'http://www.godeliverix.net/Vista/img/GoDeliverix.jpg' alt =\"goParkix\" width=\"300\" height=\"230\" style=\"display: block;\" /></a>\r\n" +
+               "\t\t\t\t\t\t</td>\r\n" +
+               "\t\t\t\t\t</tr>\r\n" +
+               "\t\t\t\t\t<tr>\r\n" +
+               "\t\t\t\t\t\t<td bgcolor=\"#ffffff\" style=\"padding: 40px 30px 40px 30px;\">\r\n" +
+               "\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\r\n" +
+               "\t\t\t\t\t\t\t\t<tr>\r\n" +
+               "\t\t\t\t\t\t\t\t\t<td style=\"text-align: center;color: #153643; font-family: Arial, sans-serif; font-size: 24px;\">\r\n" +
+               "\t\t\t\t\t\t\t\t\t\t<b> Hola, " + Nombre + " " + Apellidos + "</b>\r\n" +
+               "\t\t\t\t\t\t\t\t\t\t<h3>¡Bienvenido!</h3>\r\n" +
+               "\t\t\t\t\t\t\t\t\t</td>\r\n" +
+               "\t\t\t\t\t\t\t\t</tr>\r\n" +
+               "\t\t\t\t\t\t\t\t<tr>\r\n" +
+               "\t\t\t\t\t\t\t\t\t<td style=\"text-align: center;color: #153643; font-family: Arial, sans-serif; font-size: 24px;\">\r\n" +
+               "\t\t\t\t\t\t\t\t\t\t<b> A contunuacion le mostramos sus credenciales de acceso usuario: " + usuario + " y contraseña " + password + "</b>\r\n" +
+               "\t\t\t\t\t\t\t\t\t</td>\r\n" +
+               "\t\t\t\t\t\t\t\t</tr>\r\n" +
+               "\t\t\t\t\t\t\t\t<tr>\r\n" +
+               "\t\t\t\t\t\t\t\t\t<td style=\"padding: 20px 0 30px 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;text-align: center;\">\r\n" +
+               "\t\t\t\t\t\t\t\t\t\tSu cuenta ha sido registrada, pero necesita ser activarla.\r\n" +
+               "\r\n\r\n\t\t\t\t\t\t<br/><br/><a href='http://www.godeliverix.net/Vista/Activaciondecuenta.aspx?CodigoActivacionCuentaDeliverixxdxdxdxd=" + CodigoActivacion.ToString() + "&UidUsuarioxdxdxdxdDDxD=" + UidUsuario.ToString() + "'>Para dar activarla dale click aqui!</a>" +
+               "\r\n\r\n\t\t\t\t\t\t<br/><br/><a style =\"display:block;color:#fff;font-weight:400;text-align:center;width:230px;font-size:20px;text-decoration:none;background:#28a745;margin:0 auto;padding:15px 0\" href=\"https://play.google.com/store/apps/details?id=com.CompuAndSoft.GDCliente\"> Descargar app</a>" +
+               "\t\t\t\t\t\t\t\t\t</td>\r\n" +
+               "\t\t\t\t\t\t\t\t</tr>\r\n" +
+               "\t\t\t\t\t\t\t</table>\r\n" +
+               "\t\t\t\t\t\t</td>\r\n" +
+               "\t\t\t\t\t</tr>\r\n" +
+               "\t\t\t\t\t<tr>\r\n" +
+               "\t\t\t\t\t\t<td bgcolor=\"#df5f16\" style=\"padding: 30px 30px 30px 30px;\">\r\n" +
+               "\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\r\n" +
+               "\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t<td style=\"color: #ffffff; font-family: Arial, sans-serif; font-size: 14px;\" width=\"75%\">\r\n\t\t\t\t\t\t\t\t\tGoDeliverix &reg; Todos los derechos reservados, 2020<br/>\r\n" +
+                "\t\t\t\t\t\t\t\t\t</td>\r\n" +
+                "\t\t\t\t\t\t\t\t\t<td align=\"right\" width=\"25%\">\r\n" +
+                //"\t\t\t\t\t\t\t\t\t\t<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\r\n\t\t\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t\t\t<td style=\"font-family: Arial, sans-serif; font-size: 12px; font-weight: bold;\">\r\n" +
+                //"\t\t\t\t\t\t\t\t\t\t\t\t\t<a href=\"https://twitter.com/goparkix\" style=\"color: #ffffff;\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<img src=\"https://help.twitter.com/content/dam/help-twitter/brand/logo.png\" alt=\"Twitter\" width=\"38\" height=\"38\" style=\"display: block;\" border=\"0\" />\r\n" +
+                //"\t\t\t\t\t\t\t\t\t\t\t\t\t</a>\r\n" +
+                //"\t\t\t\t\t\t\t\t\t\t\t\t</td>\r\n" +
+                //"\t\t\t\t\t\t\t\t\t\t\t\t<td style=\"font-size: 0; line-height: 0;\" width=\"20\">&nbsp;</td>\r\n" +
+                //"\t\t\t\t\t\t\t\t\t\t\t\t<td style=\"font-family: Arial, sans-serif; font-size: 12px; font-weight: bold;\">\r\n" +
+                ////"\t\t\t\t\t\t\t\t\t\t\t\t\t<a href=\"https://www.facebook.com/goparkix/ \" style=\"color: #ffffff;\">\r\n" +
+                ////"\t\t\t\t\t\t\t\t\t\t\t\t\t\t<img src=\"https://images.vexels.com/media/users/3/137253/isolated/preview/90dd9f12fdd1eefb8c8976903944c026-icono-de-facebook-logo-by-vexels.png\" alt=\"Facebook\" width=\"38\" height=\"38\" style=\"display: block;\" border=\"0\" />\r\n" +
+                ////"\t\t\t\t\t\t\t\t\t\t\t\t\t</a>\r\n" +
+                //"\t\t\t\t\t\t\t\t\t\t\t\t</td>\r\n" +
+                //"\t\t\t\t\t\t\t\t\t\t\t</tr>\r\n" +
+                //"\t\t\t\t\t\t\t\t\t\t</table>\r\n" +
+                "\t\t\t\t\t\t\t\t\t</td>\r\n" +
+                "\t\t\t\t\t\t\t\t</tr>\r\n" +
+                "\t\t\t\t\t\t\t</table>\r\n" +
+                "\t\t\t\t\t\t</td>\r\n" +
+                "\t\t\t\t\t</tr>\r\n" +
+                "\t\t\t\t</table>\r\n" +
+                "\t\t\t</td>\r\n" +
+                "\t\t</tr>\r\n" +
+                "\t</table>\r\n" +
+                "</body>\r\n" +
+                "</html>";
+
+
+
+            // mail.Body = contenido;
+            mail.Body = ho;
             mail.IsBodyHtml = true;
             //Se activa una variable del protocolo SMTP para poder enviar el correo electronico
             SmtpClient smtp = new SmtpClient();
@@ -255,7 +328,7 @@ namespace VistaDelModelo
         /// <param name="UidUsuario"></param>
         /// <param name="estatus"></param>
         /// <param name="UidOrdenRepartidor"></param>
-        public void BitacoraRegistroRepartidores(char StrParametro,Guid UidUsuario, Guid UidEstatus, Guid UidOrdenRepartidor = new Guid())
+        public void BitacoraRegistroRepartidores(char StrParametro, Guid UidUsuario, Guid UidEstatus, Guid UidOrdenRepartidor = new Guid())
         {
             bool resultado = false;
             SqlCommand cmd = new SqlCommand();
@@ -263,7 +336,7 @@ namespace VistaDelModelo
             {
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.CommandText = "asp_BitacoraEstatusRepartidor";
-                
+
                 cmd.Parameters.Add("@uidUsuario", SqlDbType.UniqueIdentifier);
                 cmd.Parameters["@uidUsuario"].Value = UidUsuario;
                 //Parametro opcional para el manejo de la accion sobre una orden asignada
@@ -275,7 +348,7 @@ namespace VistaDelModelo
                 cmd.Parameters.Add("@UidEstatus", SqlDbType.UniqueIdentifier);
                 cmd.Parameters["@UidEstatus"].Value = UidEstatus;
 
-                cmd.Parameters.Add("@StrParametro", SqlDbType.Char,1);
+                cmd.Parameters.Add("@StrParametro", SqlDbType.Char, 1);
                 cmd.Parameters["@StrParametro"].Value = StrParametro;
 
                 var oconexion = new Conexion();
@@ -301,10 +374,10 @@ namespace VistaDelModelo
             {
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.CommandText = "asp_BitacoraDeSupervisores";
-                
+
                 cmd.Parameters.Add("@uidUsuario", SqlDbType.UniqueIdentifier);
                 cmd.Parameters["@uidUsuario"].Value = UidUsuario;
-                
+
                 cmd.Parameters.Add("@UidEstatus", SqlDbType.UniqueIdentifier);
                 cmd.Parameters["@UidEstatus"].Value = UidEstatus;
 

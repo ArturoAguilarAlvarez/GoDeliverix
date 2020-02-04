@@ -142,8 +142,14 @@ namespace VistaDelModelo
             get { return _UidRegistroProductoEnCarrito; }
             set { _UidRegistroProductoEnCarrito = value; }
         }
+        private List<VMProducto> _ListaDeProductos;
 
-        public List<VMProducto> ListaDeProductos = new List<VMProducto>();
+        public List<VMProducto> ListaDeProductos
+        {
+            get { return _ListaDeProductos; }
+            set { _ListaDeProductos = value; }
+        }
+
         public List<VMProducto> ListaDeDetallesDeOrden = new List<VMProducto>();
         public List<VMProducto> ListaDeProductosSeleccionados = new List<VMProducto>();
         public List<VMProducto> ListaDeGiro = new List<VMProducto>();
@@ -156,6 +162,14 @@ namespace VistaDelModelo
         public List<VMProducto> ListaDelCarrito = new List<VMProducto>();
         public List<VMProducto> ListaDelProductosSeleccionados = new List<VMProducto>();
         public List<VMProducto> ListaDelInformacionSucursales = new List<VMProducto>();
+
+        private string _EstatusProducto;
+
+        public string ColorEstatusProducto
+        {
+            get { return _EstatusProducto; }
+            set { _EstatusProducto = value; }
+        }
 
         #endregion
         #region Metodos
@@ -300,7 +314,7 @@ namespace VistaDelModelo
         /// <param name="UidSeccion"></param>
         public void BuscarProductosSeccion(Guid UidSeccion)
         {
-            ListaDeProductos.Clear();
+            ListaDeProductos = new List<VMProducto>();
             foreach (DataRow item in DatosProductos.ObtenProductoSeccion(UidSeccion).Rows)
             {
                 Guid uidproducto = new Guid(item["UidProducto"].ToString());
@@ -460,7 +474,7 @@ namespace VistaDelModelo
 
         }
 
-        public void AgregaAlCarrito(Guid uidProducto, Guid UidSucursal, Guid UidSeccion, string cantidad, decimal CostoDeEnvio = 0.0m, Guid UidTarifario = new Guid(), string strNota = "", Guid RegistroProductoEnCarrito = new Guid(), string URLEmpresa = "",string dPropina = "")
+        public void AgregaAlCarrito(Guid uidProducto, Guid UidSucursal, Guid UidSeccion, string cantidad, decimal CostoDeEnvio = 0.0m, Guid UidTarifario = new Guid(), string strNota = "", Guid RegistroProductoEnCarrito = new Guid(), string URLEmpresa = "", string dPropina = "")
         {
             //Agrega un registro sin nota
             //Agrega un registro con una nota
@@ -511,13 +525,15 @@ namespace VistaDelModelo
                         STRRUTA = imagen,
                         Cantidad = int.Parse(cantidad),
                         UidNota = uidNota,
-                        StrNota = nota
+                        StrNota = nota,
+                        ColorEstatusProducto = ""
                     });
 
                     if (!ListaDelInformacionSucursales.Exists(suc => suc.UidSucursal == uidsucursal))
                     {
                         ListaDelInformacionSucursales.Add(new VMProducto()
                         {
+                            STRRUTA = URLEmpresa,
                             UidTarifario = UidTarifario,
                             UidSucursal = uidsucursal,
                             Empresa = sucursal,
@@ -525,7 +541,7 @@ namespace VistaDelModelo
                             CostoEnvio = CostoDeEnvio,
                             Subtotal = SubTotal,
                             Cantidad = int.Parse(cantidad),
-                            DPropina =dpropina
+                            DPropina = dpropina
                         });
                     }
                     else
@@ -719,7 +735,7 @@ namespace VistaDelModelo
         public void BuscarProductos(Guid UIDSUCURSAL, string Nombre = "")
         {
             DataTable Dt = new DataTable();
-            ListaDeProductos.Clear();
+            ListaDeProductos = new List<VMProducto>();
             try
             {
                 SqlCommand CMD = new SqlCommand
@@ -781,7 +797,7 @@ namespace VistaDelModelo
         }
 
         #region Busqueda de productos desde cliente
-        public void buscarProductosEmpresaDesdeCliente(string StrParametroBusqueda, string StrDia, Guid UidDireccion, Guid UidBusquedaCategorias, string StrNombreEmpresa = "")
+        public void buscarProductosEmpresaDesdeCliente(string StrParametroBusqueda, string StrDia, Guid UidEstado, Guid UidColonia, Guid UidBusquedaCategorias, string StrNombreEmpresa = "")
         {
             try
             {
@@ -793,7 +809,7 @@ namespace VistaDelModelo
 
                 CMD.Parameters.Add("@strParametroBusqueda", SqlDbType.VarChar, 100);
                 CMD.Parameters["@strParametroBusqueda"].Value = StrParametroBusqueda;
-                
+
                 if (!string.IsNullOrEmpty(StrNombreEmpresa))
                 {
                     CMD.Parameters.Add("@StrNombreProducto", SqlDbType.VarChar, 200);
@@ -803,13 +819,16 @@ namespace VistaDelModelo
                 CMD.Parameters.Add("@StrDia", SqlDbType.VarChar, 20);
                 CMD.Parameters["@StrDia"].Value = StrDia;
 
-                CMD.Parameters.Add("@UidDireccion", SqlDbType.UniqueIdentifier);
-                CMD.Parameters["@UidDireccion"].Value = UidDireccion;
+                CMD.Parameters.Add("@Estado", SqlDbType.UniqueIdentifier);
+                CMD.Parameters["@Estado"].Value = UidEstado;
+
+                CMD.Parameters.Add("@UidColonia", SqlDbType.UniqueIdentifier);
+                CMD.Parameters["@UidColonia"].Value = UidColonia;
 
                 CMD.Parameters.Add("@UidBusquedaCategorias", SqlDbType.UniqueIdentifier);
                 CMD.Parameters["@UidBusquedaCategorias"].Value = UidBusquedaCategorias;
-                
-                ListaDeProductos.Clear();
+
+                ListaDeProductos = new List<VMProducto>();
                 foreach (DataRow item in CN.Busquedas(CMD).Rows)
                 {
                     Guid uidproducto = new Guid(item["UidProducto"].ToString());
@@ -821,7 +840,15 @@ namespace VistaDelModelo
 
                     if (!ListaDeProductos.Exists(p => p.UID == uidproducto))
                     {
-                        ListaDeProductos.Add(new VMProducto() { UID = uidproducto, Empresa = item["NombreComercial"].ToString(), UIDEMPRESA = UidEmpresa, STRDESCRIPCION = descripcion, STRNOMBRE = nombre, STRRUTA = ruta });
+                        ListaDeProductos.Add(new VMProducto()
+                        {
+                            UID = uidproducto,
+                            Empresa = item["NombreComercial"].ToString(),
+                            UIDEMPRESA = UidEmpresa,
+                            STRDESCRIPCION = descripcion,
+                            STRNOMBRE = nombre,
+                            STRRUTA = ruta
+                        });
                     }
                 }
             }
@@ -830,63 +857,8 @@ namespace VistaDelModelo
                 throw;
             }
         }
-        //public void BuscarProductoPorSucursal(string StrParametroBusqueda, string StrDia, Guid UidDireccion, Guid UidBusquedaCategorias, object UidProducto)
-        //{
-        //    try
-        //    {
-        //        SqlCommand CMD = new SqlCommand
-        //        {
-        //            CommandType = CommandType.StoredProcedure,
-        //            CommandText = "asp_BuscarSucursalesCliente"
-        //        };
 
-        //        CMD.Parameters.Add("@strParametroBusqueda", SqlDbType.VarChar, 100);
-        //        CMD.Parameters["@strParametroBusqueda"].Value = StrParametroBusqueda;
-
-
-        //        CMD.Parameters.Add("@StrDia", SqlDbType.VarChar, 20);
-        //        CMD.Parameters["@StrDia"].Value = StrDia;
-
-        //        CMD.Parameters.Add("@UidDireccion", SqlDbType.UniqueIdentifier);
-        //        CMD.Parameters["@UidDireccion"].Value = UidDireccion;
-
-        //        CMD.Parameters.Add("@UidBusquedaCategorias", SqlDbType.UniqueIdentifier);
-        //        CMD.Parameters["@UidBusquedaCategorias"].Value = UidBusquedaCategorias;
-
-        //        CMD.Parameters.Add("@UidProduto", SqlDbType.UniqueIdentifier);
-        //        CMD.Parameters["@UidProduto"].Value = UidProducto;
-
-        //        ListaDePreciosSucursales.Clear();
-
-        //        foreach (DataRow item in CN.Busquedas(CMD).Rows)
-        //        {
-        //            Guid uidseccion = new Guid(item["UidSeccion"].ToString());
-        //            string stridentificador = item["Identificador"].ToString().ToUpper();
-        //            string strTiempoDeElaboracion = item["VchTiempoElaboracion"].ToString();
-        //            string dbCosto = item["Mcosto"].ToString();
-        //            Guid UidSucursal = new Guid(item["UidSucursal"].ToString());
-        //            Guid uidempresa = new Guid(item["UidEmpresa"].ToString());
-        //            if (!ListaDePreciosSucursales.Exists(p => p.UID == uidseccion))
-        //            {
-        //                ListaDePreciosSucursales.Add(new VMProducto()
-        //                {
-        //                    UID = uidseccion,
-        //                    StrCosto = dbCosto,
-        //                    DtmVariableParaTiempo = DateTime.Parse(strTiempoDeElaboracion),
-        //                    StrIdentificador = stridentificador,
-        //                    UidSucursal = UidSucursal,
-        //                    UIDEMPRESA = uidempresa
-        //                });
-        //            }
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //}
-
-        public void BuscarProductoPorSucursal(string StrParametroBusqueda, string StrDia, Guid UidDireccion, Guid UidBusquedaCategorias, object UidProducto)
+        public void BuscarProductoPorSucursal(string StrParametroBusqueda, string StrDia, Guid UidColonia, Guid UidEstado, Guid UidBusquedaCategorias, Guid UidProducto)
         {
             try
             {
@@ -903,8 +875,12 @@ namespace VistaDelModelo
                 CMD.Parameters.Add("@StrDia", SqlDbType.VarChar, 20);
                 CMD.Parameters["@StrDia"].Value = StrDia;
 
-                CMD.Parameters.Add("@UidDireccion", SqlDbType.UniqueIdentifier);
-                CMD.Parameters["@UidDireccion"].Value = UidDireccion;
+                CMD.Parameters.Add("@UidColonia", SqlDbType.UniqueIdentifier);
+                CMD.Parameters["@UidColonia"].Value = UidColonia;
+
+
+                CMD.Parameters.Add("@UidEstado", SqlDbType.UniqueIdentifier);
+                CMD.Parameters["@UidEstado"].Value = UidEstado;
 
                 CMD.Parameters.Add("@UidBusquedaCategorias", SqlDbType.UniqueIdentifier);
                 CMD.Parameters["@UidBusquedaCategorias"].Value = UidBusquedaCategorias;

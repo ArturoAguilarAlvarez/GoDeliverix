@@ -44,9 +44,6 @@ namespace WebApplication1.Controllers
             MVAcceso.CorreoDeConfirmacion(new Guid(UidUsuario), correo, usuario, password, Nombre, Apellidos);
 
         }
-
-
-
         public ResponseHelper GetProfileType(string UidUsuario)
         {
             Respuesta = new ResponseHelper();

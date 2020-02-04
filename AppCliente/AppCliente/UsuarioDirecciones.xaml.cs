@@ -23,6 +23,11 @@ namespace AppCliente
         public UsuarioDirecciones()
         {
             InitializeComponent();
+
+        }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
             Iniciar();
         }
 
@@ -68,37 +73,97 @@ namespace AppCliente
 
         public async void EliminarDireccion()
         {
-            if (txtIDDireccionn.Text != "0" && !string.IsNullOrEmpty(txtIDDireccionn.Text))
+            if (!string.IsNullOrEmpty(App.Global1))
+            {
+                if (txtIDDireccionn.Text != "0" && !string.IsNullOrEmpty(txtIDDireccionn.Text))
+                {
+                    var action = await DisplayAlert("Eliminar?", "Estas seguro de eliminar esta direccion?", "Si", "No");
+                    if (action)
+                    {
+                        Guid Gui = new Guid(txtIDDireccionn.Text);
+                        int index = AppCliente.App.MVDireccion.ListaDIRECCIONES.FindIndex(x => x.ID == Gui);
+                        //int index = MVTelefono.ListaDeTelefonos.FindIndex(x => x.ID == Gui);
+                        AppCliente.App.MVDireccion.QuitaDireeccionDeLista(txtIDDireccionn.Text);
+
+                        // AppCliente.App.MVDireccion.EliminaDireccionUsuario(txtIDDireccionn.Text);
+
+                        string _Url = $"" + Helpers.Settings.sitio + "/api/Direccion/DeleteDireccionUsuario?UidDireccion={txtIDDireccionn.Text}";
+                        var content = await _client.DeleteAsync(_Url);
+
+                        App.MVDireccion.ObtenerDireccionesUsuario(App.Global1);
+                        MyListViewDirecciones.ItemsSource = null;
+                        MyListViewDirecciones.ItemsSource = App.MVDireccion.ListaDIRECCIONES;
+                        txtIDDireccionn.Text = "0";
+                    }
+                }
+            }
+            else
             {
                 var action = await DisplayAlert("Eliminar?", "Estas seguro de eliminar esta direccion?", "Si", "No");
                 if (action)
                 {
-                    Guid Gui = new Guid(txtIDDireccionn.Text);
-                    int index = AppCliente.App.MVDireccion.ListaDIRECCIONES.FindIndex(x => x.ID == Gui);
-                    //int index = MVTelefono.ListaDeTelefonos.FindIndex(x => x.ID == Gui);
-                    AppCliente.App.MVDireccion.QuitaDireeccionDeLista(txtIDDireccionn.Text);
-
-                    // AppCliente.App.MVDireccion.EliminaDireccionUsuario(txtIDDireccionn.Text);
-
-                    string _Url = $"http://godeliverix.net/api/Direccion/DeleteDireccionUsuario?UidDireccion={txtIDDireccionn.Text}";
-                    var content = await _client.DeleteAsync(_Url);
-
-                    AppCliente.App.MVDireccion.ObtenerDireccionesUsuario(AppCliente.App.Global1);
-                    MyListViewDirecciones.ItemsSource = null;
-                    MyListViewDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;
-                    txtIDDireccionn.Text = "0";
+                    Helpers.Settings.UidDireccion = string.Empty;
+                    Helpers.Settings.StrPAIS = string.Empty;
+                    Helpers.Settings.StrESTADO = string.Empty;
+                    Helpers.Settings.StrMUNICIPIO = string.Empty;
+                    Helpers.Settings.StrCIUDAD = string.Empty;
+                    Helpers.Settings.StrCOLONIA = string.Empty;
+                    Helpers.Settings.StrCALLE0 = string.Empty;
+                    Helpers.Settings.StrCALLE1 = string.Empty;
+                    Helpers.Settings.StrCALLE2 = string.Empty;
+                    Helpers.Settings.StrMANZANA = string.Empty;
+                    Helpers.Settings.StrLongitud = string.Empty;
+                    Helpers.Settings.StrLatitud = string.Empty;
+                    Helpers.Settings.StrLOTE = string.Empty;
+                    Helpers.Settings.StrCodigoPostal = string.Empty;
+                    Helpers.Settings.StrREFERENCIA = string.Empty;
+                    Helpers.Settings.StrIDENTIFICADOR = string.Empty;
+                    Helpers.Settings.StrNombreCiudad = string.Empty;
+                    Helpers.Settings.StrNombreColonia = string.Empty;
+                    App.MVDireccion.ListaDIRECCIONES = new List<VMDireccion>();
+                    MyListViewDirecciones.ItemsSource = App.MVDireccion.ListaDIRECCIONES;
                 }
             }
         }
 
         public async void Iniciar()
         {
-            var tex = ("http://godeliverix.net/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + App.Global1);
-            string strDirecciones = await _client.GetStringAsync(tex);
-            var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
-            App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
+            if (!string.IsNullOrEmpty(App.Global1))
+            {
+                var tex = ("" + Helpers.Settings.sitio + "/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + App.Global1);
+                string strDirecciones = await _client.GetStringAsync(tex);
+                var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
+                App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(Helpers.Settings.UidDireccion))
+                {
+                    App.MVDireccion.ListaDIRECCIONES = new List<VMDireccion>();
+                    App.MVDireccion.ListaDIRECCIONES.Add(new VMDireccion()
+                    {
+                        ID = new Guid(Helpers.Settings.UidDireccion),
+                        PAIS = Helpers.Settings.StrPAIS,
+                        ESTADO = Helpers.Settings.StrESTADO,
+                        MUNICIPIO = Helpers.Settings.StrMUNICIPIO,
+                        CIUDAD = Helpers.Settings.StrCIUDAD,
+                        COLONIA = Helpers.Settings.StrCOLONIA,
+                        CALLE0 = Helpers.Settings.StrCALLE0,
+                        CALLE1 = Helpers.Settings.StrCALLE1,
+                        CALLE2 = Helpers.Settings.StrCALLE2,
+                        MANZANA = Helpers.Settings.StrMANZANA,
+                        LOTE = Helpers.Settings.StrLOTE,
+                        CodigoPostal = Helpers.Settings.StrCodigoPostal,
+                        REFERENCIA = Helpers.Settings.StrREFERENCIA,
+                        IDENTIFICADOR = Helpers.Settings.StrIDENTIFICADOR,
+                        NOMBRECIUDAD = Helpers.Settings.StrNombreCiudad,
+                        NOMBRECOLONIA = Helpers.Settings.StrNombreColonia
+                    });
+                }
+            }
 
-            if (AppCliente.App.MVDireccion.ListaDIRECCIONES.Count == 0)
+
+            if (App.MVDireccion.ListaDIRECCIONES.Count == 0)
             {
                 PanelSinDirecciones.IsVisible = true;
                 PanelDirecciones.IsVisible = false;
@@ -107,12 +172,12 @@ namespace AppCliente
             {
                 PanelSinDirecciones.IsVisible = false;
                 PanelDirecciones.IsVisible = true;
-                for (int i = 0; i < AppCliente.App.MVDireccion.ListaDIRECCIONES.Count; i++)
+                for (int i = 0; i < App.MVDireccion.ListaDIRECCIONES.Count; i++)
                 {
-                    AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Clicked = false;
+                    App.MVDireccion.ListaDIRECCIONES[i].Clicked = false;
                 }
 
-                MyListViewDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;
+                MyListViewDirecciones.ItemsSource = App.MVDireccion.ListaDIRECCIONES;
             }
 
 

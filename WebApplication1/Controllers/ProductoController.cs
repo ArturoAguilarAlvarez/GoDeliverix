@@ -14,11 +14,11 @@ namespace WebApplication1.Controllers
         VMProducto MVProducto;
         ResponseHelper Respuesta;
         // GET: api/Profile/5
-        public ResponseHelper GetBuscarProductosCliente(string StrParametroBusqueda, string StrDia, Guid UidDireccion, Guid UidBusquedaCategorias, string StrNombreEmpresa)
+        public ResponseHelper GetBuscarProductosCliente(string StrParametroBusqueda, string StrDia, Guid UidEstado, Guid UidColonia, Guid UidBusquedaCategorias, string StrNombreEmpresa)
         {
             MVProducto = new VMProducto();
-            MVProducto.buscarProductosEmpresaDesdeCliente(StrParametroBusqueda, StrDia, UidDireccion, UidBusquedaCategorias, StrNombreEmpresa);
-            
+            MVProducto.buscarProductosEmpresaDesdeCliente(StrParametroBusqueda, StrDia, UidEstado, UidColonia, UidBusquedaCategorias, StrNombreEmpresa);
+
             Respuesta = new ResponseHelper();
             Respuesta.Data = MVProducto;
             Respuesta.Status = true;
@@ -26,32 +26,32 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
-        public ResponseHelper GetObtenerInformacionDeProductoDeLaSucursal(string StrParametroBusqueda, string StrDia, Guid UidDireccion, Guid UidBusquedaCategorias, object UidProducto)
+        public ResponseHelper GetObtenerInformacionDeProductoDeLaSucursal(string StrParametroBusqueda, string StrDia, string UidColonia, string UidEstado, string UidBusquedaCategorias, string UidProducto)
         {
             MVProducto = new VMProducto();
-            MVProducto.BuscarProductoPorSucursal(StrParametroBusqueda,StrDia,UidDireccion,UidBusquedaCategorias,UidProducto);
-            
+            MVProducto.BuscarProductoPorSucursal(StrParametroBusqueda, StrDia, new Guid(UidColonia), new Guid(UidEstado), new Guid(UidBusquedaCategorias), new Guid(UidProducto));
+
             Respuesta = new ResponseHelper();
-            Respuesta.Data = MVProducto.ListaDeProductos;
+            Respuesta.Data = MVProducto;
             Respuesta.Status = true;
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;
         }
 
-        public ResponseHelper GetObtenerProductosDeLaSucursal(string UidSeccion)
+        public ResponseHelper GetObtenerProductosDeLaSeccion(string UidSeccion)
         {
             MVProducto = new VMProducto();
             MVProducto.BuscarProductosSeccion(new Guid(UidSeccion));
-            
+
             Respuesta = new ResponseHelper();
-            Respuesta.Data = MVProducto.ListaDeProductos;
+            Respuesta.Data = MVProducto;
             Respuesta.Status = true;
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;
         }
 
 
-        
+
         // POST: api/Profile
         public void Post([FromBody]string value)
         {

@@ -11,9 +11,9 @@ using Xamarin.Forms.Xaml;
 using VistaDelModelo;
 namespace AppCliente
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class RegistroPaso4 : ContentPage
-	{
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class RegistroPaso4 : ContentPage
+    {
 
         string usuario;
         string contrasena;
@@ -24,9 +24,9 @@ namespace AppCliente
         VMAcceso MVAcceso = new VMAcceso() { };
         VMUsuarios MVUsuarios = new VMUsuarios();
 
-        public RegistroPaso4 (string usuario, string contrasena, string nombre, string apellidoP, string apellidoM, string fechaNacimiento)
-		{
-			InitializeComponent ();
+        public RegistroPaso4(string usuario, string contrasena, string nombre, string apellidoP, string apellidoM, string fechaNacimiento)
+        {
+            InitializeComponent();
             this.usuario = usuario;
             this.contrasena = contrasena;
             this.nombre = nombre;
@@ -55,13 +55,11 @@ namespace AppCliente
                 {
                     DisplayAlert("Error", "Correo no valido", "OK");
                 }
-
             }
             else
             {
                 DisplayAlert("Error", "Los campos de Correo y numero telefonico son obligatorios", "OK");
             }
-
         }
 
 
@@ -85,6 +83,5 @@ namespace AppCliente
                 return false;
             }
         }
-
     }
 }

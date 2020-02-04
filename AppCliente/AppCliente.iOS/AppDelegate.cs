@@ -4,7 +4,6 @@ using System.Linq;
 using Foundation;
 using ImageCircle.Forms.Plugin.iOS;
 using UIKit;
-
 namespace AppCliente.iOS
 {
     // The UIApplicationDelegate for the application. This class is responsible for launching the 
@@ -20,12 +19,14 @@ namespace AppCliente.iOS
         //
         // You have 17 seconds to return from this method, or iOS will terminate your application.
         //
+        public UIWindowScene UIWindow { get; set; }
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();                        
             global::Xamarin.FormsMaps.Init();       
             ImageCircleRenderer.Init();
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
+            ZXing.Net.Mobile.Forms.iOS.Platform.Init();
             Xamarin.FormsGoogleMaps.Init("AIzaSyBiWETPG3f-5VYV30iPCAPv-39tu_EjOYo");
             global::Rg.Plugins.Popup.Popup.Init();
 

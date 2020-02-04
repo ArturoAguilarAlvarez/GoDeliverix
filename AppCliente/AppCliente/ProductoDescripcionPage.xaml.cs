@@ -8,6 +8,9 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using VistaDelModelo;
 using Rg.Plugins.Popup.Services;
+using System.Net.Http;
+using AppCliente.WebApi;
+using Newtonsoft.Json;
 
 namespace AppCliente
 {
@@ -19,7 +22,6 @@ namespace AppCliente
         string costo;
         string CostoPorSucursal = "";
         Guid idSeccion;
-        bool tap = true;
         bool tipo = false;
         string UIDEmpresa;
 
@@ -35,20 +37,47 @@ namespace AppCliente
         public ProductoDescripcionPage(VMProducto objProducto, List<VMProducto> lista)
         {
             InitializeComponent();
+            CargaVentanaBusquedaProductos(objProducto, lista);
+        }
+        protected async void CargaVentanaBusquedaProductos(VMProducto objProducto, List<VMProducto> lista)
+        {
             Title = objProducto.STRNOMBRE;
             UIDEmpresa = objProducto.UIDEMPRESA.ToString();
             this.objProducto = objProducto;
             ImagenProducto.Source = objProducto.STRRUTA;
-                   
+
             txtNombreProducto.Text = objProducto.STRNOMBRE;
             txtDescripcionProducto.Text = objProducto.STRDESCRIPCION;
             txtIDSeccion.Text = lista[0].UID.ToString();
-            this.idSeccion = lista[0].UID;
+            idSeccion = lista[0].UID;
             txtSucursalSeleccionada.Text = lista[0].StrIdentificador;
             ListaPreciosProcto = lista;
-            txtEmpresaCosto.Text = "Precio: $" + lista[0].StrCosto;
+            App.MVProducto.ListaDePreciosSucursales = lista;
+            using (HttpClient _WebApi = new HttpClient())
+            {
+                string _URL = "" + Helpers.Settings.sitio + "/api/Seccion/GetBuscarSeccion?UIDSECCION=" + idSeccion.ToString() + "&UidEstado=" + App.UidEstadoABuscar + "&UidColonia=" + App.UidColoniaABuscar + "";
+                var content = await _WebApi.GetStringAsync(_URL);
+                var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                var oSeccion = JsonConvert.DeserializeObject<VMSeccion>(obj);
+                txtHoraDisponibilidad.Text = "Disponible hasta " + oSeccion.StrHoraFin + "";
+
+                _URL = "" + Helpers.Settings.sitio + "/api/Usuario/GetObtenerHora?UidEstado=" + App.UidEstadoABuscar + "";
+                content = await _WebApi.GetStringAsync(_URL);
+                obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                DateTime HoraActual = DateTime.Parse(obj);
+
+                DateTime HoraSeccion = DateTime.Parse(oSeccion.StrHoraFin);
+                TimeSpan TiempoRestante = new TimeSpan(0, 10, 0);
+                TimeSpan Diferencia = new TimeSpan();
+                Diferencia = (HoraSeccion - HoraActual);
+                if (Diferencia <= TiempoRestante)
+                {
+                    txtHoraDisponibilidad.TextColor = Color.Red;
+                    await DisplayAlert("¡Aviso!", "El producto esta por terminar\n Pide rapido!", "Aceptar");
+                }
+            }
+            txtEmpresaCosto.Text = "$" + lista[0].StrCosto;
             btnAgregarCarrito.Text = "Agregar carrito $" + lista[0].StrCosto;
-            //this.idSeccion = lista[0].UidSucursal;
             idSeucursalSeleccionada.Text = lista[0].UidSucursal.ToString();
             tipo = true;
             txtSucursall.Text = objProducto.Empresa + " >";
@@ -58,26 +87,35 @@ namespace AppCliente
         public ProductoDescripcionPage(VMProducto objProducto, Guid UiEmpresa, VMSeccion objSeccion)
         {
             InitializeComponent();
+            CargaVentanaBusquedaDeEmpresa(objProducto, UiEmpresa, objSeccion);
+        }
+        protected async void CargaVentanaBusquedaDeEmpresa(VMProducto objProducto, Guid UiEmpresa, VMSeccion objSeccion)
+        {
             UIDEmpresa = objProducto.UIDEMPRESA.ToString();
             this.objProducto = objProducto;
-            string url = objProducto.STRRUTA;
-            ImagenProducto.Source = ImageSource.FromResource(url);
+            ImagenProducto.Source = objProducto.STRRUTA;
             txtNombreProducto.Text = objProducto.STRNOMBRE;
             txtDescripcionProducto.Text = objProducto.STRDESCRIPCION;
 
             txtEmpresaCosto.Text = "Precio: $" + objProducto.StrCosto;
             CostoPorSucursal = objProducto.StrCosto;
-            //btnCambioDeSucursal.IsVisible = false;
-            //lbIdEmpresa.Text = UiEmpresa.ToString();
             txtIDSeccion.Text = objSeccion.UID.ToString();
             idSeucursalSeleccionada.Text = UiEmpresa.ToString();
             txtSucursall.IsVisible = false;
             txtSucursalSeleccionada.IsVisible = false;
             btnAgregarCarrito.Text = "Agregar carrito $" + objProducto.StrCosto;
             idSeccion = objSeccion.UID;
+            using (HttpClient _WebApi = new HttpClient())
+            {
+                string _URL = "" + Helpers.Settings.sitio + "/api/Seccion/GetBuscarSeccion?UIDSECCION=" + objSeccion.UID.ToString() + "&UidEstado=" + App.UidEstadoABuscar + "&UidColonia=" + App.UidColoniaABuscar + "";
+                var content = await _WebApi.GetStringAsync(_URL);
+                var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                var oSeccion = JsonConvert.DeserializeObject<VMSeccion>(obj);
+                txtHoraDisponibilidad.Text = "Disponible hasta " + oSeccion.StrHoraFin + "";
+
+            }
             tipo = false;
         }
-
         private void Stepper_ValueChanged(object sender, ValueChangedEventArgs e)
         {
             double value = e.NewValue;
@@ -104,21 +142,8 @@ namespace AppCliente
             //await PopupNavigation.Instance.PushAsync(new Popup.PopupLoanding());
             if (cantidad > 0)
             {
-                //objProducto.Cantidad = int.Parse(cantidad.ToString());
-                //objProducto.StrNota = txtComentario.Text;
-                //objProducto.StrCosto = costo;
-                //App.MVProducto.ListaDelCarrito.Add(objProducto);
 
-                //if (tipo)
-                //{
-                //    App.MVTarifario.BuscarTarifario("Cliente", ZonaEntrega: App.DireccionABuscar, uidSucursal: idSeccion.ToString());
-                //}
-                //else
-                //{
-
-                App.MVTarifario.BuscarTarifario("Cliente", ZonaEntrega: App.DireccionABuscar, uidSucursal: idSeucursalSeleccionada.Text);
-                //}
-
+                App.MVTarifario.BuscarTarifario("Cliente", ZonaEntrega: App.UidColoniaABuscar, uidSucursal: idSeucursalSeleccionada.Text);
 
 
                 AgregarAlcarrito(objProducto.UID, new Guid(idSeucursalSeleccionada.Text), idSeccion, cantidad.ToString(), txtComentario.Text);
@@ -141,7 +166,7 @@ namespace AppCliente
 
         private void BtnCambioDeSucursal_Clicked(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new SeleccionarSucursalPrecioProducto(ListaPreciosProcto, btnAgregarCarrito, txtSucursalSeleccionada, txtEmpresaCosto, cantidad, txtIDSeccion, idSeucursalSeleccionada));
+            Navigation.PushAsync(new SeleccionarSucursalPrecioProducto(App.MVProducto.ListaDePreciosSucursales, btnAgregarCarrito, txtSucursalSeleccionada, txtEmpresaCosto, cantidad, txtIDSeccion, idSeucursalSeleccionada));
         }
 
         protected void AgregarAlcarrito(Guid UidProducto, Guid UidSucursal, Guid UidSeccion, string StrCantidad, string StrNotas = "")
@@ -150,12 +175,12 @@ namespace AppCliente
             string URLEmpresa;
             if (UIDEmpresa == "00000000-0000-0000-0000-000000000000")
             {
-                URLEmpresa = "http://www.godeliverix.net/vista/" + App.MVImagen.STRRUTA;
+                URLEmpresa = "" + Helpers.Settings.sitio + "/vista/" + App.MVImagen.STRRUTA;
             }
             else
             {
                 App.MVImagen.ObtenerImagenPerfilDeEmpresa(UIDEmpresa);
-                URLEmpresa = "http://www.godeliverix.net/vista/" + App.MVImagen.STRRUTA;
+                URLEmpresa = "" + Helpers.Settings.sitio + "/vista/" + App.MVImagen.STRRUTA;
             }
             #endregion
 
@@ -423,7 +448,6 @@ namespace AppCliente
 
                             costo = (Double.Parse(costoo) * cantidad).ToString();
 
-
                             _displayLabel.Text = string.Format("{0}", cantidad);
                             btnAgregarCarrito.Text = "Agregar carrito $" + costo;
                         }
@@ -432,7 +456,6 @@ namespace AppCliente
                             _displayLabel.Text = oldValue;
                             break;
                         }
-
                     }
                 }
                 else

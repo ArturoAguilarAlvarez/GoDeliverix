@@ -135,6 +135,20 @@ namespace VistaDelModelo
             set { _strEstatusPagoTarjeta = value; }
         }
 
+        private string _strFolioPagoConTarjeta;
+
+        public string StrFolioPagoTarjeta
+        {
+            get { return _strFolioPagoConTarjeta; }
+            set { _strFolioPagoConTarjeta = value; }
+        }
+        private bool _bUsabilidadDeFolioPagoTarjeta;
+
+        public bool BUsoFolioPagoTarjeta
+        {
+            get { return _bUsabilidadDeFolioPagoTarjeta; }
+            set { _bUsabilidadDeFolioPagoTarjeta = value; }
+        }
 
         #endregion
 
@@ -181,6 +195,28 @@ namespace VistaDelModelo
             }
             return resultado;
         }
+
+        public void ObtenerFolioPagoTarjeta()
+        {
+            SqlCommand Comando = new SqlCommand();
+            try
+            {
+                Comando.CommandType = CommandType.StoredProcedure;
+                Comando.CommandText = "asp_ObtenerFolio";
+
+                oConexion = new Conexion();
+                foreach (DataRow item in oConexion.Busquedas(Comando).Rows)
+                {
+                    StrFolioPagoTarjeta = item["bifolio"].ToString();
+                    BUsoFolioPagoTarjeta = bool.Parse(item["buso"].ToString());
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public bool BitacoraEstatusCobro(string uidOrden, string estatus)
         {
             bool resultado = false;
@@ -204,6 +240,7 @@ namespace VistaDelModelo
                 throw;
             }
             return resultado;
+
         }
         public string ObtenerEstatusDeCobro()
         {
@@ -247,7 +284,7 @@ namespace VistaDelModelo
             }
             return respuesta;
         }
-        public bool AgregarInformacionTarjeta(string Autorizacion, string reference, DateTime HoraTransaccion, string response, string cc_type, string tp_operation, string monto = "0.0")
+        public bool AgregarInformacionTarjeta(string Autorizacion, string reference, DateTime HoraTransaccion, string response, string cc_type, string tp_operation, string nb_company, string nb_merchant, string id_url, string cd_error, string nb_error, string cc_number, string cc_mask,string FolioPago, string monto = "0.0")
         {
             SqlCommand Comando = new SqlCommand();
             bool resultado = false;
@@ -255,6 +292,30 @@ namespace VistaDelModelo
             {
                 Comando.CommandType = CommandType.StoredProcedure;
                 Comando.CommandText = "asp_AgregaInformacionPagoConTarjeta";
+
+                Comando.Parameters.Add("@FolioPago", SqlDbType.VarChar, 50);
+                Comando.Parameters["@FolioPago"].Value = FolioPago;
+                
+                Comando.Parameters.Add("@cc_number", SqlDbType.VarChar, 50);
+                Comando.Parameters["@cc_number"].Value = cc_number;
+                
+                Comando.Parameters.Add("@cc_mask", SqlDbType.VarChar, 50);
+                Comando.Parameters["@cc_mask"].Value = cc_mask;
+
+                Comando.Parameters.Add("@nb_company", SqlDbType.VarChar, 50);
+                Comando.Parameters["@nb_company"].Value = nb_company;
+
+                Comando.Parameters.Add("@nb_merchant", SqlDbType.VarChar, 50);
+                Comando.Parameters["@nb_merchant"].Value = nb_merchant;
+
+                Comando.Parameters.Add("@id_url", SqlDbType.VarChar, 50);
+                Comando.Parameters["@id_url"].Value = id_url;
+
+                Comando.Parameters.Add("@cd_error", SqlDbType.VarChar, 200);
+                Comando.Parameters["@cd_error"].Value = cd_error;
+
+                Comando.Parameters.Add("@nb_error", SqlDbType.VarChar, 200);
+                Comando.Parameters["@nb_error"].Value = nb_error;
 
                 Comando.Parameters.Add("@UidOrdenFormaDeCobro", SqlDbType.VarChar, 50);
                 Comando.Parameters["@UidOrdenFormaDeCobro"].Value = reference;
@@ -301,7 +362,7 @@ namespace VistaDelModelo
         /// <summary>
         /// Retorna el estatus del registro del pago con tarjeta
         /// </summary>
-        public void ObtenerEstatusPagoConTarjeta() 
+        public void ObtenerEstatusPagoConTarjeta()
         {
             try
             {

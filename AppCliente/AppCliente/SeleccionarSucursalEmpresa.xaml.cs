@@ -37,7 +37,7 @@ namespace AppCliente
 
         private void MyListViewSeleccionarEmpresas_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            var item = ((ItemTappedEventArgs)e);
+            var item = e;
             VMSucursales ObjItem = (VMSucursales)item.Item;
             App.MVOferta.Buscar(UIDSUCURSAL: ObjItem.ID);
             UiSucursal.Text = ObjItem.ID.ToString();

@@ -292,7 +292,7 @@ namespace WebApplication1.Vista.Cliente
                 string subcategoria = string.Empty;
                 Guid Colonia = new Guid(DDlUbicacion.SelectedItem.Value);
 
-                
+
                 CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
                 string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
                 string NombreABuscar = txtNombreDeBusqueda.Text;
@@ -307,15 +307,15 @@ namespace WebApplication1.Vista.Cliente
 
                 if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
                 {
-                    MVProducto.BuscarProductoPorSucursal("Giro",  Dia, Colonia, new Guid(giro), UidProducto);
+                    //MVProducto.BuscarProductoPorSucursal("Giro", Dia, Colonia, new Guid(giro), UidProducto);
                 }
                 if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
                 {
-                    MVProducto.BuscarProductoPorSucursal("Categoria",  Dia, Colonia, new Guid(categoria), UidProducto);
+                   // MVProducto.BuscarProductoPorSucursal("Categoria", Dia, Colonia, new Guid(categoria), UidProducto);
                 }
                 if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || !string.IsNullOrWhiteSpace(subcategoria)))
                 {
-                    MVProducto.BuscarProductoPorSucursal("Subcategoria",  Dia, Colonia, new Guid(subcategoria), UidProducto);
+                   // MVProducto.BuscarProductoPorSucursal("Subcategoria", Dia, Colonia, new Guid(subcategoria), UidProducto);
                 }
                 LvSucursales.DataSource = MVProducto.ListaDePreciosSucursales;
                 LvSucursales.DataBind();
@@ -412,7 +412,7 @@ namespace WebApplication1.Vista.Cliente
 
             string categoria = string.Empty;
             string subcategoria = string.Empty;
-            Guid UidDireccion =new Guid(DDlUbicacion.SelectedItem.Value);
+            Guid UidDireccion = new Guid(DDlUbicacion.SelectedItem.Value);
             string Hora = string.Empty;
             if (DateTime.Now.Hour < 10)
             {
@@ -443,7 +443,7 @@ namespace WebApplication1.Vista.Cliente
             {
                 //giro
                 //MVProducto.AgregaProductoSeleccionadoALista();
-                MVEmpresa.BuscarEmpresaBusquedaCliente("Giro",  Dia, UidDireccion, new Guid(giro));
+              //  MVEmpresa.BuscarEmpresaBusquedaCliente("Giro", Dia, UidDireccion, new Guid(giro));
                 //DLEmpresa.DataSource = MVEMpresa.LISTADEEMPRESAS;
                 //DLEmpresa.DataBind();
             }
@@ -451,7 +451,7 @@ namespace WebApplication1.Vista.Cliente
             // Busqueda por categoria
             if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
             {
-                MVEmpresa.BuscarEmpresaBusquedaCliente("Categoria",  Dia, UidDireccion, new Guid(categoria));
+               // MVEmpresa.BuscarEmpresaBusquedaCliente("Categoria", Dia, UidDireccion, new Guid(categoria));
                 //DLEmpresa.DataSource = MVEMpresa.LISTADEEMPRESAS;
                 //DLEmpresa.DataBind();
             }
@@ -459,7 +459,7 @@ namespace WebApplication1.Vista.Cliente
             //Busqueda por subcategoria
             if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || !string.IsNullOrWhiteSpace(subcategoria)))
             {
-                MVEmpresa.BuscarEmpresaBusquedaCliente("Subcategoria",  Dia, UidDireccion, new Guid(subcategoria));
+               // MVEmpresa.BuscarEmpresaBusquedaCliente("Subcategoria", Dia, UidDireccion, new Guid(subcategoria));
                 //DLEmpresa.DataSource = MVEMpresa.LISTADEEMPRESAS;
                 //DLEmpresa.DataBind();
             }
@@ -504,19 +504,19 @@ namespace WebApplication1.Vista.Cliente
             //Busqueda por giro
             if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
             {
-                MVProducto.buscarProductosEmpresaDesdeCliente("Giro",  Dia, UidDireccion, new Guid(giro));
+                // MVProducto.buscarProductosEmpresaDesdeCliente("Giro",  Dia, UidDireccion, new Guid(giro));
             }
             else
             // Busqueda por categoria
             if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
             {
-                MVProducto.buscarProductosEmpresaDesdeCliente("Categoria",  Dia, UidDireccion, new Guid(categoria));
+                // MVProducto.buscarProductosEmpresaDesdeCliente("Categoria",  Dia, UidDireccion, new Guid(categoria));
             }
             else
             //Busqueda por subcategoria
             if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || !string.IsNullOrWhiteSpace(subcategoria)))
             {
-                MVProducto.buscarProductosEmpresaDesdeCliente("Subcategoria", hora,  UidDireccion, new Guid(subcategoria));
+                // MVProducto.buscarProductosEmpresaDesdeCliente("Subcategoria", hora,  UidDireccion, new Guid(subcategoria));
             }
 
             lblCantidadDeResultados.Text = MVProducto.ListaDeProductos.Count + " resultados";
@@ -565,7 +565,7 @@ namespace WebApplication1.Vista.Cliente
                 string subcategoria = string.Empty;
                 Guid Colonia = new Guid(DDlUbicacion.SelectedItem.Value);
 
-                
+
                 CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
                 string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
                 string NombreABuscar = txtNombreDeBusqueda.Text;
@@ -581,17 +581,17 @@ namespace WebApplication1.Vista.Cliente
                 if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
                 {
                     // GetBuscarProductosCliente
-                    MVProducto.BuscarProductoPorSucursal("Giro",  Dia, Colonia, new Guid(giro), UidProducto);
+                  //  MVProducto.BuscarProductoPorSucursal("Giro", Dia, Colonia, new Guid(giro), UidProducto);
                 }
                 if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
                 {
                     // GetBuscarProductosCliente
-                    MVProducto.BuscarProductoPorSucursal("Categoria",  Dia, Colonia, new Guid(categoria), UidProducto);
+                   // MVProducto.BuscarProductoPorSucursal("Categoria", Dia, Colonia, new Guid(categoria), UidProducto);
                 }
                 if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || !string.IsNullOrWhiteSpace(subcategoria)))
                 {
                     // GetBuscarProductosCliente
-                    MVProducto.BuscarProductoPorSucursal("Subcategoria", Dia, Colonia, new Guid(subcategoria), UidProducto);
+                 //   MVProducto.BuscarProductoPorSucursal("Subcategoria", Dia, Colonia, new Guid(subcategoria), UidProducto);
                 }
 
                 LvSucursales.SelectedIndex = 0;
@@ -655,7 +655,7 @@ namespace WebApplication1.Vista.Cliente
             string subcategoria = string.Empty;
             Guid Colonia = new Guid(DDlUbicacion.SelectedItem.Value);
 
-            
+
             CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
             string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
             string NombreABuscar = txtNombreDeBusqueda.Text;
@@ -670,15 +670,15 @@ namespace WebApplication1.Vista.Cliente
 
             if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
             {
-                MVProducto.BuscarProductoPorSucursal("Giro",  Dia, Colonia, new Guid(giro), UidProducto);
+               // MVProducto.BuscarProductoPorSucursal("Giro", Dia, Colonia, new Guid(giro), UidProducto);
             }
             if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
             {
-                MVProducto.BuscarProductoPorSucursal("Categoria",  Dia, Colonia, new Guid(categoria), UidProducto);
+               // MVProducto.BuscarProductoPorSucursal("Categoria", Dia, Colonia, new Guid(categoria), UidProducto);
             }
             if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || !string.IsNullOrWhiteSpace(subcategoria)))
             {
-                MVProducto.BuscarProductoPorSucursal("Subcategoria",  Dia, Colonia, new Guid(subcategoria), UidProducto);
+               // MVProducto.BuscarProductoPorSucursal("Subcategoria", Dia, Colonia, new Guid(subcategoria), UidProducto);
             }
             lblPrecio.Text = "$" + MVProducto.ListaDePreciosSucursales[0].StrCosto.Replace(",", ".");
             bool Producto = false;
@@ -795,22 +795,22 @@ namespace WebApplication1.Vista.Cliente
             if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
             {
                 //giro
-                MVEmpresa.BuscarEmpresaBusquedaCliente("Giro",  Dia, UidDireccion, new Guid(giro), NombreABuscar);
-                MVProducto.buscarProductosEmpresaDesdeCliente("Giro",  Dia, UidDireccion, new Guid(giro), NombreABuscar);
+               // MVEmpresa.BuscarEmpresaBusquedaCliente("Giro", Dia, UidDireccion, new Guid(giro), NombreABuscar);
+                //MVProducto.buscarProductosEmpresaDesdeCliente("Giro",  Dia, UidDireccion, new Guid(giro), NombreABuscar);
             }
             else
             // Busqueda por categoria
             if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
             {
-                MVEmpresa.BuscarEmpresaBusquedaCliente("Categoria",  Dia, UidDireccion, new Guid(categoria), NombreABuscar);
-                MVProducto.buscarProductosEmpresaDesdeCliente("Categoria",  Dia, UidDireccion, new Guid(categoria), NombreABuscar);
+               // MVEmpresa.BuscarEmpresaBusquedaCliente("Categoria", Dia, UidDireccion, new Guid(categoria), NombreABuscar);
+                //MVProducto.buscarProductosEmpresaDesdeCliente("Categoria",  Dia, UidDireccion, new Guid(categoria), NombreABuscar);
             }
             else
             //Busqueda por subcategoria
             if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || !string.IsNullOrWhiteSpace(subcategoria)))
             {
-                MVEmpresa.BuscarEmpresaBusquedaCliente("Subcategoria",  Dia, UidDireccion, new Guid(subcategoria), NombreABuscar);
-                MVProducto.buscarProductosEmpresaDesdeCliente("Subcategoria",  Dia, UidDireccion, new Guid(subcategoria), NombreABuscar);
+               // MVEmpresa.BuscarEmpresaBusquedaCliente("Subcategoria", Dia, UidDireccion, new Guid(subcategoria), NombreABuscar);
+                //MVProducto.buscarProductosEmpresaDesdeCliente("Subcategoria",  Dia, UidDireccion, new Guid(subcategoria), NombreABuscar);
             }
             PanelCategorias.Visible = false;
             if (Page.AppRelativeVirtualPath != "~/Vista/Cliente/Default.aspx")
@@ -849,7 +849,7 @@ namespace WebApplication1.Vista.Cliente
                 PanelCategorias.Visible = true;
             }
         }
-        
+
         protected void DLEmpresa_ItemCommand(object source, DataListCommandEventArgs e)
         {
             if (e.CommandName == "VentanaEmpresas")
@@ -868,20 +868,20 @@ namespace WebApplication1.Vista.Cliente
                 MVEmpresa.BuscarEmpresas(UidEmpresa: UidEmpresa);
                 lblNombreEmpresa.Text = MVEmpresa.NOMBRECOMERCIAL;
                 TimeZoneInfo localZone = TimeZoneInfo.Local;
-                
 
-               
+
+
                 DropDownList DDlUbicacion = Master.FindControl("DDlUbicacion") as DropDownList;
                 Guid UidDireccion = new Guid(DDlUbicacion.SelectedItem.Value);
                 if (DDlUbicacion != null)
                 {
 
-                    
+
                     CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
                     string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
                     if (DDlUbicacion.Text != null)
                     {
-                        MVSucursales.BuscarSucursalesCliente(UidEmpresa,  Dia, UidDireccion);
+                        //MVSucursales.BuscarSucursalesCliente(UidEmpresa, Dia, UidDireccion);
                     }
                 }
 
@@ -925,7 +925,7 @@ namespace WebApplication1.Vista.Cliente
 
         protected void DLEmpresa_ItemDataBound(object sender, DataListItemEventArgs e)
         {
-            
+
             Guid UidEmpresa = new Guid(DLEmpresa.DataKeys[e.Item.ItemIndex].ToString());
             Label lblUbicacion = Master.FindControl("lblUidDireccion") as Label;
             Guid UidDireccion = new Guid(lblUbicacion.Text);
@@ -933,7 +933,7 @@ namespace WebApplication1.Vista.Cliente
             string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
             Label lblCantidadDeSucursales = e.Item.FindControl("lblCantidadDeSucursales") as Label;
             Label lblCantidadDeProductos = e.Item.FindControl("lblCantidadDeProductos") as Label;
-            MVSucursales.BuscarSucursalesCliente(UidEmpresa,  Dia, UidDireccion);
+           // MVSucursales.BuscarSucursalesCliente(UidEmpresa, Dia, UidDireccion);
 
             if (MVSucursales.LISTADESUCURSALES.Count > 1)
             {
@@ -957,7 +957,7 @@ namespace WebApplication1.Vista.Cliente
                         articulos = articulos + productos[i].Cantidad;
                     }
                 }
-                if (articulos>0)
+                if (articulos > 0)
                 {
                     lblCantidadDeProductos.ForeColor = System.Drawing.Color.Purple;
                     lblCantidadDeProductos.Text = articulos.ToString();
@@ -966,7 +966,7 @@ namespace WebApplication1.Vista.Cliente
                 {
                     lblCantidadDeProductos.ForeColor = System.Drawing.Color.Gray;
                 }
-                
+
             }
 
         }
@@ -978,7 +978,7 @@ namespace WebApplication1.Vista.Cliente
             MuestraSeccion(new Guid(ddlOfertas.SelectedItem.Value), UidDireccion);
         }
 
-        public void MuestraSeccion(Guid UidOferta,Guid UidDireccion)
+        public void MuestraSeccion(Guid UidOferta, Guid UidDireccion)
         {
             MVSeccion.Buscar(UIDOFERTA: UidOferta, UidDirecccion: UidDireccion);
             MnSecciones.Items.Clear();
@@ -1011,7 +1011,7 @@ namespace WebApplication1.Vista.Cliente
                     lvSucursalesEmpresa.SelectedIndex = item.DataItemIndex;
                 }
             }
-            
+
             lblNombreDeEmpresa.Text = lblNombreEmpresa.Text;
         }
 
@@ -1019,7 +1019,7 @@ namespace WebApplication1.Vista.Cliente
         {
             e.Item.Selectable = true;
             e.Item.Selected = true;
-                    
+
             Guid Seccion = new Guid(e.Item.Value);
             if (Seccion != Guid.Empty)
             {
@@ -1074,7 +1074,7 @@ namespace WebApplication1.Vista.Cliente
             DropDownList DDlUbicacion = Master.FindControl("DDlUbicacion") as DropDownList;
             Label LblProductoEnCarrito = e.Item.FindControl("LblProductoEnCarrito") as Label;
             Label lblDescripcionDeProducto = e.Item.FindControl("lblDescripcionDeProducto") as Label;
-           
+
             Guid UidProducto = MVProducto.ListaDeProductos[e.Item.ItemIndex].UID;
 
             lblDescripcionDeProducto.Text = MVProducto.ListaDeProductos[e.Item.ItemIndex].STRDESCRIPCION;
@@ -1099,7 +1099,7 @@ namespace WebApplication1.Vista.Cliente
                 {
                     cantidad = cantidad + item.Cantidad;
                 }
-                if (cantidad>0)
+                if (cantidad > 0)
                 {
                     LblProductoEnCarrito.ForeColor = System.Drawing.Color.Purple;
                     LblProductoEnCarrito.Text = cantidad.ToString();

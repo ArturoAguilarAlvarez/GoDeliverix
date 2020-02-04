@@ -25,14 +25,14 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
-        public ResponseHelper GetBuscarCorreo(string UidPropietario, string strParametroDebusqueda, string strCorreoElectronico = "", string UidCorreoElectronico = "")
+        public ResponseHelper GetBuscarCorreo(string UidPropietario = "", string strParametroDebusqueda = "", string strCorreoElectronico = "", string UidCorreoElectronico = "")
         {
             MVCorreoElectronico = new VMCorreoElectronico();
             if (string.IsNullOrEmpty(UidCorreoElectronico))
             {
                 UidCorreoElectronico = Guid.Empty.ToString();
             }
-            MVCorreoElectronico.BuscarCorreos(new Guid(UidPropietario), strParametroDebusqueda, strCorreoElectronico,new Guid(UidCorreoElectronico));
+            MVCorreoElectronico.BuscarCorreos(new Guid(UidPropietario), strParametroDebusqueda, strCorreoElectronico, new Guid(UidCorreoElectronico));
 
             Respuesta = new ResponseHelper();
 
@@ -57,7 +57,7 @@ namespace WebApplication1.Controllers
         /// </summary>
         /// <param name="strCorreoElectronico"></param>
         /// <returns></returns>
-        public ResponseHelper GetRecuperarContrasena( string strCorreoElectronico)
+        public ResponseHelper GetRecuperarContrasena(string strCorreoElectronico)
         {
             Respuesta = new ResponseHelper();
             VMAcceso MVAcceso = new VMAcceso();

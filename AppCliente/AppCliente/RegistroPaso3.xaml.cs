@@ -32,7 +32,7 @@ namespace AppCliente
                  && !string.IsNullOrEmpty(txtApellidoM.Text)
                  && !string.IsNullOrEmpty(txtFechaNacimiento.Date.ToString()))
                 {
-                    Navigation.PushAsync(new RegistroPaso4(usuario, contrasena, txtNombre.Text, txtApellidoP.Text, txtApellidoM.Text, txtFechaNacimiento.Date.ToString("MM-dd-yyyy")));
+                    Navigation.PushAsync(new RegistroPaso4(usuario, contrasena, txtNombre.Text, txtApellidoP.Text, txtApellidoM.Text, txtFechaNacimiento.Date.ToString("dd-MM-yyyy")));
                 }
                 else
                 {

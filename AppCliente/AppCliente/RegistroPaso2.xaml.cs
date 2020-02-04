@@ -17,9 +17,7 @@ namespace AppCliente
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class RegistroPaso2 : ContentPage
     {
-        VMAcceso MVAcceso = new VMAcceso() { };
         VMUsuarios MVUsuarios = new VMUsuarios();
-        string UrlApi = "http://www.godeliverix.net/api/";
         string url = "";
         HttpClient _WebApiGoDeliverix = new HttpClient();
         public RegistroPaso2()
@@ -34,15 +32,10 @@ namespace AppCliente
             {
                 if (txtContrasena1.Text.Length > 7)
                 {
-                    url = "http://www.godeliverix.net/api/Usuario/GetBuscarUsuarios?USER=" + txtUsuario.Text + "&UIDPERFIL=4f1e1c4b-3253-4225-9e46-dd7d1940da19";
+                    url = "" + Helpers.Settings.sitio + "/api/Usuario/GetBuscarUsuarios?USER=" + txtUsuario.Text + "&UIDPERFIL=4f1e1c4b-3253-4225-9e46-dd7d1940da19";
                     string content = await _WebApiGoDeliverix.GetStringAsync(url);
                     var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                     MVUsuarios = JsonConvert.DeserializeObject<VMUsuarios>(obj);
-                    //string content = await _WebApiGoDeliverix.GetStringAsync(url);
-                    //var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                    //MVUsuarios = JsonConvert.DeserializeObject<VMUsuarios>(obj);
-
-                    //MVUsuarios.BusquedaDeUsuario(USER: txtUsuario.Text, UIDPERFIL: new Guid("4f1e1c4b-3253-4225-9e46-dd7d1940da19"));//No me trae el usuario que requiero
                     if (MVUsuarios.LISTADEUSUARIOS.Count == 0)
                     {
                         if (txtContrasena1.Text == txtContrasena2.Text)
@@ -56,7 +49,7 @@ namespace AppCliente
                     }
                     else
                     {
-                         await DisplayAlert("Error", "Usuario existente", "OK");
+                        await DisplayAlert("Error", "Usuario existente", "OK");
                     }
                 }
                 else
@@ -66,9 +59,8 @@ namespace AppCliente
             }
             else
             {
-                await  DisplayAlert("Error", "Ingrese todos los datos", "OK");
+                await DisplayAlert("Error", "Ingrese todos los datos", "OK");
             }
         }
-
     }
 }

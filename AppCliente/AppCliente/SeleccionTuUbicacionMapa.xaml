@@ -5,7 +5,6 @@
              x:Class="AppCliente.SeleccionTuUbicacionMapa"
              Title="Seleccione su ubicación">
     <ContentPage.Content>
-
         <Grid
             HorizontalOptions="Fill"
             VerticalOptions="Fill">
@@ -13,23 +12,21 @@
                 <RowDefinition Height="6*" />
                 <RowDefinition Height="4*" />
             </Grid.RowDefinitions>
-
-            
             <maps:Map Grid.Row="0" x:Name="map" Margin="10"
                       MapLongClicked="Map_MapClicked"
-                      HasZoomEnabled="True"
-                      
+                      HasZoomEnabled="True"                      
                       VerticalOptions="FillAndExpand" />
-            <!--InitialCameraUpdate="-23.68, -46.87, 13, 30, 60"-->
             <StackLayout Grid.Row="1">
-                <Button 
-                    Text="MI Ubicacion" 
+                <ActivityIndicator x:Name="AICargando" HeightRequest="50" WidthRequest="50" IsVisible="False" IsRunning="False"></ActivityIndicator>
+                <Button Text="Obtener ubicación" ImageSource="pin" HeightRequest="50" ContentLayout="Left,50"
                     Clicked="Button_MiUbicacion" 
-                    BackgroundColor="Blue" 
+                    BackgroundColor="Orange" 
                     TextColor="White"></Button>
+
                 <Button 
                     Text="Continuar"  
-                    BackgroundColor="Blue" 
+                    BackgroundColor="Green" 
+                    x:Name="btnContinuar"
                     TextColor="White" 
                     Clicked="Button_ContinuarConElProcesoGuardado"></Button>
             </StackLayout>

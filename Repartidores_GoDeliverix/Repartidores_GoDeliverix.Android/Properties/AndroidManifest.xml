@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.CompuAndSoft.Repartidores" android:installLocation="auto">
-	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="28" />
-	<application android:label="GoDeliverix_Run" android:icon="@drawable/logo48" android:usesCleartextTraffic="true">
+	<uses-sdk android:minSdkVersion="23" android:targetSdkVersion="28" />
+	<application android:label="GoDeliverix_Run" android:icon="@drawable/logo48" android:roundIcon="@drawable/logo48round" android:usesCleartextTraffic="true">
 		<!--<receiver android:name="com.onesignal.GcmBroadcastReceiver"
               android:permission="com.google.android.c2dm.permission.SEND" >
       <intent-filter>
@@ -9,7 +11,7 @@
         <category android:name="GoDeliverix_Run" />
       </intent-filter>
     </receiver>-->
-    <meta-data android:name="com.samsung.knoxlicense.permissions" android:value="true" />
+		<meta-data android:name="com.samsung.knoxlicense.permissions" android:value="true" />
 	</application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />

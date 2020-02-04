@@ -65,8 +65,7 @@ namespace AppCliente
 
         private void MyListViewDistribuidora_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-
-            var item = ((ItemTappedEventArgs)e);
+            var item = e;
             listaEmpresa.ItemsSource = null;
             listaEmpresa.ItemsSource = App.MVProducto.ListaDelInformacionSucursales;
             VMTarifario registro = (VMTarifario)item.Item;
@@ -89,7 +88,6 @@ namespace AppCliente
             }
 
             txtTotalEnvio.Text = "Total de envio " + TotalEnvio.ToString();
-
 
             btnPagar.Text = "Pagar  $" + TotalPagar;
             btnPagar2.Text = "Pagar  $" + TotalPagar;

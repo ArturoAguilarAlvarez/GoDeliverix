@@ -338,7 +338,7 @@ namespace VistaDelModelo
 
         #region Busquedas de FrontEnd cliente
 
-        public void BuscarEmpresaBusquedaCliente(string StrParametroBusqueda, string StrDia, Guid UidDireccion, Guid UidBusquedaCategorias, string StrNombreEmpresa = "")
+        public void BuscarEmpresaBusquedaCliente(string StrParametroBusqueda, string StrDia, Guid UidEstado, Guid UidColonia, Guid UidBusquedaCategorias, string StrNombreEmpresa = "")
         {
             DataTable Dt = new DataTable();
             LISTADEEMPRESAS = new List<VMEmpresas>();
@@ -364,8 +364,11 @@ namespace VistaDelModelo
                 CMD.Parameters.Add("@StrDia", SqlDbType.VarChar, 20);
                 CMD.Parameters["@StrDia"].Value = StrDia;
 
-                CMD.Parameters.Add("@UidDireccion", SqlDbType.UniqueIdentifier);
-                CMD.Parameters["@UidDireccion"].Value = UidDireccion;
+                CMD.Parameters.Add("@UidEstado", SqlDbType.UniqueIdentifier);
+                CMD.Parameters["@UidEstado"].Value = UidEstado;
+
+                CMD.Parameters.Add("@UidColonia", SqlDbType.UniqueIdentifier);
+                CMD.Parameters["@UidColonia"].Value = UidColonia;
 
                 CMD.Parameters.Add("@UidBusquedaCategorias", SqlDbType.UniqueIdentifier);
                 CMD.Parameters["@UidBusquedaCategorias"].Value = UidBusquedaCategorias;

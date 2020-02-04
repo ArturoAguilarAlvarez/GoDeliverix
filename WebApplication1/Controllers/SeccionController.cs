@@ -13,17 +13,40 @@ namespace WebApplication1.Controllers
         VMSeccion MVSeccion;
         ResponseHelper Respuesta;
         // GET: api/Profile/5
-        public ResponseHelper GetBuscarSeccion(string UIDSECCION = "", string UIDOFERTA = "", string NOMBRE = "", string HORAINICIO = "", string HORAFIN = "", string Estatus = "", string UidDirecccion = "")
+        public ResponseHelper GetBuscarSeccion(string UIDSECCION = "", string UIDOFERTA = "", string NOMBRE = "", string HORAINICIO = "", string HORAFIN = "", string Estatus = "", string UidDirecccion = "", string UidEstado = "", string UidColonia = "")
         {
             MVSeccion = new VMSeccion();
-            MVSeccion.Buscar(new Guid(UIDSECCION),new Guid(UIDOFERTA),NOMBRE,HORAINICIO,HORAFIN,Estatus,new Guid(UidDirecccion));
-
+            if (string.IsNullOrEmpty(UidDirecccion))
+            {
+                UidDirecccion = Guid.Empty.ToString();
+            }
+            if (string.IsNullOrEmpty(UIDOFERTA))
+            {
+                UIDOFERTA = Guid.Empty.ToString();
+            }
+            if (string.IsNullOrEmpty(UIDSECCION))
+            {
+                UIDSECCION = Guid.Empty.ToString();
+            }
+            MVSeccion.Buscar(new Guid(UIDSECCION), new Guid(UIDOFERTA), NOMBRE, HORAINICIO, HORAFIN, Estatus, new Guid(UidDirecccion), UidEstado, UidColonia);
             Respuesta = new ResponseHelper();
-            Respuesta.Data = MVSeccion.ListaDeSeccion;
+            Respuesta.Data = MVSeccion;
             Respuesta.Status = true;
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;
         }
+        public ResponseHelper GetBuscaSeccion(string UIDSECCIONProducto)
+        {
+            MVSeccion = new VMSeccion();
+            MVSeccion.BuscarSeccion(UIDSECCIONProducto);
+            Respuesta = new ResponseHelper();
+            Respuesta.Data = MVSeccion;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion recibida satisfactoriamente";
+            return Respuesta;
+        }
+
+
 
         //// POST: api/Profile
         //public void Post([FromBody]string value)

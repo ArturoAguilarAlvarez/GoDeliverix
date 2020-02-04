@@ -37,7 +37,7 @@ namespace AppCliente
             {
                 using (HttpClient _WebApi = new HttpClient())
                 {
-                    string url = "https://www.godeliverix.net/api/Tarifario/GetModificarPropina?UidOrdenSucursal=" + MVORden.UidRelacionOrdenSucursal + "&MPropina=" + mpropina + "";
+                    string url = "" + Helpers.Settings.sitio + "/api/Tarifario/GetModificarPropina?UidOrdenSucursal=" + MVORden.UidRelacionOrdenSucursal + "&MPropina=" + mpropina + "";
                     MetodoConsulta();
                     await _WebApi.GetStringAsync(url);
                     Navigation.InsertPageBefore(new CodigoDeEntrega(MVORden.LngCodigoDeEntrega), this);
@@ -82,7 +82,7 @@ namespace AppCliente
                     StrNota = Status,
                     MPropina = decimal.Parse(itemm["MPropina"].ToString()),
                     MTotalSucursal = itemm["MTotalSucursal"].ToString() + decimal.Parse(itemm["MPropina"].ToString()),
-                    Imagen = "http://godeliverix.net/Vista/" + itemm["NVchRuta"].ToString(),
+                    Imagen = "" + Helpers.Settings.sitio + "/Vista/" + itemm["NVchRuta"].ToString(),
                 });
             }
             ListHistorialEmpresa.ItemsSource = App.MVOrden.ListaDeOrdenesEmpresa;

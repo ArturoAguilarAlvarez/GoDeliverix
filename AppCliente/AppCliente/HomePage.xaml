@@ -12,24 +12,27 @@
             <!--IsClippedToBounds="True"-->
             <Grid x:Name="PanelNavegacionBuscar" IsVisible="True">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="6*"></ColumnDefinition>
+                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
                     <ColumnDefinition Width="2*"></ColumnDefinition>
                     <ColumnDefinition Width="2*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Label Text="" x:Name="txtBusquedaActual" TextColor="White" VerticalOptions="Center"></Label>
+                
+                <Button Text="Acceder" BackgroundColor="Orange" x:Name="btnAcceder" Clicked="btnAcceder_Clicked" IsVisible="False" Grid.Column="0" TextColor="White"></Button>
+                <Label Text="" x:Name="txtBusquedaActual" Grid.Column="1" TextColor="White" VerticalOptions="Center"></Label>
                 <ImageButton  
                     Source="IconoBuscar" 
                     HorizontalOptions="End"
                     BackgroundColor="Transparent" 
                     Clicked="MenuItemBuscar_Activted" 
-                    Grid.Column="1"
+                    Grid.Column="2"
                     Margin="0,0,10,0"></ImageButton>
                 <ImageButton    
                     Source="IconoCarrito" 
                     HorizontalOptions="End"
                     BackgroundColor="Transparent" 
                     Clicked="MenuItem1_Activted" 
-                    Grid.Column="2"
+                    Grid.Column="3"
                     Margin="0,0,10,0"></ImageButton>
 
             </Grid>
@@ -80,10 +83,9 @@
     </NavigationPage.TitleView>
     <ContentPage.Content>
         <Grid VerticalOptions="Fill">
-            <StackLayout Orientation="Vertical" x:Name="PanelDireccionesVacias">
-
+            <StackLayout Orientation="Vertical" x:Name="PanelDireccionesVacias" IsVisible="False">
                 <Label Text=" Agrega una direccion y encuentra productos cerca de ti." FontAttributes="Bold" TextDecorations="None" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Start" Margin="20" FontSize="Large"></Label>
-                <Button Text="Agregar direccion" HorizontalOptions="FillAndExpand" x:Name="btnAgregarDireccion" TextColor="White" FontSize="Medium"  BackgroundColor="Green" Clicked="BtnAgregarDireccion_Clicked"></Button>
+                <Button Text="Administrar direcciones" HorizontalOptions="FillAndExpand" x:Name="btnAgregarDireccion" TextColor="White" FontSize="Medium"  BackgroundColor="Green" Clicked="BtnAgregarDireccion_Clicked"></Button>
             </StackLayout>
 
             <StackLayout x:Name="PanelProductos">
@@ -254,11 +256,11 @@
                 Clicked="ButtonMasDeLaLista_Clicked"
                     TextColor="Black" ></Button>-->
                     <Button 
-                    Text="Cargando direcciones" 
+                    Text="" 
                     x:Name="btnSeleccionarDireccion" 
                     Grid.Row="3" VerticalOptions="End" 
                     Clicked="BtnSeleccionarDireccion_Clicked"
-                    BackgroundColor="#20396e" 
+                    BackgroundColor="Green" 
                     HorizontalOptions="FillAndExpand"  
                     TextColor="White" ></Button>
                     <Label Text="" x:Name="IDDireccionBusqueda" IsVisible="False"></Label>

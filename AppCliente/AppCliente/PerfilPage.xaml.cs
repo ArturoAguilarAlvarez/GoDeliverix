@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using VistaDelModelo;
@@ -30,13 +31,13 @@ namespace AppCliente
         public static VMCorreoElectronico MVCorreoElectronico = new VMCorreoElectronico();
         public List<TipoDeTelefono> TIPOTELEFONO;
 
-        public PerfilPage ()
+        public PerfilPage()
         {
             InitializeComponent();
-            MVTelefono = AppCliente.App.MVTelefono;
-            MVUsuarios = AppCliente.App.MVUsuarios;
-            MVCorreoElectronico = AppCliente.App.MVCorreoElectronico;
-            MVDireccion = AppCliente.App.MVDireccion;
+            MVTelefono = App.MVTelefono;
+            MVUsuarios = App.MVUsuarios;
+            MVCorreoElectronico = App.MVCorreoElectronico;
+            MVDireccion = App.MVDireccion;
             CargarNombreTelefono();
             MyListView.ItemsSource = MVTelefono.ListaDeTelefonos;
             Cargausuario();
@@ -44,23 +45,17 @@ namespace AppCliente
 
             txtNumeroTelefonico.Text = "";
             txtIDTelefono.Text = "";
-       
+
             MyListViewDirecciones.ItemsSource = MVDireccion.ListaDIRECCIONES;
-            //DataTable datatable=MVDireccion.Paises();
-            //MyListViewDirecciones.ItemsSource = MVDireccion.Paises();
         }
         public void CargarNombreTelefono()
         {
             int a = MVTelefono.ListaDeTelefonos.Count();
             a = a - 1;
             MyListView.ItemsSource = MVTelefono.ListaDeTelefonos;
-            //MyListViewDirecciones.ItemsSource = MVTelefono.ListaDeTelefonos;
             for (int i = 0; i <= a; i++)
             {
                 MVTelefono.ListaDeTelefonos[i].StrNombreTipoDeTelefono = MVTelefono.ListaDeTipoDeTelefono.Where(t => t.ID == MVTelefono.ListaDeTelefonos[i].UidTipo).FirstOrDefault().StrNombreTipoDeTelefono;
-
-                //int index = MVTelefono.TIPOTELEFONO.FindIndex(x => x.ID == MVTelefono.ListaDeTelefonos[i].ID);
-                //MVTelefono.ListaDeTelefonos[i].StrNombreTipoDeTelefono = MVTelefono.TIPOTELEFONO[index].NOMBRE;
             }
         }
         public void Cargausuario()
@@ -98,7 +93,7 @@ namespace AppCliente
             VMTelefono ObjItem = (VMTelefono)item.CommandParameter;
             txtNumeroTelefonico.Text = ObjItem.NUMERO;
             txtIDTelefono.Text = ObjItem.ID.ToString();
-            MyPicker.SelectedIndex = -1; 
+            MyPicker.SelectedIndex = -1;
         }
         private void OnDeleteDirecciones(object sender, EventArgs e)
         {
@@ -136,7 +131,10 @@ namespace AppCliente
 
             try
             {
-                MVUsuarios.ActualizarUsuario(UidUsuario: new Guid(AppCliente.App.Global1), Nombre: txtNombre.Text, ApellidoPaterno: txtApellido1.Text, ApellidoMaterno: txtApellido2.Text, usuario: txtUsuario.Text, password: txtContrasena.Text, fnacimiento: txtFechaNacimiento.Date.ToString("MM-dd-yyyy"), perfil: "4F1E1C4B-3253-4225-9E46-DD7D1940DA19");
+                string url = "" + Helpers.Settings.sitio + "/api/Usuario/GetActualizarUsuario?UidUsuario=" + App.Global1 + "&Nombre=" + txtNombre.Text + "&ApellidoPaterno=" + txtApellido1.Text + "&ApellidoMaterno=" + txtApellido2.Text + "&perfil=4F1E1C4B-3253-4225-9E46-DD7D1940DA19&password=" + txtContrasena.Text + "&fnacimiento=" + txtFechaNacimiento.Date.ToString("MM-dd-yyyy") + "";
+                //MVUsuarios.ActualizarUsuario(UidUsuario: new Guid(AppCliente.App.Global1), Nombre: txtNombre.Text, ApellidoPaterno: txtApellido1.Text, ApellidoMaterno: txtApellido2.Text, usuario: txtUsuario.Text, password: txtContrasena.Text, fnacimiento: txtFechaNacimiento.Date.ToString("MM-dd-yyyy"), perfil: "4F1E1C4B-3253-4225-9E46-DD7D1940DA19");
+                HttpClient _webApi = new HttpClient();
+                await _webApi.GetAsync(url);
                 Cargausuario();
                 await PopupNavigation.Instance.PopAsync();
                 await DisplayAlert("Error", "Registro exitoso", "OK");
@@ -241,22 +239,20 @@ namespace AppCliente
 
         private void MypickerPais_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string tipo = "Gestion";
             Guid Pais = new Guid("afd6c3b7-f5be-40c9-8385-936d275a8d6b");
             DataTable dt = new DataTable();
 
             dt = MVDireccion.Estados(Pais);
 
             DireccionesLista.Clear();
-                    foreach (DataRow item in dt.Rows)
-                    {
+            foreach (DataRow item in dt.Rows)
+            {
                 MypickerEstado.Items.Add(item["Nombre"].ToString());
                 DireccionesLista.Add(
                   new VMDireccion()
                   {
                       ID = new Guid(item["IdEstado"].ToString()),
                       ESTADO = item["Nombre"].ToString()
-
                   });
             }
         }

@@ -78,6 +78,21 @@ namespace DBControl
 
             return oConexcion.Consultas(sentencia);
         }
+
+        public string ObtenerFolioUsuario(string uidUsuario)
+        {
+            oConexcion = new Conexion();
+            string query = "select top 1  FolioUsuario from Usuarios where UidUsuario ='"+uidUsuario+"'";
+
+            string resultado = string.Empty;
+            foreach (DataRow item in oConexcion.Consultas(query).Rows)
+            {
+                resultado = item["FolioUsuario"].ToString();
+            }
+            return resultado;
+
+        }
+
         public DataTable ObtenerUsuarioSimpleBusquedaAvanzada(string perfil)
         {
             oConexcion = new Conexion();

@@ -33,7 +33,14 @@ namespace AppCliente
             {
                 if (Email_bien_escrito(txtCorreo.Text))
                 {
-                    MVCorreoElectronico.BuscarCorreos(strCorreoElectronico: txtCorreo.Text, strParametroDebusqueda: "Usuario");
+                    //MVCorreoElectronico.BuscarCorreos(strCorreoElectronico: txtCorreo.Text, strParametroDebusqueda: "Usuario");
+                    using (HttpClient _WebApi = new HttpClient())
+                    {
+                        string _URL = "" + Helpers.Settings.sitio + "/api/CorreoElectronico/GetBuscarCorreo?strCorreoElectronico=" + txtCorreo.Text + "&strParametroDebusqueda=Usuario";
+                        var content = await _WebApi.GetStringAsync(_URL);
+                        var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                        MVCorreoElectronico = JsonConvert.DeserializeObject<VMCorreoElectronico>(obj);
+                    }
                     if (MVCorreoElectronico.ID != Guid.Empty)
                     {
                         string password = Guid.NewGuid().ToString().Substring(0, 18);
@@ -41,7 +48,7 @@ namespace AppCliente
                         bool respuesta = false;
                         using (HttpClient _client = new HttpClient())
                         {
-                            string _Url = $"https://godeliverix.net/api/CorreoElectronico/GetRecuperarContrasena?" +
+                            string _Url = $"" + Helpers.Settings.sitio + "/api/CorreoElectronico/GetRecuperarContrasena?" +
                                 $"strCorreoElectronico={MVCorreoElectronico.CORREO}";
                             var content = await _client.GetAsync(_Url);
                             string res = await content.Content.ReadAsStringAsync();
@@ -73,7 +80,6 @@ namespace AppCliente
             {
                 await DisplayAlert("Error", "Ingrese su correo", "OK");
             }
-
         }
         private Boolean Email_bien_escrito(String email)
         {

@@ -1,4 +1,5 @@
-﻿using AppCliente.WebApi;
+﻿using AppCliente.ViewModel;
+using AppCliente.WebApi;
 using Newtonsoft.Json;
 using Rg.Plugins.Popup.Services;
 using System;
@@ -21,188 +22,154 @@ namespace AppCliente
         decimal TotalEnvio = 0;
         decimal TotalPagar = 0;
         decimal TotalPropina = 0;
-        HttpClient _client = new HttpClient();
 
         public CarritoPage()
         {
             InitializeComponent();
-            CargaDireccionAEntregar();
+        }
 
+        protected async void CargaCarrito()
+        {
+            cantidad = 0;
+            subtotal = 0;
+            TotalEnvio = 0;
+            TotalPagar = 0;
             if (App.MVProducto.ListaDelCarrito.Count > 0)
             {
-                MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDelCarrito;
-                MyListViewCarritoEmpresa.ItemsSource = App.MVProducto.ListaDelInformacionSucursales;
-                
+                List<MVMProductos> listaDelCarrito = new List<MVMProductos>();
+                List<MVMProductos> listainformacionsucursales = new List<MVMProductos>();
                 for (int i = 0; i < App.MVProducto.ListaDelCarrito.Count; i++)
                 {
-                    cantidad = cantidad + App.MVProducto.ListaDelCarrito[i].Cantidad;
+                    HttpClient _WebApi = new HttpClient();
+                    string _URL = "" + Helpers.Settings.sitio + "/api/Seccion/GetBuscaSeccion?UIDSECCIONProducto=" + App.MVProducto.ListaDelCarrito[i].UidSeccionPoducto.ToString() + "";
+                    var content = await _WebApi.GetStringAsync(_URL);
+                    var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                    var oSeccion = JsonConvert.DeserializeObject<VMSeccion>(obj);
+
+                    _URL = "" + Helpers.Settings.sitio + "/api/Usuario/GetObtenerHora?UidEstado=" + App.UidEstadoABuscar + "";
+                    content = await _WebApi.GetStringAsync(_URL);
+                    obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                    DateTime HoraActual = DateTime.Parse(obj);
+
+                    DateTime HoraSeccion = DateTime.Parse(oSeccion.StrHoraFin);
+                    TimeSpan TiempoRestante = new TimeSpan(0, 10, 0);
+                    TimeSpan Diferencia = new TimeSpan();
+                    Diferencia = (HoraSeccion - HoraActual);
+                    Color ocolor = new Color();
+                    if (HoraActual > HoraSeccion)
+                    {
+                        ocolor = Color.Red;
+                    }
+                    else
+                    {
+                        ocolor = Color.White;
+                    }
+                    cantidad += App.MVProducto.ListaDelCarrito[i].Cantidad;
                     decimal a = decimal.Parse(App.MVProducto.ListaDelCarrito[i].StrCosto);
+                    listaDelCarrito.Add(new MVMProductos()
+                    {
+                        UidRegistroProductoEnCarrito = App.MVProducto.ListaDelCarrito[i].UidRegistroProductoEnCarrito,
+                        UidSeccionPoducto = App.MVProducto.ListaDelCarrito[i].UidSeccionPoducto,
+                        Total = App.MVProducto.ListaDelCarrito[i].Total,
+                        Subtotal = App.MVProducto.ListaDelCarrito[i].Subtotal,
+                        CostoEnvio = App.MVProducto.ListaDelCarrito[i].CostoEnvio,
+                        UID = App.MVProducto.ListaDelCarrito[i].UID,
+                        UidSucursal = App.MVProducto.ListaDelCarrito[i].UidSucursal,
+                        STRNOMBRE = App.MVProducto.ListaDelCarrito[i].STRNOMBRE,
+                        StrCosto = App.MVProducto.ListaDelCarrito[i].StrCosto.ToString(),
+                        Empresa = App.MVProducto.ListaDelCarrito[i].Empresa,
+                        STRRUTA = App.MVProducto.ListaDelCarrito[i].STRRUTA,
+                        Cantidad = App.MVProducto.ListaDelCarrito[i].Cantidad,
+                        UidNota = App.MVProducto.ListaDelCarrito[i].UidNota,
+                        StrNota = App.MVProducto.ListaDelCarrito[i].StrNota,
+                        CColor = ocolor
+                    });
                 }
                 for (int i = 0; i < App.MVProducto.ListaDelInformacionSucursales.Count; i++)
                 {
-                    TotalEnvio = TotalEnvio + App.MVProducto.ListaDelInformacionSucursales[i].CostoEnvio;
-                    TotalPagar = TotalPagar + App.MVProducto.ListaDelInformacionSucursales[i].Total;
-                    subtotal = subtotal + App.MVProducto.ListaDelInformacionSucursales[i].Subtotal;
+                    Color ocolor = new Color();
+                    TotalEnvio += App.MVProducto.ListaDelInformacionSucursales[i].CostoEnvio;
+                    TotalPagar += App.MVProducto.ListaDelInformacionSucursales[i].Total;
+                    subtotal += App.MVProducto.ListaDelInformacionSucursales[i].Subtotal;
                     TotalPropina += App.MVProducto.ListaDelInformacionSucursales[i].DPropina;
+                    if (listaDelCarrito.Exists(o => o.UidSucursal == App.MVProducto.ListaDelInformacionSucursales[i].UidSucursal && o.CColor == Color.Red))
+                    {
+                        ocolor = Color.Red;
+                    }
+                    else
+                    {
+                        ocolor = Color.White;
+                    }
+                    listainformacionsucursales.Add(new MVMProductos()
+                    {
+                        UidTarifario = App.MVProducto.ListaDelInformacionSucursales[i].UidTarifario,
+                        UidSucursal = App.MVProducto.ListaDelInformacionSucursales[i].UidSucursal,
+                        Empresa = App.MVProducto.ListaDelInformacionSucursales[i].Empresa,
+                        Total = App.MVProducto.ListaDelInformacionSucursales[i].Total,
+                        CostoEnvio = App.MVProducto.ListaDelInformacionSucursales[i].CostoEnvio,
+                        Subtotal = App.MVProducto.ListaDelInformacionSucursales[i].Subtotal,
+                        Cantidad = App.MVProducto.ListaDelInformacionSucursales[i].Cantidad,
+                        DPropina = App.MVProducto.ListaDelInformacionSucursales[i].DPropina,
+                        CColor = ocolor,
+                        STRRUTA = App.MVProducto.ListaDelInformacionSucursales[i].STRRUTA
+                    });
                 }
+                int errores = 0;
+                var productoserror = listaDelCarrito.FindAll(o => o.CColor == Color.Red);
+                errores = productoserror.Count;
+                int erroressucursales = 0;
+                var sucursalerror = listainformacionsucursales.FindAll(o => o.CColor == Color.Red);
+                erroressucursales = sucursalerror.Count;
+                if (errores > 0)
+                {
+                    await DisplayAlert("Producto no disponible", "Uno de los productos no esta disponible\nVerifica tu carrito", "Aceptar");
+                    btnPagar.IsEnabled = false;
+                }
+                else
+                {
+                    btnPagar.IsEnabled = true;
+                }
+                MyListViewBusquedaProductos.ItemsSource = listaDelCarrito;
+                MyListViewCarritoEmpresa.ItemsSource = listainformacionsucursales;
                 ViewListaProductoVacio.IsVisible = false;
                 ScrollView_Productos.IsVisible = false;
-
                 #region mostrar los datos al usuario
-                //txtTotalEnvio.Text = "$" + TotalEnvio.ToString();
-                //txtCantidad.Text = cantidad.ToString();
-                //txtsubtotal.Text = "$" + subtotal.ToString();
-                //txtCantidadSucursales.Text = App.MVProducto.ListaDelInformacionSucursales.Count.ToString();
-                //txtPropina.Text = "$" + TotalPropina;
                 btnPagar.Text = "Pagar  $" + TotalPagar;
-                //btnPagar2.Text = "Pagar  $" + TotalPagar;
                 #endregion
             }
             else
             {
                 #region mostrar los datos al usuario
-                //txtTotalEnvio.Text = "$0.00";
-                //txtCantidad.Text = "0";
-                //txtsubtotal.Text = "$0.00";
-                //txtCantidadSucursales.Text = "0";
-                //txtPropina.Text = "$0.00";
                 btnPagar.Text = "Pagar  $0.00";
-                //btnPagar2.Text = "Pagar  $0.00";
                 #endregion
                 ViewListaProductoVacio.IsVisible = true;
                 ScrollView_Productos.IsVisible = false;
             }
-
         }
-
-        private async void CargaDireccionAEntregar()
-        {
-            using (var _webApi = new HttpClient())
-            {
-                string url = "https://www.godeliverix.net/api/Direccion/GetDireccionCompleta?UidDireccion=" + App.DireccionABuscar + "";
-                var content = await _webApi.GetStringAsync(url);
-                var obj = JsonConvert.DeserializeObject<ResponseHelper>(content.ToString()).Data.ToString();
-                var MDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
-                string referencia = string.Empty;
-                if (MDireccion.REFERENCIA != "No hay informacion")
-                {
-                    referencia = MDireccion.REFERENCIA;
-                }
-                //lblDireccionAEntregar.Text = MDireccion.PAIS + "," + MDireccion.ESTADO + "," + MDireccion.MUNICIPIO + "," + MDireccion.CIUDAD + "," + MDireccion.COLONIA + "," + MDireccion.CALLE0 + " " + MDireccion.MANZANA + " " + MDireccion.LOTE + ", CP " + MDireccion.CodigoPostal + ". " + "Referencia: " + referencia;
-            }
-        }
-
         private async void BtnPagar_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new Pago(TotalPagar.ToString()));
-
-           // BtnPagar_ClickedAsync();
-        }
-        private async void BtnPagar_ClickedAsync()
-        {
-
-
-            Guid UidOrden = Guid.NewGuid();
-            decimal total = TotalPagar;
-            Guid UidUsuario = new Guid(App.Global1);
-            Guid UidDireccion = new Guid(App.DireccionABuscar);
-
-
-            if (App.MVProducto.ListaDelCarrito.Count > 0)
+            if (App.Global1 == string.Empty)
             {
-                if (!App.MVProducto.ListaDelInformacionSucursales.Exists(t => t.UidTarifario == Guid.Empty))
-                {                    //Guarda la orden con la sucursal
-                    for (int i = 0; i < App.MVProducto.ListaDelCarrito.Count; i++)
-                    {
-                        VMProducto objeto = App.MVProducto.ListaDelInformacionSucursales.Find(Suc => Suc.UidSucursal == App.MVProducto.ListaDelCarrito[i].UidSucursal);
-                        var objetos = App.MVProducto.ListaDelCarrito.FindAll(Suc => Suc.UidSucursal == App.MVProducto.ListaDelCarrito[i].UidSucursal);
-                        decimal totalSucursal = 0.0m;
-                        Guid UidOrdenSucursal = Guid.NewGuid();
-                        foreach (var item in objetos)
-                        {
-                            totalSucursal = totalSucursal + item.Subtotal;
-                            //Guarda la relacion con los productos
-                            Guid Uidnota = new Guid();
-                            string mensaje = "";
-                            if (item.UidNota == null || item.UidNota == Guid.Empty)
-                            {
-                                Uidnota = Guid.Empty;
-                            }
-                            else
-                            {
-                                Uidnota = item.UidNota;
-                            }
-                            if (!string.IsNullOrEmpty(item.StrNota) && item.StrNota != null)
-                            {
-                                mensaje = item.StrNota;
-                            }
-                            else
-                            {
-                                mensaje = "sin nota";
-                            }
-                            string _Url = $"http://godeliverix.net/api/Orden/GetGuardarProductos?" +
-                                $"UIDORDEN={UidOrdenSucursal}" +
-                                $"&UIDSECCIONPRODUCTO={item.UidSeccionPoducto}" +
-                                $"&INTCANTIDAD={item.Cantidad}" +
-                                $"&STRCOSTO={item.StrCosto}" +
-                                $"&UidSucursal={item.UidSucursal}" +
-                                $"&UidRegistroEncarrito={item.UidRegistroProductoEnCarrito}" +
-                                $"&UidNota={Uidnota}" +
-                                $"&StrMensaje={mensaje}";
-                            var content = await _client.GetAsync(_Url);
-                        }
-                        //Envia la orden a la sucursal suministradora
-                        Random Codigo = new Random();
-                        long CodigoDeEnrega = Codigo.Next(00001, 99999);
+                await Navigation.PopAsync();
+                await DisplayAlert("Inicio de sesion obligatorio", "Para continuar con el pedido inicia sesion o registrate", "Aceptar");
 
-
-                        string _Url1 = $"http://godeliverix.net/api/Orden/GetGuardarOrden?" +
-                            $"UIDORDEN={UidOrden}" +
-                            $"&Total={total}" +
-                            $"&Uidusuario={UidUsuario}" +
-                            $"&UidDireccion={UidDireccion}" +
-                            $"&Uidsucursal={objeto.UidSucursal}" +
-                            $"&totalSucursal={totalSucursal}" +
-                            $"&UidRelacionOrdenSucursal={UidOrdenSucursal}" +
-                            $"&LngCodigoDeEntrega={CodigoDeEnrega}";
-                        var content1 = await _client.GetAsync(_Url1);
-
-                        // Envia la orden a la sucursal distribuidora
-                        string _Url2 = $@"http://godeliverix.net/api/Tarifario/GetGuardarTarifario?" +
-                            $"UidOrdenSucursal={UidOrdenSucursal}" +
-                            $"&DPropina={objeto.DPropina}" +
-                            $"&UidTarifario={objeto.UidTarifario}";
-                        var content2 = await _client.GetAsync(_Url2);
-
-                        //Una vez que se haya guardado ella basededatosse le cambia el estatus a la orden
-                        string _Url3 = $"http://godeliverix.net/api/Orden/GetAgregaEstatusALaOrden?" +
-                            $"UidEstatus=DE294EFC-C549-4DDD-A0D1-B0E1E2039ECC" +
-                            $"&StrParametro=U" +
-                            $"&UidOrden={UidOrdenSucursal}" +
-                            $"&UidSucursal={objeto.UidSucursal}";
-                        var content3 = await _client.GetAsync(_Url3);
-
-                        App.MVProducto.ListaDelCarrito.RemoveAll(sucursal => sucursal.UidSucursal == objeto.UidSucursal);
-                        i = i - 1;
-                    }
-                    LimpiarCarrito();
-                    App.MVOrden.ObtenerInformacionDeLaUltimaOrden(UidUsuario);
-                    await DisplayAlert("Felicidades!", "Se ha enviado su orden", "OK");
-                }
-                else
-                {
-                    await DisplayAlert("NO a escogido distribuidora", "No se ha elegido una empresa distribuidora dentro de la orden", "ok");
-                }
+                NavigationPage navigationPage = ((NavigationPage)((MasterDetailPage)App.Current.MainPage).Detail);
+                await navigationPage.PushAsync(new Login());
+            }
+            else
+            {
+                await Navigation.PushAsync(new Pago(TotalPagar.ToString()));
             }
         }
+
 
         private async void MyListViewCarritoEmpresa_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             await PopupNavigation.Instance.PushAsync(new Popup.PopupLoanding());
             var item = ((ItemTappedEventArgs)e);
-            VMProducto ObjItem = (VMProducto)item.Item;
+            MVMProductos ObjItem = (MVMProductos)item.Item;
             MyListViewCarritoEmpresa.ItemsSource = App.MVProducto.ListaDelInformacionSucursales;
-            await Navigation.PushAsync(new CarritoDetalleSucursal(ObjItem,  MyListViewCarritoEmpresa, btnPagar));
+            await Navigation.PushAsync(new CarritoDetalleSucursal(ObjItem, MyListViewCarritoEmpresa, btnPagar));
             await PopupNavigation.Instance.PopAsync();
         }
 
@@ -212,13 +179,8 @@ namespace AppCliente
             App.MVProducto.ListaDelInformacionSucursales.Clear();
             MyListViewBusquedaProductos.ItemsSource = null;
             MyListViewCarritoEmpresa.ItemsSource = null;
-            //txtCantidad.Text = "0";
-            //txtPropina.Text = "$0.00";
-            //txtCantidadSucursales.Text = "0";
-            //txtsubtotal.Text = "$0.00";
-            //txtTotalEnvio.Text = "$0.00";
             btnPagar.Text = "pagar $0.00";
-            //btnPagar2.Text = "pagar $0.00";
+            CargaCarrito();
         }
 
         private async void BtnLimpiarCarrito_Clicked(object sender, EventArgs e)
@@ -235,25 +197,34 @@ namespace AppCliente
             await PopupNavigation.Instance.PushAsync(new Popup.PopupLoanding());
             var item = sender as Button;
             var ObjItem = item.BindingContext as VMProducto;
-            App.MVTarifario.BuscarTarifario("Cliente", ZonaEntrega: App.DireccionABuscar, uidSucursal: ObjItem.UidSucursal.ToString());
-            //await Navigation.PushAsync(new SeleccionarDistribuidoraCarrito(ObjItem, MyListViewCarritoEmpresa, txtTotalEnvio, btnPagar, btnPagar2));
+
+            using (HttpClient _WebApiGoDeliverix = new HttpClient())
+            {
+                string url = "" + Helpers.Settings.sitio + "/api/Tarifario/GetBuscarTarifario?TipoDeBusqueda=Cliente&ZonaEntrega=" + App.UidColoniaABuscar + "&uidSucursal=" + ObjItem.UidSucursal.ToString() + "";
+
+                string content = await _WebApiGoDeliverix.GetStringAsync(url);
+                string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                App.MVTarifario = JsonConvert.DeserializeObject<VMTarifario>(obj);
+            }
             await Navigation.PushAsync(new SeleccionarDistribuidoraCarrito(ObjItem, MyListViewCarritoEmpresa, btnPagar));
             await PopupNavigation.Instance.PopAsync();
         }
 
-        private void ImageButton_Clicked(object sender, EventArgs e)
-        {
-            var item = sender as Button;
-            var ObjItem = item.BindingContext as VMProducto;
-        }
+
 
         private async void BtnAgregarPropina_Clicked(object sender, EventArgs e)
         {
             await PopupNavigation.Instance.PushAsync(new Popup.PopupLoanding());
             var item = sender as Button;
-            var ObjItem = item.BindingContext as VMProducto;
+            var ObjItem = item.BindingContext as MVMProductos;
             await Navigation.PushAsync(new ModificarPropina(UidSucursal: ObjItem.UidSucursal, MyListViewCarritoEmpresa, btnPagar));
             await PopupNavigation.Instance.PopAsync();
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            CargaCarrito();
         }
     }
 }

@@ -30,9 +30,8 @@ namespace AppCliente
         public Login()
         {
             InitializeComponent();
-            NavigationPage.SetHasNavigationBar(this, false);
             //string currentuserID = (Application.Current.Properties["Userr"].ToString());
-            AppCliente.Helpers.Settings.ClearAllData();
+
             LimpiarPerfil();
         }
 
@@ -73,7 +72,7 @@ namespace AppCliente
             Navigation.PushAsync(new RecuperarPassword());
         }
 
-       
+
 
         protected async void Ingresar(string Usuario, string Contrasena)
         {
@@ -81,7 +80,7 @@ namespace AppCliente
             {
                 acLogin.IsRunning = true;
                 acLogin.IsVisible = true;
-                string url = "https://www.godeliverix.net/api/Profile/GET?Usuario=" + Usuario + "&Contrasena=" + Contrasena;
+                string url = "" + Helpers.Settings.sitio + "/api/Profile/GET?Usuario=" + Usuario + "&Contrasena=" + Contrasena;
                 string content = "";
                 using (HttpClient _client = new HttpClient())
                 {
@@ -99,24 +98,36 @@ namespace AppCliente
                 if (_acceso)
                 {
                     string strDirecciones = string.Empty;
+                    App.MVDireccion = new VMDireccion();
                     using (HttpClient _client = new HttpClient())
                     {
-                        var tex = "https://www.godeliverix.net/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + _id;
+                        var tex = "" + Helpers.Settings.sitio + "/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + _id;
                         strDirecciones = await _client.GetStringAsync(tex);
                     }
 
                     var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
-                    App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
-                    OneSignal.Current.SetExternalUserId(App.Global1);
+                    if (App.MVDireccion.ListaDIRECCIONES.Count == 0)
+                    {
+                        App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
+                    }
+                    else
+                    {
+                        var oDirecciones = JsonConvert.DeserializeObject<VMDireccion>(obj);
+                    }
                     if (GuardarContraseña.IsToggled && string.IsNullOrEmpty(AppCliente.Helpers.Settings.UserName) && string.IsNullOrEmpty(AppCliente.Helpers.Settings.Password))
                     {
                         AppCliente.Helpers.Settings.UserName = txtUsuario.Text;
                         AppCliente.Helpers.Settings.Password = txtIDContraseña.Text;
                         Application.Current.MainPage = new MasterMenu();
+                        App.Navegacion = "HomePage";
                         //await PopupNavigation.Instance.PopAsync();
                     }
                     else
                     {
+                        if (App.MVProducto.ListaDelCarrito.Count != 0)
+                        {
+
+                        }
                         Application.Current.MainPage = new MasterMenu();
                         //await PopupNavigation.Instance.PopAsync();
                     }
@@ -152,10 +163,16 @@ namespace AppCliente
             App.giro = "";
             App.categoria = "";
             App.subcategoria = "";
-            App.ListaCarrito = new List<VMProducto>();
 
-            App.DireccionABuscar = "";
-
+            if (App.MVProducto.ListaDelCarrito.Count == 0)
+            {
+                App.ListaCarrito = new List<VMProducto>();
+                App.MVProducto = new VMProducto();
+            }
+            if (!string.IsNullOrEmpty(App.DireccionABuscar))
+            {
+                App.DireccionABuscar = "";
+            }
             App.MVAcceso = new VMAcceso();
             App.MVSucursales = new VMSucursales();
             App.MVUsuarios = new VMUsuarios();
@@ -168,14 +185,11 @@ namespace AppCliente
             App.MVOferta = new VMOferta();
             App.MVSeccion = new VMSeccion();
             App.MVTarifario = new VMTarifario();
-            App.MVProducto = new VMProducto();
             App.MVEmpresa = new VMEmpresas();
-
             App.MVOrden = new VMOrden();
-
-
             App.MVCorreoElectronico = new VMCorreoElectronico();
             App.MVDireccion = new VMDireccion();
+
         }
     }
 }

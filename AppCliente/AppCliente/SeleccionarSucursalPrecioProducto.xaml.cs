@@ -42,7 +42,6 @@ namespace AppCliente
             try
             {
                 VMProducto a = (VMProducto)MyListViewBusquedaEmpresaDelProducto.SelectedItem;
-
                 lbEmpresa.Text = a.StrIdentificador;
                 string i = a.UidSeccion.ToString();
                 lbCosto.Text ="Prercio: $"+ a.StrCosto;
@@ -51,15 +50,12 @@ namespace AppCliente
                 uidEmpresaSeleccionada.Text = a.UID.ToString();
                 sucursal.Text = a.UidSucursal.ToString();
                 costo = (cantidad) * (costo);
-
-                btn.Text = "Agregar carrito $" + costo; ;
-
-
+                btn.Text = "Agregar carrito $" + costo; 
                 Navigation.PopAsync();
             }
             catch (Exception)
             {
-                DisplayAlert("Sorry", "Selecciones un sucuersal", "ok");
+                DisplayAlert("Alerta", "Seleciona una sucursal", "ok");
             }
         }
 
@@ -85,7 +81,7 @@ namespace AppCliente
             }
             catch (Exception)
             {
-                DisplayAlert("Sorry", "Selecciones un sucuersal", "ok");
+                DisplayAlert("Alerta", "Seleciona una sucursal", "ok");
             }
 
         }

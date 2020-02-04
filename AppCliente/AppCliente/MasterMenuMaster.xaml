@@ -28,7 +28,7 @@
                     <Label
             Grid.Column="1"
             Grid.Row="2"
-                      TextColor="White"
+                      TextColor="Black"
                       FontSize="23"
                       x:Name="MiNombre"
             Text="GoDeliverix"

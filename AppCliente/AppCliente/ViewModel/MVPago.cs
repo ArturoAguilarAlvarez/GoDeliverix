@@ -11,7 +11,6 @@ namespace AppCliente.ViewModel
 {
     public class MVPago
     {
-        VMMonedero MVMonedero;
         #region Propiedades
         private string _NombreTipoDePago;
 

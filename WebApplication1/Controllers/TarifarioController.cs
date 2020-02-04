@@ -15,10 +15,10 @@ namespace WebApplication1.Controllers
         /// <param name="UidTarifario"></param>
         /// <returns></returns>
         public ResponseHelper GetGuardarTarifario(Guid UidOrdenSucursal, Guid UidTarifario, string DPropina)
-        {  
+        {
             MVTarifario = new VMTarifario();
             Respuesta = new ResponseHelper();
-            MVTarifario.AgregarTarifarioOrden(UidOrden: UidOrdenSucursal, UidTarifario: UidTarifario, DPropina:decimal.Parse(DPropina));
+            MVTarifario.AgregarTarifarioOrden(UidOrden: UidOrdenSucursal, UidTarifario: UidTarifario, DPropina: decimal.Parse(DPropina));
 
             Respuesta.Data = "Registro guardado";
             Respuesta.Status = true;
@@ -52,6 +52,17 @@ namespace WebApplication1.Controllers
             Respuesta.Data = "Registro actualizado";
             Respuesta.Status = true;
             Respuesta.Message = "Informacion actualizada satisfactoriamente";
+            return Respuesta;
+        }
+
+        public ResponseHelper GetBuscarTarifario(string TipoDeBusqueda, string uidSucursal = "", string UidZonaRecolecta = "", string ZonaEntrega = "", string contrato = "", string UidSucursalDistribuidora = "")
+        {
+            MVTarifario = new VMTarifario();
+            Respuesta = new ResponseHelper();
+            MVTarifario.BuscarTarifario(TipoDeBusqueda, uidSucursal, UidZonaRecolecta, ZonaEntrega, contrato, UidSucursalDistribuidora);
+            Respuesta.Data = MVTarifario;
+            Respuesta.Status = true;
+            Respuesta.Message = "Informacion agregada satisfactoriamente";
             return Respuesta;
         }
     }

@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using AppCliente.ViewModel;
 using Rg.Plugins.Popup.Pages;
 
 using Rg.Plugins.Popup.Services;
@@ -25,7 +25,7 @@ namespace AppCliente.Popup
         ListView MyListViewBusquedaEmpresas;
         int CantidadProductosMostrados = 0;
         Label lbCantidad;
-
+        VMProductosYEmpresas oBusquedaProdutos = new VMProductosYEmpresas();
         public PupupFiltroBusqueda(ImageButton button,
             StackLayout ScrollView_Productos,
             StackLayout ScrollView_Empresas,
@@ -35,9 +35,9 @@ namespace AppCliente.Popup
             Label lbCantidad)
         {
             this.lbCantidad = lbCantidad;
-            this.MyListViewBusquedaProductosHome= MyListViewBusquedaProductosHome;
+            this.MyListViewBusquedaProductosHome = MyListViewBusquedaProductosHome;
             this.MyListViewBusquedaEmpresas = MyListViewBusquedaEmpresas;
-             MyBtnFiltroBusquedas = button;
+            MyBtnFiltroBusquedas = button;
             InitializeComponent();
             this.ScrollView_Productos = ScrollView_Productos;
             this.ScrollView_Empresas = ScrollView_Empresas;
@@ -54,55 +54,9 @@ namespace AppCliente.Popup
             App.MVSubCategoria.BuscarSubCategoria(UidCategoria: Guid.Empty.ToString(), Tipo: "Seleccionar");
             App.MVCategoria.BuscarCategorias(UidGiro: objetoGiro.UIDVM.ToString(), tipo: "seleccion");
             MyPickerCategoria.ItemsSource = App.MVCategoria.LISTADECATEGORIAS;
-            
 
-            //if (App.buscarPor != "")
-            //{
-            //    MypickerEmpresaProducto.SelectedItem = App.buscarPor;
-            //    if (App.giro != "")
-            //    {
-            //        MyPickerGiro.SelectedItem = App.MVGiro.LISTADEGIRO.Find(t => t.UIDVM == new Guid(App.giro));
-            //        if (App.categoria != "")
-            //        {
-            //            MyPickerCategoria.SelectedItem = App.MVCategoria.LISTADECATEGORIAS.Find(t => t.UIDCATEGORIA == new Guid(App.categoria));
-            //            if (App.subcategoria != "")
-            //            {
-            //                MyPickerCategoria.SelectedItem = App.MVCategoria.LISTADECATEGORIAS.Find(t => t.UIDCATEGORIA == new Guid(App.categoria));
-            //                if (App.subcategoria != "")
-            //                {
-            //                    MyPickerSubCategoria.SelectedItem = App.MVSubCategoria.LISTADESUBCATEGORIAS.Find(t => t.UID == new Guid(App.subcategoria));
-            //                }
-            //                else
-            //                {
-
-            //                    MyPickerSubCategoria.SelectedIndex = 0;
-            //                }
-            //            }
-            //            else
-            //            {
-
-            //                MypickerEmpresaProducto.SelectedIndex = 0;
-            //            }
-            //        }
-            //        else
-            //        {
-            //            MyPickerSubCategoria.SelectedIndex = 0;
-            //            MypickerEmpresaProducto.SelectedIndex = 0;
-            //        }
-            //    }
-            //    else
-            //    {
-            //        MyPickerCategoria.SelectedIndex = 0;
-            //        MyPickerSubCategoria.SelectedIndex = 0;
-            //        MypickerEmpresaProducto.SelectedIndex = 0;
-            //    }
-            //}
-            //else
-            //{
-                MyPickerCategoria.SelectedIndex = 0;
-                MyPickerSubCategoria.SelectedIndex = 0;
-                //MypickerEmpresaProducto.SelectedIndex = 0;
-            //}
+            MyPickerCategoria.SelectedIndex = 0;
+            MyPickerSubCategoria.SelectedIndex = 0;
         }
 
         private void Button_Clicked(object sender, EventArgs e)
@@ -166,20 +120,20 @@ namespace AppCliente.Popup
 
         private void SearchFor_SearchButtonPressed()
         {
-            string Buscado = "";
 
-            string Hora = string.Empty;
-            if (DateTime.Now.Hour < 10)
+            Guid UidEstado = new Guid();
+            Guid UidColonia = new Guid();
+
+            if (Helpers.Settings.UidDireccion != string.Empty)
             {
-                Hora = "0" + DateTime.Now.Hour.ToString();
+                UidEstado = new Guid(App.MVDireccion.ListaDIRECCIONES[0].ESTADO);
+                UidColonia = new Guid(App.MVDireccion.ListaDIRECCIONES[0].COLONIA);
             }
             else
             {
-                Hora = DateTime.Now.Hour.ToString();
+                UidEstado = new Guid(Helpers.Settings.StrESTADO);
+                UidColonia = new Guid(Helpers.Settings.StrCOLONIA);
             }
-
-            string hora = Hora + ":" + DateTime.Now.Minute.ToString();
-
             CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
             string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
 
@@ -229,22 +183,26 @@ namespace AppCliente.Popup
             if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
             {
                 //giro
-                App.MVProducto.buscarProductosEmpresaDesdeCliente("Giro", Dia, Direccion, new Guid(giro), "");
-                App.MVEmpresa.BuscarEmpresaBusquedaCliente("Giro", Dia, Direccion, new Guid(giro), "");
+                oBusquedaProdutos.BuscarProductos("Giro", Dia, UidEstado, UidColonia, new Guid(giro), "");
+                // App.MVProducto.buscarProductosEmpresaDesdeCliente("Giro", Dia, Direccion, new Guid(giro), "");
+                App.MVEmpresa.BuscarEmpresaBusquedaCliente("Giro", Dia, UidEstado, UidColonia, new Guid(giro), "");
             }
             else
             //// Busqueda por categoria
             if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
             {
-                App.MVProducto.buscarProductosEmpresaDesdeCliente("Categoria", Dia, Direccion, new Guid(categoria), "");
-                App.MVEmpresa.BuscarEmpresaBusquedaCliente("Categoria", Dia, Direccion, new Guid(categoria), "");
+                oBusquedaProdutos.BuscarProductos("Categoria", Dia, UidEstado, UidColonia, new Guid(categoria), "");
+
+                //App.MVProducto.buscarProductosEmpresaDesdeCliente("Categoria", Dia, Direccion, new Guid(categoria), "");
+                App.MVEmpresa.BuscarEmpresaBusquedaCliente("Categoria", Dia, UidEstado, UidColonia, new Guid(categoria), "");
             }
             else
             //Busqueda por subcategoria
             if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || !string.IsNullOrWhiteSpace(subcategoria)))
             {
-                App.MVProducto.buscarProductosEmpresaDesdeCliente("Subcategoria", Dia, Direccion, new Guid(subcategoria), "");
-                App.MVEmpresa.BuscarEmpresaBusquedaCliente("Subcategoria", Dia, Direccion, new Guid(subcategoria), "");
+                oBusquedaProdutos.BuscarProductos("Subcategoria", Dia, UidEstado, UidColonia, new Guid(subcategoria), "");
+                //App.MVProducto.buscarProductosEmpresaDesdeCliente("Subcategoria", Dia, Direccion, new Guid(subcategoria), "");
+                App.MVEmpresa.BuscarEmpresaBusquedaCliente("Subcategoria", Dia, UidEstado, UidColonia, new Guid(subcategoria), "");
             }
             if (App.buscarPor == "Productos")
             {
@@ -253,17 +211,17 @@ namespace AppCliente.Popup
                 {
                     if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
                     {
-                        App.MVProducto.BuscarProductoPorSucursal("Giro", Dia, Direccion, new Guid(giro), item.UID);
+                        App.MVProducto.BuscarProductoPorSucursal("Giro", Dia, UidColonia, UidEstado, new Guid(giro), item.UID);
                     }
                     else
                     if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
                     {
-                        App.MVProducto.BuscarProductoPorSucursal("Categoria", Dia, Direccion, new Guid(categoria), item.UID);
+                        App.MVProducto.BuscarProductoPorSucursal("Categoria", Dia, UidColonia, UidEstado, new Guid(categoria), item.UID);
                     }
                     else
                     if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || !string.IsNullOrWhiteSpace(subcategoria)))
                     {
-                        App.MVProducto.BuscarProductoPorSucursal("Subcategoria", Dia, Direccion, new Guid(subcategoria), item.UID);
+                        App.MVProducto.BuscarProductoPorSucursal("Subcategoria", Dia, UidColonia, UidEstado, new Guid(subcategoria), item.UID);
                     }
                     item.StrCosto = App.MVProducto.ListaDePreciosSucursales[0].StrCosto;
                 }

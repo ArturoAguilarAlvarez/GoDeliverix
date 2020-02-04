@@ -398,7 +398,7 @@ namespace VistaDelModelo
 
         }
 
-        public void BuscarSucursalesCliente(Guid uidEmpresa, string day, Guid UidDireccion)
+        public void BuscarSucursalesCliente(Guid uidEmpresa, string day, Guid UidEstado, Guid UidColonia)
         {
             DataTable Dt = new DataTable();
             LISTADESUCURSALES = new List<VMSucursales>();
@@ -408,14 +408,14 @@ namespace VistaDelModelo
                 CMD.CommandType = CommandType.StoredProcedure;
                 CMD.CommandText = "asp_BuscarSucursalesClientes";
 
-
                 CMD.Parameters.Add("@UidEmpresa", SqlDbType.UniqueIdentifier);
                 CMD.Parameters["@UidEmpresa"].Value = uidEmpresa;
 
-                CMD.Parameters.Add("@UidDireccion", SqlDbType.UniqueIdentifier);
-                CMD.Parameters["@UidDireccion"].Value = UidDireccion;
+                CMD.Parameters.Add("@UidColonia", SqlDbType.UniqueIdentifier);
+                CMD.Parameters["@UidColonia"].Value = UidColonia;
 
-
+                CMD.Parameters.Add("@UidEstado", SqlDbType.UniqueIdentifier);
+                CMD.Parameters["@UidEstado"].Value = UidEstado;
 
                 CMD.Parameters.Add("@StrDia", SqlDbType.NVarChar, 20);
                 CMD.Parameters["@StrDia"].Value = day;
