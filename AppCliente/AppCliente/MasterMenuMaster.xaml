@@ -41,7 +41,7 @@
                         <StackLayout Padding="15,10" Orientation="Horizontal" HorizontalOptions="FillAndExpand">
                             <Image Source="{Binding UrlResource}" HeightRequest="40" WidthRequest="40"></Image>
                             <Label VerticalOptions="FillAndExpand" 
-                    VerticalTextAlignment="Center" 
+                    VerticalTextAlignment="Center"  TextColor="LightGray"
                     Text="{Binding Title}" 
                     FontSize="18"/>
                         </StackLayout>

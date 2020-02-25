@@ -10,8 +10,7 @@
         <StackLayout>
             <ListView x:Name="MyListViewBusquedaProductos"
                         VerticalScrollBarVisibility="Always"
-      ItemsSource="{Binding VMProducto}"
-                SelectionMode="None"
+                      SelectionMode="None"
                 SeparatorVisibility="Default"
       IsPullToRefreshEnabled="False"
       HasUnevenRows="True">

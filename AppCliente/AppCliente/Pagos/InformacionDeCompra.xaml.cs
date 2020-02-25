@@ -68,13 +68,10 @@ namespace AppCliente.Pagos
                 default:
                     break;
             }
-
-
-
         }
         private async void cargaMonedero()
         {
-            string _Url = $""+Helpers.Settings.sitio+"/api/Monedero/Get?" +
+            string _Url = $"" + Helpers.Settings.sitio + "/api/Monedero/Get?" +
                                 $"id={App.Global1}";
             var content = "";
             using (HttpClient _client = new HttpClient())

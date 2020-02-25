@@ -16,9 +16,9 @@
 
                 <Label Text="Apellido Materno" VerticalTextAlignment="Center"></Label>
                 <Entry  Text="{Binding Path= StrApellidoMaterno,Mode=TwoWay}"></Entry>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                    <Button Text="OK" FontSize="Large" TextColor="White" Clicked="CloseWindowsPopup" Command="{Binding IsSavingName}" BackgroundColor="Green"></Button>
-                    <Button Text="X" FontSize="Large" TextColor="White"  BackgroundColor="Red"  Clicked="CloseWindowsPopup"></Button>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                    <Button Text="ACEPTAR" FontSize="Large" HorizontalOptions="FillAndExpand" TextColor="White" Clicked="CloseWindowsPopup" Command="{Binding IsSavingName}" BackgroundColor="Green"></Button>
+                    <Button Text="CANCELAR" FontSize="Large" HorizontalOptions="FillAndExpand" TextColor="White"  BackgroundColor="Red"  Clicked="CloseWindowsPopup"></Button>
                 </StackLayout>
             </StackLayout>
         </StackLayout>

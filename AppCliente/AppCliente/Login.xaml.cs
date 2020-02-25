@@ -106,13 +106,14 @@ namespace AppCliente
                     }
 
                     var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
-                    if (App.MVDireccion.ListaDIRECCIONES.Count == 0)
+                    if (App.MVDireccion.ListaDIRECCIONES.Count > 0)
                     {
                         App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
                     }
                     else
                     {
                         var oDirecciones = JsonConvert.DeserializeObject<VMDireccion>(obj);
+
                     }
                     if (GuardarContraseña.IsToggled && string.IsNullOrEmpty(AppCliente.Helpers.Settings.UserName) && string.IsNullOrEmpty(AppCliente.Helpers.Settings.Password))
                     {
@@ -124,13 +125,12 @@ namespace AppCliente
                     }
                     else
                     {
-                        if (App.MVProducto.ListaDelCarrito.Count != 0)
-                        {
-
-                        }
                         Application.Current.MainPage = new MasterMenu();
-                        //await PopupNavigation.Instance.PopAsync();
+                        App.Navegacion = "HomePage";
                     }
+                    Helpers.Settings.StrNombreColonia = string.Empty;
+                    Helpers.Settings.StrCOLONIA = string.Empty;
+                    Helpers.Settings.StrESTADO = string.Empty;
                     Application.Current.Properties["IsLogged"] = true;
 
                 }
@@ -164,15 +164,15 @@ namespace AppCliente
             App.categoria = "";
             App.subcategoria = "";
 
-            if (App.MVProducto.ListaDelCarrito.Count == 0)
-            {
-                App.ListaCarrito = new List<VMProducto>();
-                App.MVProducto = new VMProducto();
-            }
-            if (!string.IsNullOrEmpty(App.DireccionABuscar))
-            {
-                App.DireccionABuscar = "";
-            }
+            //if (App.MVProducto.ListaDelCarrito.Count == 0)
+            //{
+            App.ListaCarrito = new List<VMProducto>();
+            App.MVProducto = new VMProducto();
+            //}
+            //if (!string.IsNullOrEmpty(App.DireccionABuscar))
+            //{
+            App.DireccionABuscar = "";
+            //}
             App.MVAcceso = new VMAcceso();
             App.MVSucursales = new VMSucursales();
             App.MVUsuarios = new VMUsuarios();
@@ -189,7 +189,7 @@ namespace AppCliente
             App.MVOrden = new VMOrden();
             App.MVCorreoElectronico = new VMCorreoElectronico();
             App.MVDireccion = new VMDireccion();
-
+            App.MVDireccion.ListaDIRECCIONES = null;
         }
     }
 }

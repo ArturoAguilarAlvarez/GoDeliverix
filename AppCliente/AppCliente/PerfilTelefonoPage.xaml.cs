@@ -188,7 +188,7 @@ namespace AppCliente
                 var action = await DisplayAlert("Eliminar?", "Estas seguro de eliminar este Telefono", "Si", "No");
                 if (action)
                 {
-                    string _Url = $"" + Helpers.Settings.sitio + "/api/Telefono/DeleteTelefonoUsuario?UidTelefono={txtIDTelefono.Text}";
+                    string _Url = $"" + Helpers.Settings.sitio + "/api/Telefono/DeleteTelefonoUsuario?UidTelefono=" + txtIDTelefono.Text + "";
                     await _client.DeleteAsync(_Url);
 
                     CargarAsync();

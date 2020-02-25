@@ -155,13 +155,17 @@ namespace WebApplication1.Controllers
             {
                 if (MVDireccion.ListaDIRECCIONES[0].ID != Guid.Empty || MVDireccion.ListaDIRECCIONES[0].ID != null)
                 {
-                    //MVUbicacion.GuardaUbicacionDireccion(MVDireccion.ListaDIRECCIONES[0].ID, Guid.NewGuid(), Latitud, Longitud);
+                    Respuesta.Status = true;
                 }
+            }
+            else
+            {
+                Respuesta.Status = false;
             }
 
 
             Respuesta.Data = MVDireccion;
-            Respuesta.Status = true;
+            
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;
         }

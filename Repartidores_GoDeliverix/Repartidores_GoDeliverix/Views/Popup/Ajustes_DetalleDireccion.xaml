@@ -54,9 +54,9 @@
                 <Entry Text="{Binding Identificador, Mode=TwoWay}"></Entry>
                 <Label Text="Referencia"></Label>
                 <Entry Text="{Binding Referencia, Mode=TwoWay}" ></Entry>
-                <StackLayout Orientation="Horizontal">
-                    <Button Text="ok" FontSize="Small" TextColor="White" BackgroundColor="Green" Clicked="CloseWindowsPopup" Command="{Binding SaveAddress}" ></Button>
-                    <Button Text="X" FontSize="Small" TextColor="White"  BackgroundColor="Red"  Clicked="CloseWindowsPopup"></Button>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Fill">
+                    <Button Text="Aceptar" FontSize="Medium" HorizontalOptions="FillAndExpand" TextColor="White" BackgroundColor="Green" Clicked="CloseWindowsPopup" Command="{Binding SaveAddress}" ></Button>
+                    <Button Text="Cancelar" FontSize="Medium" HorizontalOptions="FillAndExpand" TextColor="White"  BackgroundColor="Red"  Clicked="CloseWindowsPopup"></Button>
                 </StackLayout>
             </StackLayout>
         </ScrollView>

@@ -10,7 +10,6 @@
 
             <Label Text="Ordenes para entregar" FontSize="Large" FontAttributes="Bold" TextColor="Black">
             </Label>
-
             <ImageButton Source="IconoCodigoQR.png" HeightRequest="50" WidthRequest="30"  HorizontalOptions="End"
                     BackgroundColor="Transparent"  Margin="0,0,10,0" Clicked="ImageButtonEscanear_Clicked"></ImageButton>
 
@@ -77,7 +76,7 @@
                                         </Grid.RowDefinitions>
                                         <Label Text="{Binding FechaDeOrden}" HorizontalOptions="Center" Grid.Column="0" FontSize="Small" ></Label>
                                         <Label Text="{Binding LNGFolio }" HorizontalOptions="Center" Grid.Column="1" FontSize="Small"></Label>
-                                        <Label Text="{Binding Imagen}" HorizontalOptions="Center"  Grid.Column="2" FontSize="Small"></Label>
+                                        <Image Source="{Binding Imagen}" HorizontalOptions="Center"  Grid.Column="2" ></Image>
                                     </Grid>
                                 </ViewCell>
                             </DataTemplate>

@@ -10,8 +10,8 @@
                 <RowDefinition Height="7*"></RowDefinition>
                 <RowDefinition Height="3*"></RowDefinition>
             </Grid.RowDefinitions>
-            <StackLayout Orientation="Vertical" Margin="10,10,10,10" Grid.Row="0">
-                
+            <StackLayout Orientation="Vertical" VerticalOptions="Start" Margin="10,10,10,10" Grid.Row="0">
+
                 <StackLayout Orientation="Horizontal" VerticalOptions="Center">
                     <Label  Text="Empresa" FontSize="Medium"  TextColor="#333"></Label>
                     <Label  Text="{Binding StrEmpresaNombreComercial}" HorizontalOptions="FillAndExpand" TextColor="#555" FontSize="Medium" ></Label>
@@ -19,28 +19,28 @@
                 <StackLayout Orientation="Horizontal" VerticalOptions="Center" >
                     <Label  Text="Sucursal" FontSize="Medium" TextColor="#333"></Label>
                     <Label x:Name="lblSucursal" Text="{Binding StrIdentificadorSucursal}" HorizontalOptions="FillAndExpand" TextColor="#555" FontSize="Medium" ></Label>
-                    </StackLayout>
+                </StackLayout>
 
                 <StackLayout Orientation="Horizontal"  VerticalOptions="Center"  >
                     <Label  Text="No.orden" FontSize="Medium"  TextColor="#333"></Label>
                     <Label  Text="{Binding LngFolio}" TextColor="#555" HorizontalOptions="FillAndExpand" FontSize="Medium" ></Label>
-                    </StackLayout>
+                </StackLayout>
 
                 <StackLayout Orientation="Horizontal" VerticalOptions="Center"  >
                     <Label  Text="Cliente" FontSize="Medium"  TextColor="#333"></Label>
                     <Label  Text="{Binding StrNombreUsuario}" TextColor="#555" HorizontalOptions="FillAndExpand" FontSize="Medium" ></Label>
-                       
-                    </StackLayout>
+
+                </StackLayout>
                 <StackLayout Orientation="Horizontal" VerticalOptions="Center">
                     <Label Text="{Binding StrEstatusCobro,StringFormat='Estatus {0}'}" TextColor="#555" HorizontalOptions="FillAndExpand" FontSize="Medium"></Label>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" VerticalOptions="Center">
                     <Label  Text="Telefono" FontSize="Medium"  TextColor="#333"></Label>
                     <Button BackgroundColor="White" TextColor="Blue" HorizontalOptions="FillAndExpand" Text="{Binding StrNumeroCliente}" x:Name="lblNumeroCliente"  Clicked="LblNumeroCliente_Clicked" FontSize="Medium" >
-                        </Button>
-                    </StackLayout>
-                
-               
+                    </Button>
+                </StackLayout>
+
+
                 <StackLayout   Orientation="Vertical" VerticalOptions="Fill" HorizontalOptions="Fill">
                     <StackLayout   Orientation="Vertical" HorizontalOptions="Fill" Margin="0,10,0,0" >
                         <ScrollView>
@@ -73,7 +73,7 @@
 
                     </StackLayout>
 
-                    
+
                 </StackLayout>
                 <StackLayout Orientation="Vertical" HorizontalOptions="End">
                     <Label  Text="{Binding MSubTotal,StringFormat='Subtotal: ${0}'}" TextColor="Black" FontSize="Large"></Label>
@@ -83,25 +83,16 @@
                 </StackLayout>
             </StackLayout>
 
-            <StackLayout Grid.Row="1">
+            <StackLayout Grid.Row="1" VerticalOptions="End" Orientation="Vertical">
                 <Button  Text="Escanear codigo" Command="{Binding RefreshAll}" x:Name="btnEscanearCodigo" Clicked="btnEscanearCodigo_Clicked" TextColor="White" BackgroundColor="CadetBlue"></Button>
-
-                <StackLayout  HorizontalOptions="Center">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="5*"></RowDefinition>
-                            <RowDefinition Height="5*"></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <StackLayout Grid.Row="0">
-                            <Entry  Text="{Binding StrCodigo,Mode=TwoWay}" x:Name="ECodigo" Placeholder="Ingresa el codigo para finalizar" HorizontalOptions="Fill"></Entry>
-                        </StackLayout>
-                        <StackLayout Grid.Row="1" Orientation="Vertical">
-                            <Button Text="Finalizar" Command="{ Binding GetCode}" x:Name="BtnFinalizar" Clicked="BtnFinalizar_Clicked" TextColor="White"  BackgroundColor="Green"></Button>
-                        </StackLayout>
-                    </Grid>
+                <StackLayout Grid.Row="0">
+                    <Entry  Text="{Binding StrCodigo,Mode=TwoWay}" x:Name="ECodigo" Placeholder="Ingresa el codigo para finalizar" HorizontalOptions="Fill"></Entry>
+                </StackLayout>
+                <StackLayout Grid.Row="1" Orientation="Vertical">
+                    <Button Text="Finalizar" Command="{ Binding GetCode}" x:Name="BtnFinalizar" Clicked="BtnFinalizar_Clicked" TextColor="White"  BackgroundColor="Green"></Button>
                 </StackLayout>
             </StackLayout>
-            
+
         </Grid>
     </ContentPage.Content>
 </ContentPage>

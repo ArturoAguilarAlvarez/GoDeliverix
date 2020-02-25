@@ -1,5 +1,4 @@
 ﻿using AppPrueba.WebApi;
-using Com.OneSignal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,12 +29,13 @@ namespace AppPrueba.Views
             if (Salir == "AppPrueba.Views.MasterMenuDetailDetail")
             {
                 AppPrueba.Helpers.Settings.CerrarSesion();
-                OneSignal.Current.RemoveExternalUserId();
-                //Inicio deturno movil
-                using (HttpClient _client = new HttpClient())
+                if (!string.IsNullOrEmpty(AppPrueba.Helpers.Settings.Uidusuario))
                 {
-                    string url = RestService.Servidor + "api/Turno/GetTurnoSuministradora?UidUsuario=" + AppPrueba.Helpers.Settings.Uidusuario + "&UidTurno=" + AppPrueba.Helpers.Settings.UidTurno;
-                    await _client.GetStringAsync(url);
+                    using (HttpClient _client = new HttpClient())
+                    {
+                        string url = RestService.Servidor + "api/Turno/GetTurnoSuministradora?UidUsuario=" + AppPrueba.Helpers.Settings.Uidusuario + "&UidTurno=" + AppPrueba.Helpers.Settings.UidTurno;
+                        await _client.GetStringAsync(url);
+                    }
                 }
                 App.Current.MainPage = new NavigationPage(new LoginPage());
             }

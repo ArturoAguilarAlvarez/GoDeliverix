@@ -440,10 +440,20 @@ namespace VistaDelModelo
                 {
                     Referencia = "No hay información";
                 }
+                string oLongitud = "";
+                string oLatitud = "";
+                if (item["VchLongitud"] != null)
+                {
+                    oLongitud = item["VchLongitud"].ToString();
+                }
+                if (item["VchLatitud"] != null)
+                {
+                    oLatitud = item["VchLatitud"].ToString();
+                }
                 //Obtiene el nombre de la colonia y de la ciudad
                 NombreCiudad = ObtenerNombreDeLaCiudad(CIUDAD.ToString());
                 NombreColonia = ObtenerNombreDeLaColonia(COLONIA.ToString());
-                ListaDIRECCIONES.Add(new VMDireccion() { ID = IDDIRECCION, PAIS = PAIS.ToString(), ESTADO = ESTADO.ToString(), MUNICIPIO = MUNICIPIO.ToString(), CIUDAD = CIUDAD.ToString(), COLONIA = COLONIA.ToString(), CALLE0 = CALLE0, CALLE1 = CALLE1, CALLE2 = CALLE2, MANZANA = MANZANA, LOTE = LOTE, CodigoPostal = CP, REFERENCIA = Referencia, IDENTIFICADOR = Identificador, NOMBRECIUDAD = NombreCiudad, NOMBRECOLONIA = NombreColonia });
+                ListaDIRECCIONES.Add(new VMDireccion() { ID = IDDIRECCION, PAIS = PAIS.ToString(), ESTADO = ESTADO.ToString(), MUNICIPIO = MUNICIPIO.ToString(), CIUDAD = CIUDAD.ToString(), COLONIA = COLONIA.ToString(), CALLE0 = CALLE0, CALLE1 = CALLE1, CALLE2 = CALLE2, MANZANA = MANZANA, LOTE = LOTE, CodigoPostal = CP, REFERENCIA = Referencia, IDENTIFICADOR = Identificador, Latitud = oLatitud, Longitud = oLongitud, NOMBRECIUDAD = NombreCiudad, NOMBRECOLONIA = NombreColonia });
             }
         }
         public string ObtenerCodigoPostal(Guid Colonia)

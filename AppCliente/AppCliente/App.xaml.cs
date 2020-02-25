@@ -53,6 +53,7 @@ namespace AppCliente
         public static VMOrden MVOrden = new VMOrden();
         public static VMCorreoElectronico MVCorreoElectronico = new VMCorreoElectronico();
         public static VMDireccion MVDireccion = new VMDireccion();
+        public static VMDireccion MVDireccionDemo;
         public static List<VMProducto> ListaDeProductos = new List<VMProducto>();
         public static List<VMEmpresas> LISTADEEMPRESAS = new List<VMEmpresas>();
         #endregion

@@ -20,23 +20,21 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>CFBundleDisplayName</key>
-	<string>GoDeliverixCliente</string>
+	<string>GoDeliverix</string>
 	<key>CFBundleIdentifier</key>
 	<string>H3NR49G9QZ</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.12</string>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
+	<string>1.0.20</string>
 	<key>CFBundleName</key>
 	<string>AppCliente</string>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Agrega tu ubicación para obtener con mas precisión el lugar de entrega.</string>
+	<string>Tu ubicación nos ayuda a localizar empresas y productos disponibles para ti.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Agrega tu ubicación para obtener con mas precisión el lugar de entrega.</string>
+	<string>Tu ubicación nos ayuda a localizar empresas y productos disponibles para ti.</string>
 	<key>NSLocationUsageDescription</key>
-	<string>Agrega tu ubicación para obtener con mas precisión el lugar de entrega.</string>
+	<string>Tu ubicación nos ayuda a localizar empresas y productos disponibles para ti.</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>Needs Calendar Permission</string>
 	<key>NSAppTransportSecurity</key>
@@ -45,10 +43,12 @@
 		<true/>
 	</dict>
 	<key>MinimumOSVersion</key>
-	<string>13.2</string>
+	<string>10.0</string>
 	<key>UIRequiresFullScreen</key>
 	<true/>
 	<key>UIMainStoryboardFile</key>
 	<string>LaunchScreen</string>
+	<key>XSLaunchImageAssets</key>
+	<string>Assets.xcassets/LaunchImages.launchimage</string>
 </dict>
 </plist>

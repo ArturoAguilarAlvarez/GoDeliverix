@@ -20,14 +20,12 @@ namespace AppCliente
         StackLayout PanelProductoNoEncontrados;
         StackLayout ScrollView_Empresas;
         StackLayout ScrollView_Productos;
-        Label IDDireccionBusqueda;
         ListView myListProduct;
         Label lbCantidad;
         ListView MyListViewBusquedaEmpresas;
         int CantidadProductosMostrados;
         VMProductosYEmpresas oBusquedaProdutos = new VMProductosYEmpresas();
         public SeleccionarDirecciones(Button button,
-            Label IDDireccionBusqueda,
             ListView myListProduct,
             Label lbCantidad,
             int CantidadProductosMostrados,
@@ -41,7 +39,6 @@ namespace AppCliente
             this.ScrollView_Productos = ScrollView_Productos;
             // App.MVDireccion.ObtenerDireccionesUsuario(App.Global1);
             this.Button = button;
-            this.IDDireccionBusqueda = IDDireccionBusqueda;
             this.PanelProductoNoEncontrados = PanelProductoNoEncontrados;
             this.MyListViewBusquedaEmpresas = MyListViewBusquedaEmpresas;
             MyListViewDirecciones.ItemsSource = App.MVDireccion.ListaDIRECCIONES;
@@ -80,7 +77,6 @@ namespace AppCliente
                     try
                     {
                         this.Button.Text = "ENTREGAR EN " + ObjItem.IDENTIFICADOR + " >";
-                        this.IDDireccionBusqueda.Text = ObjItem.ID.ToString();
                         App.DireccionABuscar = ObjItem.ID.ToString();
                         App.UidColoniaABuscar = ObjItem.COLONIA.ToString();
                         App.UidEstadoABuscar = ObjItem.ESTADO.ToString();

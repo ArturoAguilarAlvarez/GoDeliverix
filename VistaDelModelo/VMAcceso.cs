@@ -170,7 +170,7 @@ namespace VistaDelModelo
             smtp.EnableSsl = false;
 
             //Activacion de la cuenta de la que se enviaran los correos electronicos
-            NetworkCredential credenciales = new NetworkCredential("website@compuandsoft.com", "W3bs1t35@");
+            NetworkCredential credenciales = new NetworkCredential("website@compuandsoft.com", "+K7;v0{?SgVX");
             // asignacion de las credenciales al protocolo smtp
             smtp.UseDefaultCredentials = true;
             smtp.Credentials = credenciales;
@@ -206,7 +206,7 @@ namespace VistaDelModelo
             smtp.EnableSsl = false;
 
             //Activacion de la cuenta de la que se enviaran los correos electronicos
-            NetworkCredential credenciales = new NetworkCredential("website@compuandsoft.com", "W3bs1t35@");
+            NetworkCredential credenciales = new NetworkCredential("website@compuandsoft.com", "+K7;v0{?SgVX");
             // asignacion de las credenciales al protocolo smtp
             smtp.UseDefaultCredentials = true;
             smtp.Credentials = credenciales;
@@ -312,7 +312,7 @@ namespace VistaDelModelo
             smtp.EnableSsl = false;
 
             //Activacion de la cuenta de la que se enviaran los correos electronicos
-            NetworkCredential credenciales = new NetworkCredential("website@compuandsoft.com", "W3bs1t35@");
+            NetworkCredential credenciales = new NetworkCredential("website@compuandsoft.com", "+K7;v0{?SgVX");
             // asignacion de las credenciales al protocolo smtp
             smtp.UseDefaultCredentials = true;
             smtp.Credentials = credenciales;

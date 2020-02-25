@@ -555,9 +555,7 @@ namespace VistaDelModelo
                             Sucursal.DPropina = dpropina;
                         }
                     }
-
                 }
-
             }
             else
             //Si existe el producto en la lista y no tiene un mensaje
@@ -565,7 +563,6 @@ namespace VistaDelModelo
             {
                 var Producto = new VMProducto();
                 Producto = ListaDelCarrito.Find(Objeto => Objeto.UidRegistroProductoEnCarrito == RegistroProductoEnCarrito);
-
 
                 decimal precio = Producto.Subtotal / Producto.Cantidad;
                 Producto.Cantidad = Producto.Cantidad + int.Parse(cantidad);

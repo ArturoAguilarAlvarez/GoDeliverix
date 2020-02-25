@@ -38,7 +38,6 @@ namespace AppCliente
             if (ObjItem.Clicked)
             {
                 ObjItem.Clicked = false;
-                txtIDDireccionn.Text = "0";
             }
             else
             {
@@ -47,7 +46,6 @@ namespace AppCliente
                     AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Clicked = false;
                 }
                 ObjItem.Clicked = true;
-                txtIDDireccionn.Text = ObjItem.ID.ToString();
             }
             MyListViewDirecciones.ItemsSource = null;
             MyListViewDirecciones.ItemsSource = AppCliente.App.MVDireccion.ListaDIRECCIONES;
@@ -55,47 +53,36 @@ namespace AppCliente
 
         private void BtnNuevo_Clicked(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new SeleccionTuUbicacionMapa(MyListViewDirecciones));
+            Navigation.PushAsync(new DireccionCompleta(null, MyListViewDirecciones));
         }
 
-        private void Button_Clicked_Eliminar(object sender, EventArgs e)
+        private async void Button_Clicked_Eliminar(object sender, EventArgs e)
         {
-            EliminarDireccion();
+            var b = (MenuItem)sender;
+            var obj = AppCliente.App.MVDireccion.ListaDIRECCIONES.Find(x => x.ID.ToString() == b.CommandParameter.ToString());
+            var action = await DisplayAlert("Eliminar", "¿Desea eliminar la ubicación " + obj.IDENTIFICADOR + "?", "Si", "No");
+            if (action)
+            {
+                for (int i = 0; i < AppCliente.App.MVDireccion.ListaDIRECCIONES.Count; i++)
+                {
+                    AppCliente.App.MVDireccion.ListaDIRECCIONES[i].Clicked = false;
+                }
+                EliminarDireccion(b.CommandParameter.ToString());
+            }
         }
-
-        //private void Button_Clicked_Editar(object sender, EventArgs e)
-        //{
-        //    var item = sender as Button;
-        //    var ObjItem = item.BindingContext as VMDireccion;
-
-        //    Navigation.PushAsync(new SeleccionTuUbicacionMapa(ObjItem));
-        //}
-
-        public async void EliminarDireccion()
+        public async void EliminarDireccion(string UidDireccion)
         {
             if (!string.IsNullOrEmpty(App.Global1))
             {
-                if (txtIDDireccionn.Text != "0" && !string.IsNullOrEmpty(txtIDDireccionn.Text))
-                {
-                    var action = await DisplayAlert("Eliminar?", "Estas seguro de eliminar esta direccion?", "Si", "No");
-                    if (action)
-                    {
-                        Guid Gui = new Guid(txtIDDireccionn.Text);
-                        int index = AppCliente.App.MVDireccion.ListaDIRECCIONES.FindIndex(x => x.ID == Gui);
-                        //int index = MVTelefono.ListaDeTelefonos.FindIndex(x => x.ID == Gui);
-                        AppCliente.App.MVDireccion.QuitaDireeccionDeLista(txtIDDireccionn.Text);
+                Guid Gui = new Guid(UidDireccion);
+                int index = AppCliente.App.MVDireccion.ListaDIRECCIONES.FindIndex(x => x.ID == Gui);
+                AppCliente.App.MVDireccion.QuitaDireeccionDeLista(UidDireccion);
+                string _Url = $"" + Helpers.Settings.sitio + "/api/Direccion/DeleteDireccionUsuario?UidDireccion=" + UidDireccion + "";
+                var content = await _client.DeleteAsync(_Url);
 
-                        // AppCliente.App.MVDireccion.EliminaDireccionUsuario(txtIDDireccionn.Text);
-
-                        string _Url = $"" + Helpers.Settings.sitio + "/api/Direccion/DeleteDireccionUsuario?UidDireccion={txtIDDireccionn.Text}";
-                        var content = await _client.DeleteAsync(_Url);
-
-                        App.MVDireccion.ObtenerDireccionesUsuario(App.Global1);
-                        MyListViewDirecciones.ItemsSource = null;
-                        MyListViewDirecciones.ItemsSource = App.MVDireccion.ListaDIRECCIONES;
-                        txtIDDireccionn.Text = "0";
-                    }
-                }
+                App.MVDireccion.ObtenerDireccionesUsuario(App.Global1);
+                MyListViewDirecciones.ItemsSource = null;
+                MyListViewDirecciones.ItemsSource = App.MVDireccion.ListaDIRECCIONES;
             }
             else
             {
@@ -176,11 +163,15 @@ namespace AppCliente
                 {
                     App.MVDireccion.ListaDIRECCIONES[i].Clicked = false;
                 }
-
                 MyListViewDirecciones.ItemsSource = App.MVDireccion.ListaDIRECCIONES;
             }
+        }
 
-
+        private void BtnEditar_Clicked(object sender, EventArgs e)
+        {
+            var b = (MenuItem)sender;
+            var obj = AppCliente.App.MVDireccion.ListaDIRECCIONES.Find(x => x.ID.ToString() == b.CommandParameter.ToString());
+            Navigation.PushAsync(new DireccionCompleta(obj, MyListViewDirecciones));
         }
     }
 }

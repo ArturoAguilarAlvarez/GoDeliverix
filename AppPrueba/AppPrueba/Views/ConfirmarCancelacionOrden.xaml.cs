@@ -78,14 +78,14 @@ namespace AppPrueba.Views
 
 
                     string _URL = (RestService.Servidor + "api/Orden/GetOrdenesSucursal?Licencia=" + AppPrueba.Helpers.Settings.Licencia +
-                        "&Estatus=Pendientes%20a%20confirmar&tipoSucursal=s");
+                        "&Estatus=Pendientesaconfirmar&tipoSucursal=s");
                     var DatosObtenidos2 = await _client.GetAsync(_URL);
                     string res = await DatosObtenidos2.Content.ReadAsStringAsync();
                     var asd = JsonConvert.DeserializeObject<ResponseHelper>(res).Data.ToString();
                     App.MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(asd);
 
                     MyListviewOrdenesRecibidas.ItemsSource = null;
-                    MyListviewOrdenesRecibidas.ItemsSource = App.MVOrden.ListaDeOrdenesPorConfirmar;
+                    MyListviewOrdenesRecibidas.ItemsSource = App.MVOrden.ListaDeOrdenes;
                     await Navigation.PopToRootAsync();
                 }
                 catch (Exception)

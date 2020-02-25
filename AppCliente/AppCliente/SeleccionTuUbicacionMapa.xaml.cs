@@ -71,11 +71,13 @@ namespace AppCliente
         {
             try
             {
+                double Latitud;
+                double Longitud;
+                Position pos = new Position();
                 if (string.IsNullOrEmpty(App.Global1))
                 {
-                    double Latitud;
-                    double Longitud;
-                    Position pos = new Position();
+
+
                     if (string.IsNullOrEmpty(Helpers.Settings.UidDireccion))
                     {
                         var location = await Geolocation.GetLocationAsync();
@@ -86,7 +88,7 @@ namespace AppCliente
                         {
                             var geo = new Geocoder();
                             var placemarks = await Geocoding.GetPlacemarksAsync(Latitud, Longitud);
-                            var addresses = await geo.GetAddressesForPositionAsync(new Position(Latitud, Longitud));
+                            //var addresses = await geo.GetAddressesForPositionAsync(new Position(Latitud, Longitud));
                             foreach (var item in placemarks)
                             {
                                 using (HttpClient _webApi = new HttpClient())
@@ -121,6 +123,8 @@ namespace AppCliente
                             pos = new Position(double.Parse(Helpers.Settings.StrLatitud), double.Parse(Helpers.Settings.StrLongitud));
                         }
                     }
+
+
                     Pin AquiEstoy = new Pin()
                     {
                         Type = PinType.Place,
@@ -129,6 +133,51 @@ namespace AppCliente
                     };
                     map.Pins.Clear();
                     map.Pins.Add(AquiEstoy);
+                }
+                else
+                {
+                    var location = await Geolocation.GetLocationAsync();
+                    Latitud = location.Latitude;
+                    Longitud = location.Longitude;
+
+                    if (location != null)
+                    {
+                        var geo = new Geocoder();
+                        var placemarks = await Geocoding.GetPlacemarksAsync(Latitud, Longitud);
+                        //var addresses = await geo.GetAddressesForPositionAsync(new Position(Latitud, Longitud));
+                        foreach (var item in placemarks)
+                        {
+                            using (HttpClient _webApi = new HttpClient())
+                            {
+                                string _URL = "" + Helpers.Settings.sitio + "/api/Direccion/GetObtenerDireccionConDatosDeGoogle?StrNombreCiudad=" + item.Locality + "&Latitud=" + item.Location.Latitude + "&Longitud=" + item.Location.Longitude + "";
+                                string content = await _webApi.GetStringAsync(_URL);
+                                string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                                App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
+                                if (App.MVDireccion.ListaDIRECCIONES.Count == 1)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                        if (App.MVDireccion != null)
+                        {
+                            pos = new Position(Latitud, Longitud);
+                            map.MoveToRegion(MapSpan.FromCenterAndRadius(pos, Distance.FromMeters(500)));
+                            MyPosicion = pos;
+                        }
+                        Pin AquiEstoy = new Pin()
+                        {
+                            Type = PinType.Place,
+                            Label = "Aqui estoy",
+                            Position = pos
+                        };
+                        map.Pins.Clear();
+                        map.Pins.Add(AquiEstoy);
+                    }
+                    else
+                    {
+                        await DisplayAlert("No sé a podido encontrar su ubicación", "Seleccione el mapa", "Ok");
+                    }
                 }
 
             }

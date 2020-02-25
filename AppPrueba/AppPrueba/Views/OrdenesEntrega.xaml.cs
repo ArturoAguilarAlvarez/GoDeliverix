@@ -40,6 +40,10 @@ namespace AppPrueba.Views
             string DatosObtenidos = await _client.GetStringAsync(url);
             var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
             App.MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(DatosGiros);
+            foreach (var item in App.MVOrden.ListaDeOrdenes)
+            {
+                item.Imagen.Replace("Imagenes/", "");
+            }
             MyListviewOrdenesPorEnviar.ItemsSource = App.MVOrden.ListaDeOrdenes;
         }
 
@@ -52,21 +56,17 @@ namespace AppPrueba.Views
                 Device.BeginInvokeOnMainThread
                 (async () =>
                 {
-                    await Navigation.PopAsync();
                     escaneado = result.Text;
                     BuscarOrdenCodigo();
+                    await Navigation.PopAsync();
                 });
             };
-            //await PopupNavigation.Instance.PushAsync(new AppPuestoTacos.Popup.Escaner());
         }
         private async void BuscarOrdenCodigo()
         {
             try
             {
-                //App.MVOrden = new VistaDelModelo.VMOrden();
-                //App.MVOrden.BuscarOrdenRepartidor(escaneado, AppPrueba.Helpers.Settings.Licencia);
-
-                url = "http://www.godeliverix.net/api/Orden/GetBuscarOrdenRepartidor?UidCodigo=" + escaneado + "&UidLicencia="+ AppPrueba.Helpers.Settings.Licencia + "";
+                url = "http://www.godeliverix.net/api/Orden/GetBuscarOrdenRepartidor?UidCodigo=" + escaneado + "&UidLicencia=" + AppPrueba.Helpers.Settings.Licencia + "";
                 string content = await _client.GetStringAsync(url);
                 var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                 App.MVOrden = new VMOrden();
@@ -80,23 +80,16 @@ namespace AppPrueba.Views
                         {
                             await DisplayAlert("", "Orden lista", "ok");
                             await Navigation.PushAsync(new OrdenDescripcionEscaneado(MyListviewOrdenesPorEnviar));
-                            //await PopupNavigation.Instance.PushAsync(new App.Popup.Escaner());
-                            //txtNumeroOrdenScaner.Text = App.MVOrden.Uidorden.ToString();
-                            //txtNumeroOrdenScaner.Text = "Orden: " + App.MVOrden.LNGFolio;
-                            //txtNombreEmpresaScaner.Text = App.MVOrden.StrNombreSucursal;
-                            //btnAsignarOrdenRepartidor.IsEnabled = true;
                         }
                         else if (App.MVOrden.UidEstatus.ToString() == "B6BFC834-7CC4-4E67-817D-5ECB0EB2FFA7".ToLower())
                         {
                             App.MVOrden.Uidorden = new Guid();
                             await DisplayAlert("", "La orden ya ha sido enviada", "ok");
-                            //lblMensajeOrden.Content = "La orden ya ha sido enviada";
                         }
                         else
                         {
                             App.MVOrden.Uidorden = new Guid();
                             await DisplayAlert("", "La orden no esta lista para ser entregada al repartidor", "ok");
-                            //lblMensajeOrden.Content = "La orden no esta lista para ser entregada al repartidor";
                         }
                     }
                     else

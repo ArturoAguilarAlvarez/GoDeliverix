@@ -147,13 +147,9 @@ namespace AppCliente
 
 
                 AgregarAlcarrito(objProducto.UID, new Guid(idSeucursalSeleccionada.Text), idSeccion, cantidad.ToString(), txtComentario.Text);
-
-                //App.MVProducto.ListaDelInformacionSucursales.Add
-                //await PopupNavigation.Instance.PushAsync(new Popup.PopupProductoComentario());
-                //Navigation.PopToRootAsync();
-                await Navigation.PopToRootAsync();
-                //await PopupNavigation.Instance.PopAllAsync();
                 await DisplayAlert("¡Que bien!", "Productos agregados al carrito", "ok");
+                await Navigation.PopToRootAsync();
+
 
             }
             else
@@ -229,132 +225,6 @@ namespace AppCliente
                 var productoRepetido = App.MVProducto.ListaDelCarrito.Find(Objeto => Objeto.UID == UidProducto && Objeto.UidNota == Guid.Empty && Objeto.UidSucursal == UidSucursal);
                 App.MVProducto.AgregaAlCarrito(UidProducto, new Guid(idSeucursalSeleccionada.Text), new Guid(txtIDSeccion.Text), StrCantidad, 0.0m, Guid.Empty, strNota: StrNotas, URLEmpresa: URLEmpresa, RegistroProductoEnCarrito: productoRepetido.UidRegistroProductoEnCarrito);
             }
-
-
-            #region metodo no sirve
-            //if (tap)
-            //{
-            //    tap = false;
-
-            //    var Producto = App.MVProducto.ListaDelCarrito.FindAll(Objeto => Objeto.UID == UidProducto && Objeto.UidNota == Guid.Empty && Objeto.UidSucursal == UidSucursal);
-            //    if (tipo)
-            //    {
-            //        Producto = App.MVProducto.ListaDelCarrito.FindAll(Objeto => Objeto.UID == UidProducto && Objeto.UidNota == Guid.Empty && Objeto.UidSucursal == idSeccion);
-            //        var productoRepetido = App.MVProducto.ListaDelCarrito.Find(Objeto => Objeto.UID == UidProducto && Objeto.UidNota == Guid.Empty && Objeto.UidSucursal == idSeccion);
-            //    }
-            //    else
-            //    {
-            //        Producto = App.MVProducto.ListaDelCarrito.FindAll(Objeto => Objeto.UID == UidProducto && Objeto.UidNota == Guid.Empty && Objeto.UidSucursal == UidSucursal);
-            //    }
-            //    if (Producto.Count <= 1 && !string.IsNullOrEmpty(StrNotas) || (Producto.Count == 0 && string.IsNullOrEmpty(StrNotas)))
-            //    {
-            //        //Si solo existe un tarifario en la lista, se muestra al usuario en los datos de la sucursal
-            //        if (App.MVTarifario.ListaDeTarifarios.Count > 0)
-            //        {
-            //            Guid UidTarifario = new Guid();
-            //            decimal DmPrecio = 0.0m;
-            //            for (int i = 0; i < 1; i++)
-            //            {
-            //                UidTarifario = App.MVTarifario.ListaDeTarifarios[i].UidTarifario;
-            //                DmPrecio = App.MVTarifario.ListaDeTarifarios[i].DPrecio;
-            //            }
-            //            if (tipo)
-            //            {
-            //                if (idSeucursalSeleccionada.Text != "")
-            //                {
-            //                    App.MVProducto.AgregaAlCarrito(UidProducto, new Guid(idSeucursalSeleccionada.Text), UidSucursal, StrCantidad, DmPrecio, UidTarifario, strNota: StrNotas, URLEmpresa: URLEmpresa);
-            //                }
-            //                else
-            //                {
-            //                    App.MVProducto.AgregaAlCarrito(UidProducto, UidSeccion, UidSucursal, StrCantidad, DmPrecio, UidTarifario, strNota: StrNotas, URLEmpresa: URLEmpresa);
-            //                }
-            //            }
-            //            else
-            //            {
-            //                App.MVProducto.AgregaAlCarrito(UidProducto, UidSucursal, UidSeccion, StrCantidad, DmPrecio, UidTarifario, strNota: StrNotas, URLEmpresa: URLEmpresa);
-            //            }
-            //        } // los datos de la informacion del tarifario se muestran vacios en caso de existir varios registros para esta orden.
-            //        else
-            //        {
-            //            if (tipo)
-            //            {
-            //                App.MVProducto.AgregaAlCarrito(UidProducto, UidSeccion, UidSucursal, StrCantidad, 0.0m, Guid.Empty, strNota: StrNotas, URLEmpresa: URLEmpresa);
-            //            }
-            //            else
-            //            {
-            //                App.MVProducto.AgregaAlCarrito(UidProducto, UidSucursal, UidSeccion, StrCantidad, 0.0m, Guid.Empty, strNota: StrNotas, URLEmpresa: URLEmpresa);
-            //            }
-            //        }
-
-            //        decimal Subtotal = 0.0m;
-            //        decimal Envio = 0.0m;
-            //        int cantidad = 0;
-            //        foreach (var producto in App.MVProducto.ListaDelCarrito)
-            //        {
-            //            cantidad = cantidad + producto.Cantidad;
-            //            Subtotal = Subtotal + decimal.Parse(producto.StrCosto);
-            //        }
-            //        foreach (var obj in App.MVProducto.ListaDelInformacionSucursales)
-            //        {
-            //            Envio = Envio + obj.CostoEnvio;
-            //        }
-            //        //lblProductosEnCarrito.Text = cantidad.ToString();
-
-            //        //Modal de la pagina Empresas.aspx
-            //        //if (!string.IsNullOrEmpty(lblUidProductoSeleccionado.Text))
-            //        //{
-            //        //    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Pop", "$('#ModalProducto').modal('hide');", true);
-            //        //    DataList DLProductos = PanelCentral.Controls[0].Controls[27].FindControl("DLProductos") as DataList;
-            //        //    DLProductos.DataSource = MVProducto.ListaDeProductos;
-            //        //    DLProductos.DataBind();
-            //        //}
-            //        //Modal de la pagina Default.aspx
-            //        //if (!string.IsNullOrEmpty(HFUidProducto.Value))
-            //        //{
-            //        //    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Pop", "$('#myModal').modal('hide');", true);
-            //        //    DataList DLProductos = PanelCentral.Controls[0].Controls[27].FindControl("DLProductos") as DataList;
-            //        //    DLProductos.DataSource = MVProducto.ListaDeProductos;
-            //        //    DLProductos.DataBind();
-            //        //}
-            //        // MuestraDetallesDeLaOrdenGeneral();
-            //    }
-            //    else
-            //    {
-            //        //sucursal = Producto[0].UidSucursal;
-            //        //seccion = Producto[0].UidSeccion;
-            //        //Guid uidProducto, Guid UidSucursal, Guid UidSeccion, string cantidad
-            //        //App.MVProducto.AgregaAlCarrito();
-
-            //        //var productoRepetido = App.MVProducto.ListaDelCarrito.Find(Objeto => Objeto.UID == UidProducto && Objeto.UidNota == Guid.Empty && Objeto.UidSucursal == UidSucursal);
-            //        //App.MVProducto.AgregaAlCarrito(UidProducto, sucursal, seccion, StrCantidad, 0.0m, Guid.Empty, strNota: StrNotas, URLEmpresa: URLEmpresa, RegistroProductoEnCarrito: productoRepetido.UidRegistroProductoEnCarrito);
-
-            //        //if (tipo)
-            //        //{
-            //        //    App.MVProducto.AgregaAlCarrito(UidProducto, UidSeccion, UidSucursal, StrCantidad, 0.0m, Guid.Empty, strNota: StrNotas, URLEmpresa: URLEmpresa);
-            //        //}
-            //        //else
-            //        //{
-            //        //    App.MVProducto.AgregaAlCarrito(UidProducto, UidSucursal, UidSeccion, StrCantidad, 0.0m, Guid.Empty, strNota: StrNotas, URLEmpresa: URLEmpresa);
-            //        //}
-
-            //        //App.MVProducto.AgregaAlCarrito(UidProducto, UidSucursal, UidSeccion, StrCantidad, 0.0m, Guid.Empty, strNota: StrNotas);
-            //        ////Modal de la pagina Default.aspx
-            //        //if (!string.IsNullOrEmpty(lblUidProductoSeleccionado.Text))
-            //        //{
-            //        //    pnlMensajeProductoSeleccionado.Visible = true;
-            //        //    lblMensajeProductoSeleccionado.Text = "Para agregar mas veces este producto de la sucursal seleccionada, gestione los que ya estan dentro del carrito";
-            //        //}
-            //        ////Modal de la pagina Empresas.aspx
-            //        //if (!string.IsNullOrEmpty(HFUidProducto.Value))
-            //        //{
-            //        //    pnlMensajeProducto.Visible = true;
-            //        //    lblMensaje.Text = "Para agregar mas veces este producto  de la sucursal seleccionada, gestione los que ya estan dentro del carrito";
-            //        //}
-            //    }
-            //}
-            #endregion
-
-
 
         }
 

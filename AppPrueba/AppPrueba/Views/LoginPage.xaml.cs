@@ -8,7 +8,6 @@ using Xamarin.Forms.Xaml;
 using Newtonsoft.Json;
 using AppPrueba.WebApi;
 using System.Net.Http;
-using Com.OneSignal;
 
 namespace AppPrueba.Views
 {
@@ -77,14 +76,13 @@ namespace AppPrueba.Views
                                     Guid UidTurno = Guid.NewGuid();
                                     AppPrueba.Helpers.Settings.UidTurno = UidTurno.ToString();
                                     //Inicio deturno movil
-                                    url = RestService.Servidor + "api/Turno/GetTurnoSuministradora?UidUsuario=" + Uidusuario.ToString()+ "&UidTurno="+ UidTurno.ToString();
+                                    url = RestService.Servidor + "api/Turno/GetTurnoSuministradora?UidUsuario=" + Uidusuario.ToString() + "&UidTurno=" + UidTurno.ToString();
                                     await _client.GetStringAsync(url);
 
                                     App.MVEmpresas.ObtenerNombreComercial(App.UIdUsuario.ToString());
                                     App.NombreEmpresa = App.MVEmpresas.NOMBRECOMERCIAL;
                                     App.NOmbreUsuario = usuario;
                                     Application.Current.Properties["IsLogged"] = true;
-                                    OneSignal.Current.SetExternalUserId(Uidusuario.ToString());
                                     App.Current.MainPage = new Views.MasterMenu();
                                     AILoading.IsVisible = false;
                                     AILoading.IsRunning = false;
@@ -158,12 +156,12 @@ namespace AppPrueba.Views
                     await NewMethod();
                 }
             }
-            catch (Exception)
+            catch (Exception f)
             {
                 btnLogin.IsEnabled = true;
                 AILoading.IsVisible = false;
                 AILoading.IsRunning = false;
-                await DisplayAlert("", "No tiene Internet", "ok");
+                await DisplayAlert("", "No tiene Internet " + f.Message + "", "ok");
             }
             AILoading.IsVisible = false;
             AILoading.IsRunning = false;

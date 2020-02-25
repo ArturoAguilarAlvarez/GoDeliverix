@@ -29,10 +29,10 @@ namespace Repartidores_GoDeliverix
             }
             else
             {
+                VMLogin obj = new VMLogin();
                 MainPage = new NavigationPage(new Login());
             }
-            OneSignal.Current.StartInit("170c0582-a7c3-4b75-b1a8-3fe4a952351f")
-                  .EndInit();
+            
         }
 
         protected override void OnStart()
@@ -51,7 +51,9 @@ namespace Repartidores_GoDeliverix
         }
         protected override void OnResume()
         {
-            if (Application.Current.Properties.ContainsKey("IsLogged"))
+            bool logueado = false;
+            bool.TryParse(Application.Current.Properties["IsLogged"].ToString(), out logueado);
+            if (logueado)
             {
                 MainPage = new NavigationPage(new TabbedPageMain()); 
             }

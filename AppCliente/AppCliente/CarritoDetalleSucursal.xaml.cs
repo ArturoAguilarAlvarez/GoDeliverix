@@ -35,35 +35,33 @@ namespace AppCliente
 
         }
 
-        public CarritoDetalleSucursal(MVMProductos ObjItem, Label txtCantidad, Label txtSubtotal, Label txtTotalEnvio, ListView MyListViewCarritoEmpresa, Button btnPagar, Button btnPagar2)
-        {
-            InitializeComponent();
+        //public CarritoDetalleSucursal(MVMProductos ObjItem, Label txtCantidad, Label txtSubtotal, Label txtTotalEnvio, ListView MyListViewCarritoEmpresa, Button btnPagar, Button btnPagar2)
+        //{
+        //    InitializeComponent();
 
-            this.txtCantidad = txtCantidad;
-            this.txtsubtotal = txtSubtotal;
-            this.txtTotalEnvio = txtTotalEnvio;
-            this.btnPagar = btnPagar;
-            this.btnPagar2 = btnPagar2;
+        //    this.txtCantidad = txtCantidad;
+        //    this.txtsubtotal = txtSubtotal;
+        //    this.txtTotalEnvio = txtTotalEnvio;
+        //    this.btnPagar = btnPagar;
+        //    this.btnPagar2 = btnPagar2;
 
-
-            this.MyListViewCarritoEmpresa = MyListViewCarritoEmpresa;
-            App.MVProducto.ListaDeDetallesDeOrden.Clear();
-            for (int i = 0; i < App.MVProducto.ListaDelCarrito.Count; i++)
-            {
-                App.MVProducto.ListaDelCarrito[i].IsVisible = false;
-                if (ObjItem.UidSucursal == App.MVProducto.ListaDelCarrito[i].UidSucursal)
-                {
-                    App.MVProducto.ListaDeDetallesDeOrden.Add(App.MVProducto.ListaDelCarrito[i]);
-                }
-                this.ObjItem = ObjItem;
-            }
-            MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeDetallesDeOrden;
-        }
+        //    this.MyListViewCarritoEmpresa = MyListViewCarritoEmpresa;
+        //    App.MVProducto.ListaDeDetallesDeOrden.Clear();
+        //    for (int i = 0; i < App.MVProducto.ListaDelCarrito.Count; i++)
+        //    {
+        //        App.MVProducto.ListaDelCarrito[i].IsVisible = false;
+        //        if (ObjItem.UidSucursal == App.MVProducto.ListaDelCarrito[i].UidSucursal)
+        //        {
+        //            App.MVProducto.ListaDeDetallesDeOrden.Add(App.MVProducto.ListaDelCarrito[i]);
+        //        }
+        //        this.ObjItem = ObjItem;
+        //    }
+        //    MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeDetallesDeOrden;
+        //}
 
         public CarritoDetalleSucursal(MVMProductos ObjItem, ListView MyListViewCarritoEmpresa, Button btnPagar)
         {
             InitializeComponent();
-
             this.btnPagar = btnPagar;
             this.MyListViewCarritoEmpresa = MyListViewCarritoEmpresa;
             this.ObjItem = ObjItem;
@@ -199,10 +197,7 @@ namespace AppCliente
             subtotal = 0;
             TotalEnvio = 0;
             TotalPagar = 0;
-            MyListViewBusquedaProductos.ItemsSource = null;
-            MyListViewCarritoEmpresa.ItemsSource = null;
-            MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDelCarrito;
-            MyListViewCarritoEmpresa.ItemsSource = App.MVProducto.ListaDelInformacionSucursales;
+
             for (int i = 0; i < App.MVProducto.ListaDelCarrito.Count; i++)
             {
                 cantidad = cantidad + App.MVProducto.ListaDelCarrito[i].Cantidad;
@@ -224,7 +219,7 @@ namespace AppCliente
             if (action)
             {
                 var item = sender as ImageButton;
-                var ObjItem = item.BindingContext as MVMProductos;
+                var ObjItem = item.BindingContext as VMProducto;
 
                 App.MVProducto.EliminaProductoDelCarrito(ObjItem.UidRegistroProductoEnCarrito);
 
@@ -241,32 +236,32 @@ namespace AppCliente
         private void ButtonEliminarUnProducto_Clicked(object sender, EventArgs e)
         {
             var item = sender as Button;
-            var ObjItem = item.BindingContext as MVMProductos;
+            var ObjItem = item.BindingContext as VMProducto;
 
             App.MVProducto.QuitarDelCarrito(ObjItem.UidRegistroProductoEnCarrito);
-            MyListViewBusquedaProductos.ItemsSource = null;
-            App.MVProducto.ListaDeDetallesDeOrden = null;
-            App.MVProducto.ListaDeDetallesDeOrden = App.MVProducto.ListaDelCarrito.Where(p => p.UidSucursal == ObjItem.UidSucursal).ToList();
+            //MyListViewBusquedaProductos.ItemsSource = null;
+            //App.MVProducto.ListaDeDetallesDeOrden = null;
+            //App.MVProducto.ListaDeDetallesDeOrden = App.MVProducto.ListaDelCarrito.Where(p => p.UidSucursal == ObjItem.UidSucursal).ToList();
 
             ActualizarCarrito();
 
-            MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeDetallesDeOrden;
+            //MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeDetallesDeOrden;
         }
 
         private void ButtonAgregarUnProducto_Clicked_1(object sender, EventArgs e)
         {
             var item = sender as Button;
-            var ObjItem = item.BindingContext as MVMProductos;
+            var ObjItem = item.BindingContext as VMProducto;
 
             Guid seccion = new Guid();
             App.MVProducto.AgregaAlCarrito(ObjItem.UidRegistroProductoEnCarrito, ObjItem.UidSucursal, seccion, "1", RegistroProductoEnCarrito: ObjItem.UidRegistroProductoEnCarrito);
 
-            MyListViewBusquedaProductos.ItemsSource = null;
-            App.MVProducto.ListaDeDetallesDeOrden = null;
-            App.MVProducto.ListaDeDetallesDeOrden = App.MVProducto.ListaDelCarrito.Where(p => p.UidSucursal == ObjItem.UidSucursal).ToList();
+            //MyListViewBusquedaProductos.ItemsSource = null;
+            //App.MVProducto.ListaDeDetallesDeOrden = null;
+            //App.MVProducto.ListaDeDetallesDeOrden = App.MVProducto.ListaDelCarrito.Where(p => p.UidSucursal == ObjItem.UidSucursal).ToList();
 
             ActualizarCarrito();
-            MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeDetallesDeOrden;
+            //MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeDetallesDeOrden;
         }
 
         private void ENotas_TextChanged(object sender, TextChangedEventArgs e)

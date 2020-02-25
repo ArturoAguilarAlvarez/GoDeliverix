@@ -15,9 +15,9 @@
                 SelectedIndex="{Binding intSelectTelefono,Mode=TwoWay}"></Picker>
                 <Label Text="Numero" VerticalTextAlignment="Center"></Label>
                 <Entry  Text="{Binding Path= intNumeroTelefono,Mode=TwoWay}" Keyboard="Telephone" Placeholder="Numero"></Entry>
-                <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
-                    <Button Text="OK" FontSize="Small" TextColor="White" Clicked="CloseWindowsPopup" Command="{Binding SaveNumber}" BackgroundColor="Green"></Button>
-                    <Button Text="X" FontSize="Small" TextColor="White"  BackgroundColor="Red"  Clicked="CloseWindowsPopup"></Button>
+                <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+                    <Button Text="ACEPTAR" FontSize="Medium" TextColor="White" HorizontalOptions="FillAndExpand" Clicked="CloseWindowsPopup" Command="{Binding SaveNumber}" BackgroundColor="Green"></Button>
+                    <Button Text="CANCELAR" FontSize="Medium" TextColor="White" HorizontalOptions="FillAndExpand" BackgroundColor="Red"  Clicked="CloseWindowsPopup"></Button>
                 </StackLayout>
             </StackLayout>
         </StackLayout>

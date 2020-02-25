@@ -10,8 +10,6 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
@@ -25,17 +23,25 @@
 		<string>comgooglemaps</string>
 	</array>
 	<key>CFBundleDisplayName</key>
-	<string>GoDeliverixRepartidorPrueba</string>
+	<string>GoDeliverix</string>
 	<key>CFBundleIdentifier</key>
 	<string>compuandsoft.GoDeliverixRepartidor</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>1.0.3</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>CFBundleName</key>
 	<string>Repartidores_GoDeliverix</string>
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleLightContent</string>
+  <key>NSLocationAlwaysUsageDescription</key>
+  <string>La ubicación se usa para indicarte con mas precision las rutas de las ordenes asignadas.</string>
+  <key>NSLocationWhenInUseUsageDescription</key>
+  <string>La ubicación se usa para indicarte con mas precision las rutas de las ordenes asignadas.</string>
+  <key>NSLocationUsageDescription</key>
+  <string>La ubicación se usa para indicarte con mas precision las rutas de las ordenes asignadas.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Esta aplicación necesita el permiso de cámara para escanear códigos QR y asi finalizar la entrega de la orden.</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

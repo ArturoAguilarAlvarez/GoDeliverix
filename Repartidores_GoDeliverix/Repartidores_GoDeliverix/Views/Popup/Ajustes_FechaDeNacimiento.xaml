@@ -8,9 +8,9 @@
             <StackLayout BindingContext="{Binding MVAjustes}" Orientation="Vertical" BackgroundColor="#f1f1f1">
                 <Label FontSize="Large" Text="Fecha de Nacimiento"></Label>
                 <DatePicker  Date="{Binding StrFechaDeNacimiento,Mode=TwoWay}"></DatePicker>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                    <Button Text="OK" FontSize="Large" Clicked="CloseWindowsPopup" Command="{Binding IsSavingBirthday}" TextColor="White"  BackgroundColor="Green"></Button>
-                    <Button Text="X" FontSize="Large" TextColor="White"  BackgroundColor="Red" Clicked="CloseWindowsPopup" ></Button>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                    <Button Text="ACEPTAR" FontSize="Large" HorizontalOptions="FillAndExpand" Clicked="CloseWindowsPopup" Command="{Binding IsSavingBirthday}" TextColor="White"  BackgroundColor="Green"></Button>
+                    <Button Text="CANCELAR" FontSize="Large" HorizontalOptions="FillAndExpand" TextColor="White"  BackgroundColor="Red" Clicked="CloseWindowsPopup" ></Button>
                 </StackLayout>
             </StackLayout>
         </StackLayout>

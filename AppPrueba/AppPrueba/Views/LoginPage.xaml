@@ -29,7 +29,7 @@
                     ></Button>
                 </StackLayout>
                 <StackLayout Orientation="Vertical" Grid.Column="0">
-                    <Image Source="goDeliverix.png"
+                <Image Source="IconoGoDeliverix.png"
                   HorizontalOptions="Center"
                   HeightRequest="200"
                   WidthRequest="200"></Image>

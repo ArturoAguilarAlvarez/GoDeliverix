@@ -19,56 +19,45 @@
                     <RowDefinition Height="AUTO" />
                     <RowDefinition Height="AUTO" />
                 </Grid.RowDefinitions>
-                <Grid ColumnSpacing="0" RowSpacing="0" Margin="15,5">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="AUTO" />
-                        <RowDefinition Height="AUTO" />
-                        <RowDefinition Height="AUTO" />
-                        <RowDefinition Height="AUTO" />
-                        <RowDefinition Height="AUTO" />
-                        <RowDefinition Height="AUTO" />
-                        <RowDefinition Height="AUTO" />
-                        <RowDefinition Height="AUTO" />
-                        <RowDefinition Height="AUTO" />
-                        <RowDefinition Height="AUTO" />
-                    </Grid.RowDefinitions>
+                <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Margin="15,5">
 
-                    <Entry Grid.Row="1"  x:Name="txtIdentificador" Placeholder="Identificador*" FontSize="Medium"   HorizontalTextAlignment="Start"></Entry>
-
-                    <Picker Grid.Row="2"  x:Name="MypickerPais" Title="Pais" SelectedIndexChanged="MypickerPais_SelectedIndexChanged">
+                    <Label Text="IDENTIFICADOR*" FontSize="Small" HorizontalOptions="Fill" HorizontalTextAlignment="Start"></Label>
+                    <Entry x:Name="txtIdentificador" Placeholder="Identificador*" FontSize="Medium"   HorizontalTextAlignment="Start"></Entry>
+                    <Label Text="PAIS*" FontSize="Small" HorizontalOptions="Fill" HorizontalTextAlignment="Start"></Label>
+                    <Picker x:Name="MypickerPais" Title="Pais" SelectedIndexChanged="MypickerPais_SelectedIndexChanged">
                         <Picker.Items>
                             <x:String>Mexico</x:String>
                         </Picker.Items>
                     </Picker>
+                    <Label Text="ESTADO*" FontSize="Small" HorizontalOptions="Fill" HorizontalTextAlignment="Start"></Label>
+                    <Picker x:Name="MypickerEstado" Title="Estado*" SelectedIndexChanged="MypickerEstado_SelectedIndexChanged"></Picker>
+                    <Label Text="MUNICIPIO*" FontSize="Small" HorizontalOptions="Fill" HorizontalTextAlignment="Start"></Label>
+                    <Picker x:Name="MypickerMunicipio" Title="Municipio*" SelectedIndexChanged="MypickerMunicipio_SelectedIndexChanged"></Picker>
+                    <Label Text="CIUDAD*" FontSize="Small" HorizontalOptions="Fill" HorizontalTextAlignment="Start"></Label>
+                    <Picker x:Name="MypickerCiudad" Title="Ciudad*" SelectedIndexChanged="MypickerCiudad_SelectedIndexChanged"></Picker>
+                    <Label Text="COLONIA*" FontSize="Small" HorizontalOptions="Fill" HorizontalTextAlignment="Start"></Label>
+                    <Picker x:Name="MypickerColonia" Title="Colonia*" SelectedIndexChanged="MypickerColonia_SelectedIndexChanged"></Picker>
+                    <Label Text="CALLE*" FontSize="Small" HorizontalOptions="Fill" HorizontalTextAlignment="Start"></Label>
+                    <Entry x:Name="txtCalle" Placeholder="calle*" FontSize="Medium"   HorizontalTextAlignment="Start"></Entry>
+                    <Label Text="ENTRE CALLE" FontSize="Small" HorizontalOptions="Fill" HorizontalTextAlignment="Start"></Label>
+                    <Entry x:Name="txtEntreCalle" Placeholder="Entre calle" FontSize="Medium"   HorizontalTextAlignment="Start"></Entry>
+                    <Label Text="Y CALLE*" FontSize="Small" HorizontalOptions="Fill" HorizontalTextAlignment="Start"></Label>
+                    <Entry x:Name="txtYCalle" Placeholder="Y calle" FontSize="Medium"   HorizontalTextAlignment="Start"></Entry>
+                    <Label Text="MANZANA*" FontSize="Small" HorizontalOptions="Fill" HorizontalTextAlignment="Start"></Label>
+                    <Entry  x:Name="txtManzana" Placeholder="Manzana o numero exterior*" FontSize="Medium"   HorizontalTextAlignment="Start"></Entry>
+                    <Label Text="LOTE*" FontSize="Small" HorizontalOptions="Fill" HorizontalTextAlignment="Start"></Label>
+                    <Entry  x:Name="txtLote" Placeholder="Lote o numero interior" FontSize="Medium"  HorizontalTextAlignment="Start"></Entry>
+                    <Label Text="CODIGO POSTAL*" FontSize="Small" HorizontalOptions="Fill" HorizontalTextAlignment="Start"></Label>
+                    <Entry  x:Name="txtCodigoPostal" Placeholder="Codigo Postal*" FontSize="Medium"   HorizontalTextAlignment="Start"></Entry>
+                    <Label Text="REFERENCIA*" FontSize="Small" HorizontalOptions="Fill" HorizontalTextAlignment="Start"></Label>
+                    <Entry  x:Name="txtReferencia" Placeholder="Referencias" FontSize="Medium"  HorizontalTextAlignment="Start"></Entry>
 
-                    <Picker Grid.Row="3"  x:Name="MypickerEstado" Title="Estado*" SelectedIndexChanged="MypickerEstado_SelectedIndexChanged"></Picker>
-
-                    <Picker Grid.Row="4"  x:Name="MypickerMunicipio" Title="Municipio*" SelectedIndexChanged="MypickerMunicipio_SelectedIndexChanged"></Picker>
-
-                    <Picker Grid.Row="5"  x:Name="MypickerCiudad" Title="Ciudad*" SelectedIndexChanged="MypickerCiudad_SelectedIndexChanged"></Picker>
-
-                    <Picker Grid.Row="6"  x:Name="MypickerColonia" Title="Colonia*" SelectedIndexChanged="MypickerColonia_SelectedIndexChanged"></Picker>
-
-                    <Entry Grid.Row="7"  x:Name="txtCalle" Placeholder="calle*" FontSize="Medium"   HorizontalTextAlignment="Start"></Entry>
-
-                    <Entry Grid.Row="8"  x:Name="txtEntreCalle" Placeholder="Entre calle" FontSize="Medium"   HorizontalTextAlignment="Start"></Entry>
-
-                    <Entry Grid.Row="9"  x:Name="txtYCalle" Placeholder="Y calle" FontSize="Medium"   HorizontalTextAlignment="Start"></Entry>
-
-                    <Entry Grid.Row="10"  x:Name="txtManzana" Placeholder="Manzana o numero exterior*" FontSize="Medium"   HorizontalTextAlignment="Start"></Entry>
-
-                    <Entry Grid.Row="11"  x:Name="txtLote" Placeholder="Lote o numero interior" FontSize="Medium"  HorizontalTextAlignment="Start"></Entry>
-
-                    <Entry Grid.Row="12"  x:Name="txtCodigoPostal" Placeholder="Codigo Postal*" FontSize="Medium"   HorizontalTextAlignment="Start"></Entry>
-
-                    <Entry Grid.Row="13"  x:Name="txtReferencia" Placeholder="Referencias" FontSize="Medium"  HorizontalTextAlignment="Start"></Entry>
-
-                    <StackLayout HorizontalOptions="Center" Grid.Row="14" Orientation="Horizontal">
+                    <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
                         <Button x:Name="btnCancelar" Text="CANCELAR"   WidthRequest="150" BackgroundColor="Red" CornerRadius="20" TextColor="White" Clicked="BtnCancelar_Clicked"/>
                         <Button x:Name="btnGuardarEditar" Text="GUARDAR"     WidthRequest="150" BackgroundColor="Green" CornerRadius="20" TextColor="White" Clicked="BtnGuardarEditar_Clicked"/>
                     </StackLayout>
                     <Entry x:Name="txtID" Placeholder="Identificador" FontSize="Medium"  IsVisible="False" HorizontalTextAlignment="Center"></Entry>
-                </Grid>
+                </StackLayout>
             </Grid>
         </ScrollView>
     </ContentPage.Content>

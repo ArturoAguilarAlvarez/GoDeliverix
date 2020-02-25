@@ -1,11 +1,18 @@
-﻿using Com.OneSignal;
+﻿using AppCliente.WebApi;
+using Com.OneSignal;
+using Newtonsoft.Json;
+using Plugin.Geolocator.Abstractions;
+using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-
+using VistaDelModelo;
+using Xamarin.Essentials;
 using Xamarin.Forms;
+using Xamarin.Forms.GoogleMaps;
 using Xamarin.Forms.Xaml;
 
 namespace AppCliente
@@ -45,6 +52,8 @@ namespace AppCliente
                 {
                     App.MVDireccion.ListaDIRECCIONES.Clear();
                 }
+                App.MVDireccionDemo = null;
+
                 //OneSignal.Current.RemoveExternalUserId();
                 Application.Current.Properties.Remove("IsLogged");
                 App.Global1 = string.Empty;
@@ -53,6 +62,21 @@ namespace AppCliente
                 IsPresented = false;
                 MasterPage.ListView.SelectedItem = null;
                 //Detail = new NavigationPage(new Login());
+            }
+            if (NombreMenu == "Actualizar mi ubicación")
+            {
+                App.MVDireccionDemo = null;
+                //var page = (Page)Activator.CreateInstance(item.TargetType);
+                //page.Title = item.Title;
+                //App.Navegacion = page.GetType().Name;
+                //Detail = new NavigationPage(page);
+                IsPresented = false;
+                MasterPage.ListView.SelectedItem = null;
+                NavigationPage NPScannerCompanyPage = ((NavigationPage)((MasterDetailPage)App.Current.MainPage).Detail);
+                Device.InvokeOnMainThreadAsync(async () =>
+                {
+                    await NPScannerCompanyPage.PushAsync(new SeleccionaColonia());
+                });
             }
             else
             {

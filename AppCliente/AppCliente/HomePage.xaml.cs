@@ -29,7 +29,101 @@ namespace AppCliente
         public HomePage()
         {
             InitializeComponent();
-            Iniciar();
+            Device.InvokeOnMainThreadAsync(async () =>
+            {
+                string versionApp = "";
+                // Uid de la aplicacion 87b2dcfd-205a-4260-9092-1ce48b28aa4a
+                if (Device.RuntimePlatform == Device.Android)
+                {
+                    versionApp = "87b2dcfd-205a-4260-9092-1ce48b28aa4a";
+                }
+                if (Device.RuntimePlatform == Device.iOS)
+                {
+                    versionApp = "310cba91-57a5-4699-91fe-3677c2718907";
+                }
+            Iniciar:
+                string _URL = "" + Helpers.Settings.sitio + "/api/Version/Get?id=" + versionApp + "";
+                var content = string.Empty;
+                await Task.Run(async () => { content = await _client.GetStringAsync(_URL); });
+                var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                var oversion = JsonConvert.DeserializeObject<VMVersion>(obj);
+                string version = VersionTracking.CurrentVersion;
+
+                if (oversion.StrVersion == version)
+                {
+                    if (!string.IsNullOrEmpty(App.Global1))
+                    {
+                        Iniciar();
+                    }
+                    //else
+                    //if (App.MVDireccionDemo != null)
+                    //{
+                    //    await DisplayAlert("Colonia actual", "La colonia seleccionada es " + Helpers.Settings.StrNombreColonia.ToUpper() + "", "Aceptar");
+                    //}
+                    else
+                    if (!string.IsNullOrEmpty(Helpers.Settings.StrCOLONIA))
+                    {
+                        Iniciar();
+                    }
+                    else
+                    {
+                        if (Navigation.NavigationStack.Count == 1)
+                        {
+                            try
+                            {
+                                await Navigation.PushAsync(new SeleccionaColonia());
+                                PanelUbicacionNoEstablecida.IsVisible = true;
+                                PanelProductoNoEncontrados.IsVisible = false;
+                                ScrollView_Productos.IsVisible = false;
+                                lbCantidad.Text = "No hay resultados";
+                                btnSeleccionarDireccion.Text = "No hay ubicación";
+                            }
+                            catch (FeatureNotSupportedException)
+                            {
+                                // Handle not supported on device exception
+                                await DisplayAlert("Aviso del sistema", "Los servicios de ubicacion no soportados por el dispositivo", "Aceptar");
+                            }
+                            catch (FeatureNotEnabledException)
+                            {
+                                await DisplayAlert("Ubicacion no activa", "Activa el GPS para obtener tu ubicacion", "Aceptar");
+                            }
+                            catch (PermissionException)
+                            {
+                                // Handle permission exception
+                                await DisplayAlert("Aviso", "Activa los permisos de ubicacion para continuar", "Aceptar");
+                            }
+                            catch (Exception)
+                            {
+                                // Unable to get location
+                                await DisplayAlert("Aviso", "No se puede obtener la ubicacion", "Aceptar");
+                            }
+                            
+                        }
+                    }
+                }
+                else
+                {
+                    var action = await DisplayAlert("Actualizacion disponible", "Actualizar a la version " + oversion.StrVersion + "", "Aceptar", "Cancelar");
+                    if (action)
+                    {
+                        var urlStore = "";
+                        if (Device.RuntimePlatform == Device.Android)
+                        {
+                            urlStore = "https://play.google.com/store/apps/details?id=com.CompuAndSoft.GDCliente";
+                        }
+                        if (Device.RuntimePlatform == Device.iOS)
+                        {
+                            urlStore = "";
+                        }
+                        await Launcher.OpenAsync(new Uri(urlStore));
+                    }
+                    else
+                    {
+                        goto Iniciar;
+                    }
+                }
+            });
+
         }
 
         private async void MenuItem1_Activted(object sender, EventArgs e)
@@ -208,17 +302,26 @@ namespace AppCliente
                 }
 
                 MyListViewBusquedaEmpresas.ItemsSource = null;
-
-                if (App.MVProducto.ListaDeProductos.Count == 0)
+                if (!string.IsNullOrEmpty(App.UidColoniaABuscar))
                 {
-                    PanelProductoNoEncontrados.IsVisible = true;
-                    ScrollView_Productos.IsVisible = false;
+                    if (App.MVProducto.ListaDeProductos.Count == 0)
+                    {
+                        PanelProductoNoEncontrados.IsVisible = true;
+                        ScrollView_Productos.IsVisible = false;
+                    }
+                    else
+                    {
+                        PanelProductoNoEncontrados.IsVisible = false;
+                        ScrollView_Productos.IsVisible = true;
+                    }
                 }
                 else
                 {
+                    PanelUbicacionNoEstablecida.IsVisible = true;
                     PanelProductoNoEncontrados.IsVisible = false;
-                    ScrollView_Productos.IsVisible = true;
+                    ScrollView_Productos.IsVisible = false;
                 }
+
             }
             else if (App.buscarPor == "Empresas")
             {
@@ -255,10 +358,16 @@ namespace AppCliente
             if (App.Global1 == string.Empty)
             {
                 await DisplayAlert("Acceso denegado", "No puedes cambiar la direccion sin haber accesado", "Aceptar");
+                var objeto = new MasterMenuMenuItem { Id = 3, Title = "Login", TargetType = typeof(Login) };
+                var Page = (Page)Activator.CreateInstance(objeto.TargetType);
+                App app = Application.Current as App;
+                App.Navegacion = Page.GetType().Name;
+                MasterDetailPage md = (MasterDetailPage)app.MainPage;
+                md.Detail = new NavigationPage(Page);
             }
             else
             {
-                await Navigation.PushAsync(new SeleccionarDirecciones(btnSeleccionarDireccion, IDDireccionBusqueda, MyListViewBusquedaProductosHome, lbCantidad, CantidadProductosMostrados, PanelProductoNoEncontrados, MyListViewBusquedaEmpresas, ScrollView_Productos, ScrollView_Empresas));
+                await Navigation.PushAsync(new SeleccionarDirecciones(btnSeleccionarDireccion, MyListViewBusquedaProductosHome, lbCantidad, CantidadProductosMostrados, PanelProductoNoEncontrados, MyListViewBusquedaEmpresas, ScrollView_Productos, ScrollView_Empresas));
             }
 
         }
@@ -282,7 +391,6 @@ namespace AppCliente
                 CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
                 string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
 
-                //Guid Direccion = App.MVDireccion.ListaDIRECCIONES[0].ID;
                 Guid UidColonia = new Guid(App.UidColoniaABuscar);
                 Guid UidEstado = new Guid(App.UidEstadoABuscar);
 
@@ -332,227 +440,156 @@ namespace AppCliente
             PanelNavegacionBuscar.IsVisible = true;
         }
 
-
-        private async void Iniciar()
+        protected override void OnAppearing()
         {
-        Iniciar:
-            // Uid de la aplicacion 87b2dcfd-205a-4260-9092-1ce48b28aa4a
-            string _URL = "" + Helpers.Settings.sitio + "/api/Version/Get?id=87b2dcfd-205a-4260-9092-1ce48b28aa4a";
-            var content = await _client.GetStringAsync(_URL);
-            var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-            var oversion = JsonConvert.DeserializeObject<VMVersion>(obj);
-            string version = VersionTracking.CurrentVersion;
+            base.OnAppearing();
 
-            if (oversion.StrVersion == version)
+        }
+        public async void Iniciar()
+        {
+
+            acloading.IsVisible = true;
+            acloading.IsRunning = true;
+
+
+
+
+
+            if (string.IsNullOrEmpty(App.Global1))
+            {
+
+
+                App.MVDireccion.ListaDIRECCIONES = new List<VMDireccion>();
+                App.MVDireccion.ListaDIRECCIONES.Add(new VMDireccion()
+                {
+                    ESTADO = Helpers.Settings.StrESTADO,
+                    COLONIA = Helpers.Settings.StrCOLONIA,
+                    NOMBRECOLONIA = Helpers.Settings.StrNombreColonia
+                });
+                btnAcceder.IsVisible = true;
+            }
+            else
+            {
+                if (App.MVDireccion.ListaDIRECCIONES.Count == 0)
+                {
+                    string strDirecciones = string.Empty;
+
+                    App.MVDireccion = new VMDireccion();
+                    using (HttpClient _client = new HttpClient())
+                    {
+                        var tex = "" + Helpers.Settings.sitio + "/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + App.Global1;
+                        strDirecciones = await _client.GetStringAsync(tex);
+                        var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
+                        App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
+                    }
+                }
+                btnAcceder.IsVisible = false;
+            }
+
+            if (App.MVDireccion != null)
             {
                 acloading.IsVisible = true;
                 acloading.IsRunning = true;
-                bool direccionagregada = false;
-                if (string.IsNullOrEmpty(App.Global1))
+
+                #region Busqueda
+                var _URL = "" + Helpers.Settings.sitio + "/api/Giro/Get";
+                var content = "";
+                using (HttpClient _client = new HttpClient())
                 {
-                    btnAcceder.IsVisible = true;
+                    content = await _client.GetStringAsync(_URL);
                 }
-                else
-                {
-                    btnAcceder.IsVisible = false;
-                }
-                _URL = "" + Helpers.Settings.sitio + "/api/Giro/Get";
-                content = await _client.GetStringAsync(_URL);
-                obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                 App.MVGiro = JsonConvert.DeserializeObject<VMGiro>(obj);
 
                 App.giro = App.MVGiro.LISTADEGIRO[0].UIDVM.ToString();
                 Guid UidEstado = new Guid();
                 Guid UidColonia = new Guid();
 
-
                 CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
                 string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
-                //Busca si un usuario no esta registrado
+                PanelRefrescar.IsVisible = false;
 
-                if (string.IsNullOrEmpty(App.Global1))
-                {
-                    if (Helpers.Settings.UidDireccion != string.Empty)
-                    {
-                        App.MVDireccion.ListaDIRECCIONES.Add(new VMDireccion()
-                        {
-                            ID = new Guid(Helpers.Settings.UidDireccion),
-                            PAIS = Helpers.Settings.StrPAIS,
-                            ESTADO = Helpers.Settings.StrESTADO,
-                            MUNICIPIO = Helpers.Settings.StrMUNICIPIO,
-                            CIUDAD = Helpers.Settings.StrCIUDAD,
-                            COLONIA = Helpers.Settings.StrCOLONIA,
-                            CALLE0 = Helpers.Settings.StrCALLE0,
-                            CALLE1 = Helpers.Settings.StrCALLE1,
-                            CALLE2 = Helpers.Settings.StrCALLE2,
-                            MANZANA = Helpers.Settings.StrMANZANA,
-                            LOTE = Helpers.Settings.StrLOTE,
-                            CodigoPostal = Helpers.Settings.StrCodigoPostal,
-                            REFERENCIA = Helpers.Settings.StrREFERENCIA,
-                            IDENTIFICADOR = Helpers.Settings.StrIDENTIFICADOR,
-                            NOMBRECIUDAD = Helpers.Settings.StrNombreCiudad,
-                            NOMBRECOLONIA = Helpers.Settings.StrNombreColonia
-                        });
-                    }
-                    else
-                    {
-                        App.MVDireccion.ListaDIRECCIONES.Clear();
-                        PanelProductos.IsVisible = false;
-                        PanelDireccionesVacias.IsVisible = true;
-                    }
-                }
-                else
-                {
-                    if (!string.IsNullOrEmpty(Helpers.Settings.UidDireccion))
-                    {
-                        var action = await DisplayAlert("Nueva direccion ", "Detectamos una nueva ubicacion en " + Helpers.Settings.StrNombreColonia + ", deseas agregarla a tu lista de direcciones?", "Si", "No");
-                        if (action)
-                        {
-                            string _Url = "" + Helpers.Settings.sitio + "/api/Direccion/GetGuardarDireccion?" +
-                                "UidUsuario=" + App.Global1 + "&UidPais=" + Helpers.Settings.StrPAIS + "&UidEstado=" + Helpers.Settings.StrESTADO + "&UidMunicipio=" + Helpers.Settings.StrMUNICIPIO + "&UidCiudad=" + Helpers.Settings.StrCIUDAD + "&UidColonia=" + Helpers.Settings.StrCOLONIA + "&CallePrincipal=" + Helpers.Settings.StrCALLE0 + "&CalleAux1=" + Helpers.Settings.StrCALLE1 + "&CalleAux2=" + Helpers.Settings.StrCALLE2 + "&Manzana=" + Helpers.Settings.StrMANZANA + "&Lote=" + Helpers.Settings.StrLOTE + "&CodigoPostal=" + Helpers.Settings.StrCodigoPostal + "&Referencia=" + Helpers.Settings.StrREFERENCIA + "&NOMBRECIUDAD=s&NOMBRECOLONIA=s&Identificador=" + Helpers.Settings.StrIDENTIFICADOR + "&Latitud=" + Helpers.Settings.StrLatitud + "&Longitud=" + Helpers.Settings.StrLongitud + "&UidDireccion=" + Helpers.Settings.UidDireccion + "";
-                            await _client.GetAsync(_Url);
-
-                            _Url = ("" + Helpers.Settings.sitio + "/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + App.Global1);
-                            string strDirecciones = await _client.GetStringAsync(_Url);
-                            obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
-                            App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
-
-                            Helpers.Settings.StrPAIS = string.Empty;
-                            Helpers.Settings.StrMUNICIPIO = string.Empty;
-                            Helpers.Settings.StrCIUDAD = string.Empty;
-                            Helpers.Settings.StrCALLE0 = string.Empty;
-                            Helpers.Settings.StrCALLE1 = string.Empty;
-                            Helpers.Settings.StrCALLE2 = string.Empty;
-                            Helpers.Settings.StrMANZANA = string.Empty;
-                            Helpers.Settings.StrLongitud = string.Empty;
-                            Helpers.Settings.StrLatitud = string.Empty;
-                            Helpers.Settings.StrLOTE = string.Empty;
-                            Helpers.Settings.StrCodigoPostal = string.Empty;
-                            Helpers.Settings.StrREFERENCIA = string.Empty;
-                            Helpers.Settings.StrIDENTIFICADOR = string.Empty;
-                            Helpers.Settings.StrNombreCiudad = string.Empty;
-                            Helpers.Settings.StrNombreColonia = string.Empty;
-
-                            await DisplayAlert("Direccion agregada", "Se ha agregado la direccion a tus direcciones", "Aceptar");
-                            direccionagregada = true;
-                        }
-                        else
-                        {
-                            Helpers.Settings.UidDireccion = string.Empty;
-                            Helpers.Settings.StrPAIS = string.Empty;
-                            Helpers.Settings.StrESTADO = string.Empty;
-                            Helpers.Settings.StrMUNICIPIO = string.Empty;
-                            Helpers.Settings.StrCIUDAD = string.Empty;
-                            Helpers.Settings.StrCOLONIA = string.Empty;
-                            Helpers.Settings.StrCALLE0 = string.Empty;
-                            Helpers.Settings.StrCALLE1 = string.Empty;
-                            Helpers.Settings.StrCALLE2 = string.Empty;
-                            Helpers.Settings.StrMANZANA = string.Empty;
-                            Helpers.Settings.StrLongitud = string.Empty;
-                            Helpers.Settings.StrLatitud = string.Empty;
-                            Helpers.Settings.StrLOTE = string.Empty;
-                            Helpers.Settings.StrCodigoPostal = string.Empty;
-                            Helpers.Settings.StrREFERENCIA = string.Empty;
-                            Helpers.Settings.StrIDENTIFICADOR = string.Empty;
-                            Helpers.Settings.StrNombreCiudad = string.Empty;
-                            Helpers.Settings.StrNombreColonia = string.Empty;
-
-                            if (App.MVProducto.ListaDelCarrito.Count > 0)
-                            {
-                                App.MVProducto.ListaDelCarrito.Clear();
-                                App.MVProducto.ListaDelInformacionSucursales.Clear();
-                            }
-
-                        }
-                    }
-                }
                 if (App.MVDireccion.ListaDIRECCIONES.Count != 0)
                 {
                     PanelProductos.IsVisible = true;
-                    PanelDireccionesVacias.IsVisible = false;
+                    App.UidColoniaABuscar = App.MVDireccion.ListaDIRECCIONES[0].COLONIA;
+                    App.UidEstadoABuscar = App.MVDireccion.ListaDIRECCIONES[0].ESTADO;
 
+                    if (!string.IsNullOrEmpty(App.Global1))
+                    {
+                        App.DireccionABuscar = App.MVDireccion.ListaDIRECCIONES[0].ID.ToString();
+                    }
                     if (!string.IsNullOrEmpty(App.UidColoniaABuscar) && !string.IsNullOrEmpty(App.UidEstadoABuscar))
                     {
                         UidEstado = new Guid(App.UidEstadoABuscar);
                         UidColonia = new Guid(App.UidColoniaABuscar);
-                    }
-                    else
-                    {
-                        UidEstado = new Guid(App.MVDireccion.ListaDIRECCIONES[0].ESTADO);
-                        UidColonia = new Guid(App.MVDireccion.ListaDIRECCIONES[0].COLONIA);
-                    }
 
-                    _URL = "" + Helpers.Settings.sitio + "/api/Categoria/Get?value=" + App.giro.ToString();
-                    content = await _client.GetStringAsync(_URL);
-                    obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                    App.MVCategoria = JsonConvert.DeserializeObject<VMCategoria>(obj);
-
-                    if (direccionagregada)
-                    {
-                        App.UidColoniaABuscar = Helpers.Settings.StrCOLONIA;
-                        App.UidEstadoABuscar = Helpers.Settings.StrESTADO;
-                        App.DireccionABuscar = Helpers.Settings.UidDireccion;
-
-                        Helpers.Settings.StrCOLONIA = string.Empty;
-                        Helpers.Settings.StrESTADO = string.Empty;
-                        Helpers.Settings.UidDireccion = string.Empty;
-                    }
-                    else
-                    {
-                        App.UidColoniaABuscar = App.MVDireccion.ListaDIRECCIONES[0].COLONIA;
-                        App.UidEstadoABuscar = App.MVDireccion.ListaDIRECCIONES[0].ESTADO;
-                        App.DireccionABuscar = App.MVDireccion.ListaDIRECCIONES[0].ID.ToString();
-                    }
-                    VMProducto oBusquedaproducto = new VMProducto();
-                    using (HttpClient _WebApi = new HttpClient())
-                    {
-                        _URL = "" + Helpers.Settings.sitio + "/api/Producto/GetBuscarProductosCliente?StrParametroBusqueda=Giro&StrDia=" + Dia + "&UidEstado=" + UidEstado + "&UidColonia=" + UidColonia + "&UidBusquedaCategorias=" + App.giro + "&StrNombreEmpresa=" + txtBusquedaActual.Text + "";
-                        content = await _WebApi.GetStringAsync(_URL);
+                        _URL = "" + Helpers.Settings.sitio + "/api/Categoria/Get?value=" + App.giro.ToString();
+                        content = await _client.GetStringAsync(_URL);
                         obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                        oBusquedaproducto = JsonConvert.DeserializeObject<VMProducto>(obj);
-                    }
-                    if (oBusquedaproducto.ListaDeProductos != null)
-                    {
-                        foreach (VMProducto item in oBusquedaproducto.ListaDeProductos)
+                        App.MVCategoria = JsonConvert.DeserializeObject<VMCategoria>(obj);
+
+                        VMProducto oBusquedaproducto = new VMProducto();
+
+
+                        App.ListaDeProductos = new List<VMProducto>();
+
+
+
+
+
+
+                        using (HttpClient _WebApi = new HttpClient())
                         {
-                            using (HttpClient _WebApi = new HttpClient())
+                            _URL = "" + Helpers.Settings.sitio + "/api/Producto/GetBuscarProductosCliente?StrParametroBusqueda=Giro&StrDia=" + Dia + "&UidEstado=" + UidEstado + "&UidColonia=" + UidColonia + "&UidBusquedaCategorias=" + App.giro + "&StrNombreEmpresa=" + txtBusquedaActual.Text + "";
+                            content = await _WebApi.GetStringAsync(_URL);
+                            obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                            oBusquedaproducto = JsonConvert.DeserializeObject<VMProducto>(obj);
+                        }
+                        if (oBusquedaproducto.ListaDeProductos != null)
+                        {
+                            foreach (VMProducto item in oBusquedaproducto.ListaDeProductos)
                             {
-                                string Cadena = "" + Helpers.Settings.sitio + "/api/Producto/GetObtenerInformacionDeProductoDeLaSucursal?StrParametroBusqueda=Giro&StrDia=" + Dia + "&UidEstado=" + UidEstado + "&UidColonia=" + UidColonia + "&UidBusquedaCategorias=" + App.giro + "&UidProducto=" + item.UID + "";
-                                content = await _WebApi.GetStringAsync(Cadena);
-                                obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                                var VProducto = JsonConvert.DeserializeObject<VMProducto>(obj);
-                                item.StrCosto = VProducto.ListaDePreciosSucursales[0].StrCosto;
+                                using (HttpClient _WebApi = new HttpClient())
+                                {
+                                    string Cadena = "" + Helpers.Settings.sitio + "/api/Producto/GetObtenerInformacionDeProductoDeLaSucursal?StrParametroBusqueda=Giro&StrDia=" + Dia + "&UidEstado=" + UidEstado + "&UidColonia=" + UidColonia + "&UidBusquedaCategorias=" + App.giro + "&UidProducto=" + item.UID + "";
+                                    content = await _WebApi.GetStringAsync(Cadena);
+                                    obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                                    var VProducto = JsonConvert.DeserializeObject<VMProducto>(obj);
+                                    item.StrCosto = VProducto.ListaDePreciosSucursales[0].StrCosto;
+                                }
                             }
+
+                            for (int i = 0; i < oBusquedaproducto.ListaDeProductos.Count; i++)
+                            {
+                                App.ListaDeProductos.Add(oBusquedaproducto.ListaDeProductos[i]);
+                            }
+
+                            PanelProductoNoEncontrados.IsVisible = false;
+                            ListaDeProductosHome = App.ListaDeProductos;
+
+                            MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos;
+                            CantidadProductosMostrados = App.ListaDeProductos.Count;
+                            lbCantidad.Text = App.ListaDeProductos.Count + " Productos disponibles";
                         }
-                        for (int i = 0; i < oBusquedaproducto.ListaDeProductos.Count; i++)
+                        if (string.IsNullOrEmpty(App.Global1))
                         {
-                            App.ListaDeProductos.Add(oBusquedaproducto.ListaDeProductos[i]);
+                            btnSeleccionarDireccion.Text = "ENTREGAR EN " + App.MVDireccion.ListaDIRECCIONES.Find(x => x.ESTADO == App.UidEstadoABuscar).NOMBRECOLONIA.ToUpper() + " ";
                         }
-                        PanelProductoNoEncontrados.IsVisible = false;
-                        ListaDeProductosHome = App.ListaDeProductos;
-
-                        MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos;
-                        CantidadProductosMostrados = App.ListaDeProductos.Count;
-                        lbCantidad.Text = App.ListaDeProductos.Count + " Productos disponibles";
-                    }
-                    if (string.IsNullOrEmpty(App.Global1))
-                    {
-
-                        btnSeleccionarDireccion.Text = "ENTREGAR EN " + App.MVDireccion.ListaDIRECCIONES.Find(x => x.ID == new Guid(App.DireccionABuscar)).IDENTIFICADOR + " >";
-                    }
-                    else
-                    if (App.DireccionABuscar != "")
-                    {
-                        btnSeleccionarDireccion.Text = "ENTREGAR A " + App.MVUsuarios.StrUsuario + " EN " + App.MVDireccion.ListaDIRECCIONES.Find(x => x.ID == new Guid(App.DireccionABuscar)).IDENTIFICADOR + " >";
-                    }
-                    else
-                    {
-                        btnSeleccionarDireccion.Text = "ENTREGAR A " + App.MVUsuarios.StrUsuario + " EN " + App.MVDireccion.ListaDIRECCIONES[0].IDENTIFICADOR + " >";
-                    }
-                    if (App.ListaDeProductos.Count == 0)
-                    {
-                        lbCantidad.Text = "0-0/0";
-                        PanelProductoNoEncontrados.IsVisible = true;
+                        else
+                        if (App.DireccionABuscar != "")
+                        {
+                            btnSeleccionarDireccion.Text = "ENTREGAR A " + App.MVUsuarios.StrUsuario + " EN " + App.MVDireccion.ListaDIRECCIONES.Find(x => x.ESTADO == App.UidEstadoABuscar).IDENTIFICADOR + " >";
+                        }
+                        else
+                        {
+                            btnSeleccionarDireccion.Text = "ENTREGAR A " + App.MVUsuarios.StrUsuario + " EN " + App.MVDireccion.ListaDIRECCIONES[0].IDENTIFICADOR + " >";
+                        }
+                        if (App.ListaDeProductos.Count == 0)
+                        {
+                            lbCantidad.Text = "No hay productos disponibles";
+                            PanelProductoNoEncontrados.IsVisible = true;
+                        }
                     }
                     acloading.IsRunning = false;
                     acloading.IsVisible = false;
@@ -563,32 +600,20 @@ namespace AppCliente
                     acloading.IsVisible = false;
 
                     PanelProductos.IsVisible = false;
-                    PanelDireccionesVacias.IsVisible = true;
-                }
-            }
-            else
-            {
-                var action = await DisplayAlert("Actualizacion disponible", "Actualizar a la version " + oversion.StrVersion + "", "Aceptar", "Cancelar");
-                if (action)
-                {
-                    var urlStore = "";
-                    if (Device.RuntimePlatform == Device.Android)
+                    if (!string.IsNullOrEmpty(App.Global1))
                     {
-                        urlStore = "https://play.google.com/store/apps/details?id=com.CompuAndSoft.GDCliente";
+                        PanelDireccionesVacias.IsVisible = true;
                     }
-                    if (Device.RuntimePlatform == Device.iOS)
+                    else
                     {
-                        urlStore = "";
+                        PanelRefrescar.IsVisible = true;
+
+                        
+
                     }
-                    Device.OpenUri(new Uri(urlStore));
                 }
-                else
-                {
-                    goto Iniciar;
-                }
+                #endregion
             }
-
-
         }
 
         private void BtnAgregarDireccion_Clicked(object sender, EventArgs e)
@@ -672,6 +697,11 @@ namespace AppCliente
             App.Navegacion = Page.GetType().Name;
             MasterDetailPage md = (MasterDetailPage)app.MainPage;
             md.Detail = new NavigationPage(Page);
+        }
+
+        private void btnRefrescar_Clicked(object sender, EventArgs e)
+        {
+            Iniciar();
         }
     }
 }

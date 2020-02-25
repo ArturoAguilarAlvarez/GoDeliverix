@@ -66,20 +66,7 @@ namespace AppCliente.ViewModel
                         long CodigoDeEnrega = Codigo.Next(00001, 99999);
 
 
-                        string _Url1 = $"http://godeliverix.net/api/Orden/GetGuardarOrden?" +
-                            $"UIDORDEN={UidOrden}" +
-                            $"&Total={total}" +
-                            $"&Uidusuario={UidUsuario}" +
-                            $"&UidDireccion={UidDireccion}" +
-                            $"&Uidsucursal={objeto.UidSucursal}" +
-                            $"&totalSucursal={totalSucursal}" +
-                            $"&UidRelacionOrdenSucursal={UidOrdenSucursal}" +
-                            $"&LngCodigoDeEntrega={CodigoDeEnrega}";
-
-                        using (HttpClient _client = new HttpClient())
-                        {
-                            await _client.GetAsync(_Url1);
-                        }
+                        
 
                         foreach (var item in objetos)
                         {
@@ -116,6 +103,20 @@ namespace AppCliente.ViewModel
                             {
                                 await _client.GetAsync(_Url);
                             }
+                        }
+                        string _Url1 = $"http://godeliverix.net/api/Orden/GetGuardarOrden?" +
+                            $"UIDORDEN={UidOrden}" +
+                            $"&Total={total}" +
+                            $"&Uidusuario={UidUsuario}" +
+                            $"&UidDireccion={UidDireccion}" +
+                            $"&Uidsucursal={objeto.UidSucursal}" +
+                            $"&totalSucursal={totalSucursal}" +
+                            $"&UidRelacionOrdenSucursal={UidOrdenSucursal}" +
+                            $"&LngCodigoDeEntrega={CodigoDeEnrega}";
+
+                        using (HttpClient _client = new HttpClient())
+                        {
+                            await _client.GetAsync(_Url1);
                         }
 
                         // Envia la orden a la sucursal distribuidora

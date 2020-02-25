@@ -21,7 +21,7 @@ namespace Repartidores_GoDeliverix.Views
             }
             if (Device.RuntimePlatform == Device.iOS)
             {
-                SLContenido.Padding = new Thickness(20, 20, 20, 0);
+                SLContenido.Padding = new Thickness(0, 20, 0, 0);
             }
             MuestraPanel("General");
         }

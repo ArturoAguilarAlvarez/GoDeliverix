@@ -66,19 +66,14 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <ContentView>
-                                    <Frame Margin="0,5">
-                                        <Grid Margin="0" Padding="0">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="*"/>
-                                            </Grid.RowDefinitions>
-
-                                            <StackLayout Grid.Row="0" Orientation="Horizontal">
+                                <ContentView >
+                                    <Frame Margin="0,5,0,0" >
+                                        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" >
+                                            <StackLayout Grid.Column="0" >
                                                 <ff:CachedImage
                                                     Source="{Binding STRRUTA}"
-                                                    HorizontalOptions="Start"
-                                                    VerticalOptions="Center"
+                                                    HorizontalOptions="Center"
+                                                    VerticalOptions="Start"
                                                     LoadingPlaceholder   = "IconoCajaVacia"
                                                     ErrorPlaceholder     = "Error"
                                                     WidthRequest         = "150"
@@ -90,18 +85,20 @@
                                                         <ffTrans:RoundedTransformation Radius="20" />
                                                     </ff:CachedImage.Transformations>
                                                 </ff:CachedImage>
-                                                <StackLayout HorizontalOptions="Fill" VerticalOptions="Fill">
-                                                    <Label Text="{Binding STRNOMBRE}" HorizontalOptions="Start" VerticalOptions="Start" FontSize="Medium"/>
-                                                    <Label Text="{Binding Empresa}"></Label>
-                                                    <Label  Text="{Binding STRDESCRIPCION}" FontSize="Micro" HorizontalOptions="Start"/>
-                                                    <Label Text="{Binding StrCosto, StringFormat='Desde ${0}'}" Margin="0,50,0,0" x:Name="txtProductoPrecio" HorizontalOptions="End" VerticalOptions="End" FontSize="Medium"  TextColor="Black" />
-                                                </StackLayout>
                                             </StackLayout>
 
+                                            <StackLayout Grid.Column="1"  Orientation="Vertical">
+                                                <Label Text="{Binding STRNOMBRE}" MaxLines="1" LineBreakMode="CharacterWrap" HorizontalOptions="Start"
+                                                           VerticalOptions="Start" FontSize="Medium"/>
+                                                <Label Text="{Binding Empresa}" MaxLines="1" LineBreakMode="CharacterWrap "></Label>
+                                                <Label  Text="{Binding STRDESCRIPCION}" MaxLines="1" LineBreakMode="HeadTruncation" FontSize="Micro" HorizontalOptions="Start"/>
+                                                <Label Text="{Binding StrCosto, StringFormat='Desde ${0}'}"
+                                                               x:Name="txtProductoPrecio" Margin="0,30,0,0"
+                                                               HorizontalOptions="End"  LineBreakMode="WordWrap" FontSize="Medium" TextColor="Black"/>
+                                            </StackLayout>
                                         </Grid>
                                     </Frame>
                                 </ContentView>
-
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -163,15 +160,12 @@
                 <Label Text="No hay productos disponibles en esta ubicacion" HorizontalOptions="Center" VerticalOptions="Center"></Label>
             </StackLayout>
 
-            <StackLayout Orientation="Horizontal" Grid.Row="2" HorizontalOptions="FillAndExpand"  x:Name="PanelNavegacion">
+            <StackLayout Orientation="Horizontal" Grid.Row="2" HorizontalOptions="FillAndExpand" VerticalOptions="End" x:Name="PanelNavegacion">
                 <Label Text="0-0/0" HorizontalOptions="CenterAndExpand" x:Name="lbCantidad"></Label>
             </StackLayout>
 
             <Button  Text="NO hay direcciones disponibles"  x:Name="btnSeleccionarDireccion" Grid.Row="3"
                 VerticalOptions="End"  Clicked="BtnSeleccionarDireccion_Clicked" BackgroundColor="#20396e" HorizontalOptions="FillAndExpand" TextColor="White" ></Button>
-
-            <Label Text="" x:Name="IDDireccionBusqueda" IsVisible="False"></Label>
-
         </Grid>
     </ContentPage.Content>
 </ContentPage>

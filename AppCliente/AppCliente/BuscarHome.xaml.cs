@@ -183,8 +183,8 @@ namespace AppCliente
                         App.LISTADEEMPRESAS.Add(App.MVEmpresa.LISTADEEMPRESAS[i]);
                     }
                     MyListViewBusquedaEmpresas.ItemsSource = App.MVEmpresa.LISTADEEMPRESAS;
+                    lbCantidad.Text = App.MVEmpresa.LISTADEEMPRESAS.Count + " Empresas disponibles";
                 }
-                int a = 0;
                 ScrollView_Empresas.IsVisible = true;
                 ScrollView_Productos.IsVisible = false;
                 if (App.MVEmpresa.LISTADEEMPRESAS == null)
@@ -197,7 +197,7 @@ namespace AppCliente
                     PanelProductoNoEncontrados.IsVisible = false;
                     ScrollView_Empresas.IsVisible = true;
                 }
-                lbCantidad.Text = a + " Empresas disponibles";
+                
             }
 
             AILoading.IsRunning = false;
@@ -233,7 +233,7 @@ namespace AppCliente
 
         private async void BtnSeleccionarDireccion_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new SeleccionarDirecciones(btnSeleccionarDireccion, IDDireccionBusqueda, MyListViewBusquedaProductosHome, lbCantidad, CantidadProductosMostrados, PanelProductoNoEncontrados, MyListViewBusquedaEmpresas, ScrollView_Productos, ScrollView_Empresas));
+            await Navigation.PushAsync(new SeleccionarDirecciones(btnSeleccionarDireccion,  MyListViewBusquedaProductosHome, lbCantidad, CantidadProductosMostrados, PanelProductoNoEncontrados, MyListViewBusquedaEmpresas, ScrollView_Productos, ScrollView_Empresas));
         }
 
         private void ButtonCambiarBusquedaProducto_Clicked(object sender, EventArgs e)

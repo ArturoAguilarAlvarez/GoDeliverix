@@ -53,7 +53,7 @@ namespace AppCliente
                     {
                     new MasterMenuMenuItem { Id = 0, Title = "Inciar sesión", TargetType = typeof(Login), UrlResource="IconoProfileMenu"},
                     new MasterMenuMenuItem { Id = 1, Title = "Busqueda", TargetType = typeof(HomePage), UrlResource="IconoHomeMenu"},
-                    new MasterMenuMenuItem { Id = 3, Title = "Direcciones", TargetType = typeof(UsuarioDirecciones),UrlResource="IconoDireccionesMenu"}
+                    new MasterMenuMenuItem { Id = 3, Title = "Establecer ubicación",TargetType = typeof(SeleccionaColonia),UrlResource="IconoDireccionesMenu"}
                     });
                 }
                 else
@@ -64,7 +64,7 @@ namespace AppCliente
                     new MasterMenuMenuItem { Id = 1, Title = "Busqueda", TargetType = typeof(HomePage), UrlResource="IconoHomeMenu"},
                     new MasterMenuMenuItem { Id = 1, Title = "Monedero", TargetType = typeof(Monedero), UrlResource="Monedero"},
                     new MasterMenuMenuItem { Id = 2, Title = "Historial", TargetType = typeof(HistorialPage),UrlResource="IconoOrdenMenu"},
-                    new MasterMenuMenuItem { Id = 3, Title = "Direcciones", TargetType = typeof(UsuarioDirecciones),UrlResource="IconoDireccionesMenu"},
+                    new MasterMenuMenuItem { Id = 3, Title = "Ubicaciones", TargetType = typeof(UsuarioDirecciones),UrlResource="IconoDireccionesMenu"},
                     new MasterMenuMenuItem { Id = 4, Title = "Telefonos", TargetType = typeof(PerfilTelefonoPage),UrlResource="IconoTelefonoHome"},
                     new MasterMenuMenuItem { Id = 6, Title = "Salir", UrlResource="LogOutIcon"}
                 });

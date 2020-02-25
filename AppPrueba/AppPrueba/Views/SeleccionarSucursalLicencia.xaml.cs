@@ -85,8 +85,6 @@ namespace AppPrueba.Views
                 AppPrueba.Helpers.Settings.NombreSucursal = sucursal.IDENTIFICADOR;
                 AppPrueba.Helpers.Settings.Perfil = perfil;
                 App.Current.MainPage = new MasterMenu();
-                //App.MVEmpresas.ObtenerNombreComercial(App.UIdUsuario.ToString());
-                //App.NombreEmpresa = App.MVEmpresas.NOMBRECOMERCIAL;
             }
             catch (Exception)
             {

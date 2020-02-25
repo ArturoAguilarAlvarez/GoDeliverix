@@ -22,11 +22,11 @@ namespace AppCliente
         Label sucursal;
         double cantidad;
 
-        public SeleccionarSucursalPrecioProducto(List<VMProducto> lista, Button btn, Button lbEmpresa, Label lbCosto, double cantidad, Label uidEmpresaSeleccionada,Label sucursal)
+        public SeleccionarSucursalPrecioProducto(List<VMProducto> lista, Button btn, Button lbEmpresa, Label lbCosto, double cantidad, Label uidEmpresaSeleccionada, Label sucursal)
         {
             InitializeComponent();
             this.sucursal = sucursal;
-            int index = App.MVProducto.ListaDePreciosSucursales.FindIndex(t=>t.StrIdentificador== lbEmpresa.Text);
+            int index = App.MVProducto.ListaDePreciosSucursales.FindIndex(t => t.StrIdentificador == lbEmpresa.Text);
             MyListViewBusquedaEmpresaDelProducto.ItemsSource = App.MVProducto.ListaDePreciosSucursales;
             MyListViewBusquedaEmpresaDelProducto.SelectedItem = App.MVProducto.ListaDePreciosSucursales[index];
             ListaPreciosProcto = lista;
@@ -44,13 +44,13 @@ namespace AppCliente
                 VMProducto a = (VMProducto)MyListViewBusquedaEmpresaDelProducto.SelectedItem;
                 lbEmpresa.Text = a.StrIdentificador;
                 string i = a.UidSeccion.ToString();
-                lbCosto.Text ="Prercio: $"+ a.StrCosto;
+                lbCosto.Text = "$" + a.StrCosto;
                 string sad = a.UID.ToString();
                 double costo = double.Parse(a.StrCosto);
                 uidEmpresaSeleccionada.Text = a.UID.ToString();
                 sucursal.Text = a.UidSucursal.ToString();
                 costo = (cantidad) * (costo);
-                btn.Text = "Agregar carrito $" + costo; 
+                btn.Text = "Agregar carrito $" + costo;
                 Navigation.PopAsync();
             }
             catch (Exception)
@@ -71,7 +71,7 @@ namespace AppCliente
                 string sad = a.UID.ToString();
                 double costo = double.Parse(a.StrCosto);
                 uidEmpresaSeleccionada.Text = a.UID.ToString();
-                sucursal.Text = a.UidSucursal.ToString();               
+                sucursal.Text = a.UidSucursal.ToString();
                 costo = (cantidad) * (costo);
 
                 btn.Text = "Agregar carrito $" + costo; ;

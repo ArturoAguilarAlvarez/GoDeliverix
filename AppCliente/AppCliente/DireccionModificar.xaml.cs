@@ -210,8 +210,6 @@ namespace AppCliente
             GuardarDireccion();
         }
 
-
-
         public async void MIDireccion()
         {
             try
@@ -276,7 +274,45 @@ namespace AppCliente
                         await DisplayAlert("Aviso", "No se pudo cargar tu direccion desde tu posicion", "Aceptar");
                     }
                 }
-
+                else
+                {
+                    MypickerPais.SelectedIndex = 1;
+                    int Estado = new int();
+                    for (int i = 0; i < DireccionesListaEstados.Count; i++)
+                    {
+                        if (DireccionesListaEstados[i].ID == new Guid(App.MVDireccion.ListaDIRECCIONES[0].ESTADO.ToUpper()))
+                        {
+                            Estado = i;
+                        }
+                    }
+                    MypickerEstado.SelectedIndex = Estado;
+                    int Municipio = new int();
+                    for (int i = 0; i < DireccionesListaMunicipios.Count; i++)
+                    {
+                        if (DireccionesListaMunicipios[i].ID == new Guid(App.MVDireccion.ListaDIRECCIONES[0].MUNICIPIO.ToUpper()))
+                        {
+                            Municipio = i;
+                        }
+                    }
+                    MypickerMunicipio.SelectedIndex = Municipio;
+                    int Ciudad = new int();
+                    for (int i = 0; i < DireccionesListaCiudad.Count; i++)
+                    {
+                        if (DireccionesListaCiudad[i].ID == new Guid(App.MVDireccion.ListaDIRECCIONES[0].CIUDAD.ToUpper()))
+                        {
+                            Ciudad = i;
+                        }
+                    }
+                    MypickerCiudad.SelectedIndex = Ciudad;
+                    txtCalle.Text = App.MVDireccion.ListaDIRECCIONES[0].CALLE0;
+                    txtEntreCalle.Text = App.MVDireccion.ListaDIRECCIONES[0].CALLE1;
+                    txtYCalle.Text = App.MVDireccion.ListaDIRECCIONES[0].CALLE2;
+                    txtReferencia.Text = App.MVDireccion.ListaDIRECCIONES[0].REFERENCIA;
+                    txtIdentificador.Text = App.MVDireccion.ListaDIRECCIONES[0].IDENTIFICADOR;
+                    txtManzana.Text = App.MVDireccion.ListaDIRECCIONES[0].MANZANA;
+                    txtLote.Text = App.MVDireccion.ListaDIRECCIONES[0].LOTE;
+                    txtCodigoPostal.Text = App.MVDireccion.ListaDIRECCIONES[0].CodigoPostal;
+                }
             }
             catch (Exception e)
             {
@@ -286,24 +322,19 @@ namespace AppCliente
 
         public async void GuardarDireccion()
         {
-            if (!string.IsNullOrEmpty(txtIdentificador.Text) && !string.IsNullOrEmpty(txtCalle.Text) && !string.IsNullOrEmpty(txtManzana.Text) && !string.IsNullOrEmpty(txtCodigoPostal.Text) && MypickerPais.SelectedIndex != -1 && MypickerEstado.SelectedIndex != -1 && MypickerMunicipio.SelectedIndex != -1 && MypickerCiudad.SelectedIndex != -1 && MypickerColonia.SelectedIndex != -1)
+            if (!string.IsNullOrEmpty(txtIdentificador.Text) && !string.IsNullOrEmpty(txtCalle.Text) && !string.IsNullOrEmpty(txtManzana.Text) && !string.IsNullOrEmpty(txtCodigoPostal.Text) && MypickerEstado.SelectedIndex != 0 && MypickerMunicipio.SelectedIndex != 0 && MypickerCiudad.SelectedIndex != 0 && MypickerColonia.SelectedIndex != 0)
             {
                 try
                 {
                     Guid UidPais = new Guid("afd6c3b7-f5be-40c9-8385-936d275a8d6b");
-
                     VMDireccion x = DireccionesListaEstados.Find(t => t.ESTADO == MypickerEstado.SelectedItem.ToString());
                     Guid UidEstado = x.ID;
-
                     VMDireccion a = DireccionesListaMunicipios.Find(t => t.MUNICIPIO == MypickerMunicipio.SelectedItem.ToString());
                     Guid UidMunicipio = a.ID;
-
                     VMDireccion b = DireccionesListaCiudad.Find(t => t.CIUDAD == MypickerCiudad.SelectedItem.ToString());
                     Guid UidCiudad = b.ID;
-
                     VMDireccion c = DireccionesListaColonia.Find(t => t.COLONIA == MypickerColonia.SelectedItem.ToString());
                     Guid UidColonia = c.ID;
-
                     if (App.Global1 == string.Empty)
                     {
                         Helpers.Settings.UidDireccion = Guid.NewGuid().ToString();

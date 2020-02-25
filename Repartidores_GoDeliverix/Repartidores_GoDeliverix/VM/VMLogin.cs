@@ -59,6 +59,7 @@ namespace Repartidores_GoDeliverix.VM
         public VMLogin()
         {
             IsSavingValues = true;
+            Application.Current.Properties["IsLogged"] = false;
         }
         #endregion
 
@@ -74,6 +75,7 @@ namespace Repartidores_GoDeliverix.VM
         private async void Login()
         {
             var supportsUri = false;
+            
             if (Device.RuntimePlatform == Device.Android)
             {
                 supportsUri = true;
@@ -109,16 +111,13 @@ namespace Repartidores_GoDeliverix.VM
                         this.IsLoading = true;
                         this.IsEnable = false;
                         Acceso(User, Password);
-
                     }
                 }
                 catch (Exception)
                 {
                     this.IsLoading = false;
                     this.IsEnable = true;
-
                     GenerateMessage("Alerta!!", "No hay internet", "Aceptar");
-
                 }
             }
             else
