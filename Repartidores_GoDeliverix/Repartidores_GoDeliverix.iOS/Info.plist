@@ -27,19 +27,19 @@
 	<key>CFBundleIdentifier</key>
 	<string>compuandsoft.GoDeliverixRepartidor</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.3</string>
+	<string>1.0.4</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>CFBundleName</key>
 	<string>Repartidores_GoDeliverix</string>
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleLightContent</string>
-  <key>NSLocationAlwaysUsageDescription</key>
-  <string>La ubicación se usa para indicarte con mas precision las rutas de las ordenes asignadas.</string>
-  <key>NSLocationWhenInUseUsageDescription</key>
-  <string>La ubicación se usa para indicarte con mas precision las rutas de las ordenes asignadas.</string>
-  <key>NSLocationUsageDescription</key>
-  <string>La ubicación se usa para indicarte con mas precision las rutas de las ordenes asignadas.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>La ubicación se usa para indicarte con mas precision las rutas de las ordenes asignadas.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>La ubicación se usa para indicarte con mas precision las rutas de las ordenes asignadas.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>La ubicación se usa para indicarte con mas precision las rutas de las ordenes asignadas.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Esta aplicación necesita el permiso de cámara para escanear códigos QR y asi finalizar la entrega de la orden.</string>
 	<key>NSAppTransportSecurity</key>

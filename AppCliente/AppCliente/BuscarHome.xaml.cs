@@ -70,140 +70,121 @@ namespace AppCliente
             Guid uidcolonia = new Guid(App.UidColoniaABuscar);
             Guid uidestado = new Guid(App.UidEstadoABuscar);
             string _URL = "";
+            string UidParametroDeBusqueda = "";
+            string tipoDeBusqueda = "";
+            ApiService ApiService = new ApiService("");
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
+            {
+                UidParametroDeBusqueda = giro;
+                tipoDeBusqueda = "Giro";
+            }
+            else if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
+            {
+                UidParametroDeBusqueda = categoria;
+                tipoDeBusqueda = "Categoria";
+            }
+            else if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || !string.IsNullOrWhiteSpace(subcategoria)))
+            {
+                UidParametroDeBusqueda = subcategoria;
+                tipoDeBusqueda = "Subcategoria";
+            }
+
+
+
             if (App.buscarPor == "Productos")
             {
-                if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
+                ApiService = new ApiService("/api/Producto");
+                parameters = new Dictionary<string, string>();
+                parameters.Add("StrParametroBusqueda", tipoDeBusqueda);
+                parameters.Add("StrDia", Dia);
+                parameters.Add("UidEstado", uidestado.ToString());
+                parameters.Add("UidColonia", uidcolonia.ToString());
+                parameters.Add("UidBusquedaCategorias", UidParametroDeBusqueda);
+                parameters.Add("StrNombreEmpresa", searchFor.Text);
+                var result = await ApiService.GET<VMProducto>(action: "GetBuscarProductosCliente", responseType: ApiService.ResponseType.Object, arguments: parameters);
+                var oReponse = result as ResponseHelper;
+                if (result != null && oReponse.Status != false)
                 {
-                    _URL = "" + Helpers.Settings.sitio + "/api/Producto/GetBuscarProductosCliente?StrParametroBusqueda=Giro&StrDia=" + Dia + "&UidEstado=" + uidestado.ToString() + "&UidColonia=" + uidcolonia.ToString() + "&UidBusquedaCategorias=" + giro + "&StrNombreEmpresa=" + searchFor.Text + "";
-                }
-                else if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
-                {
-                    _URL = "" + Helpers.Settings.sitio + "/api/Producto/GetBuscarProductosCliente?StrParametroBusqueda=Categoria&StrDia=" + Dia + "&UidEstado=" + uidestado.ToString() + "&UidColonia=" + uidcolonia.ToString() + "&UidBusquedaCategorias=" + categoria + "&StrNombreEmpresa=" + searchFor.Text + "";
-                }
-                else if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || !string.IsNullOrWhiteSpace(subcategoria)))
-                {
-                    _URL = "" + Helpers.Settings.sitio + "/api/Producto/GetBuscarProductosCliente?StrParametroBusqueda=Subcategoria&StrDia=" + Dia + "&UidEstado=" + uidestado.ToString() + "&UidColonia=" + uidcolonia.ToString() + "&UidBusquedaCategorias=" + subcategoria + "&StrNombreEmpresa=" + searchFor.Text + "";
-                }
-                var content = "";
-                using (HttpClient _WebApi = new HttpClient())
-                {
-                    content = await _WebApi.GetStringAsync(_URL);
-                }
-                var BusquedaProducto = new VMProducto();
-                var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                BusquedaProducto = JsonConvert.DeserializeObject<VMProducto>(obj);
-                App.ListaDeProductos = new List<VMProducto>();
-                if (BusquedaProducto.ListaDeProductos != null)
-                {
-                    foreach (VMProducto item in BusquedaProducto.ListaDeProductos)
+                    var BusquedaProducto = oReponse.Data as VMProducto;
+                    App.ListaDeProductos = new List<VMProducto>();
+                    if (BusquedaProducto.ListaDeProductos != null)
                     {
-                        if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
+                        foreach (VMProducto item in BusquedaProducto.ListaDeProductos)
                         {
-                            _URL = "" + Helpers.Settings.sitio + "/api/Producto/GetObtenerInformacionDeProductoDeLaSucursal?StrParametroBusqueda=Giro&StrDia=" + Dia + "&UidEstado=" + uidestado.ToString() + "&UidColonia=" + uidcolonia.ToString() + "&UidBusquedaCategorias=" + giro + "&UidProducto=" + item.UID + "";
+                            App.ListaDeProductos.Add(item);
+                        }
+                        PanelProductoNoEncontrados.IsVisible = false;
+                        MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos;
+                        CantidadProductosMostrados = App.ListaDeProductos.Count;
+                        lbCantidad.Text = App.ListaDeProductos.Count + " Productos disponibles";
+                        ScrollView_Empresas.IsVisible = false;
+                        ScrollView_Productos.IsVisible = true;
+                        MyListViewBusquedaProductosHome.ItemsSource = null;
+                        MyListViewBusquedaProductosHome.ItemsSource = BusquedaProducto.ListaDeProductos;
+                        CantidadProductosMostrados = BusquedaProducto.ListaDeProductos.Count;
+                        MyListViewBusquedaEmpresas.ItemsSource = null;
+                        if (BusquedaProducto.ListaDeProductos.Count == 0)
+                        {
+                            PanelProductoNoEncontrados.IsVisible = true;
+                            ScrollView_Productos.IsVisible = false;
                         }
                         else
-                        if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
                         {
-                            _URL = "" + Helpers.Settings.sitio + "/api/Producto/GetObtenerInformacionDeProductoDeLaSucursal?StrParametroBusqueda=Categoria&StrDia=" + Dia + "&UidEstado=" + uidestado.ToString() + "&UidColonia=" + uidcolonia.ToString() + "&UidBusquedaCategorias=" + categoria + "&UidProducto=" + item.UID + "";
+                            PanelProductoNoEncontrados.IsVisible = false;
+                            ScrollView_Productos.IsVisible = true;
                         }
-                        else
-                        if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || !string.IsNullOrWhiteSpace(subcategoria)))
-                        {
-                            _URL = "" + Helpers.Settings.sitio + "/api/Producto/GetObtenerInformacionDeProductoDeLaSucursal?StrParametroBusqueda=Subcategoria&StrDia=" + Dia + "&UidEstado=" + uidestado.ToString() + "&UidColonia=" + uidcolonia.ToString() + "&UidBusquedaCategorias=" + subcategoria + "&UidProducto=" + item.UID + "";
-                        }
-                        using (HttpClient _WebApi = new HttpClient())
-                        {
-                            content = await _WebApi.GetStringAsync(_URL);
-                        }
-                        obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                        var VProducto = JsonConvert.DeserializeObject<VMProducto>(obj);
-                        item.StrCosto = VProducto.ListaDePreciosSucursales[0].StrCosto;
                     }
-                    for (int i = 0; i < BusquedaProducto.ListaDeProductos.Count; i++)
+                }
+
+            }
+            else if (App.buscarPor == "Empresas")
+            {
+                ApiService = new ApiService("/api/Empresa");
+                parameters = new Dictionary<string, string>();
+                parameters.Add("StrParametroBusqueda", tipoDeBusqueda);
+                parameters.Add("StrDia", Dia);
+                parameters.Add("UidEstado", uidestado.ToString());
+                parameters.Add("UidColonia", uidcolonia.ToString());
+                parameters.Add("UidBusquedaCategorias", UidParametroDeBusqueda);
+                parameters.Add("StrNombreEmpresa", searchFor.Text);
+                var result = await ApiService.GET<VMEmpresas>(action: "GetObtenerEmpresaCliente", responseType: ApiService.ResponseType.Object, arguments: parameters);
+                var oReponse = result as ResponseHelper;
+                if (result != null && oReponse.Status != false)
+                {
+                    var oEmpresa = oReponse.Data as VMEmpresas;
+                    App.LISTADEEMPRESAS = new List<VMEmpresas>();
+                    if (oEmpresa.LISTADEEMPRESAS != null)
                     {
-                        App.ListaDeProductos.Add(BusquedaProducto.ListaDeProductos[i]);
+                        foreach (var item in oEmpresa.LISTADEEMPRESAS)
+                        {
+                            item.StrRuta = "" + Helpers.Settings.sitio + "/vista/" + (item.StrRuta.Substring(3));
+                        }
+                        foreach (var item in oEmpresa.LISTADEEMPRESAS)
+                        {
+                            App.LISTADEEMPRESAS.Add(item);
+                        }
+                        MyListViewBusquedaEmpresas.ItemsSource = App.LISTADEEMPRESAS;
+                        lbCantidad.Text = App.LISTADEEMPRESAS.Count + " Empresas disponibles";
                     }
-                    PanelProductoNoEncontrados.IsVisible = false;
-                    MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos;
-                    CantidadProductosMostrados = App.ListaDeProductos.Count;
-                    lbCantidad.Text = App.ListaDeProductos.Count + " Productos disponibles";
-                    ScrollView_Empresas.IsVisible = false;
-                    ScrollView_Productos.IsVisible = true;
-                    MyListViewBusquedaProductosHome.ItemsSource = null;
-                    MyListViewBusquedaProductosHome.ItemsSource = BusquedaProducto.ListaDeProductos;
-                    CantidadProductosMostrados = BusquedaProducto.ListaDeProductos.Count;
-                    MyListViewBusquedaEmpresas.ItemsSource = null;
-                    if (BusquedaProducto.ListaDeProductos.Count == 0)
+                    ScrollView_Empresas.IsVisible = true;
+                    ScrollView_Productos.IsVisible = false;
+                    if (oEmpresa.LISTADEEMPRESAS == null)
                     {
                         PanelProductoNoEncontrados.IsVisible = true;
-                        ScrollView_Productos.IsVisible = false;
+                        ScrollView_Empresas.IsVisible = false;
                     }
                     else
                     {
                         PanelProductoNoEncontrados.IsVisible = false;
-                        ScrollView_Productos.IsVisible = true;
+                        ScrollView_Empresas.IsVisible = true;
                     }
                 }
-            }
-            else if (App.buscarPor == "Empresas")
-            {
-                //Busqueda por giro
-                if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
-                {
-                    _URL = "" + Helpers.Settings.sitio + "/api/Empresa/GetObtenerEmpresaCliente?StrParametroBusqueda=Giro&StrDia=" + Dia + "&UidColonia=" + uidcolonia.ToString() + "&UidEstado=" + uidestado.ToString() + "&UidBusquedaCategorias=" + giro + "&StrNombreEmpresa=" + searchFor.Text + "";
-                }
-                else
-                //// Busqueda por categoria
-                if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
-                {
-                    _URL = "" + Helpers.Settings.sitio + "/api/Empresa/GetObtenerEmpresaCliente?StrParametroBusqueda=Categoria&StrDia=" + Dia + "&UidColonia=" + uidcolonia.ToString() + "&UidEstado=" + uidestado.ToString() + "&UidBusquedaCategorias=" + categoria + "&StrNombreEmpresa=" + searchFor.Text + "";
-                }
-                else
-                //Busqueda por subcategoria
-                if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || !string.IsNullOrWhiteSpace(subcategoria)))
-                {
-                    _URL = "" + Helpers.Settings.sitio + "/api/Empresa/GetObtenerEmpresaCliente?StrParametroBusqueda=Subcategoria&StrDia=" + Dia + "&UidColonia=" + uidcolonia.ToString() + "&UidEstado=" + uidestado.ToString() + "&UidBusquedaCategorias=" + subcategoria + "&StrNombreEmpresa=" + searchFor.Text + "";
-                }
-                string content;
-                using (HttpClient _webApi = new HttpClient())
-                {
-                    content = await _webApi.GetStringAsync(_URL);
-                }
-                string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                App.MVEmpresa = JsonConvert.DeserializeObject<VMEmpresas>(obj);
-                App.LISTADEEMPRESAS = new List<VMEmpresas>();
-                if (App.MVEmpresa.LISTADEEMPRESAS != null)
-                {
-                    foreach (var item in App.MVEmpresa.LISTADEEMPRESAS)
-                    {
-                        item.StrRuta = "" + Helpers.Settings.sitio + "/vista/" + (item.StrRuta.Substring(3));
-                    }
-                    for (int i = 0; i < App.MVEmpresa.LISTADEEMPRESAS.Count; i++)
-                    {
-                        App.LISTADEEMPRESAS.Add(App.MVEmpresa.LISTADEEMPRESAS[i]);
-                    }
-                    MyListViewBusquedaEmpresas.ItemsSource = App.MVEmpresa.LISTADEEMPRESAS;
-                    lbCantidad.Text = App.MVEmpresa.LISTADEEMPRESAS.Count + " Empresas disponibles";
-                }
-                ScrollView_Empresas.IsVisible = true;
-                ScrollView_Productos.IsVisible = false;
-                if (App.MVEmpresa.LISTADEEMPRESAS == null)
-                {
-                    PanelProductoNoEncontrados.IsVisible = true;
-                    ScrollView_Empresas.IsVisible = false;
-                }
-                else
-                {
-                    PanelProductoNoEncontrados.IsVisible = false;
-                    ScrollView_Empresas.IsVisible = true;
-                }
-                
-            }
 
+            }
             AILoading.IsRunning = false;
             AILoading.IsVisible = false;
         }
-
 
         private async void MyListViewBusquedaEmpresas_ItemTapped(object sender, ItemTappedEventArgs e)
         {
@@ -233,7 +214,7 @@ namespace AppCliente
 
         private async void BtnSeleccionarDireccion_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new SeleccionarDirecciones(btnSeleccionarDireccion,  MyListViewBusquedaProductosHome, lbCantidad, CantidadProductosMostrados, PanelProductoNoEncontrados, MyListViewBusquedaEmpresas, ScrollView_Productos, ScrollView_Empresas));
+            await Navigation.PushAsync(new SeleccionarDirecciones(btnSeleccionarDireccion, MyListViewBusquedaProductosHome, lbCantidad, CantidadProductosMostrados, PanelProductoNoEncontrados, MyListViewBusquedaEmpresas, ScrollView_Productos, ScrollView_Empresas));
         }
 
         private void ButtonCambiarBusquedaProducto_Clicked(object sender, EventArgs e)

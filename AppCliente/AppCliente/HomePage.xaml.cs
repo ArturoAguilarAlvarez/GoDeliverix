@@ -15,6 +15,8 @@ using Xamarin.Forms;
 using Xamarin.Forms.GoogleMaps;
 using Xamarin.Forms.Xaml;
 using AppCliente.ViewModel;
+using System.Threading;
+using Plugin.Connectivity;
 
 namespace AppCliente
 {
@@ -31,101 +33,143 @@ namespace AppCliente
             InitializeComponent();
             Device.InvokeOnMainThreadAsync(async () =>
             {
-                string versionApp = "";
-                // Uid de la aplicacion 87b2dcfd-205a-4260-9092-1ce48b28aa4a
-                if (Device.RuntimePlatform == Device.Android)
+                //var conectivilidad = Connectivity.NetworkAccess;
+                //if (conectivilidad == NetworkAccess.Internet)
+                //{
+                if (await IsRunningGoDeliverixServicesAsync())
                 {
-                    versionApp = "87b2dcfd-205a-4260-9092-1ce48b28aa4a";
-                }
-                if (Device.RuntimePlatform == Device.iOS)
-                {
-                    versionApp = "310cba91-57a5-4699-91fe-3677c2718907";
-                }
-            Iniciar:
-                string _URL = "" + Helpers.Settings.sitio + "/api/Version/Get?id=" + versionApp + "";
-                var content = string.Empty;
-                await Task.Run(async () => { content = await _client.GetStringAsync(_URL); });
-                var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                var oversion = JsonConvert.DeserializeObject<VMVersion>(obj);
-                string version = VersionTracking.CurrentVersion;
+                    string versionApp = "";
+                    // Uid de la aplicacion 87b2dcfd-205a-4260-9092-1ce48b28aa4a
+                    if (Device.RuntimePlatform == Device.Android)
+                    {
+                        versionApp = "87b2dcfd-205a-4260-9092-1ce48b28aa4a";
+                    }
+                    if (Device.RuntimePlatform == Device.iOS)
+                    {
+                        versionApp = "310cba91-57a5-4699-91fe-3677c2718907";
+                    }
+                Iniciar:
+                    ApiService ApiService = new ApiService("/api/Version");
+                    Dictionary<string, string> parameters = new Dictionary<string, string>();
+                    parameters.Add("id", versionApp);
+                    var result = await ApiService.GET<VMVersion>(action: "Get", responseType: ApiService.ResponseType.Object, arguments: parameters);
+                    var oReponse = result as ResponseHelper;
 
-                if (oversion.StrVersion == version)
-                {
-                    if (!string.IsNullOrEmpty(App.Global1))
+                    if (result != null && oReponse.Status != false)
                     {
-                        Iniciar();
-                    }
-                    //else
-                    //if (App.MVDireccionDemo != null)
-                    //{
-                    //    await DisplayAlert("Colonia actual", "La colonia seleccionada es " + Helpers.Settings.StrNombreColonia.ToUpper() + "", "Aceptar");
-                    //}
-                    else
-                    if (!string.IsNullOrEmpty(Helpers.Settings.StrCOLONIA))
-                    {
-                        Iniciar();
-                    }
-                    else
-                    {
-                        if (Navigation.NavigationStack.Count == 1)
+                        var oversion = oReponse.Data as VMVersion;
+                        string version = VersionTracking.CurrentVersion;
+                        if (oversion.StrVersion == version)
                         {
-                            try
+                            ApiService = new ApiService("/api/Giro");
+                            parameters = new Dictionary<string, string>();
+                            result = await ApiService.GET<VMGiro>(action: "Get", responseType: ApiService.ResponseType.Object, arguments: parameters);
+                            oReponse = result as ResponseHelper;
+                            if (result != null && oReponse.Status != false)
                             {
-                                await Navigation.PushAsync(new SeleccionaColonia());
-                                PanelUbicacionNoEstablecida.IsVisible = true;
-                                PanelProductoNoEncontrados.IsVisible = false;
-                                ScrollView_Productos.IsVisible = false;
-                                lbCantidad.Text = "No hay resultados";
-                                btnSeleccionarDireccion.Text = "No hay ubicación";
+                                App.MVGiro = oReponse.Data as VMGiro;
+                                App.giro = App.MVGiro.LISTADEGIRO[0].UIDVM.ToString();
+                                ApiService = new ApiService("/api/Categoria");
+                                parameters = new Dictionary<string, string>();
+                                parameters.Add("value", App.giro.ToString());
+                                result = await ApiService.GET<VMCategoria>(action: "Get", responseType: ApiService.ResponseType.Object, arguments: parameters);
+                                oReponse = result as ResponseHelper;
+                                if (result != null && oReponse.Status != false)
+                                {
+                                    App.MVCategoria = oReponse.Data as VMCategoria;
+
+                                    if (!string.IsNullOrEmpty(App.Global1))
+                                    {
+                                        Iniciar();
+                                    }
+                                    else
+                                if (!string.IsNullOrEmpty(Helpers.Settings.StrCOLONIA))
+                                    {
+
+                                        Iniciar();
+                                    }
+                                    else
+                                    {
+                                        if (Navigation.NavigationStack.Count == 1)
+                                        {
+                                            try
+                                            {
+                                                await Navigation.PushAsync(new SeleccionaColonia());
+                                                PanelUbicacionNoEstablecida.IsVisible = true;
+                                                PanelProductoNoEncontrados.IsVisible = false;
+                                                ScrollView_Productos.IsVisible = false;
+                                                lbCantidad.Text = "No hay resultados";
+                                                btnSeleccionarDireccion.Text = "No hay ubicación";
+                                            }
+                                            catch (FeatureNotSupportedException)
+                                            {
+                                                // Handle not supported on device exception
+                                                await DisplayAlert("Aviso del sistema", "Los servicios de ubicacion no soportados por el dispositivo", "Aceptar");
+                                            }
+                                            catch (FeatureNotEnabledException)
+                                            {
+                                                await DisplayAlert("Ubicacion no activa", "Activa el GPS para obtener tu ubicacion", "Aceptar");
+                                            }
+                                            catch (PermissionException)
+                                            {
+                                                // Handle permission exception
+                                                await DisplayAlert("Aviso", "Activa los permisos de ubicacion para continuar", "Aceptar");
+                                            }
+                                            catch (Exception)
+                                            {
+                                                // Unable to get location
+                                                await DisplayAlert("Aviso", "No se puede obtener la ubicacion", "Aceptar");
+                                            }
+                                        }
+                                    }
+                                }
                             }
-                            catch (FeatureNotSupportedException)
+                        }
+                        else
+                        {
+                            var action = await DisplayAlert("Actualizacion disponible", "Actualizar a la version " + oversion.StrVersion + "", "Aceptar", "Cancelar");
+                            if (action)
                             {
-                                // Handle not supported on device exception
-                                await DisplayAlert("Aviso del sistema", "Los servicios de ubicacion no soportados por el dispositivo", "Aceptar");
+                                var urlStore = "";
+                                if (Device.RuntimePlatform == Device.Android)
+                                {
+                                    urlStore = "https://play.google.com/store/apps/details?id=com.CompuAndSoft.GDCliente";
+                                }
+                                if (Device.RuntimePlatform == Device.iOS)
+                                {
+                                    urlStore = "";
+                                }
+                                await Launcher.OpenAsync(new Uri(urlStore));
                             }
-                            catch (FeatureNotEnabledException)
+                            else
                             {
-                                await DisplayAlert("Ubicacion no activa", "Activa el GPS para obtener tu ubicacion", "Aceptar");
+                                goto Iniciar;
                             }
-                            catch (PermissionException)
-                            {
-                                // Handle permission exception
-                                await DisplayAlert("Aviso", "Activa los permisos de ubicacion para continuar", "Aceptar");
-                            }
-                            catch (Exception)
-                            {
-                                // Unable to get location
-                                await DisplayAlert("Aviso", "No se puede obtener la ubicacion", "Aceptar");
-                            }
-                            
                         }
                     }
                 }
                 else
                 {
-                    var action = await DisplayAlert("Actualizacion disponible", "Actualizar a la version " + oversion.StrVersion + "", "Aceptar", "Cancelar");
-                    if (action)
-                    {
-                        var urlStore = "";
-                        if (Device.RuntimePlatform == Device.Android)
-                        {
-                            urlStore = "https://play.google.com/store/apps/details?id=com.CompuAndSoft.GDCliente";
-                        }
-                        if (Device.RuntimePlatform == Device.iOS)
-                        {
-                            urlStore = "";
-                        }
-                        await Launcher.OpenAsync(new Uri(urlStore));
-                    }
-                    else
-                    {
-                        goto Iniciar;
-                    }
+                    Application.Current.MainPage = new NavigationPage(new SitioEnMantenimiento());
                 }
+                //}
+                //else
+                //{
+                //    GenerateMessage("Sin internet", "El dispositivo no esta conectado a internet, verifique su conexión.", "Aceptar");
+                //}
             });
 
         }
-
+        public async Task<bool> IsRunningGoDeliverixServicesAsync()
+        {
+            var conectivilidad = Connectivity.NetworkAccess;
+            bool resultado = false;
+            if (conectivilidad == NetworkAccess.Internet)
+            {
+                resultado = await CrossConnectivity.Current.IsReachable("www.google.com", 5000);
+            }
+            return resultado;
+        }
         private async void MenuItem1_Activted(object sender, EventArgs e)
         {
             NavigationPage navigationPage = ((NavigationPage)((MasterDetailPage)App.Current.MainPage).Detail);
@@ -447,18 +491,13 @@ namespace AppCliente
         }
         public async void Iniciar()
         {
-
             acloading.IsVisible = true;
             acloading.IsRunning = true;
-
-
-
-
+            string obj = "";
+            lbCantidad.Text = "Cargando productos";
 
             if (string.IsNullOrEmpty(App.Global1))
             {
-
-
                 App.MVDireccion.ListaDIRECCIONES = new List<VMDireccion>();
                 App.MVDireccion.ListaDIRECCIONES.Add(new VMDireccion()
                 {
@@ -466,6 +505,10 @@ namespace AppCliente
                     COLONIA = Helpers.Settings.StrCOLONIA,
                     NOMBRECOLONIA = Helpers.Settings.StrNombreColonia
                 });
+                App.UidEstadoABuscar = Helpers.Settings.StrESTADO;
+
+                btnSeleccionarDireccion.Text = "ENTREGAR EN " + App.MVDireccion.ListaDIRECCIONES.Find(x => x.ESTADO == App.UidEstadoABuscar).NOMBRECOLONIA.ToUpper() + " ";
+
                 btnAcceder.IsVisible = true;
             }
             else
@@ -473,13 +516,12 @@ namespace AppCliente
                 if (App.MVDireccion.ListaDIRECCIONES.Count == 0)
                 {
                     string strDirecciones = string.Empty;
-
                     App.MVDireccion = new VMDireccion();
                     using (HttpClient _client = new HttpClient())
                     {
                         var tex = "" + Helpers.Settings.sitio + "/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + App.Global1;
                         strDirecciones = await _client.GetStringAsync(tex);
-                        var obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
+                        obj = JsonConvert.DeserializeObject<ResponseHelper>(strDirecciones).Data.ToString();
                         App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
                     }
                 }
@@ -492,23 +534,13 @@ namespace AppCliente
                 acloading.IsRunning = true;
 
                 #region Busqueda
-                var _URL = "" + Helpers.Settings.sitio + "/api/Giro/Get";
-                var content = "";
-                using (HttpClient _client = new HttpClient())
-                {
-                    content = await _client.GetStringAsync(_URL);
-                }
-                var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                App.MVGiro = JsonConvert.DeserializeObject<VMGiro>(obj);
 
-                App.giro = App.MVGiro.LISTADEGIRO[0].UIDVM.ToString();
                 Guid UidEstado = new Guid();
                 Guid UidColonia = new Guid();
 
                 CultureInfo ConfiguracionDiaEspanol = new CultureInfo("Es-Es");
                 string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
                 PanelRefrescar.IsVisible = false;
-
                 if (App.MVDireccion.ListaDIRECCIONES.Count != 0)
                 {
                     PanelProductos.IsVisible = true;
@@ -523,72 +555,79 @@ namespace AppCliente
                     {
                         UidEstado = new Guid(App.UidEstadoABuscar);
                         UidColonia = new Guid(App.UidColoniaABuscar);
-
-                        _URL = "" + Helpers.Settings.sitio + "/api/Categoria/Get?value=" + App.giro.ToString();
-                        content = await _client.GetStringAsync(_URL);
-                        obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                        App.MVCategoria = JsonConvert.DeserializeObject<VMCategoria>(obj);
-
                         VMProducto oBusquedaproducto = new VMProducto();
-
-
                         App.ListaDeProductos = new List<VMProducto>();
-
-
-
-
-
-
-                        using (HttpClient _WebApi = new HttpClient())
-                        {
-                            _URL = "" + Helpers.Settings.sitio + "/api/Producto/GetBuscarProductosCliente?StrParametroBusqueda=Giro&StrDia=" + Dia + "&UidEstado=" + UidEstado + "&UidColonia=" + UidColonia + "&UidBusquedaCategorias=" + App.giro + "&StrNombreEmpresa=" + txtBusquedaActual.Text + "";
-                            content = await _WebApi.GetStringAsync(_URL);
-                            obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                            oBusquedaproducto = JsonConvert.DeserializeObject<VMProducto>(obj);
-                        }
-                        if (oBusquedaproducto.ListaDeProductos != null)
-                        {
-                            foreach (VMProducto item in oBusquedaproducto.ListaDeProductos)
-                            {
-                                using (HttpClient _WebApi = new HttpClient())
-                                {
-                                    string Cadena = "" + Helpers.Settings.sitio + "/api/Producto/GetObtenerInformacionDeProductoDeLaSucursal?StrParametroBusqueda=Giro&StrDia=" + Dia + "&UidEstado=" + UidEstado + "&UidColonia=" + UidColonia + "&UidBusquedaCategorias=" + App.giro + "&UidProducto=" + item.UID + "";
-                                    content = await _WebApi.GetStringAsync(Cadena);
-                                    obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                                    var VProducto = JsonConvert.DeserializeObject<VMProducto>(obj);
-                                    item.StrCosto = VProducto.ListaDePreciosSucursales[0].StrCosto;
-                                }
-                            }
-
-                            for (int i = 0; i < oBusquedaproducto.ListaDeProductos.Count; i++)
-                            {
-                                App.ListaDeProductos.Add(oBusquedaproducto.ListaDeProductos[i]);
-                            }
-
-                            PanelProductoNoEncontrados.IsVisible = false;
-                            ListaDeProductosHome = App.ListaDeProductos;
-
-                            MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos;
-                            CantidadProductosMostrados = App.ListaDeProductos.Count;
-                            lbCantidad.Text = App.ListaDeProductos.Count + " Productos disponibles";
-                        }
-                        if (string.IsNullOrEmpty(App.Global1))
-                        {
-                            btnSeleccionarDireccion.Text = "ENTREGAR EN " + App.MVDireccion.ListaDIRECCIONES.Find(x => x.ESTADO == App.UidEstadoABuscar).NOMBRECOLONIA.ToUpper() + " ";
-                        }
-                        else
-                        if (App.DireccionABuscar != "")
+                        if (App.DireccionABuscar != "" && !string.IsNullOrEmpty(App.Global1))
                         {
                             btnSeleccionarDireccion.Text = "ENTREGAR A " + App.MVUsuarios.StrUsuario + " EN " + App.MVDireccion.ListaDIRECCIONES.Find(x => x.ESTADO == App.UidEstadoABuscar).IDENTIFICADOR + " >";
                         }
+                        ApiService ApiService = new ApiService("/api/Producto");
+                        Dictionary<string, string> parameters = new Dictionary<string, string>();
+                        parameters.Add("StrParametroBusqueda", "Giro");
+                        parameters.Add("StrDia", Dia);
+                        parameters.Add("UidEstado", UidEstado.ToString());
+                        parameters.Add("UidColonia", UidColonia.ToString());
+                        parameters.Add("UidBusquedaCategorias", App.giro);
+                        parameters.Add("StrNombreEmpresa", txtBusquedaActual.Text);
+                        var result = await ApiService.GET<VMProducto>(action: "GetBuscarProductosCliente", responseType: ApiService.ResponseType.Object, arguments: parameters);
+                        var oReponse = result as ResponseHelper;
+                        if (result != null && oReponse.Status != false)
+                        {
+                            oBusquedaproducto = oReponse.Data as VMProducto;
+                            if (oBusquedaproducto.ListaDeProductos != null)
+                            {
+                                foreach (VMProducto item in oBusquedaproducto.ListaDeProductos)
+                                {
+                                    //parameters = new Dictionary<string, string>();
+                                    //parameters.Add("StrParametroBusqueda", "Giro");
+                                    //parameters.Add("StrDia", Dia);
+                                    //parameters.Add("UidEstado", UidEstado.ToString());
+                                    //parameters.Add("UidColonia", UidColonia.ToString());
+                                    //parameters.Add("UidBusquedaCategorias", App.giro);
+                                    //parameters.Add("UidProducto", item.UID.ToString());
+                                    //result = await ApiService.GET<VMProducto>(action: "GetObtenerInformacionDeProductoDeLaSucursal", responseType: ApiService.ResponseType.Object, arguments: parameters);
+
+                                    //oReponse = result as ResponseHelper;
+                                    //if (result != null && oReponse.Status != false)
+                                    //{
+                                    //    var VProducto = oReponse.Data as VMProducto;
+                                    //    if (VProducto.ListaDePreciosSucursales.Count > 0)
+                                    //    {
+                                    //        item.StrCosto = VProducto.ListaDePreciosSucursales[0].StrCosto;
+                                    App.ListaDeProductos.Add(item);
+                                    //    }
+                                    //}
+                                    //else
+                                    //{
+                                    //    var objeto = new MasterMenuMenuItem { Id = 1, Title = "Busqueda", TargetType = typeof(HomePage), UrlResource = "IconoHomeMenu" };
+                                    //    var Page = (Page)Activator.CreateInstance(objeto.TargetType);
+                                    //    App app = Application.Current as App;
+                                    //    App.Navegacion = Page.GetType().Name;
+                                    //    MasterDetailPage md = (MasterDetailPage)app.MainPage;
+                                    //    md.Detail = new NavigationPage(Page);
+                                    //}
+                                }
+                                PanelProductoNoEncontrados.IsVisible = false;
+                                ListaDeProductosHome = App.ListaDeProductos;
+
+                                MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos;
+                                CantidadProductosMostrados = App.ListaDeProductos.Count;
+                                lbCantidad.Text = App.ListaDeProductos.Count + " Productos disponibles";
+                            }
+                            else
+                            {
+                                lbCantidad.Text = "No hay productos disponibles";
+                                PanelProductoNoEncontrados.IsVisible = true;
+                            }
+                        }
                         else
                         {
-                            btnSeleccionarDireccion.Text = "ENTREGAR A " + App.MVUsuarios.StrUsuario + " EN " + App.MVDireccion.ListaDIRECCIONES[0].IDENTIFICADOR + " >";
-                        }
-                        if (App.ListaDeProductos.Count == 0)
-                        {
-                            lbCantidad.Text = "No hay productos disponibles";
-                            PanelProductoNoEncontrados.IsVisible = true;
+                            var objeto = new MasterMenuMenuItem { Id = 1, Title = "Busqueda", TargetType = typeof(HomePage), UrlResource = "IconoHomeMenu" };
+                            var Page = (Page)Activator.CreateInstance(objeto.TargetType);
+                            App app = Application.Current as App;
+                            App.Navegacion = Page.GetType().Name;
+                            MasterDetailPage md = (MasterDetailPage)app.MainPage;
+                            md.Detail = new NavigationPage(Page);
                         }
                     }
                     acloading.IsRunning = false;
@@ -608,7 +647,7 @@ namespace AppCliente
                     {
                         PanelRefrescar.IsVisible = true;
 
-                        
+
 
                     }
                 }
@@ -702,6 +741,19 @@ namespace AppCliente
         private void btnRefrescar_Clicked(object sender, EventArgs e)
         {
             Iniciar();
+        }
+        protected async void GenerateMessage(string Tittle, string Message, string TextOption)
+        {
+            await Application.Current.MainPage.DisplayAlert(
+              Tittle,
+              Message,
+              TextOption);
+        }
+
+        private void MyListViewBusquedaProductosHome_Refreshing(object sender, EventArgs e)
+        {
+            Iniciar();
+            MyListViewBusquedaProductosHome.IsRefreshing = false;
         }
     }
 }

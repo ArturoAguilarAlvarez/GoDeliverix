@@ -64,12 +64,18 @@ namespace AppCliente
                         //var addresses = await geo.GetAddressesForPositionAsync(new Position(Latitud, Longitud));
                         foreach (var item in placemarks)
                         {
-                            using (HttpClient _webApi = new HttpClient())
+                            ApiService ApiService = new ApiService("/api/Direccion");
+                            Dictionary<string, string> parameters = new Dictionary<string, string>();
+                            parameters.Add("StrNombreCiudad", item.Locality);
+                            parameters.Add("CodigoEstado", item.AdminArea);
+                            parameters.Add("CodigoPais", item.CountryCode);
+                            parameters.Add("Latitud", item.Location.Latitude.ToString());
+                            parameters.Add("Longitud", item.Location.Longitude.ToString());
+                            var result = await ApiService.GET<VMDireccion>(action: "GetObtenerDireccionConDatosDeGoogle", responseType: ApiService.ResponseType.Object, arguments: parameters);
+                            var oReponse = result as ResponseHelper;
+                            if (result != null && oReponse.Status != false)
                             {
-                                string _URL = "" + Helpers.Settings.sitio + "/api/Direccion/GetObtenerDireccionConDatosDeGoogle?StrNombreCiudad=" + item.Locality + "&Latitud=" + item.Location.Latitude + "&Longitud=" + item.Location.Longitude + "";
-                                string content = await _webApi.GetStringAsync(_URL);
-                                string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                                App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
+                                App.MVDireccion = oReponse.Data as VMDireccion;
                                 if (App.MVDireccion.ListaDIRECCIONES.Count == 1)
                                 {
                                     break;

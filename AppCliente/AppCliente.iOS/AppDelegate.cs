@@ -22,8 +22,8 @@ namespace AppCliente.iOS
         public UIWindowScene UIWindow { get; set; }
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            global::Xamarin.Forms.Forms.Init();                        
-            global::Xamarin.FormsMaps.Init();       
+            global::Xamarin.Forms.Forms.Init();
+            global::Xamarin.FormsMaps.Init();
             ImageCircleRenderer.Init();
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();
@@ -33,5 +33,6 @@ namespace AppCliente.iOS
             LoadApplication(new App());
             return base.FinishedLaunching(app, options);
         }
+        
     }
 }

@@ -25,45 +25,11 @@ namespace AppCliente
 
             if (current == NetworkAccess.Internet)
             {
-                if (Ingresar())
-                {
-
-                    App.MVTelefono.TipoDeTelefonos();
-                    App.MVTelefono.BuscarTelefonos(UidPropietario: new Guid(App.Global1), ParadetroDeBusqueda: "Usuario");
-                    App.MVCorreoElectronico.BuscarCorreos(UidPropietario: new Guid(App.Global1), strParametroDebusqueda: "Usuario");
-                    App.MVDireccion.ObtenerDireccionesUsuario(App.Global1);
-                    //for (int i = 0; i < MVDireccion.ListaDIRECCIONES.Count; i++)
-                    //{
-                    //    MVUbicacion.RecuperaUbicacionDireccion(MVDireccion.ListaDIRECCIONES[i].ID.ToString());
-                    //}
-                    // App.MVUsuarios.obtenerUsuario(App.Global1);
-                    //Application.Current.MainPage = new MasterDetailPage1();
-                    //switch (Device.RuntimePlatform)
-                    //{
-                    //    case Device.iOS:
-                    //        Application.Current.MainPage = new TabsMain();
-                    //        //Application.Current.MainPage = new NavigationPage(new TabsMain());
-                    //        break;
-                    //    case Device.Android:
-                    //        Application.Current.MainPage = new MasterDetailPage1();
-                    //        break;
-                    //    case Device.UWP:
-                    //    case Device.macOS:
-                    //    default:
-                    //        // This is just an example. You wouldn't actually need to do this, since Padding is already 0 by default.
-                    //        break;
-                    //}
-                    //MainPage = new MasterDetailPage1();
-
-                }
-                else
-                {
-                    Application.Current.MainPage = new Login();
-                }
+                Application.Current.MainPage = new MasterMenu();
             }
             else
             {
-                DisplayAlert("Sorry", "Revisa tu conexión a internet e intenta otra vez", "ok");
+                DisplayAlert("Sin internet", "El dispositivo no esta conectado a internet, verifique su conexión.", "Aceptar");
             }
         }
 

@@ -844,8 +844,9 @@ namespace VistaDelModelo
                             UIDEMPRESA = UidEmpresa,
                             STRDESCRIPCION = descripcion,
                             STRNOMBRE = nombre,
-                            STRRUTA = ruta
-                        });
+                            STRRUTA = ruta,
+                            StrCosto = decimal.Parse(item["MCosto"].ToString()).ToString("N2")
+                    });
                     }
                 }
             }
@@ -892,7 +893,7 @@ namespace VistaDelModelo
                     Guid uidseccion = new Guid(item["UidSeccion"].ToString());
                     string stridentificador = item["Identificador"].ToString().ToUpper();
                     string strTiempoDeElaboracion = item["VchTiempoElaboracion"].ToString();
-                    string dbCosto = item["Mcosto"].ToString();
+                    string dbCosto = decimal.Parse(item["Mcosto"].ToString()).ToString("N2");
                     Guid UidSucursal = new Guid(item["UidSucursal"].ToString());
                     Guid uidempresa = new Guid(item["UidEmpresa"].ToString());
                     if (!ListaDePreciosSucursales.Exists(p => p.UID == uidseccion))

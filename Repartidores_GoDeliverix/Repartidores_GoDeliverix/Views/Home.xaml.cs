@@ -13,79 +13,55 @@ namespace Repartidores_GoDeliverix.Views
         static int ContentHeight = (int)(App.ScreenHeight / App.ScreenDensity);
         static int ThresholdMax = Math.Max(ContentHeight, ContentWidth);
         static int ThresholdMin = Math.Min(ContentHeight, ContentWidth);
+        Location location = new Location();
         public Home()
         {
             InitializeComponent();
             if (Device.RuntimePlatform == Device.Android)
             {
-                SLHome.Padding = new Thickness(0,0,0,0);
+                SLHome.Padding = new Thickness(0, 0, 0, 0);
             }
             if (Device.RuntimePlatform == Device.iOS)
             {
-                SLHome.Padding = new Thickness(0,20,0,0);
+                SLHome.Padding = new Thickness(0, 20, 0, 0);
             }
         }
-        
-        private  void BtnMapaEspera_ClickedAsync(object sender, EventArgs e)
-        {
-            
 
-            if (Device.RuntimePlatform == Device.iOS)
-            {
-                //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
-                Device.OpenUri(new Uri("comgooglemaps:center=0,0"));
-            }
-            else if (Device.RuntimePlatform == Device.Android)
-            {
-                // opens the Maps app directly
-                Device.OpenUri(new Uri("geo:0,0"));
-            }
+        private async void BtnMapaEspera_ClickedAsync(object sender, EventArgs e)
+        {
+            location = await Geolocation.GetLocationAsync();
+           await  Map.OpenAsync(location.Latitude, location.Longitude, new MapLaunchOptions { NavigationMode = NavigationMode.None });
+            
         }
 
         private async void BtnMapaSucursalCliente_ClickedAsync(object sender, EventArgs e)
         {
-            var location = await Geolocation.GetLocationAsync();
-            if (Device.RuntimePlatform == Device.iOS)
-            {
-                //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
-                Device.OpenUri(new Uri("comgooglemaps://? saddr="+location.Longitude+","+location.Latitude+"&daddr=" + lblUbicacionSucursal.Text + "&zoom=12"));
-            }
-            else if (Device.RuntimePlatform == Device.Android)
-            {
-                Device.OpenUri(new Uri("geo:" + location.Longitude + "," + location.Latitude + "?q=" + lblUbicacionSucursal.Text+""));
-                // opens the Maps app directly
-                // Device.OpenUri(new Uri("geo:" + location.Latitude + "," + location.Longitude + ""));
-            }
+            string[]  ubicacionSucursal=lblUbicacionSucursal.Text.Split(char.Parse(","));
+            double longitudes = double.Parse(ubicacionSucursal[1]);
+            double latitudes = double.Parse(ubicacionSucursal[0]);
+            location = new Location(latitudes, longitudes);
+            await Map.OpenAsync(location, new MapLaunchOptions { NavigationMode = NavigationMode.Driving });
+            
         }
 
         private async void BtnMapaSucursal_ClickedAsync(object sender, EventArgs e)
         {
-            var location = await Geolocation.GetLocationAsync();
-            if (Device.RuntimePlatform == Device.iOS)
-            {
-                //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
-                Device.OpenUri(new Uri("comgooglemaps://? saddr=" + location.Longitude + "," + location.Latitude + "&daddr=" + lblUbicacionSucursal.Text + "&zoom=12"));
-            }
-            else if (Device.RuntimePlatform == Device.Android)
-            {
-                // opens the Maps app directly
-                Device.OpenUri(new Uri("geo:" + location.Longitude + "," + location.Latitude + "?q=" + lblUbicacionSucursal.Text + ""));
-            }
+            string[] ubicacionSucursal = lblUbicacionSucursal.Text.Split(char.Parse(","));
+            double longitudes = double.Parse(ubicacionSucursal[1]);
+            double latitudes = double.Parse(ubicacionSucursal[0]);
+            location = new Location(latitudes, longitudes);
+            await Map.OpenAsync(location, new MapLaunchOptions { NavigationMode = NavigationMode.Driving });
+            
         }
 
         private async void BtnMapaCliente_ClickedAsync(object sender, EventArgs e)
         {
-            var location = await Geolocation.GetLocationAsync();
-            if (Device.RuntimePlatform == Device.iOS)
-            {
-                //https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
-                Device.OpenUri(new Uri("comgooglemaps://? saddr=" + location.Longitude + "," + location.Latitude + "&daddr=" + lblUbicacionCliente.Text + "&zoom=12"));
-            }
-            else if (Device.RuntimePlatform == Device.Android)
-            {
-                // opens the Maps app directly
-                Device.OpenUri(new Uri("geo:" + location.Longitude + "," + location.Latitude + "?q=" + lblUbicacionCliente.Text + ""));
-            }
+            string[] ubicacionSucursal = lblUbicacionCliente.Text.Split(char.Parse(","));
+            double longitudes = double.Parse(ubicacionSucursal[1]);
+            double latitudes = double.Parse(ubicacionSucursal[0]);
+            location = new Location(latitudes, longitudes);
+            await Map.OpenAsync(location, new MapLaunchOptions { NavigationMode = NavigationMode.Driving });
+
         }
     }
 }

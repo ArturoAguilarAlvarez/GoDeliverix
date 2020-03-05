@@ -1,5 +1,4 @@
 ﻿using System;
-using Com.OneSignal;
 using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
@@ -7,7 +6,6 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using System.Collections.Generic;
-using Com.OneSignal.Abstractions;
 
 namespace AppPrueba.Droid
 {
@@ -20,8 +18,6 @@ namespace AppPrueba.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
             base.OnCreate(savedInstanceState);
-            OneSignal.Current.StartInit("170c0582-a7c3-4b75-b1a8-3fe4a952351f").Settings(new Dictionary<string, bool>() {
-    { IOSSettings.kOSSettingsKeyAutoPrompt, true } }).EndInit();
             global::ZXing.Net.Mobile.Forms.Android.Platform.Init();
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);

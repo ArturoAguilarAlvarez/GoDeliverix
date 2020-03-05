@@ -176,7 +176,7 @@ namespace VistaDelModelo
         //    }
         //}
 
-        public void ObtenerDireccionConGoogle(string strNombreCiudad)
+        public void ObtenerDireccionConGoogle(string strNombreCiudad , string CodigoPais,string CodigoEstado)
         {
             SqlCommand cmd = new SqlCommand();
 
@@ -188,6 +188,12 @@ namespace VistaDelModelo
                 //Dato 1
                 cmd.Parameters.Add("@VchNombreCiudad", SqlDbType.NVarChar, 200);
                 cmd.Parameters["@VchNombreCiudad"].Value = strNombreCiudad;
+                
+                cmd.Parameters.Add("@VchCodigoPais", SqlDbType.NVarChar, 10);
+                cmd.Parameters["@VchCodigoPais"].Value = CodigoPais;
+
+                cmd.Parameters.Add("@VchCodigoEstado", SqlDbType.NVarChar, 200);
+                cmd.Parameters["@VchCodigoEstado"].Value = CodigoEstado;
                 oConexion = new Conexion();
                 ListaDIRECCIONES = new List<VMDireccion>();
                 foreach (DataRow item in oConexion.Busquedas(cmd).Rows)

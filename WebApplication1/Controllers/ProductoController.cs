@@ -14,7 +14,7 @@ namespace WebApplication1.Controllers
         VMProducto MVProducto;
         ResponseHelper Respuesta;
         // GET: api/Profile/5
-        public ResponseHelper GetBuscarProductosCliente(string StrParametroBusqueda, string StrDia, Guid UidEstado, Guid UidColonia, Guid UidBusquedaCategorias, string StrNombreEmpresa)
+        public ResponseHelper GetBuscarProductosCliente(string StrParametroBusqueda, string StrDia, Guid UidEstado, Guid UidColonia, Guid UidBusquedaCategorias, string StrNombreEmpresa = "")
         {
             MVProducto = new VMProducto();
             MVProducto.buscarProductosEmpresaDesdeCliente(StrParametroBusqueda, StrDia, UidEstado, UidColonia, UidBusquedaCategorias, StrNombreEmpresa);

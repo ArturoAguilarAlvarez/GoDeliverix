@@ -63,7 +63,7 @@ namespace AppCliente
                 MasterPage.ListView.SelectedItem = null;
                 //Detail = new NavigationPage(new Login());
             }
-            if (NombreMenu == "Actualizar mi ubicación")
+            if (NombreMenu == "Establecer ubicación")
             {
                 App.MVDireccionDemo = null;
                 //var page = (Page)Activator.CreateInstance(item.TargetType);
@@ -72,11 +72,12 @@ namespace AppCliente
                 //Detail = new NavigationPage(page);
                 IsPresented = false;
                 MasterPage.ListView.SelectedItem = null;
+                App.Navegacion = "HomePage";
+
                 NavigationPage NPScannerCompanyPage = ((NavigationPage)((MasterDetailPage)App.Current.MainPage).Detail);
-                Device.InvokeOnMainThreadAsync(async () =>
-                {
-                    await NPScannerCompanyPage.PushAsync(new SeleccionaColonia());
-                });
+
+                NPScannerCompanyPage.PushAsync(new SeleccionaColonia());
+                
             }
             else
             {

@@ -61,7 +61,6 @@
             </Grid>
             <ActivityIndicator x:Name="AILoading" Grid.Row="1" ></ActivityIndicator>
             <StackLayout Grid.Row="1" x:Name="ScrollView_Productos">
-
                 <ListView x:Name="MyListViewBusquedaProductosHome" ItemTapped="MyListViewBusquedaProductosHome_ItemTapped" VerticalScrollBarVisibility="Always" ItemsSource="{Binding ListaDeProductos}" SelectionMode="None" SeparatorVisibility="None" IsPullToRefreshEnabled="False" HasUnevenRows="True">
                     <ListView.ItemTemplate>
                         <DataTemplate>
@@ -86,15 +85,11 @@
                                                     </ff:CachedImage.Transformations>
                                                 </ff:CachedImage>
                                             </StackLayout>
-
                                             <StackLayout Grid.Column="1"  Orientation="Vertical">
-                                                <Label Text="{Binding STRNOMBRE}" MaxLines="1" LineBreakMode="CharacterWrap" HorizontalOptions="Start"
-                                                           VerticalOptions="Start" FontSize="Medium"/>
-                                                <Label Text="{Binding Empresa}" MaxLines="1" LineBreakMode="CharacterWrap "></Label>
+                                                <Label Text="{Binding STRNOMBRE}" MaxLines="1" LineBreakMode="CharacterWrap" HorizontalOptions="Start" VerticalOptions="Start" FontSize="Medium"/>
+                                                <Label Text="{Binding Empresa}" MaxLines="1" LineBreakMode="TailTruncation"></Label>
                                                 <Label  Text="{Binding STRDESCRIPCION}" MaxLines="1" LineBreakMode="HeadTruncation" FontSize="Micro" HorizontalOptions="Start"/>
-                                                <Label Text="{Binding StrCosto, StringFormat='Desde ${0}'}"
-                                                               x:Name="txtProductoPrecio" Margin="0,30,0,0"
-                                                               HorizontalOptions="End"  LineBreakMode="WordWrap" FontSize="Medium" TextColor="Black"/>
+                                                <Label Text="{Binding StrCosto, StringFormat='${0}'}" x:Name="txtProductoPrecio" Margin="0,30,0,0" HorizontalOptions="End"  LineBreakMode="WordWrap" FontSize="Medium" TextColor="Black"/>
                                             </StackLayout>
                                         </Grid>
                                     </Frame>

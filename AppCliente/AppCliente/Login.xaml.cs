@@ -31,7 +31,7 @@ namespace AppCliente
         {
             InitializeComponent();
             //string currentuserID = (Application.Current.Properties["Userr"].ToString());
-
+            
             LimpiarPerfil();
         }
 

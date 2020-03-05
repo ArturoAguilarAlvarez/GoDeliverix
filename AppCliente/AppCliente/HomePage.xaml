@@ -98,10 +98,10 @@
 
 
                 <StackLayout Grid.Row="0" x:Name="ScrollView_Productos" Orientation="Vertical" VerticalOptions="FillAndExpand">
-                    <ActivityIndicator x:Name="acloading" Scale="3" HeightRequest="50"></ActivityIndicator>
+                    <ActivityIndicator x:Name="acloading" Scale="3" Margin="0,50,0,0" HeightRequest="50"></ActivityIndicator>
                     <ListView x:Name="MyListViewBusquedaProductosHome" ItemTapped="MyListViewBusquedaProductosHome_ItemTapped"
                           VerticalScrollBarVisibility="Always" 
-                      SelectionMode="None" SeparatorVisibility="None" IsPullToRefreshEnabled="false" HasUnevenRows="True">
+                      SelectionMode="None" SeparatorVisibility="None"  IsPullToRefreshEnabled="True" Refreshing="MyListViewBusquedaProductosHome_Refreshing" HasUnevenRows="True">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
@@ -130,8 +130,8 @@
                                                     <Label Text="{Binding STRNOMBRE}" MaxLines="1" LineBreakMode="CharacterWrap" HorizontalOptions="Start"
                                                            VerticalOptions="Start" FontSize="Medium"/>
                                                     <Label Text="{Binding Empresa}" MaxLines="1" LineBreakMode="CharacterWrap "></Label>
-                                                    <Label  Text="{Binding STRDESCRIPCION}" MaxLines="1" LineBreakMode="HeadTruncation" FontSize="Micro" HorizontalOptions="Start"/>
-                                                    <Label Text="{Binding StrCosto, StringFormat='Desde ${0}'}"
+                                                    <Label  Text="{Binding STRDESCRIPCION}" MaxLines="1" LineBreakMode="TailTruncation" FontSize="Micro" HorizontalOptions="Start"/>
+                                                    <Label Text="{Binding StrCosto, StringFormat='${0:C2}'}"
                                                                x:Name="txtProductoPrecio" Margin="0,30,0,0"
                                                                HorizontalOptions="End"  LineBreakMode="WordWrap" FontSize="Medium" TextColor="Black"/>
                                                 </StackLayout>
@@ -208,9 +208,9 @@
                 </StackLayout>
 
 
-                <Label HorizontalOptions="FillAndExpand" Grid.Row="1" VerticalTextAlignment="Center" BackgroundColor="LightGray" HorizontalTextAlignment="Center" x:Name="lbCantidad"></Label>
+                <Label HorizontalOptions="FillAndExpand" Grid.Row="1" VerticalTextAlignment="Center" VerticalOptions="End" BackgroundColor="LightGray" HorizontalTextAlignment="Center" x:Name="lbCantidad"></Label>
 
-                <Button  Grid.Row="2"  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                <Button  Grid.Row="2"  HorizontalOptions="FillAndExpand" VerticalOptions="End"
                     x:Name="btnSeleccionarDireccion" 
                     Clicked="BtnSeleccionarDireccion_Clicked"
                     BackgroundColor="Green" FontSize="Medium"

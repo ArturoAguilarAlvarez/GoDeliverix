@@ -144,12 +144,12 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
-        public ResponseHelper GetObtenerDireccionConDatosDeGoogle(string StrNombreCiudad, string Latitud, string Longitud)
+        public ResponseHelper GetObtenerDireccionConDatosDeGoogle(string StrNombreCiudad,string CodigoEstado,string CodigoPais, string Latitud, string Longitud)
         {
             MVDireccion = new VMDireccion();
             Respuesta = new ResponseHelper();
             MVUbicacion = new VMUbicacion();
-            MVDireccion.ObtenerDireccionConGoogle(StrNombreCiudad);
+            MVDireccion.ObtenerDireccionConGoogle(StrNombreCiudad, CodigoPais, CodigoEstado);
 
             if (MVDireccion.ListaDIRECCIONES.Count != 0)
             {

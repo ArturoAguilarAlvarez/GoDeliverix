@@ -26,13 +26,25 @@ namespace AppCliente
         public SeleccionaColonia()
         {
             InitializeComponent();
-            CargaDesdeMenu();
+            try
+            {
+                CargaDesdeMenu();
+            }
+            catch (Exception)
+            {
+                Device.InvokeOnMainThreadAsync(async () =>
+                {
+                    await DisplayAlert("Alerta", "Te saliste sin que uno de los procesos haya terminado, por favor recarga la pagina", "ACEPTAR");
+                });
+                throw;
+            }
         }
         public async void CargaDesdeMenu()
         {
             try
             {
                 SLCargando.IsVisible = true;
+                SLDatos.IsVisible = false;
                 acLoading.IsRunning = true;
                 acLoading.IsVisible = true;
                 double Latitud;
@@ -52,18 +64,32 @@ namespace AppCliente
                     var oDireccion = new VMDireccion();
                     foreach (var item in placemarks)
                     {
-                        using (HttpClient _webApi = new HttpClient())
+                        ApiService ApiService = new ApiService("/api/Direccion");
+                        Dictionary<string, string> parameters = new Dictionary<string, string>();
+                        parameters.Add("StrNombreCiudad", item.Locality);
+                        parameters.Add("CodigoEstado", item.AdminArea);
+                        parameters.Add("CodigoPais", item.CountryCode);
+                        parameters.Add("Latitud", item.Location.Latitude.ToString());
+                        parameters.Add("Longitud", item.Location.Longitude.ToString());
+                        var result = await ApiService.GET<VMDireccion>(action: "GetObtenerDireccionConDatosDeGoogle", responseType: ApiService.ResponseType.Object, arguments: parameters);
+                        var oReponse = result as ResponseHelper;
+                        if (result != null && oReponse.Status != false)
                         {
-                            var content = "";
-                            var _URL = "" + Helpers.Settings.sitio + "/api/Direccion/GetObtenerDireccionConDatosDeGoogle?StrNombreCiudad=" + item.Locality + "&Latitud=" + item.Location.Latitude + "&Longitud=" + item.Location.Longitude + "";
-                            content = await _webApi.GetStringAsync(_URL);
-                            var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                            oDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
+                            oDireccion = oReponse.Data as VMDireccion;
                             if (oDireccion.ListaDIRECCIONES.Count == 1)
                             {
                                 App.UidEstadoABuscar = oDireccion.ListaDIRECCIONES[0].ESTADO;
                                 break;
                             }
+                        }
+                        else
+                        {
+                            var objeto = new MasterMenuMenuItem { Id = 1, Title = "Busqueda", TargetType = typeof(HomePage), UrlResource = "IconoHomeMenu" };
+                            var Page = (Page)Activator.CreateInstance(objeto.TargetType);
+                            App app = Application.Current as App;
+                            App.Navegacion = Page.GetType().Name;
+                            MasterDetailPage md = (MasterDetailPage)app.MainPage;
+                            md.Detail = new NavigationPage(Page);
                         }
                     }
                     VMDireccion Colonias = new VMDireccion();
@@ -88,33 +114,44 @@ namespace AppCliente
                     map.Pins.Clear();
                     map.Pins.Add(AquiEstoy);
                     var pos = new Position(Latitud, Longitud);
-                    map.MoveToRegion(MapSpan.FromCenterAndRadius(pos, Distance.FromMeters(300)), true);
+                    map.MoveToRegion(MapSpan.FromCenterAndRadius(pos, Distance.FromMiles(0.05)), true);
                     odireccion = oDireccion;
-
-                    SLCargando.IsVisible = false;
-                    acLoading.IsRunning = false;
-                    acLoading.IsVisible = false;
+                    SLColonias.IsVisible = true;
                 }
             }
             catch (FeatureNotSupportedException e)
             {
                 // Handle not supported on device exception
-                await DisplayAlert("Aviso del sistema", "Los servicios de ubicacion no soportados por el dispositivo", "Aceptar");
+                lblMensaje.Text = "Servicios de ubicación no soportados, selecciona una ubicación en el mapa y descubre las colonias disponibles";
+                SLMensaje.IsVisible = true;
+                //await DisplayAlert("Aviso del sistema", "Los servicios de ubicacion no soportados por el dispositivo", "Aceptar");
             }
             catch (FeatureNotEnabledException e)
             {
-                await DisplayAlert("Ubicacion no activa", "Activa el GPS para obtener tu ubicacion", "Aceptar");
+                lblMensaje.Text = "Activa tu ubicación para mostrarte las colonias cercanas a ti, de lo contrario selecciona una ubicación en el mapa y descubre las colonias disponibles";
+                SLMensaje.IsVisible = true;
+
+                //await DisplayAlert("Ubicacion no activa", "Activa el GPS para obtener tu ubicacion", "Aceptar");
             }
             catch (PermissionException e)
             {
                 // Handle permission exception
-                await DisplayAlert("Aviso", "Activa los permisos de ubicacion para continuar", "Aceptar");
+                lblMensaje.Text = "Activa los permisos de ubicación para poder mostrarte las colonias cercanas a ti, de lo contrario selecciona una ubicación en el mapa y descubre las colonias disponibles";
+                SLMensaje.IsVisible = true;
+                //await DisplayAlert("Aviso", "Activa los permisos de ubicacion para continuar", "Aceptar");
             }
             catch (Exception e)
             {
                 // Unable to get location
-                await DisplayAlert("Aviso", "No se puede obtener la ubicacion, intenta otra", "Aceptar");
+                lblMensaje.Text = "Servicio no disponible en esta zona";
+                SLMensaje.IsVisible = true;
+                //await DisplayAlert("Aviso", "No se puede obtener la ubicacion, intenta otra", "Aceptar");
             }
+
+            SLCargando.IsVisible = false;
+            acLoading.IsRunning = false;
+            acLoading.IsVisible = false;
+            SLDatos.IsVisible = true;
         }
 
 
@@ -156,6 +193,8 @@ namespace AppCliente
         {
             try
             {
+                SLColonias.IsVisible = false;
+                SLMensaje.IsVisible = false;
                 var Latitud = e.Point.Latitude;
                 var Longitud = e.Point.Longitude;
                 Pin AquiEstoy = new Pin()
@@ -167,7 +206,7 @@ namespace AppCliente
                 map.Pins.Clear();
                 map.Pins.Add(AquiEstoy);
                 var pos = new Position(Latitud, Longitud);
-                map.MoveToRegion(MapSpan.FromCenterAndRadius(pos, Distance.FromMeters(500)));
+
                 var geo = new Geocoder();
                 var location = new Location();
                 string content = string.Empty;
@@ -176,18 +215,24 @@ namespace AppCliente
 
                 if (location != null)
                 {
+                    var oDireccion = new VMDireccion();
                     foreach (var item in placemarks)
                     {
-                        using (HttpClient _webApi = new HttpClient())
+                        string ciudad = string.Empty;
+                        if (!string.IsNullOrEmpty(item.Locality))
                         {
-                            string ciudad = string.Empty;
-                            if (!string.IsNullOrEmpty(item.Locality))
+                            ApiService ApiService = new ApiService("/api/Direccion");
+                            Dictionary<string, string> parameters = new Dictionary<string, string>();
+                            parameters.Add("StrNombreCiudad", item.Locality);
+                            parameters.Add("CodigoEstado", item.AdminArea);
+                            parameters.Add("CodigoPais", item.CountryCode);
+                            parameters.Add("Latitud", item.Location.Latitude.ToString());
+                            parameters.Add("Longitud", item.Location.Longitude.ToString());
+                            var result = await ApiService.GET<VMDireccion>(action: "GetObtenerDireccionConDatosDeGoogle", responseType: ApiService.ResponseType.Object, arguments: parameters);
+                            var oReponse = result as ResponseHelper;
+                            if (result != null && oReponse.Status != false)
                             {
-                                ciudad = item.Locality;
-                                string _URL = "" + Helpers.Settings.sitio + "/api/Direccion/GetObtenerDireccionConDatosDeGoogle?StrNombreCiudad=" + ciudad + "&Latitud=" + item.Location.Latitude + "&Longitud=" + item.Location.Longitude + "";
-                                await Task.Run(async () => { content = await _webApi.GetStringAsync(_URL); });
-                                string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
-                                var oDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
+                                oDireccion = oReponse.Data as VMDireccion;
                                 if (oDireccion.ListaDIRECCIONES.Count == 1)
                                 {
                                     VMDireccion Colonias = new VMDireccion();
@@ -205,57 +250,76 @@ namespace AppCliente
                                           });
                                         MypickerColonia.Items.Add(items["Nombre"].ToString());
                                     }
+                                    map.MoveToRegion(MapSpan.FromCenterAndRadius(pos, Distance.FromMiles(0.05)));
+                                    SLColonias.IsVisible = true;
+                                    odireccion = oDireccion;
                                     break;
                                 }
                             }
                             else
                             {
-                                await DisplayAlert("Zona no disponible", "No existe servicio en el punto marcado", "Aceptar");
+                                lblMensaje.Text = "Sin servicio en esta ubicación, elige otra ";
+                                SLMensaje.IsVisible = true;
+                               // await DisplayAlert("Error extraño", "Ocurrio algo mal al recuperar la ubicación intenta de nuevo por favor", "aceptar");
                             }
                         }
+                        else
+                        {
+                            lblMensaje.Text = "Sin servicio en esta ubicación, elige otra";
+                            SLMensaje.IsVisible = true;
+                            //await DisplayAlert("Zona no disponible", "No existe servicio en el punto marcado", "Aceptar");
+                        }
+
                     }
+                    
                 }
             }
             catch (FeatureNotSupportedException)
             {
                 // Handle not supported on device exception
-                await DisplayAlert("Aviso del sistema", "Los servicios de ubicacion no soportados por el dispositivo", "Aceptar");
+                lblMensaje.Text = "Servicios de ubicación no soportados, selecciona una ubicación en el mapa y descubre las colonias disponibles";
+                SLMensaje.IsVisible = true;
+                //await DisplayAlert("Aviso del sistema", "Los servicios de ubicacion no soportados por el dispositivo", "Aceptar");
             }
             catch (FeatureNotEnabledException)
             {
-                await DisplayAlert("Ubicacion no activa", "Activa el GPS para obtener tu ubicacion", "Aceptar");
+                lblMensaje.Text = "Activa tu ubicación para mostrarte las colonias cercanas a ti, de lo contrario selecciona una ubicación en el mapa y descubre las colonias disponibles";
+                SLMensaje.IsVisible = true;
+
+                //await DisplayAlert("Ubicacion no activa", "Activa el GPS para obtener tu ubicacion", "Aceptar");
             }
             catch (PermissionException)
             {
                 // Handle permission exception
-                await DisplayAlert("Aviso", "Activa los permisos de ubicacion para continuar", "Aceptar");
+                lblMensaje.Text = "Activa los permisos de ubicación para poder mostrarte las colonias cercanas a ti, de lo contrario selecciona una ubicación en el mapa y descubre las colonias disponibles";
+                SLMensaje.IsVisible = true;
+                //await DisplayAlert("Aviso", "Activa los permisos de ubicacion para continuar", "Aceptar");
             }
             catch (Exception)
             {
                 // Unable to get location
-                await DisplayAlert("Aviso", "No se puede obtener la ubicacion", "Aceptar");
+                lblMensaje.Text = "Servicio no disponible en esta zona";
+                SLMensaje.IsVisible = true;
+                //await DisplayAlert("Aviso", "No se puede obtener la ubicacion, intenta otra", "Aceptar");
             }
+
+            SLCargando.IsVisible = false;
+            acLoading.IsRunning = false;
+            acLoading.IsVisible = false;
+            SLDatos.IsVisible = true;
 
         }
 
         private async void BtnCancelar_Clicked(object sender, EventArgs e)
         {
-            if (oPagina != null)
+            if (App.MVDireccionDemo == null && App.MVDireccion.ListaDIRECCIONES.Count == 0)
             {
-                if (App.MVDireccionDemo == null && App.MVDireccion.ListaDIRECCIONES.Count == 0)
-                {
-                    await DisplayAlert("Colonia no seleccionada", "No se ha establecido una colonia para buscar", "Aceptar");
-                }
-                else if (App.MVDireccion.ListaDIRECCIONES.Count > 0 && App.MVDireccionDemo == null)
-                {
-                    App.MVDireccionDemo = App.MVDireccion;
-                    await Navigation.PopAsync();
-                }
+                await DisplayAlert("Colonia no seleccionada", "No se ha establecido una colonia para buscar", "Aceptar");
             }
             else
             {
-                Navigation.InsertPageBefore(new HomePage(), this);
-
+                App.MVDireccionDemo = App.MVDireccion;
+                await Navigation.PopAsync();
             }
         }
     }

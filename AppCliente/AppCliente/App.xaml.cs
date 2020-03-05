@@ -66,41 +66,36 @@ namespace AppCliente
         public App()
         {
             InitializeComponent();
+
             SetCultureToUSEnglish();
             Usuario = AppCliente.Helpers.Settings.UserName;
             Contrasena = AppCliente.Helpers.Settings.Password;
             var current = Connectivity.NetworkAccess;
-            if (string.IsNullOrEmpty(Usuario) || string.IsNullOrEmpty(Contrasena))
+            if (current == NetworkAccess.Internet)
             {
-                // MainPage = new NavigationPage(new Login());
-                MainPage = new MasterMenu();
-
-            }
-            else
-            {
-                if (current == NetworkAccess.Internet)
+                if (string.IsNullOrEmpty(Usuario) || string.IsNullOrEmpty(Contrasena))
                 {
-
+                    MainPage = new MasterMenu();
+                }
+                else
+                {
                     if (Ingresar().Result)
                     {
                         MVDireccion.ObtenerDireccionesUsuario(Global1);
-
                         MainPage = new MasterMenu();
-
                     }
                     else
                     {
                         MainPage = new NavigationPage(new MasterMenu());
-                        //MainPage = new NavigationPage(new Login());
                     }
                 }
-                else
-                {
-                    MainPage = new NavigationPage(new ErrorConectividadPage());
-                }
             }
-
+            else
+            {
+                MainPage = new NavigationPage(new ErrorConectividadPage());
+            }
         }
+
 
         private void OnHandleNotificationOpened(Com.OneSignal.Abstractions.OSNotificationOpenedResult result)
         {
@@ -131,36 +126,39 @@ namespace AppCliente
 
         protected override void OnResume()
         {
-            MasterMenuMenuItem objeto = new MasterMenuMenuItem { Id = 0, Title = "", TargetType = typeof(HomePage) };
-
-            switch (Navegacion)
+            if (!string.IsNullOrEmpty(Navegacion))
             {
-                case "Login":
-                    objeto = new MasterMenuMenuItem { Id = 3, Title = "Inciar sesión", TargetType = typeof(Login) };
-                    break;
-                case "UsuarioDirecciones":
-                    objeto = new MasterMenuMenuItem { Id = 3, Title = "Direcciones", TargetType = typeof(UsuarioDirecciones) };
-                    break;
-                case "HomePage":
-                    objeto = new MasterMenuMenuItem { Id = 3, Title = "Busqueda", TargetType = typeof(HomePage) };
-                    break;
-                case "Monedero":
-                    objeto = new MasterMenuMenuItem { Id = 3, Title = "Monedero", TargetType = typeof(Monedero) };
-                    break;
-                case "HistorialPage":
-                    objeto = new MasterMenuMenuItem { Id = 3, Title = "Historial", TargetType = typeof(HistorialPage) };
-                    break;
-                case "PerfilTelefonoPage":
-                    objeto = new MasterMenuMenuItem { Id = 3, Title = "Telefonos", TargetType = typeof(PerfilTelefonoPage) };
-                    break;
-                case "PerfilGeneralPage":
-                    objeto = new MasterMenuMenuItem { Id = 3, Title = "Perfil", TargetType = typeof(PerfilGeneralPage) };
-                    break;
+                MasterMenuMenuItem objeto = new MasterMenuMenuItem { Id = 0, Title = "", TargetType = typeof(HomePage) };
+
+                switch (Navegacion)
+                {
+                    case "Login":
+                        objeto = new MasterMenuMenuItem { Id = 3, Title = "Inciar sesión", TargetType = typeof(Login) };
+                        break;
+                    case "UsuarioDirecciones":
+                        objeto = new MasterMenuMenuItem { Id = 3, Title = "Direcciones", TargetType = typeof(UsuarioDirecciones) };
+                        break;
+                    case "HomePage":
+                        objeto = new MasterMenuMenuItem { Id = 3, Title = "Busqueda", TargetType = typeof(HomePage) };
+                        break;
+                    case "Monedero":
+                        objeto = new MasterMenuMenuItem { Id = 3, Title = "Monedero", TargetType = typeof(Monedero) };
+                        break;
+                    case "HistorialPage":
+                        objeto = new MasterMenuMenuItem { Id = 3, Title = "Historial", TargetType = typeof(HistorialPage) };
+                        break;
+                    case "PerfilTelefonoPage":
+                        objeto = new MasterMenuMenuItem { Id = 3, Title = "Telefonos", TargetType = typeof(PerfilTelefonoPage) };
+                        break;
+                    case "PerfilGeneralPage":
+                        objeto = new MasterMenuMenuItem { Id = 3, Title = "Perfil", TargetType = typeof(PerfilGeneralPage) };
+                        break;
+                }
+                var Page = (Page)Activator.CreateInstance(objeto.TargetType);
+                App app = Application.Current as App;
+                MasterDetailPage md = (MasterDetailPage)app.MainPage;
+                md.Detail = new NavigationPage(Page);
             }
-            var Page = (Page)Activator.CreateInstance(objeto.TargetType);
-            App app = Application.Current as App;
-            MasterDetailPage md = (MasterDetailPage)app.MainPage;
-            md.Detail = new NavigationPage(Page);
         }
 
         protected async Task<bool> Ingresar()
@@ -172,12 +170,15 @@ namespace AppCliente
                 id = MVAcceso.Ingresar(Usuario, Contrasena);
                 try
                 {
-                    using (HttpClient _WebApiGoDeliverix = new HttpClient())
+                    ApiService ApiService = new ApiService("/api/Profile");
+                    var parameters = new Dictionary<string, string>();
+                    parameters.Add("Usuario", Usuario);
+                    parameters.Add("Contrasena", Contrasena);
+                    var result = await ApiService.GET<VMCategoria>(action: "Get", responseType: ApiService.ResponseType.Object, arguments: parameters);
+                    var oReponse = result as ResponseHelper;
+                    if (result != null && oReponse.Status != false)
                     {
-                        string url = "" + Helpers.Settings.sitio + "/api/Profile/GET?Usuario=" + Usuario + "&Contrasena=" + Contrasena + "";
-
-                        string content = await _WebApiGoDeliverix.GetStringAsync(url);
-                        id = new Guid(content = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString());
+                        id = new Guid(oReponse.Data.ToString());
                     }
 
                     Guid UidUsuario = id;

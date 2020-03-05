@@ -1,4 +1,5 @@
 ﻿using DBControl;
+using System;
 using System.Data;
 
 namespace VistaDelModelo
@@ -25,6 +26,17 @@ namespace VistaDelModelo
             return Resultado;
         }
 
-
+        public bool HayInternet()
+        {
+            try
+            {
+                System.Net.IPHostEntry host = System.Net.Dns.GetHostEntry("https://www.godeliverix.net");
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

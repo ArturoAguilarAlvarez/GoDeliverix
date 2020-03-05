@@ -9,25 +9,33 @@
              x:Class="AppCliente.SeleccionaColonia">
     <ContentPage.Content>
         <ContentView x:Name="popupLoadingView" BackgroundColor="#C0808080"  IsVisible="True" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
-
-            <StackLayout x:Name="SLDatos" Orientation="Vertical" HorizontalOptions="FillAndExpand" BackgroundColor="White" VerticalOptions="FillAndExpand" Padding="10,10,10,5">
-                <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-                    <maps:Map Grid.Row="0" x:Name="map" Margin="10"
+            <StackLayout HorizontalOptions="FillAndExpand" BackgroundColor="White" VerticalOptions="FillAndExpand">
+                <StackLayout x:Name="SLDatos" Orientation="Vertical"  Padding="10,10,10,5" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                    <StackLayout VerticalOptions="FillAndExpand" Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                        <maps:Map MapType="Street" Grid.Row="0" x:Name="map" Margin="10" 
                               MapClicked="Map_MapClicked"
                       HasZoomEnabled="True"                      
-                      VerticalOptions="FillAndExpand" />
-                    <Label  TextColor="Black" VerticalOptions="Start"  HorizontalOptions="Center" VerticalTextAlignment="Center" FontSize="20" Text="La colonia nos ayuda a mostrar los productos disponibles"></Label>
-                    <Picker   x:Name="MypickerColonia" Title="Ver colonias" SelectedIndexChanged="MypickerColonia_SelectedIndexChanged"></Picker>
-                    <Grid>
-                        <Button Text="Confirmar" Grid.Column="0" BackgroundColor="Green" x:Name="BtnConfirmarColonia" TextColor="White" Clicked="BtnConfirmarColonia_Clicked"></Button>
-                        <Button Text="Cancelar" Grid.Column="1" BackgroundColor="Red" x:Name="BtnCancelar" TextColor="White" Clicked="BtnCancelar_Clicked"></Button>
-                    </Grid>
+                      VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HeightRequest="300" />
+
+                        <StackLayout x:Name="SLMensaje" HorizontalOptions="Fill" IsVisible="False" VerticalOptions="Fill">
+                            <Label x:Name="lblMensaje" FontSize="20" HorizontalTextAlignment="Center"></Label>
+                        </StackLayout>
+                        <StackLayout x:Name="SLColonias" HorizontalOptions="Fill" IsVisible="False" VerticalOptions="Fill">
+                            <Label  TextColor="Black" VerticalOptions="Start"  HorizontalOptions="Center" VerticalTextAlignment="Center" FontSize="20" Text="La colonia nos ayuda a mostrar los productos disponibles"></Label>
+                            <Picker   x:Name="MypickerColonia" Title="Ver colonias" SelectedIndexChanged="MypickerColonia_SelectedIndexChanged"></Picker>
+                            <Grid>
+                                <Button Text="Confirmar" Grid.Column="0" BackgroundColor="Green" x:Name="BtnConfirmarColonia" TextColor="White" Clicked="BtnConfirmarColonia_Clicked"></Button>
+                                <Button Text="Cancelar" Grid.Column="1" BackgroundColor="Red" x:Name="BtnCancelar" TextColor="White" Clicked="BtnCancelar_Clicked"></Button>
+                            </Grid>
+                        </StackLayout>
+
+                    </StackLayout>
                 </StackLayout>
                 <StackLayout x:Name="SLCargando" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-                    <ActivityIndicator  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" x:Name="acLoading"></ActivityIndicator>
+                    <ActivityIndicator  HorizontalOptions="FillAndExpand" Scale="3" VerticalOptions="FillAndExpand" x:Name="acLoading"></ActivityIndicator>
                 </StackLayout>
-                
             </StackLayout>
+
         </ContentView>
     </ContentPage.Content>
 </ContentPage>
