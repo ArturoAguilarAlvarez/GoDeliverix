@@ -3,7 +3,74 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AppCliente.RegistroPaso3">
     <ContentPage.Content>
-        <ScrollView Padding="40,0,40,0">
+        <ScrollView
+            Padding="40,20,40,20">
+            <FlexLayout
+                Direction="Column"
+                JustifyContent="SpaceBetween">
+                <StackLayout
+                    Orientation="Vertical"
+                    HorizontalOptions="FillAndExpand">
+
+                    <StackLayout 
+                        Margin="20"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
+                        <Label
+                            FontAttributes="Bold"
+                            TextColor="Black"
+                            FontSize="22" 
+                            Text="Datos personales">
+                        </Label>
+                        <StackLayout
+                            BackgroundColor="Black"
+                            HorizontalOptions="Center">
+                            <Label
+                                TextColor="White"
+                                Padding="10,0,10,0"
+                                Text="3/5">
+                            </Label>
+                        </StackLayout>
+                    </StackLayout>
+
+                    <StackLayout
+                        Orientation="Vertical"
+                        HorizontalOptions="FillAndExpand">
+                        <Label Text="Nombre(s)*"></Label>
+                        <Entry Placeholder="Nombre" x:Name="txtNombre" />
+                    </StackLayout>
+
+                    <StackLayout
+                        Orientation="Vertical"
+                        HorizontalOptions="FillAndExpand">
+                        <Label Text="Apellido Paterno*"></Label>
+                        <Entry Placeholder="Apellido Paterno"  x:Name="txtApellidoP"/>
+                    </StackLayout>
+
+                    <StackLayout
+                        Orientation="Vertical"
+                        HorizontalOptions="FillAndExpand">
+                        <Label Text="Apellido Materno*"></Label>
+                        <Entry Placeholder="Apellido Materno"  x:Name="txtApellidoM"/>
+                    </StackLayout>
+
+                    <StackLayout
+                        Orientation="Vertical"
+                        HorizontalOptions="FillAndExpand">
+                        <Label Text="Fecha de Nacimiento"></Label>
+                        <DatePicker x:Name="txtFechaNacimiento" Format="yyyy-dd-MM"></DatePicker>
+                    </StackLayout>
+                </StackLayout>
+
+                <Button 
+                    Text="Siguiente" 
+                    BackgroundColor="#dd5d16" 
+                    Clicked="Button_Siguiente" 
+                    TextColor="White">
+                </Button>
+            </FlexLayout>
+        </ScrollView>
+        <!--<ScrollView Padding="40,0,40,0">
             <StackLayout>
                 <Label 
                 HorizontalOptions="Center" 
@@ -21,13 +88,15 @@
                 <DatePicker x:Name="txtFechaNacimiento" Grid.Row="11"  Format="yyyy-dd-MM"></DatePicker>
 
 
-                <!--<Button 
+                -->
+        <!--<Button 
                 VerticalOptions="CenterAndExpand"
                 HorizontalOptions="Center" 
                 Text="Siguiente" 
                 TextColor="White"
                 BackgroundColor="#51406A" 
                 Clicked="Button_Siguiente"/>-->
+        <!--
 
                 <Button 
                 Text="Siguiente" 
@@ -40,6 +109,6 @@
 
                 <Label HorizontalOptions="End" VerticalOptions="End" Text="3/5"></Label>
             </StackLayout>
-        </ScrollView>
+        </ScrollView>-->
     </ContentPage.Content>
 </ContentPage>

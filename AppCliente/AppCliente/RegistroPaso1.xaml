@@ -4,8 +4,59 @@
              x:Class="AppCliente.RegistroPaso1">
     <ContentPage.Content>
 
-        <StackLayout Padding="40,0,40,0">
+        <FlexLayout 
+            Padding="40,20,40,20"            
+            Direction="Column"
+            JustifyContent="SpaceBetween">
 
+            <StackLayout
+                Orientation="Vertical">
+
+                <Image Source="IconoRegistro.png"
+                  VerticalOptions="End"
+                  HorizontalOptions="Center"
+                  HeightRequest="200"
+                  WidthRequest="200"
+                  ></Image>
+                
+                <StackLayout 
+                    Margin="20"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                    <Label
+                        FontAttributes="Bold"
+                        TextColor="Black"
+                        FontSize="22" 
+                        Text="Bienvenido a GoDeliverix">
+                    </Label>
+                    <StackLayout
+                        BackgroundColor="Black"
+                        HorizontalOptions="Center">
+                        <Label
+                            TextColor="White"
+                            Padding="10,0,10,0"
+                            Text="1/5">
+                        </Label>
+                    </StackLayout>
+                </StackLayout>
+                <Label
+                    Text="Con GoDeliverix encuentras lo que necesitas desde la comodidad de su casa"
+                    HorizontalOptions="Center"
+                    HorizontalTextAlignment="Center">
+                </Label>
+
+            </StackLayout>
+
+            <Button 
+                Text="Siguiente" 
+                BackgroundColor="#dd5d16" 
+                Clicked="Button_Siguiente" 
+                TextColor="White">
+            </Button>
+
+        </FlexLayout>
+
+        <!--<StackLayout Padding="40,0,40,0">
             <Image Source="IconoRegistro.png"
                   VerticalOptions="End"
                   HorizontalOptions="Center"
@@ -25,24 +76,18 @@
                 Con GoDeliverix encuentras lo que necesitas desde la comodidad de su casa
             </Label>
 
-            <!--<Button 
+            -->
+        <!--<Button 
                     VerticalOptions="CenterAndExpand"
                     HorizontalOptions="Center" 
                 Text="Siguiente" 
                 TextColor="White"
                 BackgroundColor="#51406A" 
                 Clicked="Button_Siguiente"/>-->
-            <Button 
-                Text="Siguiente" 
-                BackgroundColor="#51406A" 
-                Clicked="Button_Siguiente" 
-                Grid.Row="7" 
-                TextColor="White"                     
-                VerticalOptions="CenterAndExpand"
-                HorizontalOptions="Fill" />
+        <!--
+            
             <Label HorizontalOptions="End" VerticalOptions="End" Text="1/5"></Label>
+        </StackLayout>-->
 
-
-        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

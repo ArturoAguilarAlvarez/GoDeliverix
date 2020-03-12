@@ -3,7 +3,59 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AppCliente.RegistroPaso4">
     <ContentPage.Content>
-        <StackLayout Padding="40,0,40,0">
+        <FlexLayout
+            Direction="Column"
+            JustifyContent="SpaceBetween"
+            Padding="40,20,40,20">
+            <StackLayout
+                Orientation="Vertical"
+                HorizontalOptions="FillAndExpand">
+
+                <StackLayout 
+                        Margin="20"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
+                    <Label
+                            FontAttributes="Bold"
+                            TextColor="Black"
+                            FontSize="22" 
+                            Text="Datos de contacto">
+                    </Label>
+                    <StackLayout
+                            BackgroundColor="Black"
+                            HorizontalOptions="Center">
+                        <Label
+                                TextColor="White"
+                                Padding="10,0,10,0"
+                                Text="4/5">
+                        </Label>
+                    </StackLayout>
+                </StackLayout>
+
+                <StackLayout
+                    Orientation="Vertical"
+                    HorizontalOptions="FillAndExpand">
+                    <Label Text="Correo Electronico*"></Label>
+                    <Entry Placeholder="Correo Electronico" x:Name="txrCorreo" Keyboard="Email"/>
+                </StackLayout>
+
+                <StackLayout
+                    Orientation="Vertical"
+                    HorizontalOptions="FillAndExpand">
+                    <Label Text="Numero de Telefono*"></Label>
+                    <Entry Placeholder="Numero de Telefono"  x:Name="txtNumeroTelefono" Keyboard="Telephone"/>
+                </StackLayout>
+            </StackLayout>
+            
+            <Button 
+                Text="Siguiente" 
+                BackgroundColor="#dd5d16" 
+                Clicked="Button_Guardar" 
+                TextColor="White">
+            </Button>
+        </FlexLayout>
+        
+        <!--<StackLayout Padding="40,0,40,0">
             <Label 
                 HorizontalOptions="Center" 
                 FontAttributes="Bold"  
@@ -15,13 +67,13 @@
             <Entry Placeholder="Correo*" x:Name="txrCorreo" Keyboard="Email"/>
             <Entry Placeholder="NumeroTelefono*"  x:Name="txtNumeroTelefono" Keyboard="Telephone" Grid.Column="0"/>
 
-            <!--<Button 
+            --><!--<Button 
                 VerticalOptions="CenterAndExpand"
                 HorizontalOptions="Center" 
                 Text="Siguiente" 
                 TextColor="White"
                 BackgroundColor="#51406A" 
-                Clicked="Button_Guardar"/>-->
+                Clicked="Button_Guardar"/>--><!--
 
             <Button 
                 Text="Siguiente" 
@@ -33,6 +85,6 @@
                 HorizontalOptions="Fill" />
 
             <Label HorizontalOptions="End" VerticalOptions="End" Text="4/5"></Label>
-        </StackLayout>
+        </StackLayout>-->
     </ContentPage.Content>
 </ContentPage>

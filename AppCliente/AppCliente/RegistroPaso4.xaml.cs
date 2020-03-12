@@ -48,17 +48,17 @@ namespace AppCliente
                     }
                     else
                     {
-                        DisplayAlert("Error", "Correo no disponible", "OK");
+                        DisplayAlert("Error", "Correo no disponible", "Aceptar");
                     }
                 }
                 else
                 {
-                    DisplayAlert("Error", "Correo no valido", "OK");
+                    DisplayAlert("Error", "El correo electronico ingresado no es valido", "Aceptar");
                 }
             }
             else
             {
-                DisplayAlert("Error", "Los campos de Correo y numero telefonico son obligatorios", "OK");
+                DisplayAlert("Error", "Ingrese los datos requeridos", "Aceptar");
             }
         }
 

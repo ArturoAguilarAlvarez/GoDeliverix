@@ -36,12 +36,12 @@ namespace AppCliente
                 }
                 else
                 {
-                    DisplayAlert("Error", "Agregar todos los campos", "OK");
+                    DisplayAlert("Error", "Ingrese los datos requeridos", "Aceptar");
                 }
             }
             else
             {
-                DisplayAlert("Error", "Debes ser mayor de 14 años", "OK");
+                DisplayAlert("Error", "Debes ser mayor de 14 años", "Aceptar");
             }
             
 

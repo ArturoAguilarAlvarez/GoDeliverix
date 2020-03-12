@@ -42,13 +42,15 @@ namespace AppCliente
             this.fechaNacimiento = fechaNacimiento;
             this.telefono = telefono;
             this.correo = correo;
+
+            this.SetSummaryData();
         }
         private async void Button_Siguiente(object sender, EventArgs e)
         {
             Guid uidusuaro = Guid.NewGuid();
             Guid uidcorreo = Guid.NewGuid();
 
-            var action = await DisplayAlert("Términos y condiciones", "He leído y acepto los términos y condiciones", "Si", "No");
+            var action = await DisplayAlert("Términos y condiciones", "He leído y acepto los términos y condiciones", "Aceptar", "Cancelar");
             if (action)
             {
                 //_client.BaseAddress = new Uri("" + Helpers.Settings.sitio + "/api/");
@@ -64,7 +66,7 @@ namespace AppCliente
                     bool respuesta = bool.Parse(obj.ToString());
                     if (respuesta)
                     {
-                        GenerateMessage("Registro existoso!", "Se ha enviado un correo de activacion al correo \n" + correo + "", "OK");
+                        GenerateMessage("Registro existoso!", "Se ha enviado un correo de activacion al correo \n" + correo + "", "Aceptar");
                         Application.Current.MainPage = new NavigationPage(new Login());
 
                         Guid UidTelefono = Guid.NewGuid();
@@ -83,6 +85,16 @@ namespace AppCliente
               Tittle,
               Message,
               TextOption);
+        }
+
+        private void SetSummaryData()
+        {            
+            txtUsuario.Text = this.usuario;
+            txtNombre.Text = $"{this.nombre} {this.apellidoP} {this.apellidoM}";
+            txtFechaNacimiento.Date = DateTime.Parse(this.fechaNacimiento);
+            txrCorreo.Text = this.correo;
+            txtNumeroTelefono.Text = this.telefono;
+
         }
     }
 }

@@ -44,22 +44,22 @@ namespace AppCliente
                         }
                         else
                         {
-                            await DisplayAlert("Error", "Los campos de contraseña no coninciden", "OK");
+                            await DisplayAlert("Datos Invalidos", "Las contraseña ingresada no coincide", "Aceptar");
                         }
                     }
                     else
                     {
-                        await DisplayAlert("Error", "Usuario existente", "OK");
+                        await DisplayAlert("Datos Invalidos", "El usuario ingresado ya existe", "Aceptar");
                     }
                 }
                 else
                 {
-                    await DisplayAlert("Error", "Seleccione otra contraseña mas segura que sea igual o mayor a 8 digitos ", "OK");
+                    await DisplayAlert("Datos Invalidos", "La contraseña debe contener minimo 8 digitos", "Aceptar");
                 }
             }
             else
             {
-                await DisplayAlert("Error", "Ingrese todos los datos", "OK");
+                await DisplayAlert("Datos Invalidos", "Ingrese los datos requeridos", "Aceptar");
             }
         }
     }

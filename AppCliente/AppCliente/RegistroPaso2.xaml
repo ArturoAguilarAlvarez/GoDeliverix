@@ -3,7 +3,67 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AppCliente.RegistroPaso2">
     <ContentPage.Content>
-        <StackLayout  Padding="40,0,40,0">
+        <FlexLayout
+            Padding="40,20,40,20"
+            Direction="Column"
+            JustifyContent="SpaceBetween">
+
+            <StackLayout
+                Orientation="Vertical"
+                HorizontalOptions="FillAndExpand">
+
+                <StackLayout 
+                    Margin="20"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                    <Label
+                        FontAttributes="Bold"
+                        TextColor="Black"
+                        FontSize="22" 
+                        Text="Datos de usuario">
+                    </Label>
+                    <StackLayout
+                        BackgroundColor="Black"
+                        HorizontalOptions="Center">
+                        <Label
+                            TextColor="White"
+                            Padding="10,0,10,0"
+                            Text="2/5">
+                        </Label>
+                    </StackLayout>
+                </StackLayout>
+
+                <StackLayout
+                    Orientation="Vertical"
+                    HorizontalOptions="FillAndExpand">
+                    <Label Text="Nombre de usuario*"></Label>
+                    <Entry x:Name="txtUsuario" Placeholder="Nombre de Usuario"></Entry>
+                </StackLayout>
+
+                <StackLayout
+                    Orientation="Vertical"
+                    HorizontalOptions="FillAndExpand">
+                    <Label Text="Contraseña*"></Label>
+                    <Entry x:Name="txtContrasena1" IsPassword = "true" Placeholder="Contraseña"></Entry>
+                </StackLayout>
+
+                <StackLayout
+                    Orientation="Vertical"
+                    HorizontalOptions="FillAndExpand">
+                    <Label Text="Confirmar Contraseña*"></Label>
+                    <Entry x:Name="txtContrasena2" IsPassword = "true" Placeholder="Confirmar Contraseña"></Entry>
+                </StackLayout>
+            </StackLayout>
+
+            <Button 
+                Text="Siguiente" 
+                BackgroundColor="#dd5d16" 
+                Clicked="Button_Siguiente" 
+                TextColor="White">
+            </Button>
+
+        </FlexLayout>
+        <!--<StackLayout  Padding="40,0,40,0">
             <Label 
                 Text="Crea tu Usuario"
                 HorizontalOptions="Center" 
@@ -49,13 +109,15 @@
                 </Grid>
             </StackLayout> 
             
-            <!--<Button 
+            -->
+        <!--<Button 
                 VerticalOptions="CenterAndExpand"
                 HorizontalOptions="Center" 
                 Text="Siguiente" 
                 TextColor="White"
                 BackgroundColor="#51406A" 
                 Clicked="Button_Siguiente"/>-->
+        <!--
 
             <Button 
                 Text="Siguiente" 
@@ -67,6 +129,6 @@
                 HorizontalOptions="Fill" />
 
             <Label HorizontalOptions="End" VerticalOptions="End" Text="2/5"></Label>
-        </StackLayout>
+        </StackLayout>-->
     </ContentPage.Content>
 </ContentPage>

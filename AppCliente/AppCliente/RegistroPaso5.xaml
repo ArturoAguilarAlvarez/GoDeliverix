@@ -3,7 +3,66 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AppCliente.RegistroPaso5">  
     <ContentPage.Content>
-        <StackLayout Padding="40,0,40,0">
+        <ScrollView
+            Padding="40,20,40,20">
+            <FlexLayout
+            Direction="Column"
+            JustifyContent="SpaceBetween">
+                <StackLayout
+                Orientation="Vertical"
+                HorizontalOptions="FillAndExpand">
+                    <StackLayout 
+                        Margin="20"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
+                        <Label
+                            FontAttributes="Bold"
+                            TextColor="Black"
+                            FontSize="22" 
+                            Text="Finalizar registro">
+                        </Label>
+                        <StackLayout
+                            BackgroundColor="Black"
+                            HorizontalOptions="Center">
+                            <Label
+                                TextColor="White"
+                                Padding="10,0,10,0"
+                                Text="5/5">
+                            </Label>
+                        </StackLayout>
+                    </StackLayout>
+
+                    <StackLayout>
+                        <Label Text="Datos de registro" FontAttributes="Bold" Margin="0,0,10,0"></Label>
+                        
+                        <Label Text="Nombre de usuario"></Label>
+                        <Entry x:Name="txtUsuario" IsEnabled="False" Placeholder="Nombre de Usuario"></Entry>
+
+                        <Label Text="Nombre Completo"></Label>
+                        <Entry Placeholder="Nombre" IsEnabled="False" x:Name="txtNombre" />
+
+                        <Label Text="Fecha de Nacimiento"></Label>
+                        <DatePicker x:Name="txtFechaNacimiento" IsEnabled="False" Format="yyyy-dd-MM"></DatePicker>
+
+                        <Label Text="Correo Electronico"></Label>
+                        <Entry Placeholder="Correo Electronico" IsEnabled="False" x:Name="txrCorreo" Keyboard="Email"/>
+
+                        <Label Text="Numero de Telefono"></Label>
+                        <Entry Placeholder="Numero de Telefono" IsEnabled="False"  x:Name="txtNumeroTelefono" Keyboard="Telephone"/>
+                    </StackLayout>
+
+                    <Label Text="Al 'Registrarse', aceptas nuestros terminos y condiciones, Se te enviara un correo para activar tu cuenta"/>
+                </StackLayout>
+
+                <Button 
+                Text="Siguiente" 
+                BackgroundColor="#dd5d16" 
+                Clicked="Button_Siguiente" 
+                TextColor="White">
+                </Button>
+            </FlexLayout>
+        </ScrollView>
+        <!--<StackLayout Padding="40,0,40,0">
             <Label 
                 HorizontalOptions="Center" 
                 FontAttributes="Bold"  
@@ -16,13 +75,13 @@
                HorizontalTextAlignment="Center" />
 
 
-            <!--<Button 
+            --><!--<Button 
                 VerticalOptions="CenterAndExpand"
                 HorizontalOptions="Center" 
                 Text="Siguiente" 
                 TextColor="White"
                 BackgroundColor="Orange" 
-                Clicked="Button_Siguiente"/>-->
+                Clicked="Button_Siguiente"/>--><!--
 
 
             <Button 
@@ -34,6 +93,6 @@
                 VerticalOptions="CenterAndExpand"
                 HorizontalOptions="Fill" />
             <Label HorizontalOptions="End" VerticalOptions="End" Text="5/5"></Label>
-        </StackLayout>
+        </StackLayout>-->
     </ContentPage.Content>
 </ContentPage>
