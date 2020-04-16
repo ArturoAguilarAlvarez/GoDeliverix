@@ -7,11 +7,17 @@
              Title="Sitio en mantenimiento"
              x:Class="AppCliente.SitioEnMantenimiento">
     <ContentPage.Content>
-        <StackLayout Orientation="Vertical" Margin="20,20,20,20">
+        <FlexLayout
+            Direction="Column"
+            JustifyContent="Center"
+            Padding="40,20,40,20">
+            
             <Image Source="IconoGoDeliverix.png"></Image>
-            <Label Text="Sitio en mantenimiento, intente mas tarde"
+            
+            <Label Text="Lost servicios de GoDeliverix no estan disponibles temporalmente, intentelo mas tarde."
                 VerticalOptions="CenterAndExpand" FontSize="30"
                 HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+            
+        </FlexLayout>
     </ContentPage.Content>
 </ContentPage>
