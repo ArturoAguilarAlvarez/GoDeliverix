@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VMComision.cs" />
     <Compile Include="VMMonedero.cs" />
     <Compile Include="VMCorreoElectronico.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

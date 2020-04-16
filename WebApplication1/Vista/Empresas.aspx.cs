@@ -17,6 +17,7 @@ namespace WebApplication1.Vista
         VMEmpresas MVEmpresas;
         VMDireccion MVDireccion;
         VMImagen MVImagen;
+        VMComision MVComision;
         VMTelefono MVTelefono;
         VMCorreoElectronico MVCorreoElectronico;
         ImagenHelper oImagenHelper = new ImagenHelper();
@@ -36,9 +37,10 @@ namespace WebApplication1.Vista
                 MVDireccion = new VMDireccion();
                 MVEmpresas = new VMEmpresas();
                 MVCorreoElectronico = new VMCorreoElectronico();
-
+                MVComision = new VMComision();
                 AccionesDeLaPagina = string.Empty;
                 Session["MVEmpresas"] = MVEmpresas;
+                Session["MVComision"] = MVComision;
                 Session["MVDireccion"] = MVDireccion;
                 Session["MVTelefono"] = MVTelefono;
                 Session["MVImagen"] = MVImagen;
@@ -100,6 +102,8 @@ namespace WebApplication1.Vista
                 DDLDTipoDETelefono.DataValueField = "UidTipo";
                 DDLDTipoDETelefono.DataTextField = "StrNombreTipoDeTelefono";
                 DDLDTipoDETelefono.DataBind();
+
+
 
                 #endregion
                 #region Limites
@@ -241,6 +245,7 @@ namespace WebApplication1.Vista
             else
             {
                 MVEmpresas = (VMEmpresas)Session["MVEmpresas"];
+                MVComision = (VMComision)Session["MVComision"];
                 MVDireccion = (VMDireccion)Session["MVDireccion"];
                 MVTelefono = (VMTelefono)Session["MVTelefono"];
                 MVImagen = (VMImagen)Session["MVImagen"];
@@ -869,11 +874,11 @@ namespace WebApplication1.Vista
             var btnVehiculos = (Master.FindControl("btnVehiculos") as LinkButton);
             var btnModuloProductos = (Master.FindControl("btnModuloProductos") as LinkButton);
             var btnModuloMenu = (Master.FindControl("btnModuloMenu") as LinkButton);
-            
+
             //Obtiene el usuario que esta dentro del sistema
             string UidUsuarioEnSistema = (Master.FindControl("txtUidUsuarioSistema") as TextBox).Text;
             string UidEmpresa = (Master.FindControl("txtUidEmpresaSistema") as TextBox).Text;
-            
+
             //Cambia el menu de navegacion del sistema
             if (MVEmpresas.ObtenerTipoDeEmpresa(valor))
             {
@@ -925,7 +930,9 @@ namespace WebApplication1.Vista
 
             CargaGrid("Direccion");
 
-
+            MVComision.ObtenerComisionPorEmpresa(new Guid(valor));
+            txtValorComision.Text = MVComision.FValor.ToString();
+            chkbxComision.Checked = MVComision.BAbsorveComision;
             //Obtiene el nombre del tipo de teleofno
             foreach (var item in MVTelefono.ListaDeTelefonos)
             {
@@ -1154,7 +1161,7 @@ namespace WebApplication1.Vista
             txtDLote.Text = string.Empty;
             txtDCodigoPostal.Text = string.Empty;
             txtDReferencia.Text = string.Empty;
-
+            txtValorComision.Text = string.Empty;
             //Datos de contacto
             txtDTelefono.Text = string.Empty;
             txtDCorreoElectronico.Text = string.Empty;
@@ -1185,7 +1192,8 @@ namespace WebApplication1.Vista
 
             DDLDTipoDeEmpresa.Enabled = estatus;
             DDLDEstatus.Enabled = estatus;
-
+            chkbxComision.Enabled = estatus;
+            txtValorComision.Enabled = estatus;
             txtIdentificadorDeDireccion.Enabled = estatus;
             btnNuevaDireccion.Enabled = estatus;
             btnNuevoTelefono.Enabled = estatus;
@@ -1211,7 +1219,7 @@ namespace WebApplication1.Vista
             CargaGrid("Telefono");
             CargaGrid("Direccion");
         }
-        
+
         private void TextboxActivados(string ControlDeACcion = "")
         {
             if (AccionesDeLaPagina == "Edicion" && ControlDeACcion == "Desactivado")
@@ -1249,7 +1257,7 @@ namespace WebApplication1.Vista
                 btnNuevo.CssClass = "btn btn-sm btn-default ";
             }
         }
-        
+
 
         private void LimpiarCajasDeTexto()
         {
@@ -1410,7 +1418,7 @@ namespace WebApplication1.Vista
             }
         }
         #endregion
-        
+
         protected void GuardarDatos(object sender, EventArgs e)
         {
             QuitarColorACamposObligatorios();
@@ -1455,7 +1463,7 @@ namespace WebApplication1.Vista
                     #region Guardar datos
 
                     Guid UidEmpresa = Guid.NewGuid();
-                    resultado = MVEmpresas.GuardarEmpresaSuministradora(UidEmpresa, RS, NC, Rfc, TipoDeEmpresa, Estatus);
+                    resultado = MVEmpresas.GuardarEmpresaSuministradora(UidEmpresa, RS, NC, Rfc, TipoDeEmpresa, Estatus, float.Parse(txtValorComision.Text), chkbxComision.Checked);
 
                     //Guarda los telefonos
                     if (MVTelefono.ListaDeTelefonos != null)
@@ -1524,7 +1532,15 @@ namespace WebApplication1.Vista
                     {
                         IdCorreo = Guid.NewGuid();
                     }
-                    resultado = MVEmpresas.ActualizarDatos(UIDEMPRESA,RS, NC, Rfc, TipoDeEmpresa, Estatus);
+                    resultado = MVEmpresas.ActualizarDatos(UidEmpresa: UIDEMPRESA,
+                        RazonSocial: RS,
+                        NombreComercial: NC,
+                        Rfc: Rfc,
+                        TipoDeACtualizacion: "BackSite",
+                        fComision: float.Parse(txtValorComision.Text),
+                        Tipo: TipoDeEmpresa,
+                        Estatus: Estatus,
+                        AbsorveComision: chkbxComision.Checked);
 
                     if (resultado == true)
                     {
@@ -1921,7 +1937,7 @@ namespace WebApplication1.Vista
                 else
                 {
                     Guid UidDireccion = Guid.NewGuid();
-                    MVDireccion.AgregaDireccionALista(UidDireccion,UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, Calle, Calle1, Calle2, Manzana, Lote, CodigoPostal, txtDReferencia.Text, NOMBRECOLONIA, NOMBRECIUDAD, Identificador);
+                    MVDireccion.AgregaDireccionALista(UidDireccion, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, Calle, Calle1, Calle2, Manzana, Lote, CodigoPostal, txtDReferencia.Text, NOMBRECOLONIA, NOMBRECIUDAD, Identificador);
                 }
                 GVDireccion.DataSource = MVDireccion.ListaDIRECCIONES;
                 GVDireccion.DataBind();
@@ -2087,7 +2103,7 @@ namespace WebApplication1.Vista
 
         protected void GuardaTelefono()
         {
-            MVTelefono.AgregaTelefonoALista( DDLDTipoDETelefono.SelectedItem.Value.ToString(), txtDTelefono.Text, DDLDTipoDETelefono.SelectedItem.Text.ToString());
+            MVTelefono.AgregaTelefonoALista(DDLDTipoDETelefono.SelectedItem.Value.ToString(), txtDTelefono.Text, DDLDTipoDETelefono.SelectedItem.Text.ToString());
             DDLDTipoDETelefono.SelectedIndex = -1;
             txtDTelefono.Text = string.Empty;
             DDLDTipoDETelefono.Enabled = false;
@@ -2304,6 +2320,17 @@ namespace WebApplication1.Vista
         protected void BtnCerrarPanelMensaje_Click(object sender, EventArgs e)
         {
             PanelMensaje.Visible = false;
+        }
+
+        protected void txtValorComision_TextChanged(object sender, EventArgs e)
+        {
+            float valorCampoDeTexto;
+            if (!float.TryParse(txtValorComision.Text, out valorCampoDeTexto))
+            {
+                PanelMensaje.Visible = true;
+                LblMensaje.Text = "Solo se aceptan valores numericos y decimales";
+                txtValorComision.Focus();
+            }
         }
     }
 }

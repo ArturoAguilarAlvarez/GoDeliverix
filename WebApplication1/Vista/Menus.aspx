@@ -66,7 +66,6 @@
 
 
         <div class="col-md-8">
-
             <div class="panel panel-primary">
                 <div class="panel-heading text-center">
                     <p>
@@ -263,15 +262,15 @@
                     </asp:Panel>
                     <%-- Panel informacion del producto --%>
                     <asp:Panel ID="PanelDetalles" runat="server">
-
                         <div class="clearfix"></div>
                         <div class=" pull-left" style="margin-top: 5px;">
-                            <asp:LinkButton runat="server" ID="btnEditarProducto" OnClick="btnEditarProducto_Click" CssClass="btn btn-sm btn-default "><span class="glyphicon glyphicon-cog"></span> Editar</asp:LinkButton><asp:LinkButton runat="server" ID="btnModificarProducto" OnClick="btnModificarProducto_Click" CssClass="btn btn-sm btn-success ">
+                            <asp:LinkButton runat="server" ID="btnEditarProducto" OnClick="btnEditarProducto_Click" CssClass="btn btn-sm btn-default ">
+                                <span class="glyphicon glyphicon-cog"></span> Editar</asp:LinkButton>
+                            <asp:LinkButton runat="server" ID="btnModificarProducto" OnClick="btnModificarProducto_Click" CssClass="btn btn-sm btn-success ">
                                 <asp:Label runat="server" ID="Label1" CssClass="glyphicon glyphicon-ok"></asp:Label>
                             </asp:LinkButton><asp:LinkButton runat="server" ID="btnCancelarProducto" OnClick="btnCancelarProducto_Click" CssClass="btn btn-sm btn-danger "><asp:label CssClass=" glyphicon glyphicon-remove" runat="server" /></asp:LinkButton><asp:Label runat="server" ID="Label2"></asp:Label>
                         </div>
                         <div class="clearfix"></div>
-
                         <div class="col-md-4">
                             <label>Información del producto</label>
                             <asp:DataList ID="DLProductoSeleccionado" DataKeyField="UID" OnItemCommand="DLProductoSeleccionado_ItemCommand1" runat="server">
@@ -321,8 +320,16 @@
                                 </asp:DropDownList>
                             </div>
                             <div class="col-md-4">
-                                <h6>Precio</h6>
-                                <asp:TextBox ID="txtCostoProduto" CssClass="form-control" runat="server" />
+                                <h6>Precio del producto</h6>
+                                <asp:TextBox ID="txtCostoProduto" OnTextChanged="txtCostoProduto_TextChanged" AutoPostBack="true" CssClass="form-control" runat="server" />
+                            </div>
+                            <div class="col-md-4">
+                                <h6>Precio de la comisión</h6>
+                                <asp:TextBox ID="txtCostoComision" Enabled="false" CssClass="form-control" runat="server" />
+                            </div>
+                            <div class="col-md-4">
+                                <h6>Precio total</h6>
+                                <asp:TextBox ID="txtCostoTotal" Enabled="false" CssClass="form-control" runat="server" />
                             </div>
                         </div>
                     </asp:Panel>

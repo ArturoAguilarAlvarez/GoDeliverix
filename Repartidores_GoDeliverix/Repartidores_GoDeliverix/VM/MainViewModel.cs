@@ -49,7 +49,6 @@ namespace Repartidores_GoDeliverix.VM
             {
                 Instance = new MainViewModel();
             }
-
             return Instance;
         }
         #endregion

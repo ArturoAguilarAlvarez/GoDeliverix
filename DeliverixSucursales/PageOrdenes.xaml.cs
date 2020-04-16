@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using VistaDelModelo;
-using LibPrintTicket;
+//using LibPrintTicket;
 namespace DeliverixSucursales
 {
     /// <summary>
@@ -116,103 +116,103 @@ namespace DeliverixSucursales
                 Guid UidOrden = new Guid(txtConfirmarUidOrden.Text);
                 VMOrden fila = MVOrden.ListaDeOrdenes.Find(o => o.Uidorden == UidOrden);
                 MVOrden.BuscarOrdenes("Sucursal", UidOrdenSucursal: fila.Uidorden, EstatusSucursal: "Detalles de orden");
-                Ticket t = new Ticket();
+                //Ticket t = new Ticket();
 
 
-                //QRCodeGenerator qrGenerator = new QRCodeGenerator();
-                //QRCodeData qrCodeData = qrGenerator.CreateQrCode(fila.LNGFolio.ToString(), QRCodeGenerator.ECCLevel.Q);
-                //QRCode qrCode = new QRCode(qrCodeData);
-                //Bitmap qrCodeImage = qrCode.GetGraphic(5);
-                //t.HeaderImage = qrCodeImage;
+                ////QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                ////QRCodeData qrCodeData = qrGenerator.CreateQrCode(fila.LNGFolio.ToString(), QRCodeGenerator.ECCLevel.Q);
+                ////QRCode qrCode = new QRCode(qrCodeData);
+                ////Bitmap qrCodeImage = qrCode.GetGraphic(5);
+                ////t.HeaderImage = qrCodeImage;
 
-                //Confirguracion de ticket
+                ////Confirguracion de ticket
 
-                //Configuracion header
-                MVOrden.ObtenerProductosDeOrden(UidOrden.ToString());
-                MVSucursal.BuscarSucursales(UidSucursal: MVOrden.ListaDeProductos[0].UidSucursal.ToString());
+                ////Configuracion header
+                //MVOrden.ObtenerProductosDeOrden(UidOrden.ToString());
+                //MVSucursal.BuscarSucursales(UidSucursal: MVOrden.ListaDeProductos[0].UidSucursal.ToString());
 
-                t.AddHeaderLine("Sucursal: " + MVSucursal.IDENTIFICADOR + "");
-                t.AddHeaderLine("Horario de " + MVSucursal.HORAAPARTURA + " a " + MVSucursal.HORACIERRE + "");
+                //t.AddHeaderLine("Sucursal: " + MVSucursal.IDENTIFICADOR + "");
+                //t.AddHeaderLine("Horario de " + MVSucursal.HORAAPARTURA + " a " + MVSucursal.HORACIERRE + "");
 
-                MVDireccion.ObtenerDireccionDeOrden(UidOrden.ToString(), "Recolecta");
-                string DireccionAEntregar = "";
-                string DireccionAEntregar1 = "";
-                string DireccionAEntregar2 = "";
-                string DireccionAEntregar3 = "";
-                Guid UidDireccionAEntregar = new Guid();
-                foreach (var item in MVDireccion.ListaDIRECCIONES)
-                {
-                    UidDireccionAEntregar = item.ID;
-                    DireccionAEntregar = " " + item.PAIS + ",  " + item.ESTADO + ", ";
-                    DireccionAEntregar1 = item.MUNICIPIO + ", " + item.COLONIA + ", ";
-                    DireccionAEntregar2 = item.CodigoPostal + ", Mza " + item.MANZANA + ", Lt " + item.LOTE + ",";
-                    DireccionAEntregar3 = "Calle " + item.CALLE0; ;
-                }
+                //MVDireccion.ObtenerDireccionDeOrden(UidOrden.ToString(), "Recolecta");
+                //string DireccionAEntregar = "";
+                //string DireccionAEntregar1 = "";
+                //string DireccionAEntregar2 = "";
+                //string DireccionAEntregar3 = "";
+                //Guid UidDireccionAEntregar = new Guid();
+                //foreach (var item in MVDireccion.ListaDIRECCIONES)
+                //{
+                //    UidDireccionAEntregar = item.ID;
+                //    DireccionAEntregar = " " + item.PAIS + ",  " + item.ESTADO + ", ";
+                //    DireccionAEntregar1 = item.MUNICIPIO + ", " + item.COLONIA + ", ";
+                //    DireccionAEntregar2 = item.CodigoPostal + ", Mza " + item.MANZANA + ", Lt " + item.LOTE + ",";
+                //    DireccionAEntregar3 = "Calle " + item.CALLE0; ;
+                //}
 
-                t.AddHeaderLine(DireccionAEntregar);
-                t.AddHeaderLine(DireccionAEntregar1);
-                t.AddHeaderLine(DireccionAEntregar2);
-                t.AddHeaderLine(DireccionAEntregar3);
+                //t.AddHeaderLine(DireccionAEntregar);
+                //t.AddHeaderLine(DireccionAEntregar1);
+                //t.AddHeaderLine(DireccionAEntregar2);
+                //t.AddHeaderLine(DireccionAEntregar3);
 
-                t.AddHeaderLine("Fecha: " + fila.FechaDeOrden + "");
+                //t.AddHeaderLine("Fecha: " + fila.FechaDeOrden + "");
 
-                t.AddSubHeaderLine("Folio: " + fila.LNGFolio.ToString() + "");
-                //Configuracion body
-                decimal total = 0.0m;
-                for (int i = 0; i < MVOrden.ListaDeProductos.Count; i++)
-                {
-                    VMOrden item = MVOrden.ListaDeProductos[i];
-                    t.AddItem(item.intCantidad.ToString(), item.StrNombreProducto.ToString(), item.MTotal.ToString());
-                    MVOrden.ObtenerNotaDeProductoEnOrden(item.UidProductoEnOrden);
-                    if (!string.IsNullOrEmpty(MVOrden.StrNota))
-                    {
-                        t.AddItem("Nota->", MVOrden.StrNota, "");
-                    }
-                    if (i < (MVOrden.ListaDeProductos.Count - 1))
-                    {
-                        t.AddItem("------", "--------------------", "-------");
-                    }
-                    total = total + item.MTotal;
-                }
-                MVDireccion.ObtenerDireccionDeOrden(UidOrden.ToString(), "Entrega");
-                DireccionAEntregar = "";
-                DireccionAEntregar1 = "";
-                DireccionAEntregar2 = "";
-                DireccionAEntregar3 = "";
+                //t.AddSubHeaderLine("Folio: " + fila.LNGFolio.ToString() + "");
+                ////Configuracion body
+                //decimal total = 0.0m;
+                //for (int i = 0; i < MVOrden.ListaDeProductos.Count; i++)
+                //{
+                //    VMOrden item = MVOrden.ListaDeProductos[i];
+                //    t.AddItem(item.intCantidad.ToString(), item.StrNombreProducto.ToString(), item.MTotal.ToString());
+                //    MVOrden.ObtenerNotaDeProductoEnOrden(item.UidProductoEnOrden);
+                //    if (!string.IsNullOrEmpty(MVOrden.StrNota))
+                //    {
+                //        t.AddItem("Nota->", MVOrden.StrNota, "");
+                //    }
+                //    if (i < (MVOrden.ListaDeProductos.Count - 1))
+                //    {
+                //        t.AddItem("------", "--------------------", "-------");
+                //    }
+                //    total = total + item.MTotal;
+                //}
+                //MVDireccion.ObtenerDireccionDeOrden(UidOrden.ToString(), "Entrega");
+                //DireccionAEntregar = "";
+                //DireccionAEntregar1 = "";
+                //DireccionAEntregar2 = "";
+                //DireccionAEntregar3 = "";
 
-                foreach (var item in MVDireccion.ListaDIRECCIONES)
-                {
-                    UidDireccionAEntregar = item.ID;
-                    DireccionAEntregar = " " + item.PAIS + ",  " + item.ESTADO + ", ";
-                    DireccionAEntregar1 = item.MUNICIPIO + ", " + item.COLONIA + ", ";
-                    DireccionAEntregar2 = item.CodigoPostal + ", Mza " + item.MANZANA + ", Lt " + item.LOTE + ",";
-                    DireccionAEntregar3 = "Calle " + item.CALLE0; ;
-                }
+                //foreach (var item in MVDireccion.ListaDIRECCIONES)
+                //{
+                //    UidDireccionAEntregar = item.ID;
+                //    DireccionAEntregar = " " + item.PAIS + ",  " + item.ESTADO + ", ";
+                //    DireccionAEntregar1 = item.MUNICIPIO + ", " + item.COLONIA + ", ";
+                //    DireccionAEntregar2 = item.CodigoPostal + ", Mza " + item.MANZANA + ", Lt " + item.LOTE + ",";
+                //    DireccionAEntregar3 = "Calle " + item.CALLE0; ;
+                //}
 
-                //Configuracion header footer
-                //Agrega un subtotal
-                t.AddTotal("Subtotal", total.ToString());
-                //Busca el tarifario y lo agrega al total
-                MVTarifario.ObtenerTarifarioDeOrden(UidOrden);
-                t.AddTotal("Envio", MVTarifario.DPrecio.ToString("N2"));
-                //Agrega el total general
-                total = total + MVTarifario.DPrecio;
-                t.AddTotal("Total", total.ToString("N2"));
-                //Datos del usuario
-                VMUsuarios MVUsuario = new VMUsuarios();
-                MVUsuario.BusquedaDeUsuario(UidUsuario: new Guid(MVOrden.ObtenerUsuarioPorUidOrdenSucursal(UidOrden)), UIDPERFIL: new Guid("4F1E1C4B-3253-4225-9E46-DD7D1940DA19"));
+                ////Configuracion header footer
+                ////Agrega un subtotal
+                //t.AddTotal("Subtotal", total.ToString());
+                ////Busca el tarifario y lo agrega al total
+                //MVTarifario.ObtenerTarifarioDeOrden(UidOrden);
+                //t.AddTotal("Envio", MVTarifario.DPrecio.ToString("N2"));
+                ////Agrega el total general
+                //total = total + MVTarifario.DPrecio;
+                //t.AddTotal("Total", total.ToString("N2"));
+                ////Datos del usuario
+                //VMUsuarios MVUsuario = new VMUsuarios();
+                //MVUsuario.BusquedaDeUsuario(UidUsuario: new Guid(MVOrden.ObtenerUsuarioPorUidOrdenSucursal(UidOrden)), UIDPERFIL: new Guid("4F1E1C4B-3253-4225-9E46-DD7D1940DA19"));
 
-                t.AddFooterLine("Cliente " + MVUsuario.StrUsuario);
+                //t.AddFooterLine("Cliente " + MVUsuario.StrUsuario);
 
-                t.AddFooterLine("Direccion de entrega");
-                t.AddFooterLine(DireccionAEntregar);
-                t.AddFooterLine(DireccionAEntregar1);
-                t.AddFooterLine(DireccionAEntregar2);
-                t.AddFooterLine(DireccionAEntregar3);
+                //t.AddFooterLine("Direccion de entrega");
+                //t.AddFooterLine(DireccionAEntregar);
+                //t.AddFooterLine(DireccionAEntregar1);
+                //t.AddFooterLine(DireccionAEntregar2);
+                //t.AddFooterLine(DireccionAEntregar3);
 
-                t.FontSize = 6;
-                t.AddFooterLine("www.godeliverix.com.mx");
-                t.PrintTicket("PDFCreator");
+                //t.FontSize = 6;
+                //t.AddFooterLine("www.godeliverix.com.mx");
+                //t.PrintTicket("PDFCreator");
 
 
                 //Cambia el estatus interno de la sucursal confirmando la orden

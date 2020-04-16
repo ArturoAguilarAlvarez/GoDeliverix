@@ -184,7 +184,7 @@ namespace DeliverixSucursales
                                         VMTurno MVTurno = new VMTurno();
                                         MVTurno.ConsultarUltimoTurnoSuministradora(MVLicencia.Licencia);
 
-                   if (MVTurno.DtmHoraFin == DateTime.MinValue && MVTurno.DtmHoraInicio != DateTime.MinValue)
+                                        if (MVTurno.DtmHoraFin == DateTime.MinValue && MVTurno.DtmHoraInicio != DateTime.MinValue)
                                         {
                                             LblUidTurno.Content = MVTurno.UidTurno;
                                             lblHoraInicioTurno.Content = MVTurno.DtmHoraInicio;
@@ -193,10 +193,10 @@ namespace DeliverixSucursales
                                         else
                                         {
                                             MVTurno = new VMTurno();
-                                            Guid UidTurnoDistribuidor = Guid.NewGuid();
-                                            MVTurno.TurnoSuministradora(MVUsuario.Uid, UidTurnoDistribuidor);
+                                            Guid UidTurnoSuministradora = Guid.NewGuid();
+                                            MVTurno.TurnoSuministradora(MVUsuario.Uid, uidTurnoDistribuidor: UidTurnoSuministradora);
 
-                                            LblUidTurno.Content = UidTurnoDistribuidor.ToString();
+                                            LblUidTurno.Content = UidTurnoSuministradora.ToString();
                                         }
 
                                         Close();

@@ -31,7 +31,7 @@
                 </StackLayout>
             </Grid>
         </StackLayout>
-    
+
 
         <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="1">
             <Grid >
@@ -49,35 +49,35 @@
                     </Grid>
                 </StackLayout>
                 <!--<StackLayout Grid.Row="1"  Padding="10,0,0,0"  >-->
-                    <!--<ScrollView VerticalOptions="Fill">-->
+                <!--<ScrollView VerticalOptions="Fill">-->
                 <ListView  Grid.Row="1"  ItemsSource="{Binding ListaProductos}" >
-                            <ListView.ItemTemplate >
+                    <ListView.ItemTemplate >
                         <DataTemplate>
                             <ViewCell >
-                                        <Grid Padding="10,0,0,0">
+                                <Grid Padding="10,0,0,0">
                                     <Label TextColor="Purple" Grid.Column="0"   HorizontalOptions="Center" FontSize="Medium" Text="{Binding IntCantidad}" ></Label>
 
                                     <Label TextColor="Purple" Grid.Column="1" HorizontalOptions="Center" FontSize="Medium" Text="{Binding StrNombreProducto}"  ></Label>
-                                            <Label TextColor="Purple" Grid.Column="2" HorizontalOptions="Center" FontSize="Medium" Text="{Binding MTotal, StringFormat='${0}'}" ></Label>
-                                        </Grid>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    <!--</ScrollView>-->
+                                    <Label TextColor="Purple" Grid.Column="2" HorizontalOptions="Center" FontSize="Medium" Text="{Binding MSubTotal, StringFormat='${0}'}" ></Label>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <!--</ScrollView>-->
                 <!--</StackLayout>-->
 
                 <StackLayout  Grid.Row="2" Padding="10,0,0,0"  >
                     <Grid >
                         <Label Text="Envio"      FontSize="Medium" TextColor="Black"  Grid.Column="0"></Label>
-                        <Label Text="{Binding MTotalTarifario}"      FontSize="Medium" TextColor="MediumPurple"  Grid.Column="1"></Label>
+                        <Label Text="{Binding MTotalTarifario,StringFormat='${0}'}"      FontSize="Medium" TextColor="MediumPurple"  Grid.Column="1"></Label>
                         <Label Text="Total" FontSize="Medium" TextColor="Black"  Grid.Column="2"></Label>
-                        <Label Text="{Binding MTotal}"  FontSize="Medium" TextColor="MediumPurple"  Grid.Column="3"></Label>
+                        <Label Text="{Binding MSubTotal,StringFormat='${0}'}"  FontSize="Medium" TextColor="MediumPurple"  Grid.Column="3"></Label>
                     </Grid>
                 </StackLayout>
             </Grid>
         </StackLayout>
-        
+
         <StackLayout  Grid.Row="2" VerticalOptions="End">
             <Grid>
                 <Button  Text="Si" FontSize="Large" Command="{Binding ConfirmOrder}" x:Name="btnAceptar" Clicked="BtnAceptar_Clicked" TextColor="White"  Grid.Column="0" BackgroundColor="Green"></Button>

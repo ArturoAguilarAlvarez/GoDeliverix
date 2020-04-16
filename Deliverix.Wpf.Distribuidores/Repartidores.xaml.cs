@@ -203,5 +203,34 @@ namespace Deliverix.Wpf.Distribuidores
                 btneliminar.IsEnabled = false;
             }
         }
+
+        private void btnInformacionDeTrabajo_Click(object sender, RoutedEventArgs e)
+        {
+            object ID = ((Button)sender).CommandParameter;
+            VMSucursales registro = MVSucusales.ListaDeRepartidoresyVehiculosEnSucursal.Find(o => o.ID.ToString() == ID.ToString());
+            DHInformacionRepartidor.IsOpen = true;
+            DHInformacionRepartidor.DataContext = registro;
+
+        }
+
+        private void btnActualizar_Click(object sender, RoutedEventArgs e)
+        {
+            object ID = ((Button)sender).CommandParameter;
+            VMSucursales registro = MVSucusales.ListaDeRepartidoresyVehiculosEnSucursal.Find(o => o.ID.ToString() == ID.ToString());
+            MessageBox.Show(registro.MFondo.ToString());
+            MVSucusales.ModificaInformacionDeTrabajoDeRepartidor(ID.ToString(), registro.MFondo);
+            MVLicencia.RecuperaLicencia();
+            string licencia = MVLicencia.Licencia;
+            MVSucusales.ObtenerRepartidoresYVehiculos(licencia);
+            CargaDataGrid("Bitacora");
+        }
+
+        private void btnCancelarInformacion_Click(object sender, RoutedEventArgs e)
+        {
+            MVLicencia.RecuperaLicencia();
+            string licencia = MVLicencia.Licencia;
+            MVSucusales.ObtenerRepartidoresYVehiculos(licencia);
+            CargaDataGrid("Bitacora");
+        }
     }
 }

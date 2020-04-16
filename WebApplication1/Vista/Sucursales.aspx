@@ -106,6 +106,7 @@
                                         </tr>
                                         <tr>
                                             <td>Filas:
+                                               
                                                 <asp:DropDownList runat="server" ID="DDLTAMANOGRIDAMPLIADA" AutoPostBack="true" OnTextChanged="TamanioGrid" OnSelectedIndexChanged="TamanioGrid">
                                                     <asp:ListItem Text="10" Value="10" />
                                                     <asp:ListItem Text="20" Value="20" />
@@ -115,6 +116,7 @@
                                                 </asp:DropDownList>
 
                                                 Pagina:
+                                               
                                                 <asp:DropDownList runat="server" ID="DDLDBANUMERODEPAGINAS" AutoPostBack="true" OnTextChanged="PaginaSeleccionadaBusquedaAmpliada" OnSelectedIndexChanged="PaginaSeleccionadaBusquedaAmpliada">
                                                 </asp:DropDownList>
                                             </td>
@@ -200,6 +202,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Pagina
+                                                       
                                                         <asp:DropDownList runat="server" ID="DDLDNUMERODEPAGINAS" AutoPostBack="true" OnTextChanged="PaginaSeleccionadaBusquedaNormal" OnSelectedIndexChanged="PaginaSeleccionadaBusquedaNormal">
                                                         </asp:DropDownList>
                                                     </td>
@@ -219,6 +222,7 @@
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <h5>Gention de sucursal:
+                               
                                 <asp:Label ID="txtNombreDeSucursal" runat="server" /></h5>
                         </div>
                         <div class="clearfix"></div>
@@ -309,8 +313,12 @@
                                 </div>
 
                                 <%--Informacion de licencia--%>
-                                <div class=" col-md-6" style="margin-top: 15px;">
-                                    <asp:CheckBox runat="server" ID="chkVisibilidadInformacion" TextAlign="Left" Text=" Información visible " />
+                                <div class=" col-md-3" style="margin-top: 15px;">
+                                    <asp:CheckBox runat="server" ID="chkVisibilidadInformacion" TextAlign="Left" Text="Mostrar mi información" />
+                                </div>
+                                <div class="col-md-3" runat="server" id="dvFondo">
+                                    <label>Fondo repartidor</label>
+                                    <asp:TextBox ID="txtFondoRepartidor" TextMode="Number" CssClass="form-control" runat="server" />
                                 </div>
                                 <div class=" col-md-3" style="margin-top: 15px;">
                                     <label>Generar codigo</label>
@@ -329,6 +337,7 @@
                                             <EmptyDataTemplate>
                                                 <div class="info">
                                                     No existen licencias
+                                               
                                                 </div>
                                             </EmptyDataTemplate>
                                             <SelectedRowStyle CssClass="table table-hover input-sm success" />
@@ -572,6 +581,7 @@
                                         <EmptyDataTemplate>
                                             <div class="info">
                                                 No existen telefonos guardados
+                                           
                                             </div>
                                         </EmptyDataTemplate>
                                         <SelectedRowStyle CssClass="table table-hover input-sm success" />
@@ -1172,6 +1182,7 @@
                                             <EmptyDataTemplate>
                                                 <div class="info">
                                                     No existen telefonos guardados
+                                               
                                                 </div>
                                             </EmptyDataTemplate>
                                             <SelectedRowStyle CssClass="table table-hover input-sm success" />
@@ -1221,6 +1232,7 @@
                                                 <EmptyDataTemplate>
                                                     <div class="info">
                                                         No hay zonas de entrega disponibles para mostrar
+                                                   
                                                     </div>
                                                 </EmptyDataTemplate>
                                                 <SelectedRowStyle CssClass="table table-hover input-sm success" />
@@ -1245,6 +1257,7 @@
                                                 <EmptyDataTemplate>
                                                     <div class="info">
                                                         No hay zonas de entrega disponibles para mostrar
+                                                   
                                                     </div>
                                                 </EmptyDataTemplate>
                                                 <SelectedRowStyle CssClass="table table-hover input-sm success" />
@@ -1355,6 +1368,7 @@
                                     <asp:GridView runat="server" OnRowCommand="DgvMensajes_RowCommand" DataKeyNames="Uid" AutoGenerateColumns="false" Style="margin-top: 10px" ID="DgvMensajes" CssClass="table table-bordered table-hover table-condensed table-striped input-sm">
                                         <EmptyDataTemplate>
                                             Sin mensajes para clientes
+                                       
                                         </EmptyDataTemplate>
                                         <EmptyDataRowStyle CssClass="text-center" />
                                         <SelectedRowStyle CssClass="table table-hover input-sm success" />

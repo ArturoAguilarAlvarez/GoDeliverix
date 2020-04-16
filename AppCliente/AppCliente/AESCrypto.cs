@@ -15,13 +15,8 @@ namespace AppCliente
                 string original = strToEncrypt;
                 // Create a new instance of the Aes
 
-
                 // class.  This generates a new key and initialization 
-
-
                 // vector (IV).
-
-
                 using (Aes myAes = Aes.Create())
                 {
                     myAes.Mode = CipherMode.CBC;

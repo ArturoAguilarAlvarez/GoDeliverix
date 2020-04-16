@@ -15,7 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using VistaDelModelo;
-using LibPrintTicket;
+//using LibPrintTicket;
 using System.Data;
 namespace Deliverix.Wpf.Distribuidores
 {
@@ -60,6 +60,7 @@ namespace Deliverix.Wpf.Distribuidores
             MVLicencia.RecuperaLicencia();
             string licencia = MVLicencia.Licencia;
             MVTurno.ObtenerRepartidoresALiquidar(licencia);
+            MVTurno.RepartidoresConFondoAEntregar(licencia);
             DataGridRepartidores.ItemsSource = MVTurno.ListaDeRepartidores;
         }
 
@@ -109,31 +110,31 @@ namespace Deliverix.Wpf.Distribuidores
                 MVTurno.LiquidarARepartidor(lblUidTurnoRepartidor.Content.ToString(), TurnoDistribuidora.Content.ToString(), lblMontoALiquidar.Content.ToString().Substring(1));
                 MVTurno.AgregaEstatusTurnoRepartidor(lblUidTurnoRepartidor.Content.ToString(), "38FA16DF-4727-41FD-A03E-E2E43FA78F3F");
 
-                Ticket t = new Ticket();
-                VMUsuarios MVusuario = new VMUsuarios();
-                MVusuario.obtenerDatosDeSupervisor(new Guid(lblUidusuario.Content.ToString()));
+                //Ticket t = new Ticket();
+                //VMUsuarios MVusuario = new VMUsuarios();
+                //MVusuario.obtenerDatosDeSupervisor(new Guid(lblUidusuario.Content.ToString()));
                 
-                //Informacion de la empresa
-                t.AddHeaderLine("" + MVusuario.NombreEmpresa + "");
-                t.AddHeaderLine("Sucursal: " + MVusuario.Sucursal + "");
+                ////Informacion de la empresa
+                //t.AddHeaderLine("" + MVusuario.NombreEmpresa + "");
+                //t.AddHeaderLine("Sucursal: " + MVusuario.Sucursal + "");
 
-                t.AddHeaderLine("Usuario: " + MVusuario.StrNombre + "");
-                //Obtene informacion del turno
-                MVTurno = new VMTurno();
-                MVLicencia = new DeliverixSucursales.VMLicencia();
-                MVLicencia.RecuperaLicencia();
-                MVTurno.ConsultarUltimoTurnoDistribuidora(MVLicencia.Licencia);
-                t.AddSubHeaderLine("");
-                t.AddHeaderLine("Informacion del liquidacion");
-                //Informacion del turno
-                t.AddHeaderLine("Repartidor: "+lblNombreRepartidor.Content+"");
-                t.AddTotal("Total liquidado ", lblMontoALiquidar.Content.ToString());
-                t.AddSubHeaderLine("");
-                t.AddTotal("Firma de Supervisor ","__________");
-                t.AddTotal("Firma de Repartidor ","__________");
-                t.FontSize = 6;
-                t.AddFooterLine("www.godeliverix.com.mx");
-                t.PrintTicket("PDFCreator");
+                //t.AddHeaderLine("Usuario: " + MVusuario.StrNombre + "");
+                ////Obtene informacion del turno
+                //MVTurno = new VMTurno();
+                //MVLicencia = new DeliverixSucursales.VMLicencia();
+                //MVLicencia.RecuperaLicencia();
+                //MVTurno.ConsultarUltimoTurnoDistribuidora(MVLicencia.Licencia);
+                //t.AddSubHeaderLine("");
+                //t.AddHeaderLine("Informacion del liquidacion");
+                ////Informacion del turno
+                //t.AddHeaderLine("Repartidor: "+lblNombreRepartidor.Content+"");
+                //t.AddTotal("Total liquidado ", lblMontoALiquidar.Content.ToString());
+                //t.AddSubHeaderLine("");
+                //t.AddTotal("Firma de Supervisor ","__________");
+                //t.AddTotal("Firma de Repartidor ","__________");
+                //t.FontSize = 6;
+                //t.AddFooterLine("www.godeliverix.com.mx");
+                //t.PrintTicket("PDFCreator");
 
 
                 lblNombreRepartidor.Content = string.Empty;

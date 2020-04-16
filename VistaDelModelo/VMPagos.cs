@@ -378,5 +378,12 @@ namespace VistaDelModelo
                 throw;
             }
         }
+
+
+        /// <summary>
+        /// Recupera el tipo de pago de una orden
+        /// </summary>
+        /// <param name="UidOrden"></param>
+        public void ObtenerElTipoDePago(string UidOrden) { }
     }
 }

@@ -301,22 +301,14 @@ namespace DBControl
         public DataTable ObtenerRepartidoresYVehiculos(string uidLicencia)
         {
             oConexion = new Conexion();
-            string query = "select vu.UidRelacionVehiculoUsuario, u.uidusuario,v.uidvehiculo,u.Nombre,u.Usuario,v.VchModelo from VehiculoUsuario vu inner join Usuarios u on u.UidUsuario = vu.UidUsuario inner join Vehiculo v on v.UidVehiculo = vu.UidVehiculo  where vu.UidVehiculo in  (select UidVehiculo from Vehiculo where UidEmpresa in (Select UidEmpresa From Sucursales where Uidsucursal in (Select UidSucursal from SucursalLicencia where UidLicencia = '" + uidLicencia + "')))";
+            string query = "select vu.UidRelacionVehiculoUsuario,vu.mfondo, u.uidusuario,v.uidvehiculo,u.Nombre,u.Usuario,v.VchModelo from VehiculoUsuario vu inner join Usuarios u on u.UidUsuario = vu.UidUsuario inner join Vehiculo v on v.UidVehiculo = vu.UidVehiculo  where vu.UidVehiculo in  (select UidVehiculo from Vehiculo where UidEmpresa in (Select UidEmpresa From Sucursales where Uidsucursal in (Select UidSucursal from SucursalLicencia where UidLicencia = '" + uidLicencia + "')))";
             return oConexion.Consultas(query);
         }
 
         public DataTable ObtenerOrdenesAsignadasARepartir(string uidlicencia)
         {
             oConexion = new Conexion();
-            string Query = " select distinct orp.UidRelacionOrdenRepartidor,dbo.asp_ObtenerUltimoEstatusOrdenRepartidor(orp.UidRelacionOrdenRepartidor) as " +
-                "EstatusRepartidor, orp.UidTurnoRepartidor, orp.UidOrden, u.Usuario,u.Nombre, o.IntFolio,s.Identificador,os.MTotalSucursal, " +
-                "convert(varchar,orp.dtmFechaAsignacion, 7) as DtmFecha from OrdenRepartidor orp  inner join OrdenTarifario ot on ot.UidRelacionOrdenTarifario" +
-                " = orp.UidOrden inner join OrdenSucursal os on os.UidRelacionOrdenSucursal = ot.UidOrden inner join Ordenes o on o.UidOrden = os.UidOrden" +
-                " inner join TurnoRepartidor tr on tr.UidTurnoRepartidor = orp.UidTurnoRepartidor inner join Sucursales s on s.UidSucursal = os.UidSucursal " +
-                "inner join Usuarios u on u.UidUsuario = tr.UidUsuario inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario inner " +
-                "join ZonaDeRecoleccion ZDR on ZDR.UidZonaDeRecolecta = t.UidRelacionZonaRecolecta inner join ContratoDeServicio CDS on " +
-                "CDS.UidSucursalSuministradora = s.UidSucursal and CDS.UidSucursalDistribuidora = ZDR.UidSucursal where CDS.UidSucursalDistribuidora in" +
-                " (select UidSucursal from SucursalLicencia where UidLicencia = '" + uidlicencia + "')";
+            string Query = " select distinct orp.UidRelacionOrdenRepartidor,ot.UidRelacionOrdenTarifario,dbo.asp_ObtenerUltimoEstatusOrdenRepartidor(orp.UidRelacionOrdenRepartidor) as EstatusRepartidor, orp.UidTurnoRepartidor, orp.UidOrden, u.Usuario,u.Nombre, o.IntFolio,s.Identificador,os.MTotalSucursal, convert(varchar,orp.dtmFechaAsignacion, 7) as DtmFecha from OrdenRepartidor orp  inner join OrdenTarifario ot on ot.UidRelacionOrdenTarifario = orp.UidOrden inner join OrdenSucursal os on os.UidRelacionOrdenSucursal = ot.UidOrden inner join Ordenes o on o.UidOrden = os.UidOrden inner join TurnoRepartidor tr on tr.UidTurnoRepartidor = orp.UidTurnoRepartidor inner join Sucursales s on s.UidSucursal = os.UidSucursal  inner join Usuarios u on u.UidUsuario = tr.UidUsuario inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario inner  join ZonaDeRecoleccion ZDR on ZDR.UidZonaDeRecolecta = t.UidRelacionZonaRecolecta inner join ContratoDeServicio CDS on  CDS.UidSucursalSuministradora = s.UidSucursal and CDS.UidSucursalDistribuidora = ZDR.UidSucursal where CDS.UidSucursalDistribuidora in  (select UidSucursal from SucursalLicencia where UidLicencia = '" + uidlicencia + "')";
             return oConexion.Consultas(Query);
         }
 

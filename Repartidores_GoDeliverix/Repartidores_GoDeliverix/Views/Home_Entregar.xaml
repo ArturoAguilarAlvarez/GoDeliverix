@@ -36,7 +36,7 @@
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" VerticalOptions="Center">
                     <Label  Text="Telefono" FontSize="Medium"  TextColor="#333"></Label>
-                    <Button BackgroundColor="White" TextColor="Blue" HorizontalOptions="FillAndExpand" Text="{Binding StrNumeroCliente}" x:Name="lblNumeroCliente"  Clicked="LblNumeroCliente_Clicked" FontSize="Medium" >
+                    <Button BackgroundColor="WhiteSmoke" TextColor="Blue" HorizontalOptions="FillAndExpand" Text="{Binding StrNumeroCliente}" x:Name="lblNumeroCliente"  Clicked="LblNumeroCliente_Clicked" FontSize="Medium" >
                     </Button>
                 </StackLayout>
 
@@ -69,14 +69,10 @@
                                 </ListView.ItemTemplate>
                             </ListView>
                         </ScrollView>
-
-
                     </StackLayout>
-
-
                 </StackLayout>
                 <StackLayout Orientation="Vertical" HorizontalOptions="End">
-                    <Label  Text="{Binding MSubTotal,StringFormat='Subtotal: ${0}'}" TextColor="Black" FontSize="Large"></Label>
+                    <Label  Text="{Binding MTotal,StringFormat='Subtotal: ${0}'}" TextColor="Black" FontSize="Large"></Label>
                     <Label  Text="{Binding MTotalTarifario,StringFormat='Costo de envio: ${0}'}" TextColor="Black" FontSize="Large"></Label>
                     <Label  Text="{Binding MPropina,StringFormat='Propina: ${0}'}" TextColor="Black" FontSize="Large"></Label>
                     <Label  Text="{Binding MTotalConPropina,StringFormat='Total: ${0}'}" TextColor="Black" FontSize="Large"></Label>

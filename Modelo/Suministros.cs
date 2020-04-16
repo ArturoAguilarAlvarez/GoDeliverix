@@ -25,7 +25,6 @@ namespace Modelo
             get { return tipo; }
             set { tipo = value; }
         }
-
         #endregion
         #region Constructores
         public Suministros()
@@ -39,12 +38,10 @@ namespace Modelo
         {
             return base.GUARDAREMPRESA(EMP);
         }
-        public override bool ACTUALIZAREMPRESA(Empresa EMP)
+        public override bool ACTUALIZAREMPRESA(Empresa EMP, string TipoDeACtualizacion)
         {
-            return base.ACTUALIZAREMPRESA(EMP);
+            return base.ACTUALIZAREMPRESA(EMP,TipoDeACtualizacion);
         }
-
-
         #endregion
     }
 }

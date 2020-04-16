@@ -45,7 +45,7 @@ namespace DeliverixSucursales
             //}
 
 
-            if (!string.IsNullOrEmpty(Registry.GetValue(@"HKEY_CURRENT_USER\GoDeliverixDistribuidores", "Licencia", "").ToString()) && Registry.GetValue(@"HKEY_CURRENT_USER\GoDeliverixDistribuidores", "Licencia", "").ToString() != Guid.Empty.ToString())
+            if (!string.IsNullOrEmpty(Registry.GetValue(@"HKEY_CURRENT_USER\GoDeliverixDistribuidores", "Licencia", "").ToString()) && Registry.GetValue(@"HKEY_CURRENT_USER\GoDeliverixDistribuidores", "Licencia", "").ToString() != Guid.Empty.ToString() || Registry.GetValue(@"HKEY_CURRENT_USER\GoDeliverixDistribuidores", "Licencia", "") != null)
             {
                 Licencia = Registry.GetValue(@"HKEY_CURRENT_USER\GoDeliverixDistribuidores", "Licencia", "").ToString();
             }
@@ -61,7 +61,7 @@ namespace DeliverixSucursales
 
         }
 
-        
+
         public void GuardarLicencia(string Licencia)
         {
             RegistryKey key;

@@ -16,32 +16,51 @@
 
             <Button VerticalOptions="Fill" BackgroundColor="{Binding ColorProp}" Text="{Binding Texto}" TextColor="White" Command="{Binding Activar}" HorizontalOptions="Fill" >
             </Button>
-            <Grid Grid.Row="1" HorizontalOptions="FillAndExpand">
+            <Grid Grid.Row="1" HorizontalOptions="FillAndExpand" Margin="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="2*"></RowDefinition>
-                    <RowDefinition Height="4*"></RowDefinition>
+                    <RowDefinition Height="2*"></RowDefinition>
+                    <RowDefinition Height="2*"></RowDefinition>
                     <RowDefinition Height="2*"></RowDefinition>
                     <RowDefinition Height="2*"></RowDefinition>
                 </Grid.RowDefinitions>
-                <StackLayout Grid.Row="0" Orientation="Vertical" Grid.ColumnSpan="2" >
-                    <Label Text="{Binding DtmHoraInicio,StringFormat='Inicio:{0}'}"/>
-                    <Label Text="{Binding LngFolio,StringFormat='Folio:{0}'}"/>
-                    <Label Text="{Binding TextoLiquidar,StringFormat='Estatus: {0}'}"/>
+                <StackLayout Grid.Row="0" Orientation="Vertical" Grid.Column="0" >
+                    <Label Text="Inicio" HorizontalOptions="Start" Font="Bold" TextColor="Black" />
+                    <Label Text="{Binding DtmHoraInicio,StringFormat='{0}'}"/>
                 </StackLayout>
-                <Label Text="{Binding Total,StringFormat='${0}'}" Grid.ColumnSpan="2" Grid.Row="1" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" FontSize="60" TextColor="Black"></Label>
-                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Row="2" Grid.Column="0">
+                <StackLayout Grid.Row="0" Orientation="Vertical" Grid.Column="1">
+                    <Label Text="Estatus" HorizontalOptions="Start" Font="Bold" TextColor="Black" />
+                    <Label Text="{Binding TextoLiquidar,StringFormat='{0}'}"/>
+                </StackLayout>
+                <StackLayout Grid.Row="1" Orientation="Vertical" Grid.Column="0">
+                    <Label Text="Fondo" HorizontalOptions="Start" Font="Bold" TextColor="Black" />                    
+                    <Label Text="{Binding DFondo,StringFormat=' ${0}'}"/>
+                </StackLayout>
+                <StackLayout Grid.Row="1" Orientation="Vertical" Grid.Column="1">
+                    <Label Text="Folio" HorizontalOptions="Start" Font="Bold" TextColor="Black" />
+                    <Label Text="{Binding LngFolio,StringFormat='{0}'}"/>
+                </StackLayout>
+                <StackLayout Grid.Row="2" Orientation="Vertical" HorizontalOptions="Start" Grid.Column="0">
+                    <Label Text="Total en el turno" Font="Bold" TextColor="Black"></Label>
+                    <Label Text="{Binding Total,StringFormat='${0}'}" VerticalOptions="CenterAndExpand"   TextColor="Black"></Label>
+                </StackLayout>
+                <StackLayout Grid.Row="2" Orientation="Vertical"  HorizontalOptions="Start" Grid.Column="1">
+                    <Label Text="Efectivo"  Font="Bold" TextColor="Black"></Label>
+                    <Label Text="{Binding MEfectivoEnCaja,StringFormat='${0}'}" VerticalOptions="CenterAndExpand" TextColor="Black"></Label>
+                </StackLayout>
+                <StackLayout Orientation="Vertical" HorizontalOptions="Start" Grid.Row="3" Grid.Column="0">
                     <Label Text="Ordenes" Font="Bold" TextColor="Black"></Label>
                     <Label  BackgroundColor="White" Text="{Binding CantidadDeOrdenes}"  HorizontalOptions="Center" TextColor="Black"></Label>
                 </StackLayout>
-                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Row="2" Grid.Column="1">
+                <StackLayout Orientation="Vertical" HorizontalOptions="Start" Grid.Row="3" Grid.Column="1">
                     <Label Text="Importe envio" Font="Bold" TextColor="Black"></Label>
                     <Label Text="{Binding TotalEnvio,StringFormat='${0}'}"  TextColor="Black"></Label>
                 </StackLayout>
-                <StackLayout Orientation="Vertical" HorizontalOptions="Center" Grid.Row="3" Grid.Column="1">
+                <StackLayout Orientation="Vertical" HorizontalOptions="Start" Grid.Row="4" Grid.Column="1">
                     <Label Text="Importe ordenes" Font="Bold" TextColor="Black"></Label>
                     <Label Text="{Binding TotalSuministros,StringFormat='${0}'}"  TextColor="Black"></Label>
                 </StackLayout>
-                <StackLayout Orientation="Vertical"  HorizontalOptions="Center" Grid.Row="3" Grid.Column="0">
+                <StackLayout Orientation="Vertical"  HorizontalOptions="Start" Grid.Row="4" Grid.Column="0">
                     <Label Text="Propinas" Font="Bold" TextColor="Black"></Label>
                     <Label Text="{Binding DPropina,StringFormat='${0}'}"  TextColor="Black"></Label>
                 </StackLayout>

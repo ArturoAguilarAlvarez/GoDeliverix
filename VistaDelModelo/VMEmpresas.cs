@@ -197,13 +197,13 @@ namespace VistaDelModelo
         }
 
 
-        public bool GuardarEmpresaSuministradora(Guid UidEmpresa, string RazonSocial, string NombreComercial, string Rfc, int Tipo, int Estatus)
+        public bool GuardarEmpresaSuministradora(Guid UidEmpresa, string RazonSocial, string NombreComercial, string Rfc, int Tipo, int Estatus, float fComision, bool AbosorveComision = new bool())
         {
 
             bool resultado = false;
             try
             {
-                resultado = sm.GUARDAREMPRESA(new Suministros() { UIDEMPRESA = UidEmpresa, RAZONSOCIAL = RazonSocial, NOMBRECOMERCIAL = NombreComercial, RFC = Rfc, TIPO = new TipoDeEmpresa() { ID = Tipo }, ESTATUS = new Estatus() { ID = Estatus } });
+                resultado = sm.GUARDAREMPRESA(new Suministros() { UIDEMPRESA = UidEmpresa, RAZONSOCIAL = RazonSocial, NOMBRECOMERCIAL = NombreComercial, RFC = Rfc, TIPO = new TipoDeEmpresa() { ID = Tipo }, ESTATUS = new Estatus() { ID = Estatus }, oComision = new Comision() { FValor = fComision, BAbsorveComision = AbosorveComision } });
             }
             catch (Exception)
             {
@@ -212,13 +212,22 @@ namespace VistaDelModelo
             }
 
             return resultado;
-
         }
 
-        public bool ActualizarDatos(Guid UidEmpresa, string RazonSocial, string NombreComercial, string Rfc, int Tipo = 0, int Estatus = 0)
+        public bool ActualizarDatos(Guid UidEmpresa, string RazonSocial, string NombreComercial, string Rfc, string TipoDeACtualizacion, float fComision = 0f, int Tipo = 0, int Estatus = 0, bool AbsorveComision = new bool())
         {
             bool resultado = false;
-            resultado = sm.ACTUALIZAREMPRESA(new Suministros() { UIDEMPRESA = UidEmpresa, RAZONSOCIAL = RazonSocial, NOMBRECOMERCIAL = NombreComercial, RFC = Rfc, TIPO = new TipoDeEmpresa() { ID = Tipo }, ESTATUS = new Estatus() { ID = Estatus } });
+            switch (TipoDeACtualizacion)
+            {
+                case "BackSite":
+                    resultado = sm.ACTUALIZAREMPRESA(new Suministros() { UIDEMPRESA = UidEmpresa, RAZONSOCIAL = RazonSocial, NOMBRECOMERCIAL = NombreComercial, RFC = Rfc, TIPO = new TipoDeEmpresa() { ID = Tipo }, ESTATUS = new Estatus() { ID = Estatus }, oComision = new Comision() { FValor = fComision, BAbsorveComision = AbsorveComision } }, TipoDeACtualizacion);
+                    break;
+                case "BackEnd":
+                    resultado = sm.ACTUALIZAREMPRESA(new Suministros() { UIDEMPRESA = UidEmpresa, RAZONSOCIAL = RazonSocial, NOMBRECOMERCIAL = NombreComercial, RFC = Rfc, TIPO = new TipoDeEmpresa() { ID = Tipo }, ESTATUS = new Estatus() { ID = Estatus } }, TipoDeACtualizacion);
+                    break;
+                default:
+                    break;
+            }
             return resultado;
         }
 

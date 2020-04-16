@@ -56,8 +56,67 @@
                     <DataGridTextColumn  Width="auto" FontSize="18" x:Name="txtUidRelacionRepartidorVehiculo" Visibility="Hidden" Binding="{Binding ID}" />
                     <DataGridTextColumn  Width="auto" Header="Usuario" FontSize="18" Binding="{Binding usuario}"/>
                     <DataGridTextColumn  Width="auto" Header="Vehiculo" FontSize="18" Binding="{Binding StrVehiculo}"/>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Width="50" x:Name="btnInformacionDeTrabajo" CommandParameter="{Binding ID}" Click="btnInformacionDeTrabajo_Click" Background="Blue" >
+                                    <Button.Content>
+                                        <materialDesign:PackIcon   Kind="Information"></materialDesign:PackIcon>
+                                    </Button.Content>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>
+        <materialDesign:DialogHost x:Name="DHInformacionRepartidor" IsOpen="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CloseOnClickAway="False">
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel Orientation="Vertical" x:Name="ContenedorDatosLogin" >
+
+                    <StackPanel Background="#20396e" HorizontalAlignment="Stretch" >
+                        <Label FontSize="25" HorizontalAlignment="Center" Content="Información de trabajo" Foreground="White"></Label>
+
+                    </StackPanel>
+
+
+                    <StackPanel Margin="40 40 40 10">
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"  Margin="0,0,0,0" >
+                            <materialDesign:PackIcon Kind="Account" Foreground="Gray" Height="21" Width="25" VerticalAlignment="Center" />
+                            <Label Content="Usuario"   Width="80" VerticalContentAlignment="Center"></Label>
+                            <Label Content="{Binding usuario}"   Width="220" VerticalContentAlignment="Center"></Label>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"  Margin="0,0,0,0" >
+                            <materialDesign:PackIcon Kind="Account" Foreground="Gray" Height="21" Width="25" VerticalAlignment="Center" />
+                            <Label Content="Repartidor"   Width="80" VerticalContentAlignment="Center"></Label>
+                            <Label Content="{Binding StrNombreRepartidor}"   Width="220" VerticalContentAlignment="Center"></Label>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="10,10,10,0">
+                            <materialDesign:PackIcon Foreground="Gray" Kind="Motorbike" Width="25" VerticalAlignment="Center"/>
+                            <Label Content="Vehiculo" Width="80" VerticalAlignment="Center"></Label>
+                            <Label Content="{Binding StrVehiculo}" Width="220" VerticalAlignment="Center"></Label>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="10,10,10,0">
+                            <materialDesign:PackIcon Foreground="Gray" Kind="Cash" Width="25" VerticalAlignment="Center"/>
+                            <Label Width="80" Content="Fondo"></Label>
+                            <TextBox Width="220" Text="{Binding MFondo,StringFormat='${0}'}"  materialDesign:HintAssist.Hint="Fondo"></TextBox>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 10 0 0">
+                            <Button Style="{StaticResource MaterialDesignFlatButton}" CommandParameter="{Binding ID}" x:Name="btnActualizar" Click="btnActualizar_Click" Background="Green" Foreground="White" IsDefault="True" Margin="0 8 8 0"  >
+                                ACTUALIZAR
+                            </Button>
+                            <Button Style="{StaticResource MaterialDesignFlatButton}" x:Name="btnCancelarInformacion" Click="btnCancelarInformacion_Click" Background="Red" Foreground="White" IsCancel="True" Margin="0 8 8 0" Command="materialDesign:DialogHost.CloseDialogCommand">
+                                CANCELAR
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
     </Grid>
 </Page>

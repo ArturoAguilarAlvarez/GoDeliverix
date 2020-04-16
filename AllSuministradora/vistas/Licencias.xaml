@@ -1,0 +1,32 @@
+﻿<Page x:Class="AllSuministradora.vistas.Licencias"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AllSuministradora.vistas"
+      mc:Ignorable="d" 
+     d:DesignHeight="600" d:DesignWidth="1030"
+      Title="Licencias">
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" >
+        <DockPanel Margin="30" HorizontalAlignment="Stretch">
+            <Label FontSize="30" Content="Sucursales asociadas" ></Label>
+            <Button Content="+" Background="Green" Command="{Binding NuevaLicencia}" FontSize="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Top"  HorizontalAlignment="Right" Height="50" Width="50" Margin="0" ></Button>
+        </DockPanel>
+        <DataGrid HorizontalAlignment="Stretch"  x:Name="SucursalesAgregadas" CanUserAddRows="False"  AutoGenerateColumns="False" Height="450" ItemsSource="{Binding ListaDeSucursales}" Margin="20,0,10,10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="*"  Header="Empresa" Binding="{ Binding NombreEmpresa}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Sucursal" Binding="{ Binding NombreSucursal}"></DataGridTextColumn>
+                <DataGridTextColumn Width="130" Header="Horario" Binding="{ Binding HorarioSucursal}"></DataGridTextColumn>
+                <DataGridTemplateColumn Width="130" Header="Estatus de turno">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Stretch">
+                                <Button x:Name="btnTurno" Command="{Binding EliminarLicencia}" CommandParameter="{Binding}" Margin="2" Background="Red" Content="Eliminar"></Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
+</Page>

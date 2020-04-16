@@ -1,9 +1,15 @@
-﻿using System;
+﻿using DeliverixSucursales;
+using Gma.QrCodeNet.Encoding;
+using Gma.QrCodeNet.Encoding.Windows.Render;
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using VistaDelModelo;
+
 namespace Deliverix.Wpf.Distribuidores
 {
     /// <summary>
@@ -36,7 +42,7 @@ namespace Deliverix.Wpf.Distribuidores
         {
             try
             {
-                System.Net.IPHostEntry host = System.Net.Dns.GetHostEntry("www.godeliverix.net");
+               // System.Net.IPHostEntry host = System.Net.Dns.GetHostEntry("www.godeliverix.net");
                 return true;
             }
             catch (Exception)
@@ -153,7 +159,7 @@ namespace Deliverix.Wpf.Distribuidores
         }
 
         private void chbxSeleccionRepartidor_Checked(object sender, RoutedEventArgs e)
-        { 
+        {
             VMUsuarios Usuario = (VMUsuarios)DataGridRepartidores.SelectedItem;
             MVUsuario.SeleccionarUsuario(Usuario.Uid);
             AgregarRelacionBitacora(UidRepartidor: Usuario.Uid);
@@ -284,9 +290,9 @@ namespace Deliverix.Wpf.Distribuidores
             catch (Exception)
             {
                 MessageBox.Show("Sin internet");
-               
+
             }
-            
+
 
         }
 
@@ -301,6 +307,19 @@ namespace Deliverix.Wpf.Distribuidores
             DataGridBitacoraDeAsignaciones.ItemsSource = MVSucursal.ListaDeOrdenesAsignadas;
             LblUidRepartidor.Content = Usuario.Uid;
             LblNombreRepartidor.Content = Usuario.StrNombre;
+        }
+
+        private void BtnCodigoQR_Click(object sender, RoutedEventArgs e)
+        {
+            if (AccesoInternet())
+            {
+                object ID = ((Button)sender).CommandParameter;
+                var registro = MVSucursal.ListaDeOrdenesAsignadas.Find(x => x.UidOrdenTarifario == new Guid(ID.ToString()));
+                var obj = new VMOrden();
+                obj.ObtenerCodigoOrdenTarifario(registro.UidOrdenTarifario);
+                LicenciaRequerida VentanaMensaje = new LicenciaRequerida(obj.CodigoOrdenTarifario);
+                VentanaMensaje.ShowDialog();
+            }
         }
     }
 }

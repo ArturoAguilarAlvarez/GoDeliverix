@@ -41,7 +41,6 @@ namespace DeliverixSucursales
                     {
                         if (HostingMvLicencia.VerificaDisponibilidad(licencia))
                         {
-                            MVLicencia.EliminarLicencia();
                             MVLicencia.GuardarLicencia(licencia);
                             HostingMvLicencia.CambiaDisponibilidadDeLicencia(licencia);
                             Close();
@@ -57,6 +56,10 @@ namespace DeliverixSucursales
                         LicenciaRequerida ventana = new LicenciaRequerida();
 
                     }
+                }
+                else
+                {
+                    MessageBox.Show("La no estan todos los caracteres");
                 }
             }
             else

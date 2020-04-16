@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using Repartidores_GoDeliverix.Helpers;
 using Repartidores_GoDeliverix.Modelo;
 using Repartidores_GoDeliverix.Views.Popup;
 using System;
@@ -318,7 +319,7 @@ namespace Repartidores_GoDeliverix.VM
             VMDireccion MVDireccion = new VMDireccion();
             Guid UidUsuario = AppInstance.Session_.UidUsuario;
             MVDireccion.ObtenerDireccionesUsuario(UidUsuario.ToString());
-            _WebApiGoDeliverix.BaseAddress = new Uri("https://www.godeliverix.net/api/");
+            _WebApiGoDeliverix.BaseAddress = new Uri("" + settings.Sitio + "api/");
 
             if (UidDireccion == Guid.Empty)
             {

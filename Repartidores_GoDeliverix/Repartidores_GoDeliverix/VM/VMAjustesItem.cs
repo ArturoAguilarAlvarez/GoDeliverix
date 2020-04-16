@@ -45,7 +45,7 @@ namespace Repartidores_GoDeliverix.VM
                         await (Application.Current.MainPage as MasterDetailPage).Detail.Navigation.PushAsync(new Ajustes_Direccion());
                         break;
                     case "Cerrar sesion":
-                        _WebApiGoDeliverix.BaseAddress = new Uri("http://www.godeliverix.net/api/");
+                        _WebApiGoDeliverix.BaseAddress = new Uri("" + Helpers.settings.Sitio + "api/");
 
                         string url = "Orden/GetBuscarOrdenAsiganadaRepartidor?UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor + "";
                         string content = await _WebApiGoDeliverix.GetStringAsync(url);

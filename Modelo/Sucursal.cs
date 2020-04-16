@@ -47,6 +47,13 @@ namespace Modelo
         public bool BVisibilidad { get; set; }
         public string StrCodigo { get; set; }
 
+        private decimal _mFondo;
+
+        public decimal MFondo
+        {
+            get { return _mFondo; }
+            set { _mFondo = value; }
+        }
 
         //Composiciones
         public Suministros EMPRESA;
@@ -91,6 +98,9 @@ namespace Modelo
                 cmd.Parameters.Add("@Codigo", SqlDbType.VarChar, 40);
                 cmd.Parameters["@Codigo"].Value = SUCURSAL.StrCodigo;
 
+                cmd.Parameters.Add("@MFondo", SqlDbType.Money);
+                cmd.Parameters["@MFondo"].Value = SUCURSAL.MFondo;
+
                 if (SUCURSAL.Estatus.ID != 0)
                 {
                     cmd.Parameters.Add("@IntEstatus", SqlDbType.Int);
@@ -131,6 +141,9 @@ namespace Modelo
 
                 cmd.Parameters.Add("@BVisibilidadInformacion", SqlDbType.Bit);
                 cmd.Parameters["@BVisibilidadInformacion"].Value = SUCURSAL.BVisibilidad;
+
+                cmd.Parameters.Add("@MFondo", SqlDbType.Money);
+                cmd.Parameters["@MFondo"].Value = SUCURSAL.MFondo;
 
                 cmd.Parameters.Add("@Codigo", SqlDbType.VarChar, 40);
                 cmd.Parameters["@Codigo"].Value = SUCURSAL.StrCodigo;
@@ -279,7 +292,7 @@ namespace Modelo
             return resultado;
         }
 
-        public void AsingaOrdenRepartidor( Guid UidTurnoRepartidor, Guid UidSucursal,Guid UidOrdenRepartidor)
+        public void AsingaOrdenRepartidor(Guid UidTurnoRepartidor, Guid UidSucursal, Guid UidOrdenRepartidor)
         {
             Conexion = new Conexion();
             bool resultado = false;

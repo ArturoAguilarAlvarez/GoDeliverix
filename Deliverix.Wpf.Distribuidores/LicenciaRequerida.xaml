@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DeliverixSucursales"
         mc:Ignorable="d"
-        Title="Aviso" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"  Width="800" Height="200" WindowStyle="None">
-    <Grid>
+        Title="Aviso" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"  Width="800" Height="400" WindowStyle="None">
+    <StackPanel Orientation="Vertical">
         <TextBlock x:Name="lblMensaje" Text="Licencia Requerida!!!"  FontSize="20"  HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Top" Margin="10 20 0 0" Height="70" Width="600"/>
+        <Image x:Name="CodigoQr" Height="100"></Image>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 
             <Button x:Name="btnAceptar" Click="btnAceptar_Click" Content="Aceptar" HorizontalAlignment="Center" Height="30" Margin="0 20 0 0" Background="Green"  VerticalAlignment="Center" Width="96"/>
         </StackPanel>
-    </Grid>
+    </StackPanel>
 </Window>

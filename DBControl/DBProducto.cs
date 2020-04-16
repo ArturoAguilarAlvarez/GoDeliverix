@@ -266,14 +266,14 @@ namespace DBControl
         public DataTable ObtenProductoSeccion(Guid uidSeccion)
         {
             oConexion = new Conexion();
-            string query = "select p.UidProducto, p.VchNombre, sp.VchTiempoElaboracion, sp.Mcosto,i.NVchRuta, p.VchDescripcion from Productos p inner join SeccionProducto sp on sp.UidProducto = p.UidProducto inner join Seccion s on s.UidSeccion = sp.UidSeccion inner join ImagenProducto ip on ip.UidProducto = p.UidProducto inner join Imagenes i on i.UIdImagen = ip.UidImagen where s.UidSeccion = '" + uidSeccion.ToString() + "' and p.IntEstatus = 1";
+            string query = "select p.UidProducto, p.VchNombre, sp.VchTiempoElaboracion, dbo.ObtenerPrecioConComision(sp.Mcosto,p.UidEmpresa )  as Mcosto,i.NVchRuta, p.VchDescripcion from Productos p inner join SeccionProducto sp on sp.UidProducto = p.UidProducto inner join Seccion s on s.UidSeccion = sp.UidSeccion inner join ImagenProducto ip on ip.UidProducto = p.UidProducto inner join Imagenes i on i.UIdImagen = ip.UidImagen where s.UidSeccion = '" + uidSeccion.ToString() + "' and p.IntEstatus = 1";
             return oConexion.Consultas(query);
         }
 
         public DataTable ProductoCarrito(Guid uidProducto, string UidSucursal, string UidSeccion)
         {
             oConexion = new Conexion();
-            string query = "select sp.UidSeccion,p.UidProducto,sp.UidSeccionProducto, p.VchNombre,sp.VchTiempoElaboracion,cast(sp.Mcosto  as decimal(10,2)) as Mcosto, s.Identificador,s.UidSucursal, i.NVchRuta, sp.UidSeccionProducto from  productos p inner join SeccionProducto sp on sp.UidProducto = p.UidProducto inner join Seccion se on se.UidSeccion = sp.UidSeccion inner join Oferta o on o.UidOferta = se.UidOferta inner join Sucursales s on s.UidSucursal = o.Uidsucursal inner join ImagenProducto ip on ip.UidProducto = p.UidProducto   inner join imagenes i on i.UIdImagen = ip.UidImagen where p.uidProducto = '" + uidProducto.ToString() + "' and s.UidSucursal = '" + UidSucursal + "' and se.uidSeccion = '" + UidSeccion + "'";
+            string query = "select sp.UidSeccion,p.UidProducto,sp.UidSeccionProducto, p.VchNombre,sp.VchTiempoElaboracion,dbo.ObtenerPrecioConComision(sp.Mcosto,p.UidEmpresa )  as Mcosto, s.Identificador,s.UidSucursal, i.NVchRuta, sp.UidSeccionProducto from  productos p inner join SeccionProducto sp on sp.UidProducto = p.UidProducto inner join Seccion se on se.UidSeccion = sp.UidSeccion inner join Oferta o on o.UidOferta = se.UidOferta inner join Sucursales s on s.UidSucursal = o.Uidsucursal inner join ImagenProducto ip on ip.UidProducto = p.UidProducto   inner join imagenes i on i.UIdImagen = ip.UidImagen where p.uidProducto = '" + uidProducto.ToString() + "' and s.UidSucursal = '" + UidSucursal + "' and se.uidSeccion = '" + UidSeccion + "'";
             return oConexion.Consultas(query);
         }
     }

@@ -28,6 +28,13 @@ namespace VistaDelModelo
             get { return _LngFolio; }
             set { _LngFolio = value; }
         }
+        private decimal _mFondo;
+
+        public decimal DFondoRepartidor
+        {
+            get { return _mFondo; }
+            set { _mFondo = value; }
+        }
 
         private DateTime _HoraIncio;
         public DateTime DtmHoraInicio
@@ -57,6 +64,8 @@ namespace VistaDelModelo
             get { return _UidUsuario; }
             set { _UidUsuario = value; }
         }
+
+
         //Propiedades para el control del turno
         private decimal _DTotal;
 
@@ -83,12 +92,21 @@ namespace VistaDelModelo
             set { _DTotalSucursal = value; }
         }
 
+
+
         private decimal _DPropina;
 
         public decimal DPropina
         {
             get { return _DPropina; }
             set { _DPropina = value; }
+        }
+        private decimal _EfectivoActual;
+
+        public decimal DEfectivoActual
+        {
+            get { return _EfectivoActual; }
+            set { _EfectivoActual = value; }
         }
 
 
@@ -131,6 +149,8 @@ namespace VistaDelModelo
             set { _ListaDeRepartidores = value; }
         }
 
+
+
         #region Informacion de usuario
         private string _strNombre;
         private Conexion oConexion;
@@ -157,12 +177,45 @@ namespace VistaDelModelo
 
         #region Metodos
 
+        public void InformacionTurnoCallCenter(Guid uidusuario)
+        {
+            try
+            {
+                oTurno = new Turno() { UidUsuario = UidUsuario };
+                foreach (DataRow item in oTurno.vertificaUltimoTurnoCallCenter(uidusuario).Rows)
+                {
+                    UidTurno = new Guid(item["UidTunoCallCenter"].ToString());
+                    LngFolio = long.Parse(item["LngFolio"].ToString());
+                    this.UidUsuario = new Guid(item["UidUsuario"].ToString());
+                    DtmHoraInicio = DateTime.Parse(item["DtmHoraInicio"].ToString());
+                    if (!string.IsNullOrEmpty(item["DtmHoraFin"].ToString()))
+                    {
+                        DtmHoraFin = DateTime.Parse(item["DtmHoraFin"].ToString());
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public bool TurnoYaabiertoEnTurnoCallCenter(Guid uidSucursal, string UidUsuario)
+        {
+            oTurno = new Turno();
+            bool resultado = false;
+            if (oTurno.VerificaExistenciaTurnoSucursalConTurnoCallCenter(uidSucursal, UidUsuario).Rows.Count > 0)
+            {
+                resultado = true;
+            }
+            return resultado;
+        }
+
         public void EstatusTurno(Guid UidUsuario, Guid UidTurno)
         {
             oTurno = new Turno() { UidTurno = UidTurno, UidUsuario = UidUsuario };
             oTurno.CreaOActualiza();
-
-
         }
         public void AgregaEstatusTurnoRepartidor(string UidTurnoRepartidor, string UidEstatusTurno)
         {
@@ -188,6 +241,9 @@ namespace VistaDelModelo
                 throw;
             }
         }
+
+
+
         public void LiquidarARepartidor(string strTurnoRepartidor, string StrTurnoDistribuidora, string strMontoALiquidar)
         {
             SqlCommand cmd = new SqlCommand();
@@ -254,6 +310,7 @@ namespace VistaDelModelo
                     LngFolio = long.Parse(item["LngFolio"].ToString());
                     this.UidUsuario = new Guid(item["UidUsuario"].ToString());
                     DtmHoraInicio = DateTime.Parse(item["DtmHoraInicio"].ToString());
+                    DFondoRepartidor = decimal.Parse(decimal.Parse(item["mfondo"].ToString()).ToString("N2"));
                     if (!string.IsNullOrEmpty(item["DtmHoraFin"].ToString()))
                     {
                         DtmHoraFin = DateTime.Parse(item["DtmHoraFin"].ToString());
@@ -335,6 +392,10 @@ namespace VistaDelModelo
                     {
                         DPropina = decimal.Parse(item["propina"].ToString());
                     }
+                    if (!string.IsNullOrEmpty(item["Efectivo"].ToString()))
+                    {
+                        DEfectivoActual = decimal.Parse(item["Efectivo"].ToString());
+                    }
                 }
             }
             catch (Exception)
@@ -364,36 +425,129 @@ namespace VistaDelModelo
                 throw;
             }
         }
+        public bool VerificaTurnoCerrado(string UidTurnoRepartidor)
+        {
+
+            bool resut = false;
+            try
+            {
+                oTurno = new Turno();
+                if (oTurno.verificaTurnoCerradoRepartidor(UidTurnoRepartidor).Rows.Count > 0)
+                {
+                    resut = true;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
+            return resut;
+        }
+
+        public decimal VerFondoRepartidor(string UidUsuario)
+        {
+            decimal mfondo = 0;
+            oTurno = new Turno();
+            foreach (DataRow item in oTurno.ObtenerFondo(UidUsuario).Rows)
+            {
+                mfondo = decimal.Parse(decimal.Parse(item["MFondo"].ToString()).ToString("N2"));
+            }
+            return mfondo;
+        }
+        public void RepartidoresConFondoAEntregar(string licencia)
+        {
+            oTurno = new Turno();
+            try
+            {
+                foreach (DataRow item in oTurno.ObtenerUltimoTurnoDeRepartidore(licencia).Rows)
+                {
+                    decimal total = 0;
+                    if (VerificaTurnoCerrado(item["UidTurnoRepartidor"].ToString()))
+                    {
+                        total = VerFondoRepartidor(item["UidUsuario"].ToString());
+                    }
+                    if (total > 0)
+                    {
+                        VMTurno usuario = new VMTurno()
+                        {
+                            UidUsuario = new Guid(item["UidUsuario"].ToString()),
+                            UidTurno = new Guid(item["UidTurnoRepartidor"].ToString()),
+                            StrNombre = item["Nombre"].ToString(),
+                            DTotalEnvio = total
+                        };
+                        if (!ListaDeRepartidores.Exists(u => u.UidUsuario == usuario.UidUsuario))
+                        {
+                            ListaDeRepartidores.Add(usuario);
+                        }
+                        else
+                        {
+                            var registro = ListaDeRepartidores.Find(u => u.UidUsuario == usuario.UidUsuario);
+                            registro.DTotalEnvio = registro.DTotalEnvio + total;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
         public void ObtenerRepartidoresALiquidar(string UidLicencia)
         {
             ListaDeRepartidores = new List<VMTurno>();
             oTurno = new Turno();
-            foreach (DataRow item in oTurno.ObtenerRepartidoresALiquidar(UidLicencia).Rows)
+            foreach (DataRow item in oTurno.
+                ObtenerRepartidoresALiquidar(UidLicencia).Rows)
             {
                 //Varifica que este activo el campo
                 if (item["EstatusTurno"].ToString().ToUpper() == "AE28F243-AA0D-43BD-BF10-124256B75B00")
                 {
-                    //if (item["estatus"].ToString().ToUpper() == "A298B40F-C495-4BD8-A357-4A3209FBC162")
-                    //{
-                    //if (string.IsNullOrEmpty(item["DtmHoraFin"].ToString()))
-                    //{
+                    decimal total = 0;
+                    if (!string.IsNullOrEmpty(item["Ordenes"].ToString()))
+                    {
+                        total = decimal.Parse(item["Ordenes"].ToString());
+                    }
+
                     VMTurno usuario = new VMTurno()
                     {
                         UidUsuario = new Guid(item["UidUsuario"].ToString()),
                         UidTurno = new Guid(item["UidTurnoRepartidor"].ToString()),
                         StrNombre = item["Nombre"].ToString(),
-                        DTotalEnvio = decimal.Parse(item["Envio"].ToString()) + decimal.Parse(item["Ordenes"].ToString())
+                        DTotalEnvio = total
                     };
                     if (!ListaDeRepartidores.Exists(u => u.UidUsuario == UidUsuario))
                     {
                         ListaDeRepartidores.Add(usuario);
                     }
-                    //}
-                    // }
                 }
             }
         }
-
+        public void ConsultarTurnoSuministradoraDesdeCallCenter(string UidLicencia, Guid UidTurnoCallCenter)
+        {
+            try
+            {
+                oTurno = new Turno() { UidUsuario = UidUsuario };
+                foreach (DataRow item in oTurno.VerificaTurnoSuministradoraCallCenter(UidLicencia, UidTurnoCallCenter).Rows)
+                {
+                    UidTurno = new Guid(item["UidTurnoSuministradora"].ToString());
+                    LngFolio = long.Parse(item["LngFolio"].ToString());
+                    this.UidUsuario = new Guid(item["UidUsuario"].ToString());
+                    DtmHoraInicio = DateTime.Parse(item["DtmHoraInicio"].ToString());
+                    if (!string.IsNullOrEmpty(item["DtmHoraFin"].ToString()))
+                    {
+                        DtmHoraFin = DateTime.Parse(item["DtmHoraFin"].ToString());
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         public void ConsultarUltimoTurnoSuministradora(string UidLicencia)
         {
             try
@@ -426,16 +580,53 @@ namespace VistaDelModelo
             };
             oTurno.TurnoDistribuidora();
         }
-        
-        public void TurnoSuministradora(Guid uid, Guid uidTurnoDistribuidor)
+
+        public void TurnoSuministradora(Guid uid, Guid uidTurnoDistribuidor = new Guid(), string licencia = "")
         {
-            oTurno = new Turno()
+            if (string.IsNullOrEmpty(licencia))
             {
-                UidTurno = uidTurnoDistribuidor,
-                UidUsuario = uid
-            };
+                oTurno = new Turno()
+                {
+                    UidTurno = uidTurnoDistribuidor,
+                    UidUsuario = uid
+                };
+            }
+            else
+            {
+                oTurno = new Turno()
+                {
+                    UidLicencia = new Guid(licencia),
+                    UidUsuario = uid
+                };
+            }
             oTurno.TurnoSuministradora();
         }
+        public void TurnoCallCenter(Guid UidUsuario)
+        {
+            try
+            {
+                oTurno = new Turno();
+                oTurno.UidUsuario = UidUsuario;
+                oTurno.TurnoCallCenter();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public void RelacionTurnoSuministradoraCallcenter(Guid UidTurnoSuministradora, Guid UidTurnoCallcenter)
+        {
+            try
+            {
+                oTurno = new Turno();
+                oTurno.RelacionTurnoSuministradoraCallCenter(UidTurnoSuministradora, UidTurnoCallcenter);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public DataTable ObtenerLiquidacionesDeTurnoDistribuidora(string UidTurnoDistribuidora)
         {
             oTurno = new Turno();
@@ -508,6 +699,19 @@ namespace VistaDelModelo
                 });
             }
         }
+
+        public bool TurnoAbierto(Guid UidSucursal)
+        {
+            oConexion = new Conexion();
+            bool resultado = false;
+            string query = "select top 1 * from TurnoSuministradora ts where ts.DtmHoraFin is  null and ts.UidSucursal = '" + UidSucursal.ToString() + "'";
+            if (oConexion.Consultas(query).Rows.Count > 0)
+            {
+                resultado = true;
+            }
+            return resultado;
+        }
+
         #endregion
     }
 }

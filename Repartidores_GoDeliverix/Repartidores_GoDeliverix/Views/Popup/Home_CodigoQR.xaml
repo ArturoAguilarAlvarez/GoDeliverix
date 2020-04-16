@@ -64,7 +64,7 @@
                                             <Grid Padding="10,0,0,0">
                                                 <Label TextColor="Purple" Grid.Column="0"   HorizontalOptions="Center" FontSize="Medium" Text="{Binding IntCantidad}" ></Label>
                                                 <Label TextColor="Purple" Grid.Column="1" HorizontalOptions="Center" FontSize="Medium" Text="{Binding StrNombreProducto}"  ></Label>
-                                                <Label TextColor="Purple" Grid.Column="2" HorizontalOptions="Center" FontSize="Medium" Text="{Binding MTotal, StringFormat='${0}'}" ></Label>
+                                                <Label TextColor="Purple" Grid.Column="2" HorizontalOptions="Center" FontSize="Medium" Text="{Binding MSubTotal, StringFormat='${0}'}" ></Label>
                                             </Grid>
                                         </ViewCell>
                                     </DataTemplate>

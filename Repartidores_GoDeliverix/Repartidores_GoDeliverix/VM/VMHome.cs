@@ -341,7 +341,7 @@ namespace Repartidores_GoDeliverix.VM
             MVOrden = new VMOrden();
             using (var _WebApiGoDeliverix = new HttpClient())
             {
-                url = "https://www.godeliverix.net/api/Orden/GetObtenerCodigoOrdenTarifario?uidOrdenTarifario=" + UidOrdenTarifario + "";
+                url = ""+ settings.Sitio + "api/Orden/GetObtenerCodigoOrdenTarifario?uidOrdenTarifario=" + UidOrdenTarifario + "";
                 string content = await _WebApiGoDeliverix.GetStringAsync(url);
                 var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                 MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(obj);
@@ -351,7 +351,7 @@ namespace Repartidores_GoDeliverix.VM
             using (var _WebApiGoDeliverix = new HttpClient())
             {
                 url = string.Empty;
-                url = "https://www.godeliverix.net/api/Sucursales/GetBuscarSucursales?UidSucursal=" + UidSucursal + "";
+                url = "" + settings.Sitio + "api/Sucursales/GetBuscarSucursales?UidSucursal=" + UidSucursal + "";
                 string content = await _WebApiGoDeliverix.GetStringAsync(url);
                 string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                 MVSucursal = JsonConvert.DeserializeObject<VistaDelModelo.VMSucursales>(obj);
@@ -431,8 +431,8 @@ namespace Repartidores_GoDeliverix.VM
                         string url = string.Empty;
                         IsLoading = true;
                         Guid uidUsuario = AppInstance.Session_.UidUsuario;
-                        var Consulta = url = "https://www.godeliverix.net/api/Profile/GetObtenerUltimoEstatusBitacoraRepartidor?UidUsuario=" + AppInstance.Session_.UidUsuario + "";
-                        var Consulta2 = "https://www.godeliverix.net/api/Turno/GetConsultaUltimoTurno?UidUsuario=" + uidUsuario + "";
+                        var Consulta = url = "" + settings.Sitio + "api/Profile/GetObtenerUltimoEstatusBitacoraRepartidor?UidUsuario=" + AppInstance.Session_.UidUsuario + "";
+                        var Consulta2 = "" + settings.Sitio + "api/Turno/GetConsultaUltimoTurno?UidUsuario=" + uidUsuario + "";
                         string UltimoAcceso = string.Empty;
                         using (var _webApi = new HttpClient())
                         {
@@ -457,7 +457,7 @@ namespace Repartidores_GoDeliverix.VM
                             {
                                 using (var _webApi = new HttpClient())
                                 {
-                                    url = "https://www.godeliverix.net/api/Orden/GetBuscarOrdenAsiganadaRepartidor?UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor + "";
+                                    url = "" + settings.Sitio + "api/Orden/GetBuscarOrdenAsiganadaRepartidor?UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor + "";
                                     string content = await _webApi.GetStringAsync(url);
                                     string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                                     MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(obj);
@@ -513,7 +513,7 @@ namespace Repartidores_GoDeliverix.VM
                                             BlEntrega = false;
                                             using (var _webApi = new HttpClient())
                                             {
-                                                url = "https://www.godeliverix.net/api/Ubicacion/GetRecuperaUbicacionSucursal?UidSucursal=" + UidSucursal + "";
+                                                url = "" + settings.Sitio + "api/Ubicacion/GetRecuperaUbicacionSucursal?UidSucursal=" + UidSucursal + "";
                                                 string content = await _webApi.GetStringAsync(url);
                                                 string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                                                 MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
@@ -523,7 +523,7 @@ namespace Repartidores_GoDeliverix.VM
                                             StrUbicacionSucursal = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
                                             using (var _webApi = new HttpClient())
                                             {
-                                                url = "https://www.godeliverix.net/api/Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
+                                                url = "" + settings.Sitio + "api/Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
                                                 string content = await _webApi.GetStringAsync(url);
                                                 string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                                                 MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
@@ -538,7 +538,7 @@ namespace Repartidores_GoDeliverix.VM
                                             {
                                                 using (var _webApi = new HttpClient())
                                                 {
-                                                    url = "https://www.godeliverix.net/api/Profile/GetBitacoraRegistroRepartidores?StrParametro=O&UidUsuario=" + uidUsuario + "&UidEstatus=B6791F2C-FA16-40C6-B5F5-123232773612&UidOrdenRepartidor=" + UidordenRepartidor + "";
+                                                    url = "" + settings.Sitio + "api/Profile/GetBitacoraRegistroRepartidores?StrParametro=O&UidUsuario=" + uidUsuario + "&UidEstatus=B6791F2C-FA16-40C6-B5F5-123232773612&UidOrdenRepartidor=" + UidordenRepartidor + "";
                                                     await _webApi.GetAsync(url);
                                                 }
 
@@ -548,7 +548,7 @@ namespace Repartidores_GoDeliverix.VM
                                                 BlEntrega = true;
                                                 using (var _webApi = new HttpClient())
                                                 {
-                                                    url = "https://www.godeliverix.net/api/Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
+                                                    url = "" + settings.Sitio + "api/Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
                                                     string content = await _webApi.GetStringAsync(url);
                                                     string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                                                     MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
@@ -563,7 +563,7 @@ namespace Repartidores_GoDeliverix.VM
                                                 BlEntrega = false;
                                                 using (var _webApi = new HttpClient())
                                                 {
-                                                    url = "https://www.godeliverix.net/api/Ubicacion/GetRecuperaUbicacionSucursal?UidSucursal=" + UidSucursal + "";
+                                                    url = "" + settings.Sitio + "api/Ubicacion/GetRecuperaUbicacionSucursal?UidSucursal=" + UidSucursal + "";
                                                     string content = await _webApi.GetStringAsync(url);
                                                     string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                                                     MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
@@ -582,7 +582,7 @@ namespace Repartidores_GoDeliverix.VM
                                             BlEntrega = true;
                                             using (var _webApi = new HttpClient())
                                             {
-                                                url = "https://www.godeliverix.net/api/Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
+                                                url = "" + settings.Sitio + "api/Ubicacion/GetRecuperaUbicacionDireccion?UidDireccion=" + UidDireccionCliente + "";
                                                 string content = await _webApi.GetStringAsync(url);
                                                 string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                                                 MVUbicacion = JsonConvert.DeserializeObject<VistaDelModelo.VMUbicacion>(obj);
@@ -626,7 +626,7 @@ namespace Repartidores_GoDeliverix.VM
             string obj = "";
             using (var _WebApi = new HttpClient())
             {
-                string url = "https://www.godeliverix.net/api/Turno/GetConsultaEstatusUltimoTurnoRepartidor?UidUsuario=" + UidUsuario + "";
+                string url = "" + settings.Sitio + "api/Turno/GetConsultaEstatusUltimoTurnoRepartidor?UidUsuario=" + UidUsuario + "";
                 string datos = await _WebApi.GetStringAsync(url);
                 obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
             }

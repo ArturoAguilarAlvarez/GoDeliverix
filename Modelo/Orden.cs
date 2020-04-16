@@ -183,7 +183,7 @@ namespace Modelo
                 if (Uidorden != Guid.Empty)
                 {
                     Comando.Parameters.Add("@UidOrden", SqlDbType.UniqueIdentifier);
-                    Comando.Parameters["@UidOrden"].Value = Uidorden ;
+                    Comando.Parameters["@UidOrden"].Value = Uidorden;
                 }
 
                 if (oMensaje.Uid != Guid.Empty && oMensaje != null)
@@ -224,6 +224,18 @@ namespace Modelo
             return resultado;
         }
 
+        public DataTable InformacionDeOrdenesUltimoTurno(string UidSucursal)
+        {
+            Datos = new Conexion();
+            string query = "select os.UidRelacionOrdenSucursal,os.IntFolio,os.MTotalSucursal,dbo.ObtenUltimoEstatusDeOrdenEnSucursal(os.UidRelacionOrdenSucursal,'s') as Estatus from OrdenSucursal os where  os.UidTurnoSuministradora in     (select top 1 UidTurnoSuministradora from TurnoSuministradora where UidSucursal = '" + UidSucursal + "' order by DtmHoraInicio desc)";
+            return Datos.Consultas(query);
+        }
+        public DataTable InformacionDeOrdenesTurnoCallCenter(string v, Guid uidTurno)
+        {
+            Datos = new Conexion();
+            string query = "select os.UidRelacionOrdenSucursal,os.IntFolio,os.MTotalSucursal,dbo.ObtenUltimoEstatusDeOrdenEnSucursal(os.UidRelacionOrdenSucursal, 's') as Estatus from OrdenSucursal os  where os.UidTurnoSuministradora in (select top 1 rt.UidTurnoSuministradora from RelacionTurnoSuministradoraTurnoCallcenter rt inner join TurnoSuministradora ts on ts.UidTurnoSuministradora = rt.UidTurnoSuministradora inner join TurnoCallCenter tc on tc.UidTunoCallCenter = rt.UidTurnoCallCenter where ts.UidSucursal = '" + v + "' and tc.UidTunoCallCenter = '" + uidTurno.ToString() + "' )";
+            return Datos.Consultas(query);
+        }
         public bool AsociarOrdenConDistribuidora(Guid uidorden, Guid iD, Guid Codigo, Guid uidLicencia, long LngFolio)
         {
             bool resultado = false;
@@ -313,6 +325,8 @@ namespace Modelo
             }
             return resultado;
         }
+
+
         #endregion
     }
 }

@@ -846,7 +846,7 @@ namespace VistaDelModelo
                             STRNOMBRE = nombre,
                             STRRUTA = ruta,
                             StrCosto = decimal.Parse(item["MCosto"].ToString()).ToString("N2")
-                    });
+                        });
                     }
                 }
             }

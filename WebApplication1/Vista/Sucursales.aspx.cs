@@ -980,6 +980,7 @@ namespace WebApplication1.Vista
             txtDHoraCierre.Text = MVSucursales.SUCURSAL.HORACIERRE;
             txtClaveDeBusqueda.Text = MVSucursales.SUCURSAL.StrCodigo;
             chkVisibilidadInformacion.Checked = MVSucursales.SUCURSAL.BVisibilidad;
+            txtFondoRepartidor.Text = MVSucursales.SUCURSAL.MFondo.ToString();
             PanelMensaje.Visible = false;
 
 
@@ -1284,6 +1285,7 @@ namespace WebApplication1.Vista
             if (MVEmpresa.ObtenerTipoDeEmpresa(UidEmpresa))
             {
                 liDatosZonaDeServicio.Visible = false;
+                dvFondo.Visible = false;
             }
             else
             //Distribuidora
@@ -1294,6 +1296,8 @@ namespace WebApplication1.Vista
                 liDatosCategoria.Visible = false;
 
                 liDatosSubcategoria.Visible = false;
+
+                dvFondo.Visible = true;
 
             }
         }
@@ -1707,7 +1711,7 @@ namespace WebApplication1.Vista
             btnGuardar.Visible = estado;
             btnCancelar.Visible = estado;
 
-
+            txtFondoRepartidor.Enabled = estado;
             btnNuevoTelefono.Enabled = estado;
 
             btnNuevoTelefono.Enabled = estado;
@@ -2169,6 +2173,11 @@ namespace WebApplication1.Vista
                 {
                     UIDSUCURSAL = txtDUisSucursal.Text;
                 }
+                decimal fondo = 0;
+                if (!string.IsNullOrEmpty(txtFondoRepartidor.Text))
+                {
+                    fondo = decimal.Parse(txtFondoRepartidor.Text);
+                }
 
                 string HoraDeApertura = txtDHoraApertura.Text;
                 string HoraDeCierre = txtDHoraCierre.Text;
@@ -2182,6 +2191,7 @@ namespace WebApplication1.Vista
                 DbLongitud = (double)Session["DbLongitud"];
                 #endregion
 
+
                 if (Session["Accion"].ToString() == "NuevoRegistro")
                 {
                     #region Guardar datos
@@ -2189,7 +2199,7 @@ namespace WebApplication1.Vista
                     Guid UidSucursal = Guid.NewGuid();
                     Guid UidDireccion = Guid.NewGuid();
 
-                    if (MVSucursales.GuardarSucursal(UidSucursal, UidDireccion, Identificador, Session["UidEmpresaSistema"].ToString(), HoraDeApertura, HoraDeCierre, ddlEstatusSucursal.SelectedItem.Value, VisibilidaddeInformacion, codigoDeBusqueda))
+                    if (MVSucursales.GuardarSucursal(UidSucursal, UidDireccion, Identificador, Session["UidEmpresaSistema"].ToString(), HoraDeApertura, HoraDeCierre, ddlEstatusSucursal.SelectedItem.Value, VisibilidaddeInformacion, codigoDeBusqueda, fondo))
                     {
                         if (MVDireccion.GuardaDireccion(UidDireccion, new Guid(DDLDPais.SelectedItem.Value.ToString()), new Guid(DDLDEstado.SelectedItem.Value), new Guid(DDLDMunicipio.SelectedItem.Value), new Guid(DDLDCiudad.SelectedItem.Value.ToString()), new Guid(DDLDColonia.SelectedItem.Value.ToString()), txtCalle0.Text, txtCalle1.Text, txtCalle2.Text, txtDManzana.Text, txtDLote.Text, txtDCodigoPostal.Text, txtDReferencia.Text, txtIdentificadorDeDireccion.Text))
                         {
@@ -2333,7 +2343,7 @@ namespace WebApplication1.Vista
                 {
                     #region Actualizar datos
                     UIDSUCURSAL = txtUidSucursal.Text;
-                    if (MVSucursales.ActualizarDatos(UIDSUCURSAL, Identificador, HoraDeApertura, HoraDeCierre, estatus, VisibilidaddeInformacion, codigoDeBusqueda))
+                    if (MVSucursales.ActualizarDatos(UIDSUCURSAL, Identificador, HoraDeApertura, HoraDeCierre, estatus, VisibilidaddeInformacion, codigoDeBusqueda, fondo))
                     {
 
                         MVDireccion.EliminaDireccion(UIDSUCURSAL);

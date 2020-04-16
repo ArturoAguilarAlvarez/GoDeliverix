@@ -70,41 +70,60 @@ namespace AppCliente
             SetCultureToUSEnglish();
             Usuario = AppCliente.Helpers.Settings.UserName;
             Contrasena = AppCliente.Helpers.Settings.Password;
-            var current = Connectivity.NetworkAccess;
-            if (current == NetworkAccess.Internet)
+            //var current = Connectivity.NetworkAccess;
+            //if (current == NetworkAccess.Internet)
+            //{
+            if (string.IsNullOrEmpty(Usuario) || string.IsNullOrEmpty(Contrasena))
             {
-                if (string.IsNullOrEmpty(Usuario) || string.IsNullOrEmpty(Contrasena))
+                MainPage = new MasterMenu();
+            }
+            else
+            {
+                if (Ingresar().Result)
                 {
+                    MVDireccion.ObtenerDireccionesUsuario(Global1);
                     MainPage = new MasterMenu();
                 }
                 else
                 {
-                    if (Ingresar().Result)
-                    {
-                        MVDireccion.ObtenerDireccionesUsuario(Global1);
-                        MainPage = new MasterMenu();
-                    }
-                    else
-                    {
-                        MainPage = new NavigationPage(new MasterMenu());
-                    }
+                    MainPage = new NavigationPage(new MasterMenu());
                 }
             }
-            else
-            {
-                MainPage = new NavigationPage(new ErrorConectividadPage());
-            }
+            //}
+            //else if (current == NetworkAccess.Local)
+            //{
+            //    if (string.IsNullOrEmpty(Usuario) || string.IsNullOrEmpty(Contrasena))
+            //    {
+            //        MainPage = new MasterMenu();
+            //    }
+            //    else
+            //    {
+            //        if (Ingresar().Result)
+            //        {
+            //            MVDireccion.ObtenerDireccionesUsuario(Global1);
+            //            MainPage = new MasterMenu();
+            //        }
+            //        else
+            //        {
+            //            MainPage = new NavigationPage(new MasterMenu());
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    MainPage = new NavigationPage(new ErrorConectividadPage());
+            //}
         }
 
 
-        private void OnHandleNotificationOpened(Com.OneSignal.Abstractions.OSNotificationOpenedResult result)
-        {
-            if (result.notification.payload.additionalData.ContainsKey("additional_message"))
-            {
-                // Si el payload posee la key additional_message, ejecutar esta seccion de codigo
-                MessageFromNotification = result.notification.payload.additionalData["additional_message"].ToString();
-            }
-        }
+        //private void OnHandleNotificationOpened(Com.OneSignal.Abstractions.OSNotificationOpenedResult result)
+        //{
+        //    if (result.notification.payload.additionalData.ContainsKey("additional_message"))
+        //    {
+        //        // Si el payload posee la key additional_message, ejecutar esta seccion de codigo
+        //        MessageFromNotification = result.notification.payload.additionalData["additional_message"].ToString();
+        //    }
+        //}
 
 
         private void SetCultureToUSEnglish()
@@ -225,8 +244,6 @@ namespace AppCliente
                     GenerateMessage("Sin coneccion a internet", "No se pudo conectar con los servicios", "OK");
                     throw;
                 }
-
-
             }
             return acceso;
         }

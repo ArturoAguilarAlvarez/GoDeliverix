@@ -132,7 +132,7 @@ namespace Repartidores_GoDeliverix.VM
             {
                 using (var _WebApiGoDeliverix = new HttpClient())
                 {
-                    string url = "https://www.godeliverix.net/api/Turno/GetConsultaLiquidacionesTurno?UidTurnoRepartidor=" + UidTurnoSeleccionado + "";
+                    string url = "" + settings.Sitio + "api/Turno/GetConsultaLiquidacionesTurno?UidTurnoRepartidor=" + UidTurnoSeleccionado + "";
                     var datos = await _WebApiGoDeliverix.GetStringAsync(url);
                     var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
                     MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
@@ -170,7 +170,7 @@ namespace Repartidores_GoDeliverix.VM
                 {
                     using (var _WebApiGoDeliverix = new HttpClient())
                     {
-                        string url = "https://www.godeliverix.net/api/Turno/GetInformacionHistoricoOrdenesTurno?UidTurno=" + UidTurnoRepartidor + "";
+                        string url = "" + settings.Sitio + "api/Turno/GetInformacionHistoricoOrdenesTurno?UidTurno=" + UidTurnoRepartidor + "";
                         var datos = await _WebApiGoDeliverix.GetStringAsync(url);
                         var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
                         MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);

@@ -22,10 +22,8 @@ namespace Deliverix.Wpf.Distribuidores
             {
                 if (!HostLicencia.VerificaEstatusDeLicenciaSucursal(MVLicencia.Licencia))
                 {
-
                     MVLicencia.EliminarLicencia();
                 }
-
             }
             ActualizarTextosDeLicencia();
         }

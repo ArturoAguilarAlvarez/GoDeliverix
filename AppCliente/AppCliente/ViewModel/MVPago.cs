@@ -65,9 +65,6 @@ namespace AppCliente.ViewModel
                         Random Codigo = new Random();
                         long CodigoDeEnrega = Codigo.Next(00001, 99999);
 
-
-                        
-
                         foreach (var item in objetos)
                         {
                             totalSucursal = totalSucursal + item.Subtotal;
@@ -90,7 +87,7 @@ namespace AppCliente.ViewModel
                             {
                                 mensaje = "sin nota";
                             }
-                            string _Url = $"http://godeliverix.net/api/Orden/GetGuardarProductos?" +
+                            string _Url = $"" + Helpers.Settings.sitio + "/api/Orden/GetGuardarProductos?" +
                                 $"UIDORDEN={UidOrdenSucursal}" +
                                 $"&UIDSECCIONPRODUCTO={item.UidSeccionPoducto}" +
                                 $"&INTCANTIDAD={item.Cantidad}" +
@@ -104,7 +101,7 @@ namespace AppCliente.ViewModel
                                 await _client.GetAsync(_Url);
                             }
                         }
-                        string _Url1 = $"http://godeliverix.net/api/Orden/GetGuardarOrden?" +
+                        string _Url1 = $"" + Helpers.Settings.sitio + "/api/Orden/GetGuardarOrden?" +
                             $"UIDORDEN={UidOrden}" +
                             $"&Total={total}" +
                             $"&Uidusuario={UidUsuario}" +
@@ -120,7 +117,7 @@ namespace AppCliente.ViewModel
                         }
 
                         // Envia la orden a la sucursal distribuidora
-                        string _Url2 = $@"http://godeliverix.net/api/Tarifario/GetGuardarTarifario?" +
+                        string _Url2 = $@"" + Helpers.Settings.sitio + "/api/Tarifario/GetGuardarTarifario?" +
                             $"UidOrdenSucursal={UidOrdenSucursal}" +
                             $"&DPropina={objeto.DPropina}" +
                             $"&UidTarifario={objeto.UidTarifario}";
@@ -130,7 +127,7 @@ namespace AppCliente.ViewModel
                         }
 
                         //Una vez que se haya guardado ella basededatos se le cambia el estatus a la orden
-                        string _Url3 = $"http://godeliverix.net/api/Orden/GetAgregaEstatusALaOrden?" +
+                        string _Url3 = $"" + Helpers.Settings.sitio + "/api/Orden/GetAgregaEstatusALaOrden?" +
                             $"UidEstatus=DE294EFC-C549-4DDD-A0D1-B0E1E2039ECC" +
                             $"&StrParametro=U" +
                             $"&UidOrden={UidOrdenSucursal}" +
@@ -145,7 +142,7 @@ namespace AppCliente.ViewModel
 
 
                     //Inserta el registro del modo de pago
-                    string _UrlPago = $"http://godeliverix.net/api/Pagos/GetInsertarPago?" +
+                    string _UrlPago = $"" + Helpers.Settings.sitio + "/api/Pagos/GetInsertarPago?" +
                         $"UIDORDEN={UidOrden}" +
                         $"&UidPago={UidPago}" +
                         $"&UidFormaDeCobro={UidFormaDeCobro}" +
@@ -171,7 +168,7 @@ namespace AppCliente.ViewModel
                             break;
                         //Pago en Monedero
                         case "13DC10FE-FE47-48D6-A427-DD2F6DE0C564":
-                            string _Url = $"http://godeliverix.net/api/Monedero/Get?" +
+                            string _Url = $"" + Helpers.Settings.sitio + "/api/Monedero/Get?" +
                                $"id={App.Global1}";
                             var content = "";
                             using (HttpClient _client = new HttpClient())
@@ -181,10 +178,10 @@ namespace AppCliente.ViewModel
                             var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                             VMMonedero MVMonedero;
                             MVMonedero = JsonConvert.DeserializeObject<VMMonedero>(obj);
-                            GenerateMessage("Felicidades!", "Su orden se ha pagado con Monedero.\n Saldo disponible $" + MVMonedero.MMonto.ToString("N2") +" ", "OK");
+                            GenerateMessage("Felicidades!", "Su orden se ha pagado con Monedero.\n Saldo disponible $" + MVMonedero.MMonto.ToString("N2") + " ", "OK");
                             break;
                     }
-                    
+
                 }
                 else
                 {

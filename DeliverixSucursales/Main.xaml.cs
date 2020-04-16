@@ -32,19 +32,19 @@ namespace Deliverix.Wpf.Distribuidores
                 //DeliverixSucursales.Properties.Settings.Default.Reset();
                 //DeliverixSucursales.Properties.Settings.Default.Reload();
 
-                //SourceRegistro = string.Empty;
-                //try
-                //{
-                //    SourceRegistro = Registry.GetValue(@"HKEY_CURRENT_USER\GoDeliverixSuministradora", "Source", "").ToString();
-                //}
-                //catch (Exception)
-                //{
-                //    SourceRegistro = string.Empty;
-                //}
-                //if (!string.IsNullOrEmpty(SourceRegistro))
-                //{
-                //    if (PruebaConexionRegistro(SourceRegistro))
-                //    {
+                SourceRegistro = string.Empty;
+                try
+                {
+                    SourceRegistro = Registry.GetValue(@"HKEY_CURRENT_USER\GoDeliverixSuministradora", "Source", "").ToString();
+                }
+                catch (Exception)
+                {
+                    SourceRegistro = string.Empty;
+                }
+                if (!string.IsNullOrEmpty(SourceRegistro))
+                {
+                    if (PruebaConexionRegistro(SourceRegistro))
+                    {
                         InitializeComponent();
                         if (Application.Current.Windows.OfType<Main>().Any())
                         {
@@ -83,18 +83,18 @@ namespace Deliverix.Wpf.Distribuidores
                             }
                         }
 
-                //    }
-                //    else
-                //    {
-                //        DataBase wBDLocal = new DataBase();
-                //        wBDLocal.Show();
-                //    }
-                //}
-                //else
-                //{
-                //    DataBase wBDLocal = new DataBase();
-                //    wBDLocal.Show();
-                //}
+                    }
+                    else
+                    {
+                        DataBase wBDLocal = new DataBase();
+                        wBDLocal.Show();
+                    }
+                }
+                else
+                {
+                    DataBase wBDLocal = new DataBase();
+                    wBDLocal.Show();
+                }
 
             }
         }
@@ -364,7 +364,7 @@ namespace Deliverix.Wpf.Distribuidores
             {
                 MVAcceso.BitacoraRegistroSupervisores(new Guid(lblUidusuario.Content.ToString()), new Guid("83D5135E-95A4-4FFB-8F74-B6BAC980DFA3"));
                 var MVTurno = new VMTurno();
-                MVTurno.TurnoSuministradora(new Guid(lblUidusuario.Content.ToString()), new Guid(LblUidTurno.Content.ToString()));
+                MVTurno.TurnoSuministradora(new Guid(lblUidusuario.Content.ToString()), uidTurnoDistribuidor: new Guid(LblUidTurno.Content.ToString()));
                 lblUidusuario.Content = string.Empty;
                 txtUsuario.Text = string.Empty;
                 txtSucursal.Text = string.Empty;

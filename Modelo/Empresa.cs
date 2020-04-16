@@ -34,6 +34,7 @@ namespace Modelo
             get { return StrRFC; }
             set { StrRFC = value; }
         }
+        
         //Propiedades Foraneas
         public Direccion DCN;
         public Telefono PHONE;
@@ -42,6 +43,13 @@ namespace Modelo
         public TipoDeEmpresa TIPO;
         public List<Direccion> LISTADEDIRECCIONES;
 
+        private Comision _oComision;
+
+        public Comision oComision
+        {
+            get { return _oComision; }
+            set { _oComision = value; }
+        }
 
 
 
@@ -91,6 +99,15 @@ namespace Modelo
                 cmd.Parameters.Add("@TipoDeEmpresa", SqlDbType.Int);
                 cmd.Parameters["@TipoDeEmpresa"].Value = EMPRESA.TIPO.ID;
 
+                cmd.Parameters.Add("@UidTipoDeComision", SqlDbType.UniqueIdentifier);
+                cmd.Parameters["@UidTipoDeComision"].Value = EMPRESA.oComision.UidTipoDeComision;
+
+                cmd.Parameters.Add("@FValor", SqlDbType.Float);
+                cmd.Parameters["@FValor"].Value = EMPRESA.oComision.FValor;
+
+                cmd.Parameters.Add("@ABAbsorbe", SqlDbType.Bit);
+                cmd.Parameters["@ABAbsorbe"].Value = Convert.ToByte(EMPRESA.oComision.BAbsorveComision);
+
                 cn = new Conexion();
                 //Mandar comando a ejecución
                 resultado = cn.ModificarDatos(cmd);
@@ -103,7 +120,7 @@ namespace Modelo
             return resultado;
 
         }
-        public virtual bool ACTUALIZAREMPRESA(Empresa EMP)
+        public virtual bool ACTUALIZAREMPRESA(Empresa EMP, string TipoDeACtualizacion)
         {
             bool resultado = false;
             SqlCommand cmd = new SqlCommand();
@@ -135,6 +152,17 @@ namespace Modelo
                     cmd.Parameters.Add("@TipoDeEmpresa", SqlDbType.Int);
                     cmd.Parameters["@TipoDeEmpresa"].Value = EMP.TIPO.ID;
                 }
+                if (TipoDeACtualizacion == "BackSite")
+                {
+                    
+                    cmd.Parameters.Add("@ABAbsorbe", SqlDbType.Bit);
+                    cmd.Parameters["@ABAbsorbe"].Value = Convert.ToByte(EMP.oComision.BAbsorveComision); ;
+
+                    cmd.Parameters.Add("@FValor", SqlDbType.Float);
+                    cmd.Parameters["@FValor"].Value = EMP.oComision.FValor;
+                }
+
+
                 cn = new Conexion();
                 //Mandar comando a ejecución
                 resultado = cn.ModificarDatos(cmd);

@@ -232,11 +232,11 @@ namespace Repartidores_GoDeliverix.VM
                 {
                     if (!string.IsNullOrEmpty(Nombre) && !string.IsNullOrEmpty(ApellidoPaterno) && !string.IsNullOrEmpty(ApellidoMaterno))
                     {
-                        url = "https://www.godeliverix.net/api/Usuario/GetActualizarUsuario?UidUsuario=" + UidUsuario + "&Nombre=" + Nombre + "&ApellidoPaterno=" + ApellidoPaterno + "&ApellidoMaterno=" + ApellidoMaterno + "&perfil=" + PerfilDeUsuario + "";
+                        url = "" + settings.Sitio + "api/Usuario/GetActualizarUsuario?UidUsuario=" + UidUsuario + "&Nombre=" + Nombre + "&ApellidoPaterno=" + ApellidoPaterno + "&ApellidoMaterno=" + ApellidoMaterno + "&perfil=" + PerfilDeUsuario + "";
                     }
                     if (!string.IsNullOrEmpty(fnacimiento))
                     {
-                        url = "https://www.godeliverix.net/api/Usuario/GetActualizarUsuario?UidUsuario=" + UidUsuario + "&fnacimiento=" + fnacimiento + "&perfil=" + PerfilDeUsuario + "";
+                        url = "" + settings.Sitio + "api/Usuario/GetActualizarUsuario?UidUsuario=" + UidUsuario + "&fnacimiento=" + fnacimiento + "&perfil=" + PerfilDeUsuario + "";
                     }
                     await _webApi.GetAsync(url);
                 }
@@ -254,7 +254,7 @@ namespace Repartidores_GoDeliverix.VM
             {
                 try
                 {
-                    url = "https://www.godeliverix.net/api/CorreoElectronico/GetActualizarCorreo?UidPropietario=" + UidUsuario + "&strParametroDeInsercion=Usuario&strCorreoElectronico=" + StrCorreoElectronico + "&UidCorreoElectronico=" + Guid.NewGuid() + "";
+                    url = "" + settings.Sitio + "api/CorreoElectronico/GetActualizarCorreo?UidPropietario=" + UidUsuario + "&strParametroDeInsercion=Usuario&strCorreoElectronico=" + StrCorreoElectronico + "&UidCorreoElectronico=" + Guid.NewGuid() + "";
                     _webApi.GetAsync(url);
                 }
                 catch (Exception e)
@@ -271,7 +271,7 @@ namespace Repartidores_GoDeliverix.VM
                 {
                     var AppInstance = MainViewModel.GetInstance();
                     string UidUsuario = AppInstance.Session_.UidUsuario.ToString();
-                    url = "https://www.godeliverix.net/api/Telefono/GetActualizaTelefonoApi?UidPropietario=" + UidUsuario + "&strParametroDeInsercion=Usuario&strCorreoElectronico=" + StrCorreoElectronico + "&UidCorreoElectronico=" + Guid.NewGuid() + "";
+                    url = "" + settings.Sitio + "api/Telefono/GetActualizaTelefonoApi?UidPropietario=" + UidUsuario + "&strParametroDeInsercion=Usuario&strCorreoElectronico=" + StrCorreoElectronico + "&UidCorreoElectronico=" + Guid.NewGuid() + "";
                     _webApi.GetAsync(url);
                 }
                 catch (Exception e)
@@ -300,7 +300,7 @@ namespace Repartidores_GoDeliverix.VM
                 {
                     try
                     {
-                        string uril = "https://www.godeliverix.net/api/Usuario/GetBuscarUsuarios?UidUsuario=" + uidUsuario + "&UIDPERFIL=DFC29662-0259-4F6F-90EA-B24E39BE4346";
+                        string uril = "" + settings.Sitio + "api/Usuario/GetBuscarUsuarios?UidUsuario=" + uidUsuario + "&UIDPERFIL=DFC29662-0259-4F6F-90EA-B24E39BE4346";
                         string content = await _webapi.GetStringAsync(uril);
                         var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                         MVUsuario = JsonConvert.DeserializeObject<VMUsuarios>(obj);
@@ -323,7 +323,7 @@ namespace Repartidores_GoDeliverix.VM
                 {
                     try
                     {
-                        string uril = "https://www.godeliverix.net/api/CorreoElectronico/GetBuscarCorreo?UidPropietario=" + uidUsuario + "&strParametroDebusqueda=Usuario";
+                        string uril = "" + settings.Sitio + "api/CorreoElectronico/GetBuscarCorreo?UidPropietario=" + uidUsuario + "&strParametroDebusqueda=Usuario";
                         string content = await _webApi.GetStringAsync(uril);
                         string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                         VMCorreoElectronico MVCorreoElectronico = JsonConvert.DeserializeObject<VMCorreoElectronico>(obj);
@@ -339,7 +339,7 @@ namespace Repartidores_GoDeliverix.VM
                 {
                     try
                     {
-                        url = "https://www.godeliverix.net/api/Telefono/GetBuscarTelefonos?UidPropietario=" + uidUsuario + "&ParadetroDeBusqueda=Usuario";
+                        url = "" + settings.Sitio + "api/Telefono/GetBuscarTelefonos?UidPropietario=" + uidUsuario + "&ParadetroDeBusqueda=Usuario";
                         string content = await _WebApi.GetStringAsync(url);
                         var inf = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                         VMTelefono MVTelefono = JsonConvert.DeserializeObject<VMTelefono>(inf);
@@ -366,7 +366,7 @@ namespace Repartidores_GoDeliverix.VM
                     try
                     {
                         //Obtiene las direcciones
-                        url = "https://www.godeliverix.net/api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + uidUsuario + "";
+                        url = "" + settings.Sitio + "api/Direccion/GetObtenerDireccionUsuario?UidUsuario=" + uidUsuario + "";
                         string content = await _Api.GetStringAsync(url);
                         var Informacion = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                         VMDireccion MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(Informacion);

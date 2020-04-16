@@ -92,9 +92,7 @@ namespace DeliverixSucursales
             }
             finally
             {
-
                 _ConexionLocal.Close();
-
             }
             return resultado;
         }

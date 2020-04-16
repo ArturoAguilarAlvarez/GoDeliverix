@@ -8,7 +8,7 @@
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       d:DesignHeight="650" d:DesignWidth="1030"
       Title="PageOrdenes" Background="#FFEFEFEF"  >
-    <Grid>
+    <Grid > 
 
         <TabControl x:Name="tabPaginas" SelectionChanged="tabPaginas_SelectionChanged" TabStripPlacement="Bottom" BorderBrush="#FF686F81"  >
             <TabControl.Resources>

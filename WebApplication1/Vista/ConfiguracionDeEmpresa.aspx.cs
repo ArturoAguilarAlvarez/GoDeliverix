@@ -236,17 +236,17 @@ namespace WebApplication1.Vista
                 FileUpload FU = FUImagen;
                 if (MVImagen.ValidarExtencionImagen(Path.GetExtension(FU.FileName).ToLower()))
                 {
-                GuardarImagenGiro:
+                    GuardarImagenGiro:
                     //Valida si el directorio existe en el servidor
                     string RUTA = "Img/Empresa/FotoPerfil";
                     if (Directory.Exists(Server.MapPath(RUTA)))
                     {
-                    //Crea el directorio de la empresa
+                        //Crea el directorio de la empresa
 
-                    CrearCarpetaDeEmpresa:
+                        CrearCarpetaDeEmpresa:
                         if (Directory.Exists(Server.MapPath(RUTA)))
                         {
-                        CrearArchivoServidor:
+                            CrearArchivoServidor:
                             //El archivo no existe en el servidor
                             if (!File.Exists(Server.MapPath(txtRutaImagen.Text)))
                             {
@@ -306,17 +306,17 @@ namespace WebApplication1.Vista
                 FileUpload FU = FuImagenPortada;
                 if (MVImagen.ValidarExtencionImagen(Path.GetExtension(FU.FileName).ToLower()))
                 {
-                GuardarImagenGiro:
+                    GuardarImagenGiro:
                     //Valida si el directorio existe en el servidor
                     string RUTA = "Img/Empresa/Portada";
                     if (Directory.Exists(Server.MapPath(RUTA)))
                     {
-                    //Crea el directorio de la empresa
+                        //Crea el directorio de la empresa
 
-                    CrearCarpetaDeEmpresa:
+                        CrearCarpetaDeEmpresa:
                         if (Directory.Exists(Server.MapPath(RUTA)))
                         {
-                        CrearArchivoServidor:
+                            CrearArchivoServidor:
                             //El archivo no existe en el servidor
                             if (!File.Exists(Server.MapPath(txtRutaImagenPortada.Text)))
                             {
@@ -441,7 +441,7 @@ namespace WebApplication1.Vista
                     {
                         IdCorreo = Guid.NewGuid();
                     }
-                    resultado = MVEmpresas.ActualizarDatos(UIDEMPRESA, RS, NC, Rfc);
+                    resultado = MVEmpresas.ActualizarDatos(UidEmpresa: UIDEMPRESA, RazonSocial: RS, NombreComercial: NC, Rfc: Rfc, TipoDeACtualizacion: "BackEnd");
 
                     if (resultado == true)
                     {
@@ -929,7 +929,7 @@ namespace WebApplication1.Vista
                 else
                 {
                     Guid UidDireccion = Guid.NewGuid();
-                    MVDireccion.AgregaDireccionALista(UidDireccion,UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, Calle, Calle1, Calle2, Manzana, Lote, CodigoPostal, txtDReferencia.Text, NOMBRECOLONIA, NOMBRECIUDAD, Identificador);
+                    MVDireccion.AgregaDireccionALista(UidDireccion, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, Calle, Calle1, Calle2, Manzana, Lote, CodigoPostal, txtDReferencia.Text, NOMBRECOLONIA, NOMBRECIUDAD, Identificador);
                 }
                 GVDireccion.DataSource = MVDireccion.ListaDIRECCIONES;
                 GVDireccion.DataBind();
@@ -1093,7 +1093,7 @@ namespace WebApplication1.Vista
 
         protected void GuardaTelefono()
         {
-            MVTelefono.AgregaTelefonoALista( DDLDTipoDETelefono.SelectedItem.Value.ToString(), txtDTelefono.Text, DDLDTipoDETelefono.SelectedItem.Text.ToString());
+            MVTelefono.AgregaTelefonoALista(DDLDTipoDETelefono.SelectedItem.Value.ToString(), txtDTelefono.Text, DDLDTipoDETelefono.SelectedItem.Text.ToString());
             DDLDTipoDETelefono.SelectedIndex = -1;
             txtDTelefono.Text = string.Empty;
             DDLDTipoDETelefono.Enabled = false;
@@ -1105,7 +1105,7 @@ namespace WebApplication1.Vista
         }
         protected void ActualizaTelefono()
         {
-            MVTelefono.ActualizaRegistroEnListaDeTelefonos(txtIdTelefono.Text, DDLDTipoDETelefono.SelectedItem.Value.ToString(),  txtDTelefono.Text);
+            MVTelefono.ActualizaRegistroEnListaDeTelefonos(txtIdTelefono.Text, DDLDTipoDETelefono.SelectedItem.Value.ToString(), txtDTelefono.Text);
 
             DDLDTipoDETelefono.SelectedIndex = -1;
             txtDTelefono.Text = string.Empty;

@@ -1,4 +1,4 @@
-﻿using AppCliente.WebApi;
+using AppCliente.WebApi;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Rg.Plugins.Popup.Services;
@@ -17,6 +17,7 @@ using Xamarin.Forms.Xaml;
 using AppCliente.ViewModel;
 using System.Threading;
 using Plugin.Connectivity;
+using System.Data;
 
 namespace AppCliente
 {
@@ -33,125 +34,120 @@ namespace AppCliente
             InitializeComponent();
             Device.InvokeOnMainThreadAsync(async () =>
             {
-                //var conectivilidad = Connectivity.NetworkAccess;
-                //if (conectivilidad == NetworkAccess.Internet)
+                //if (await IsRunningGoDeliverixServicesAsync())
                 //{
-                if (await IsRunningGoDeliverixServicesAsync())
+                string versionApp = "";
+                // Uid de la aplicacion 87b2dcfd-205a-4260-9092-1ce48b28aa4a
+                if (Device.RuntimePlatform == Device.Android)
                 {
-                    string versionApp = "";
-                    // Uid de la aplicacion 87b2dcfd-205a-4260-9092-1ce48b28aa4a
-                    if (Device.RuntimePlatform == Device.Android)
-                    {
-                        versionApp = "87b2dcfd-205a-4260-9092-1ce48b28aa4a";
-                    }
-                    if (Device.RuntimePlatform == Device.iOS)
-                    {
-                        versionApp = "310cba91-57a5-4699-91fe-3677c2718907";
-                    }
+                    versionApp = "87b2dcfd-205a-4260-9092-1ce48b28aa4a";
+                }
+                if (Device.RuntimePlatform == Device.iOS)
+                {
+                    versionApp = "310cba91-57a5-4699-91fe-3677c2718907";
+                }
                 Iniciar:
-                    ApiService ApiService = new ApiService("/api/Version");
-                    Dictionary<string, string> parameters = new Dictionary<string, string>();
-                    parameters.Add("id", versionApp);
-                    var result = await ApiService.GET<VMVersion>(action: "Get", responseType: ApiService.ResponseType.Object, arguments: parameters);
-                    var oReponse = result as ResponseHelper;
+                ApiService ApiService = new ApiService("/api/Version");
+                Dictionary<string, string> parameters = new Dictionary<string, string>();
+                parameters.Add("id", versionApp);
+                var result = await ApiService.GET<VMVersion>(action: "Get", responseType: ApiService.ResponseType.Object, arguments: parameters);
+                var oReponse = result as ResponseHelper;
 
-                    if (result != null && oReponse.Status != false)
+                if (result != null && oReponse.Status != false)
+                {
+                    var oversion = oReponse.Data as VMVersion;
+                    string version = VersionTracking.CurrentVersion;
+                    if (oversion.StrVersion == version)
                     {
-                        var oversion = oReponse.Data as VMVersion;
-                        string version = VersionTracking.CurrentVersion;
-                        if (oversion.StrVersion == version)
+                        ApiService = new ApiService("/api/Giro");
+                        parameters = new Dictionary<string, string>();
+                        result = await ApiService.GET<VMGiro>(action: "Get", responseType: ApiService.ResponseType.Object, arguments: parameters);
+                        oReponse = result as ResponseHelper;
+                        if (result != null && oReponse.Status != false)
                         {
-                            ApiService = new ApiService("/api/Giro");
+                            App.MVGiro = oReponse.Data as VMGiro;
+                            App.giro = App.MVGiro.LISTADEGIRO[0].UIDVM.ToString();
+                            ApiService = new ApiService("/api/Categoria");
                             parameters = new Dictionary<string, string>();
-                            result = await ApiService.GET<VMGiro>(action: "Get", responseType: ApiService.ResponseType.Object, arguments: parameters);
+                            parameters.Add("value", App.giro.ToString());
+                            result = await ApiService.GET<VMCategoria>(action: "Get", responseType: ApiService.ResponseType.Object, arguments: parameters);
                             oReponse = result as ResponseHelper;
                             if (result != null && oReponse.Status != false)
                             {
-                                App.MVGiro = oReponse.Data as VMGiro;
-                                App.giro = App.MVGiro.LISTADEGIRO[0].UIDVM.ToString();
-                                ApiService = new ApiService("/api/Categoria");
-                                parameters = new Dictionary<string, string>();
-                                parameters.Add("value", App.giro.ToString());
-                                result = await ApiService.GET<VMCategoria>(action: "Get", responseType: ApiService.ResponseType.Object, arguments: parameters);
-                                oReponse = result as ResponseHelper;
-                                if (result != null && oReponse.Status != false)
-                                {
-                                    App.MVCategoria = oReponse.Data as VMCategoria;
+                                App.MVCategoria = oReponse.Data as VMCategoria;
 
-                                    if (!string.IsNullOrEmpty(App.Global1))
-                                    {
-                                        Iniciar();
-                                    }
-                                    else
-                                if (!string.IsNullOrEmpty(Helpers.Settings.StrCOLONIA))
-                                    {
+                                if (!string.IsNullOrEmpty(App.Global1))
+                                {
+                                    Iniciar();
+                                }
+                                else
+                            if (!string.IsNullOrEmpty(Helpers.Settings.StrCOLONIA))
+                                {
 
-                                        Iniciar();
-                                    }
-                                    else
-                                    {
-                                        if (Navigation.NavigationStack.Count == 1)
-                                        {
-                                            try
-                                            {
-                                                await Navigation.PushAsync(new SeleccionaColonia());
-                                                PanelUbicacionNoEstablecida.IsVisible = true;
-                                                PanelProductoNoEncontrados.IsVisible = false;
-                                                ScrollView_Productos.IsVisible = false;
-                                                lbCantidad.Text = "No hay resultados";
-                                                btnSeleccionarDireccion.Text = "No hay ubicación";
-                                            }
-                                            catch (FeatureNotSupportedException)
-                                            {
-                                                // Handle not supported on device exception
-                                                await DisplayAlert("Aviso del sistema", "Los servicios de ubicacion no soportados por el dispositivo", "Aceptar");
-                                            }
-                                            catch (FeatureNotEnabledException)
-                                            {
-                                                await DisplayAlert("Ubicacion no activa", "Activa el GPS para obtener tu ubicacion", "Aceptar");
-                                            }
-                                            catch (PermissionException)
-                                            {
-                                                // Handle permission exception
-                                                await DisplayAlert("Aviso", "Activa los permisos de ubicacion para continuar", "Aceptar");
-                                            }
-                                            catch (Exception)
-                                            {
-                                                // Unable to get location
-                                                await DisplayAlert("Aviso", "No se puede obtener la ubicacion", "Aceptar");
-                                            }
-                                        }
-                                    }
+                                    Iniciar();
                                 }
-                            }
-                        }
-                        else
-                        {
-                            var action = await DisplayAlert("Actualizacion disponible", "Actualizar a la version " + oversion.StrVersion + "", "Aceptar", "Cancelar");
-                            if (action)
-                            {
-                                var urlStore = "";
-                                if (Device.RuntimePlatform == Device.Android)
+                                else
                                 {
-                                    urlStore = "https://play.google.com/store/apps/details?id=com.CompuAndSoft.GDCliente";
+                                    //try
+                                    //{
+                                    //    await Navigation.PushAsync(new SeleccionaColonia());
+                                    //    PanelUbicacionNoEstablecida.IsVisible = true;
+                                    //    PanelProductoNoEncontrados.IsVisible = false;
+                                    //    ScrollView_Productos.IsVisible = false;
+                                    //    lbCantidad.Text = "No hay resultados";
+                                    //    btnSeleccionarDireccion.Text = "No hay ubicación";
+                                    //}
+                                    //catch (FeatureNotSupportedException)
+                                    //{
+                                    //    // Handle not supported on device exception
+                                    //    await DisplayAlert("Aviso del sistema", "Los servicios de ubicacion no soportados por el dispositivo", "Aceptar");
+                                    //}
+                                    //catch (FeatureNotEnabledException)
+                                    //{
+                                    //    await DisplayAlert("Ubicacion no activa", "Activa el GPS para obtener tu ubicacion", "Aceptar");
+                                    //}
+                                    //catch (PermissionException)
+                                    //{
+                                    //    // Handle permission exception
+                                    //    await DisplayAlert("Aviso", "Activa los permisos de ubicacion para continuar", "Aceptar");
+                                    //}
+                                    //catch (Exception)
+                                    //{
+                                    //    // Unable to get location
+                                    //    await DisplayAlert("Aviso", "No se puede obtener la ubicacion", "Aceptar");
+                                    //}
                                 }
-                                if (Device.RuntimePlatform == Device.iOS)
-                                {
-                                    urlStore = "";
-                                }
-                                await Launcher.OpenAsync(new Uri(urlStore));
-                            }
-                            else
-                            {
-                                goto Iniciar;
                             }
                         }
                     }
+
+                    else
+                    {
+                        var action = await DisplayAlert("Actualizacion disponible", "Actualizar a la version " + oversion.StrVersion + "", "Aceptar", "Cancelar");
+                        if (action)
+                        {
+                            var urlStore = "";
+                            if (Device.RuntimePlatform == Device.Android)
+                            {
+                                urlStore = "https://play.google.com/store/apps/details?id=com.CompuAndSoft.GDCliente";
+                            }
+                            if (Device.RuntimePlatform == Device.iOS)
+                            {
+                                urlStore = "";
+                            }
+                            await Launcher.OpenAsync(new Uri(urlStore));
+                        }
+                        else
+                        {
+                            goto Iniciar;
+                        }
+                    }
                 }
-                else
-                {
-                    Application.Current.MainPage = new NavigationPage(new SitioEnMantenimiento());
-                }
+                //}
+                //else
+                //{
+                //    Application.Current.MainPage = new NavigationPage(new SitioEnMantenimiento());
+                //}
                 //}
                 //else
                 //{
@@ -167,6 +163,11 @@ namespace AppCliente
             if (conectivilidad == NetworkAccess.Internet)
             {
                 resultado = await CrossConnectivity.Current.IsReachable("www.google.com", 5000);
+            }
+            else if (conectivilidad == NetworkAccess.Local)
+            {
+                resultado = await CrossConnectivity.Current.IsReachable(Helpers.Settings.sitio, 5000);
+
             }
             return resultado;
         }
@@ -401,13 +402,11 @@ namespace AppCliente
         {
             if (App.Global1 == string.Empty)
             {
-                await DisplayAlert("Acceso denegado", "No puedes cambiar la direccion sin haber accesado", "Aceptar");
-                var objeto = new MasterMenuMenuItem { Id = 3, Title = "Login", TargetType = typeof(Login) };
-                var Page = (Page)Activator.CreateInstance(objeto.TargetType);
-                App app = Application.Current as App;
-                App.Navegacion = Page.GetType().Name;
-                MasterDetailPage md = (MasterDetailPage)app.MainPage;
-                md.Detail = new NavigationPage(Page);
+                App.MVDireccionDemo = null;
+                NavigationPage NPScannerCompanyPage = ((NavigationPage)((MasterDetailPage)App.Current.MainPage).Detail);
+
+                await NPScannerCompanyPage.PushAsync(new SeleccionaColonia());
+
             }
             else
             {
@@ -507,7 +506,7 @@ namespace AppCliente
                 });
                 App.UidEstadoABuscar = Helpers.Settings.StrESTADO;
 
-                btnSeleccionarDireccion.Text = "ENTREGAR EN " + App.MVDireccion.ListaDIRECCIONES.Find(x => x.ESTADO == App.UidEstadoABuscar).NOMBRECOLONIA.ToUpper() + " ";
+                btnSeleccionarDireccion.Text = "ENTREGAR EN " + App.MVDireccion.ListaDIRECCIONES[0].NOMBRECOLONIA.ToUpper() + " ";
 
                 btnAcceder.IsVisible = true;
             }
@@ -574,7 +573,7 @@ namespace AppCliente
                         if (result != null && oReponse.Status != false)
                         {
                             oBusquedaproducto = oReponse.Data as VMProducto;
-                            if (oBusquedaproducto.ListaDeProductos != null)
+                            if (oBusquedaproducto.ListaDeProductos != null && oBusquedaproducto.ListaDeProductos.Count > 0)
                             {
                                 foreach (VMProducto item in oBusquedaproducto.ListaDeProductos)
                                 {

@@ -6,6 +6,7 @@ using System.Web.UI.WebControls;
 using VistaDelModelo;
 using System.Linq;
 using System.Timers;
+using System.Drawing;
 
 namespace WebApplication1.Vista
 {
@@ -21,6 +22,7 @@ namespace WebApplication1.Vista
         VMEstatus MVEstatus = new VMEstatus();
         VMOferta MVOferta = new VMOferta();
         VMDia MVDia = new VMDia();
+        VMComision MVComision = new VMComision();
         string Acciones = "";
 
         #endregion
@@ -37,6 +39,7 @@ namespace WebApplication1.Vista
                 Session["MVEstatus"] = MVEstatus;
                 Session["MVOferta"] = MVOferta;
                 Session["MVDia"] = MVDia;
+                Session["MVComision"] = MVComision;
 
 
                 DGVSucursales.DataSource = null;
@@ -108,6 +111,7 @@ namespace WebApplication1.Vista
                 MVEstatus = (VMEstatus)Session["MVEstatus"];
                 MVOferta = (VMOferta)Session["MVOferta"];
                 MVDia = (VMDia)Session["MVDia"];
+                MVComision = (VMComision)Session["MVComision"];
 
             }
         }
@@ -618,26 +622,24 @@ namespace WebApplication1.Vista
 
             int selIdx = dl.SelectedIndex;
 
-
-
             Trace.Write("dl_ItemCommand", String.Format("{0}: {1}",
              e.CommandName.ToLower(), e.Item.ItemIndex));
             switch (e.CommandName.ToLower())
             {
                 case "select":
                     selIdx = e.Item.ItemIndex;
-                    MVProducto.InformacionProducto(DLProductoSeleccionado.DataKeys[selIdx].ToString(),txtUidSucursal.Text);
+                    MVProducto.InformacionProducto(DLProductoSeleccionado.DataKeys[selIdx].ToString(), txtUidSucursal.Text);
                     txtUidProducto.Text = MVProducto.UID.ToString();
 
-                    
+
                     string Hora = "";
-                    string Minuto ="";
+                    string Minuto = "";
                     if (!string.IsNullOrEmpty(MVProducto.STRTiemporElaboracion))
                     {
                         DateTime tiempo = DateTime.Parse(MVProducto.STRTiemporElaboracion);
                         Hora = tiempo.Hour.ToString();
                         Minuto = tiempo.Minute.ToString();
-                    }   
+                    }
                     else
                     {
                         Hora = "0";
@@ -650,9 +652,49 @@ namespace WebApplication1.Vista
                     //Muestra los minutos guardados
                     DDLMinutos.SelectedIndex = DDLMinutos.Items.IndexOf(DDLMinutos.Items.FindByText(Minuto));
                     txtCostoProduto.Text = MVProducto.StrCosto;
+                    MVComision.ObtenerComisionPorEmpresa(new Guid(Session["UidEmpresaSistema"].ToString()));
+                    decimal total = 0;
+                    decimal totalPorcentaje = 0;
+                    decimal valor = 0;
+                    //Porcentaje
+                    if (MVComision.UidTipoDeComision == new Guid("960D9483-4058-4AC9-A1C3-79F5B303E3BA"))
+                    {
+                        valor = decimal.Parse(MVProducto.StrCosto) / 100;
+                        totalPorcentaje = MVComision.FValor * valor; ;
+                        if (MVComision.BAbsorveComision)
+                        {
+                            total = int.Parse(MVProducto.StrCosto);
+                        }
+                        else
+                        {
+                            total = decimal.Parse(MVProducto.StrCosto) + totalPorcentaje;
+                        }
+                    }
+                    //Comision
+                    if (MVComision.UidTipoDeComision == new Guid("29875A81-7247-4CC5-821F-04A3B3C839FF"))
+                    {
+                        totalPorcentaje = MVComision.FValor;
+                        if (MVComision.BAbsorveComision)
+                        {
+                            total = int.Parse(MVProducto.StrCosto);
+                        }
+                        else
+                        {
+                            total = decimal.Parse(MVProducto.StrCosto) + totalPorcentaje;
+                        }
+                    }
+                    txtCostoComision.Text = totalPorcentaje.ToString();
+
+                    txtCostoTotal.Text = total.ToString();
                     break;
                 case "unselect":
                     selIdx = -1;
+                    DDLHoras.SelectedIndex = -1;
+                    //Muestra los minutos guardados
+                    DDLMinutos.SelectedIndex = -1;
+                    txtCostoProduto.Text = string.Empty;
+                    txtCostoComision.Text = string.Empty;
+                    txtCostoTotal.Text = string.Empty;
                     break;
             }
             if (selIdx != dl.SelectedIndex)
@@ -893,7 +935,6 @@ namespace WebApplication1.Vista
         }
         #endregion
 
-
         protected void CargaGrid(string GridView)
         {
             switch (GridView)
@@ -913,8 +954,6 @@ namespace WebApplication1.Vista
         {
             MuestraPanel("Oferta");
         }
-
-
 
         #region Panel Productos
         protected void seleccionaProducto()
@@ -996,7 +1035,6 @@ namespace WebApplication1.Vista
             HabilitaControlesProductos(false);
         }
 
-
         protected void btnBuscarProducto_Click(object sender, EventArgs e)
         {
             string nombre = txtBusquedaNombre.Text;
@@ -1029,7 +1067,6 @@ namespace WebApplication1.Vista
         }
         #endregion
 
-
         protected void EstatusControlesInformacionProducto(bool estatus)
         {
             DDLHoras.Enabled = estatus;
@@ -1037,6 +1074,7 @@ namespace WebApplication1.Vista
             txtCostoProduto.Enabled = estatus;
             btnModificarProducto.Visible = estatus;
             btnCancelarProducto.Visible = estatus;
+
         }
 
         protected void btnEditarProducto_Click(object sender, EventArgs e)
@@ -1055,7 +1093,6 @@ namespace WebApplication1.Vista
 
         protected void btnModificarProducto_Click(object sender, EventArgs e)
         {
-
             string Costo = txtCostoProduto.Text;
             string tiempo = DDLHoras.SelectedItem.Text + ":" + DDLMinutos.SelectedItem.Text;
             MVProducto.ActualizarProducto(txtUidProducto.Text, tiempo, Costo, txtUidSeccion.Text);
@@ -1077,6 +1114,51 @@ namespace WebApplication1.Vista
                 {
                     item.Selected = false;
                 }
+            }
+        }
+
+        protected void txtCostoProduto_TextChanged(object sender, EventArgs e)
+        {
+            float resultado = 0;
+
+            if (float.TryParse(txtCostoProduto.Text, out resultado))
+            {
+                MVComision.ObtenerComisionPorEmpresa(new Guid(Session["UidEmpresaSistema"].ToString()));
+                float total = 0f;
+                var totalPorcentaje = 0f;
+                //Porcentaje
+                if (MVComision.UidTipoDeComision == new Guid("960D9483-4058-4AC9-A1C3-79F5B303E3BA"))
+                {
+                    totalPorcentaje = (100 / MVComision.FValor) * resultado;
+                    if (MVComision.BAbsorveComision)
+                    {
+                        total = resultado;
+                    }
+                    else
+                    {
+                        total = resultado + totalPorcentaje;
+                    }
+                }
+                //Comision
+                if (MVComision.UidTipoDeComision == new Guid("29875A81-7247-4CC5-821F-04A3B3C839FF"))
+                {
+                    totalPorcentaje = MVComision.FValor;
+                    if (MVComision.BAbsorveComision)
+                    {
+
+                        total = resultado;
+                    }
+                    else
+                    {
+                        total = resultado + totalPorcentaje;
+                    }
+                }
+                txtCostoComision.Text = totalPorcentaje.ToString();
+                txtCostoTotal.Text = total.ToString();
+            }
+            else
+            {
+                txtCostoComision.BorderColor = Color.Red;
             }
         }
     }

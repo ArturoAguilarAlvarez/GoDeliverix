@@ -154,18 +154,22 @@
                                         <tr>
                                             <td>Filas:
                                               
-                                                  <asp:DropDownList runat="server" ID="DDLTAMANOGRIDAMPLIADA" AutoPostBack="true" OnTextChanged="TamanioGrid" OnSelectedIndexChanged="TamanioGrid">
-                                                      <asp:ListItem Text="10" Value="3" />
-                                                      <asp:ListItem Text="20" Value="5" />
-                                                      <asp:ListItem Text="30" Value="6" />
-                                                      <asp:ListItem Text="100" Value="100" />
-                                                      <asp:ListItem Text="200" Value="200" />
-                                                  </asp:DropDownList>
+                                                 
+
+                                                <asp:DropDownList runat="server" ID="DDLTAMANOGRIDAMPLIADA" AutoPostBack="true" OnTextChanged="TamanioGrid" OnSelectedIndexChanged="TamanioGrid">
+                                                    <asp:ListItem Text="10" Value="3" />
+                                                    <asp:ListItem Text="20" Value="5" />
+                                                    <asp:ListItem Text="30" Value="6" />
+                                                    <asp:ListItem Text="100" Value="100" />
+                                                    <asp:ListItem Text="200" Value="200" />
+                                                </asp:DropDownList>
 
                                                 Pagina:
                                               
-                                                  <asp:DropDownList runat="server" ID="DDLDBANUMERODEPAGINAS" AutoPostBack="true" OnTextChanged="PaginaSeleccionadaBusquedaAmpliada" OnSelectedIndexChanged="PaginaSeleccionadaBusquedaAmpliada">
-                                                  </asp:DropDownList>
+                                                 
+
+                                                <asp:DropDownList runat="server" ID="DDLDBANUMERODEPAGINAS" AutoPostBack="true" OnTextChanged="PaginaSeleccionadaBusquedaAmpliada" OnSelectedIndexChanged="PaginaSeleccionadaBusquedaAmpliada">
+                                                </asp:DropDownList>
                                             </td>
                                         </tr>
                                     </table>
@@ -364,26 +368,22 @@
                                                         <asp:Label ID="lblTotalDeRegistros" runat="server" />
                                                         <asp:ImageButton ImageUrl="~/Vista/Img/FechaDerecha.png" ID="btnSiguiente" runat="server" CommandName="Page" CommandArgument="Next" />
                                                         <asp:ImageButton ImageUrl="~/Vista/Img/FlechasDoblesDerecha.png" ID="btnUltimo" runat="server" CommandName="Page" CommandArgument="Last" />
-
                                                     </td>
-
                                                 </tr>
                                                 <tr>
                                                     <td>Pagina
-                                                      <asp:DropDownList runat="server" ID="DDLDNUMERODEPAGINAS" AutoPostBack="true" OnTextChanged="PaginaSeleccionadaBusquedaNormal" OnSelectedIndexChanged="PaginaSeleccionadaBusquedaNormal">
-                                                      </asp:DropDownList>
+                                                     
+                                                        <asp:DropDownList runat="server" ID="DDLDNUMERODEPAGINAS" AutoPostBack="true" OnTextChanged="PaginaSeleccionadaBusquedaNormal" OnSelectedIndexChanged="PaginaSeleccionadaBusquedaNormal">
+                                                        </asp:DropDownList>
                                                     </td>
                                                 </tr>
                                             </table>
-
                                         </PagerTemplate>
                                     </asp:GridView>
                                 </div>
-
                             </div>
                         </div>
                     </asp:Panel>
-
                 </div>
             </ContentTemplate>
         </asp:UpdatePanel>
@@ -442,65 +442,72 @@
 
                             <asp:Label ID="lblUidEmpresa" CssClass="hide" runat="server" />
                             <asp:Panel runat="server" ID="pnlDatosGenerales">
-                                <div class="row">
-                                    <div class="col-md-12" style="margin-top: 5px;">
-                                        <div class="col-md-3">
-                                            <div class="col-md-12 text-center pull-right" style="margin-top: 10px;">
-                                                <asp:Image runat="server" CssClass="img img-thumbnail" ID="ImageEmpresa" Width="200px" />
-                                            </div>
-                                            <div class="clearfix"></div>
-                                            <div class=" col-md-12 text-center" style="margin-top: 5px;">
-                                                <script type="text/javascript">
-                                                    function UploadFile(fileUpload) {
-                                                        if (fileUpload.value != '') {
-                                                            document.getElementById("<%=btnSubirImagen.ClientID %>").click();
-                                                        }
+                                <div class="row" style="margin-top: 5px;">
+                                    <div class="col-md-3">
+                                        <div class="col-md-12 text-center pull-right" style="margin-top: 10px;">
+                                            <asp:Image runat="server" CssClass="img img-thumbnail" ID="ImageEmpresa" Width="200px" />
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class=" col-md-12 text-center" style="margin-top: 5px;">
+                                            <script type="text/javascript">
+                                                function UploadFile(fileUpload) {
+                                                    if (fileUpload.value != '') {
+                                                        document.getElementById("<%=btnSubirImagen.ClientID %>").click();
                                                     }
-                                                </script>
-                                                <asp:TextBox ID="txtRutaImagen" CssClass="hide" runat="server" />
-                                                <asp:LinkButton CssClass="btn btn-sm btn-default" ID="BtnCargarImagen" OnClick="SeleccionarImagen" runat="server">
+                                                }
+                                            </script>
+                                            <asp:TextBox ID="txtRutaImagen" CssClass="hide" runat="server" />
+                                            <asp:LinkButton CssClass="btn btn-sm btn-default" ID="BtnCargarImagen" OnClick="SeleccionarImagen" runat="server">
                                                 <span class="glyphicon glyphicon-open">
                                                 </span>
                                                 Cargar Imagen
-                                                </asp:LinkButton>
-                                                <asp:FileUpload ID="FUImagen" CssClass="hide" runat="server" />
-                                                <asp:Button Text="Subir" OnClick="MuestraFoto" CssClass="hide" ID="btnSubirImagen" runat="server" />
-                                            </div>
+                                            </asp:LinkButton>
+                                            <asp:FileUpload ID="FUImagen" CssClass="hide" runat="server" />
+                                            <asp:Button Text="Subir" OnClick="MuestraFoto" CssClass="hide" ID="btnSubirImagen" runat="server" />
                                         </div>
-                                        <div class="col-md-5">
+                                    </div>
+                                    <div class="col-md-9">
+
+                                        <div class="col-md-6">
                                             <h6>Razon social*</h6>
                                             <asp:TextBox ID="txtDRazonSocial" runat="server" CssClass="form-control"></asp:TextBox>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <h6>RFC*</h6>
                                             <asp:TextBox ID="txtDRfc" runat="server" AutoPostBack="true" CssClass="form-control" OnTextChanged="TxtDRfc_TextChanged" Style="text-transform: uppercase"></asp:TextBox>
                                         </div>
 
-                                        <div class="col-md-5">
+                                        <div class="col-md-6">
                                             <h6>Nombre comercial*</h6>
                                             <asp:TextBox ID="txtDNombreComercial" runat="server" CssClass="form-control"></asp:TextBox>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <h6>Estatus</h6>
                                             <asp:DropDownList ID="DDLDEstatus" runat="server" CssClass="form-control"></asp:DropDownList>
                                         </div>
-                                        <div class="col-md-5">
+                                        <div class="col-md-12">
                                             <h6>Correo electronico</h6>
                                             <asp:TextBox ID="txtDCorreoElectronico" runat="server" CssClass="form-control" TextMode="Email"></asp:TextBox>
                                             <asp:Label CssClass="hidden" ID="txtUidCorreoElectronico" runat="server" />
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <h6>Tipo*</h6>
                                             <asp:DropDownList ID="DDLDTipoDeEmpresa" runat="server" CssClass="form-control"></asp:DropDownList>
                                         </div>
-
-
+                                        <div class="col-md-6">
+                                            <h6>Porcentaje de comisión</h6>
+                                            <asp:TextBox ID="txtValorComision" OnTextChanged="txtValorComision_TextChanged" runat="server" CssClass="form-control" TextMode="Number"></asp:TextBox>
+                                            <asp:Label CssClass="hidden" ID="Label1" runat="server" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>Comisión incluida</h6>
+                                            <asp:CheckBox ID="chkbxComision" runat="server" />
+                                        </div>
                                     </div>
                                 </div>
                             </asp:Panel>
 
                             <asp:Panel runat="server" ID="pnlDireccion">
-
                                 <div class="pull-left" style="margin-top: 10px;">
                                     <asp:LinkButton runat="server" ID="btnNuevaDireccion" OnClick="NuevaDireccion" CssClass="btn btn-sm btn-default disabled"><span class="glyphicon glyphicon-file"></span>Nuevo</asp:LinkButton>
                                     <asp:LinkButton runat="server" ID="btnEdiarDireccion" OnClick="ActivaEdicionDeDireccion" CssClass="btn btn-sm btn-default disabled"><span class="glyphicon glyphicon-cog"></span>Editar</asp:LinkButton>
@@ -513,6 +520,7 @@
                                         <EmptyDataTemplate>
                                             <div class="info">
                                                 No existen direcciones guardadas
+                                           
                                             </div>
                                         </EmptyDataTemplate>
                                         <SelectedRowStyle CssClass="table table-hover input-sm success" />
@@ -574,6 +582,7 @@
                                         <EmptyDataTemplate>
                                             <div class="info">
                                                 No existen telefonos guardados 
+                                           
                                             </div>
                                         </EmptyDataTemplate>
                                         <SelectedRowStyle CssClass="table table-hover input-sm success" />

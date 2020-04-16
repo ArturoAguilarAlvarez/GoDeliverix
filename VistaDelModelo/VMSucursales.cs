@@ -114,6 +114,13 @@ namespace VistaDelModelo
             set { _strVehiculo = value; }
         }
 
+        private decimal _mfondo;
+
+        public decimal MFondo
+        {
+            get { return _mfondo; }
+            set { _mfondo = value; }
+        }
 
         private Sucursal _sucursal = new Sucursal();
 
@@ -234,6 +241,7 @@ namespace VistaDelModelo
         //Variables para el control de las ordenes asignadas
         public long lngFolio { get; set; }
         public Guid UidOrden { get; set; }
+        public Guid UidOrdenTarifario { get; set; }
         public string FechaAsignacion { get; set; }
         public string usuario { get; set; }
         public bool Seleccion { get; set; }
@@ -257,6 +265,30 @@ namespace VistaDelModelo
                 string nombre = item["Nombre"].ToString();
                 TIPOTELEFONO.Add(new TipoDeTelefono(id, nombre));
             }
+        }
+
+        public void ModificaInformacionDeTrabajoDeRepartidor(string UidRegistroRepartidor, decimal mFondo)
+        {
+            try
+            {
+                SqlCommand CMD = new SqlCommand();
+                CMD.CommandType = CommandType.StoredProcedure;
+                CMD.CommandText = "asp_actualizaInformacionDeTrabajoRepartidor";
+
+                CMD.Parameters.Add("@UidRegistroRepartidor", SqlDbType.UniqueIdentifier);
+                CMD.Parameters["@UidRegistroRepartidor"].Value = new Guid(UidRegistroRepartidor);
+
+                CMD.Parameters.Add("@Fondo", SqlDbType.Money);
+                CMD.Parameters["@Fondo"].Value = mFondo;
+
+                DT = Datos.Busquedas(CMD);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
         #endregion
 
@@ -610,7 +642,14 @@ namespace VistaDelModelo
                 string HC = item["HorarioCierre"].ToString().ToUpper();
                 bool visibilidad = bool.Parse(item["VisibilidadDeInformacion"].ToString());
                 string codigo = item["CodigoLocalizador"].ToString();
-                SUCURSAL = new Sucursal() { ID = ID, IDENTIFICADOR = IDENTIFICADOR, HORAAPARTURA = HA, HORACIERRE = HC, StrCodigo = codigo, BVisibilidad = visibilidad };
+                decimal fondo = 0;
+                if (!string.IsNullOrEmpty(item["MFondoRepartidores"].ToString()))
+                {
+                    fondo = decimal.Parse(item["MFondoRepartidores"].ToString());
+                }
+
+
+                SUCURSAL = new Sucursal() { ID = ID, IDENTIFICADOR = IDENTIFICADOR, HORAAPARTURA = HA, HORACIERRE = HC, StrCodigo = codigo, BVisibilidad = visibilidad, MFondo = fondo };
 
                 this.ID = ID;
                 this.IDENTIFICADOR = IDENTIFICADOR;
@@ -654,7 +693,7 @@ namespace VistaDelModelo
 
 
         #region Inserciones y actualizaciones
-        public bool GuardarSucursal(Guid UidSucursal, Guid UIDDIRECCION, string IDENTIFICADOR, string Empresa, string HoraApertura, string HoraCierre, string ESTATUS, bool bVisibilidadInformacion, string codigo)
+        public bool GuardarSucursal(Guid UidSucursal, Guid UIDDIRECCION, string IDENTIFICADOR, string Empresa, string HoraApertura, string HoraCierre, string ESTATUS, bool bVisibilidadInformacion, string codigo, decimal fondo = 0)
         {
             bool resultado = false;
             try
@@ -671,6 +710,7 @@ namespace VistaDelModelo
                     USUARIO = new Usuarios() { ID = new Guid(Empresa) },
                     Estatus = new Estatus() { ID = int.Parse(ESTATUS) },
                     BVisibilidad = bVisibilidadInformacion,
+                    MFondo = fondo,
                     StrCodigo = codigo
                 });
             }
@@ -694,13 +734,13 @@ namespace VistaDelModelo
             }
             return UIDEMPRESA;
         }
-        public bool ActualizarDatos(string IdSucursal, string IDENTIFICADOR, string HoraApertura, string HoraCierre, string estatus, bool bVisibilidadInformacion, string codigo)
+        public bool ActualizarDatos(string IdSucursal, string IDENTIFICADOR, string HoraApertura, string HoraCierre, string estatus, bool bVisibilidadInformacion, string codigo, decimal fondo)
         {
             bool resultado = false;
             Guid ID = new Guid(IdSucursal);
             try
             {
-                resultado = SUCURSAL.ACTUALIZASUCURSAL(new Sucursal() { ID = ID, HORAAPARTURA = HoraApertura, HORACIERRE = HoraCierre, Estatus = new Estatus() { ID = int.Parse(estatus) }, IDENTIFICADOR = IDENTIFICADOR, BVisibilidad = bVisibilidadInformacion, StrCodigo = codigo });
+                resultado = SUCURSAL.ACTUALIZASUCURSAL(new Sucursal() { ID = ID, HORAAPARTURA = HoraApertura, HORACIERRE = HoraCierre, Estatus = new Estatus() { ID = int.Parse(estatus) }, IDENTIFICADOR = IDENTIFICADOR, BVisibilidad = bVisibilidadInformacion, StrCodigo = codigo, MFondo = fondo });
             }
             catch (Exception)
             {
@@ -1084,7 +1124,8 @@ namespace VistaDelModelo
                             UidVehiculo = new Guid(item["UidVehiculo"].ToString()),
                             StrNombreRepartidor = item["Nombre"].ToString(),
                             usuario = item["Usuario"].ToString(),
-                            StrVehiculo = item["VchModelo"].ToString()
+                            StrVehiculo = item["VchModelo"].ToString(),
+                            MFondo = decimal.Parse(decimal.Parse(item["mfondo"].ToString()).ToString("N2"))
                         });
                 }
             }
@@ -1123,7 +1164,7 @@ namespace VistaDelModelo
             }
             return Resultado;
         }
-        public void AsignarOrdenRepartidor( Guid UidTurnoRepartidor, Guid UidSucursal , Guid UidOrdenRepartidor)
+        public void AsignarOrdenRepartidor(Guid UidTurnoRepartidor, Guid UidSucursal, Guid UidOrdenRepartidor)
         {
             try
             {
@@ -1175,7 +1216,8 @@ namespace VistaDelModelo
                         FechaAsignacion = item["DtmFecha"].ToString(),
                         usuario = item["Usuario"].ToString(),
                         MTotal = double.Parse(item["MTotalSucursal"].ToString()),
-                        StrEstatusRepartidor = EstatusRepartidor
+                        StrEstatusRepartidor = EstatusRepartidor,
+                        UidOrdenTarifario = new Guid(item["UidRelacionOrdenTarifario"].ToString())
                     };
                     ListaDeOrdenesAsignadas.Add(objeto);
                 }

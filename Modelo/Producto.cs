@@ -58,6 +58,14 @@ namespace Modelo
             get { return _mCosto; }
             set { _mCosto = value; }
         }
+        private string _McostoProducto;
+
+        public string MCostoProducto
+        {
+            get { return _McostoProducto; }
+            set { _McostoProducto = value; }
+        }
+
         #endregion
 
         #region Metodos

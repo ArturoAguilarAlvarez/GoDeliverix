@@ -137,6 +137,14 @@ namespace VistaDelModelo
             set { _StrEstatusOrdenSucursal = value; }
         }
 
+        private string _StrNombreRepartidor;
+
+        public string StrNombreRepartidor
+        {
+            get { return _StrNombreRepartidor; }
+            set { _StrNombreRepartidor = value; }
+        }
+
         public string StrEstatusOrdenTarifario { get; private set; }
 
 
@@ -211,7 +219,12 @@ namespace VistaDelModelo
         public List<VMOrden> ListaDeBitacoraDeOrdenes = new List<VMOrden>();
         public List<VMOrden> ListaDeInformacionDeOrden = new List<VMOrden>();
 
+
+
         public List<VMOrden> ListaDeOrdenesPorConfirmar = new List<VMOrden>();
+
+
+
         public List<VMOrden> ListaDeOrdenesPorElaborar = new List<VMOrden>();
         public List<VMOrden> ListaDeOrdenesPorEnviar = new List<VMOrden>();
         public List<VMOrden> ListaDeOrdenesEnviadas = new List<VMOrden>();
@@ -352,7 +365,7 @@ namespace VistaDelModelo
             Datos = new Conexion();
             try
             {
-                string Query = "select distinct s.UidSucursal,op.UidListaDeProductosEnOrden,i.NVchRuta,p.uidproducto, s.Identificador,ot.MPropina,p.VchNombre,op.IntCantidad,op.MTotal,t.MCosto as tarifario from Ordenes o inner join OrdenSucursal os on os.UidOrden = o.UidOrden inner join Sucursales s on s.UidSucursal = os.UidSucursal inner join OrdenProducto op on os.UidRelacionOrdenSucursal = op.UidOrden inner join SeccionProducto sp on sp.UidSeccionProducto = op.UidSeccionProducto inner join Productos p on p.UidProducto = sp.UidProducto inner join OrdenTarifario ot on ot.UidOrden = os.UidRelacionOrdenSucursal inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario inner join ImagenProducto iproduc on iproduc.UidProducto = p.UidProducto  inner join Imagenes i on i.UIdImagen = iproduc.UidImagen where os.UidRelacionOrdenSucursal = '" + uidRelacionordenSucursal + "'";
+                string Query = "select distinct s.UidSucursal,op.UidListaDeProductosEnOrden,i.NVchRuta,p.uidproducto, s.Identificador,ot.MPropina,p.VchNombre,op.IntCantidad,(sp.Mcosto * op.intCantidad) as PagoSucursal, op.MTotal,t.MCosto as tarifario from Ordenes o inner join OrdenSucursal os on os.UidOrden = o.UidOrden inner join Sucursales s on s.UidSucursal = os.UidSucursal inner join OrdenProducto op on os.UidRelacionOrdenSucursal = op.UidOrden inner join SeccionProducto sp on sp.UidSeccionProducto = op.UidSeccionProducto inner join Productos p on p.UidProducto = sp.UidProducto inner join OrdenTarifario ot on ot.UidOrden = os.UidRelacionOrdenSucursal inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario inner join ImagenProducto iproduc on iproduc.UidProducto = p.UidProducto  inner join Imagenes i on i.UIdImagen = iproduc.UidImagen where os.UidRelacionOrdenSucursal = '" + uidRelacionordenSucursal + "'";
 
                 ListaDeProductos = new List<VMOrden>();
                 foreach (DataRow item in Datos.Consultas(Query).Rows)
@@ -364,7 +377,9 @@ namespace VistaDelModelo
                     }
                     //Muestra el total con 2 decimales a la derecha
                     decimal mt = decimal.Parse(item["MTotal"].ToString());
+                    decimal mts = decimal.Parse(item["PagoSucursal"].ToString());
                     string Total = mt.ToString("N2");
+                    string totalsucursal = mts.ToString("N2");
                     ListaDeProductos.Add(new VMOrden()
                     {
                         UidProducto = new Guid(item["uidproducto"].ToString()),
@@ -377,6 +392,7 @@ namespace VistaDelModelo
                         UidSucursal = new Guid(item["UidSucursal"].ToString()),
                         MPropina = decimal.Parse(item["MPropina"].ToString()),
                         MTotal = decimal.Parse(Total),
+                        MTotalSucursal = totalsucursal,
                         MCostoTarifario = double.Parse(item["tarifario"].ToString()),
                         VisibilidadNota = TieneNota
                     });
@@ -440,9 +456,16 @@ namespace VistaDelModelo
                     {
                         CodigoEntrega = long.Parse(item["BIntCodigoEntrega"].ToString());
                     }
-                    VMOrden orden = new VMOrden() { Uidorden = new Guid(item["UidOrden"].ToString()),
-                        EstatusCobro = item["EstatusCobro"].ToString(),LngCodigoDeEntrega = CodigoEntrega, FechaDeOrden = item["DtmFechaDeCreacion"].ToString(), MTotal = decimal.Parse(item["MTotal"].ToString()) + decimal.Parse(item["MPropina"].ToString()),
-                        StrFormaDeCobro = item["FormaDeCobro"].ToString(), LNGFolio = int.Parse(item["intFolio"].ToString()),  };
+                    VMOrden orden = new VMOrden()
+                    {
+                        Uidorden = new Guid(item["UidOrden"].ToString()),
+                        EstatusCobro = item["EstatusCobro"].ToString(),
+                        LngCodigoDeEntrega = CodigoEntrega,
+                        FechaDeOrden = item["DtmFechaDeCreacion"].ToString(),
+                        MTotal = decimal.Parse(item["MTotal"].ToString()) + decimal.Parse(item["MPropina"].ToString()),
+                        StrFormaDeCobro = item["FormaDeCobro"].ToString(),
+                        LNGFolio = int.Parse(item["intFolio"].ToString()),
+                    };
                     ListaDeOrdenes.Add(orden);
                 }
             }
@@ -508,7 +531,13 @@ namespace VistaDelModelo
                     case "Usuario":
                         foreach (DataRow item in Datos.Busquedas(comando).Rows)
                         {
-                            VMOrden orden = new VMOrden() { Uidorden = new Guid(item["UidOrden"].ToString()), FechaDeOrden = item["DtmFechaDeCreacion"].ToString(), MTotal = decimal.Parse(item["MTotal"].ToString()), LNGFolio = int.Parse(item["IntFolio"].ToString()) };
+                            VMOrden orden = new VMOrden()
+                            {
+                                Uidorden = new Guid(item["UidOrden"].ToString()),
+                                FechaDeOrden = item["DtmFechaDeCreacion"].ToString(),
+                                MTotal = decimal.Parse(item["MTotal"].ToString()),
+                                LNGFolio = int.Parse(item["IntFolio"].ToString())
+                            };
                             ListaDeOrdenes.Add(orden);
                         }
                         break;
@@ -525,7 +554,7 @@ namespace VistaDelModelo
                                 {
                                     imagen = "Package";
                                     //Convierte el total en decimales con 2 numeros a la derecha
-                                    decimal MT = decimal.Parse(item["MTotalSucursal"].ToString());
+                                    decimal MT = decimal.Parse(item["Mcosto"].ToString());
                                     string Total = MT.ToString("N2");
                                     if (!ListaDeOrdenes.Exists(o => o.Uidorden == new Guid(item["UidRelacionOrdenSucursal"].ToString())))
                                     {
@@ -568,7 +597,7 @@ namespace VistaDelModelo
                                         {
                                             Uidorden = new Guid(item["UidRelacionOrdenSucursal"].ToString()),
                                             LNGFolio = long.Parse(item["IntFolio"].ToString()),
-                                            MTotal = decimal.Parse(item["MTotalSucursal"].ToString()),
+                                            MTotal = decimal.Parse(item["MCosto"].ToString()),
                                             FechaDeOrden = item["DtmFechaDeCreacion"].ToString(),
                                             Imagen = imagen,
                                             UidEstatus = new Guid(item["estatus"].ToString().ToLower())
@@ -610,7 +639,7 @@ namespace VistaDelModelo
                                         {
                                             Uidorden = new Guid(item["UidRelacionOrdenSucursal"].ToString()),
                                             LNGFolio = long.Parse(item["IntFolio"].ToString()),
-                                            MTotal = decimal.Parse(item["MTotalSucursal"].ToString()),
+                                            MTotal = decimal.Parse(item["MCosto"].ToString()),
                                             FechaDeOrden = item["DtmFechaDeCreacion"].ToString(),
                                             Imagen = imagen
                                         });
@@ -662,7 +691,7 @@ namespace VistaDelModelo
                                     {
                                         Uidorden = new Guid(item["UidRelacionOrdenSucursal"].ToString()),
                                         LNGFolio = long.Parse(item["IntFolio"].ToString()),
-                                        MTotal = decimal.Parse(item["MTotalSucursal"].ToString()),
+                                        MTotal = decimal.Parse(item["MCosto"].ToString()),
                                         FechaDeOrden = TiempoRestante.Minutes.ToString() + ":" + TiempoRestante.Seconds.ToString(),
                                         Imagen = imagen
                                     });
@@ -683,7 +712,7 @@ namespace VistaDelModelo
                                     {
                                         Uidorden = new Guid(item["UidOrden"].ToString()),
                                         LNGFolio = long.Parse(item["IntFolio"].ToString()),
-                                        MTotal = decimal.Parse(item["MTotalSucursal"].ToString()),
+                                        MTotal = decimal.Parse(item["Mcosto"].ToString()),
                                         FechaDeOrden = item["DtmFechaDeCreacion"].ToString(),
                                         Imagen = imagen
                                     });
@@ -1061,7 +1090,7 @@ namespace VistaDelModelo
             oDBOrden = new DBOrden();
             oDBOrden.eliminarRegistroOrdenRepartidor(UidRelacionOrdenRepartidor);
         }
-        public void BuscarOrdenRepartidor(string strcodigo, string licencia)
+        public void BuscarOrdenRepartidor(string strcodigo, string licencia = "")
         {
             oDBOrden = new DBOrden();
             foreach (DataRow item in oDBOrden.BuscarOrden(strcodigo, licencia).Rows)
@@ -1070,6 +1099,7 @@ namespace VistaDelModelo
                 LNGFolio = long.Parse(item["IntFolio"].ToString());
                 StrNombreSucursal = item["Identificador"].ToString();
                 StrEstatusOrdenSucursal = item["estatus"].ToString();
+                StrNombreRepartidor = item["Nombre"].ToString();
             }
         }
         #endregion
@@ -1125,7 +1155,7 @@ namespace VistaDelModelo
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="UidLicencia"></param>
+        /// <param name="UidLicencia"></param>-
         public void ObtenerOrdenSucursalDistribuidora(string UidLicencia)
         {
             Datos = new Conexion();
@@ -1220,7 +1250,25 @@ namespace VistaDelModelo
         }
         #endregion
 
+        public void InformacionDeOrdenesDelUltimoTurnoSuministradora(string Uidsucursal)
+        {
+            oOrden = new Orden();
+            ListaDeOrdenes = new List<VMOrden>();
+            foreach (DataRow item in oOrden.InformacionDeOrdenesUltimoTurno(Uidsucursal).Rows)
+            {
+                ListaDeOrdenes.Add(new VMOrden() { Uidorden = new Guid(item["UidRelacionOrdenSucursal"].ToString()), MTotal = decimal.Parse(item["MTotalSucursal"].ToString()), UidEstatus = new Guid(item["Estatus"].ToString()) });
+            }
+        }
 
+        public void InformacionDeOrdenesDeTurnoSuministradoraTurnoCallCenter(string v, Guid uidTurno)
+        {
+            oOrden = new Orden();
+            ListaDeOrdenes = new List<VMOrden>();
+            foreach (DataRow item in oOrden.InformacionDeOrdenesTurnoCallCenter(v, uidTurno).Rows)
+            {
+                ListaDeOrdenes.Add(new VMOrden() { Uidorden = new Guid(item["UidRelacionOrdenSucursal"].ToString()), MTotal = decimal.Parse(item["MTotalSucursal"].ToString()), UidEstatus = new Guid(item["Estatus"].ToString()) });
+            }
+        }
         #endregion
     }
 }
