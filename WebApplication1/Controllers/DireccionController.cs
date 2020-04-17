@@ -144,7 +144,7 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
-        public ResponseHelper GetObtenerDireccionConDatosDeGoogle(string StrNombreCiudad,string CodigoEstado,string CodigoPais, string Latitud, string Longitud)
+        public ResponseHelper GetObtenerDireccionConDatosDeGoogle(string StrNombreCiudad, string CodigoEstado, string CodigoPais)
         {
             MVDireccion = new VMDireccion();
             Respuesta = new ResponseHelper();
@@ -165,7 +165,7 @@ namespace WebApplication1.Controllers
 
 
             Respuesta.Data = MVDireccion;
-            
+
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;
         }
