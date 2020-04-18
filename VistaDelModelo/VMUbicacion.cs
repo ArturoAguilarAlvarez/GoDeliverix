@@ -103,5 +103,9 @@ namespace VistaDelModelo
             }
         }
 
+        public DataTable ObtenerDatosDireccion(string colonia, string codigopostal)
+        {
+            return this.Datos.ObtenerDireccionPorColoniaEstadoPais(colonia, codigopostal);
+        }
     }
 }
