@@ -71,7 +71,8 @@ namespace WebApplication1.Controllers
                                             UidMunicipio = (Guid)row["UidMunicipio"],
                                             Municipio = (string)row["Municipio"],
                                             UidPais = (Guid)row["UidPais"],
-                                            Pais = (string)row["Pais"]
+                                            Pais = (string)row["Pais"],
+                                            Direccion = item.formatted_address
                                         };
                                     }
 
@@ -131,6 +132,8 @@ namespace WebApplication1.Controllers
         public string Estado;
         public Guid UidPais;
         public string Pais;
+
+        public string Direccion;
     }
 
     public class AddressComponent
