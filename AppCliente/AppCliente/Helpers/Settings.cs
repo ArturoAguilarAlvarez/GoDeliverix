@@ -117,8 +117,8 @@ namespace AppCliente.Helpers
             set => AppSettings.AddOrUpdateValue(nameof(StrLatitud), value);
         }
 
-        //public const string sitio = "https://www.godeliverix.net";
-        public const string sitio = "http://192.168.1.87";
+        public const string sitio = "https://www.godeliverix.net";
+        //public const string sitio = "http://192.168.1.87";
         public static void ClearAllData()
         {
             AppSettings.Clear();

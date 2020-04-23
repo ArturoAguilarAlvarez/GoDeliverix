@@ -217,11 +217,11 @@ namespace Deliverix.Wpf.Distribuidores
         {
             object ID = ((Button)sender).CommandParameter;
             VMSucursales registro = MVSucusales.ListaDeRepartidoresyVehiculosEnSucursal.Find(o => o.ID.ToString() == ID.ToString());
-            MessageBox.Show(registro.MFondo.ToString());
             MVSucusales.ModificaInformacionDeTrabajoDeRepartidor(ID.ToString(), registro.MFondo);
             MVLicencia.RecuperaLicencia();
             string licencia = MVLicencia.Licencia;
             MVSucusales.ObtenerRepartidoresYVehiculos(licencia);
+            DHInformacionRepartidor.IsOpen = false;
             CargaDataGrid("Bitacora");
         }
 

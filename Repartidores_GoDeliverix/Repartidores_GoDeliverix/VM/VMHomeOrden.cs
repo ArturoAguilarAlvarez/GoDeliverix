@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Repartidores_GoDeliverix.Helpers;
+using Repartidores_GoDeliverix.Modelo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -169,9 +170,9 @@ namespace Repartidores_GoDeliverix.VM
             set { SetValue(ref _MTotalTarifario, value); }
         }
 
-        private List<VMHomeOrden> _ListaProductos;
+        private List<Productos> _ListaProductos;
 
-        public List<VMHomeOrden> ListaProductos
+        public List<Productos> ListaProductos
         {
             get { return _ListaProductos; }
             set { SetValue(ref _ListaProductos, value); }
@@ -491,6 +492,10 @@ namespace Repartidores_GoDeliverix.VM
                     estatus = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
 
                 }
+                if (estatus == "Pendiente")
+                {
+                    estatus = "Pago en destino";
+                }
                 StrEstatusCobro = estatus;
                 using (var _WebApiGoDeliverix = new HttpClient())
                 {
@@ -545,11 +550,11 @@ namespace Repartidores_GoDeliverix.VM
                 }
                 MTotal = 0.0m;
                 MSTotal = 0.0m;
-                ListaProductos = new List<VMHomeOrden>();
+                ListaProductos = new List<Productos>();
                 foreach (VMOrden item in MVOrden.ListaDeProductos)
                 {
                     MTotalTarifario = 0.0m;
-                    ListaProductos.Add(new VMHomeOrden()
+                    ListaProductos.Add(new Productos()
                     {
                         StrNombreProducto = item.StrNombreProducto,
                         IntCantidad = item.intCantidad,

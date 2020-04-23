@@ -72,7 +72,7 @@
                         <Label Text="Envio"      FontSize="Medium" TextColor="Black"  Grid.Column="0"></Label>
                         <Label Text="{Binding MTotalTarifario,StringFormat='${0}'}"      FontSize="Medium" TextColor="MediumPurple"  Grid.Column="1"></Label>
                         <Label Text="Total" FontSize="Medium" TextColor="Black"  Grid.Column="2"></Label>
-                        <Label Text="{Binding MSubTotal,StringFormat='${0}'}"  FontSize="Medium" TextColor="MediumPurple"  Grid.Column="3"></Label>
+                        <Label Text="{Binding MTotal,StringFormat='${0}'}"  FontSize="Medium" TextColor="MediumPurple"  Grid.Column="3"></Label>
                     </Grid>
                 </StackLayout>
             </Grid>

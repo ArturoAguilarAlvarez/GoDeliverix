@@ -310,6 +310,7 @@ namespace VistaDelModelo
                     LngFolio = long.Parse(item["LngFolio"].ToString());
                     this.UidUsuario = new Guid(item["UidUsuario"].ToString());
                     DtmHoraInicio = DateTime.Parse(item["DtmHoraInicio"].ToString());
+
                     DFondoRepartidor = decimal.Parse(decimal.Parse(item["mfondo"].ToString()).ToString("N2"));
                     if (!string.IsNullOrEmpty(item["DtmHoraFin"].ToString()))
                     {
@@ -492,7 +493,6 @@ namespace VistaDelModelo
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -509,7 +509,7 @@ namespace VistaDelModelo
                     decimal total = 0;
                     if (!string.IsNullOrEmpty(item["Ordenes"].ToString()))
                     {
-                        total = decimal.Parse(item["Ordenes"].ToString());
+                        total = decimal.Parse(decimal.Parse(item["Ordenes"].ToString()).ToString("N2"));
                     }
 
                     VMTurno usuario = new VMTurno()

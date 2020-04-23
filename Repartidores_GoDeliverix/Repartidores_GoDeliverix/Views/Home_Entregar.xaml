@@ -32,7 +32,7 @@
 
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" VerticalOptions="Center">
-                    <Label Text="{Binding StrEstatusCobro,StringFormat='Estatus {0}'}" TextColor="#555" HorizontalOptions="FillAndExpand" FontSize="Medium"></Label>
+                    <Label Text="{Binding StrEstatusCobro,StringFormat='Estatus del pago {0}'}" TextColor="#555" HorizontalOptions="FillAndExpand" FontSize="Medium"></Label>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" VerticalOptions="Center">
                     <Label  Text="Telefono" FontSize="Medium"  TextColor="#333"></Label>

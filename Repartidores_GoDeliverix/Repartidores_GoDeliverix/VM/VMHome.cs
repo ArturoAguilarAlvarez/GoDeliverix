@@ -41,7 +41,6 @@ namespace Repartidores_GoDeliverix.VM
         }
         #endregion
 
-
         public Guid UidOrdenTarifario
         {
             get { return _UidOrdenTarifario; }
@@ -294,7 +293,6 @@ namespace Repartidores_GoDeliverix.VM
                 StrCodigo = MVOrden.CodigoOrdenTarifario
             };
             AppInstance.MVHomeOrden.StrCodigo = string.Empty;
-            AppInstance.MVHomeOrden.ListaProductos = new System.Collections.Generic.List<VMHomeOrden>();
             AppInstance.MVHomeOrden.CargaOrden();
 
 
@@ -341,7 +339,7 @@ namespace Repartidores_GoDeliverix.VM
             MVOrden = new VMOrden();
             using (var _WebApiGoDeliverix = new HttpClient())
             {
-                url = ""+ settings.Sitio + "api/Orden/GetObtenerCodigoOrdenTarifario?uidOrdenTarifario=" + UidOrdenTarifario + "";
+                url = "" + settings.Sitio + "api/Orden/GetObtenerCodigoOrdenTarifario?uidOrdenTarifario=" + UidOrdenTarifario + "";
                 string content = await _WebApiGoDeliverix.GetStringAsync(url);
                 var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                 MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(obj);
@@ -369,8 +367,7 @@ namespace Repartidores_GoDeliverix.VM
                 UidOrdenTarifario = UidOrdenTarifario,
                 UidordenRepartidor = UidordenRepartidor,
                 StrIdentificadorSucursal = MVSucursal.IDENTIFICADOR,
-                StrCodigo = MVOrden.CodigoOrdenTarifario,
-                ListaProductos = new System.Collections.Generic.List<VMHomeOrden>()
+                StrCodigo = MVOrden.CodigoOrdenTarifario
             };
             AppInstance.MVHomeOrden.CargaOrden();
             IsLoading = false;
@@ -394,7 +391,7 @@ namespace Repartidores_GoDeliverix.VM
                 LngFolio = LngFolio,
                 UidOrdenTarifario = UidOrdenTarifario,
                 UidordenRepartidor = UidordenRepartidor,
-                ListaProductos = new System.Collections.Generic.List<VMHomeOrden>()
+                ListaProductos = new System.Collections.Generic.List<Modelo.Productos>()
             };
             AppInstance.MVHomeOrden.CargaOrden();
             IsLoading = false;

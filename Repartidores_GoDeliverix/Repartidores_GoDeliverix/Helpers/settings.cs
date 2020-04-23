@@ -29,9 +29,9 @@ namespace Repartidores_GoDeliverix.Helpers
             AppSettings.Clear();
         }
         //Produccion
-        //public static string Sitio = "https://www.godeliverix.net/";
+        public static string Sitio = "https://www.godeliverix.net/";
         //Local
-        public static string Sitio = "http://192.168.1.15/";
+         //public static string Sitio = "http://192.168.1.65/";
 
         //#region data values 
         ////No funciona
