@@ -23,6 +23,14 @@ namespace AllSuministradora.model
             get { return _IntCantidad; }
             set { _IntCantidad = value; OnpropertyChanged("IntCantidad"); }
         }
+        private string _MTotalSucursal;
+
+        public string MTotalSucursal
+        {
+            get { return _MTotalSucursal; }
+            set { _MTotalSucursal = value; OnpropertyChanged("MTotalSucursal"); }
+        }
+
 
         #endregion
     }

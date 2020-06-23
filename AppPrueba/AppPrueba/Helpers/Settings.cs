@@ -76,5 +76,6 @@ namespace AppPrueba.Helpers
             Usuario = "";
             Contrasena = "";
         }
+
     }
 }

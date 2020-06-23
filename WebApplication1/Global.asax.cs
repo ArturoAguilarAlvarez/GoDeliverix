@@ -12,6 +12,7 @@ using WebApplication1.App_Start;
 
 namespace WebApplication1
 {
+
     public class Global : System.Web.HttpApplication
     {
 
@@ -42,9 +43,9 @@ namespace WebApplication1
 
         protected void Application_Error(object sender, EventArgs e)
         {
-           
+            
         }
-
+        
         protected void Session_End(object sender, EventArgs e)
         {
         }

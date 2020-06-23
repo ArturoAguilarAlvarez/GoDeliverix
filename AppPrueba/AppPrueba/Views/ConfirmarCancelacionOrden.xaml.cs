@@ -31,7 +31,7 @@ namespace AppPrueba.Views
 
         public async void Cargar()
         {
-            string _url = ("http://godeliverix.net/api/Empresa/GetMensajeSucursal?Licencia=" + AppPrueba.Helpers.Settings.Licencia.ToString());
+            string _url = (RestService.Servidor + "api/Empresa/GetMensajeSucursal?Licencia=" + AppPrueba.Helpers.Settings.Licencia.ToString());
             var DatosObtenidos = await _client.GetAsync(_url);
             string res = await DatosObtenidos.Content.ReadAsStringAsync();
             var asd = JsonConvert.DeserializeObject<ResponseHelper>(res).Data.ToString();
@@ -65,7 +65,7 @@ namespace AppPrueba.Views
                        + "&IdMensaje=" + ObjSeccion.Uid + "&UidOrden=" + ObjItem.Uidorden);
                     var DatosObtenidos = await _client.GetAsync(_url);
 
-                    string _Url = $"https://godeliverix.net/api/Monedero/GetMovimientosMonedero?" +
+                    string _Url = $"" + RestService.Servidor + "api/Monedero/GetMovimientosMonedero?" +
                                 $"UidOrdenSucursal={ObjItem.Uidorden}" + $"&TipoDeMovimiento=E85F0486-1FBE-494C-86A2-BFDDC733CA5D" +
                                 $"&Concepto=2AABDF7F-EDCE-455F-B775-6283654D7DA0" +
                                 $"&Monto=" + ObjItem.MTotal + "";

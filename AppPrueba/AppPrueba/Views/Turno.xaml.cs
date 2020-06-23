@@ -26,7 +26,7 @@ namespace AppPrueba.Views
             string UidLicencia = AppPrueba.Helpers.Settings.Licencia;
             using (HttpClient _WebApi = new HttpClient())
             {
-                string url = "https://www.godeliverix.net/api/Turno/GetUltimoTurnoSuministradora?UidLicencia=" + UidLicencia + "";
+                string url = RestService.Servidor + "api/Turno/GetUltimoTurnoSuministradora?UidLicencia=" + UidLicencia + "";
                 var datos = await _WebApi.GetStringAsync(url);
                 var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
                 var MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);

@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="InformacionCierreTurnoSuministradora" targetNamespace="http://tempuri.org/InformacionCierreTurnoSuministradora.xsd" xmlns:mstns="http://tempuri.org/InformacionCierreTurnoSuministradora.xsd" xmlns="http://tempuri.org/InformacionCierreTurnoSuministradora.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="InformacionCierreTurnoSuministradora" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="InformacionCierreTurnoSuministradora" msprop:Generator_UserDSName="InformacionCierreTurnoSuministradora">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="LsInformacionOrdenes" msprop:Generator_TableClassName="LsInformacionOrdenesDataTable" msprop:Generator_TableVarName="tableLsInformacionOrdenes" msprop:Generator_TablePropName="LsInformacionOrdenes" msprop:Generator_RowDeletingName="LsInformacionOrdenesRowDeleting" msprop:Generator_RowChangingName="LsInformacionOrdenesRowChanging" msprop:Generator_RowEvHandlerName="LsInformacionOrdenesRowChangeEventHandler" msprop:Generator_RowDeletedName="LsInformacionOrdenesRowDeleted" msprop:Generator_UserTableName="LsInformacionOrdenes" msprop:Generator_RowChangedName="LsInformacionOrdenesRowChanged" msprop:Generator_RowEvArgName="LsInformacionOrdenesRowChangeEvent" msprop:Generator_RowClassName="LsInformacionOrdenesRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="LngFolio" msprop:Generator_ColumnVarNameInTable="columnLngFolio" msprop:Generator_ColumnPropNameInRow="LngFolio" msprop:Generator_ColumnPropNameInTable="LngFolioColumn" msprop:Generator_UserColumnName="LngFolio" type="xs:string" minOccurs="0" />
+              <xs:element name="DPagoDeComision" msprop:Generator_ColumnVarNameInTable="columnDPagoDeComision" msprop:Generator_ColumnPropNameInRow="DPagoDeComision" msprop:Generator_ColumnPropNameInTable="DPagoDeComisionColumn" msprop:Generator_UserColumnName="DPagoDeComision" type="xs:string" minOccurs="0" />
+              <xs:element name="DPagosASucursal" msprop:Generator_ColumnVarNameInTable="columnDPagosASucursal" msprop:Generator_ColumnPropNameInRow="DPagosASucursal" msprop:Generator_ColumnPropNameInTable="DPagosASucursalColumn" msprop:Generator_UserColumnName="DPagosASucursal" type="xs:string" minOccurs="0" />
+              <xs:element name="DPrecioOrden" msprop:Generator_ColumnVarNameInTable="columnDPrecioOrden" msprop:Generator_ColumnPropNameInRow="DPrecioOrden" msprop:Generator_ColumnPropNameInTable="DPrecioOrdenColumn" msprop:Generator_UserColumnName="DPrecioOrden" type="xs:string" minOccurs="0" />
+              <xs:element name="IntComisionSistema" msprop:Generator_ColumnVarNameInTable="columnIntComisionSistema" msprop:Generator_ColumnPropNameInRow="IntComisionSistema" msprop:Generator_ColumnPropNameInTable="IntComisionSistemaColumn" msprop:Generator_UserColumnName="IntComisionSistema" type="xs:string" minOccurs="0" />
+              <xs:element name="DGananciasSucursal" msprop:Generator_ColumnVarNameInTable="columnDGananciasSucursal" msprop:Generator_ColumnPropNameInRow="DGananciasSucursal" msprop:Generator_ColumnPropNameInTable="DGananciasSucursalColumn" msprop:Generator_UserColumnName="DGananciasSucursal" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="InformacionTurno" msprop:Generator_TableClassName="InformacionTurnoDataTable" msprop:Generator_TableVarName="tableInformacionTurno" msprop:Generator_TablePropName="InformacionTurno" msprop:Generator_RowDeletingName="InformacionTurnoRowDeleting" msprop:Generator_RowChangingName="InformacionTurnoRowChanging" msprop:Generator_RowEvHandlerName="InformacionTurnoRowChangeEventHandler" msprop:Generator_RowDeletedName="InformacionTurnoRowDeleted" msprop:Generator_UserTableName="InformacionTurno" msprop:Generator_RowChangedName="InformacionTurnoRowChanged" msprop:Generator_RowEvArgName="InformacionTurnoRowChangeEvent" msprop:Generator_RowClassName="InformacionTurnoRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="StrNombre" msprop:Generator_ColumnVarNameInTable="columnStrNombre" msprop:Generator_ColumnPropNameInRow="StrNombre" msprop:Generator_ColumnPropNameInTable="StrNombreColumn" msprop:Generator_UserColumnName="StrNombre" type="xs:string" minOccurs="0" />
+              <xs:element name="StrUsuario" msprop:Generator_ColumnVarNameInTable="columnStrUsuario" msprop:Generator_ColumnPropNameInRow="StrUsuario" msprop:Generator_ColumnPropNameInTable="StrUsuarioColumn" msprop:Generator_UserColumnName="StrUsuario" type="xs:string" minOccurs="0" />
+              <xs:element name="LngFolio" msprop:Generator_ColumnVarNameInTable="columnLngFolio" msprop:Generator_ColumnPropNameInRow="LngFolio" msprop:Generator_ColumnPropNameInTable="LngFolioColumn" msprop:Generator_UserColumnName="LngFolio" type="xs:string" minOccurs="0" />
+              <xs:element name="DtmHoraInicio" msprop:Generator_ColumnVarNameInTable="columnDtmHoraInicio" msprop:Generator_ColumnPropNameInRow="DtmHoraInicio" msprop:Generator_ColumnPropNameInTable="DtmHoraInicioColumn" msprop:Generator_UserColumnName="DtmHoraInicio" type="xs:string" minOccurs="0" />
+              <xs:element name="DtmHoraFin" msprop:Generator_ColumnVarNameInTable="columnDtmHoraFin" msprop:Generator_ColumnPropNameInRow="DtmHoraFin" msprop:Generator_ColumnPropNameInTable="DtmHoraFinColumn" msprop:Generator_UserColumnName="DtmHoraFin" type="xs:string" minOccurs="0" />
+              <xs:element name="StrEmpresaDistribuidora" msprop:Generator_ColumnVarNameInTable="columnStrEmpresaDistribuidora" msprop:Generator_ColumnPropNameInRow="StrEmpresaDistribuidora" msprop:Generator_ColumnPropNameInTable="StrEmpresaDistribuidoraColumn" msprop:Generator_UserColumnName="StrEmpresaDistribuidora" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="InformacionOrdenesPorCobrar" msprop:Generator_TableClassName="InformacionOrdenesPorCobrarDataTable" msprop:Generator_TableVarName="tableInformacionOrdenesPorCobrar" msprop:Generator_RowChangedName="InformacionOrdenesPorCobrarRowChanged" msprop:Generator_TablePropName="InformacionOrdenesPorCobrar" msprop:Generator_RowDeletingName="InformacionOrdenesPorCobrarRowDeleting" msprop:Generator_RowChangingName="InformacionOrdenesPorCobrarRowChanging" msprop:Generator_RowEvHandlerName="InformacionOrdenesPorCobrarRowChangeEventHandler" msprop:Generator_RowDeletedName="InformacionOrdenesPorCobrarRowDeleted" msprop:Generator_RowClassName="InformacionOrdenesPorCobrarRow" msprop:Generator_UserTableName="InformacionOrdenesPorCobrar" msprop:Generator_RowEvArgName="InformacionOrdenesPorCobrarRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="StrNombreSucursal" msprop:Generator_ColumnVarNameInTable="columnStrNombreSucursal" msprop:Generator_ColumnPropNameInRow="StrNombreSucursal" msprop:Generator_ColumnPropNameInTable="StrNombreSucursalColumn" msprop:Generator_UserColumnName="StrNombreSucursal" type="xs:string" minOccurs="0" />
+              <xs:element name="LNGFolio" msprop:Generator_ColumnVarNameInTable="columnLNGFolio" msprop:Generator_ColumnPropNameInRow="LNGFolio" msprop:Generator_ColumnPropNameInTable="LNGFolioColumn" msprop:Generator_UserColumnName="LNGFolio" type="xs:string" minOccurs="0" />
+              <xs:element name="MTotalSucursal" msprop:Generator_ColumnVarNameInTable="columnMTotalSucursal" msprop:Generator_ColumnPropNameInRow="MTotalSucursal" msprop:Generator_ColumnPropNameInTable="MTotalSucursalColumn" msprop:Generator_UserColumnName="MTotalSucursal" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

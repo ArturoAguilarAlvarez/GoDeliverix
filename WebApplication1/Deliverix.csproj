@@ -277,6 +277,7 @@
     <Content Include="Vista\Cliente\Default.aspx" />
     <Content Include="Vista\Cliente\Historico.aspx" />
     <Content Include="Vista\Configuracion.aspx" />
+    <Content Include="Vista\ConfiguracionComisiones.aspx" />
     <Content Include="Vista\ConfiguracionDeEmpresa.aspx" />
     <Content Include="Vista\Empresas.aspx" />
     <Content Include="Vista\Default.aspx" />
@@ -424,6 +425,7 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\CategoriaController.cs" />
+    <Compile Include="Controllers\ContratoController.cs" />
     <Compile Include="Controllers\CorreoElectronicoController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\DireccionController.cs" />
@@ -521,6 +523,13 @@
     </Compile>
     <Compile Include="Vista\Configuracion.aspx.designer.cs">
       <DependentUpon>Configuracion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Vista\ConfiguracionComisiones.aspx.cs">
+      <DependentUpon>ConfiguracionComisiones.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Vista\ConfiguracionComisiones.aspx.designer.cs">
+      <DependentUpon>ConfiguracionComisiones.aspx</DependentUpon>
     </Compile>
     <Compile Include="Vista\ConfiguracionDeEmpresa.aspx.cs">
       <DependentUpon>ConfiguracionDeEmpresa.aspx</DependentUpon>

@@ -15,10 +15,10 @@ namespace DBControl
         public DataTable RecuperarRelacionContrato(string UidSucursal)
         {
             oConexion = new Conexion();
-            string query = "select * from ContratoDeServicio where UidSucursalSuministradora = '" + UidSucursal + "' or UidSucursalDistribuidora = '" + UidSucursal + "'";
+            string query = "select UidContrato, UidSucursalSuministradora, UidSucursalDistribuidora, DtmFechaDeCreacion, UidEstatusContrato, BlConfirmacionSuministradora, BlConfirmacionDistribuidora, BiPagaAlRecogerOrdenes, ComisionBackSite, DiferenciaComisionDistribuidora, ComisionDistribuidora from ContratoDeServicio where UidSucursalSuministradora = '" + UidSucursal + "' or UidSucursalDistribuidora = '" + UidSucursal + "'";
             return oConexion.Consultas(query);
         }
-        public bool GuardaRelacionDeContrato(Guid UidContrato, Guid uidSucursalSumunistradora, Guid uidSucursalDistribuidora, Guid UidEstatus, bool confirmacionSuministradora, bool ConfirmacionDistribuidora)
+        public bool GuardaRelacionDeContrato(Guid UidContrato, Guid uidSucursalSumunistradora, Guid uidSucursalDistribuidora, Guid UidEstatus, bool confirmacionSuministradora, bool ConfirmacionDistribuidora, bool PagoAlRecolectar, int ComisionDeProducto)
         {
             oConexion = new Conexion();
             bool resultado = false;
@@ -45,6 +45,12 @@ namespace DBControl
 
                 cmd.Parameters.Add("@BlConfirmacionDistribuidora", SqlDbType.Bit);
                 cmd.Parameters["@BlConfirmacionDistribuidora"].Value = ConfirmacionDistribuidora;
+
+                cmd.Parameters.Add("@BiPagaAlRecogerOrdenes", SqlDbType.Bit);
+                cmd.Parameters["@BiPagaAlRecogerOrdenes"].Value = PagoAlRecolectar;
+
+                cmd.Parameters.Add("@ComisionContrato", SqlDbType.Int);
+                cmd.Parameters["@ComisionContrato"].Value = ComisionDeProducto;
                 //Mandar comando a ejecución
                 resultado = oConexion.ModificarDatos(cmd);
             }
@@ -68,6 +74,20 @@ namespace DBControl
             oConexion = new Conexion();
             string query = "delete from contratodeservicio where UidSucursalSuministradora = '" + uidSucursal + "'";
             oConexion.Consultas(query);
+        }
+
+        public DataTable PagaAlRecolectar(string uidSucursal, string licencia)
+        {
+            oConexion = new Conexion();
+            string query = "select * from ContratoDeServicio where UidSucursalSuministradora = '" + uidSucursal.ToString() + "' and UidSucursalDistribuidora in (select s.UidSucursal from Sucursales s inner join SucursalLicencia sl on sl.UidSucursal = s.UidSucursal where sl.UidLicencia = '" + licencia + "') and BiPagaAlRecogerOrdenes = 1";
+            return oConexion.Consultas(query);
+        }
+
+        public DataTable PagaAlRecolectarLaOrden(string uidOrden)
+        {
+            oConexion = new Conexion();
+            string query = "select * from ContratoDeServicio where UidSucursalSuministradora = (select uidsucursal from OrdenSucursal where UidRelacionOrdenSucursal = '" + uidOrden + "') and UidSucursalDistribuidora in (select zr.UidSucursal from OrdenSucursal os inner join OrdenTarifario ot on ot.UidOrden = os.UidRelacionOrdenSucursal inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario inner join ZonaDeRecoleccion zr on t.UidRelacionZonaRecolecta = zr.UidZonaDeRecolecta where os.UidRelacionOrdenSucursal = '" + uidOrden + "') and BiPagaAlRecogerOrdenes = 1";
+            return oConexion.Consultas(query);
         }
     }
 }

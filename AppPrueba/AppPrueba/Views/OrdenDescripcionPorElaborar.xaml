@@ -34,7 +34,7 @@
                 <Grid>
                     <Label Text="Producto" Grid.Column="0" HorizontalOptions="Center"></Label>
                     <Label Text="Cantidad" Grid.Column="1" HorizontalOptions="Center"></Label>
-                    <Label Text="Notas" Grid.Column="2" HorizontalOptions="Center"></Label>
+                    <Label Text="Importe" Grid.Column="2" HorizontalOptions="Center"></Label>
                 </Grid>
                 <ListView x:Name="MyListviewOrdenesEnPreparacion"
                             Grid.Row="1"                            
@@ -54,7 +54,7 @@
                                         </Grid.RowDefinitions>
                                         <Label Text="{Binding StrNombreProducto }" HorizontalOptions="Center" Grid.Column="0" FontSize="Medium"></Label>
                                         <Label Text="{Binding intCantidad }" HorizontalOptions="Center" Grid.Column="1" FontSize="Medium"></Label>
-                                        <Label Text="{Binding VisibilidadNota }" HorizontalOptions="Center" Grid.Column="2" FontSize="Large"></Label>
+                                        <Label Text="{Binding MTotalSucursal,StringFormat='${0}' }" HorizontalOptions="Center" Grid.Column="2" FontSize="Large"></Label>
                                     </Grid>
                                 </ContentView>
                             </ViewCell>

@@ -21,9 +21,13 @@
                     <Label  Text="Empresa" FontSize="Large"  TextColor="Black"></Label>
                     <Label  Text="{Binding StrEmpresaNombreComercial}" TextColor="Purple" FontSize="Medium" ></Label>
                 </StackLayout>
-                <StackLayout Orientation="Vertical" Grid.Row="1" HorizontalOptions="Center">
+                <StackLayout Orientation="Vertical" Grid.Row="1" Grid.Column="0" HorizontalOptions="Center">
                     <Label  Text="Numero de orden" FontSize="Large"  TextColor="Black"></Label>
                     <Label  Text="{Binding LngFolio}" TextColor="Purple" FontSize="Medium" ></Label>
+                </StackLayout>
+                <StackLayout Orientation="Vertical" Grid.Row="1" Grid.Column="1" HorizontalOptions="Center">
+                    <Label  Text="Pago" FontSize="Large"  TextColor="Black"></Label>
+                    <Label  Text="{Binding StrPagoAlRecolectar}" TextColor="Purple" FontSize="Medium" ></Label>
                 </StackLayout>
                 <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="1">
                     <Label  Text="Sucursal" FontSize="Large" TextColor="Black"></Label>

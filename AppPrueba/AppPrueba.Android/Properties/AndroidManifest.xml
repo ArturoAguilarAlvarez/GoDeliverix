@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="2" android:versionName="1.0.1" package="com.companyname.AppPrueba" android:installLocation="preferExternal">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="3" android:versionName="1.0.2" package="com.companyname.AppPrueba" android:installLocation="preferExternal">
 	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="28" />
 	<application android:label="GoDeliverix" android:usesCleartextTraffic="true" android:icon="@mipmap/Icono2">
 		<meta-data android:name="com.samsung.knoxlicense.permissions" android:value="true" />

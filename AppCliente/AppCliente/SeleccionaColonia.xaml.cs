@@ -20,7 +20,6 @@ namespace AppCliente
     public partial class SeleccionaColonia : ContentPage
     {
         public List<VMDireccion> DireccionesListaColonia = new List<VMDireccion>();
-        HomePage oPagina = new HomePage();
         VMDireccion odireccion = new VMDireccion();
 
         public SeleccionaColonia()
@@ -93,7 +92,7 @@ namespace AppCliente
                         }
                     }
                     VMDireccion Colonias = new VMDireccion();
-                    DataTable dt = Colonias.Colonias(new Guid(oDireccion.ListaDIRECCIONES[0].CIUDAD));
+                    var dt = Colonias.Colonias(new Guid(oDireccion.ListaDIRECCIONES[0].CIUDAD));
                     DireccionesListaColonia.Clear();
                     foreach (DataRow item in dt.Rows)
                     {
@@ -114,7 +113,8 @@ namespace AppCliente
                     map.Pins.Clear();
                     map.Pins.Add(AquiEstoy);
                     var pos = new Position(Latitud, Longitud);
-                    map.MoveToRegion(MapSpan.FromCenterAndRadius(pos, Distance.FromMiles(0.05)), true);
+                    // map.MoveToRegion(MapSpan.FromCenterAndRadius(pos, Distance.FromMeters(100)));
+                    await map.MoveCamera(CameraUpdateFactory.NewCameraPosition(new CameraPosition(pos, 15)));
                     odireccion = oDireccion;
                     SLColonias.IsVisible = true;
                 }
@@ -260,7 +260,7 @@ namespace AppCliente
                             {
                                 lblMensaje.Text = "Sin servicio en esta ubicación, elige otra ";
                                 SLMensaje.IsVisible = true;
-                               // await DisplayAlert("Error extraño", "Ocurrio algo mal al recuperar la ubicación intenta de nuevo por favor", "aceptar");
+                                // await DisplayAlert("Error extraño", "Ocurrio algo mal al recuperar la ubicación intenta de nuevo por favor", "aceptar");
                             }
                         }
                         else
@@ -271,7 +271,7 @@ namespace AppCliente
                         }
 
                     }
-                    
+
                 }
             }
             catch (FeatureNotSupportedException)

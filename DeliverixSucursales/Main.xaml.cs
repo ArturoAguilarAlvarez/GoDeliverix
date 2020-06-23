@@ -9,6 +9,8 @@ using System.Windows.Input;
 using VistaDelModelo;
 using Application = System.Windows.Application;
 using LibPrintTicket;
+using DeliverixSucursales.Reportes;
+
 namespace Deliverix.Wpf.Distribuidores
 {
     /// <summary>
@@ -365,6 +367,10 @@ namespace Deliverix.Wpf.Distribuidores
                 MVAcceso.BitacoraRegistroSupervisores(new Guid(lblUidusuario.Content.ToString()), new Guid("83D5135E-95A4-4FFB-8F74-B6BAC980DFA3"));
                 var MVTurno = new VMTurno();
                 MVTurno.TurnoSuministradora(new Guid(lblUidusuario.Content.ToString()), uidTurnoDistribuidor: new Guid(LblUidTurno.Content.ToString()));
+                DeliverixSucursales.VMLicencia olicencia = new DeliverixSucursales.VMLicencia();
+                olicencia.RecuperaLicencia();
+                ReporteCierreTurnoSucursal obj = new ReporteCierreTurnoSucursal(olicencia.Licencia.ToString(), txtSucursal.Text, lblFolioTurno.Content.ToString(), txtUsuario.Text);
+                obj.Show();
                 lblUidusuario.Content = string.Empty;
                 txtUsuario.Text = string.Empty;
                 txtSucursal.Text = string.Empty;
@@ -376,7 +382,6 @@ namespace Deliverix.Wpf.Distribuidores
                 {
                     if (!string.IsNullOrEmpty(lblUidusuario.Content.ToString()))
                     {
-
                         btnordenes.IsEnabled = true;
                         btnReportes.IsEnabled = true;
                         btnMenuPrincipal.IsEnabled = true;

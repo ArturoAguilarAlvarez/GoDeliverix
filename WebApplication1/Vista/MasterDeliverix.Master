@@ -89,6 +89,11 @@
                                                 <span class="glyphicon glyphicon-time"></span> Zona Horaria
                                             </asp:LinkButton>
                                         </li>
+                                        <li role="presentation" class="text-left">
+                                            <asp:LinkButton ID="btnConfiguracionComisiones" OnClick="btnConfiguracionComisiones_Click" runat="server" >
+                                                <span class="glyphicon glyphicon glyphicon-globe"></span> Configuracion comisiones
+                                            </asp:LinkButton>
+                                        </li>
                                     </ul>
                                 </li>
                                 <%--Modulo sucursales--%>

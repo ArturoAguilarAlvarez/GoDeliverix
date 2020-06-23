@@ -49,7 +49,7 @@ namespace AppPrueba.Views
 
         private async void ButtonConfirmar_Clicked(object sender, EventArgs e)
         {
-            var action = await DisplayAlert("", "¿Confirmar esta orden?", "Si", "No");
+            var action = await DisplayAlert("", "¿Confirmar orden " + ObjItem.LNGFolio + "?", "Si", "No");
             if (action)
             {
                 ConfirmarOrden();

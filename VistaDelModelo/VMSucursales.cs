@@ -1215,7 +1215,7 @@ namespace VistaDelModelo
                         UidOrden = new Guid(item["UidOrden"].ToString()),
                         FechaAsignacion = item["DtmFecha"].ToString(),
                         usuario = item["Usuario"].ToString(),
-                        MTotal = double.Parse(item["MTotalSucursal"].ToString()),
+                        MTotal = double.Parse(item["PagoSucursal"].ToString()),
                         StrEstatusRepartidor = EstatusRepartidor,
                         UidOrdenTarifario = new Guid(item["UidRelacionOrdenTarifario"].ToString())
                     };
@@ -1244,6 +1244,7 @@ namespace VistaDelModelo
                 {
                     Suministradora = new Guid(item["UidSucursalSuministradora"].ToString());
                     Distribuidora = new Guid(item["UidSucursalDistribuidora"].ToString());
+
                     if (!ListaDeSucursalesDeContrato.Exists(Cont => Cont.ID == Distribuidora))
                     {
                         BuscarSucursalesContrato(UidSucursal: Distribuidora, Visibilidad: 0, tipoDeEmpresa: tipodeEmpresa, StrTipoDeBusqueda: "Contrato");

@@ -20,7 +20,7 @@ namespace AppPrueba.Views
         VMOrden ObjItem;
         ListView MyListviewOrdenesPorRealizar;
         HttpClient _client = new HttpClient();
-        
+
         public OrdenDescripcionPorElaborar(VMOrden ObjItem, ListView MyListviewOrdenesPorRealizar)
         {
             InitializeComponent();
@@ -40,8 +40,6 @@ namespace AppPrueba.Views
             var DatosJson = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
             App.MVOrden = JsonConvert.DeserializeObject<VMOrden>(DatosJson);
 
-            
-
             //App.MVOrden.ObtenerProductosDeOrden(ObjItem.Uidorden.ToString());
             MyListviewOrdenesEnPreparacion.ItemsSource = App.MVOrden.ListaDeProductos;
         }
@@ -53,20 +51,18 @@ namespace AppPrueba.Views
                 try
                 {
                     App.MVOrden.AgregaEstatusALaOrden(new Guid("c412d367-7d05-45d8-aeca-b8fabbf129d9"), UidOrden: ObjItem.Uidorden, UidLicencia: new Guid(AppPrueba.Helpers.Settings.Licencia), StrParametro: "S");
-                    //App.MVTarifario.AgregarCodigoAOrdenTarifario(UidCodigo: Guid.NewGuid(), UidLicencia: new Guid(AppPuestoTacos.Helpers.Settings.Licencia), uidorden: ObjItem.Uidorden);
+                    App.MVTarifario.AgregarCodigoAOrdenTarifario(UidCodigo: Guid.NewGuid(), UidLicencia: new Guid(AppPrueba.Helpers.Settings.Licencia), uidorden: ObjItem.Uidorden);
                     App.MVOrden.BuscarOrdenes("Sucursal", UidLicencia: new Guid(AppPrueba.Helpers.Settings.Licencia), EstatusSucursal: "Pendiente para elaborar", TipoDeSucursal: "S");
-                    MyListviewOrdenesPorRealizar.ItemsSource = null;    
-                    MyListviewOrdenesPorRealizar.ItemsSource = App.MVOrden.ListaDeOrdenesPorElaborar;
+                    MyListviewOrdenesPorRealizar.ItemsSource = null;
+                    MyListviewOrdenesPorRealizar.ItemsSource = App.MVOrden.ListaDeOrdenes;
                     await Navigation.PopToRootAsync();
                 }
                 catch (Exception)
                 {
-                    await DisplayAlert("Sorry", "¿Compruebe su conexion a internet?", "Si", "No");
+                    await DisplayAlert("Aviso", "No hay conexion a internet, intenta nuevamente mas tarde", "Aceptar");
                 }
             }
         }
-
-
         private async void ButtonCancelar_Clicked(object sender, EventArgs e)
         {
             //await Navigation.PopToRootAsync();

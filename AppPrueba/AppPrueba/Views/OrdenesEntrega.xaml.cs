@@ -66,7 +66,7 @@ namespace AppPrueba.Views
         {
             try
             {
-                url = "http://www.godeliverix.net/api/Orden/GetBuscarOrdenRepartidor?UidCodigo=" + escaneado + "&UidLicencia=" + AppPrueba.Helpers.Settings.Licencia + "";
+                url = RestService.Servidor + "api/Orden/GetBuscarOrdenRepartidor?UidCodigo=" + escaneado + "&UidLicencia=" + AppPrueba.Helpers.Settings.Licencia + "";
                 string content = await _client.GetStringAsync(url);
                 var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                 App.MVOrden = new VMOrden();

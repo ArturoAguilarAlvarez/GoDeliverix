@@ -41,29 +41,29 @@ namespace AppCliente.Pagos
                 TotalPropina += App.MVProducto.ListaDelInformacionSucursales[i].DPropina;
             }
 
-            txtTotalEnvio.Text = "$" + TotalEnvio.ToString();
+            txtTotalEnvio.Text = "$" + TotalEnvio.ToString("N2");
             txtCantidad.Text = cantidad.ToString();
-            txtsubtotal.Text = "$" + subtotal.ToString();
+            txtsubtotal.Text = "$" + subtotal.ToString("N2");
             txtCantidadSucursales.Text = App.MVProducto.ListaDelInformacionSucursales.Count.ToString();
             txtPropina.Text = "$" + TotalPropina;
-            txtTotal.Text = "$" + TotalPagar;
+            txtTotal.Text = "$" + TotalPagar.ToString("N2");
 
             InformacionMonedero.IsVisible = false;
             switch (TipoDeFormaDePago)
             {
                 //Efectivo
                 case "6518C044-CE40-41F4-9344-92F0C200A8C2":
-                    btnConfirmarPago.Text = "Confirmar pago por $" + TotalPagar;
+                    btnConfirmarPago.Text = "Confirmar pago por $" + TotalPagar.ToString("N2");
                     break;
                 //Tarjeta
                 case "30545834-7FFE-4D1A-AA94-D6E569371C60":
-                    btnConfirmarPago.Text = "Continuar el pago por $" + TotalPagar;
+                    btnConfirmarPago.Text = "Continuar el pago por $" + TotalPagar.ToString("N2");
                     break;
                 //Monedero
                 case "13DC10FE-FE47-48D6-A427-DD2F6DE0C564":
                     InformacionMonedero.IsVisible = true;
                     cargaMonedero();
-                    btnConfirmarPago.Text = "Confirmar pago por $" + TotalPagar;
+                    btnConfirmarPago.Text = "Confirmar pago por $" + TotalPagar.ToString("N2");
                     break;
                 default:
                     break;

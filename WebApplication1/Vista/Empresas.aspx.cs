@@ -56,6 +56,7 @@ namespace WebApplication1.Vista
                 pnlDatosGenerales.Visible = true;
                 pnlDireccion.Visible = false;
                 pnlContacto.Visible = false;
+                PnlComisiones.Visible = false;
                 btnGuardar.Visible = false;
                 btnCancelar.Visible = false;
                 btnGuardarTelefono.Visible = false;
@@ -878,7 +879,7 @@ namespace WebApplication1.Vista
             //Obtiene el usuario que esta dentro del sistema
             string UidUsuarioEnSistema = (Master.FindControl("txtUidUsuarioSistema") as TextBox).Text;
             string UidEmpresa = (Master.FindControl("txtUidEmpresaSistema") as TextBox).Text;
-
+            panelComisionGoDeliverix.Visible = false;
             //Cambia el menu de navegacion del sistema
             if (MVEmpresas.ObtenerTipoDeEmpresa(valor))
             {
@@ -888,6 +889,8 @@ namespace WebApplication1.Vista
                 //Modulo suministradora
                 btnModuloProductos.Visible = true;
                 btnModuloMenu.Visible = true;
+                panelComisionGoDeliverix.Visible = true;
+                chkbxComisionTarjeta.Enabled = true;
             }
             else if (!MVEmpresas.ObtenerTipoDeEmpresa(valor))
             {
@@ -897,13 +900,12 @@ namespace WebApplication1.Vista
                 //Modulo suministradora
                 btnModuloProductos.Visible = false;
                 btnModuloMenu.Visible = false;
+                chkbxComisionTarjeta.Enabled = false;
             }
 
             Session["UidEmpresaSistema"] = MVEmpresas.UIDEMPRESA;
             lblNombreEmpresaSeleccionada.Text = MVEmpresas.NOMBRECOMERCIAL;
             txtUidEmpresaSeleccionadaSistema.Text = MVEmpresas.UIDEMPRESA.ToString();
-
-
 
             PanelCargando.Visible = true;
             //Obtiene lo datos de la empresa
@@ -931,8 +933,8 @@ namespace WebApplication1.Vista
             CargaGrid("Direccion");
 
             MVComision.ObtenerComisionPorEmpresa(new Guid(valor));
-            txtValorComision.Text = MVComision.FValor.ToString();
             chkbxComision.Checked = MVComision.BAbsorveComision;
+            chkbxComisionTarjeta.Checked = MVComision.BIncluyeComisionTarjeta;
             //Obtiene el nombre del tipo de teleofno
             foreach (var item in MVTelefono.ListaDeTelefonos)
             {
@@ -1065,6 +1067,7 @@ namespace WebApplication1.Vista
             //Imagen por default
             ImageEmpresa.ImageUrl = "Img/Default.jpg";
             ImageEmpresa.DataBind();
+
             //Limpia todo
             MVEmpresas = new VMEmpresas();
             MVDireccion = new VMDireccion();
@@ -1161,7 +1164,6 @@ namespace WebApplication1.Vista
             txtDLote.Text = string.Empty;
             txtDCodigoPostal.Text = string.Empty;
             txtDReferencia.Text = string.Empty;
-            txtValorComision.Text = string.Empty;
             //Datos de contacto
             txtDTelefono.Text = string.Empty;
             txtDCorreoElectronico.Text = string.Empty;
@@ -1193,7 +1195,6 @@ namespace WebApplication1.Vista
             DDLDTipoDeEmpresa.Enabled = estatus;
             DDLDEstatus.Enabled = estatus;
             chkbxComision.Enabled = estatus;
-            txtValorComision.Enabled = estatus;
             txtIdentificadorDeDireccion.Enabled = estatus;
             btnNuevaDireccion.Enabled = estatus;
             btnNuevoTelefono.Enabled = estatus;
@@ -1283,9 +1284,13 @@ namespace WebApplication1.Vista
             PanelDatosDireccion.Visible = false;
             PanelDeBusqueda.Visible = true;
             PanelMensaje.Visible = false;
+            PnlComisiones.Visible = false;
+            PnlComisiones.Visible = false;
+
             liDatosGenerales.Attributes.Add("class", "active");
             liDatosDireccion.Attributes.Add("class", " ");
             liDatosContacto.Attributes.Add("class", "");
+            LiDatosComision.Attributes.Add("class", "");
             if (Session["Accion"] != null)
             {
                 AccionesDeLaPagina = Session["Accion"].ToString();
@@ -1298,9 +1303,12 @@ namespace WebApplication1.Vista
             pnlDireccion.Visible = true;
             pnlContacto.Visible = false;
             PanelMensaje.Visible = false;
+            PnlComisiones.Visible = false;
+            PnlComisiones.Visible = false;
             liDatosGenerales.Attributes.Add("class", "");
             liDatosDireccion.Attributes.Add("class", "active");
             liDatosContacto.Attributes.Add("class", "");
+            LiDatosComision.Attributes.Add("class", "");
             if (Session["Accion"] != null)
             {
                 AccionesDeLaPagina = Session["Accion"].ToString();
@@ -1315,9 +1323,30 @@ namespace WebApplication1.Vista
             PanelDatosDireccion.Visible = false;
             PanelDeBusqueda.Visible = true;
             PanelMensaje.Visible = false;
+            PnlComisiones.Visible = false;
             liDatosGenerales.Attributes.Add("class", "");
             liDatosDireccion.Attributes.Add("class", "");
             liDatosContacto.Attributes.Add("class", "active");
+            LiDatosComision.Attributes.Add("Class", "");
+            if (Session["Accion"] != null)
+            {
+                AccionesDeLaPagina = Session["Accion"].ToString();
+            }
+            TextboxActivados(ControlDeACcion: "Desactivado");
+        }
+        protected void PanelCoMision(object sender, EventArgs e)
+        {
+            pnlDatosGenerales.Visible = false;
+            pnlDireccion.Visible = false;
+            pnlContacto.Visible = false;
+            PanelDatosDireccion.Visible = false;
+            PanelDeBusqueda.Visible = true;
+            PanelMensaje.Visible = false;
+            PnlComisiones.Visible = true;
+            liDatosGenerales.Attributes.Add("class", "");
+            liDatosDireccion.Attributes.Add("class", "");
+            liDatosContacto.Attributes.Add("class", "");
+            LiDatosComision.Attributes.Add("Class", "active");
             if (Session["Accion"] != null)
             {
                 AccionesDeLaPagina = Session["Accion"].ToString();
@@ -1463,7 +1492,7 @@ namespace WebApplication1.Vista
                     #region Guardar datos
 
                     Guid UidEmpresa = Guid.NewGuid();
-                    resultado = MVEmpresas.GuardarEmpresaSuministradora(UidEmpresa, RS, NC, Rfc, TipoDeEmpresa, Estatus, float.Parse(txtValorComision.Text), chkbxComision.Checked);
+                    resultado = MVEmpresas.GuardarEmpresaSuministradora(UidEmpresa, RS, NC, Rfc, TipoDeEmpresa, Estatus, chkbxComision.Checked, chkbxComisionTarjeta.Checked);
 
                     //Guarda los telefonos
                     if (MVTelefono.ListaDeTelefonos != null)
@@ -1537,10 +1566,9 @@ namespace WebApplication1.Vista
                         NombreComercial: NC,
                         Rfc: Rfc,
                         TipoDeACtualizacion: "BackSite",
-                        fComision: float.Parse(txtValorComision.Text),
                         Tipo: TipoDeEmpresa,
                         Estatus: Estatus,
-                        AbsorveComision: chkbxComision.Checked);
+                        AbsorveComision: chkbxComision.Checked, IncluyeComisionTarjeta: chkbxComisionTarjeta.Checked);
 
                     if (resultado == true)
                     {
@@ -2322,14 +2350,23 @@ namespace WebApplication1.Vista
             PanelMensaje.Visible = false;
         }
 
-        protected void txtValorComision_TextChanged(object sender, EventArgs e)
+        protected void DDLDTipoDeEmpresa_SelectedIndexChanged(object sender, EventArgs e)
         {
-            float valorCampoDeTexto;
-            if (!float.TryParse(txtValorComision.Text, out valorCampoDeTexto))
+            string empresa = DDLDTipoDeEmpresa.SelectedItem.Text;
+            switch (empresa.ToLower())
             {
-                PanelMensaje.Visible = true;
-                LblMensaje.Text = "Solo se aceptan valores numericos y decimales";
-                txtValorComision.Focus();
+                case "distribuidora":
+                    chkbxComisionTarjeta.Checked = true;
+                    chkbxComisionTarjeta.Enabled = false;
+                    panelComisionGoDeliverix.Visible = false;
+                    break;
+                case "suministradora":
+                    chkbxComisionTarjeta.Checked = false;
+                    chkbxComisionTarjeta.Enabled = true;
+                    panelComisionGoDeliverix.Visible = true;
+                    break;
+                default:
+                    break;
             }
         }
     }

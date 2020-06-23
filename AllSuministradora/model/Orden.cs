@@ -78,6 +78,13 @@ namespace AllSuministradora.model
             get { return _dtmFechaDeOrden; }
             set { _dtmFechaDeOrden = value; OnpropertyChanged("DtmFechaDeOrden"); }
         }
+        private string _strEstatusPagoOrden;
+
+        public string StrEstatusPagoOrden
+        {
+            get { return _strEstatusPagoOrden; }
+            set { _strEstatusPagoOrden = value; OnpropertyChanged("StrEstatusPagoOrden"); }
+        }
 
         private long _lbgFolio;
 
@@ -227,10 +234,11 @@ namespace AllSuministradora.model
             var instance = ControlGeneral.GetInstance();
             SucursalItem sucursal = instance.VMSucursalesLocal.ListaDeSucursales.Where(x => x.UidSucursal == UidSucursal).FirstOrDefault();
             MVOrden.AgregaEstatusALaOrden(new Guid("c412d367-7d05-45d8-aeca-b8fabbf129d9"), UidOrden: UidOrden, UidLicencia: sucursal.Licencia, StrParametro: "S");
-            instance.MVOrdenes.oSeleccionElaboracion = new Orden();
+            instance.Principal.oSeleccionElaboracion = new Orden();
             MessageBox.Show("Orden finalizada");
             instance.MVOrdenes.StrBusquedaDeOrdenes = "Elaborar";
             instance.MVOrdenes.CargaOrdenes();
+            instance.Principal.VisibilidadVentnaFinalizar = false;
         }
         protected void Cancelar()
         {
@@ -259,10 +267,11 @@ namespace AllSuministradora.model
             MVOrden.AgregarEstatusOrdenEnSucursal(new Guid("EC09BCDE-ADAC-441D-8CC1-798BC211E46E"), "S", sucursal.Licencia.ToString(), UidOrden: UidOrden);
             MVOrden.AgregaEstatusALaOrden(new Guid("2d2f38b8-7757-45fb-9ca6-6ecfe20356ed"), UidOrden: UidOrden, UidLicencia: sucursal.Licencia, StrParametro: "S");
             MVTarifario.AgregarCodigoAOrdenTarifario(UidCodigo: Guid.NewGuid(), UidLicencia: sucursal.Licencia, uidorden: UidOrden);
-            instance.MVOrdenes.oSeleccionado = new Orden();
-            instance.MVOrdenes.oSeleccionElaboracion = new Orden();
+            instance.Principal.oSeleccionado = new Orden();
+            instance.Principal.oSeleccionElaboracion = new Orden();
             MessageBox.Show("Orden confirmada");
             instance.MVOrdenes.StrBusquedaDeOrdenes = "Confirmar";
+            instance.Principal.VisibilidadVentnaConfirmar = false;
             instance.MVOrdenes.CargaOrdenes();
         }
         #endregion

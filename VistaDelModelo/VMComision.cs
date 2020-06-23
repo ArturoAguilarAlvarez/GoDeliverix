@@ -54,15 +54,21 @@ namespace VistaDelModelo
             get { return _BAbsorveComision; }
             set { _BAbsorveComision = value; }
         }
+        private bool _BIncluyeComisionTarjeta;
+
+        public bool BIncluyeComisionTarjeta
+        {
+            get { return _BIncluyeComisionTarjeta; }
+            set { _BIncluyeComisionTarjeta = value; }
+        }
 
         private List<VMComision> _ListaDeTipoDeComision;
 
-        public List<VMComision> ListaDeTipoDeComision
+        public List<VMComision> ListaDeComisiones
         {
             get { return _ListaDeTipoDeComision; }
             set { _ListaDeTipoDeComision = value; }
         }
-
 
         private Comision _oComision;
 
@@ -105,16 +111,61 @@ namespace VistaDelModelo
                 oComosion.ComisionDeEmpresa(UidEmpresa);
                 UidComision = oComosion.UidComision;
                 UidTipoDeComision = oComosion.UidTipoDeComision;
-                FValor = int.Parse(oComosion.FValor.ToString());
                 BAbsorveComision = oComosion.BAbsorveComision;
+                BIncluyeComisionTarjeta = oComosion.BIncluyeComisionTarjeta;
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
+        public void ObtenerComisiones()
+        {
+            oComosion = new Comision();
+            ListaDeComisiones = new List<VMComision>();
+            foreach (DataRow item in oComosion.obtenerComisionesGoDeliverix().Rows)
+            {
+                ListaDeComisiones.Add(new VMComision() { UidComision = new Guid(item["UidComisionEnvio"].ToString()), StrNombreTipoDeComision = item["StrNombreComision"].ToString(), FValor = int.Parse(item["intComision"].ToString()) });
+            }
+        }
+        public bool ActualizaComisionGoDeliverix(int valorComision, string Comision)
+        {
+            oComosion = new Comision() { FValor = valorComision, StrNombreTipoDeComision = Comision };
+            return oComosion.ActualizarComisionGoDeliverix();
+        }
+
+        #region Pasarela de cobros
+        public void ObtenerComisionPasarelaDeCobro(string StrNombreProvedor)
+        {
+            oComosion = new Comision();
+            foreach (DataRow item in oComosion.ObtenerComisionPasarelaDeCobro(StrNombreProvedor).Rows)
+            {
+                UidComision = new Guid(item["UidComisionPasarela"].ToString());
+                FValor = int.Parse(item["IntComisionUsoPasarela"].ToString());
+            }
+        }
+        public bool ActualizaComisionTarjeta(int valorComision, string Comision)
+        {
+            oComosion = new Comision() { FValor = valorComision, UidComision = new Guid(Comision) };
+            return oComosion.ActualizaComisionTarjeta();
+        }
+
+        public string ObtenerGananciasRepartidor(string valor)
+        {
+            oComosion = new Comision();
+           return oComosion.ObtenerComisionDeGananciaRepartidor(valor);
+        }
+
+        public void ObtenerComisionGoDeliverix(string StrNombreDeComision)
+        {
+            oComosion = new Comision();
+            foreach (DataRow item in oComosion.ComisionSistema(StrNombreDeComision).Rows)
+            {
+                FValor = int.Parse(item["intComision"].ToString());
+            }
+        }
+
+        #endregion
         #endregion
     }
 }

@@ -259,6 +259,14 @@ namespace Repartidores_GoDeliverix.VM
             set { SetValue(ref _StrNumeroCliente, value); }
         }
 
+        private bool _BlVisibilidadPagoAlRecoger;
+
+        public bool BlVisibilidadPagoAlRecoger
+        {
+            get { return _BlVisibilidadPagoAlRecoger; }
+            set { SetValue(ref _BlVisibilidadPagoAlRecoger, value); }
+        }
+
         #endregion
 
 
@@ -279,6 +287,14 @@ namespace Repartidores_GoDeliverix.VM
         {
             get { return _StrEstatusCobro; }
             set { SetValue(ref _StrEstatusCobro, value); }
+        }
+
+        private string _strPagoAlRecolectar;
+
+        public string StrPagoAlRecolectar
+        {
+            get { return _strPagoAlRecolectar; }
+            set { SetValue(ref _strPagoAlRecolectar, value); }
         }
 
         #endregion
@@ -353,8 +369,9 @@ namespace Repartidores_GoDeliverix.VM
 
 
                         AppInstance.MVTurno.CargarTurno();
-                        // MVOrden.AgregaEstatusALaOrden(new Guid("2FDEE8E7-0D54-4616-B4C1-037F5A37409D"), UidOrden: UidOrdenSucursal, StrParametro: "S");
                         AppInstance.MVHome.Verifica();
+                        await AppInstance.MVTurno.VerificaEstatusTurno();
+                        AppInstance.MVTurno.VerificaEstatusARecargando();
                         await Application.Current.MainPage.Navigation.PopAsync();
                         GenerateMessage("Orden entregada", "Felicidades, entregaste la orden!!!", "Aceptar");
                     }
@@ -504,7 +521,23 @@ namespace Repartidores_GoDeliverix.VM
                     var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                     MVSucursal = JsonConvert.DeserializeObject<VistaDelModelo.VMSucursales>(obj);
                 }
-
+                bool respuesta = false;
+                using (var _WebApiGoDeliverix = new HttpClient())
+                {
+                    url = "" + Helpers.settings.Sitio + "api/Contrato/GetPagaAlRecolectar?UidOrdenSucursal=" + StrUidOrden + "";
+                    var content = await _WebApiGoDeliverix.GetStringAsync(url);
+                    respuesta = bool.Parse(JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString());
+                }
+                if (respuesta)
+                {
+                    StrPagoAlRecolectar = "Pago al recolectar orden";
+                    BlVisibilidadPagoAlRecoger = true;
+                }
+                else
+                {
+                    StrPagoAlRecolectar = "Pagado";
+                    BlVisibilidadPagoAlRecoger = false;
+                }
                 StrIdentificadorSucursal = MVSucursal.IDENTIFICADOR;
 
                 using (var _WebApiGoDeliverix = new HttpClient())
@@ -568,7 +601,6 @@ namespace Repartidores_GoDeliverix.VM
                 }
                 MTotalConPropina = MTotal + MPropina + MTotalTarifario;
                 MSubTotal = MSubTotal;
-                MTotal += MTotalTarifario;
             }
             catch (Exception)
             {

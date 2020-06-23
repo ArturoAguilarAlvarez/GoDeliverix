@@ -1,6 +1,8 @@
-﻿using System;
+﻿using AppPrueba.WebApi;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -95,16 +97,18 @@ namespace AppPrueba.Views
             var action = await DisplayAlert("", "¿Esta seguro de eliminar esta licencia de este dispositivo?", "Si", "No");
             if (action)
             {
-                App.MVLicencia.ActualizarLicenciaSucursal(UidLicencia: new Guid(AppPrueba.Helpers.Settings.Licencia), bdisponibilidad: false);
+                HttpClient _client = new HttpClient();
+                string url = RestService.Servidor + "api/Licencia/GetActualizarLicenciaSucursal?UidLicencia=" + AppPrueba.Helpers.Settings.Licencia + "&bdisponibilidad=false";
+                await _client.GetStringAsync(url);
+                //App.MVLicencia.ActualizarLicenciaSucursal(UidLicencia: new Guid(AppPrueba.Helpers.Settings.Licencia), bdisponibilidad: false);
                 AppPrueba.Helpers.Settings.ClearAllData();
                 AppPrueba.App.Current.MainPage = new NavigationPage(new LoginPage());
             }
-
         }
 
         private void ButtonCambioLicencia_Clicked(object sender, EventArgs e)
         {
-          //  Navigation.PushAsync(new ConfiguracionCambioLicencia());
+            //  Navigation.PushAsync(new ConfiguracionCambioLicencia());
         }
     }
 }

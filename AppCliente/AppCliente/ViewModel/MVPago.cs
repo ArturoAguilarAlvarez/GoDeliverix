@@ -95,7 +95,8 @@ namespace AppCliente.ViewModel
                                 $"&UidSucursal={item.UidSucursal}" +
                                 $"&UidRegistroEncarrito={item.UidRegistroProductoEnCarrito}" +
                                 $"&UidNota={Uidnota}" +
-                                $"&StrMensaje={mensaje}";
+                                $"&StrMensaje={mensaje}" +
+                                $"&UidTarifario={objeto.UidTarifario}";
                             using (HttpClient _client = new HttpClient())
                             {
                                 await _client.GetAsync(_Url);
@@ -109,7 +110,8 @@ namespace AppCliente.ViewModel
                             $"&Uidsucursal={objeto.UidSucursal}" +
                             $"&totalSucursal={totalSucursal}" +
                             $"&UidRelacionOrdenSucursal={UidOrdenSucursal}" +
-                            $"&LngCodigoDeEntrega={CodigoDeEnrega}";
+                            $"&LngCodigoDeEntrega={CodigoDeEnrega}" +
+                            $"&UidTarifario={objeto.UidTarifario}";
 
                         using (HttpClient _client = new HttpClient())
                         {

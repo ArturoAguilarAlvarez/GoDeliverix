@@ -86,7 +86,7 @@ namespace AllSuministradora.VistasDelModelo
 
                             MVTurno.InformacionTurnoCallCenter(Uidusuario);
 
-                            if (MVTurno.DtmHoraFin == DateTime.MinValue)
+                            if (MVTurno.DtmHoraFin == DateTime.MinValue && MVTurno.DtmHoraInicio != DateTime.MinValue)
                             {
                                 instance.Principal.oTurno = new Turno() { UidTurno = MVTurno.UidTurno, LngFolio = MVTurno.LngFolio, StrHoraInicio = MVTurno.DtmHoraInicio.ToString() };
                             }

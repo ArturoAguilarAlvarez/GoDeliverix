@@ -39,7 +39,7 @@
                             Padding="0"
                             Clicked="ButtonBusquedaFecha_Clicked"></Button>
                         <Button 
-                            Text="Ordens" 
+                            Text="Orden" 
                             Grid.Column="1" 
                             HorizontalOptions="Center" 
                             TextColor="Black" 

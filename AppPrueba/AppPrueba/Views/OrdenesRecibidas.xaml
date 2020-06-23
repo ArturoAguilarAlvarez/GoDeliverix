@@ -42,7 +42,7 @@
                             Padding="0"
                             Clicked="ButtonOrdenamientoFecha_Clicked"></Button>
                         <Button 
-                            Text="Ordens" 
+                            Text="Orden" 
                             Grid.Column="1" 
                             HorizontalOptions="Center" 
                             TextColor="Black" 
@@ -51,7 +51,7 @@
                             Padding="0" 
                             Clicked="ButtonOrdenamientoNumeroOrden_Clicked"></Button>
                         <Button 
-                            Text="$Total" 
+                            Text="Importe" 
                             Grid.Column="2" 
                             HorizontalOptions="Center" 
                             TextColor="Black" 
@@ -82,7 +82,7 @@
                                             </Grid.RowDefinitions>
                                             <Label Text="{Binding FechaDeOrden}" HorizontalOptions="Center" Grid.Column="0" FontSize="15"></Label>
                                             <Label Text="{Binding LNGFolio }" HorizontalOptions="Center" Grid.Column="1" FontSize="15"></Label>
-                                            <Label Text="{Binding MTotal }" HorizontalOptions="Center" Grid.Column="2" FontSize="25"></Label>
+                                            <Label Text="{Binding MTotal,StringFormat='{0:C2}' }"  HorizontalOptions="Center" Grid.Column="2" FontSize="25"></Label>
                                         </Grid>
                                     </ContentView>
                                 </ViewCell>

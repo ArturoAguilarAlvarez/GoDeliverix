@@ -1536,6 +1536,15 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.LinkButton btnCerrarPanelInformacion;
 
         /// <summary>
+        /// lblInformacionNombreEmpresa control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblInformacionNombreEmpresa;
+
+        /// <summary>
         /// lblInformacionNombreSucursal control.
         /// </summary>
         /// <remarks>
@@ -1561,6 +1570,42 @@ namespace WebApplication1.Vista
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink HlnkCorreoElectronico;
+
+        /// <summary>
+        /// lblComisionGoDeliverix control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblComisionGoDeliverix;
+
+        /// <summary>
+        /// lblComisionSucursal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblComisionSucursal;
+
+        /// <summary>
+        /// txtComisionProducto control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtComisionProducto;
+
+        /// <summary>
+        /// ChbxPagoOrdenAlRecolectar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox ChbxPagoOrdenAlRecolectar;
 
         /// <summary>
         /// liInformacionTelefono control.

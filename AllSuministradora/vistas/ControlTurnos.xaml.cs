@@ -32,5 +32,13 @@ namespace AllSuministradora.vistas
             }
             TurnoSucursal.DataContext = instance.VMSucursalesLocal;
         }
+
+        private void btnTurno_Click(object sender, RoutedEventArgs e)
+        {
+            Button turno = sender as Button;
+            var instance = ControlGeneral.GetInstance();
+            var sucursal = instance.VMSucursalesLocal.ListaDeSucursales.Where(x => x.Licencia.ToString() == turno.CommandParameter.ToString()).FirstOrDefault();
+            sucursal.ControlTurno();
+        }
     }
 }

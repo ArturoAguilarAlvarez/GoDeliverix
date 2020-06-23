@@ -153,9 +153,6 @@
                                         </tr>
                                         <tr>
                                             <td>Filas:
-                                              
-                                                 
-
                                                 <asp:DropDownList runat="server" ID="DDLTAMANOGRIDAMPLIADA" AutoPostBack="true" OnTextChanged="TamanioGrid" OnSelectedIndexChanged="TamanioGrid">
                                                     <asp:ListItem Text="10" Value="3" />
                                                     <asp:ListItem Text="20" Value="5" />
@@ -433,6 +430,8 @@
                                     <asp:LinkButton runat="server" ID="btnDatosDireccion" OnClick="PanelDireccion"><span class="glyphicon glyphicon-road"></span> DIRECCION</asp:LinkButton></li>
                                 <li role="presentation" id="liDatosContacto" runat="server">
                                     <asp:LinkButton runat="server" ID="btnDatosDeConectado" OnClick="PanelContacto"><span class="glyphicon glyphicon-phone"></span> CONTACTO</asp:LinkButton></li>
+                                <li role="presentation" id="LiDatosComision" runat="server">
+                                    <asp:LinkButton runat="server" ID="btnDatosComision" OnClick="PanelCoMision"><span class="glyphicon glyphicon-phone"></span> COMISIONES</asp:LinkButton></li>
                             </ul>
                         </ContentTemplate>
                     </asp:UpdatePanel>
@@ -492,16 +491,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <h6>Tipo*</h6>
-                                            <asp:DropDownList ID="DDLDTipoDeEmpresa" runat="server" CssClass="form-control"></asp:DropDownList>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <h6>Porcentaje de comisión</h6>
-                                            <asp:TextBox ID="txtValorComision" OnTextChanged="txtValorComision_TextChanged" runat="server" CssClass="form-control" TextMode="Number"></asp:TextBox>
-                                            <asp:Label CssClass="hidden" ID="Label1" runat="server" />
-                                        </div>
-                                        <div class="col-md-6">
-                                            <h6>Comisión incluida</h6>
-                                            <asp:CheckBox ID="chkbxComision" runat="server" />
+                                            <asp:DropDownList ID="DDLDTipoDeEmpresa" OnSelectedIndexChanged="DDLDTipoDeEmpresa_SelectedIndexChanged" runat="server" CssClass="form-control"></asp:DropDownList>
                                         </div>
                                     </div>
                                 </div>
@@ -603,7 +593,16 @@
                                 </div>
 
                             </asp:Panel>
-
+                            <asp:Panel ID="PnlComisiones" runat="server">
+                                <div class="col-md-6">
+                                    <h6>Incluir comisión de pago con tarjeta </h6>
+                                    <asp:CheckBox ID="chkbxComisionTarjeta" runat="server" />
+                                </div>
+                                <div class="col-md-6" id="panelComisionGoDeliverix" runat="server">
+                                    <h6>Incluir comisión de GoDeliverix </h6>
+                                    <asp:CheckBox ID="chkbxComision" runat="server" />
+                                </div>
+                            </asp:Panel>
                         </ContentTemplate>
                         <Triggers>
                             <asp:PostBackTrigger ControlID="btnSubirImagen" />

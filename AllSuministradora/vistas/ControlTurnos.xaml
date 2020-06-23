@@ -20,8 +20,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal"  HorizontalAlignment="Stretch">
-                                <Button Command="{Binding  CmdAbrirTurno}"  Background="{Binding CcolorTurno}" Margin="2" Content="{Binding StrEstatusTurno}">
-
+                                <Button  CommandParameter="{Binding Licencia}" x:Name="btnTurno" Click="btnTurno_Click"  Background="{Binding CcolorTurno}" Margin="2" Content="{Binding StrEstatusTurno}">
                                 </Button>
                             </StackPanel>
                         </DataTemplate>

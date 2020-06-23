@@ -26,6 +26,7 @@ namespace WebApplication1.Vista
         VMTelefono MVTelefono = new VMTelefono();
         VMMensaje MVMensaje = new VMMensaje();
         VMTarifario MVTarifario = new VMTarifario();
+        VMComision MVComision = new VMComision();
         string AccionesDeLaPagina = "";
 
         //Variables globales del control sobe los mapas 
@@ -83,6 +84,7 @@ namespace WebApplication1.Vista
                     Session["MVEmpresa"] = MVEmpresa;
                     Session["MVContrato"] = MVContrato;
                     Session["MVTarifario"] = MVTarifario;
+                    Session["MVComision"] = MVComision;
                     //Sesiones de la ubicacion
                     Session["TipoMapa"] = TipoMapa;
                     Session["MarketOPciones"] = MarketOPciones;
@@ -171,11 +173,14 @@ namespace WebApplication1.Vista
 
                     //DropdownList 
                     MVEstatus.ObtnenerEstatusDeContrato();
+
                     ddlCEstatus.DataSource = MVEstatus.ListaEstatus;
                     ddlCEstatus.DataValueField = "UidEstatus";
                     ddlCEstatus.DataTextField = "NOMBRE";
                     ddlCEstatus.DataBind();
                     PanelDeInformacion.Visible = false;
+                    MVComision.ObtenerComisionGoDeliverix("Envio");
+                    lblComisionGoDeliverix.Text = MVComision.FValor.ToString() + "%";
                     #endregion
 
                     #region Telefono
@@ -302,6 +307,7 @@ namespace WebApplication1.Vista
                 }
                 else
                 {
+                    MVComision = (VMComision)Session["MVComision"];
                     MVEmpresa = (VMEmpresas)Session["MVEmpresa"];
                     MVSucursales = (VMSucursales)Session["MVSucursales"];
                     MVLicencia = (VMLicencia)Session["MVLicencia"];
@@ -980,7 +986,6 @@ namespace WebApplication1.Vista
             txtDHoraCierre.Text = MVSucursales.SUCURSAL.HORACIERRE;
             txtClaveDeBusqueda.Text = MVSucursales.SUCURSAL.StrCodigo;
             chkVisibilidadInformacion.Checked = MVSucursales.SUCURSAL.BVisibilidad;
-            txtFondoRepartidor.Text = MVSucursales.SUCURSAL.MFondo.ToString();
             PanelMensaje.Visible = false;
 
 
@@ -1074,6 +1079,7 @@ namespace WebApplication1.Vista
             }
             else //Si es por distribuidora solo por el uid trae los tarifarios
             {
+                txtFondoRepartidor.Text = MVSucursales.SUCURSAL.MFondo.ToString();
                 MVTarifario.BuscarTarifario("Gestion", uidSucursal: valor);
                 CrearGridViewTarifario(MVTarifario.ListaDeTarifarios);
             }
@@ -2178,7 +2184,6 @@ namespace WebApplication1.Vista
                 {
                     fondo = decimal.Parse(txtFondoRepartidor.Text);
                 }
-
                 string HoraDeApertura = txtDHoraApertura.Text;
                 string HoraDeCierre = txtDHoraCierre.Text;
 
@@ -2190,8 +2195,6 @@ namespace WebApplication1.Vista
                 DbLatitud = (double)Session["DbLatitud"];
                 DbLongitud = (double)Session["DbLongitud"];
                 #endregion
-
-
                 if (Session["Accion"].ToString() == "NuevoRegistro")
                 {
                     #region Guardar datos
@@ -2480,8 +2483,6 @@ namespace WebApplication1.Vista
                                 MVContrato.borrarSucursalDistribuidora(UidDistribuidora);
                                 MVContrato.GuardaRelacionDeContrato();
                             }
-
-
                             PanelMensaje.Visible = true;
                             LblMensaje.Text = "Registro actualizado!";
                         }
@@ -2523,9 +2524,6 @@ namespace WebApplication1.Vista
                     string UidDistribuidora = txtUidSucursal.Text;
                     MVContrato.borrarSucursalDistribuidora(UidDistribuidora);
                 }
-
-
-
             }
 
         }
@@ -4221,7 +4219,33 @@ namespace WebApplication1.Vista
         #endregion
 
         #region Contrato
-
+        protected void txtComisionProducto_TextChanged(object sender, EventArgs e)
+        {
+            ValidaComision();
+        }
+        private bool ValidaComision()
+        {
+            int comision = 0;
+            bool resultado = false;
+            if (int.TryParse(txtComisionProducto.Text, out comision))
+            {
+                if (comision < int.Parse(lblComisionGoDeliverix.Text.Replace("%", "")))
+                {
+                    PanelMensajeContrato.Visible = true;
+                    lblMensajeContrato.Text = "La comision no puede ser menor a la de GoDeliverix";
+                }
+                else
+                {
+                    resultado = true;
+                }
+            }
+            else
+            {
+                PanelMensajeContrato.Visible = true;
+                lblMensajeContrato.Text = "El porcentaje de comision no es valido";
+            }
+            return resultado;
+        }
         protected void dgvBusquedaDeEmpresa_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
@@ -4453,146 +4477,161 @@ namespace WebApplication1.Vista
                 Guid UidSuministradora = Guid.Empty;
                 Guid UidDistribuidora = Guid.Empty;
                 int index = int.Parse(e.CommandArgument.ToString());
-
-                //Suministradora
-                if (MVEmpresa.ObtenerTipoDeEmpresa(Session["UidEmpresaSistema"].ToString()))
+                int ComisionContrato = 0;
+                if (int.TryParse(txtComisionProducto.Text, out ComisionContrato))
                 {
-                    UidSuministradora = new Guid(txtUidSucursal.Text);
-                    UidDistribuidora = new Guid(dgvBusquedaDeEmpresa.DataKeys[index].Value.ToString());
-
-                    if (!MVContrato.ListaDeSucursalesEnContrato.Exists(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora))
+                    if (ValidaComision())
                     {
-                        //Pendiente
-                        //if (MVTarifario.ListaDeTarifariosSeleccionados.Exists(t => t.GuidSucursalDistribuidora == UidDistribuidora))
-                        //{
-                        Guid UidContrato = Guid.NewGuid();
-                        var objeto = new VMContrato() { Uid = UidContrato, UidEstatus = new Guid("5719C82E-6E7F-42A7-9C56-0F75DFEF0343"), UidSucursalSuministradora = UidSuministradora, UidSucursalDistribuidora = UidDistribuidora, BlConfirmacionSuministadora = true, BlConfirmacionDistribuidora = false };
-                        MVContrato.ListaDeSucursalesEnContrato.Add(objeto);
-                        //List<VMTarifario> tarifariosNuevos = new List<VMTarifario>();
-                        //List<VMTarifario> TarifariosViejos = new List<VMTarifario>();
-                        ////Envia correo electronico a la sucursal si su colonia fue retirada del tarifario a usar
-                        // tarifariosNuevos = MVTarifario.ListaDeTarifariosSeleccionados.FindAll(T=>T.UidContrato == Guid.Empty);
-                        // TarifariosViejos = MVTarifario.ListaDeTarifariosSeleccionados.FindAll(T=>T.UidContrato == Guid.Empty);
-                        //foreach (var item in tarifariosNuevos)
-                        //{
-                        //    if (TarifariosViejos.Exists(t=>t.UidRelacionZE == item.UidRelacionZE))
-                        //    {
-                        //        VMAcceso Correo = new VMAcceso();
-                        //        // queda pendiente el envio del correo electronico
-                        //        string sucursalSuministradora = txtNombreDeSucursal.Text;
-                        //        //string Distribuidora =  (UidDistribuidora);
-                        //       // Correo.CorreoDeInformacionDeCambioDeTarifario();
-                        //        var registro = MVTarifario.ListaDeTarifariosSeleccionados.Find(t=>t.UidTarifario ==item.UidTarifario);
-                        //        MVTarifario.ListaDeTarifariosSeleccionados.Remove(registro);
-                        //    }
-                        //}
+                        //Suministradora
+                        if (MVEmpresa.ObtenerTipoDeEmpresa(Session["UidEmpresaSistema"].ToString()))
+                        {
+                            UidSuministradora = new Guid(txtUidSucursal.Text);
+                            UidDistribuidora = new Guid(dgvBusquedaDeEmpresa.DataKeys[index].Value.ToString());
+                            bool PagoAlRecolectar = ChbxPagoOrdenAlRecolectar.Checked;
 
-                        Guid UidSucursalDistribuidora = new Guid(dgvBusquedaDeEmpresa.DataKeys[int.Parse(e.CommandArgument.ToString())].Value.ToString());
-                        MVTarifario.BuscarTarifario("Gestion", uidSucursal: UidSucursalDistribuidora.ToString(), UidZonaRecolecta: DDLDColonia.SelectedItem.Value);
-                        foreach (var item in MVTarifario.ListaDeTarifarios)
-                        {
-                            MVTarifario.SeleccionarTarifario(item.UidTarifario, UidContrato, UidSucursalDistribuidora);
-                        }
-                        MVTarifario.GuardaTarifarioDeContrato(UidContrato, UidSucursalDistribuidora);
-                        //}
-                        //else
-                        //{
-                        //    PanelMensaje.Visible = true;
-                        //    LblMensaje.Text = "No se puede guardar un contrato sin haber seleccionado una zona de entrega";
-                        //}
-                    }
-                    else
-                    {
-                        //Pendiente a contratar
-                        if (MVContrato.ListaDeSucursalesEnContrato.Exists(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora && cont.UidEstatus == new Guid("5719C82E-6E7F-42A7-9C56-0F75DFEF0343") && !cont.BlConfirmacionSuministadora && cont.BlConfirmacionDistribuidora))
-                        {
-                            if (MVTarifario.ListaDeTarifariosSeleccionados.Exists(t => t.GuidSucursalDistribuidora == UidDistribuidora))
+                            if (!MVContrato.ListaDeSucursalesEnContrato.Exists(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora))
                             {
-                                var objeto = MVContrato.ListaDeSucursalesEnContrato.Find(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora);
-                                objeto.UidEstatus = new Guid("CD20F9BF-EBA2-4128-88FB-647544457B2D");
-                                objeto.BlConfirmacionSuministadora = true;
+                                //Pendiente
+                                //if (MVTarifario.ListaDeTarifariosSeleccionados.Exists(t => t.GuidSucursalDistribuidora == UidDistribuidora))
+                                //{
+                                Guid UidContrato = Guid.NewGuid();
+
+                                var objeto = new VMContrato() { Uid = UidContrato, UidEstatus = new Guid("5719C82E-6E7F-42A7-9C56-0F75DFEF0343"), UidSucursalSuministradora = UidSuministradora, UidSucursalDistribuidora = UidDistribuidora, BlConfirmacionSuministadora = true, BlConfirmacionDistribuidora = false, BiPagoAlRecoletar = PagoAlRecolectar, IntPorcentajeComisionContrato = ComisionContrato };
+                                MVContrato.ListaDeSucursalesEnContrato.Add(objeto);
+                                //List<VMTarifario> tarifariosNuevos = new List<VMTarifario>();
+                                //List<VMTarifario> TarifariosViejos = new List<VMTarifario>();
+                                ////Envia correo electronico a la sucursal si su colonia fue retirada del tarifario a usar
+                                // tarifariosNuevos = MVTarifario.ListaDeTarifariosSeleccionados.FindAll(T=>T.UidContrato == Guid.Empty);
+                                // TarifariosViejos = MVTarifario.ListaDeTarifariosSeleccionados.FindAll(T=>T.UidContrato == Guid.Empty);
+                                //foreach (var item in tarifariosNuevos)
+                                //{
+                                //    if (TarifariosViejos.Exists(t=>t.UidRelacionZE == item.UidRelacionZE))
+                                //    {
+                                //        VMAcceso Correo = new VMAcceso();
+                                //        // queda pendiente el envio del correo electronico
+                                //        string sucursalSuministradora = txtNombreDeSucursal.Text;
+                                //        //string Distribuidora =  (UidDistribuidora);
+                                //       // Correo.CorreoDeInformacionDeCambioDeTarifario();
+                                //        var registro = MVTarifario.ListaDeTarifariosSeleccionados.Find(t=>t.UidTarifario ==item.UidTarifario);
+                                //        MVTarifario.ListaDeTarifariosSeleccionados.Remove(registro);
+                                //    }
+                                //}
+
                                 Guid UidSucursalDistribuidora = new Guid(dgvBusquedaDeEmpresa.DataKeys[int.Parse(e.CommandArgument.ToString())].Value.ToString());
-                                MVTarifario.GuardaTarifarioDeContrato(objeto.Uid, UidSucursalDistribuidora);
+                                MVTarifario.BuscarTarifario("Gestion", uidSucursal: UidSucursalDistribuidora.ToString(), UidZonaRecolecta: DDLDColonia.SelectedItem.Value);
+                                foreach (var item in MVTarifario.ListaDeTarifarios)
+                                {
+                                    MVTarifario.SeleccionarTarifario(item.UidTarifario, UidContrato, UidSucursalDistribuidora);
+                                }
+                                MVTarifario.GuardaTarifarioDeContrato(UidContrato, UidSucursalDistribuidora);
+                                //}
+                                //else
+                                //{
+                                //    PanelMensaje.Visible = true;
+                                //    LblMensaje.Text = "No se puede guardar un contrato sin haber seleccionado una zona de entrega";
+                                //}
                             }
                             else
                             {
-                                PanelMensaje.Visible = true;
-                                LblMensaje.Text = "No se puede aceptar un contrato sin haber seleccionado una zona de entrega";
-                            }
-                        }
-                        //Cancela el contrato pendiente
-                        else if (MVContrato.ListaDeSucursalesEnContrato.Exists(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora && cont.UidEstatus == new Guid("5719C82E-6E7F-42A7-9C56-0F75DFEF0343") && cont.BlConfirmacionSuministadora && !cont.BlConfirmacionDistribuidora))
-                        {
-                            var objeto = MVContrato.ListaDeSucursalesEnContrato.Find(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora);
-                            MVContrato.ListaDeSucursalesEnContrato.Remove(objeto);
-                            List<VMTarifario> registros = new List<VMTarifario>();
-                            registros = MVTarifario.ListaDeTarifariosSeleccionados.FindAll(t => t.GuidSucursalDistribuidora == UidDistribuidora);
-                            for (int i = 0; i < registros.Count; i++)
-                            {
-                                var c = MVTarifario.ListaDeTarifariosSeleccionados.Find(t => t.UidTarifario == registros[i].UidTarifario);
-                                MVTarifario.ListaDeTarifariosSeleccionados.Remove(c);
-                            }
-                        }
-                        else
-                        //Elimina el contrato contratado
-                        if (MVContrato.ListaDeSucursalesEnContrato.Exists(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora && cont.UidEstatus == new Guid("CD20F9BF-EBA2-4128-88FB-647544457B2D") && cont.BlConfirmacionSuministadora && cont.BlConfirmacionDistribuidora))
-                        {
-                            var objeto = MVContrato.ListaDeSucursalesEnContrato.Find(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora);
-                            MVContrato.ListaDeSucursalesEnContrato.Remove(objeto);
-                            List<VMTarifario> registros = new List<VMTarifario>();
-                            registros = MVTarifario.ListaDeTarifariosSeleccionados.FindAll(t => t.GuidSucursalDistribuidora == UidDistribuidora);
-                            for (int i = 0; i < registros.Count; i++)
-                            {
-                                var c = MVTarifario.ListaDeTarifariosSeleccionados.Find(t => t.UidTarifario == registros[i].UidTarifario);
-                                MVTarifario.ListaDeTarifariosSeleccionados.Remove(c);
-                            }
+                                //Pendiente a contratar
+                                if (MVContrato.ListaDeSucursalesEnContrato.Exists(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora && cont.UidEstatus == new Guid("5719C82E-6E7F-42A7-9C56-0F75DFEF0343") && !cont.BlConfirmacionSuministadora && cont.BlConfirmacionDistribuidora))
+                                {
+                                    if (MVTarifario.ListaDeTarifariosSeleccionados.Exists(t => t.GuidSucursalDistribuidora == UidDistribuidora))
+                                    {
+                                        var objeto = MVContrato.ListaDeSucursalesEnContrato.Find(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora);
+                                        objeto.UidEstatus = new Guid("CD20F9BF-EBA2-4128-88FB-647544457B2D");
+                                        objeto.BlConfirmacionSuministadora = true;
+                                        Guid UidSucursalDistribuidora = new Guid(dgvBusquedaDeEmpresa.DataKeys[int.Parse(e.CommandArgument.ToString())].Value.ToString());
+                                        MVTarifario.GuardaTarifarioDeContrato(objeto.Uid, UidSucursalDistribuidora);
+                                    }
+                                    else
+                                    {
+                                        PanelMensaje.Visible = true;
+                                        LblMensaje.Text = "No se puede aceptar un contrato sin haber seleccionado una zona de entrega";
+                                    }
+                                }
+                                //Cancela el contrato pendiente
+                                else if (MVContrato.ListaDeSucursalesEnContrato.Exists(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora && cont.UidEstatus == new Guid("5719C82E-6E7F-42A7-9C56-0F75DFEF0343") && cont.BlConfirmacionSuministadora && !cont.BlConfirmacionDistribuidora))
+                                {
+                                    var objeto = MVContrato.ListaDeSucursalesEnContrato.Find(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora);
+                                    MVContrato.ListaDeSucursalesEnContrato.Remove(objeto);
+                                    List<VMTarifario> registros = new List<VMTarifario>();
+                                    registros = MVTarifario.ListaDeTarifariosSeleccionados.FindAll(t => t.GuidSucursalDistribuidora == UidDistribuidora);
+                                    for (int i = 0; i < registros.Count; i++)
+                                    {
+                                        var c = MVTarifario.ListaDeTarifariosSeleccionados.Find(t => t.UidTarifario == registros[i].UidTarifario);
+                                        MVTarifario.ListaDeTarifariosSeleccionados.Remove(c);
+                                    }
+                                }
+                                else
+                                //Elimina el contrato contratado
+                                if (MVContrato.ListaDeSucursalesEnContrato.Exists(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora && cont.UidEstatus == new Guid("CD20F9BF-EBA2-4128-88FB-647544457B2D") && cont.BlConfirmacionSuministadora && cont.BlConfirmacionDistribuidora))
+                                {
+                                    var objeto = MVContrato.ListaDeSucursalesEnContrato.Find(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora);
+                                    MVContrato.ListaDeSucursalesEnContrato.Remove(objeto);
+                                    List<VMTarifario> registros = new List<VMTarifario>();
+                                    registros = MVTarifario.ListaDeTarifariosSeleccionados.FindAll(t => t.GuidSucursalDistribuidora == UidDistribuidora);
+                                    for (int i = 0; i < registros.Count; i++)
+                                    {
+                                        var c = MVTarifario.ListaDeTarifariosSeleccionados.Find(t => t.UidTarifario == registros[i].UidTarifario);
+                                        MVTarifario.ListaDeTarifariosSeleccionados.Remove(c);
+                                    }
 
+                                }
+                            }
                         }
+                        //Distribuidora
+                        else
+                        {
+                            UidSuministradora = new Guid(dgvBusquedaDeEmpresa.DataKeys[int.Parse(e.CommandArgument.ToString())].Value.ToString());
+                            UidDistribuidora = new Guid(txtUidSucursal.Text);
+                            if (!MVContrato.ListaDeSucursalesEnContrato.Exists(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora))
+                            {
+                                //Pendiente
+                                var objeto = new VMContrato() { Uid = Guid.NewGuid(), UidEstatus = new Guid("5719C82E-6E7F-42A7-9C56-0F75DFEF0343"), UidSucursalSuministradora = UidSuministradora, UidSucursalDistribuidora = UidDistribuidora, BlConfirmacionSuministadora = false, BlConfirmacionDistribuidora = true, IntPorcentajeComisionContrato = ComisionContrato };
+                                MVContrato.ListaDeSucursalesEnContrato.Add(objeto);
+                            }
+                            else
+                            {
+                                //Pendiente a contratar
+                                if (MVContrato.ListaDeSucursalesEnContrato.Exists(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora && cont.UidEstatus == new Guid("5719C82E-6E7F-42A7-9C56-0F75DFEF0343") && cont.BlConfirmacionSuministadora && !cont.BlConfirmacionDistribuidora))
+                                {
+                                    var objeto = MVContrato.ListaDeSucursalesEnContrato.Find(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora);
+                                    objeto.UidEstatus = new Guid("CD20F9BF-EBA2-4128-88FB-647544457B2D");
+                                    objeto.BlConfirmacionDistribuidora = true;
+                                }
+                                //Cancela el contrato pendiente
+                                else if (MVContrato.ListaDeSucursalesEnContrato.Exists(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora && cont.UidEstatus == new Guid("5719C82E-6E7F-42A7-9C56-0F75DFEF0343") && !cont.BlConfirmacionSuministadora && cont.BlConfirmacionDistribuidora))
+                                {
+                                    var objeto = MVContrato.ListaDeSucursalesEnContrato.Find(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora);
+                                    MVContrato.ListaDeSucursalesEnContrato.Remove(objeto);
+                                }
+                                else
+                               //Elimina el contrato contratado
+                               if (MVContrato.ListaDeSucursalesEnContrato.Exists(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora && cont.UidEstatus == new Guid("CD20F9BF-EBA2-4128-88FB-647544457B2D") && cont.BlConfirmacionSuministadora && cont.BlConfirmacionDistribuidora))
+                                {
+                                    var objeto = MVContrato.ListaDeSucursalesEnContrato.Find(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora);
+                                    MVContrato.ListaDeSucursalesEnContrato.Remove(objeto);
+                                    List<VMTarifario> registros = new List<VMTarifario>();
+                                    registros = MVTarifario.ListaDeTarifariosSeleccionados.FindAll(t => t.UidContrato == objeto.Uid);
+                                    for (int i = 0; i < registros.Count; i++)
+                                    {
+                                        var c = MVTarifario.ListaDeTarifariosSeleccionados.Find(t => t.UidTarifario == registros[i].UidTarifario);
+                                        MVTarifario.ListaDeTarifariosSeleccionados.Remove(c);
+                                    }
+                                }
+                            }
+                        }
+                        cargaGrid("Empresas");
                     }
+
                 }
-                //Distribuidora
                 else
                 {
-                    UidSuministradora = new Guid(dgvBusquedaDeEmpresa.DataKeys[int.Parse(e.CommandArgument.ToString())].Value.ToString());
-                    UidDistribuidora = new Guid(txtUidSucursal.Text);
-                    if (!MVContrato.ListaDeSucursalesEnContrato.Exists(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora))
-                    {
-                        //Pendiente
-                        var objeto = new VMContrato() { Uid = Guid.NewGuid(), UidEstatus = new Guid("5719C82E-6E7F-42A7-9C56-0F75DFEF0343"), UidSucursalSuministradora = UidSuministradora, UidSucursalDistribuidora = UidDistribuidora, BlConfirmacionSuministadora = false, BlConfirmacionDistribuidora = true };
-                        MVContrato.ListaDeSucursalesEnContrato.Add(objeto);
-                    }
-                    else
-                    {
-                        //Pendiente a contratar
-                        if (MVContrato.ListaDeSucursalesEnContrato.Exists(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora && cont.UidEstatus == new Guid("5719C82E-6E7F-42A7-9C56-0F75DFEF0343") && cont.BlConfirmacionSuministadora && !cont.BlConfirmacionDistribuidora))
-                        {
-                            var objeto = MVContrato.ListaDeSucursalesEnContrato.Find(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora);
-                            objeto.UidEstatus = new Guid("CD20F9BF-EBA2-4128-88FB-647544457B2D");
-                            objeto.BlConfirmacionDistribuidora = true;
-                        }
-                        //Cancela el contrato pendiente
-                        else if (MVContrato.ListaDeSucursalesEnContrato.Exists(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora && cont.UidEstatus == new Guid("5719C82E-6E7F-42A7-9C56-0F75DFEF0343") && !cont.BlConfirmacionSuministadora && cont.BlConfirmacionDistribuidora))
-                        {
-                            var objeto = MVContrato.ListaDeSucursalesEnContrato.Find(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora);
-                            MVContrato.ListaDeSucursalesEnContrato.Remove(objeto);
-                        }
-                        else
-                        //Elimina el contrato contratado
-                       if (MVContrato.ListaDeSucursalesEnContrato.Exists(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora && cont.UidEstatus == new Guid("CD20F9BF-EBA2-4128-88FB-647544457B2D") && cont.BlConfirmacionSuministadora && cont.BlConfirmacionDistribuidora))
-                        {
-                            var objeto = MVContrato.ListaDeSucursalesEnContrato.Find(cont => cont.UidSucursalSuministradora == UidSuministradora && cont.UidSucursalDistribuidora == UidDistribuidora);
-                            MVContrato.ListaDeSucursalesEnContrato.Remove(objeto);
-                            List<VMTarifario> registros = new List<VMTarifario>();
-                            registros = MVTarifario.ListaDeTarifariosSeleccionados.FindAll(t => t.UidContrato == objeto.Uid);
-                            for (int i = 0; i < registros.Count; i++)
-                            {
-                                var c = MVTarifario.ListaDeTarifariosSeleccionados.Find(t => t.UidTarifario == registros[i].UidTarifario);
-                                MVTarifario.ListaDeTarifariosSeleccionados.Remove(c);
-                            }
-                        }
-                    }
+                    PanelMensaje.Visible = true;
+                    LblMensaje.Text = "La comision establecida no es valida, verifiquela por favor";
                 }
-                cargaGrid("Empresas");
+
             }
             if (e.CommandName == "Cancelar")
             {
@@ -4639,15 +4678,20 @@ namespace WebApplication1.Vista
             if (e.CommandName == "Informacion")
             {
                 int index = int.Parse(e.CommandArgument.ToString());
+                var empresa = new VMEmpresas();
+                var sucursal = new VMSucursales();
                 string UidSucursal = dgvBusquedaDeEmpresa.DataKeys[index].Value.ToString();
                 lblIndexContrato.Text = index.ToString();
                 //Obtiene los datos de la direccion de la sucursal
                 VMDireccion d = new VMDireccion();
                 d.ObtenerDireccionSucursal(UidSucursal);
                 lblInformacionDireccionEmpresaContrato.Text = d.ObtenerNombreDeLaCiudad(d.CIUDAD) + "," + d.ObtenerNombreDeLaColonia(d.COLONIA) + "," + d.CALLE0 + "," + d.CodigoPostal;
+                //Datos correo electronico
                 VMCorreoElectronico ce = new VMCorreoElectronico();
-
                 ce.BuscarCorreos(UidPropietario: MVSucursales.ObtenerUidEmpresa(UidSucursal), strParametroDebusqueda: "Empresa");
+                // Datos Informacion de la empresa
+                sucursal.BuscarSucursales(UidSucursal: UidSucursal);
+                empresa.BuscarEmpresas(UidEmpresa: sucursal.UidEmpresa);
 
                 HlnkCorreoElectronico.NavigateUrl = "mailto:" + ce.CORREO;
                 HlnkCorreoElectronico.Text = ce.CORREO;
@@ -4658,13 +4702,24 @@ namespace WebApplication1.Vista
                 DGVInformacionTelefonica.DataSource = MVTelefono.ListaDeTelefonosInformacion;
                 DGVInformacionTelefonica.DataBind();
 
+                lblInformacionNombreEmpresa.Text = empresa.NOMBRECOMERCIAL;
                 lblInformacionNombreSucursal.Text = dgvBusquedaDeEmpresa.Rows[index].Cells[4].Text;
                 PanelDeInformacion.Visible = true;
 
+
+                var objeto = MVContrato.ListaDeSucursalesEnContrato.Find(p => p.UidSucursalDistribuidora.ToString() == UidSucursal);
+                if (objeto != null)
+                {
+                    ChbxPagoOrdenAlRecolectar.Checked = objeto.BiPagoAlRecoletar;
+                    txtComisionProducto.Text = objeto.IntPorcentajeComisionContrato.ToString();
+                }
                 //Oculta los botones para la edicion del contrato
                 btnEditarContrato.Visible = false;
                 btnAceptarEdicionContrato.Visible = false;
                 PanelMensajeContrato.Visible = false;
+                ChbxPagoOrdenAlRecolectar.Enabled = false;
+                txtComisionProducto.Enabled = false;
+                txtComisionProducto.Text = lblComisionGoDeliverix.Text.Replace("%", "");
                 //Obtiene la informacion del tarifario dependiendo de la zona de recoleccion de la empresa suministradora
                 if (MVEmpresa.ObtenerTipoDeEmpresa(Session["UidEmpresaSistema"].ToString())) // si es empresa suministradora
                 {
@@ -4711,12 +4766,16 @@ namespace WebApplication1.Vista
                     {
                         DgvInformacionTarifario.Enabled = true;
                     }
+                    PanelTarifarioSuministradora.Visible = true;
+                    PanelTarifarioDistribuidora.Visible = false;
                 }
                 else
                 {
                     MVTarifario.BuscarTarifario("Informacion distribuidora", uidSucursal: UidSucursal, UidSucursalDistribuidora: txtUidSucursal.Text);
                     DGVInformacionTarifarioDistribuidora.DataSource = MVTarifario.ListaDeTarifarios;
                     DGVInformacionTarifarioDistribuidora.DataBind();
+                    PanelTarifarioSuministradora.Visible = false;
+                    PanelTarifarioDistribuidora.Visible = true;
                 }
 
 
@@ -4834,26 +4893,34 @@ namespace WebApplication1.Vista
 
             //El tarifario solo se le muestra a la empresa suminsitradora para que esta pueda elegirlos.
             //A la empresa distribuidora por el momento solo se leemuestra la informacion telefonica de la empresa suministradora.
-            if (MVEmpresa.ObtenerTipoDeEmpresa(Session["UidEmpresaSistema"].ToString()))
+            if (Session["UidEmpresaSistema"] == null)
             {
-                panelInformacionContacto.Visible = true;
-                panelInformacionTarifario.Visible = false;
-                //Muestra los paneles
-                PanelTarifarioSuministradora.Visible = true;
-                PanelTarifarioDistribuidora.Visible = false;
-                liInformacionTelefono.Attributes.Add("class", "active");
-                liInformacionTarifario.Attributes.Add("class", "");
+                Response.Redirect("Default/");
             }
             else
             {
-                panelInformacionContacto.Visible = true;
-                panelInformacionTarifario.Visible = false;
-                //Muestra los paneles
-                PanelTarifarioSuministradora.Visible = false;
-                PanelTarifarioDistribuidora.Visible = true;
-                liInformacionTelefono.Attributes.Add("class", "active");
-                liInformacionTarifario.Attributes.Add("class", "");
+                if (MVEmpresa.ObtenerTipoDeEmpresa(Session["UidEmpresaSistema"].ToString()))
+                {
+                    panelInformacionContacto.Visible = true;
+                    panelInformacionTarifario.Visible = true;
+                    //Muestra los paneles
+                    PanelTarifarioSuministradora.Visible = true;
+                    PanelTarifarioDistribuidora.Visible = false;
+                    liInformacionTelefono.Attributes.Add("class", "active");
+                    liInformacionTarifario.Attributes.Add("class", "");
+                }
+                else
+                {
+                    panelInformacionContacto.Visible = true;
+                    panelInformacionTarifario.Visible = true;
+                    //Muestra los paneles
+                    PanelTarifarioSuministradora.Visible = false;
+                    PanelTarifarioDistribuidora.Visible = true;
+                    liInformacionTelefono.Attributes.Add("class", "active");
+                    liInformacionTarifario.Attributes.Add("class", "");
+                }
             }
+
         }
 
 
@@ -4936,54 +5003,50 @@ namespace WebApplication1.Vista
         {
             if (DgvInformacionTarifario.Enabled)
             {
-                //Guid UidSucursalDistribuidora = new Guid(dgvBusquedaDeEmpresa.DataKeys[int.Parse(lblIndexContrato.Text)].Value.ToString());
-                //bool resultado = false;
-                //foreach (GridViewRow item in DgvInformacionTarifario.Rows)
-                //{
-                //    string Colonia = item.Cells[3].Text;
-                //    if (MVTarifario.ListaDeTarifariosSeleccionados.Exists(t => t.StrNombreColoniaZE == Colonia && t.GuidSucursalDistribuidora != UidSucursalDistribuidora))
-                //    {
-                //        var objeto = MVTarifario.ListaDeTarifariosSeleccionados.Find(t => t.StrNombreColoniaZE == Colonia && t.GuidSucursalDistribuidora != UidSucursalDistribuidora);
-                //        resultado = true;
-                //        var sucursal = MVSucursales.ListaDeSucursalesDeContrato.Find(S => S.ID == objeto.GuidSucursalDistribuidora);
-                //        PanelMensajeContrato.Visible = true;
-                //        lblMensajeContrato.Text = "La colonia " + Colonia + " esta asociada en el contrato de " + sucursal.IDENTIFICADOR + "¿Desea sustituirlo?";
-                //        break;
-                //    }
-                //}
-                //if (!resultado)
-                //{
                 GuardaTarifarios();
 
                 if (!PanelMensajeContrato.Visible)
                 {
-                    DgvInformacionTarifario.DataSource = MVTarifario.ListaDeTarifarios;
-                    DgvInformacionTarifario.DataBind();
-                    string UidSucursal = dgvBusquedaDeEmpresa.DataKeys[int.Parse(lblIndexContrato.Text)].Value.ToString();
-                    foreach (GridViewRow item in DgvInformacionTarifario.Rows)
+                    int ComisionProducto = 0;
+                    if (int.TryParse(txtComisionProducto.Text, out ComisionProducto))
                     {
-                        CheckBox chk = item.FindControl("chkbTarifario") as CheckBox;
+                        DgvInformacionTarifario.DataSource = MVTarifario.ListaDeTarifarios;
+                        DgvInformacionTarifario.DataBind();
+                        bool PagoAlRecolectar = ChbxPagoOrdenAlRecolectar.Checked;
+                        string UidSucursal = dgvBusquedaDeEmpresa.DataKeys[int.Parse(lblIndexContrato.Text)].Value.ToString();
 
-                        item.Cells[2].Text = "$" + item.Cells[2].Text;
-
-                        chk.Checked = true;
-                        if (MVTarifario.ListaDeTarifariosSeleccionados.Exists(t => t.GuidSucursalDistribuidora == new Guid(UidSucursal)))
+                        var obj = MVContrato.ListaDeSucursalesEnContrato.Find(o => o.UidSucursalSuministradora == new Guid(txtUidSucursal.Text) && o.UidSucursalDistribuidora.ToString() == UidSucursal);
+                        obj.BiPagoAlRecoletar = PagoAlRecolectar;
+                        obj.IntPorcentajeComisionContrato = ComisionProducto;
+                        foreach (GridViewRow item in DgvInformacionTarifario.Rows)
                         {
-                            if (!MVTarifario.ListaDeTarifariosSeleccionados.Exists(t => t.UidTarifario.ToString() == DgvInformacionTarifario.DataKeys[item.RowIndex].Value.ToString()))
+                            CheckBox chk = item.FindControl("chkbTarifario") as CheckBox;
+
+                            item.Cells[2].Text = "$" + item.Cells[2].Text;
+
+                            chk.Checked = true;
+                            if (MVTarifario.ListaDeTarifariosSeleccionados.Exists(t => t.GuidSucursalDistribuidora == new Guid(UidSucursal)))
                             {
-                                chk.Checked = false;
+                                if (!MVTarifario.ListaDeTarifariosSeleccionados.Exists(t => t.UidTarifario.ToString() == DgvInformacionTarifario.DataKeys[item.RowIndex].Value.ToString()))
+                                {
+                                    chk.Checked = false;
+                                }
                             }
                         }
+                        btnAceptarEdicionContrato.Visible = false;
+                        DgvInformacionTarifario.Enabled = false;
+                        ChbxPagoOrdenAlRecolectar.Enabled = false;
+                        txtComisionProducto.Enabled = false;
+                        PanelDeInformacion.Visible = false;
                     }
-                    btnAceptarEdicionContrato.Visible = false;
-                    DgvInformacionTarifario.Enabled = false;
-                    PanelDeInformacion.Visible = false;
-                }
+                    else
+                    {
+                        PanelMensajeContrato.Visible = true;
+                        lblMensajeContrato.Text = "Ingrese solo numeros enteros en la comision";
+                    }
 
-                //}
+                }
             }
-            //btnAceptarEdicionContrato.Visible = false;
-            //PanelDeInformacion.Visible = false;
         }
 
         #region Filtros del panel tarifario
@@ -5043,6 +5106,8 @@ namespace WebApplication1.Vista
         {
             btnAceptarEdicionContrato.Visible = true;
             DgvInformacionTarifario.Enabled = true;
+            ChbxPagoOrdenAlRecolectar.Enabled = true;
+            txtComisionProducto.Enabled = true;
         }
 
         /// <summary>
@@ -5512,7 +5577,6 @@ namespace WebApplication1.Vista
                 }
             }
         }
-
 
 
         protected void BtnTarifario_Click(object sender, EventArgs e)

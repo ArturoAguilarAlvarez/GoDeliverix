@@ -197,13 +197,13 @@ namespace VistaDelModelo
         }
 
 
-        public bool GuardarEmpresaSuministradora(Guid UidEmpresa, string RazonSocial, string NombreComercial, string Rfc, int Tipo, int Estatus, float fComision, bool AbosorveComision = new bool())
+        public bool GuardarEmpresaSuministradora(Guid UidEmpresa, string RazonSocial, string NombreComercial, string Rfc, int Tipo, int Estatus, bool AbosorveComision = new bool(), bool IncluyeComisionTarjeta = new bool())
         {
 
             bool resultado = false;
             try
             {
-                resultado = sm.GUARDAREMPRESA(new Suministros() { UIDEMPRESA = UidEmpresa, RAZONSOCIAL = RazonSocial, NOMBRECOMERCIAL = NombreComercial, RFC = Rfc, TIPO = new TipoDeEmpresa() { ID = Tipo }, ESTATUS = new Estatus() { ID = Estatus }, oComision = new Comision() { FValor = fComision, BAbsorveComision = AbosorveComision } });
+                resultado = sm.GUARDAREMPRESA(new Suministros() { UIDEMPRESA = UidEmpresa, RAZONSOCIAL = RazonSocial, NOMBRECOMERCIAL = NombreComercial, RFC = Rfc, TIPO = new TipoDeEmpresa() { ID = Tipo }, ESTATUS = new Estatus() { ID = Estatus }, oComision = new Comision() { BAbsorveComision = AbosorveComision, BIncluyeComisionTarjeta = IncluyeComisionTarjeta } });
             }
             catch (Exception)
             {
@@ -214,13 +214,13 @@ namespace VistaDelModelo
             return resultado;
         }
 
-        public bool ActualizarDatos(Guid UidEmpresa, string RazonSocial, string NombreComercial, string Rfc, string TipoDeACtualizacion, float fComision = 0f, int Tipo = 0, int Estatus = 0, bool AbsorveComision = new bool())
+        public bool ActualizarDatos(Guid UidEmpresa, string RazonSocial, string NombreComercial, string Rfc, string TipoDeACtualizacion, float fComision = 0f, int Tipo = 0, int Estatus = 0, bool AbsorveComision = new bool(), bool IncluyeComisionTarjeta = new bool())
         {
             bool resultado = false;
             switch (TipoDeACtualizacion)
             {
                 case "BackSite":
-                    resultado = sm.ACTUALIZAREMPRESA(new Suministros() { UIDEMPRESA = UidEmpresa, RAZONSOCIAL = RazonSocial, NOMBRECOMERCIAL = NombreComercial, RFC = Rfc, TIPO = new TipoDeEmpresa() { ID = Tipo }, ESTATUS = new Estatus() { ID = Estatus }, oComision = new Comision() { FValor = fComision, BAbsorveComision = AbsorveComision } }, TipoDeACtualizacion);
+                    resultado = sm.ACTUALIZAREMPRESA(new Suministros() { UIDEMPRESA = UidEmpresa, RAZONSOCIAL = RazonSocial, NOMBRECOMERCIAL = NombreComercial, RFC = Rfc, TIPO = new TipoDeEmpresa() { ID = Tipo }, ESTATUS = new Estatus() { ID = Estatus }, oComision = new Comision() { BAbsorveComision = AbsorveComision, BIncluyeComisionTarjeta = IncluyeComisionTarjeta } }, TipoDeACtualizacion);
                     break;
                 case "BackEnd":
                     resultado = sm.ACTUALIZAREMPRESA(new Suministros() { UIDEMPRESA = UidEmpresa, RAZONSOCIAL = RazonSocial, NOMBRECOMERCIAL = NombreComercial, RFC = Rfc, TIPO = new TipoDeEmpresa() { ID = Tipo }, ESTATUS = new Estatus() { ID = Estatus } }, TipoDeACtualizacion);

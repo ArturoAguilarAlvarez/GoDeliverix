@@ -94,10 +94,21 @@ namespace Deliverix.Wpf.Distribuidores
                     if (DataGridRelacionEquipo.SelectedIndex != -1)
                     {
                         VMSucursales Registros = (VMSucursales)DataGridRelacionEquipo.SelectedItem;
-                        MVSucusales.EliminaRegistroListaRepartidores(Registros.ID);
-                        DataGridRelacionEquipo.SelectedIndex = -1;
-                        btnAgregar.IsEnabled = false;
-                        btneliminar.IsEnabled = false;
+
+                        VMTurno mvturno = new VMTurno();
+                        mvturno.ConsultaUltimoTurno(Registros.UidUsuario);
+                        if (mvturno.DtmHoraFin != DateTime.MinValue)
+                        {
+                            MVSucusales.EliminaRegistroListaRepartidores(Registros.ID);
+                            DataGridRelacionEquipo.SelectedIndex = -1;
+                            btnAgregar.IsEnabled = false;
+                            btneliminar.IsEnabled = false;
+                        }
+                        else
+                        {
+                            MessageBox.Show("No puedes eliminar la informacion de trabajo del repartidor si esta tiene un turno abierto");
+                        }
+                        
                     }
                     else
                     {
@@ -208,8 +219,18 @@ namespace Deliverix.Wpf.Distribuidores
         {
             object ID = ((Button)sender).CommandParameter;
             VMSucursales registro = MVSucusales.ListaDeRepartidoresyVehiculosEnSucursal.Find(o => o.ID.ToString() == ID.ToString());
-            DHInformacionRepartidor.IsOpen = true;
-            DHInformacionRepartidor.DataContext = registro;
+            VMTurno mvturno = new VMTurno();
+            mvturno.ConsultaUltimoTurno(registro.UidUsuario);
+            if (mvturno.DtmHoraFin != DateTime.MinValue)
+            {
+                DHInformacionRepartidor.IsOpen = true;
+                DHInformacionRepartidor.DataContext = registro;
+            }
+            else
+            {
+                MessageBox.Show("No puedes modificar la informacion de trabajo si esta tiene un turno abierto");
+            }
+
 
         }
 

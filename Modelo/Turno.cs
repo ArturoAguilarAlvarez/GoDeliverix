@@ -143,7 +143,7 @@ namespace Modelo
         public DataTable ObtenerLiquidaciones(string uidTurnoDistribuidora)
         {
             oConexion = new Conexion();
-            string query = "select td.UidTurnoDistribuidora, UPPER(u.Nombre) + ' ' + UPPER(u.ApellidoPaterno) as Nombre, u.Usuario, sum(os.MTotalSucursal) as TotalOrdenes,sum(t.MCosto) as TotalEnvio, count(orep.UidOrden) as OrdenesEfectuadas, lr.MMontoLiquidado  from LiquidacionRepartidor lr inner join TurnoRepartidor tr on tr.UidTurnoRepartidor = lr.UidTurnoRepartidor inner join Usuarios u on tr.UidUsuario = u.UidUsuario inner join TurnoDistribuidora td on td.UidTurnoDistribuidora = lr.UidTurnoDistribuidora inner join OrdenRepartidor orep on orep.LngFolioLiquidacion = lr.LngFolio inner join OrdenTarifario ot on ot.UidRelacionOrdenTarifario = orep.UidOrden inner join OrdenSucursal os on os.UidRelacionOrdenSucursal = ot.UidOrden inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario where  td.UidTurnoDistribuidora = '" + uidTurnoDistribuidora + "' group by td.UidTurnoDistribuidora, u.Nombre, u.ApellidoPaterno, u.Usuario, lr.MMontoLiquidado";
+            string query = "select lr.UidTurnoDistribuidora, UPPER(u.Nombre) + ' ' + UPPER(u.ApellidoPaterno) as Nombre, u.Usuario,lr.MMontoLiquidado,atr.VchNombre as accion from LiquidacionRepartidor lr inner join turnoRepartidor tr on tr.UidTurnoRepartidor = lr.UidTurnoRepartidor inner join Usuarios u on tr.UidUsuario = u.UidUsuario inner join AccionTurnoRepartidor atr on atr.UidAccionTurnoRepartidor = lr.UidAccionTurnoRepartidor where lr.UidTurnoDistribuidora = '" + uidTurnoDistribuidora + "'";
             return oConexion.Consultas(query);
         }
 
@@ -179,7 +179,7 @@ namespace Modelo
             return oConexion.Consultas(query);
         }
 
-        public void AgregarInformacionRepartidor(Guid uidUsuario, string mMonto)
+        public void AgregarInformacionRepartidor(Guid uidUsuario, string mMonto, int MontoCOmision)
         {
             SqlCommand cmd = new SqlCommand();
             try
@@ -192,6 +192,9 @@ namespace Modelo
 
                 cmd.Parameters.Add("@MMonto", SqlDbType.Money);
                 cmd.Parameters["@MMonto"].Value = decimal.Parse(mMonto);
+
+                cmd.Parameters.Add("@IntMontoCOmision", SqlDbType.Int);
+                cmd.Parameters["@IntMontoCOmision"].Value = MontoCOmision;
 
                 oConexion = new Conexion();
                 //Mandar comando a ejecución
@@ -211,7 +214,7 @@ namespace Modelo
         public DataTable VerificaUltimoTurnoDistribuidora(string UidLicencia)
         {
             oConexion = new Conexion();
-            string query = "select top 1 * from turnodistribuidora td " +
+            string query = "select top 1 td.UidTurnoDistribuidora,td.LngFolio,td.UidUsuario,td.DtmHoraInicio,td.DtmHoraFin,dbo.ObtenerLiquidacionesTurnoDistribuidora(td.UidTurnoDistribuidora) as liquidaciones,dbo.ObtenerRecargasTurnoDistribuidora(td.UidTurnoDistribuidora) as recargas from turnodistribuidora td " +
                 "left join sucursallicencia sl on sl.UidSucursal = td.UidSucursal where sl.uidlicencia = '" + UidLicencia + "' order by td.DtmHoraInicio desc";
             return oConexion.Consultas(query);
         }
@@ -296,7 +299,7 @@ namespace Modelo
         {
             oConexion = new Conexion();
             string query = "select top 1 * from TurnoSuministradora td " +
-                "left join sucursallicencia sl on sl.UidSucursal = td.UidSucursal where sl.uidlicencia = '" + UidLicencia + "' order by td.DtmHoraInicio desc";
+                "left join sucursallicencia sl on sl.UidSucursal = td.UidSucursal inner join sucursales s on s.uidsucursal = td.uidsucursal inner join Empresa e on e.uidempresa = s.uidempresa where sl.uidlicencia = '" + UidLicencia + "' order by td.DtmHoraInicio desc";
             return oConexion.Consultas(query);
         }
 
@@ -326,6 +329,12 @@ namespace Modelo
             oConexion = new Conexion();
             string query = "select tr.UidTurnoRepartidor,(u.Nombre + ' '+ u.ApellidoPaterno +' '+ u.ApellidoMaterno) as Nombre,u.UidUsuario from Repartidor r inner join UsuarioSucursal us on us.UidUsuario = r.UidUsuario inner join TurnoRepartidor tr on tr.UidUsuario = r.UidUsuario inner join Usuarios u on u.UidUsuario = r.UidUsuario where us.UidSucursal in (select UidSucursal from SucursalLicencia where UidLicencia ='" + licencia + "') and tr.BFondoLiquidado = 0 and tr.DtmHoraFin is not null";
             return oConexion.Consultas(query);
+        }
+
+        public DataTable ObtenerRepartidoresARecargar(string uidLicencia)
+        {
+            oDbTurno = new DBTurno();
+            return oDbTurno.ObtenerRepartidoresParaRecargar(uidLicencia);
         }
 
         #endregion

@@ -50,8 +50,17 @@
                             Padding="0" 
                             Clicked="ButtonOrdenarPorOrden_Clicked"></Button>
                         <Button 
-                            Text="Estatus" 
+                            Text="Importe" 
                             Grid.Column="2" 
+                            HorizontalOptions="Center" 
+                            TextColor="Black" 
+                            FontAttributes="Bold" 
+                            BackgroundColor="Transparent"
+                            Padding="0" 
+                            Clicked="ButtonOrdenarPorOrden_Clicked"></Button>
+                        <Button 
+                            Text="Estatus" 
+                            Grid.Column="3" 
                             HorizontalOptions="Center" 
                             TextColor="Black" 
                             FontAttributes="Bold" 
@@ -76,7 +85,8 @@
                                         </Grid.RowDefinitions>
                                         <Label Text="{Binding FechaDeOrden}" HorizontalOptions="Center" Grid.Column="0" FontSize="Small" ></Label>
                                         <Label Text="{Binding LNGFolio }" HorizontalOptions="Center" Grid.Column="1" FontSize="Small"></Label>
-                                        <Image Source="{Binding Imagen}" HorizontalOptions="Center"  Grid.Column="2" ></Image>
+                                        <Label Text="{Binding MTotal,StringFormat='{0:C2}' }" HorizontalOptions="Center" Grid.Column="2" FontSize="Small"></Label>
+                                        <Image Source="{Binding Imagen}" HorizontalOptions="Center"  Grid.Column="3" ></Image>
                                     </Grid>
                                 </ViewCell>
                             </DataTemplate>

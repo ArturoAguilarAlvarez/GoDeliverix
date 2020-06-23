@@ -681,6 +681,24 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.LinkButton btnDatosDeConectado;
 
         /// <summary>
+        /// LiDatosComision control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiDatosComision;
+
+        /// <summary>
+        /// btnDatosComision control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnDatosComision;
+
+        /// <summary>
         /// lblUidEmpresa control.
         /// </summary>
         /// <remarks>
@@ -807,33 +825,6 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.DropDownList DDLDTipoDeEmpresa;
 
         /// <summary>
-        /// txtValorComision control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtValorComision;
-
-        /// <summary>
-        /// Label1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label1;
-
-        /// <summary>
-        /// chkbxComision control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkbxComision;
-
-        /// <summary>
         /// pnlDireccion control.
         /// </summary>
         /// <remarks>
@@ -958,6 +949,42 @@ namespace WebApplication1.Vista
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView DGVTELEFONOS;
+
+        /// <summary>
+        /// PnlComisiones control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PnlComisiones;
+
+        /// <summary>
+        /// chkbxComisionTarjeta control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkbxComisionTarjeta;
+
+        /// <summary>
+        /// panelComisionGoDeliverix control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl panelComisionGoDeliverix;
+
+        /// <summary>
+        /// chkbxComision control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkbxComision;
 
         /// <summary>
         /// Master property.

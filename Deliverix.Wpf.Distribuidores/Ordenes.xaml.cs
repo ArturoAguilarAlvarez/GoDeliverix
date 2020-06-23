@@ -22,6 +22,7 @@ namespace Deliverix.Wpf.Distribuidores
         VMSucursales MVSucursal = new VMSucursales();
         VMAcceso MVAcceso = new VMAcceso();
         DispatcherTimer Timer = new DispatcherTimer();
+        VMContrato MVContrato = new VMContrato();
         DeliverixSucursales.VMLicencia MVLicencia = new DeliverixSucursales.VMLicencia();
 
         public Ordenes1()
@@ -29,6 +30,8 @@ namespace Deliverix.Wpf.Distribuidores
             if (AccesoInternet())
             {
                 InitializeComponent();
+                LblUidRepartidor.Content = string.Empty;
+                LblNumeroDeOrden.Content = string.Empty;
                 CargaDatosVentanaAsignacionDeOrdenes();
                 //Activa el reload de la pagina (Carga toda la informacion)
                 Timer.Tick += new EventHandler(Windows_Reload);
@@ -42,7 +45,7 @@ namespace Deliverix.Wpf.Distribuidores
         {
             try
             {
-               // System.Net.IPHostEntry host = System.Net.Dns.GetHostEntry("www.godeliverix.net");
+                // System.Net.IPHostEntry host = System.Net.Dns.GetHostEntry("www.godeliverix.net");
                 return true;
             }
             catch (Exception)
@@ -118,7 +121,6 @@ namespace Deliverix.Wpf.Distribuidores
                 }
                 if (Resultado)
                 {
-
                     Guid UidRepartidor = new Guid(LblUidRepartidor.Content.ToString());
                     Guid UidTurnoRepartidor = new Guid(LblUidTurnoRepartidor.Content.ToString());
                     Guid UidOrden = new Guid(LblUidOrden.Content.ToString());
@@ -161,22 +163,98 @@ namespace Deliverix.Wpf.Distribuidores
         private void chbxSeleccionRepartidor_Checked(object sender, RoutedEventArgs e)
         {
             VMUsuarios Usuario = (VMUsuarios)DataGridRepartidores.SelectedItem;
-            MVUsuario.SeleccionarUsuario(Usuario.Uid);
-            AgregarRelacionBitacora(UidRepartidor: Usuario.Uid);
-            DataGridBitacoraDeAsignaciones.ItemsSource = MVSucursal.ListaDeOrdenesAsignadas;
-            LblUidRepartidor.Content = Usuario.Uid;
-            LblUidTurnoRepartidor.Content = Usuario.uidTurnoRepartidor;
-            LblNombreRepartidor.Content = Usuario.StrNombre;
+            MVLicencia.RecuperaLicencia();
+            string licencia = MVLicencia.Licencia;
+            if (string.IsNullOrEmpty(LblNumeroDeOrden.Content.ToString()))
+            {
+                MVUsuario.SeleccionarUsuario(Usuario.Uid);
+                AgregarRelacionBitacora(UidRepartidor: Usuario.Uid);
+                DataGridBitacoraDeAsignaciones.ItemsSource = MVSucursal.ListaDeOrdenesAsignadas;
+                LblUidRepartidor.Content = Usuario.Uid;
+                LblUidTurnoRepartidor.Content = Usuario.uidTurnoRepartidor;
+                LblNombreRepartidor.Content = Usuario.StrNombre;
+            }
+            else
+            {
+                if (MVContrato.VerificaPagoARecolectar(LblUidSucursal.Content.ToString(), licencia) || LblUidSucursal.Content == null)
+                {
+                    // MessageBox.Show("Paga al recolectar");
+                    var orden = MVOrden.ListaDeBitacoraDeOrdenes.Find(u => u.Uidorden.ToString() == LblUidOrden.Content.ToString());
+                    if (Usuario.MEfectivoEnMano < (orden.MTotal))
+                    {
+                        MessageBox.Show("No puedes asignar la orden a un repartidor sin que este tenga el dinero para pagarla al recolectar");
+                    }
+                    else
+                    {
+                        MVUsuario.SeleccionarUsuario(Usuario.Uid);
+                        AgregarRelacionBitacora(UidRepartidor: Usuario.Uid);
+                        DataGridBitacoraDeAsignaciones.ItemsSource = MVSucursal.ListaDeOrdenesAsignadas;
+                        LblUidRepartidor.Content = Usuario.Uid;
+                        LblUidTurnoRepartidor.Content = Usuario.uidTurnoRepartidor;
+                        LblNombreRepartidor.Content = Usuario.StrNombre;
+                    }
+                }
+                else
+                {
+                    //MessageBox.Show("No paga al recolectar");
+                    MVUsuario.SeleccionarUsuario(Usuario.Uid);
+                    AgregarRelacionBitacora(UidRepartidor: Usuario.Uid);
+                    DataGridBitacoraDeAsignaciones.ItemsSource = MVSucursal.ListaDeOrdenesAsignadas;
+                    LblUidRepartidor.Content = Usuario.Uid;
+                    LblUidTurnoRepartidor.Content = Usuario.uidTurnoRepartidor;
+                    LblNombreRepartidor.Content = Usuario.StrNombre;
+                }
+            }
+
         }
 
         private void chbxSeleccionOrden_Checked(object sender, RoutedEventArgs e)
         {
             VMOrden FilaSeleccionada = (VMOrden)DataGridOrdenes.SelectedItem;
-            MVOrden.SeleccionaOrden(FilaSeleccionada.Uidorden);
-            AgregarRelacionBitacora(UidOrden: FilaSeleccionada.Uidorden);
-            DataGridBitacoraDeAsignaciones.ItemsSource = MVSucursal.ListaDeOrdenesAsignadas;
-            LblNumeroDeOrden.Content = FilaSeleccionada.LNGFolio;
-            LblUidOrden.Content = FilaSeleccionada.Uidorden;
+            MVLicencia.RecuperaLicencia();
+            string licencia = MVLicencia.Licencia;
+            if (string.IsNullOrEmpty(LblUidRepartidor.Content.ToString()) || LblUidRepartidor.Content == null)
+            {
+                MVOrden.SeleccionaOrden(FilaSeleccionada.Uidorden);
+                AgregarRelacionBitacora(UidOrden: FilaSeleccionada.Uidorden);
+                DataGridBitacoraDeAsignaciones.ItemsSource = MVSucursal.ListaDeOrdenesAsignadas;
+                LblNumeroDeOrden.Content = FilaSeleccionada.LNGFolio;
+                LblUidOrden.Content = FilaSeleccionada.Uidorden;
+                LblUidSucursal.Content = FilaSeleccionada.UidSucursal;
+            }
+            else
+            {
+                if (MVContrato.VerificaPagoARecolectar(FilaSeleccionada.UidSucursal.ToString(), licencia))
+                {
+                    // MessageBox.Show("Paga al recolectar");
+
+                    var repartidor = MVUsuario.LISTADEUSUARIOS.Find(u => u.uidTurnoRepartidor.ToString() == LblUidTurnoRepartidor.Content.ToString());
+                    if (repartidor.MEfectivoEnMano < (FilaSeleccionada.MTotal))
+                    {
+                        MessageBox.Show("No puedes asignar la orden a un repartidor sin que este tenga el dinero para pagarla al recolectar");
+                    }
+                    else
+                    {
+                        MVOrden.SeleccionaOrden(FilaSeleccionada.Uidorden);
+                        AgregarRelacionBitacora(UidOrden: FilaSeleccionada.Uidorden);
+                        DataGridBitacoraDeAsignaciones.ItemsSource = MVSucursal.ListaDeOrdenesAsignadas;
+                        LblNumeroDeOrden.Content = FilaSeleccionada.LNGFolio;
+                        LblUidOrden.Content = FilaSeleccionada.Uidorden;
+                        LblUidSucursal.Content = FilaSeleccionada.UidSucursal;
+                    }
+                }
+                else
+                {
+                    //MessageBox.Show("No paga al recolectar");
+                    MVOrden.SeleccionaOrden(FilaSeleccionada.Uidorden);
+                    AgregarRelacionBitacora(UidOrden: FilaSeleccionada.Uidorden);
+                    DataGridBitacoraDeAsignaciones.ItemsSource = MVSucursal.ListaDeOrdenesAsignadas;
+                    LblNumeroDeOrden.Content = FilaSeleccionada.LNGFolio;
+                    LblUidOrden.Content = FilaSeleccionada.Uidorden;
+                    LblUidSucursal.Content = FilaSeleccionada.UidSucursal;
+                }
+            }
+
         }
 
         protected void AgregarRelacionBitacora(Guid UidOrden = new Guid(), Guid UidRepartidor = new Guid())
@@ -300,13 +378,14 @@ namespace Deliverix.Wpf.Distribuidores
         {
             VMUsuarios Usuario = (VMUsuarios)DataGridRepartidores.SelectedItem;
 
-            MVAcceso.BitacoraRegistroRepartidores(char.Parse("S"), Usuario.Uid, new Guid("AAD35D44-5E65-46B6-964F-CD2DF026ECB1"));
-
+            var mvturno = new VMTurno();
+            mvturno.AgregaEstatusTurnoRepartidor(Usuario.uidTurnoRepartidor.ToString(), "B03E3407-F76D-4DFA-8BF9-7F059DC76141");
             MVUsuario.SeleccionarUsuario(Usuario.Uid);
             AgregarRelacionBitacora(UidRepartidor: Usuario.Uid);
             DataGridBitacoraDeAsignaciones.ItemsSource = MVSucursal.ListaDeOrdenesAsignadas;
             LblUidRepartidor.Content = Usuario.Uid;
             LblNombreRepartidor.Content = Usuario.StrNombre;
+
         }
 
         private void BtnCodigoQR_Click(object sender, RoutedEventArgs e)

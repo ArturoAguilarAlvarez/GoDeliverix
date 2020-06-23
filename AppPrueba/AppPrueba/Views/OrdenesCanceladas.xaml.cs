@@ -1,6 +1,4 @@
-﻿using AppPrueba.Services;
-using AppPrueba.WebApi;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +8,7 @@ using System.Threading.Tasks;
 using VistaDelModelo;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using RestService = AppPrueba.Services.RestService;
-
+using AppPrueba.WebApi;
 namespace AppPrueba.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]

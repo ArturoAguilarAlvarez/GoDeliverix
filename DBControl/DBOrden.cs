@@ -25,7 +25,7 @@ namespace DBControl
         public DataTable BuscarOrden(string strcodigo, string licencia)
         {
             oConexion = new Conexion();
-            string query = "select ot.UidOrden, s.Identificador,os.IntFolio, dbo.EstatusActualDeOrden(ot.UidOrden) as estatus, u.Nombre from OrdenTarifario ot inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario inner join ZonaDeRecoleccion ZDR on ZDR.UidZonaDeRecolecta = t.UidRelacionZonaRecolecta inner join Sucursales s on s.UidSucursal = ZDR.UidSucursal inner join OrdenSucursal os on os.UidRelacionOrdenSucursal = ot.UidOrden inner join OrdenRepartidor orep on orep.UidOrden = ot.UidRelacionOrdenTarifario inner join TurnoRepartidor tr on tr.UidTurnoRepartidor = orep.UidTurnoRepartidor inner join Usuarios u on u.UidUsuario = tr.UidUsuario where ot.UidCodigo = '" + strcodigo + "' ";
+            string query = "select ot.UidOrden, s.Identificador,os.IntFolio, dbo.EstatusActualDeOrden(ot.UidOrden) as estatus,dbo.ObtenerEstatusDeCobro(ot.UidOrden) as EstatusPago, u.Nombre from OrdenTarifario ot inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario inner join ZonaDeRecoleccion ZDR on ZDR.UidZonaDeRecolecta = t.UidRelacionZonaRecolecta inner join Sucursales s on s.UidSucursal = ZDR.UidSucursal inner join OrdenSucursal os on os.UidRelacionOrdenSucursal = ot.UidOrden inner join OrdenRepartidor orep on orep.UidOrden = ot.UidRelacionOrdenTarifario inner join TurnoRepartidor tr on tr.UidTurnoRepartidor = orep.UidTurnoRepartidor inner join Usuarios u on u.UidUsuario = tr.UidUsuario where ot.UidCodigo = '" + strcodigo + "' ";
             return oConexion.Consultas(query);
         }
 

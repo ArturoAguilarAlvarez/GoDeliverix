@@ -468,6 +468,13 @@ namespace Repartidores_GoDeliverix.VM
                                     BlNuevaOrden = false;
                                     BlRecolecta = false;
                                     BlEntrega = false;
+                                }else if (UidEstatusTurno == new Guid("B03E3407-F76D-4DFA-8BF9-7F059DC76141"))
+                                {
+                                    Texto = "Debes recargar para recibir ordenes";
+                                    BlSinAsignar = true;
+                                    BlNuevaOrden = false;
+                                    BlRecolecta = false;
+                                    BlEntrega = false;
                                 }
                                 else
                                 {
@@ -626,6 +633,10 @@ namespace Repartidores_GoDeliverix.VM
                 string url = "" + settings.Sitio + "api/Turno/GetConsultaEstatusUltimoTurnoRepartidor?UidUsuario=" + UidUsuario + "";
                 string datos = await _WebApi.GetStringAsync(url);
                 obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
+                if (string.IsNullOrEmpty(obj))
+                {
+                    obj = Guid.Empty.ToString();
+                }
             }
             return new Guid(obj);
         }

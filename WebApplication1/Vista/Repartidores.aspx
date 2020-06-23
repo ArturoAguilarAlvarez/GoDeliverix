@@ -129,18 +129,22 @@
                                         <asp:ImageButton ImageUrl="~/Vista/Img/FechaIzquierda.png" ID="btnAnterior" runat="server" CommandName="Page" CommandArgument="Prev" />
                                         Filas:
                                               
-                                                  <asp:DropDownList runat="server" ID="DDLTAMANOGRIDAMPLIADA" AutoPostBack="true" OnTextChanged="TamanioGrid" OnSelectedIndexChanged="TamanioGrid">
-                                                      <asp:ListItem Text="10" Value="10" />
-                                                      <asp:ListItem Text="20" Value="20" />
-                                                      <asp:ListItem Text="30" Value="30" />
-                                                      <asp:ListItem Text="100" Value="100" />
-                                                      <asp:ListItem Text="200" Value="200" />
-                                                  </asp:DropDownList>
+                                                 
+
+                                        <asp:DropDownList runat="server" ID="DDLTAMANOGRIDAMPLIADA" AutoPostBack="true" OnTextChanged="TamanioGrid" OnSelectedIndexChanged="TamanioGrid">
+                                            <asp:ListItem Text="10" Value="10" />
+                                            <asp:ListItem Text="20" Value="20" />
+                                            <asp:ListItem Text="30" Value="30" />
+                                            <asp:ListItem Text="100" Value="100" />
+                                            <asp:ListItem Text="200" Value="200" />
+                                        </asp:DropDownList>
 
                                         Pagina:
                                               
-                                                  <asp:DropDownList runat="server" ID="DDLDBANUMERODEPAGINAS" AutoPostBack="true" OnTextChanged="PaginaSeleccionadaBusquedaAmpliada" OnSelectedIndexChanged="PaginaSeleccionadaBusquedaAmpliada">
-                                                  </asp:DropDownList>
+                                                 
+
+                                        <asp:DropDownList runat="server" ID="DDLDBANUMERODEPAGINAS" AutoPostBack="true" OnTextChanged="PaginaSeleccionadaBusquedaAmpliada" OnSelectedIndexChanged="PaginaSeleccionadaBusquedaAmpliada">
+                                        </asp:DropDownList>
                                         <asp:ImageButton ImageUrl="~/Vista/Img/FechaDerecha.png" ID="btnSiguiente" runat="server" CommandName="Page" CommandArgument="Next" />
                                         <asp:ImageButton ImageUrl="~/Vista/Img/FlechasDoblesDerecha.png" ID="btnUltimo" runat="server" CommandName="Page" CommandArgument="Last" />
 
@@ -370,16 +374,13 @@
 
                                 <table class="text-center">
                                     <tr>
-
                                         <td>
                                             <asp:ImageButton ImageUrl="~/Vista/Img/FlechasDoblesIzquierda.png" ID="btnPrimero" runat="server" CommandName="Page" CommandArgument="First" />
                                             <asp:ImageButton ImageUrl="~/Vista/Img/FechaIzquierda.png" ID="btnAnterior" runat="server" CommandName="Page" CommandArgument="Prev" />
                                             <asp:Label ID="lblTotalDeRegistros" runat="server" />
                                             <asp:ImageButton ImageUrl="~/Vista/Img/FechaDerecha.png" ID="btnSiguiente" runat="server" CommandName="Page" CommandArgument="Next" />
                                             <asp:ImageButton ImageUrl="~/Vista/Img/FlechasDoblesDerecha.png" ID="btnUltimo" runat="server" CommandName="Page" CommandArgument="Last" />
-
                                         </td>
-
                                     </tr>
                                     <tr>
                                         <td>Pagina
@@ -493,6 +494,7 @@
                             <EmptyDataTemplate>
                                 <div class="info">
                                     No existen direcciones guardadas
+                               
                                 </div>
                             </EmptyDataTemplate>
                             <SelectedRowStyle CssClass="table table-hover input-sm success" />
@@ -556,6 +558,7 @@
                                 <EmptyDataTemplate>
                                     <div class="info">
                                         No existen telefonos guardados 
+                                   
                                     </div>
                                 </EmptyDataTemplate>
                                 <SelectedRowStyle CssClass="table table-hover input-sm success" />
@@ -626,17 +629,14 @@
 
                         </div>
                     </asp:Panel>
-                    <asp:Panel ID="PanelInformacionDeTrabajo" runat="server">
+                    <asp:Panel ID="PanelInformacionDeTrabajo" runat="server" Style="margin: 10px">
                         <div class="col-md-6">
                             <p>Monto maximo a portar($)</p>
                             <asp:TextBox class="form-control" TextMode="Number" ID="txtMontoMaximoAPortar" runat="server" />
                         </div>
                         <div class="col-md-6">
-                            <p>Tipo de pago</p>
-                            <asp:RadioButtonList runat="server">
-                                <asp:ListItem Text="Porcentaje" />
-                                <asp:ListItem Text="Cantidad" />
-                            </asp:RadioButtonList>
+                            <p>Porcentaje de pago de pago</p>
+                            <asp:TextBox class="form-control" TextMode="Number" ID="txtPorcentajePagoRepartidor" OnTextChanged="txtPorcentajePagoRepartidor_TextChanged" runat="server" />
                         </div>
                     </asp:Panel>
                 </div>

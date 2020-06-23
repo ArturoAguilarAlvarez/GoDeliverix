@@ -24,10 +24,10 @@ namespace WebApplication1.Controllers
         /// <param name="UidRelacionOrdenSucursal"></param>
         /// <param name="LngCodigoDeEntrega"></param>
         /// <returns></returns>
-        public ResponseHelper GetGuardarOrden(Guid UIDORDEN, decimal Total, Guid Uidusuario, Guid UidDireccion, Guid Uidsucursal, decimal totalSucursal, Guid UidRelacionOrdenSucursal, long LngCodigoDeEntrega)
+        public ResponseHelper GetGuardarOrden(Guid UIDORDEN, decimal Total, Guid Uidusuario, Guid UidDireccion, Guid Uidsucursal, decimal totalSucursal, Guid UidRelacionOrdenSucursal, long LngCodigoDeEntrega,string UidTarifario)
         {
             MVOrden = new VMOrden();
-            MVOrden.GuardaOrden(UIDORDEN, Total, Uidusuario, UidDireccion, Uidsucursal, totalSucursal, UidRelacionOrdenSucursal, LngCodigoDeEntrega);
+            MVOrden.GuardaOrden(UIDORDEN, Total, Uidusuario, UidDireccion, Uidsucursal, totalSucursal, UidRelacionOrdenSucursal, LngCodigoDeEntrega, UidTarifario);
             Respuesta = new ResponseHelper();
             Respuesta.Data = "Registro guardado";
             Respuesta.Status = true;
@@ -46,10 +46,10 @@ namespace WebApplication1.Controllers
         /// <param name="UidNota"></param>
         /// <param name="StrMensaje"></param>
         /// <returns></returns>
-        public ResponseHelper GetGuardarProductos(Guid UIDORDEN, Guid UIDSECCIONPRODUCTO, int INTCANTIDAD, string STRCOSTO, Guid UidSucursal, Guid UidRegistroEncarrito, Guid UidNota, String StrMensaje)
+        public ResponseHelper GetGuardarProductos(Guid UIDORDEN, Guid UIDSECCIONPRODUCTO, int INTCANTIDAD, string STRCOSTO, Guid UidSucursal, Guid UidRegistroEncarrito, Guid UidNota, String StrMensaje, string UidTarifario)
         {
             MVOrden = new VMOrden();
-            MVOrden.GuardaProducto(UIDORDEN, UIDSECCIONPRODUCTO, INTCANTIDAD, STRCOSTO, UidSucursal, UidRegistroEncarrito, UidNota, StrMensaje);
+            MVOrden.GuardaProducto(UIDORDEN, UIDSECCIONPRODUCTO, INTCANTIDAD, STRCOSTO, UidSucursal, UidRegistroEncarrito, UidNota, StrMensaje, UidTarifario);
             Respuesta = new ResponseHelper();
             Respuesta.Data = "Registro guardado";
             Respuesta.Status = true;

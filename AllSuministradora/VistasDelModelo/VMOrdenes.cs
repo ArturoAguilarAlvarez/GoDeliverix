@@ -21,24 +21,7 @@ namespace AllSuministradora.VistasDelModelo
         #endregion
         #region Propiedades de los controles
 
-        private Orden _oSeleccionado;
 
-        public Orden oSeleccionado
-        {
-            get { return _oSeleccionado; }
-            set
-            {
-                _oSeleccionado = value;
-                OnpropertyChanged("oSeleccionado");
-            }
-        }
-        private Orden _oSeleccionElaboracion;
-
-        public Orden oSeleccionElaboracion
-        {
-            get { return _oSeleccionElaboracion; }
-            set { _oSeleccionElaboracion = value; OnpropertyChanged("oSeleccionElaboracion"); }
-        }
 
         private Orden _oOrdenRepartidor;
 
@@ -62,6 +45,21 @@ namespace AllSuministradora.VistasDelModelo
         {
             get { return _ListaDeOrdenes; }
             set { _ListaDeOrdenes = value; OnpropertyChanged("ListaDeOrdenes"); }
+        }
+
+        private int _intCantidadDeOrdenesAConfirmar;
+
+        public int IntCantidadDeOrdenesAConfirmar
+        {
+            get { return _intCantidadDeOrdenesAConfirmar; }
+            set { _intCantidadDeOrdenesAConfirmar = value; OnpropertyChanged("IntCantidadDeOrdenesAConfirmar"); }
+        }
+        private int _IntCantidadDeOrdenesAFinalizar;
+
+        public int IntCantidadDeOrdenesAFinalizar
+        {
+            get { return _IntCantidadDeOrdenesAFinalizar; }
+            set { _IntCantidadDeOrdenesAFinalizar = value; OnpropertyChanged("IntCantidadDeOrdenesAFinalizar"); }
         }
 
 
@@ -145,6 +143,7 @@ namespace AllSuministradora.VistasDelModelo
                             }
 
                         }
+                        IntCantidadDeOrdenesAConfirmar = ListaDeOrdenes.Count;
                         break;
                     case "Elaborar":
                         MVOrden.BuscarOrdenes("Sucursal", UidLicencia: item.Licencia, EstatusSucursal: "Pendiente para elaborar", TipoDeSucursal: "S");
@@ -164,6 +163,7 @@ namespace AllSuministradora.VistasDelModelo
                                 });
                             }
                         }
+                        IntCantidadDeOrdenesAFinalizar = ListaDeOrdenes.Count;
                         break;
                     case "Recolectar":
                         MVOrden.BuscarOrdenes("Sucursal", UidLicencia: item.Licencia, EstatusSucursal: "Lista a enviar", TipoDeSucursal: "S");
@@ -225,10 +225,14 @@ namespace AllSuministradora.VistasDelModelo
                             var instance = ControlGeneral.GetInstance();
                             Orden obj = instance.MVOrdenes.ListaDeOrdenes.Where(x => x.UidOrden == MVOrden.Uidorden).FirstOrDefault();
                             SucursalItem sucursal = instance.VMSucursalesLocal.ListaDeSucursales.Where(x => x.UidSucursal == obj.UidSucursal).FirstOrDefault();
-
-
+                            string pago = "Pagada";
+                            VMContrato objcontrato = new VMContrato();
+                            if (objcontrato.VerificaPagoARecolectar(UidOrden: obj.UidOrden.ToString()))
+                            {
+                                pago = "Pago al recolectar";
+                            }
                             MVOrden.ObtenerProductosDeOrden(MVOrden.Uidorden.ToString());
-                            oOrdenRepartidor = new Orden() { UidOrden = MVOrden.Uidorden, UidSucursal = sucursal.UidSucursal, StrNombreRepartidor = MVOrden.StrNombreRepartidor, StrIdentificadorSucursal = sucursal.NombreSucursal, NombreComercialEmpresa = sucursal.NombreEmpresa, LngFolio = obj.LngFolio, DCLTotal = obj.DCLTotal };
+                            oOrdenRepartidor = new Orden() { UidOrden = MVOrden.Uidorden, UidSucursal = sucursal.UidSucursal, StrNombreRepartidor = MVOrden.StrNombreRepartidor, StrIdentificadorSucursal = sucursal.NombreSucursal, NombreComercialEmpresa = sucursal.NombreEmpresa, LngFolio = obj.LngFolio, DCLTotal = obj.DCLTotal, StrEstatusPagoOrden = pago };
                             oOrdenRepartidor.ListaDeProductos = new List<Producto>();
 
                             oOrdenRepartidor.VControlConfirmar = Visibility.Visible;
@@ -240,6 +244,7 @@ namespace AllSuministradora.VistasDelModelo
                                     {
                                         StrNombre = item.StrNombreProducto,
                                         IntCantidad = item.intCantidad,
+                                        MTotalSucursal = item.MTotalSucursal
                                     });
                             }
                         }

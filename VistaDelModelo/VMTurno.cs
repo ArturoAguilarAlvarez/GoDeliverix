@@ -21,6 +21,13 @@ namespace VistaDelModelo
             get { return _UidLiquidacion; }
             set { _UidLiquidacion = value; }
         }
+        private string _strNombreEmpresa;
+
+        public string StrNombreEmpresa
+        {
+            get { return _strNombreEmpresa; }
+            set { _strNombreEmpresa = value; }
+        }
 
         private long _LngFolio;
         public long LngFolio
@@ -28,6 +35,15 @@ namespace VistaDelModelo
             get { return _LngFolio; }
             set { _LngFolio = value; }
         }
+
+        private long _LngFolioGeneral;
+
+        public long LngFolioGeneral
+        {
+            get { return _LngFolioGeneral; }
+            set { _LngFolioGeneral = value; }
+        }
+
         private decimal _mFondo;
 
         public decimal DFondoRepartidor
@@ -92,8 +108,6 @@ namespace VistaDelModelo
             set { _DTotalSucursal = value; }
         }
 
-
-
         private decimal _DPropina;
 
         public decimal DPropina
@@ -109,6 +123,43 @@ namespace VistaDelModelo
             set { _EfectivoActual = value; }
         }
 
+        private decimal _DeGanancias;
+
+        public decimal DGanancias
+        {
+            get { return _DeGanancias; }
+            set { _DeGanancias = value; }
+        }
+        private decimal _DeLiquidacion;
+
+        public decimal DLiquidacion
+        {
+            get { return _DeLiquidacion; }
+            set { _DeLiquidacion = value; }
+        }
+        private decimal _DRecarga;
+
+        public decimal DRecarga
+        {
+            get { return _DRecarga; }
+            set { _DRecarga = value; }
+        }
+
+        private decimal _DPagosASucursal;
+
+        public decimal DPagosASucursal
+        {
+            get { return _DPagosASucursal; }
+            set { _DPagosASucursal = value; }
+        }
+
+        private int _IntCantidadDePagos;
+
+        public int IntCantidadDePagos
+        {
+            get { return _IntCantidadDePagos; }
+            set { _IntCantidadDePagos = value; }
+        }
 
         private decimal _DTotalEnvio;
 
@@ -132,6 +183,14 @@ namespace VistaDelModelo
             set { _ListaDeTurnos = value; }
         }
 
+        private List<VMTurno> _ListaDeordenes;
+
+        public List<VMTurno> ListaDeInformacionDeTurno
+        {
+            get { return _ListaDeordenes; }
+            set { _ListaDeordenes = value; }
+        }
+
         private List<VMTurno> _ListaDeLiquidaciones;
 
         public List<VMTurno> ListaDeLiquidaciones
@@ -149,6 +208,75 @@ namespace VistaDelModelo
             set { _ListaDeRepartidores = value; }
         }
 
+        private string _strAccionTurnoRepartidor;
+
+        public string StrAccionTurnoRepartidor
+        {
+            get { return _strAccionTurnoRepartidor; }
+            set { _strAccionTurnoRepartidor = value; }
+        }
+
+
+        #region Variables para reportes
+        private int _IntComisionSistema;
+
+        public int IntComisionSistema
+        {
+            get { return _IntComisionSistema; }
+            set { _IntComisionSistema = value; }
+        }
+        private decimal _DGananciasSucursal;
+
+        public decimal DGananciasSucursal
+        {
+            get { return _DGananciasSucursal; }
+            set { _DGananciasSucursal = value; }
+        }
+        private decimal _DPrecioOrden;
+
+        public decimal DPrecioOrden
+        {
+            get { return _DPrecioOrden; }
+            set { _DPrecioOrden = value; }
+        }
+        private decimal _DPagoDeComision;
+
+        public decimal DPagoDeComision
+        {
+            get { return _DPagoDeComision; }
+            set { _DPagoDeComision = value; }
+        }
+        private string _StrTipoDePagoDeOrden;
+
+        public string StrTipoDePagoDeOrden
+        {
+            get { return _StrTipoDePagoDeOrden; }
+            set { _StrTipoDePagoDeOrden = value; }
+        }
+        private string _StrEmpresaDistribuidora;
+
+        public string StrEmpresaDistribuidora
+        {
+            get { return _StrEmpresaDistribuidora; }
+            set { _StrEmpresaDistribuidora = value; }
+        }
+        private string _strNombreSucursal;
+
+        public string strNombreSucursal
+        {
+            get { return _strNombreSucursal; }
+            set { _strNombreSucursal = value; }
+        }
+
+        private bool _BPagoAlRecolectar;
+
+        public bool BPagoAlRecolectar
+        {
+            get { return _BPagoAlRecolectar; }
+            set { _BPagoAlRecolectar = value; }
+        }
+
+        #endregion
 
 
         #region Informacion de usuario
@@ -244,7 +372,7 @@ namespace VistaDelModelo
 
 
 
-        public void LiquidarARepartidor(string strTurnoRepartidor, string StrTurnoDistribuidora, string strMontoALiquidar)
+        public void LiquidarARepartidor(string strTurnoRepartidor, string StrTurnoDistribuidora, string strMontoALiquidar, string StrAccionRepartidor)
         {
             SqlCommand cmd = new SqlCommand();
             try
@@ -260,6 +388,9 @@ namespace VistaDelModelo
 
                 cmd.Parameters.Add("@MMontoALiquidar", SqlDbType.Money);
                 cmd.Parameters["@MMontoALiquidar"].Value = decimal.Parse(strMontoALiquidar);
+
+                cmd.Parameters.Add("@StrAccionTurno", SqlDbType.VarChar, 15);
+                cmd.Parameters["@StrAccionTurno"].Value = StrAccionRepartidor;
 
                 oConexion = new Conexion();
                 //Mandar comando a ejecución
@@ -290,7 +421,7 @@ namespace VistaDelModelo
             foreach (DataRow item in oTurno.ObtenerMontoAsignado(uidRepartidor).Rows)
             {
                 UidLiquidacion = new Guid(item["UidRepartidor"].ToString());
-                registro = item["MMontoMaximo"].ToString();
+                registro = decimal.Parse(item["MMontoMaximo"].ToString()).ToString("N2");
             }
             return registro;
         }
@@ -339,6 +470,23 @@ namespace VistaDelModelo
                     {
                         DtmHoraFin = DateTime.Parse(item["DtmHoraFin"].ToString());
                     }
+                    if (string.IsNullOrEmpty(item["liquidaciones"].ToString()))
+                    {
+                        DLiquidacion = 0;
+                    }
+                    else
+                    {
+                        DLiquidacion = decimal.Parse(item["liquidaciones"].ToString());
+                    }
+                    if (string.IsNullOrEmpty(item["recargas"].ToString()))
+                    {
+                        DRecarga = 0;
+                    }
+                    else
+                    {
+                        DRecarga = decimal.Parse(item["recargas"].ToString());
+                    }
+                    
                 }
             }
             catch (Exception)
@@ -396,6 +544,26 @@ namespace VistaDelModelo
                     if (!string.IsNullOrEmpty(item["Efectivo"].ToString()))
                     {
                         DEfectivoActual = decimal.Parse(item["Efectivo"].ToString());
+                    }
+                    if (!string.IsNullOrEmpty(item["liquidacion"].ToString()))
+                    {
+                        DLiquidacion = decimal.Parse(item["liquidacion"].ToString());
+                    }
+                    if (!string.IsNullOrEmpty(item["ganancias"].ToString()))
+                    {
+                        DGanancias = decimal.Parse(item["ganancias"].ToString());
+                    }
+                    if (!string.IsNullOrEmpty(item["PagosSucursales"].ToString()))
+                    {
+                        DPagosASucursal = decimal.Parse(item["PagosSucursales"].ToString());
+                    }
+                    if (!string.IsNullOrEmpty(item["recarga"].ToString()))
+                    {
+                        DRecarga = decimal.Parse(item["recarga"].ToString());
+                    }
+                    if (!string.IsNullOrEmpty(item["CantidadDePagos"].ToString()))
+                    {
+                        intTotalOrdenes = int.Parse(item["CantidadDePagos"].ToString());
                     }
                 }
             }
@@ -469,26 +637,35 @@ namespace VistaDelModelo
                     if (VerificaTurnoCerrado(item["UidTurnoRepartidor"].ToString()))
                     {
                         total = VerFondoRepartidor(item["UidUsuario"].ToString());
-                    }
-                    if (total > 0)
-                    {
-                        VMTurno usuario = new VMTurno()
+                        if (total > 0)
                         {
-                            UidUsuario = new Guid(item["UidUsuario"].ToString()),
-                            UidTurno = new Guid(item["UidTurnoRepartidor"].ToString()),
-                            StrNombre = item["Nombre"].ToString(),
-                            DTotalEnvio = total
-                        };
-                        if (!ListaDeRepartidores.Exists(u => u.UidUsuario == usuario.UidUsuario))
-                        {
-                            ListaDeRepartidores.Add(usuario);
+                            VMTurno usuario = new VMTurno()
+                            {
+                                UidUsuario = new Guid(item["UidUsuario"].ToString()),
+                                UidTurno = new Guid(item["UidTurnoRepartidor"].ToString()),
+                                StrNombre = item["Nombre"].ToString(),
+                                DTotalEnvio = total
+                            };
+                            if (!ListaDeRepartidores.Exists(u => u.UidUsuario == usuario.UidUsuario))
+                            {
+                                ListaDeRepartidores.Add(usuario);
+                            }
+                            else
+                            {
+                                var registro = ListaDeRepartidores.Find(u => u.UidUsuario == usuario.UidUsuario);
+
+                                if (registro.DTotalEnvio == 0)
+                                {
+                                    registro.DTotalEnvio = registro.DTotalEnvio + total;
+                                }
+                                else
+                                {
+                                    registro.DTotalEnvio = registro.DTotalEnvio - total;
+                                }
+                            }
                         }
-                        else
-                        {
-                            var registro = ListaDeRepartidores.Find(u => u.UidUsuario == usuario.UidUsuario);
-                            registro.DTotalEnvio = registro.DTotalEnvio + total;
-                        }
                     }
+
                 }
             }
             catch (Exception)
@@ -500,16 +677,40 @@ namespace VistaDelModelo
         {
             ListaDeRepartidores = new List<VMTurno>();
             oTurno = new Turno();
-            foreach (DataRow item in oTurno.
-                ObtenerRepartidoresALiquidar(UidLicencia).Rows)
+            foreach (DataRow item in oTurno.ObtenerRepartidoresALiquidar(UidLicencia).Rows)
             {
                 //Varifica que este activo el campo
-                if (item["EstatusTurno"].ToString().ToUpper() == "AE28F243-AA0D-43BD-BF10-124256B75B00")
+                if (item["EstatusTurno"].ToString().ToUpper() == "AE28F243-AA0D-43BD-BF10-124256B75B00" || item["EstatusTurno"].ToString().ToUpper() == "B03E3407-F76D-4DFA-8BF9-7F059DC76141")
                 {
+
+                    string estatus = "";
+                    switch (item["EstatusTurno"].ToString().ToUpper())
+                    {
+                        case "AE28F243-AA0D-43BD-BF10-124256B75B00":
+                            estatus = "Liquidando";
+                            break;
+                        case "B03E3407-F76D-4DFA-8BF9-7F059DC76141":
+                            estatus = "Recargando";
+                            break;
+                        default:
+                            break;
+                    }
                     decimal total = 0;
                     if (!string.IsNullOrEmpty(item["Ordenes"].ToString()))
                     {
+                        var MVTurno = new VMTurno();
+                        MVTurno.ConsultaUltimoTurno(new Guid(item["UidUsuario"].ToString()));
+                        decimal MontoFondo = MVTurno.DFondoRepartidor;
                         total = decimal.Parse(decimal.Parse(item["Ordenes"].ToString()).ToString("N2"));
+
+                        if (MontoFondo < total)
+                        {
+                            total = total - MontoFondo;
+                        }
+                        else
+                        {
+                            total += MontoFondo;
+                        }
                     }
 
                     VMTurno usuario = new VMTurno()
@@ -517,7 +718,62 @@ namespace VistaDelModelo
                         UidUsuario = new Guid(item["UidUsuario"].ToString()),
                         UidTurno = new Guid(item["UidTurnoRepartidor"].ToString()),
                         StrNombre = item["Nombre"].ToString(),
-                        DTotalEnvio = total
+                        DTotalEnvio = total,
+                        StrAccionTurnoRepartidor = estatus
+                    };
+                    if (!ListaDeRepartidores.Exists(u => u.UidUsuario == UidUsuario))
+                    {
+                        ListaDeRepartidores.Add(usuario);
+                    }
+                }
+            }
+            foreach (DataRow rep in oTurno.ObtenerRepartidoresARecargar(UidLicencia).Rows)
+            {
+                //Varifica que este activo el campo
+                if (rep["EstatusTurno"].ToString().ToUpper() == "AE28F243-AA0D-43BD-BF10-124256B75B00" || rep["EstatusTurno"].ToString().ToUpper() == "B03E3407-F76D-4DFA-8BF9-7F059DC76141")
+                {
+
+                    string estatus = "";
+                    switch (rep["EstatusTurno"].ToString().ToUpper())
+                    {
+                        case "AE28F243-AA0D-43BD-BF10-124256B75B00":
+                            estatus = "Liquidando";
+                            break;
+                        case "B03E3407-F76D-4DFA-8BF9-7F059DC76141":
+                            estatus = "Recargando";
+                            break;
+                        default:
+                            break;
+                    }
+                    decimal total = 0;
+                    decimal TotalEfectivo = 0;
+                    decimal TotalEnvio = 0;
+                    decimal TotalPropina = 0;
+                    if (!string.IsNullOrEmpty(rep["Ordenes"].ToString()))
+                    {
+                        TotalEfectivo = decimal.Parse(rep["Ordenes"].ToString());
+                        TotalEnvio = (decimal.Parse(decimal.Parse(rep["envio"].ToString()).ToString("N2")));
+                        TotalPropina = decimal.Parse(decimal.Parse(rep["propina"].ToString()).ToString("N2"));
+                        var MVTurno = new VMTurno();
+                        MVTurno.ConsultaUltimoTurno(new Guid(rep["UidUsuario"].ToString()));
+                        decimal MontoFondo = MVTurno.DFondoRepartidor;
+                        if (MontoFondo > TotalEfectivo)
+                        {
+                            total = TotalEfectivo;
+                        }
+                        else
+                        {
+                            total = TotalEfectivo - MontoFondo;
+                        }
+                    }
+
+                    VMTurno usuario = new VMTurno()
+                    {
+                        UidUsuario = new Guid(rep["UidUsuario"].ToString()),
+                        UidTurno = new Guid(rep["UidTurnoRepartidor"].ToString()),
+                        StrNombre = rep["Nombre"].ToString(),
+                        DTotalEnvio = decimal.Parse(total.ToString("N2")),
+                        StrAccionTurnoRepartidor = estatus
                     };
                     if (!ListaDeRepartidores.Exists(u => u.UidUsuario == UidUsuario))
                     {
@@ -559,6 +815,7 @@ namespace VistaDelModelo
                     LngFolio = long.Parse(item["LngFolio"].ToString());
                     this.UidUsuario = new Guid(item["UidUsuario"].ToString());
                     DtmHoraInicio = DateTime.Parse(item["DtmHoraInicio"].ToString());
+                    StrNombreEmpresa = item["NombreComercial"].ToString();
                     if (!string.IsNullOrEmpty(item["DtmHoraFin"].ToString()))
                     {
                         DtmHoraFin = DateTime.Parse(item["DtmHoraFin"].ToString());
@@ -643,10 +900,10 @@ namespace VistaDelModelo
             return resultado;
         }
 
-        public void AgregarInformacionRepartidor(Guid uidUsuario, string MMonto)
+        public void AgregarInformacionRepartidor(Guid uidUsuario, string MMonto, int PorcentajeGanancias)
         {
             oTurno = new Turno();
-            oTurno.AgregarInformacionRepartidor(uidUsuario, MMonto);
+            oTurno.AgregarInformacionRepartidor(uidUsuario, MMonto, PorcentajeGanancias);
         }
 
         public void ObtenBitacoraTurno(string UidLicencia)
@@ -712,6 +969,79 @@ namespace VistaDelModelo
             return resultado;
         }
 
+        public void InformacionDeCierreDeTurnoSucursalSuministradora(string StrTipoDeSucursal, string UidTurnoSuministradora = "", string UidLicencia = "")
+        {
+            SqlCommand cmd = new SqlCommand();
+            try
+            {
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.CommandText = "asp_ConsultarInformacionDeTurno";
+                //Dato1
+                cmd.Parameters.Add("@VchTipoDeEmpresa", SqlDbType.VarChar, 15);
+                cmd.Parameters["@VchTipoDeEmpresa"].Value = StrTipoDeSucursal;
+
+                if (!string.IsNullOrEmpty(UidTurnoSuministradora))
+                {
+                    cmd.Parameters.Add("@UidTurnoSucursal", SqlDbType.UniqueIdentifier);
+                    cmd.Parameters["@UidTurnoSucursal"].Value = new Guid(UidTurnoSuministradora);
+                }
+                if (!string.IsNullOrEmpty(UidLicencia))
+                {
+                    cmd.Parameters.Add("@UidLicenciaSucursal", SqlDbType.UniqueIdentifier);
+                    cmd.Parameters["@UidLicenciaSucursal"].Value = new Guid(UidLicencia);
+                }
+
+                oConexion = new Conexion();
+                ListaDeInformacionDeTurno = new List<VMTurno>();
+
+                //Mandar comando a ejecución
+                if (StrTipoDeSucursal == "Suministradora")
+                {
+                    foreach (DataRow item in oConexion.Busquedas(cmd).Rows)
+                    {
+                        ListaDeInformacionDeTurno.Add(new VMTurno()
+                        {
+                            LngFolio = long.Parse(item["Orden"].ToString()),
+                            IntComisionSistema = int.Parse(item["Comision"].ToString()),
+                            DPagosASucursal = decimal.Parse(item["Cobrado"].ToString()),
+                            DGananciasSucursal = decimal.Parse(item["Ingreso"].ToString()),
+                            DPrecioOrden = decimal.Parse(item["PagoDeComision"].ToString()) + decimal.Parse(item["Ingreso"].ToString()),
+                            DPagoDeComision = decimal.Parse(item["PagoDeComision"].ToString()),
+                            StrTipoDePagoDeOrden = item["TipoDePago"].ToString(),
+                            StrEmpresaDistribuidora = item["EmpresaDistribuidora"].ToString(),
+                            BPagoAlRecolectar = bool.Parse(item["PagoAlRecolectar"].ToString())
+                        });
+                    }
+                }
+                else if(StrTipoDeSucursal == "Distribuidora")
+                {
+                    foreach (DataRow item in oConexion.Busquedas(cmd).Rows)
+                    {
+                        ListaDeInformacionDeTurno.Add(new VMTurno()
+                        {
+                            LngFolio = long.Parse(item["Orden"].ToString()),
+                            LngFolioGeneral = long.Parse(item["FolioOrdenDistribuidora"].ToString()),
+                            DPagosASucursal = decimal.Parse(item["MontoSucursal"].ToString()),
+                            DPagoDeComision = decimal.Parse(item["Pagado"].ToString()),                            
+                            DGananciasSucursal = decimal.Parse(item["Ingresos"].ToString()),
+                            DGanancias = decimal.Parse(item["GananciasRepartidor"].ToString()),
+                            StrTipoDePagoDeOrden = item["TipoDePago"].ToString(),
+                            StrEmpresaDistribuidora = item["Empresa"].ToString(),
+                            strNombreSucursal = item["Sucursal"].ToString(),
+                            strUsuario =item["Repartidor"].ToString(),
+                            DPropina = decimal.Parse(item["Propina"].ToString()),
+                            DTotalEnvio = decimal.Parse(item["Envio"].ToString())
+                        });
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
         #endregion
     }
 }

@@ -75,6 +75,22 @@ namespace AllSuministradora.VistasDelModelo
             get { return _VisibilidadCerrarTurno; }
             set { _VisibilidadCerrarTurno = value; OnpropertyChanged("VisibilidadCerrarTurno"); }
         }
+
+        private bool _VisibilidadVentanaConfirmar;
+
+        public bool VisibilidadVentnaConfirmar
+        {
+            get { return _VisibilidadVentanaConfirmar; }
+            set { _VisibilidadVentanaConfirmar = value; OnpropertyChanged("VisibilidadVentnaConfirmar"); }
+        }
+        private bool _VisibilidadVentnaFinalizar;
+
+        public bool VisibilidadVentnaFinalizar
+        {
+            get { return _VisibilidadVentnaFinalizar; }
+            set { _VisibilidadVentnaFinalizar = value; OnpropertyChanged("VisibilidadVentnaFinalizar"); }
+        }
+
         private Orden _oOrdenCancelada;
 
         public Orden oOrdenCancelada
@@ -88,6 +104,25 @@ namespace AllSuministradora.VistasDelModelo
         {
             get { return _oTurno; }
             set { _oTurno = value; OnpropertyChanged("oTurno"); }
+        }
+
+        private Orden _oSeleccionado;
+
+        public Orden oSeleccionado
+        {
+            get { return _oSeleccionado; }
+            set
+            {
+                _oSeleccionado = value;
+                OnpropertyChanged("oSeleccionado");
+            }
+        }
+        private Orden _oSeleccionElaboracion;
+
+        public Orden oSeleccionElaboracion
+        {
+            get { return _oSeleccionElaboracion; }
+            set { _oSeleccionElaboracion = value; OnpropertyChanged("oSeleccionElaboracion"); }
         }
 
         #endregion
@@ -121,6 +156,8 @@ namespace AllSuministradora.VistasDelModelo
             VisibilidadVentanaLogin = false;
             VisibilidadVentanaLicencia = false;
             VisibilidadVentanaCancelar = false;
+            VisibilidadVentnaConfirmar = false;
+            VisibilidadVentnaFinalizar = false;
             VisibilidadCerrarTurno = Visibility.Hidden;
             VisibilidadInicioTurno = Visibility.Visible;
             AbrirLogin = new CommandBase(param => AbrirVentanaLogin());

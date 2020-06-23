@@ -121,7 +121,7 @@
                                                         TextColor="Black"
                                                         FontSize="Default"></Label>
                                                 <Label 
-                                                        Text="{Binding Subtotal  , StringFormat='${0}'}"
+                                                        Text="{Binding Subtotal  , StringFormat='{0:C2}'}"
                                                         HorizontalOptions="End"
                                                         FontSize="Default"
                                                         TextColor="Black"/>
@@ -148,7 +148,7 @@
                                         </StackLayout>
                                     </StackLayout>
                                     <Label 
-                                                    Text="{Binding Total , StringFormat='Importe total: ${0}'}"
+                                                    Text="{Binding Total , StringFormat='Importe total: {0:C2}'}"
                                                     HorizontalOptions="End"
                                                     FontSize="Large"
                                                     TextColor="Red"

@@ -42,9 +42,9 @@ namespace AllSuministradora.vistas
                 instance.MVOrdenes.StrBusquedaDeOrdenes = "Confirmar";
                 instance.MVOrdenes.CargaOrdenes();
             }
-            instance.MVOrdenes.oSeleccionado = new Orden();
+            instance.Principal.oSeleccionado = new Orden();
             instance.MVOrdenes.oOrdenParaEnvio = new Orden();
-            instance.MVOrdenes.oSeleccionElaboracion = new Orden();
+            instance.Principal.oSeleccionElaboracion = new Orden();
             DataContext = instance.MVOrdenes;
 
         }
@@ -68,10 +68,12 @@ namespace AllSuministradora.vistas
                         {
                             StrNombre = item.StrNombreProducto,
                             IntCantidad = item.intCantidad,
+                            MTotalSucursal = item.MTotalSucursal
                         });
                 }
-                instance.MVOrdenes.oSeleccionado = fila;
-                instance.MVOrdenes.oSeleccionElaboracion = null;
+                instance.Principal.oSeleccionado = fila;
+                instance.Principal.VisibilidadVentnaConfirmar = true;
+                instance.Principal.oSeleccionElaboracion = null;
             }
             else
             {
@@ -127,10 +129,12 @@ namespace AllSuministradora.vistas
                         {
                             StrNombre = item.StrNombreProducto,
                             IntCantidad = item.intCantidad,
+                            MTotalSucursal = item.MTotalSucursal
                         });
                 }
-                instance.MVOrdenes.oSeleccionElaboracion = fila;
-                instance.MVOrdenes.oSeleccionado = new Orden();
+                instance.Principal.oSeleccionElaboracion = fila;
+                instance.Principal.VisibilidadVentnaFinalizar = true;
+                instance.Principal.oSeleccionado = new Orden();
             }
             else
             {

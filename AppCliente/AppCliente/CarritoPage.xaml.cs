@@ -130,7 +130,7 @@ namespace AppCliente
             MyListViewCarritoEmpresa.ItemsSource = listainformacionsucursales;
             ViewListaProductoVacio.IsVisible = false;
             #region mostrar los datos al usuario
-            btnPagar.Text = "Pagar  $" + TotalPagar;
+            btnPagar.Text = "Pagar  $" + TotalPagar.ToString("N2");
             #endregion
 
         }

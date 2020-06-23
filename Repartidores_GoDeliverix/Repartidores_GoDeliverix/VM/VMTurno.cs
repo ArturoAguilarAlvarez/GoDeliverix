@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Input;
@@ -19,7 +20,7 @@ namespace Repartidores_GoDeliverix.VM
         string url = "";
         VistaDelModelo.VMTurno MVTurno;
         VistaDelModelo.VMTurno MVTurnoInformacion;
-        Timer tiempo;
+        System.Timers.Timer tiempo;
 
         private Guid _UidTurnoRepartidor;
         public Guid UidTurnoRepartidor
@@ -92,6 +93,42 @@ namespace Repartidores_GoDeliverix.VM
         {
             get { return _DPropina; }
             set { SetValue(ref _DPropina, value); }
+        }
+
+        private decimal _DLiquidacion;
+
+        public decimal DLiquidacion
+        {
+            get { return _DLiquidacion; }
+            set { _DLiquidacion = value; OnPropertyChanged("DLiquidacion"); }
+        }
+        private decimal _DRecarga;
+
+        public decimal DRecarga
+        {
+            get { return _DRecarga; }
+            set { _DRecarga = value; OnPropertyChanged("DRecarga"); }
+        }
+        private decimal _DGanancias;
+
+        public decimal DGanancias
+        {
+            get { return _DGanancias; }
+            set { _DGanancias = value; OnPropertyChanged("DGanancias"); }
+        }
+        private decimal _DPagosSucursal;
+
+        public decimal DPagosSucursal
+        {
+            get { return _DPagosSucursal; }
+            set { _DPagosSucursal = value; OnPropertyChanged("DPagosSucursal"); }
+        }
+        private int _intCantidadDEPagos;
+
+        public int IntCantidadDePagos
+        {
+            get { return _intCantidadDEPagos; }
+            set { _intCantidadDEPagos = value; OnPropertyChanged("IntCantidadDePagos"); }
         }
 
         private decimal __TotalEnvio;
@@ -181,7 +218,7 @@ namespace Repartidores_GoDeliverix.VM
         public ICommand Historico { get { return new RelayCommand(HistoricoTurno); } }
         public ICommand HistoricoOrdenTurno { get { return new RelayCommand(OrdenesHistoricoTurno); } }
 
-        public Timer Tiempo { get => tiempo; set => tiempo = value; }
+        public System.Timers.Timer Tiempo { get => tiempo; set => tiempo = value; }
 
         private async void VerOrdenesActuales()
         {
@@ -281,7 +318,7 @@ namespace Repartidores_GoDeliverix.VM
                         url = "" + settings.Sitio + "api/Turno/GetAgregaEstatusTurnoRepartidor?UidTurnoRepartidor=" + AppInstance.Session_.UidTurnoRepartidor + "&UidEstatusTurno=3BE9EF83-4A39-4A60-9FA9-7F50AD60CA3A";
                         await _webApi.GetStringAsync(url);
                     }
-                    MEfectivoEnCaja = MEfectivoEnCaja + DFondo;
+
                     Total = 0;
                     DFondo = 0;
                     if (MEfectivoEnCaja > 0)
@@ -309,18 +346,23 @@ namespace Repartidores_GoDeliverix.VM
 
         public VMTurno()
         {
-            tiempo = new Timer
+            tiempo = new System.Timers.Timer
             {
                 Interval = 6000
             };
             //enlazas un metodo al evento elapsed que es el que se ejecutara
             //cada vez que el intervalo de tiempo se cumpla
-            tiempo.Elapsed += new ElapsedEventHandler(VerificaEstatusTurno);
+            tiempo.Elapsed += new ElapsedEventHandler(VerificaTurno);
             tiempo.Start();
             CargarTurno();
         }
 
-        private async void VerificaEstatusTurno(object sender, ElapsedEventArgs e)
+        private async void VerificaTurno(object sender, ElapsedEventArgs e)
+        {
+            await VerificaEstatusTurno();
+        }
+
+        public async Task VerificaEstatusTurno()
         {
             var AppInstance = MainViewModel.GetInstance();
             if (AppInstance.Session_.UidTurnoRepartidor != Guid.Empty)
@@ -345,6 +387,16 @@ namespace Repartidores_GoDeliverix.VM
                         TextoLiquidar = "Abierto";
                         CargarTurno();
                     }
+                    else if (obj.ToUpper() == "B03E3407-F76D-4DFA-8BF9-7F059DC76141")
+                    {
+                        TextoLiquidar = "Recargando";
+                        CargarTurno();
+                    }
+                    else if (obj.ToUpper() == "CCAFB7D6-A27C-4F5B-A4A6-13D35138471F")
+                    {
+                        TextoLiquidar = "Recargado";
+                        CargarTurno();
+                    }
                     else if (obj.ToUpper() == "3BE9EF83-4A39-4A60-9FA9-7F50AD60CA3A")
                     {
                         TextoLiquidar = "Cerrado";
@@ -358,7 +410,7 @@ namespace Repartidores_GoDeliverix.VM
         {
             MVTurno = new VistaDelModelo.VMTurno();
             var AppInstance = MainViewModel.GetInstance();
-            string consulta2 = "" + settings.Sitio + "api/Turno/GetInformacionDeOrdenesPorTuno?UidTurno=" + AppInstance.Session_.UidTurnoRepartidor + "";
+
             using (var _webApi = new HttpClient())
             {
                 url = "" + settings.Sitio + "api/Turno/GetConsultaUltimoTurno?UidUsuario=" + AppInstance.Session_.UidUsuario + "";
@@ -377,23 +429,30 @@ namespace Repartidores_GoDeliverix.VM
                 DtmHoraInicio = MVTurno.DtmHoraInicio.ToString();
                 using (var _WepApi = new HttpClient())
                 {
-                    var dato = await _WepApi.GetStringAsync(consulta2);
+                    string url = "" + settings.Sitio + "api/Turno/GetInformacionDeOrdenesPorTuno?UidTurno=" + AppInstance.Session_.UidTurnoRepartidor + "";
+                    var dato = await _WepApi.GetStringAsync(url);
                     string obj = JsonConvert.DeserializeObject<ResponseHelper>(dato).Data.ToString();
                     MVTurnoInformacion = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
                 }
-
                 CantidadDeOrdenes = MVTurnoInformacion.intTotalOrdenes;
                 TotalSuministros = MVTurnoInformacion.DTotalSucursal;
                 TotalEnvio = MVTurnoInformacion.DTotalEnvio;
                 Total = TotalSuministros + TotalEnvio;
                 DPropina = MVTurnoInformacion.DPropina;
+                DLiquidacion = MVTurnoInformacion.DLiquidacion;
+                DRecarga = MVTurnoInformacion.DRecarga;
+                DGanancias = MVTurnoInformacion.DGanancias;
+                DPagosSucursal = MVTurnoInformacion.DPagosASucursal;
+                IntCantidadDePagos = MVTurnoInformacion.IntCantidadDePagos;
                 DFondo = MVTurno.DFondoRepartidor;
+                if (MVTurnoInformacion.DTotalSucursal == 0)
+                {
+                    MVTurnoInformacion.DEfectivoActual = MVTurno.DFondoRepartidor;
+                }
                 MEfectivoEnCaja = MVTurnoInformacion.DEfectivoActual;
-
                 //Obtiene el monto maximo a cargar por repartidor
                 decimal montoMaximo = await ObtenMontoRepartidor(AppInstance.Session_.UidUsuario);
-
-                if (montoMaximo <= MEfectivoEnCaja)
+                if (montoMaximo < MEfectivoEnCaja)
                 {
                     //Cambia el estatus a liquidando
                     CambiaEstatusTurnoRepartidor("Liquidando", AppInstance.Session_.UidTurnoRepartidor.ToString());
@@ -416,7 +475,7 @@ namespace Repartidores_GoDeliverix.VM
                         UidEstatusTurno = Guid.Empty;
                     }
                 }
-                if (UidEstatusTurno == new Guid("AE28F243-AA0D-43BD-BF10-124256B75B00"))
+                if (UidEstatusTurno == new Guid("AE28F243-AA0D-43BD-BF10-124256B75B00") || UidEstatusTurno == new Guid("B03E3407-F76D-4DFA-8BF9-7F059DC76141"))
                 {
                     using (var _webApi = new HttpClient())
                     {
@@ -445,7 +504,8 @@ namespace Repartidores_GoDeliverix.VM
                         if (MEfectivoEnCaja == 0)
                         {
                             MEfectivoEnCaja = MVTurnoInformacion.DEfectivoActual;
-                            MEfectivoEnCaja = MEfectivoEnCaja + MVTurno.VerFondoRepartidor(AppInstance.Session_.UidUsuario.ToString());
+                            MEfectivoEnCaja = MEfectivoEnCaja;
+                            //+ MVTurno.VerFondoRepartidor(AppInstance.Session_.UidUsuario.ToString());
                         }
                     }
                     else
@@ -475,6 +535,31 @@ namespace Repartidores_GoDeliverix.VM
             }
         }
 
+        public async void VerificaEstatusARecargando()
+        {
+            var AppInstance = MainViewModel.GetInstance();
+
+            using (var _webApi = new HttpClient())
+            {
+                url = "" + settings.Sitio + "api/Turno/GetConsultaUltimoTurno?UidUsuario=" + AppInstance.Session_.UidUsuario + "";
+                var datos = await _webApi.GetStringAsync(url);
+                var obj = JsonConvert.DeserializeObject<ResponseHelper>(datos).Data.ToString();
+                MVTurno = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
+            }
+
+            using (var _WepApi = new HttpClient())
+            {
+                string url = "" + settings.Sitio + "api/Turno/GetInformacionDeOrdenesPorTuno?UidTurno=" + AppInstance.Session_.UidTurnoRepartidor + "";
+                var dato = await _WepApi.GetStringAsync(url);
+                string obj = JsonConvert.DeserializeObject<ResponseHelper>(dato).Data.ToString();
+                MVTurnoInformacion = JsonConvert.DeserializeObject<VistaDelModelo.VMTurno>(obj);
+            }
+            if (MVTurno.DFondoRepartidor > MVTurnoInformacion.DEfectivoActual)
+            {
+                CambiaEstatusTurnoRepartidor("Recargando", AppInstance.Session_.UidTurnoRepartidor.ToString());
+            }
+
+        }
 
         private async void CambiaEstatusTurnoRepartidor(string Estatus, string UidTRepartidor)
         {
@@ -484,6 +569,10 @@ namespace Repartidores_GoDeliverix.VM
                 {
                     case "Liquidando":
                         url = "" + settings.Sitio + "api/Turno/GetAgregaEstatusTurnoRepartidor?UidTurnoRepartidor=" + UidTRepartidor + "&UidEstatusTurno=AE28F243-AA0D-43BD-BF10-124256B75B00";
+                        await _webApi.GetStringAsync(url);
+                        break;
+                    case "Recargando":
+                        url = "" + settings.Sitio + "api/Turno/GetAgregaEstatusTurnoRepartidor?UidTurnoRepartidor=" + UidTRepartidor + "&UidEstatusTurno=B03E3407-F76D-4DFA-8BF9-7F059DC76141";
                         await _webApi.GetStringAsync(url);
                         break;
                 }

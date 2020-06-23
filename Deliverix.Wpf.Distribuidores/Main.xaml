@@ -99,7 +99,7 @@
                                     <materialDesign:PackIcon Kind="Worker" Height="30" Width="30" Margin="3" VerticalAlignment="Center"/>
                                     <TextBlock Text="Repartidores" VerticalAlignment="Center" Margin="20 10"/>
                                 </DockPanel>
-                            </Button>                            
+                            </Button>
                         </StackPanel>
                     </ListViewItem>
                     <ListViewItem Height="60" >
@@ -109,7 +109,7 @@
                                     <materialDesign:PackIcon Kind="Bank" Height="30" Width="30" Margin="3" VerticalAlignment="Center"/>
                                     <TextBlock Text="Liquidacion" VerticalAlignment="Center" Margin="20 10"/>
                                 </DockPanel>
-                            </Button>                           
+                            </Button>
                         </StackPanel>
                     </ListViewItem>
                     <ListViewItem Height="60" >
@@ -119,7 +119,7 @@
                                     <materialDesign:PackIcon Kind="Key" Height="30" Width="30" Margin="3" VerticalAlignment="Center"/>
                                     <TextBlock Text="Licencia" VerticalAlignment="Center" Margin="20 10"/>
                                 </DockPanel>
-                            </Button>                            
+                            </Button>
                         </StackPanel>
                     </ListViewItem>
                 </ListView>
@@ -134,5 +134,57 @@
 
             </Frame>
         </Grid>
+        <materialDesign:DialogHost IsOpen="False" x:Name="DHAccionRepartidor" CloseOnClickAway="True" >
+            <materialDesign:DialogHost.DialogContent>
+
+                <StackPanel  Orientation="Vertical">
+                    <StackPanel Background="#20396e">
+                        <Label Content="Informacion de turno" x:Name="lblTituloInformacionTurnoRepartidor" Foreground="White" HorizontalAlignment="Center" FontSize="40" ></Label>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel x:Name="pnlInformacionTrabajoRepartidor">
+                            <StackPanel  Orientation="Vertical">
+                                <StackPanel Orientation="Vertical">
+                                    <Label Content="Repartidor" FontSize="30"></Label>
+                                    <Label   x:Name="lblNombreRepartidor" Foreground="Orange" FontSize="30"  ></Label>
+                                    <Label   x:Name="lblUidTurnoRepartidor" Visibility="Hidden" ></Label>
+                                    <Label   x:Name="lblUidRepartidor" Visibility="Hidden" ></Label>
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical" >
+                                    <Label Content="Efectivo" FontSize="30"></Label>
+                                    <Label  FontSize="30"  Foreground="Orange" x:Name="lblMontoALiquidar"  ></Label>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Liquidar" Background="Green" Width="150" x:Name="btnLiquidarRepartidor" Click="BtnLiquidar_Click" Margin="40"></Button>
+                                <Button Content="Recargar" Background="Blue" Width="150" x:Name="btnRecargar" Click="btnRecargar_Click" Margin="40"></Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+        <materialDesign:DialogHost x:Name="DHRecargar" CloseOnClickAway="True">
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel  Orientation="Vertical">
+                    <StackPanel Background="#20396e">
+                        <Label Content="Agregar recarga" Foreground="White" HorizontalAlignment="Center" FontSize="40" ></Label>
+                    </StackPanel>
+                    <StackPanel x:Name="pnlRecarga" HorizontalAlignment="Stretch" Orientation="Vertical">
+                        <Label x:Name="lblEfectivoActual" FontSize="20" ContentStringFormat="Efectivo actual {0}"></Label>
+                        <Label x:Name="lblEfectivoMaximoRepartidor" FontSize="20" ContentStringFormat="Maximo efectivo a portar ${0}"></Label>
+                        <Label x:Name="lblMontoMaximoRepartidor" FontSize="20" ContentStringFormat="Monto maximo a recargar ${0}"></Label>
+                        <Label Content="Recomendado para recargar" FontSize="20"></Label>
+                        <Label x:Name="lblMontoRecomendadoARecargar" HorizontalAlignment="Center" ContentStringFormat="${0}" FontSize="30"></Label>
+                        <Label Content="Monto a recargar"  FontSize="20"></Label>
+                        <TextBox materialDesign:HintAssist.Hint="Monto a recargar" x:Name="txtMontoRecarga" FontSize="30" HorizontalAlignment="Stretch" Margin="15"></TextBox>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Aceptar" Background="Green" Width="150" x:Name="btnAceptarRecarga" Click="btnAceptarRecarga_Click" Margin="40"></Button>
+                            <Button Content="Cancelar" Background="Red" Width="150" x:Name="btnCancelarRecarga" Click="btnCancelarRecarga_Click" Margin="40"></Button>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
     </Grid>
 </Window>

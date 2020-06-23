@@ -82,7 +82,7 @@ namespace Modelo
         #endregion
 
         #region Metodos
-        public bool GuardarOrden()
+        public bool GuardarOrden(Guid UidTarifario)
         {
             bool resultado = false;
             Datos = new Conexion();
@@ -116,6 +116,9 @@ namespace Modelo
                 Comando.Parameters.Add("@RelacionDeOrden", SqlDbType.UniqueIdentifier);
                 Comando.Parameters["@RelacionDeOrden"].Value = UidRelacionOrdenSucursal;
 
+                Comando.Parameters.Add("@TarifarioDistribuidora", SqlDbType.UniqueIdentifier);
+                Comando.Parameters["@TarifarioDistribuidora"].Value = UidTarifario;
+
                 resultado = Datos.ModificarDatos(Comando);
             }
             catch (Exception)
@@ -126,7 +129,7 @@ namespace Modelo
             return resultado;
         }
         //Indica que producto se asigno a la orden
-        public bool GuardarProductos(Guid UidOrden, Guid UidProducto, int cantidad, string STRCOSTO, Guid UidSucursal, Guid UidRegistroEncarrito, Guid UidNota, string strMensaje)
+        public bool GuardarProductos(Guid UidOrden, Guid UidProducto, int cantidad, string STRCOSTO, Guid UidSucursal, Guid UidRegistroEncarrito, Guid UidNota, string strMensaje, string UidTarifario = "")
         {
             bool resultado = false;
             Datos = new Conexion();
@@ -159,6 +162,10 @@ namespace Modelo
 
                 Comando.Parameters.Add("@MTotal", SqlDbType.Money);
                 Comando.Parameters["@MTotal"].Value = double.Parse(STRCOSTO);
+
+                Comando.Parameters.Add("@TarifarioDistribuidora", SqlDbType.VarChar, 40);
+                Comando.Parameters["@TarifarioDistribuidora"].Value = UidTarifario;
+
 
                 resultado = Datos.ModificarDatos(Comando);
             }

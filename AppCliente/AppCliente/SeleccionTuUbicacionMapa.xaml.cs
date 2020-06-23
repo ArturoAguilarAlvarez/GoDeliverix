@@ -162,7 +162,7 @@ namespace AppCliente
                         if (App.MVDireccion != null)
                         {
                             pos = new Position(Latitud, Longitud);
-                            map.MoveToRegion(MapSpan.FromCenterAndRadius(pos, Distance.FromMeters(500)));
+                            await map.MoveCamera(CameraUpdateFactory.NewCameraPosition(new CameraPosition(pos, 15)));
                             MyPosicion = pos;
                         }
                         Pin AquiEstoy = new Pin()

@@ -7,6 +7,7 @@
              x:Class="AppPrueba.Views.OrdenDescripcionConfirmar">
     <NavigationPage.TitleView>
         <StackLayout Orientation="Horizontal" HorizontalOptions="End" Spacing="10" Margin="0,0,10,0">
+
             <ImageButton Source="IconoCancelar.png" HeightRequest="50" WidthRequest="30"  HorizontalOptions="End"
                     BackgroundColor="Transparent"  Margin="0,0,10,0" Clicked="ButtonCancelar_Clicked"></ImageButton>
 
@@ -40,7 +41,7 @@
                 <Grid>
                     <Button Text="Producto" Grid.Column="0" HorizontalOptions="Center" BackgroundColor="Transparent"></Button>
                     <Button Text="Cantidad" Grid.Column="1" HorizontalOptions="Center" BackgroundColor="Transparent"></Button>
-                    <Button Text="$Total" Grid.Column="2" HorizontalOptions="Center" BackgroundColor="Transparent"></Button>
+                    <Button Text="Total" Grid.Column="2" HorizontalOptions="Center" BackgroundColor="Transparent"></Button>
                     <Button Text="Notas" Grid.Column="3" HorizontalOptions="Center" BackgroundColor="Transparent"></Button>
                 </Grid>
                 <ListView x:Name="MyListviewOrdenesConfirmar"
@@ -61,7 +62,7 @@
                                         </Grid.RowDefinitions>
                                         <Label Text="{Binding StrNombreProducto }" HorizontalOptions="Center" Grid.Column="0" FontSize="Medium"></Label>
                                         <Label Text="{Binding intCantidad }" HorizontalOptions="Center" Grid.Column="1" FontSize="Medium"></Label>
-                                        <Label Text="{Binding MTotal }" HorizontalOptions="Center" Grid.Column="2" FontSize="Large"></Label>
+                                        <Label Text="{Binding MTotalSucursal,StringFormat='${0}' }" HorizontalOptions="Center" Grid.Column="2" FontSize="Large"></Label>
                                         <Button IsVisible="{Binding VisibilidadNota}" Clicked="Button_Clicked" HorizontalOptions="Center"  Text="Ver Nota" Grid.Column="3" ></Button>
                                     </Grid>
                                 </ContentView>

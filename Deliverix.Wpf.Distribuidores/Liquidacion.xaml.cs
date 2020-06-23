@@ -38,8 +38,8 @@ namespace Deliverix.Wpf.Distribuidores
             PaginaPrincipal = pagina;
             string licencia = MVLicencia.Licencia;
 
-            lblNombreRepartidor.Content = string.Empty;
-            lblUidTurnoRepartidor.Content = string.Empty;
+            PaginaPrincipal.lblNombreRepartidor.Content = string.Empty;
+            PaginaPrincipal.lblUidTurnoRepartidor.Content = string.Empty;
             //Obtiene el uid del turno y consulta sus liquidaciones
 
             Timer.Tick += new EventHandler(ObtenerHistorico);
@@ -62,6 +62,7 @@ namespace Deliverix.Wpf.Distribuidores
             MVTurno.ObtenerRepartidoresALiquidar(licencia);
             MVTurno.RepartidoresConFondoAEntregar(licencia);
             DataGridRepartidores.ItemsSource = MVTurno.ListaDeRepartidores;
+
         }
 
         protected void RefrescaBitacora()
@@ -74,8 +75,15 @@ namespace Deliverix.Wpf.Distribuidores
                 int intOrdenes = 0;
                 foreach (DataRowView item in dgLiquidaciones.Items)
                 {
-                    intOrdenes = intOrdenes + int.Parse(item[5].ToString());
-                    total = total + decimal.Parse(item[6].ToString());
+                    intOrdenes = intOrdenes + 1;
+                    if (item[4].ToString() == "Recarga")
+                    {
+                        total = total - decimal.Parse(item[3].ToString());
+                    }
+                    else if (item[4].ToString() == "Liquidacion")
+                    {
+                        total = total + decimal.Parse(item[3].ToString());
+                    }
                 }
                 lblCantidadOrdenes.Content = intOrdenes;
                 lblMonto.Content = "$" + total.ToString("N2");
@@ -91,65 +99,41 @@ namespace Deliverix.Wpf.Distribuidores
             {
                 VMTurno Objeto = new VMTurno();
                 Objeto = (VMTurno)DataGridRepartidores.SelectedItem;
-                lblNombreRepartidor.Content = Objeto.StrNombre;
-                lblUidTurnoRepartidor.Content = Objeto.UidTurno;
-                lblMontoALiquidar.Content = "$" + Objeto.DTotalEnvio;
-            }
-        }
-        private void BtnLiquidar_Click(object sender, RoutedEventArgs e)
-        {
-            LicenciaRequerida VentanaMensaje = new LicenciaRequerida();
-            TextBlock lblMensaje = VentanaMensaje.FindName("lblMensaje") as TextBlock;
+                PaginaPrincipal.lblNombreRepartidor.Content = Objeto.StrNombre;
+                PaginaPrincipal.lblUidTurnoRepartidor.Content = Objeto.UidTurno;
+                PaginaPrincipal.lblUidRepartidor.Content = Objeto.UidUsuario;
+                PaginaPrincipal.lblMontoALiquidar.Content = "$" + Objeto.DTotalEnvio;
+                PaginaPrincipal.DHAccionRepartidor.IsOpen = true;
+                PaginaPrincipal.pnlInformacionTrabajoRepartidor.Visibility = Visibility.Visible;
+                PaginaPrincipal.pnlRecarga.Visibility = Visibility.Hidden;
 
-            if (!string.IsNullOrEmpty(lblUidTurnoRepartidor.Content.ToString()))
-            {
-                MVTurno = new VMTurno();
-                //Cotroles de la master page
-                Label TurnoDistribuidora = PaginaPrincipal.FindName("LblUidTurno") as Label;
-                Label lblUidusuario = PaginaPrincipal.FindName("lblUidusuario") as Label;
-                MVTurno.LiquidarARepartidor(lblUidTurnoRepartidor.Content.ToString(), TurnoDistribuidora.Content.ToString(), lblMontoALiquidar.Content.ToString().Substring(1));
-                MVTurno.AgregaEstatusTurnoRepartidor(lblUidTurnoRepartidor.Content.ToString(), "38FA16DF-4727-41FD-A03E-E2E43FA78F3F");
+                VMTurno mvturno = new VMTurno();
+                mvturno.ConsultaUltimoTurno(Objeto.UidUsuario);
+                //Verifica que el turno haya sido cerrado
+                if (mvturno.DtmHoraFin != DateTime.MinValue)
+                {
+                    PaginaPrincipal.btnLiquidarRepartidor.Visibility = Visibility.Visible;
+                    PaginaPrincipal.btnRecargar.Visibility = Visibility.Hidden;
+                    PaginaPrincipal.lblTituloInformacionTurnoRepartidor.Content = "Informacion de cierre de turno";
+                }
+                else
+                {
+                    if (Objeto.StrAccionTurnoRepartidor == "Recargando")
+                    {
+                        PaginaPrincipal.btnLiquidarRepartidor.Visibility = Visibility.Hidden;
+                        PaginaPrincipal.btnRecargar.Visibility = Visibility.Visible;
+                    }
 
-                //Ticket t = new Ticket();
-                //VMUsuarios MVusuario = new VMUsuarios();
-                //MVusuario.obtenerDatosDeSupervisor(new Guid(lblUidusuario.Content.ToString()));
-                
-                ////Informacion de la empresa
-                //t.AddHeaderLine("" + MVusuario.NombreEmpresa + "");
-                //t.AddHeaderLine("Sucursal: " + MVusuario.Sucursal + "");
-
-                //t.AddHeaderLine("Usuario: " + MVusuario.StrNombre + "");
-                ////Obtene informacion del turno
-                //MVTurno = new VMTurno();
-                //MVLicencia = new DeliverixSucursales.VMLicencia();
-                //MVLicencia.RecuperaLicencia();
-                //MVTurno.ConsultarUltimoTurnoDistribuidora(MVLicencia.Licencia);
-                //t.AddSubHeaderLine("");
-                //t.AddHeaderLine("Informacion del liquidacion");
-                ////Informacion del turno
-                //t.AddHeaderLine("Repartidor: "+lblNombreRepartidor.Content+"");
-                //t.AddTotal("Total liquidado ", lblMontoALiquidar.Content.ToString());
-                //t.AddSubHeaderLine("");
-                //t.AddTotal("Firma de Supervisor ","__________");
-                //t.AddTotal("Firma de Repartidor ","__________");
-                //t.FontSize = 6;
-                //t.AddFooterLine("www.godeliverix.com.mx");
-                //t.PrintTicket("PDFCreator");
+                    if (Objeto.StrAccionTurnoRepartidor == "Liquidando")
+                    {
+                        PaginaPrincipal.btnLiquidarRepartidor.Visibility = Visibility.Visible;
+                        PaginaPrincipal.btnRecargar.Visibility = Visibility.Hidden;
+                    }
 
 
-                lblNombreRepartidor.Content = string.Empty;
-                lblMontoALiquidar.Content = string.Empty;
-                lblUidTurnoRepartidor.Content = string.Empty;
-                MVTurno = new VMTurno();
-                lblMensaje.Text = "La liquidacion ha sido confirmada";
-                VentanaMensaje.ShowDialog();
-                RefrescarDatosLiquidadores();
-                RefrescaBitacora();
-            }
-            else
-            {
-                lblMensaje.Text = "Para liquidar debes seleccionar un repartidor";
-                VentanaMensaje.ShowDialog();
+                    PaginaPrincipal.lblTituloInformacionTurnoRepartidor.Content = "Informacion de turno";
+                }
+
             }
         }
     }

@@ -21,7 +21,7 @@ namespace AppCliente.Pagos
         decimal cantidad = 0;
         decimal subtotal = 0;
         decimal TotalEnvio = 0;
-        decimal TotalPagar = 0;
+        string TotalPagar = "";
         decimal TotalPropina = 0;
         bool OrdenVerificada = false;
         Guid UidOrden;
@@ -41,7 +41,7 @@ namespace AppCliente.Pagos
             for (int i = 0; i < App.MVProducto.ListaDelInformacionSucursales.Count; i++)
             {
                 TotalEnvio += App.MVProducto.ListaDelInformacionSucursales[i].CostoEnvio;
-                TotalPagar += App.MVProducto.ListaDelInformacionSucursales[i].Total;
+                TotalPagar += App.MVProducto.ListaDelInformacionSucursales[i].Total.ToString("N2");
                 subtotal += App.MVProducto.ListaDelInformacionSucursales[i].Subtotal;
                 TotalPropina += App.MVProducto.ListaDelInformacionSucursales[i].DPropina;
             }
@@ -149,7 +149,7 @@ namespace AppCliente.Pagos
                     if (App.oPago.StrEstatusPagosTarjeta == "approved")
                     {
                         OrdenVerificada = true;
-                        MVPago.EnviarOrdenASucursales(TotalPagar, App.Global1, App.DireccionABuscar, TipoDeFormaDePago, UidOrden, UidOrdenPago);
+                        MVPago.EnviarOrdenASucursales(decimal.Parse(TotalPagar), App.Global1, App.DireccionABuscar, TipoDeFormaDePago, UidOrden, UidOrdenPago);
                         await Navigation.PopToRootAsync();
                     }
                     if (App.oPago.StrEstatusPagosTarjeta == "error")

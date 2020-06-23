@@ -29,7 +29,7 @@ namespace AppPrueba.Views
             }
             catch (Exception)
             {
-                DisplayAlert("Sorry", "Sin acceso a internet", "Ok");
+                DisplayAlert("Aviso", "Sin acceso a internet", "Ok");
             }
         }
 
@@ -50,21 +50,21 @@ namespace AppPrueba.Views
             var action = await DisplayAlert("Finalizar?", "¿A concluido el proceso de elaboracion de la orden " + ObjItem.LNGFolio + "?", "Si", "No");
             if (action)
             {
-                url = ("http://godeliverix.net/api/Orden/GetFinalizarOrden?Licencia="
+                url = (RestService.Servidor + "api/Orden/GetFinalizarOrden?Licencia="
                     + AppPrueba.Helpers.Settings.Licencia.ToString() +
                     "&Uidorden=" + ObjItem.Uidorden);
 
                 var DatosObtenidos = await _client.GetAsync(url);
 
                 //Crea el codigo para que el repartidor pueda recoger la orden                
-                url = (RestService.Servidor + "api/Orden/GetOrdenesSucursal?Licencia=" + AppPrueba.Helpers.Settings.Licencia.ToString() + "&Estatus=Pendiente%20para%20elaborar&tipoSucursal=s");
-                string DatosObtenidos2 = await _client.GetStringAsync(url);
-                var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos2).Data.ToString();
-                App.MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(DatosGiros);
-                
-                MyListviewOrdenesPorRealizar.ItemsSource = null;
-                MyListviewOrdenesPorRealizar.ItemsSource = App.MVOrden.ListaDeOrdenesPorElaborar;
+                //url = (RestService.Servidor + "api/Orden/GetOrdenesSucursal?Licencia=" + AppPrueba.Helpers.Settings.Licencia.ToString() + "&Estatus=Pendiente%20para%20elaborar&tipoSucursal=s");
+                //string DatosObtenidos2 = await _client.GetStringAsync(url);
+                //var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos2).Data.ToString();
+                //App.MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(DatosGiros);
 
+                //MyListviewOrdenesPorRealizar.ItemsSource = null;
+                //MyListviewOrdenesPorRealizar.ItemsSource = App.MVOrden.ListaDeOrdenesPorElaborar;
+                Cargar();
             }
         }
 
@@ -73,7 +73,6 @@ namespace AppPrueba.Views
             // desc await PopupNavigation.Instance.PushAsync(new AppPrueba.Popup.Loanding());
             var item = ((ItemTappedEventArgs)e);
             VMOrden ObjItem = (VMOrden)item.Item;
-
             await Navigation.PushAsync(new OrdenDescripcionPorElaborar(ObjItem, MyListviewOrdenesPorRealizar));
             //  descomentar await PopupNavigation.Instance.PopAllAsync();
         }

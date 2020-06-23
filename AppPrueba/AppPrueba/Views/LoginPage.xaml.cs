@@ -50,7 +50,7 @@ namespace AppPrueba.Views
                     string Uid;
                     using (HttpClient _WebApiGoDeliverix = new HttpClient())
                     {
-                        url = "https://www.godeliverix.net/api/Profile/GET?Usuario=" + usuario + "&Contrasena=" + password + "";
+                        url = RestService.Servidor + "api/Profile/GET?Usuario=" + usuario + "&Contrasena=" + password + "";
                         string content = await _WebApiGoDeliverix.GetStringAsync(url);
                         Uid = content = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                     }

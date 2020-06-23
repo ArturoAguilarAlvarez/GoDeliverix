@@ -191,7 +191,7 @@ namespace DBControl
         public DataTable ObtenerRepartidoresConVehiculosYTurnoAbierto(string licencia)
         {
             oConexcion = new Conexion();
-            string query = "select u.UidUsuario,u.Nombre,u.usuario,dbo.asp_ObtenerUtimoEstatus(u.UidUsuario) as estatus,dbo.GD_ObtenerUltimoEstatusTurnoRepartidor(tr.UidTurnoRepartidor) as EstatusTurno, tr.DtmHoraFin, tr.UidTurnoRepartidor from Usuarios u inner join TurnoRepartidor tr on tr.UidUsuario = u.UidUsuario and  tr.DtmHoraFin is null  where u.UidUsuario in (select UidUsuario from VehiculoUsuario where UidVehiculo in (select UidVehiculo from vehiculoSucursal where uidsucursal in ( select UidSucursal from SucursalLicencia where UidLicencia = '" + licencia + "'))) order by tr.DtmHoraInicio desc";
+            string query = "select u.UidUsuario,u.Nombre,u.usuario,dbo.asp_ObtenerUtimoEstatus(u.UidUsuario) as estatus,dbo.GD_ObtenerUltimoEstatusTurnoRepartidor(tr.UidTurnoRepartidor) as EstatusTurno, tr.DtmHoraFin, tr.UidTurnoRepartidor,dbo.asp_ObtenerLaCantidadDeEfectivoEnMano(tr.UidTurnoRepartidor) as Efectivo,(select MFondo from VehiculoUsuario where UidUsuario = u.UidUsuario) as Fondo from Usuarios u inner join TurnoRepartidor tr on tr.UidUsuario = u.UidUsuario and  tr.DtmHoraFin is null  where u.UidUsuario in (select UidUsuario from VehiculoUsuario where UidVehiculo in (select UidVehiculo from vehiculoSucursal where uidsucursal in ( select UidSucursal from SucursalLicencia where UidLicencia = '" + licencia + "'))) order by tr.DtmHoraInicio desc";
             return oConexcion.Consultas(query);
         }
 

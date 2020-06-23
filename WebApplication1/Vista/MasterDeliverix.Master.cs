@@ -312,5 +312,10 @@ namespace WebApplication1.Vista
         {
             Response.Redirect("ZonaHoraria.aspx");
         }
+
+        protected void btnConfiguracionComisiones_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("ConfiguracionComisiones.aspx");
+        }
     }
 }

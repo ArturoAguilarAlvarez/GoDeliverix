@@ -56,6 +56,13 @@ namespace Modelo
             get { return _BAbsorveComision; }
             set { _BAbsorveComision = value; }
         }
+        private bool _BIncluyeComisionTarjeta;
+
+        public bool BIncluyeComisionTarjeta
+        {
+            get { return _BIncluyeComisionTarjeta; }
+            set { _BIncluyeComisionTarjeta = value; }
+        }
 
         Conexion oConexion;
         string query;
@@ -84,9 +91,110 @@ namespace Modelo
             {
                 UidComision = new Guid(item["UidComision"].ToString());
                 UidTipoDeComision = new Guid(item["UidTipoDeComision"].ToString());
-                FValor = float.Parse(item["DValor"].ToString());
                 BAbsorveComision = bool.Parse(item["BAboserveComision"].ToString());
+                BIncluyeComisionTarjeta = bool.Parse(item["BAAbsorveComisionTarjeta"].ToString());
             }
+        }
+
+        public bool ActualizarComisionGoDeliverix()
+        {
+            bool resultado = false;
+            try
+            {
+                SqlCommand Comando = new SqlCommand();
+
+                oConexion = new Conexion();
+                Comando.CommandType = CommandType.StoredProcedure;
+                Comando.CommandText = "asp_ActualizaComisionGoDeliverix";
+
+                Comando.Parameters.Add("@IntValorComision", SqlDbType.Int);
+                Comando.Parameters["@IntValorComision"].Value = int.Parse(FValor.ToString());
+
+                Comando.Parameters.Add("@StrNombreComision", SqlDbType.VarChar, 50);
+                Comando.Parameters["@StrNombreComision"].Value = StrNombreTipoDeComision;
+
+                resultado = oConexion.ModificarDatos(Comando);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return resultado;
+        }
+
+        public DataTable obtenerComisionesGoDeliverix()
+        {
+            oConexion = new Conexion();
+            string query = "Select * from ComisionGoDeliverix";
+            return oConexion.Consultas(query);
+        }
+
+        public DataTable ObtenerComisionPasarelaDeCobro(string strNombreProvedor)
+        {
+            oConexion = new Conexion();
+            string query = "select * from ComisionesPasarela cp inner join ProvedoresPasarela pp on pp.UidProvedorPasarela = cp.UidProvedorPasarela where pp.StrProvedor = '" + strNombreProvedor + "'";
+            return oConexion.Consultas(query);
+        }
+
+        public bool ActualizaComisionTarjeta()
+        {
+            bool resultado = false;
+            try
+            {
+                SqlCommand Comando = new SqlCommand();
+
+                oConexion = new Conexion();
+                Comando.CommandType = CommandType.StoredProcedure;
+                Comando.CommandText = "asp_ActualizaComisionPasarelaDeCobro";
+
+                Comando.Parameters.Add("@UidComision", SqlDbType.UniqueIdentifier);
+                Comando.Parameters["@UidComision"].Value = UidComision;
+
+                Comando.Parameters.Add("@IntValor", SqlDbType.Int);
+                Comando.Parameters["@IntValor"].Value = FValor;
+
+                resultado = oConexion.ModificarDatos(Comando);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return resultado;
+        }
+
+        public string ObtenerComisionDeGananciaRepartidor(string UidRepartidor)
+        {
+            string resultado = "";
+            try
+            {
+                oConexion = new Conexion();
+                string query = "select IntComisionDeGananciaPorEnvio from repartidor where uidusuario = '" + UidRepartidor + "'";
+                DataTable datos = oConexion.Consultas(query);
+                if (datos.Rows.Count == 1)
+                {
+                    foreach (DataRow item in datos.Rows)
+                    {
+                        resultado = item["IntComisionDeGananciaPorEnvio"].ToString();
+                    }
+                    if (string.IsNullOrEmpty(resultado))
+                    {
+                        resultado = "0";
+                    }
+                }
+                return resultado;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public DataTable ComisionSistema(string strNombreDeComision)
+        {
+            string query = "select * from ComisionGoDeliverix where StrNombreComision = '" + strNombreDeComision + "'";
+            oConexion = new Conexion();
+            return oConexion.Consultas(query);
         }
         #endregion
     }

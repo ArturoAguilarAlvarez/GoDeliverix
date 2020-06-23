@@ -1,5 +1,4 @@
-﻿using AppPrueba.Services;
-using AppPrueba.WebApi;
+﻿using AppPrueba.WebApi;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -28,7 +27,7 @@ namespace AppPrueba.Views
 
         public async void Cargar()
         {
-            url = (Services.RestService.Servidor + "api/Orden/GetOrdenesSucursal?Licencia=" + AppPrueba.Helpers.Settings.Licencia.ToString() + "&Estatus=Canceladas&tipoSucursal=s");
+            url = (RestService.Servidor + "api/Orden/GetOrdenesSucursal?Licencia=" + AppPrueba.Helpers.Settings.Licencia.ToString() + "&Estatus=Canceladas&tipoSucursal=s");
             string DatosObtenidos = await _client.GetStringAsync(url);
             var DatosGiros = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
             App.MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(DatosGiros);

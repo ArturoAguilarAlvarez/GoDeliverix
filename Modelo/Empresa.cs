@@ -102,11 +102,11 @@ namespace Modelo
                 cmd.Parameters.Add("@UidTipoDeComision", SqlDbType.UniqueIdentifier);
                 cmd.Parameters["@UidTipoDeComision"].Value = EMPRESA.oComision.UidTipoDeComision;
 
-                cmd.Parameters.Add("@FValor", SqlDbType.Float);
-                cmd.Parameters["@FValor"].Value = EMPRESA.oComision.FValor;
-
                 cmd.Parameters.Add("@ABAbsorbe", SqlDbType.Bit);
                 cmd.Parameters["@ABAbsorbe"].Value = Convert.ToByte(EMPRESA.oComision.BAbsorveComision);
+
+                cmd.Parameters.Add("@IncluyeComisionTarjeta", SqlDbType.Bit);
+                cmd.Parameters["@IncluyeComisionTarjeta"].Value = Convert.ToByte(EMPRESA.oComision.BIncluyeComisionTarjeta);
 
                 cn = new Conexion();
                 //Mandar comando a ejecución
@@ -158,8 +158,8 @@ namespace Modelo
                     cmd.Parameters.Add("@ABAbsorbe", SqlDbType.Bit);
                     cmd.Parameters["@ABAbsorbe"].Value = Convert.ToByte(EMP.oComision.BAbsorveComision); ;
 
-                    cmd.Parameters.Add("@FValor", SqlDbType.Float);
-                    cmd.Parameters["@FValor"].Value = EMP.oComision.FValor;
+                    cmd.Parameters.Add("@IncluyeComisionTarjeta", SqlDbType.Bit);
+                    cmd.Parameters["@IncluyeComisionTarjeta"].Value = Convert.ToByte(EMP.oComision.BIncluyeComisionTarjeta);
                 }
 
 

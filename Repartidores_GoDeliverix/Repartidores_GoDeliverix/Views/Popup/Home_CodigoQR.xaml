@@ -21,7 +21,7 @@
         <ScrollView>
             <StackLayout  x:Name="pnlContenido" BackgroundColor="WhiteSmoke" Orientation="Vertical">
                 <Label x:Name="lblCodigo" Text="{Binding StrCodigo,Mode=TwoWay}" BindingContextChanged="LblCodigo_BindingContextChanged" IsVisible="False"></Label>
-                <Label HorizontalOptions="CenterAndExpand" Text="{Binding MSubTotal,StringFormat='Total a pagar ${0}'}" TextColor="Black" FontSize="Large"></Label>
+                <Label HorizontalOptions="CenterAndExpand" IsVisible="{Binding BlVisibilidadPagoAlRecoger}" Text="{Binding MSubTotal,StringFormat='Monto a pagar ${0}'}" TextColor="Black" FontSize="20"></Label>
 
                 <Grid>
                     <Grid.RowDefinitions>

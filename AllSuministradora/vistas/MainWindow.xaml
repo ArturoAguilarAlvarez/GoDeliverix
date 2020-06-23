@@ -38,7 +38,7 @@
                 <Label FontSize="15" Foreground="White" Content="{Binding StrHoraInicio}" ContentStringFormat="Hora de inicio: {0}"></Label>
             </StackPanel>
 
-            <TextBlock Text="GoDeliverix Sucursales" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30"></TextBlock>
+            <TextBlock Text="Sucursales" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30"></TextBlock>
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                 <Label Visibility="Hidden" x:Name="lblUidUsuario"></Label>
                 <Label Content="{Binding StrNombre}" Foreground="White" VerticalAlignment="Center"  FontSize="20"></Label>
@@ -108,13 +108,9 @@
         <materialDesign:DialogHost x:Name="dhTransferirTurno" IsOpen="{Binding VisibilidadVentanaLogin}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CloseOnClickAway="False">
             <materialDesign:DialogHost.DialogContent>
                 <StackPanel Orientation="Vertical" x:Name="ContenedorDatosLogin" >
-
                     <StackPanel Background="#20396e" HorizontalAlignment="Stretch" >
                         <Label FontSize="25" HorizontalAlignment="Center" Content="Iniciar turno" Foreground="White"></Label>
-
                     </StackPanel>
-
-
                     <StackPanel Margin="40 40 40 10">
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"  Margin="0,0,0,0" >
@@ -175,6 +171,7 @@
                 </StackPanel>
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
+        <!--Ventana cancelar-->
         <materialDesign:DialogHost IsOpen="{Binding VisibilidadVentanaCancelar}" CloseOnClickAway="True">
             <materialDesign:DialogHost.DialogContent>
                 <StackPanel Orientation="Vertical" DataContext="{Binding oOrdenCancelada}" >
@@ -196,9 +193,183 @@
                             </Button>
                         </StackPanel>
                     </StackPanel>
-
                 </StackPanel>
             </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+        <!--Ventana informacionDeProducto-->
+        <materialDesign:DialogHost  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsOpen="{Binding VisibilidadVentnaConfirmar}"  CloseOnClickAway="True">
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel Orientation="Vertical" DataContext="{Binding oSeleccionado}" HorizontalAlignment="Stretch" Width="600"  >
+                    <StackPanel Background="#20396e" Height="50">
+                        <Label Content="{Binding NombreComercialEmpresa}" ContentStringFormat="Empresa {0}" HorizontalAlignment="Left" Margin="5" Foreground="White" FontSize="25"></Label>
+                    </StackPanel>
+                    <StackPanel  Orientation="Vertical" Margin="20,10,40,10"  HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Vertical"   x:Name="SLDetalles" >
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="{Binding LngFolio}" FontSize="20" ContentStringFormat="   Orden: {0}" ></Label>
+                                <Label Content="{Binding StrIdentificadorSucursal}"  FontSize="20" Margin="80,0,0,0" ContentStringFormat="Sucursal: {0}" ></Label>
+                            </StackPanel>
+
+
+                            <Expander Header="Productos" Visibility="{Binding VControlConfirmar}">
+                                <DataGrid HorizontalAlignment="Stretch"  x:Name="COrdenProductos" CanUserAddRows="False"  AutoGenerateColumns="False" VerticalAlignment="Bottom" Height="150" ItemsSource="{Binding ListaDeProductos}" Margin="30,0,10,10">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Width="*" Header="Producto" Binding="{ Binding StrNombre}"></DataGridTextColumn>
+                                        <DataGridTextColumn Width="*" Header="Cantidad" Binding="{ Binding IntCantidad}"></DataGridTextColumn>
+                                        <DataGridTextColumn Width="*" Header="Importe"  Binding="{ Binding MTotalSucursal,StringFormat='${0}'}"></DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Expander>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Label Content="{Binding DCLTotal}"   FontSize="20" ContentStringFormat="      Total: {0:C2}" ></Label>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button  Background="Green" Visibility="{Binding VControlConfirmar}" Margin="10" Command="{Binding CmdConfirmarOrden}">
+                                    <DockPanel>
+                                        <materialDesign:PackIcon Kind="Check" FontSize="20" VerticalAlignment="Center"></materialDesign:PackIcon>
+                                        <Label Content="Confirmar" Foreground="White" VerticalAlignment="Center"></Label>
+                                    </DockPanel>
+                                </Button>
+                                <Button  Background="Red" Command="{Binding CmdCancelar}"  Visibility="{Binding VCancelarConfirmar}">
+                                    <DockPanel>
+                                        <materialDesign:PackIcon Kind="Cancel" FontSize="20" VerticalAlignment="Center"></materialDesign:PackIcon>
+                                        <Label Content="Cancelar" Foreground="White" VerticalAlignment="Center"></Label>
+                                    </DockPanel>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+
+                <!--<StackPanel Margin="40,0,10,10" DataContext="{Binding oSeleccionado}" Visibility="{Binding VControlConfirmar}" >
+                    <StackPanel Background="Blue" HorizontalAlignment="Stretch">
+                        <Label Content="{Binding NombreComercialEmpresa}" HorizontalAlignment="Center" Foreground="White" FontSize="20"></Label>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical"   x:Name="SLDetalles" >
+                        
+                        <StackPanel Orientation="Vertical">
+                            <Label Content="{Binding LngFolio}" Width="300" FontSize="20" ContentStringFormat="Folio: {0}" ></Label>
+                            <Label Content="{Binding StrIdentificadorSucursal}"  Width="300" FontSize="20" ContentStringFormat="Sucursal: {0}" ></Label>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="{Binding DCLTotal}"  Width="300" FontSize="20" ContentStringFormat="Total: {0:C2}" ></Label>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+                            <Expander Header="Productos" Visibility="{Binding VControlConfirmar}">
+                                <DataGrid HorizontalAlignment="Stretch"  x:Name="COrdenProductos" CanUserAddRows="False"  AutoGenerateColumns="False" VerticalAlignment="Bottom" Height="150" ItemsSource="{Binding ListaDeProductos}" Margin="30,0,10,10">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Width="*" Header="Producto" Binding="{ Binding StrNombre}"></DataGridTextColumn>
+                                        <DataGridTextColumn Width="*" Header="Cantidad" Binding="{ Binding IntCantidad}"></DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Expander>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button  Background="Green" Visibility="{Binding VControlConfirmar}" Command="{Binding CmdConfirmarOrden}">
+                                <DockPanel>
+                                    <materialDesign:PackIcon Kind="Check" FontSize="20" VerticalAlignment="Center"></materialDesign:PackIcon>
+                                    <Label Content="Confirmar" Foreground="White" VerticalAlignment="Center"></Label>
+                                </DockPanel>
+                            </Button>
+                            <Button  Background="Red" Command="{Binding CmdCancelar}"  Visibility="{Binding VCancelarConfirmar}">
+                                <DockPanel>
+                                    <materialDesign:PackIcon Kind="Cancel" FontSize="20" VerticalAlignment="Center"></materialDesign:PackIcon>
+                                    <Label Content="Cancelar" Foreground="White" VerticalAlignment="Center"></Label>
+                                </DockPanel>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>-->
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+
+        <!--Ventana informacionDeProducto-->
+        <materialDesign:DialogHost  IsOpen="{Binding VisibilidadVentnaFinalizar}" CloseOnClickAway="True">
+
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel Orientation="Vertical" DataContext="{Binding oSeleccionElaboracion}" HorizontalAlignment="Stretch" Width="600"  >
+                    <StackPanel Background="#20396e" Height="50">
+                        <Label Content="{Binding NombreComercialEmpresa}" ContentStringFormat="Empresa {0}" HorizontalAlignment="Left" Margin="5" Foreground="White" FontSize="25"></Label>
+                    </StackPanel>
+                    <StackPanel  Orientation="Vertical" Margin="20,10,40,10"  HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Vertical"    >
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="{Binding LngFolio}" FontSize="20" ContentStringFormat="   Orden: {0}" ></Label>
+                                <Label Content="{Binding StrIdentificadorSucursal}"  FontSize="20" Margin="80,0,0,0" ContentStringFormat="Sucursal: {0}" ></Label>
+                            </StackPanel>
+
+
+                            <Expander Header="Productos" Visibility="{Binding VControlConfirmar}">
+                                <DataGrid HorizontalAlignment="Stretch" CanUserAddRows="False"  AutoGenerateColumns="False" VerticalAlignment="Bottom" Height="150" ItemsSource="{Binding ListaDeProductos}" Margin="30,0,10,10">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Width="*" Header="Producto" Binding="{ Binding StrNombre}"></DataGridTextColumn>
+                                        <DataGridTextColumn Width="*" Header="Cantidad" Binding="{ Binding IntCantidad}"></DataGridTextColumn>
+                                        <DataGridTextColumn Width="*" Header="Importe"  Binding="{ Binding MTotalSucursal,StringFormat='${0}'}"></DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Expander>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Label Content="{Binding DCLTotal}"   FontSize="20" ContentStringFormat="      Total: {0:C2}" ></Label>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button  Background="Green" Visibility="{Binding VControlConfirmar}" Margin="10" Command="{Binding CMdTerminarOrden}">
+                                    <DockPanel>
+                                        <materialDesign:PackIcon Kind="Check" FontSize="20" VerticalAlignment="Center"></materialDesign:PackIcon>
+                                        <Label Content="Confirmar" Foreground="White" VerticalAlignment="Center"></Label>
+                                    </DockPanel>
+                                </Button>
+                                <Button  Background="Red" Command="{Binding CmdCancelar}"  Visibility="{Binding VCancelarConfirmar}">
+                                    <DockPanel>
+                                        <materialDesign:PackIcon Kind="Cancel" FontSize="20" VerticalAlignment="Center"></materialDesign:PackIcon>
+                                        <Label Content="Cancelar" Foreground="White" VerticalAlignment="Center"></Label>
+                                    </DockPanel>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+
+
+            <!--<materialDesign:DialogHost.DialogContent>
+                <StackPanel Orientation="Vertical" Margin="30,0,10,10" Visibility="{Binding VControlConfirmar}" DataContext="{Binding oSeleccionElaboracion}" >
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="{Binding LngFolio}" Width="300" FontSize="20" ContentStringFormat="Folio: {0}" ></Label>
+                        <Label Content="{Binding NombreComercialEmpresa}"  Width="300" FontSize="20" ContentStringFormat="Empresa: {0}" ></Label>
+                        <Label Content="{Binding StrIdentificadorSucursal}"  Width="300" FontSize="20" ContentStringFormat="Sucursal: {0}" ></Label>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="{Binding DCLTotal}"  Width="300" FontSize="20" ContentStringFormat="Total: {0:C2}" ></Label>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+                        <Expander Header="Productos" Visibility="{Binding VControlConfirmar}">
+                            <DataGrid HorizontalAlignment="Stretch" CanUserAddRows="False"  AutoGenerateColumns="False" VerticalAlignment="Bottom" Height="150" ItemsSource="{Binding ListaDeProductos}" Margin="30,0,10,10">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Width="*" Header="Producto" Binding="{ Binding StrNombre}"></DataGridTextColumn>
+                                    <DataGridTextColumn Width="*" Header="Cantidad" Binding="{ Binding IntCantidad}"></DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Expander>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button  Background="Green" Visibility="{Binding VControlConfirmar}" Command="{Binding CMdTerminarOrden}">
+                            <DockPanel>
+                                <materialDesign:PackIcon Kind="Check" FontSize="20" VerticalAlignment="Center"></materialDesign:PackIcon>
+                                <Label Content="Confirmar" Foreground="White" VerticalAlignment="Center"></Label>
+                            </DockPanel>
+                        </Button>
+                        <Button  Background="Red" Command="{Binding CmdCancelar}"  Visibility="{Binding VCancelarConfirmar}">
+                            <DockPanel>
+                                <materialDesign:PackIcon Kind="Cancel" FontSize="20" VerticalAlignment="Center"></materialDesign:PackIcon>
+                                <Label Content="Cancelar" Foreground="White" VerticalAlignment="Center"></Label>
+                            </DockPanel>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>-->
         </materialDesign:DialogHost>
     </Grid>
 </Window>

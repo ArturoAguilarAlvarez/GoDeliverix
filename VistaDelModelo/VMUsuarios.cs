@@ -149,7 +149,23 @@ namespace VistaDelModelo
             set { _ListaDeUsuarios = value; }
         }
 
+        #region Repartidor
+        private decimal _mEfectivoEnMano;
 
+        public decimal MEfectivoEnMano
+        {
+            get { return _mEfectivoEnMano; }
+            set { _mEfectivoEnMano = value; }
+        }
+        private decimal _MFondoRepartidor;
+
+        public decimal MFondoRepartidor
+        {
+            get { return _MFondoRepartidor; }
+            set { _MFondoRepartidor = value; }
+        }
+
+        #endregion
 
         #endregion
 
@@ -689,7 +705,7 @@ namespace VistaDelModelo
                 //Varifica que este activo el campo
                 if (item["estatus"].ToString().ToUpper() == "A298B40F-C495-4BD8-A357-4A3209FBC162")
                 {
-                    if (item["EstatusTurno"].ToString().ToUpper() == "81494F49-F416-4431-99F4-E0AA4CF7E9F6" || item["EstatusTurno"].ToString().ToUpper() == "38FA16DF-4727-41FD-A03E-E2E43FA78F3F")
+                    if (item["EstatusTurno"].ToString().ToUpper() == "81494F49-F416-4431-99F4-E0AA4CF7E9F6" || item["EstatusTurno"].ToString().ToUpper() == "38FA16DF-4727-41FD-A03E-E2E43FA78F3F" || item["EstatusTurno"].ToString().ToUpper() == "CCAFB7D6-A27C-4F5B-A4A6-13D35138471F")
                     {
                         if (string.IsNullOrEmpty(item["DtmHoraFin"].ToString()))
                         {
@@ -699,6 +715,8 @@ namespace VistaDelModelo
                                 uidTurnoRepartidor = new Guid(item["UidTurnoRepartidor"].ToString()),
                                 StrNombre = item["Nombre"].ToString(),
                                 StrUsuario = item["usuario"].ToString(),
+                                MEfectivoEnMano = decimal.Parse(decimal.Parse(item["Efectivo"].ToString()).ToString("N2")),
+                                MFondoRepartidor = decimal.Parse(decimal.Parse(item["Fondo"].ToString()).ToString("N2"))
                             };
                             if (!LISTADEUSUARIOS.Exists(u => u.Uid == Uid))
                             {

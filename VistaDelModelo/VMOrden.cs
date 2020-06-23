@@ -106,6 +106,15 @@ namespace VistaDelModelo
             get { return _dtmFecha; }
             set { _dtmFecha = value; }
         }
+        //Pago
+        private bool _bComisionIncluida;
+
+        public bool BComisionIncluida
+        {
+            get { return _bComisionIncluida; }
+            set { _bComisionIncluida = value; }
+        }
+
 
 
         //Campos para wpf
@@ -234,7 +243,7 @@ namespace VistaDelModelo
 
 
         #region Metodos
-        public bool GuardaOrden(Guid UIDORDEN, decimal Total, Guid Uidusuario, Guid UidDireccion, Guid Uidsucursal, decimal totalSucursal, Guid UidRelacionOrdenSucursal, long LngCodigoDeEntrega)
+        public bool GuardaOrden(Guid UIDORDEN, decimal Total, Guid Uidusuario, Guid UidDireccion, Guid Uidsucursal, decimal totalSucursal, Guid UidRelacionOrdenSucursal, long LngCodigoDeEntrega, string uidOrdenTarifario = "")
         {
             bool resultado = false;
             oOrden = new Orden();
@@ -251,7 +260,7 @@ namespace VistaDelModelo
                     LngCodigoDeEntrega = LngCodigoDeEntrega,
                     UidRelacionOrdenSucursal = UidRelacionOrdenSucursal
                 };
-                resultado = oOrden.GuardarOrden();
+                resultado = oOrden.GuardarOrden(new Guid(uidOrdenTarifario));
             }
             catch (Exception)
             {
@@ -297,13 +306,13 @@ namespace VistaDelModelo
             return resultado;
         }
 
-        public bool GuardaProducto(Guid UIDORDEN, Guid UIDSECCIONPRODUCTO, int INTCANTIDAD, string STRCOSTO, Guid UidSucursal, Guid UidRegistroEncarrito, Guid UidNota, String StrMensaje)
+        public bool GuardaProducto(Guid UIDORDEN, Guid UIDSECCIONPRODUCTO, int INTCANTIDAD, string STRCOSTO, Guid UidSucursal, Guid UidRegistroEncarrito, Guid UidNota, String StrMensaje, string UidTarifario = "")
         {
             bool resultado = false;
             try
             {
                 oOrden = new Orden();
-                resultado = oOrden.GuardarProductos(UIDORDEN, UIDSECCIONPRODUCTO, INTCANTIDAD, STRCOSTO, UidSucursal, UidRegistroEncarrito, UidNota, StrMensaje);
+                resultado = oOrden.GuardarProductos(UIDORDEN, UIDSECCIONPRODUCTO, INTCANTIDAD, STRCOSTO, UidSucursal, UidRegistroEncarrito, UidNota, StrMensaje, UidTarifario);
             }
             catch (Exception)
             {
@@ -1100,6 +1109,7 @@ namespace VistaDelModelo
                 StrNombreSucursal = item["Identificador"].ToString();
                 StrEstatusOrdenSucursal = item["estatus"].ToString();
                 StrNombreRepartidor = item["Nombre"].ToString();
+                EstatusCobro = item["EstatusPago"].ToString();
             }
         }
         #endregion
@@ -1183,7 +1193,7 @@ namespace VistaDelModelo
             Datos = new Conexion();
             ListaDeBitacoraDeOrdenes.Clear();
 
-            string Query = " select distinct ot.UidRelacionOrdenTarifario, t.MCosto, s.Identificador,S.UidSucursal, os.MTotalSucursal, os.MTotalSucursal,t.MCosto,os.intfolio,Ot.DtmFecha,dbo.EstatusActualDeOrden(os.UidRelacionOrdenSucursal) as estatus, dbo.asp_ObtenerUltimoEstatusOrdenTarifario(ot.UidRelacionOrdenTarifario) as EstatusTarifario,dbo.asp_ObtenerUltimoEstatusOrdenRepartidor(ot.UidRelacionOrdenTarifario) as EstatusRepartidor  from OrdenTarifario ot " +
+            string Query = " select distinct ot.UidRelacionOrdenTarifario, t.MCosto, s.Identificador,S.UidSucursal, os.MTotalSucursal, dbo.asp_PrecioParaSucursales(os.UidRelacionOrdenSucursal) as PagoSucursal,t.MCosto,os.intfolio,Ot.DtmFecha,dbo.EstatusActualDeOrden(os.UidRelacionOrdenSucursal) as estatus, dbo.asp_ObtenerUltimoEstatusOrdenTarifario(ot.UidRelacionOrdenTarifario) as EstatusTarifario,dbo.asp_ObtenerUltimoEstatusOrdenRepartidor(ot.UidRelacionOrdenTarifario) as EstatusRepartidor,os.BiPagoAlRecolectar  from OrdenTarifario ot " +
                 " inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario " +
                 " inner join ZonaDeRecoleccion ZDR on ZDR.UidZonaDeRecolecta = t.UidRelacionZonaRecolecta " +
                 "  inner join OrdenSucursal os on os.UidRelacionOrdenSucursal = ot.UidOrden " +
@@ -1199,13 +1209,14 @@ namespace VistaDelModelo
                     ListaDeBitacoraDeOrdenes.Add(new VMOrden()
                     {
                         UidSucursal = new Guid(item["UidSucursal"].ToString()),
-                        MTotal = decimal.Parse(item["MTotalSucursal"].ToString()),
+                        MTotal = decimal.Parse(item["PagoSucursal"].ToString()),
                         MCostoTarifario = double.Parse(item["MCosto"].ToString()),
                         StrNombreSucursal = item["Identificador"].ToString(),
                         LNGFolio = long.Parse(item["intfolio"].ToString()),
                         FechaDeOrden = item["DtmFecha"].ToString(),
-                        Uidorden = new Guid(item["UidRelacionOrdenTarifario"].ToString())
-                    });
+                        Uidorden = new Guid(item["UidRelacionOrdenTarifario"].ToString()),
+                        BComisionIncluida = bool.Parse(item["BiPagoAlRecolectar"].ToString())
+                    }) ;
                     //}
 
                 }

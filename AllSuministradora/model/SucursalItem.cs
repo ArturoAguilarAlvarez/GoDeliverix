@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using VistaDelModelo;
+using AllSuministradora.vistas.Reportes;
 
 namespace AllSuministradora.model
 {
@@ -145,7 +146,7 @@ namespace AllSuministradora.model
             }
         }
 
-        protected void ControlTurno()
+        public void ControlTurno()
         {
             var instance = ControlGeneral.GetInstance();
 
@@ -173,7 +174,7 @@ namespace AllSuministradora.model
 
                 VMOrden MVOrden = new VMOrden();
                 MVOrden.InformacionDeOrdenesDeTurnoSuministradoraTurnoCallCenter(UidSucursal.ToString(), instance.Principal.oTurno.UidTurno);
-                bool PosibilidadDeCerrar = false;
+                bool PosibilidadDeCerrar = true;
                 if (MVOrden.ListaDeOrdenes.Count > 0)
                 {
                     foreach (var o in MVOrden.ListaDeOrdenes)
@@ -189,20 +190,23 @@ namespace AllSuministradora.model
                     }
 
                 }
+
                 if (PosibilidadDeCerrar)
                 {
-                    oTurno = new Turno() { UidUsuario = new Guid(instance.Principal.UidUsuario), UidLicencia = Licencia };
-                    oTurno.ControlDeTurno();
-                    oTurno = null;
-                    StrEstatusTurno = "Comenzar";
-                    CcolorTurno = Brushes.Green;
+                    //VMTurno MVTUrno = new VMTurno();
+                    //MVTUrno.InformacionDeCierreDeTurnoSucursalSuministradora("Suministradora", UidLicencia: Licencia.ToString());
+                    //oTurno = new Turno() { UidUsuario = new Guid(instance.Principal.UidUsuario), UidLicencia = Licencia };
+                    //oTurno.ControlDeTurno();
+                    //oTurno = null;
+                    //StrEstatusTurno = "Comenzar";
+                    //CcolorTurno = Brushes.Green;
+                    vistas.Reportes.ReporteCierreTurnoSucursal obj = new vistas.Reportes.ReporteCierreTurnoSucursal(Licencia.ToString());
+                    obj.Show();
                 }
                 else
                 {
                     MessageBox.Show("No puedes cerrar turno si no has completado las ordenes");
                 }
-
-
             }
             //instance.VMSucursalesLocal.ObtenSucursales();
         }
