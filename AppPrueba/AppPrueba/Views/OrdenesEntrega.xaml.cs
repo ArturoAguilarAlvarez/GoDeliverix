@@ -42,7 +42,7 @@ namespace AppPrueba.Views
             App.MVOrden = JsonConvert.DeserializeObject<VistaDelModelo.VMOrden>(DatosGiros);
             foreach (var item in App.MVOrden.ListaDeOrdenes)
             {
-                item.Imagen.Replace("Imagenes/", "");
+                item.Imagen = item.Imagen.Replace("Imagenes/", string.Empty).Replace(".png", string.Empty);
             }
             MyListviewOrdenesPorEnviar.ItemsSource = App.MVOrden.ListaDeOrdenes;
         }

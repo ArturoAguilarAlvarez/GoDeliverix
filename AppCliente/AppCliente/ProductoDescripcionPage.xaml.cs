@@ -24,6 +24,7 @@ namespace AppCliente
         Guid idSeccion;
         bool tipo = false;
         string UIDEmpresa;
+        bool Cargando = false;
 
         public static List<VMProducto> ListaPreciosProcto = new List<VMProducto>();
 
@@ -41,6 +42,8 @@ namespace AppCliente
         }
         protected async void CargaVentanaBusquedaProductos(VMProducto objProducto, List<VMProducto> lista)
         {
+            Cargando = true;
+            pnlDescripcionProducto.IsVisible = false;
             Title = objProducto.STRNOMBRE;
             UIDEmpresa = objProducto.UIDEMPRESA.ToString();
             this.objProducto = objProducto;
@@ -77,10 +80,18 @@ namespace AppCliente
                 }
             }
             txtEmpresaCosto.Text = "$" + lista[0].StrCosto;
-            btnAgregarCarrito.Text = "Agregar carrito $" + lista[0].StrCosto;
+            btnAgregarCarrito.Text = "Agregar $" + lista[0].StrCosto;
             idSeucursalSeleccionada.Text = lista[0].UidSucursal.ToString();
+            HttpClient _api = new HttpClient();
+            string _link = "" + Helpers.Settings.sitio + "/api/Imagen/GetImagenDePerfilEmpresa?UidEmpresa=" + lista[0].UIDEMPRESA + "";
+            var conten = await _api.GetStringAsync(_link);
+            var ob = JsonConvert.DeserializeObject<ResponseHelper>(conten).Data.ToString();
+            var oimagen = JsonConvert.DeserializeObject<VMImagen>(ob);
+            string ruta = Helpers.Settings.sitio + "/vista/" + oimagen.STRRUTA;
+            ImagenEmpresa.Source = ruta;
             tipo = true;
-            txtSucursall.Text = objProducto.Empresa + " >";
+            Cargando = false;
+            pnlDescripcionProducto.IsVisible = true;
         }
 
         //inicio con busqueda de empresa
@@ -101,9 +112,9 @@ namespace AppCliente
             CostoPorSucursal = objProducto.StrCosto;
             txtIDSeccion.Text = objSeccion.UID.ToString();
             idSeucursalSeleccionada.Text = UiEmpresa.ToString();
-            txtSucursall.IsVisible = false;
+            //txtSucursall.IsVisible = false;
             txtSucursalSeleccionada.IsVisible = false;
-            btnAgregarCarrito.Text = "Agregar carrito $" + objProducto.StrCosto;
+            btnAgregarCarrito.Text = "Agregar  $" + objProducto.StrCosto;
             idSeccion = objSeccion.UID;
             using (HttpClient _WebApi = new HttpClient())
             {
@@ -134,7 +145,7 @@ namespace AppCliente
             costo = (Double.Parse(costoo) * value).ToString();
 
 
-            btnAgregarCarrito.Text = "Agregar carrito $" + costo;
+            btnAgregarCarrito.Text = "Agregar  $" + costo;
         }
 
         private async void ButtonCarrito_Clicked(object sender, EventArgs e)
@@ -145,7 +156,7 @@ namespace AppCliente
 
                 App.MVTarifario.BuscarTarifario("Cliente", ZonaEntrega: App.UidColoniaABuscar, uidSucursal: idSeucursalSeleccionada.Text);
 
-
+                objProducto.IsSelected = true;
                 AgregarAlcarrito(objProducto.UID, new Guid(idSeucursalSeleccionada.Text), idSeccion, cantidad.ToString(), txtComentario.Text);
                 await DisplayAlert("¡Que bien!", "Productos agregados al carrito", "ok");
                 await Navigation.PopToRootAsync();
@@ -230,6 +241,8 @@ namespace AppCliente
 
         private void ButtonMenos_Clicked(object sender, EventArgs e)
         {
+            Cargando = true;
+            pnlDescripcionProducto.IsVisible = false;
             if (cantidad == 1)
             {
 
@@ -246,17 +259,18 @@ namespace AppCliente
                 {
                     costoo = CostoPorSucursal;
                 }
-
                 costo = (Double.Parse(costoo) * cantidad).ToString();
-
-
                 _displayLabel.Text = string.Format("{0}", cantidad);
-                btnAgregarCarrito.Text = "Agregar carrito $" + costo;
+                btnAgregarCarrito.Text = "Agregar  $" + costo;
             }
+            Cargando = false;
+            pnlDescripcionProducto.IsVisible = true;
         }
 
         private void ButtonMas_Clicked(object sender, EventArgs e)
         {
+            Cargando = true;
+            pnlDescripcionProducto.IsVisible = false;
             cantidad = cantidad + 1;
             string costoo;
             if (ListaPreciosProcto.Count > 0)
@@ -270,14 +284,15 @@ namespace AppCliente
 
             costo = (Double.Parse(costoo) * cantidad).ToString();
 
-
             _displayLabel.Text = string.Format("{0}", cantidad);
-            btnAgregarCarrito.Text = "Agregar carrito $" + costo;
+            btnAgregarCarrito.Text = "Agregar  $" + costo;
             if (cantidad > 1)
             {
 
                 btnMenos.IsEnabled = true;
             }
+            Cargando = false;
+            pnlDescripcionProducto.IsVisible = true;
         }
 
         private void _displayLabel_TextChanged(object sender, TextChangedEventArgs e)
@@ -319,7 +334,7 @@ namespace AppCliente
                             costo = (Double.Parse(costoo) * cantidad).ToString();
 
                             _displayLabel.Text = string.Format("{0}", cantidad);
-                            btnAgregarCarrito.Text = "Agregar carrito $" + costo;
+                            btnAgregarCarrito.Text = "Agregar  $" + costo;
                         }
                         else
                         {

@@ -4,41 +4,61 @@
              x:Class="AppCliente.CarritoDetalleSucursal"
              xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"             
              xmlns:ffTrans="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
-             Title="Detalle productos sucursal">
+             Title="Detalles del pedido">
 
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout Orientation="Vertical">
+            <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" BackgroundColor="{Binding CColor}" >
+                <Label Text="Informacion de envio" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" BackgroundColor="White" FontSize="Medium" TextColor="Black"></Label>
+                <Label TextColor="#333" FontSize="Medium" HorizontalTextAlignment="Center" Margin="0,0,50,0" Text="GoDeliverix" FontAttributes="Bold"></Label>
+                <StackLayout Orientation="Horizontal" Padding="8">
+                    <Image Source="IconoGoDeliverix" WidthRequest="100"></Image>
+                    <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                        <Label TextColor="Black" FontSize="Medium" HorizontalTextAlignment="End" Text="Tarifa:"></Label>
+                        <Label TextColor="Black" FontSize="Medium" HorizontalTextAlignment="End" Text="Propina:"></Label>
+                        <Label TextColor="Green" FontSize="Medium" HorizontalTextAlignment="End" Text="Total:"></Label>
+
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                        <Label FontSize="Medium" HorizontalOptions="End" x:Name="lblTaria"   ></Label>
+                        <Label FontSize="Medium" HorizontalOptions="End" x:Name="lblPropina" ></Label>
+                        <Label FontSize="Medium" HorizontalOptions="End" x:Name="lblTotal"  TextColor="#4ab046"></Label>
+                    </StackLayout>
+                    <ImageButton Source="arrow" HeightRequest="50" BackgroundColor="Transparent" x:Name="btnTarifas" Clicked="btnTarifas_Clicked" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"></ImageButton>
+                </StackLayout>
+                <!--<StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                    <Button Text="Otros repartidores" BackgroundColor="Blue" TextColor="White" ></Button>
+                    <Button Text="Modificar propina" x:Name="btnPropina" Clicked="btnPropina_Clicked" BackgroundColor="Orange" TextColor="White" ></Button>
+                </StackLayout>-->
+            </StackLayout>
+            <Label Text="Detalles de productos" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" BackgroundColor="White"  FontSize="Medium" TextColor="Black"></Label>
+
             <ListView x:Name="MyListViewBusquedaProductos"
                         VerticalScrollBarVisibility="Always"
                       SelectionMode="None"
                 SeparatorVisibility="Default"
+                      SeparatorColor="Transparent"
+                      
       IsPullToRefreshEnabled="False"
       HasUnevenRows="True">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell >
-
-                            <ContentView Margin="0" Padding="0">
-
-                                <Grid Margin="0" Padding="0" BackgroundColor="{Binding CColor}">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
-
-                                    <StackLayout Grid.Row="0" Orientation="Horizontal">
-                                        <!--<Image
-                                   HorizontalOptions="Start"
-                                    VerticalOptions="Start"
-                               Source="{Binding STRRUTA}"
-                                    Margin="15"
-                                WidthRequest="130"
-                                HeightRequest="130">
-                                        </Image>-->
-                                        <ff:CachedImage
+                            <StackLayout Spacing="0"
+                                BackgroundColor="White"
+                                Padding="24,8,24,8">
+                                <Frame  VerticalOptions="FillAndExpand"
+                                    Padding="0"
+                                    CornerRadius="4">
+                                    <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" >
+                                        <ContentView>
+                                            <StackLayout BackgroundColor="{Binding CColor}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Orientation="Horizontal">
+                                                <BoxView BackgroundColor="Red" WidthRequest="10" HorizontalOptions="FillAndExpand"></BoxView>
+                                                <StackLayout  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                                                    <ff:CachedImage
                                                             Source="{Binding STRRUTA}"
-                                                            HorizontalOptions="Center"
-                                                            VerticalOptions="Center"
+                                                            HorizontalOptions="CenterAndExpand"
+                                                            VerticalOptions="CenterAndExpand"
                                                             LoadingPlaceholder   = "IconoCajaVacia"
                                                             ErrorPlaceholder     = "Error"
                                                             WidthRequest         = "130"
@@ -47,41 +67,69 @@
                                                             RetryCount           = "3"
                                                             RetryDelay           = "250"
                                                             DownsampleToViewSize = "False">
-                                            <ff:CachedImage.Transformations>
-                                                <ffTrans:RoundedTransformation Radius="20" />
-                                            </ff:CachedImage.Transformations>
-                                        </ff:CachedImage>
-                                        <StackLayout HorizontalOptions="FillAndExpand" >
-                                            <Label Text="{Binding STRNOMBRE}" HorizontalOptions="Start" FontSize="Medium" TextColor="Black"/>
-                                            <Label  Text="{Binding Cantidad, StringFormat='Cantidad {0}'}" FontSize="Small" HorizontalOptions="Start" TextColor="Black" />
+                                                        <ff:CachedImage.Transformations>
+                                                            <ffTrans:RoundedTransformation Radius="20" />
+                                                        </ff:CachedImage.Transformations>
+                                                    </ff:CachedImage>
+                                                </StackLayout>
 
-                                            <Label Text="{Binding Subtotal, StringFormat='Importe $ {0}'}" x:Name="txtProductoPrecio"  HorizontalOptions="Start" FontSize="Medium" TextColor="Black" VerticalOptions="End" />
+                                                <StackLayout HorizontalOptions="FillAndExpand" Orientation="Vertical" >
+                                                    <Label Text="{Binding STRNOMBRE}" HorizontalOptions="Start" VerticalOptions="StartAndExpand" FontSize="Medium" TextColor="Black"/>
 
-                                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                                                <ImageButton Source="IconoEliminar" HeightRequest="40" WidthRequest="40" BackgroundColor="Transparent" Clicked="ImageButtonEliminarProducto_Clicked"></ImageButton>
-                                                <Button CornerRadius="25" TextColor="Black" FontAttributes="Bold" FontSize="24" Padding="0" BackgroundColor="Red" Text="-" WidthRequest="50" HeightRequest="50" Clicked="ButtonEliminarUnProducto_Clicked"></Button>
-                                                <Button CornerRadius="25" TextColor="Black" FontAttributes="Bold" FontSize="24" BackgroundColor="Green" Text="+" WidthRequest="50" HeightRequest="50" Clicked="ButtonAgregarUnProducto_Clicked_1"></Button>
-                                            </StackLayout>
-                                        </StackLayout>
-                                    </StackLayout>
+                                                    <Label Text="{Binding Subtotal, StringFormat='Importe {0:C2}'}" TextColor="#4ab046" x:Name="txtProductoPrecio"  HorizontalOptions="End" VerticalOptions="End" FontSize="Medium"   />
+                                                    <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                                                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                                                            <!--<ImageButton Source="IconoEliminar" HeightRequest="40" WidthRequest="40" BackgroundColor="Orange" Clicked="ImageButtonEliminarProducto_Clicked"></ImageButton>-->
+                                                            <Button Text="-" VerticalOptions="Center" WidthRequest="40" HeightRequest="40" FontSize="24" Padding="0" BackgroundColor="White" BorderWidth="1" BorderColor="#efefef" Clicked="ButtonEliminarUnProducto_Clicked"></Button>
+                                                            <Entry Text="{Binding Cantidad, StringFormat='{0}'}" MinimumWidthRequest="40" WidthRequest="40" HorizontalTextAlignment="Center"></Entry>
+                                                            <!--<Label  TextDecorations="Underline"  FontSize="30"   HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand" TextColor="White" />-->
+                                                            <Button Text="+" VerticalOptions="Center" WidthRequest="40" HeightRequest="40" FontSize="24" Padding="0" BackgroundColor="White" BorderWidth="1" BorderColor="#efefef" Clicked="ButtonAgregarUnProducto_Clicked_1"></Button>
+                                                        </StackLayout>
+                                                        <!--<Label FontSize="Small" TextColor="White" FontAttributes="Bold">Notas</Label>-->
+                                                        <Entry  Text="{Binding StrNota}" TextColor="Black" Placeholder="Notas" PlaceholderColor="Black" x:Name="ENotas" TextChanged="ENotas_TextChanged"  HorizontalOptions="FillAndExpand" />
+                                                    </StackLayout>
+                                                </StackLayout>
 
-                                    <Entry Grid.Row="1" Text="{Binding StrNota}" Placeholder="Sin nota" x:Name="ENotas" TextChanged="ENotas_TextChanged" Margin="20,5,20,0" HorizontalOptions="Fill" />
-
-                                    <StackLayout Orientation="Horizontal" Grid.Row="2" HorizontalOptions="Center" IsVisible="{Binding IsVisible}">
+                                                <!--<StackLayout Orientation="Horizontal" Grid.Row="2" HorizontalOptions="Center" IsVisible="{Binding IsVisible}">
                                         <Button Text="menos" Clicked="ButtonMenos_Clicked"></Button>
                                         <Button Text="mas" Clicked="ButtonMas_Clicked_1"></Button>
                                         <Button Text="Eliminar" Clicked="ButtonEliminar_Clicked"></Button>
+                                    </StackLayout>-->
+
+                                            </StackLayout>
+                                        </ContentView>
                                     </StackLayout>
-
-                                </Grid>
-
-                            </ContentView>
+                                </Frame>
+                            </StackLayout>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
 
 
             </ListView>
+            <StackLayout Spacing="0"
+                         Margin="5"
+                                Padding="10,8,10,8">
+                <Frame  VerticalOptions="FillAndExpand"
+                                    Padding="0"
+                            BackgroundColor="LightGray"
+                                    CornerRadius="4" >
+                    <StackLayout Orientation="Vertical" VerticalOptions="End" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" Padding="15">
+                        <Label Text="Detalle del pedido" HorizontalOptions="Start" FontSize="Large" FontAttributes="Bold"></Label>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                            <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                                <Label Text="Productos" FontSize="Medium" TextColor="Black"></Label>
+                                <Label Text="Subtotal" FontSize="Medium" TextColor="Black"></Label>
+                            </StackLayout>
+                            <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                                <Label Text="3" FontSize="Medium" x:Name="lblResumenCantidad" HorizontalOptions="End" TextColor="Black"></Label>
+                                <Label Text="$500.00" FontSize="Medium" x:Name="lblResumenSubtotal" HorizontalOptions="End" TextColor="Black"></Label>
+                            </StackLayout>
+                        </StackLayout>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+            
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

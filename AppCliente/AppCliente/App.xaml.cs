@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 using Rg.Plugins.Popup.Services;
-using Com.OneSignal;
 using System.Net.Http;
 using Newtonsoft.Json;
 using AppCliente.WebApi;

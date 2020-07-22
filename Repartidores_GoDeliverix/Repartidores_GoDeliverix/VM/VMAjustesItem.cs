@@ -9,7 +9,6 @@ using Xamarin.Forms;
 using Newtonsoft.Json;
 using Repartidores_GoDeliverix.Helpers;
 using System.Net.Http;
-using Com.OneSignal;
 namespace Repartidores_GoDeliverix.VM
 {
     public class VMAjustesItem

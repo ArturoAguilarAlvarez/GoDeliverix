@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("AllSuministradora")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("HP Inc.")]
+[assembly: AssemblyCompany("Compu and soft")]
 [assembly: AssemblyProduct("AllSuministradora")]
-[assembly: AssemblyCopyright("Copyright © HP Inc. 2020")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

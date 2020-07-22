@@ -83,12 +83,12 @@ namespace AppCliente
                         }
                         else
                         {
-                            var objeto = new MasterMenuMenuItem { Id = 1, Title = "Busqueda", TargetType = typeof(HomePage), UrlResource = "IconoHomeMenu" };
-                            var Page = (Page)Activator.CreateInstance(objeto.TargetType);
-                            App app = Application.Current as App;
-                            App.Navegacion = Page.GetType().Name;
-                            MasterDetailPage md = (MasterDetailPage)app.MainPage;
-                            md.Detail = new NavigationPage(Page);
+                            //var objeto = new MasterMenuMenuItem { Id = 1, Title = "Busqueda", TargetType = typeof(HomePage), UrlResource = "IconoHomeMenu" };
+                            //var Page = (Page)Activator.CreateInstance(objeto.TargetType);
+                            //App app = Application.Current as App;
+                            //App.Navegacion = Page.GetType().Name;
+                            //MasterDetailPage md = (MasterDetailPage)app.MainPage;
+                            //md.Detail = new NavigationPage(Page);
                         }
                     }
                     VMDireccion Colonias = new VMDireccion();
@@ -123,12 +123,15 @@ namespace AppCliente
             {
                 // Handle not supported on device exception
                 lblMensaje.Text = "Servicios de ubicación no soportados, selecciona una ubicación en el mapa y descubre las colonias disponibles";
+                //await map.MoveCamera(CameraUpdateFactory.NewCameraPosition(new CameraPosition(new Position(20.6357046, -87.0757835), 15)));
                 SLMensaje.IsVisible = true;
+
                 //await DisplayAlert("Aviso del sistema", "Los servicios de ubicacion no soportados por el dispositivo", "Aceptar");
             }
             catch (FeatureNotEnabledException e)
             {
                 lblMensaje.Text = "Activa tu ubicación para mostrarte las colonias cercanas a ti, de lo contrario selecciona una ubicación en el mapa y descubre las colonias disponibles";
+                //await map.MoveCamera(CameraUpdateFactory.NewCameraPosition(new CameraPosition(new Position(20.6357046,-87.0757835), 15)));
                 SLMensaje.IsVisible = true;
 
                 //await DisplayAlert("Ubicacion no activa", "Activa el GPS para obtener tu ubicacion", "Aceptar");
@@ -137,6 +140,7 @@ namespace AppCliente
             {
                 // Handle permission exception
                 lblMensaje.Text = "Activa los permisos de ubicación para poder mostrarte las colonias cercanas a ti, de lo contrario selecciona una ubicación en el mapa y descubre las colonias disponibles";
+                //await map.MoveCamera(CameraUpdateFactory.NewCameraPosition(new CameraPosition(new Position(20.6357046, -87.0757835), 15)));
                 SLMensaje.IsVisible = true;
                 //await DisplayAlert("Aviso", "Activa los permisos de ubicacion para continuar", "Aceptar");
             }

@@ -27,7 +27,6 @@ namespace AppCliente
         VMProductosYEmpresas oBusquedaProdutos = new VMProductosYEmpresas();
         public SeleccionarDirecciones(Button button,
             ListView myListProduct,
-            Label lbCantidad,
             int CantidadProductosMostrados,
             StackLayout PanelProductoNoEncontrados,
             ListView MyListViewBusquedaEmpresas,
@@ -44,7 +43,7 @@ namespace AppCliente
             MyListViewDirecciones.ItemsSource = App.MVDireccion.ListaDIRECCIONES;
             var index = App.MVDireccion.ListaDIRECCIONES.Find(t => t.ID.ToString() == App.DireccionABuscar);
             this.myListProduct = myListProduct;
-            this.lbCantidad = lbCantidad;
+            //this.lbCantidad = lbCantidad;
             this.CantidadProductosMostrados = CantidadProductosMostrados;
             MyListViewDirecciones.SelectedItem = index;
 

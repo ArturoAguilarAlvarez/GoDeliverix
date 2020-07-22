@@ -4,17 +4,24 @@
              x:Class="AppCliente.CarritoPage"
             xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"             
              xmlns:ffTrans="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
-            Title="Mi Carrito" >
+            Title="" > 
 
     <!--Pages can be added as references or inline-->
-    <NavigationPage.TitleView>
-        <Grid>
-            <Label Text="Detalles" FontSize="Large" Grid.Column="0" TextColor="White" VerticalOptions="Center" HorizontalOptions="Start"></Label>
-            <ImageButton Source="IconoEliminar.png" Grid.Column="1" HeightRequest="50" WidthRequest="30"  HorizontalOptions="End"
-                    BackgroundColor="Transparent"      Clicked="BtnLimpiarCarrito_Clicked"></ImageButton>
-        </Grid>
 
-    </NavigationPage.TitleView>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem>
+            <ToolbarItem.Text>Carrito
+            </ToolbarItem.Text>
+        </ToolbarItem>
+        <ToolbarItem Clicked="BtnLimpiarCarrito_Clicked">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource Glyph="&#xF01B4;" FontFamily="{StaticResource MatIcon}"></FontImageSource>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+    
+    
 
     <ContentPage.Content>
         <Grid VerticalOptions="Fill">
@@ -38,8 +45,10 @@
                     Text="¡Miles de productos de esperan!">
                 </Label>
             </StackLayout>
-
-            <ListView 
+            <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                <Label Text="Pedidos" FontSize="20" TextColor="Black" Margin="2"></Label>
+                <Label Text="Click para ver detalles, editar el pedido y/o agregar propina." FontSize="12" TextColor="Black" Margin="5"></Label>
+                <ListView 
                     x:Name="MyListViewCarritoEmpresa"       
                     Grid.Row="0"
                     VerticalScrollBarVisibility="Always"
@@ -54,8 +63,8 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <ContentView Margin="0" Padding="0">
-                                <StackLayout  Margin="0,10,0,0"
+                            <ContentView Margin="10" Padding="0">
+                                <StackLayout  Margin="0,0,0,0"
                                             Orientation="Vertical" 
                                             HorizontalOptions="FillAndExpand" BackgroundColor="{Binding CColor}" >
                                     <!--<StackLayout Margin="20,0,0,0"  HorizontalOptions="FillAndExpand" Orientation="Horizontal" >
@@ -67,12 +76,27 @@
                                                         Clicked="ButtonCambiarRepartidor_Clicked"></Button>
                                            
                                         </StackLayout>-->
-                                    <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal" >
-                                        <StackLayout Orientation="Vertical" >
-                                            <ff:CachedImage
+
+                                        <StackLayout Orientation="Vertical">
+                                            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                                                <Label 
+                                                        Text="{Binding Empresa }"  
+                                                        VerticalOptions="Center"
+                                                        TextColor="Black"  
+                                                        HorizontalOptions="CenterAndExpand"
+                                                        FontSize="Medium"/>
+                                                <Label 
+                                                        Text="{Binding Cantidad  , StringFormat='  {0} Productos'}"
+                                                        TextColor="Black"
+                                                        HorizontalOptions="End"
+                                                        FontSize="Medium"></Label>
+                                            </StackLayout>
+                                            <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal" >
+                                                <StackLayout Orientation="Vertical" >
+                                                    <ff:CachedImage
                                                             Source="{Binding STRRUTA}"
                                                             HorizontalOptions="Center"
-                                                            VerticalOptions="Center"
+                                                            VerticalOptions="CenterAndExpand"
                                                             LoadingPlaceholder   = "IconoCajaVacia"
                                                             ErrorPlaceholder     = "Error"
                                                             WidthRequest         = "100"
@@ -81,87 +105,113 @@
                                                             RetryCount           = "3"
                                                             RetryDelay           = "250"
                                                             DownsampleToViewSize = "False">
-                                                <ff:CachedImage.Transformations>
-                                                    <ffTrans:RoundedTransformation Radius="20" />
-                                                </ff:CachedImage.Transformations>
-                                            </ff:CachedImage>
-                                            <Label 
-                                                        Text="{Binding Empresa }"  
-                                                        HorizontalOptions="Center"
-                                                        TextColor="Black"  
-                                                        FontSize="Large"/>
-                                        </StackLayout>
-                                        <StackLayout Orientation="Horizontal" >
-                                            <StackLayout Orientation="Vertical" HorizontalOptions="Start">
-                                                <Label 
+                                                        <ff:CachedImage.Transformations>
+                                                            <ffTrans:RoundedTransformation Radius="20" />
+                                                        </ff:CachedImage.Transformations>
+                                                    </ff:CachedImage>
+                                                </StackLayout>
+                                                <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                                                    <StackLayout Orientation="Horizontal" >
+                                                        <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                                                            <!--<Label 
                                                         Text="Productos: "
-                                                        HorizontalOptions="Start"
+                                                        HorizontalOptions="FillAndExpand"
                                                         TextColor="Black"
-                                                        FontSize="Default"></Label>
-                                                <Label 
+                                                        ></Label>-->
+                                                            <Label 
                                                         Text="Subtotal:"
-                                                        HorizontalOptions="Start"
-                                                        FontSize="Default"
+                                                        HorizontalTextAlignment="End"
+                                                        FontSize="Medium"
+                                                        HorizontalOptions="FillAndExpand"
                                                         TextColor="Black"/>
-                                                <Label  
+                                                            <Label  
                                                         Text="Envio: "
                                                         TextColor="Black"
-                                                        FontSize="Default"
-                                                        HorizontalOptions="Start" />
-                                                <Label  
+                                                        FontSize="Medium"
+                                                        HorizontalTextAlignment="End"
+                                                        HorizontalOptions="FillAndExpand" />
+                                                            <Label  
                                                         Text="Propina: "
                                                         TextColor="Black"
-                                                        FontSize="Default"
-                                                        HorizontalOptions="Start" />
-                                            </StackLayout>
-                                            <StackLayout Orientation="Vertical" HorizontalOptions="End">
-                                                <Label 
+                                                        FontSize="Medium"
+                                                        HorizontalTextAlignment="End"
+                                                        HorizontalOptions="FillAndExpand" />
+                                                           <Label 
+                                                        Text="Total:"
+                                                        HorizontalOptions="FillAndExpand"
+                                                        FontSize="Medium"
+                                                        TextColor="#4ab046"
+                                                        HorizontalTextAlignment="End"
+                                                        VerticalOptions="End" />
+                                                        </StackLayout>
+                                                        <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                                                            <!--<Label 
                                                         Text="{Binding Cantidad  , StringFormat='{0}'}"
                                                         HorizontalOptions="End"
                                                         TextColor="Black"
-                                                        FontSize="Default"></Label>
-                                                <Label 
+                                                        FontSize="Default"></Label>-->
+                                                            <Label 
                                                         Text="{Binding Subtotal  , StringFormat='{0:C2}'}"
                                                         HorizontalOptions="End"
-                                                        FontSize="Default"
-                                                        TextColor="Black"/>
-                                                <Label  
+                                                        FontSize="Medium"
+                                                        />
+                                                            <Label  
                                                         Text="{Binding CostoEnvio , StringFormat='${0}'}"
-                                                        TextColor="Black"
-                                                        FontSize="Default"
+                                                        HorizontalTextAlignment="End"
+                                                        FontSize="Medium"
                                                         HorizontalOptions="End" />
-                                                <Label  
-                                                        Text="{Binding DPropina , StringFormat='${0}'}"
-                                                        TextColor="Black"
-                                                        FontSize="Default"
+                                                            <Label  
+                                                        Text="{Binding DPropina , StringFormat='{0:C2}'}"
+                                                        FontSize="Medium"
                                                         HorizontalOptions="End" />
-                                                <Button 
-                                                        Text="Agregar propina" 
-                                                        CornerRadius="10" 
+                                                            <Label 
+                                                    Text="{Binding Total , StringFormat='{0:C2}'}"
+                                                    HorizontalOptions="End"
                                                     FontSize="Medium"
-                                                    Padding="5,5,5,5"
-                                                        BackgroundColor="Blue" 
-                                                        TextColor="White" 
-                                                        x:Name="btnAgregarPropina"
-                                                        Clicked="BtnAgregarPropina_Clicked"></Button>
+                                                    TextColor="#4ab046"
+                                                    VerticalOptions="End" />
+                                                        </StackLayout>
+                                                    </StackLayout>
+                                                </StackLayout>
+                                                <Image Source="arrow" HeightRequest="50" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"></Image>
                                             </StackLayout>
                                         </StackLayout>
                                     </StackLayout>
-                                    <Label 
-                                                    Text="{Binding Total , StringFormat='Importe total: {0:C2}'}"
-                                                    HorizontalOptions="End"
-                                                    FontSize="Large"
-                                                    TextColor="Red"
-                                                    VerticalOptions="End" />
-                                    <Label 
-                                                    Text="Mas detalles..." 
-                                                    HorizontalOptions="Center"></Label>
-                                </StackLayout>
                             </ContentView>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+                <StackLayout Spacing="0"
+                                VerticalOptions="EndAndExpand"
+                                Padding="10,8,10,8">
+                    <Frame  VerticalOptions="FillAndExpand"
+                                    Padding="0"
+                            BackgroundColor="LightGray"
+                                    CornerRadius="4" >
+                        <StackLayout Orientation="Vertical" VerticalOptions="End" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" Padding="15">
+                            <Label Text="Detalle del carrito" HorizontalOptions="Start" FontSize="Large" FontAttributes="Bold"></Label>
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                                <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                                    <Label Text="Productos" FontSize="Medium" TextColor="Black"></Label>
+                                    <Label Text="Subtotal" FontSize="Medium" TextColor="Black"></Label>
+                                    <Label Text="Envio" FontSize="Medium" TextColor="Black"></Label>
+                                    <Label Text="Propina" FontSize="Medium" TextColor="Black"></Label>
+
+                                </StackLayout>
+                                <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                                    <Label Text="3" FontSize="Medium" x:Name="lblResumenCantidad" HorizontalOptions="End" TextColor="Black"></Label>
+                                    <Label  FontSize="Medium" x:Name="lblResumenSubtotal" HorizontalOptions="End" TextColor="Black"></Label>
+                                    <Label  FontSize="Medium" x:Name="lblResumenEnvio" HorizontalOptions="End" TextColor="Black"></Label>
+                                    <Label  FontSize="Medium" x:Name="lblResumenPropina" HorizontalOptions="End" TextColor="Black"></Label>
+                                </StackLayout>
+                            </StackLayout>
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+                
+            </StackLayout>
+           
 
 
 

@@ -206,15 +206,21 @@ namespace AppCliente
             Guid UidColonia = new Guid(App.UidColoniaABuscar);
             Guid UidEstado = new Guid(App.UidEstadoABuscar);
 
-            App.MVProducto.BuscarProductoPorSucursal("Giro", Dia, UidColonia, UidEstado, new Guid(App.giro), ObjItem.UID);
+            //App.MVProducto.BuscarProductoPorSucursal("Giro", Dia, UidColonia, UidEstado, new Guid(App.giro), ObjItem.UID);
+            var _WebApi = new HttpClient();
+            string _URL = "" + Helpers.Settings.sitio + "/api/Producto/GetObtenerInformacionDeProductoDeLaSucursal?StrParametroBusqueda=Giro&StrDia=" + Dia + "&UidEstado=" + UidEstado + "&UidColonia=" + UidColonia + "&UidBusquedaCategorias=" + App.giro + "&UidProducto=" + ObjItem.UID + "";
+            var content = await _WebApi.GetStringAsync(_URL);
+            var obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+            var VProducto = JsonConvert.DeserializeObject<VMProducto>(obj);
 
-            await Navigation.PushAsync(new ProductoDescripcionPage(ObjItem, App.MVProducto.ListaDePreciosSucursales));
+
+            await Navigation.PushAsync(new ProductoDescripcionPage(ObjItem, VProducto.ListaDePreciosSucursales));
             await PopupNavigation.Instance.PopAllAsync();
         }
 
         private async void BtnSeleccionarDireccion_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new SeleccionarDirecciones(btnSeleccionarDireccion, MyListViewBusquedaProductosHome, lbCantidad, CantidadProductosMostrados, PanelProductoNoEncontrados, MyListViewBusquedaEmpresas, ScrollView_Productos, ScrollView_Empresas));
+            await Navigation.PushAsync(new SeleccionarDirecciones(btnSeleccionarDireccion, MyListViewBusquedaProductosHome,  CantidadProductosMostrados, PanelProductoNoEncontrados, MyListViewBusquedaEmpresas, ScrollView_Productos, ScrollView_Empresas));
         }
 
         private void ButtonCambiarBusquedaProducto_Clicked(object sender, EventArgs e)
@@ -246,7 +252,7 @@ namespace AppCliente
         private void BtnFitltrosBusquedas_Clicked(object sender, EventArgs e)
         {
             btnFitltrosBusquedas.IsEnabled = false;
-            PopupNavigation.Instance.PushAsync(new Popup.PupupFiltroBusqueda(btnFitltrosBusquedas, ScrollView_Productos, ScrollView_Empresas, MyListViewBusquedaProductosHome, MyListViewBusquedaEmpresas, PanelProductoNoEncontrados, lbCantidad));
+            PopupNavigation.Instance.PushAsync(new Popup.PupupFiltroBusqueda(btnFitltrosBusquedas, ScrollView_Productos, ScrollView_Empresas, MyListViewBusquedaProductosHome, MyListViewBusquedaEmpresas, PanelProductoNoEncontrados));
         }
 
 

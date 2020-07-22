@@ -61,6 +61,16 @@ namespace AppCliente
                 string version = VersionTracking.CurrentVersion;
                 if (oversion.StrVersion == version)
                 {
+                    if (string.IsNullOrEmpty(App.Global1))
+                    {
+                        btnAcceder.Text = "Entrar";
+                        btnAcceder.IsEnabled = true;
+                    }
+                    else
+                    {
+                        btnAcceder.Text = string.Empty;
+                        btnAcceder.IsEnabled = false;
+                    }
                     ApiService = new ApiService("/api/Giro");
                     parameters = new Dictionary<string, string>();
                     result = await ApiService.GET<VMGiro>(action: "Get", responseType: ApiService.ResponseType.Object, arguments: parameters);
@@ -80,13 +90,13 @@ namespace AppCliente
 
                             if (!string.IsNullOrEmpty(App.Global1))
                             {
-                                 Iniciar();
+                                Iniciar();
                             }
                             else
                         if (!string.IsNullOrEmpty(Helpers.Settings.StrCOLONIA))
                             {
 
-                                 Iniciar();
+                                Iniciar();
                             }
                             else
                             {
@@ -96,7 +106,7 @@ namespace AppCliente
                                     PanelUbicacionNoEstablecida.IsVisible = true;
                                     PanelProductoNoEncontrados.IsVisible = false;
                                     ScrollView_Productos.IsVisible = false;
-                                    lbCantidad.Text = "No hay resultados";
+                                    //lbCantidad.Text = "No hay resultados";
                                     btnSeleccionarDireccion.Text = "No hay ubicación";
                                 }
                                 catch (FeatureNotSupportedException)
@@ -209,7 +219,7 @@ namespace AppCliente
         private void ButtonFiltros_Clicked(object sender, EventArgs e)
         {
             btnFitltrosBusquedas.IsEnabled = false;
-            PopupNavigation.Instance.PushAsync(new Popup.PupupFiltroBusqueda(btnFitltrosBusquedas, ScrollView_Productos, ScrollView_Empresas, MyListViewBusquedaProductosHome, MyListViewBusquedaEmpresas, PanelProductoNoEncontrados, lbCantidad));
+            PopupNavigation.Instance.PushAsync(new Popup.PupupFiltroBusqueda(btnFitltrosBusquedas, ScrollView_Productos, ScrollView_Empresas, MyListViewBusquedaProductosHome, MyListViewBusquedaEmpresas, PanelProductoNoEncontrados));
         }
 
         private async void SearchFor_SearchButtonPressed(object sender, EventArgs e)
@@ -337,13 +347,13 @@ namespace AppCliente
                 {
                     MyListViewBusquedaProductosHome.ItemsSource = App.MVProducto.ListaDeProductos.GetRange(0, 10);
                     CantidadProductosMostrados = 10;
-                    lbCantidad.Text = "1-10/" + App.MVProducto.ListaDeProductos.Count;
+                    //lbCantidad.Text = "1-10/" + App.MVProducto.ListaDeProductos.Count;
                 }
                 else
                 {
                     MyListViewBusquedaProductosHome.ItemsSource = App.MVProducto.ListaDeProductos;
                     CantidadProductosMostrados = App.MVProducto.ListaDeProductos.Count;
-                    lbCantidad.Text = "1-" + App.MVProducto.ListaDeProductos.Count + "/" + App.MVProducto.ListaDeProductos.Count;
+                    // lbCantidad.Text = "1-" + App.MVProducto.ListaDeProductos.Count + "/" + App.MVProducto.ListaDeProductos.Count;
                 }
 
                 MyListViewBusquedaEmpresas.ItemsSource = null;
@@ -395,7 +405,7 @@ namespace AppCliente
             }
             PanelNavegacionCarrito.IsVisible = false;
             PanelNavegacionBuscar.IsVisible = true;
-            txtBusquedaActual.Text = Buscado;
+            //txtBusquedaActual.Text = Buscado;
         }
 
         private async void BtnSeleccionarDireccion_Clicked(object sender, EventArgs e)
@@ -410,7 +420,7 @@ namespace AppCliente
             }
             else
             {
-                await Navigation.PushAsync(new SeleccionarDirecciones(btnSeleccionarDireccion, MyListViewBusquedaProductosHome, lbCantidad, CantidadProductosMostrados, PanelProductoNoEncontrados, MyListViewBusquedaEmpresas, ScrollView_Productos, ScrollView_Empresas));
+                await Navigation.PushAsync(new SeleccionarDirecciones(btnSeleccionarDireccion, MyListViewBusquedaProductosHome, CantidadProductosMostrados, PanelProductoNoEncontrados, MyListViewBusquedaEmpresas, ScrollView_Productos, ScrollView_Empresas));
             }
 
         }
@@ -474,7 +484,7 @@ namespace AppCliente
 
         private void SearchFor_TextChanged(object sender, TextChangedEventArgs e)
         {
-            txtBusquedaActual.Text = searchFor.Text;
+            //txtBusquedaActual.Text = searchFor.Text;
         }
 
         private void ImageButton_Clicked_2(object sender, EventArgs e)
@@ -493,7 +503,7 @@ namespace AppCliente
             acloading.IsVisible = true;
             acloading.IsRunning = true;
             string obj = "";
-            lbCantidad.Text = "Cargando productos";
+            //lbCantidad.Text = "Cargando productos";
 
             if (string.IsNullOrEmpty(App.Global1))
             {
@@ -506,9 +516,10 @@ namespace AppCliente
                 });
                 App.UidEstadoABuscar = Helpers.Settings.StrESTADO;
 
-                btnSeleccionarDireccion.Text = "ENTREGAR EN " + App.MVDireccion.ListaDIRECCIONES[0].NOMBRECOLONIA.ToUpper() + " ";
+                btnSeleccionarDireccion.Text = "ENTREGAR EN " + App.MVDireccion.ListaDIRECCIONES[0].NOMBRECOLONIA.ToUpper() + " >";
 
-                btnAcceder.IsVisible = true;
+                btnAcceder.Text = "Entrar";
+                btnAcceder.IsEnabled = true;
             }
             else
             {
@@ -524,7 +535,8 @@ namespace AppCliente
                         App.MVDireccion = JsonConvert.DeserializeObject<VMDireccion>(obj);
                     }
                 }
-                btnAcceder.IsVisible = false;
+                btnAcceder.Text = string.Empty;
+                btnAcceder.IsEnabled = false;
             }
 
             if (App.MVDireccion != null)
@@ -567,7 +579,7 @@ namespace AppCliente
                         parameters.Add("UidEstado", UidEstado.ToString());
                         parameters.Add("UidColonia", UidColonia.ToString());
                         parameters.Add("UidBusquedaCategorias", App.giro);
-                        parameters.Add("StrNombreEmpresa", txtBusquedaActual.Text);
+                        //parameters.Add("StrNombreEmpresa", txtBusquedaActual.Text);
                         var result = await ApiService.GET<VMProducto>(action: "GetBuscarProductosCliente", responseType: ApiService.ResponseType.Object, arguments: parameters);
                         var oReponse = result as ResponseHelper;
                         if (result != null && oReponse.Status != false)
@@ -577,6 +589,10 @@ namespace AppCliente
                             {
                                 foreach (VMProducto item in oBusquedaproducto.ListaDeProductos)
                                 {
+                                    if (App.MVProducto.ListaDelCarrito.Exists(o => o.UID == item.UID))
+                                    {
+                                        item.IsSelected = true;
+                                    }
                                     //parameters = new Dictionary<string, string>();
                                     //parameters.Add("StrParametroBusqueda", "Giro");
                                     //parameters.Add("StrDia", Dia);
@@ -611,11 +627,11 @@ namespace AppCliente
 
                                 MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos;
                                 CantidadProductosMostrados = App.ListaDeProductos.Count;
-                                lbCantidad.Text = App.ListaDeProductos.Count + " Productos disponibles";
+                                //lbCantidad.Text = App.ListaDeProductos.Count + " Productos disponibles";
                             }
                             else
                             {
-                                lbCantidad.Text = "No hay productos disponibles";
+                                //lbCantidad.Text = "No hay productos disponibles";
                                 PanelProductoNoEncontrados.IsVisible = true;
                             }
                         }
@@ -698,7 +714,7 @@ namespace AppCliente
 
                 MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos;
                 CantidadProductosMostrados = App.ListaDeProductos.Count;
-                lbCantidad.Text = App.ListaDeProductos.Count + " Productos disponibles";
+                //lbCantidad.Text = App.ListaDeProductos.Count + " Productos disponibles";
             }
             acloading.IsRunning = false;
             acloading.IsVisible = false;

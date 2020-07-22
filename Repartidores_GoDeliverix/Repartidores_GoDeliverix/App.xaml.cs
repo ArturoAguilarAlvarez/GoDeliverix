@@ -4,7 +4,6 @@ using System.Globalization;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Repartidores_GoDeliverix.VM;
-using Com.OneSignal;
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace Repartidores_GoDeliverix
 {

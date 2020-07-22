@@ -7,11 +7,26 @@
              xmlns:ffTrans="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
              Title="Home"
              x:Class="AppCliente.HomePage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Clicked="btnAcceder_Clicked"  x:Name="btnAcceder">
+           
+        </ToolbarItem>
+        <ToolbarItem Clicked="MenuItemBuscar_Activted">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource Glyph="&#xF0349;" FontFamily="{StaticResource MatIcon}"></FontImageSource>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <ToolbarItem Clicked="MenuItem1_Activted">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource Glyph="&#xF0D68;" FontFamily="{StaticResource MatIcon}"></FontImageSource>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
     <NavigationPage.TitleView>
         <Grid>
             <!--IsClippedToBounds="True"-->
             <Grid x:Name="PanelNavegacionBuscar" IsVisible="True">
-                <Grid.ColumnDefinitions>
+                <!--<Grid.ColumnDefinitions>
                     <ColumnDefinition Width="4*"></ColumnDefinition>
                     <ColumnDefinition Width="2*"></ColumnDefinition>
                     <ColumnDefinition Width="2*"></ColumnDefinition>
@@ -20,20 +35,27 @@
 
                 <Button Text="Acceder" BackgroundColor="Orange" x:Name="btnAcceder" Clicked="btnAcceder_Clicked" IsVisible="True" Grid.Column="0" TextColor="White"></Button>
                 <Label Text="" x:Name="txtBusquedaActual" Grid.Column="1" TextColor="White" VerticalOptions="Center"></Label>
-                <ImageButton  
-                    Source="IconoBuscar" 
+                <Button  
+                    FontSize="40"
+                    TextColor="White"
+                    Text="&#xF1075;"
+                    FontFamily="{StaticResource MatIcon}"
                     HorizontalOptions="End"
                     BackgroundColor="Transparent" 
                     Clicked="MenuItemBuscar_Activted" 
                     Grid.Column="2"
-                    Margin="0,0,10,0"></ImageButton>
-                <ImageButton    
-                    Source="IconoCarrito" 
+                    Margin="0,0,10,0"></Button>
+
+                <Button    
+                    FontSize="30"
+                    TextColor="White"
+                    Text="&#xF09E7;" 
+                    FontFamily="{StaticResource MatIcon}"
                     HorizontalOptions="End"
                     BackgroundColor="Transparent" 
                     Clicked="MenuItem1_Activted" 
                     Grid.Column="3"
-                    Margin="0,0,10,0"></ImageButton>
+                    Margin="0,0,10,0"></Button>-->
 
             </Grid>
             <Grid x:Name="PanelNavegacionCarrito" IsVisible="False">
@@ -89,15 +111,15 @@
                 <Button Text="Actualizar busqueda" HorizontalOptions="FillAndExpand" x:Name="btnRefrescar" TextColor="White" FontSize="Medium"  BackgroundColor="Green" Clicked="btnRefrescar_Clicked"></Button>
             </StackLayout>
 
-            <Grid  x:Name="PanelProductos">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="8*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                </Grid.RowDefinitions>
+            <StackLayout Orientation="Vertical"  x:Name="PanelProductos">
+                <Button   HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand"
+                    x:Name="btnSeleccionarDireccion" 
+                    Clicked="BtnSeleccionarDireccion_Clicked"
+                          HeightRequest="50"
+                    BackgroundColor="Transparent" FontSize="Small"
+                    TextColor="Black" ></Button>
 
-
-                <StackLayout Grid.Row="0" x:Name="ScrollView_Productos" Orientation="Vertical" VerticalOptions="FillAndExpand">
+                <StackLayout  x:Name="ScrollView_Productos" Orientation="Vertical" VerticalOptions="FillAndExpand">
                     <ActivityIndicator x:Name="acloading" Scale="3" Margin="0,50,0,0" HeightRequest="50"></ActivityIndicator>
                     <ListView x:Name="MyListViewBusquedaProductosHome" ItemTapped="MyListViewBusquedaProductosHome_ItemTapped"
                           VerticalScrollBarVisibility="Always" 
@@ -107,16 +129,16 @@
                                 <ViewCell>
                                     <ContentView >
                                         <Frame Margin="0,5,0,0" >
-                                            <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" >
-                                                <StackLayout Grid.Column="0" >
+                                            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" >
+                                                <StackLayout >
                                                     <ff:CachedImage
                                                     Source="{Binding STRRUTA}"
                                                     HorizontalOptions="Center"
                                                     VerticalOptions="Start"
                                                     LoadingPlaceholder   = "IconoCajaVacia"
                                                     ErrorPlaceholder     = "Error"
-                                                    WidthRequest         = "150"
-                                                    HeightRequest        = "150"
+                                                    WidthRequest         = "90"
+                                                    HeightRequest        = "90"
                                                     RetryCount           = "3"
                                                     RetryDelay           = "3"
                                                     DownsampleToViewSize = "False">
@@ -126,16 +148,35 @@
                                                     </ff:CachedImage>
                                                 </StackLayout>
 
-                                                <StackLayout Grid.Column="1"  Orientation="Vertical">
-                                                    <Label Text="{Binding STRNOMBRE}" MaxLines="1" LineBreakMode="CharacterWrap" HorizontalOptions="Start"
-                                                           VerticalOptions="Start" FontSize="Medium"/>
-                                                    <Label Text="{Binding Empresa}" MaxLines="1" LineBreakMode="CharacterWrap "></Label>
-                                                    <Label  Text="{Binding STRDESCRIPCION}" MaxLines="1" LineBreakMode="TailTruncation" FontSize="Micro" HorizontalOptions="Start"/>
-                                                    <Label Text="{Binding StrCosto, StringFormat='${0:C2}'}"
+                                                <StackLayout   Orientation="Vertical" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                                                    <Label Text="{Binding STRNOMBRE}"  MaxLines="1" LineBreakMode="CharacterWrap" HorizontalOptions="Start" FontSize="Medium"/>
+                                                    <Label  Text="{Binding STRDESCRIPCION}"  MaxLines="1"  LineBreakMode="TailTruncation" FontSize="Micro" HorizontalOptions="Start"/>
+                                                    <StackLayout Orientation="Horizontal" Margin="0,-15,0,0" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand">
+                                                        <ff:CachedImage
+                                                    Source="{Binding STRRUTAImagenEmpresa}"
+                                                    HorizontalOptions="StartAndExpand"
+                                                    VerticalOptions="End"
+                                                    LoadingPlaceholder   = "IconoCajaVacia"
+                                                    ErrorPlaceholder     = "Error"
+                                                    WidthRequest         = "40"
+                                                    HeightRequest        = "40"
+                                                    RetryCount           = "3"
+                                                    RetryDelay           = "3"
+                                                    DownsampleToViewSize = "False">
+                                                            <ff:CachedImage.Transformations>
+                                                                <ffTrans:RoundedTransformation Radius="20" />
+                                                            </ff:CachedImage.Transformations>
+                                                        </ff:CachedImage>
+                                                        <Label Text="&#xF0D68;" VerticalOptions="End" IsVisible="{Binding IsSelected}" FontFamily="{StaticResource MatIcon}" FontSize="Large" TextColor="Black"></Label>
+
+                                                        <Label Text="{Binding StrCosto, StringFormat='${0:C2}'}"
                                                                x:Name="txtProductoPrecio" Margin="0,30,0,0"
                                                                HorizontalOptions="End"  LineBreakMode="WordWrap" FontSize="Medium" TextColor="Black"/>
+                                                    </StackLayout>
+
+
                                                 </StackLayout>
-                                            </Grid>
+                                            </StackLayout>
                                         </Frame>
                                     </ContentView>
                                 </ViewCell>
@@ -143,7 +184,7 @@
                         </ListView.ItemTemplate>
                     </ListView>
                 </StackLayout>
-                <StackLayout Grid.Row="0" x:Name="ScrollView_Empresas" VerticalOptions="Start" IsVisible="False">
+                <StackLayout x:Name="ScrollView_Empresas" VerticalOptions="Start" IsVisible="False">
                     <ListView x:Name="MyListViewBusquedaEmpresas" VerticalScrollBarVisibility="Always" ItemsSource="{Binding VMEmpresas}"
                       SelectionMode="None" ItemTapped="MyListViewBusquedaEmpresas_ItemTapped"
                       SeparatorVisibility="None" IsPullToRefreshEnabled="False" HasUnevenRows="True">
@@ -197,26 +238,22 @@
                     </ListView>
                 </StackLayout>
 
-                <StackLayout IsVisible="False" x:Name="PanelProductoNoEncontrados" VerticalOptions="Start" Grid.Row="0" >
+                <StackLayout IsVisible="False" x:Name="PanelProductoNoEncontrados" VerticalOptions="Start" >
                     <Image Source="IconoCajaVacia" HorizontalOptions="Center" VerticalOptions="Center"></Image>
                     <Label Text="No hay productos disponibles en esta ubicacion" HorizontalOptions="Fill" HorizontalTextAlignment="Center" TextColor="Orange" VerticalOptions="Center"></Label>
                 </StackLayout>
-                <StackLayout IsVisible="False" x:Name="PanelUbicacionNoEstablecida" VerticalOptions="Start" Grid.Row="0" >
+                <StackLayout IsVisible="False" x:Name="PanelUbicacionNoEstablecida" VerticalOptions="Start">
                     <Image Source="IconoDireccionesMenu" HorizontalOptions="Center" VerticalOptions="Center"></Image>
                     <Label FontSize="Medium" Text="No se ha establecido una ubicación" HorizontalOptions="Fill" HorizontalTextAlignment="Center" TextColor="Orange" VerticalOptions="Center"></Label>
                     <Label FontSize="Medium" Text="Para establecer una, seleccione en el menu 'Establecer ubicación' " HorizontalOptions="Fill" HorizontalTextAlignment="Center" TextColor="Orange" VerticalOptions="Center"></Label>
                 </StackLayout>
 
 
-                <Label HorizontalOptions="FillAndExpand" Grid.Row="1" VerticalTextAlignment="Center" VerticalOptions="End" BackgroundColor="LightGray" HorizontalTextAlignment="Center" x:Name="lbCantidad"></Label>
+                <!--<Label HorizontalOptions="FillAndExpand" Grid.Row="1" VerticalTextAlignment="Center" VerticalOptions="End" BackgroundColor="LightGray" HorizontalTextAlignment="Center" x:Name="lbCantidad"></Label>-->
 
-                <Button  Grid.Row="2"  HorizontalOptions="FillAndExpand" VerticalOptions="End"
-                    x:Name="btnSeleccionarDireccion" 
-                    Clicked="BtnSeleccionarDireccion_Clicked"
-                    BackgroundColor="Green" FontSize="Medium"
-                    TextColor="White" ></Button>
 
-            </Grid>
+
+            </StackLayout>
 
         </Grid>
     </ContentPage.Content>

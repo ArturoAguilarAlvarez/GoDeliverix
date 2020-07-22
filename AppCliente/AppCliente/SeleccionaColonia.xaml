@@ -10,9 +10,9 @@
     <ContentPage.Content>
         <ContentView x:Name="popupLoadingView" BackgroundColor="#C0808080"  IsVisible="True" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
             <StackLayout HorizontalOptions="FillAndExpand" BackgroundColor="White" VerticalOptions="FillAndExpand">
-                <StackLayout x:Name="SLDatos" Orientation="Vertical"  Padding="10,10,10,5" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                <StackLayout x:Name="SLDatos" Orientation="Vertical"  Padding="0,0,0,5" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
                     <StackLayout VerticalOptions="FillAndExpand" Orientation="Vertical" HorizontalOptions="FillAndExpand">
-                        <maps:Map MapType="Street" Grid.Row="0" x:Name="map" Margin="10" 
+                        <maps:Map MapType="Street" Grid.Row="0" x:Name="map" Margin="0" 
                               MapClicked="Map_MapClicked"
                       HasZoomEnabled="True"                      
                       VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HeightRequest="300" />
@@ -31,8 +31,9 @@
 
                     </StackLayout>
                 </StackLayout>
-                <StackLayout x:Name="SLCargando" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-                    <ActivityIndicator  HorizontalOptions="FillAndExpand" Scale="3" VerticalOptions="FillAndExpand" x:Name="acLoading"></ActivityIndicator>
+                <StackLayout x:Name="SLCargando" VerticalOptions="FillAndExpand" Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                    <ActivityIndicator   HorizontalOptions="FillAndExpand" Scale="1" VerticalOptions="FillAndExpand" x:Name="acLoading"></ActivityIndicator>
+                    <Label FontSize="Large" HorizontalOptions="Center" VerticalOptions="StartAndExpand">CARGANDO</Label>
                 </StackLayout>
             </StackLayout>
 

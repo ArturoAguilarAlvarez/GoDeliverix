@@ -13,107 +13,120 @@
   </NavigationPage.TitleView>-->
     <ContentPage.Content>
         <ScrollView>
-            <StackLayout>
-                <Grid ColumnSpacing="0" VerticalOptions="FillAndExpand" RowSpacing="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="4*" />
-                        <RowDefinition Height="AUTO" />
-                        <RowDefinition Height="AUTO" />
-                        <RowDefinition Height="AUTO" />
-                    </Grid.RowDefinitions>
-
-                    <ff:CachedImage x:Name="ImagenProducto"
-                                                    HorizontalOptions="FillAndExpand"
-                                                    VerticalOptions="FillAndExpand"
+            <StackLayout VerticalOptions="FillAndExpand" Orientation="Vertical">
+                <ff:CachedImage x:Name="ImagenProducto" Margin="10"
+                                                    HeightRequest="200"
                                                     LoadingPlaceholder   = "IconoCajaVacia"
                                                     RetryCount           = "3"
                                                     RetryDelay           = "3"
                                                     DownsampleToViewSize = "False">
-                        <ff:CachedImage.Transformations>
-                            <ffTrans:RoundedTransformation Radius="20" />
-                        </ff:CachedImage.Transformations>
-                    </ff:CachedImage>
-                    
-                    <StackLayout Orientation="Horizontal" Margin="10,0" Grid.Row="1" HorizontalOptions="Center">
-                        <StackLayout Orientation="Vertical">
+                    <ff:CachedImage.Transformations>
+                        <ffTrans:RoundedTransformation Radius="20" />
+                    </ff:CachedImage.Transformations>
+                </ff:CachedImage>
+                <ActivityIndicator x:Name="AICargando" IsVisible="{Binding Cargando}" IsRunning="{Binding Cargando}"></ActivityIndicator>
+                <StackLayout x:Name="pnlDescripcionProducto" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                    <StackLayout  Orientation="Horizontal" Margin="10,0" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="1">
+                        <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
                             <Label Margin="0,0" HorizontalOptions="Center" Text="" FontSize="Medium" FontAttributes="Bold" x:Name="txtNombreProducto" Grid.Row="1"></Label>
                             <Label Margin="0,0" HorizontalOptions="Center" Text="" FontSize="Default" FontAttributes="Italic" x:Name="txtDescripcionProducto" Grid.Row="2"  ></Label>
 
-                            <StackLayout Orientation="Vertical" HorizontalOptions="Start" >
-                                <StackLayout Orientation="Horizontal">
-                                    <Label Text="Sucursal: " VerticalOptions="Center" x:Name="txtSucursall"></Label>
-                                    <Button  Text="Sucursal seleccionada" x:Name="txtSucursalSeleccionada" Clicked="BtnCambioDeSucursal_Clicked" BackgroundColor="Transparent"></Button>
-                                </StackLayout>
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                                <!--<ImageButton Source="IconoEliminar" HeightRequest="40" WidthRequest="40" BackgroundColor="Orange" Clicked="ImageButtonEliminarProducto_Clicked"></ImageButton>-->
+                                <Button Text="-" Clicked="ButtonMenos_Clicked" x:Name="btnMenos" VerticalOptions="Center" WidthRequest="40" HeightRequest="40" FontSize="24" Padding="0" BackgroundColor="White" BorderWidth="1" BorderColor="#efefef" ></Button>
+                                <Entry   Text="1" x:Name="_displayLabel" MinimumWidthRequest="40" WidthRequest="40" HorizontalTextAlignment="Center"></Entry>
+                                <!--<Label  TextDecorations="Underline"  FontSize="30"   HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand" TextColor="White" />-->
+                                <Button Text="+" Clicked="ButtonMas_Clicked" VerticalOptions="Center" WidthRequest="40" HeightRequest="40" FontSize="24" Padding="0" BackgroundColor="White" BorderWidth="1" BorderColor="#efefef"></Button>
                             </StackLayout>
 
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="3*"></ColumnDefinition>
-                                    <ColumnDefinition Width="4*"></ColumnDefinition>
-                                    <ColumnDefinition Width="3*"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
 
-                                <Button
-                    Grid.Column="0"
+                            <!--<StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                            <Button
                      x:Name="btnMenos"
                     Text="-"
                     Clicked="ButtonMenos_Clicked"
-                    WidthRequest="80"
-                    HeightRequest="80"
-                    FontSize="40"
+                    WidthRequest="60"
+                    HeightRequest="60"
+                    FontSize="25"
                     Padding="0"
                     FontAttributes="Bold"
                     BorderColor="Black"
                     BorderWidth="2"
-                    BackgroundColor="#cb2d3e"
                     TextColor="White"
+                    BackgroundColor="White"
                     FontFamily="Roboto-Bold"
                     HorizontalOptions="Center">
-                                    <Button.BorderRadius>
-                                        <OnPlatform x:TypeArguments="x:Int32"  iOS="40" Android="40">
-                                        </OnPlatform>
-                                    </Button.BorderRadius>
-                                </Button>
-
-                                <Entry Grid.Column="1" Keyboard="Numeric" FontSize="Large" x:Name="_displayLabel" TextChanged="_displayLabel_TextChanged"  HorizontalTextAlignment="Center" Text="1" VerticalOptions="Center"></Entry>
-
-                                <Button Grid.Column="2"
+                            </Button>
+                            <Entry  Keyboard="Numeric" FontSize="30"  TextChanged="_displayLabel_TextChanged"  HorizontalTextAlignment="Center" Text="1" VerticalOptions="Center"></Entry>
+                            <Button 
                     Text="+"
                     Clicked="ButtonMas_Clicked"
-                    WidthRequest="80"
-                    HeightRequest="80"
-                    FontSize="40"
+                    WidthRequest="60"
+                    HeightRequest="30"
+                    FontSize="25"
                     Padding="0"
                     FontAttributes="Bold"
                     BorderWidth="2"
-                    BackgroundColor="#56ab2f"
                     BorderColor="Black"
                     TextColor="White"
+                                
                     FontFamily="Roboto-Bold"
-                    HorizontalOptions="Center">
-                                    <Button.BorderRadius>
-                                        <OnPlatform x:TypeArguments="x:Int32"  iOS="40" Android="40">
-                                        </OnPlatform>
-                                    </Button.BorderRadius>
-                                </Button>
-                            </Grid>
-                            <StackLayout Orientation="Vertical"  HorizontalOptions="FillAndExpand">
+                    >
+                            </Button>
+                        </StackLayout>-->
+
+
+                            <StackLayout Orientation="Vertical"  HorizontalOptions="CenterAndExpand">
                                 <Label Text="defaoult" x:Name="txtEmpresaCosto" FontSize="24" TextColor="Black"></Label>
-                                <Label Text="defaoult" x:Name="txtHoraDisponibilidad" FontSize="Medium" TextColor="Blue"></Label>
                             </StackLayout>
                         </StackLayout>
                     </StackLayout>
-                    <StackLayout Grid.Row="2">
-                        <Entry x:Name="txtComentario" Placeholder="Agregar Notas" Margin="5,0" ></Entry>
+                    <StackLayout VerticalOptions="Center" >
+                        <Editor x:Name="txtComentario" Placeholder="Agregar Notas" Margin="5,0" ></Editor>
                         <Label IsVisible="False" x:Name="txtIDSeccion" ></Label>
                         <Label x:Name="idSeucursalSeleccionada" IsVisible="False"></Label>
                     </StackLayout>
+                    <StackLayout Orientation="Vertical" VerticalOptions="EndAndExpand" HorizontalOptions="FillAndExpand" >
+                        <StackLayout Spacing="0"
+                                
+                                Padding="10,8,10,8">
+                            <Frame  VerticalOptions="FillAndExpand"
+                                    Padding="0"
+                                    CornerRadius="4" >
+                                <StackLayout Orientation="Horizontal" Padding="5" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" >
+                                    <ff:CachedImage x:Name="ImagenEmpresa" 
+                                                    HeightRequest="60"
+                                                    LoadingPlaceholder   = "IconoCajaVacia"
+                                                    RetryCount           = "3"
+                                                    RetryDelay           = "3"
+                                                    DownsampleToViewSize = "False">
+                                        <ff:CachedImage.Transformations>
+                                            <ffTrans:RoundedTransformation Radius="20" />
+                                        </ff:CachedImage.Transformations>
+                                    </ff:CachedImage>
+                                    <StackLayout Orientation="Vertical">
 
-                    <Button Grid.Row="3" Text="Agregar carrito $0" x:Name="btnAgregarCarrito"  BackgroundColor="#20396e" TextColor="White" HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand" Clicked="ButtonCarrito_Clicked"></Button>
-                    
-                </Grid>
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label  x:Name="txtSucursalSeleccionada"    BackgroundColor="Transparent"></Label>
+                                        </StackLayout>
+                                        <Label Text="defaoult" x:Name="txtHoraDisponibilidad" FontSize="Small" TextColor="Blue"></Label>
+                                    </StackLayout>
+                                    <ImageButton Source="arrow" HeightRequest="50" Clicked="BtnCambioDeSucursal_Clicked" BackgroundColor="Transparent" x:Name="btnTarifas" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"></ImageButton>
+                                </StackLayout>
+                            </Frame>
+                        </StackLayout>
+
+
+
+                    </StackLayout>
+                </StackLayout>
+
+                <Button  Text="Agregar  $0" VerticalOptions="EndAndExpand" x:Name="btnAgregarCarrito"  BackgroundColor="#20396e" TextColor="White" HorizontalOptions="FillAndExpand"  Clicked="ButtonCarrito_Clicked"></Button>
+
             </StackLayout>
+
         </ScrollView>
+        
     </ContentPage.Content>
 
 </ContentPage>

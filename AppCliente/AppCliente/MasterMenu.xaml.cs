@@ -1,5 +1,4 @@
 ﻿using AppCliente.WebApi;
-using Com.OneSignal;
 using Newtonsoft.Json;
 using Plugin.Geolocator.Abstractions;
 using Rg.Plugins.Popup.Services;

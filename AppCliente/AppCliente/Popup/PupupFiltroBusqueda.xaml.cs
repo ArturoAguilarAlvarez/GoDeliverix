@@ -31,10 +31,10 @@ namespace AppCliente.Popup
             StackLayout ScrollView_Empresas,
             ListView MyListViewBusquedaProductosHome,
             ListView MyListViewBusquedaEmpresas,
-            StackLayout PanelProductoNoEncontrados,
-            Label lbCantidad)
+            StackLayout PanelProductoNoEncontrados
+           )
         {
-            this.lbCantidad = lbCantidad;
+           // this.lbCantidad = lbCantidad;
             this.MyListViewBusquedaProductosHome = MyListViewBusquedaProductosHome;
             this.MyListViewBusquedaEmpresas = MyListViewBusquedaEmpresas;
             MyBtnFiltroBusquedas = button;

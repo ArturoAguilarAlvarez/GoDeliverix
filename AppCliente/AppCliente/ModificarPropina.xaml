@@ -7,37 +7,66 @@
              Title="Propina"
              x:Class="AppCliente.ModificarPropina">
     <ContentPage.Content>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="2*"></RowDefinition>
-                <RowDefinition Height="2*"></RowDefinition>
-                <RowDefinition Height="4*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <Label 
-                Text="Agregar un extra para el repartidor" 
-                Grid.Row="0"
-                FontSize="Large"                
-                HorizontalOptions="CenterAndExpand"
-                VerticalOptions="EndAndExpand"></Label>
-            <StackLayout Grid.Row="1" Orientation="Vertical">
-                <Label Text="Propina actual" FontSize="Large" HorizontalOptions="CenterAndExpand"
-                       VerticalOptions="Start" ></Label>
-                <Label x:Name="lblpropina" 
-                       FontSize="Large"  
-                       HorizontalOptions="CenterAndExpand"
-                       VerticalOptions="Center"></Label>
+        <StackLayout Orientation="Vertical" VerticalOptions="StartAndExpand" Padding="8">
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                <Image Source="IconoGoDeliverix" WidthRequest="100"></Image>
+                <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                    <StackLayout Orientation="Horizontal">
+
+                        <Label Text="GoDeliverix" 
+                               FontAttributes="Bold"                                                       
+                               TextColor="#333" 
+                               FontSize="Medium"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Sucursal" 
+                               HorizontalOptions="StartAndExpand"
+                               HorizontalTextAlignment="Start"
+                               TextColor="Black" 
+                               FontSize="Medium"/>
+                        <Label Text="Matriz"
+                                                           HorizontalOptions="End"
+                                                           TextColor="Black" 
+                               HorizontalTextAlignment="End"
+                                                           FontSize="Medium"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Envío" 
+                                                       TextColor="Black" 
+                                                       HorizontalTextAlignment="Start"
+                                                       HorizontalOptions="StartAndExpand"
+                                                       FontSize="Medium"/>
+                        <Label Text="$50.00"
+                                                           HorizontalOptions="End"
+                                                           FontSize="Medium"
+                                                           TextColor="#4ab046"
+                               HorizontalTextAlignment="End"
+                                                           VerticalOptions="End" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Propina" 
+                                                       TextColor="Black" 
+                                                       HorizontalTextAlignment="Start"
+                                                       HorizontalOptions="StartAndExpand"
+                                                       FontSize="Medium"/>
+                        <Label Text="$10.00" x:Name="lblpropina"
+                                                           HorizontalOptions="End"
+                              HorizontalTextAlignment="End"
+                                                           FontSize="Medium"
+                                                           TextColor="#4ab046"
+                                                           VerticalOptions="End" />
+                    </StackLayout>
+                </StackLayout>
             </StackLayout>
             
-            
-            
-            <StackLayout 
-                Orientation="Vertical" 
-                         Grid.Row="2">
+            <StackLayout Orientation="Vertical">
                 <Label 
-                    Text="Seleccione cantidad"
+                    Text="Agregar propina"
+                    Margin="10"
                     HorizontalOptions="CenterAndExpand"
+                    HorizontalTextAlignment="Center"
                     FontSize="Medium"></Label>
-                <Picker x:Name="PCantidadDePropina" >
+                <!--<Picker x:Name="PCantidadDePropina" >
                     <Picker.Items>
                         <x:String>Monto de propina</x:String>
                         <x:String>$10.00</x:String>
@@ -45,25 +74,38 @@
                         <x:String>$30.00</x:String>
                         <x:String>$40.00</x:String>
                     </Picker.Items>
-                </Picker>
-                <Label 
-                    Text="Ingrese otra cantidad"
+                </Picker>-->
+                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                    <StackLayout Orientation="Vertical">
+                        <Button Text="$10.00" WidthRequest="150" TextColor="White" FontSize="Medium" BackgroundColor="#4ab046"></Button>
+                        <Button Text="$30.00" WidthRequest="150" TextColor="White" FontSize="Medium" BackgroundColor="#4ab046"></Button>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical">
+                        <Button Text="$20.00" WidthRequest="150" TextColor="White" FontSize="Medium" BackgroundColor="#4ab046"></Button>
+                        <Button Text="$40.00" WidthRequest="150" TextColor="White" FontSize="Medium" BackgroundColor="#4ab046"></Button>
+                    </StackLayout>
+                </StackLayout>
+                <Label Margin="30,10,10,10"
+                    Text="Otra cantidad"
                     HorizontalOptions="CenterAndExpand"
+                    HorizontalTextAlignment="Center"
                     FontSize="Medium"></Label>
                 <Entry 
                     x:Name="lblMontoPropina"
                     HorizontalOptions="FillAndExpand" 
                     Keyboard="Numeric"
-                    Placeholder="Monto de propina"></Entry>
-                <Button 
+                    Placeholder="Propina"></Entry>
+            </StackLayout>
+
+            <!--<Button 
                     x:Name="btnAgregarPropina"
                     Text="Agregar" 
                     FontSize="Large"  
                     TextColor="White" 
                     HorizontalOptions="FillAndExpand" 
                     BackgroundColor="Green"
-                    Clicked="BtnAgregarPropina_Clicked"></Button>
-            </StackLayout>
-        </Grid>
+                    VerticalOptions="End"
+                    Clicked="BtnAgregarPropina_Clicked"></Button>-->
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

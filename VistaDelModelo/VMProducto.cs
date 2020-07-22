@@ -60,6 +60,14 @@ namespace VistaDelModelo
             get { return _strRuta; }
             set { _strRuta = value; }
         }
+        
+        private string _strRutaEmpresa;
+
+        public string STRRUTAImagenEmpresa
+        {
+            get { return _strRutaEmpresa; }
+            set { _strRutaEmpresa = value; }
+        }
 
         private Guid _UidGiro;
         public Guid UIDGIRO
@@ -133,6 +141,13 @@ namespace VistaDelModelo
         {
             get { return _StrIdentificador; }
             set { _StrIdentificador = value; }
+        }
+        private string _strDireccion;
+
+        public string StrDireccion
+        {
+            get { return _strDireccion; }
+            set { _strDireccion = value; }
         }
 
         private Guid _UidRegistroProductoEnCarrito;
@@ -485,10 +500,6 @@ namespace VistaDelModelo
             {
                 dpropina = decimal.Parse(dPropina, System.Globalization.NumberStyles.Float);
             }
-            else
-            {
-                dpropina = 0.0m;
-            }
             if (RegistroProductoEnCarrito == Guid.Empty)
             {
 
@@ -500,6 +511,7 @@ namespace VistaDelModelo
 
                 foreach (DataRow item in DatosProductos.ProductoCarrito(uidProducto, UidSucursal.ToString(), UidSeccion.ToString()).Rows)
                 {
+                    dpropina= 0.00m;
                     Guid uidproducto = new Guid(item["UidProducto"].ToString());
                     Guid uidsucursal = new Guid(item["UidSucursal"].ToString());
                     Guid UidSeccionpoducto = new Guid(item["UidSeccionProducto"].ToString());
@@ -510,6 +522,7 @@ namespace VistaDelModelo
                     string imagen = "http://www.godeliverix.net/vista/" + item["NVchRuta"].ToString();
                     decimal SubTotal = decimal.Parse(costo) * int.Parse(cantidad);
                     decimal Total = SubTotal + CostoDeEnvio;
+                    dpropina = CostoDeEnvio * 0.1m;
                     ListaDelCarrito.Add(new VMProducto()
                     {
                         UidRegistroProductoEnCarrito = Guid.NewGuid(),
@@ -517,6 +530,7 @@ namespace VistaDelModelo
                         Total = Total,
                         Subtotal = SubTotal,
                         CostoEnvio = CostoDeEnvio,
+                        DPropina = dpropina,
                         UID = uidproducto,
                         UidSucursal = uidsucursal,
                         STRNOMBRE = nombre,
@@ -832,6 +846,7 @@ namespace VistaDelModelo
                     string nombre = item["VchNombre"].ToString().ToUpper();
                     string descripcion = item["VchDescripcion"].ToString();
                     string ruta = "https://www.godeliverix.net/vista/" + item["NVchRuta"].ToString();
+                    string rutaiamgenempresa = "https://www.godeliverix.net/vista/" + item["RutaEmpresa"].ToString();
                     //string ruta = "../" + item["NVchRuta"].ToString();
                     Guid UidEmpresa = new Guid(item["UidEmpresa"].ToString());
 
@@ -845,6 +860,7 @@ namespace VistaDelModelo
                             STRDESCRIPCION = descripcion,
                             STRNOMBRE = nombre,
                             STRRUTA = ruta,
+                            STRRUTAImagenEmpresa = rutaiamgenempresa,
                             StrCosto = decimal.Parse(item["MCosto"].ToString()).ToString("N2")
                         });
                     }
@@ -887,7 +903,7 @@ namespace VistaDelModelo
                 CMD.Parameters["@UidProduto"].Value = UidProducto;
 
                 ListaDePreciosSucursales.Clear();
-
+                var odireccion = new VMDireccion();
                 foreach (DataRow item in CN.Busquedas(CMD).Rows)
                 {
                     Guid uidseccion = new Guid(item["UidSeccion"].ToString());
@@ -896,12 +912,16 @@ namespace VistaDelModelo
                     string dbCosto = decimal.Parse(item["Mcosto"].ToString()).ToString("N2");
                     Guid UidSucursal = new Guid(item["UidSucursal"].ToString());
                     Guid uidempresa = new Guid(item["UidEmpresa"].ToString());
+                    string direccion = "";
+                    odireccion.ObtenerDireccionSucursal(UidSucursal.ToString());
+                    direccion = odireccion.ObtenerNombreDeLaColonia(odireccion.COLONIA) +"-"+ odireccion.CALLE0;
                     if (!ListaDePreciosSucursales.Exists(p => p.UID == uidseccion))
                     {
                         ListaDePreciosSucursales.Add(new VMProducto()
                         {
                             UID = uidseccion,
                             StrCosto = dbCosto,
+                            StrDireccion = direccion,
                             DtmVariableParaTiempo = DateTime.Parse(strTiempoDeElaboracion),
                             StrIdentificador = stridentificador,
                             UidSucursal = UidSucursal,

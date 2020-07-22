@@ -7,7 +7,7 @@ namespace AppPrueba.WebApi
     public static class RestService
     {
         public static string Servidor = "https://www.godeliverix.net/";
-        //public static string Servidor = "http://192.168.1.65/";
+        //public static string Servidor = "http://192.168.1.72/";
         public static string ContentType = "application/json";
         public static string ApiKey = "";
 

@@ -118,7 +118,7 @@ namespace AppCliente.Helpers
         }
 
         public const string sitio = "https://www.godeliverix.net";
-        //public const string sitio = "http://192.168.1.65";
+        //public const string sitio = "http://192.168.1.72";
         public static void ClearAllData()
         {
             AppSettings.Clear();

@@ -36,14 +36,15 @@ namespace AppCliente.Pagos
             for (int i = 0; i < App.MVProducto.ListaDelInformacionSucursales.Count; i++)
             {
                 TotalEnvio = TotalEnvio + App.MVProducto.ListaDelInformacionSucursales[i].CostoEnvio;
-                TotalPagar = TotalPagar + App.MVProducto.ListaDelInformacionSucursales[i].Total;
-                subtotal = subtotal + App.MVProducto.ListaDelInformacionSucursales[i].Subtotal;
                 TotalPropina += App.MVProducto.ListaDelInformacionSucursales[i].DPropina;
+                TotalPagar = TotalPagar + App.MVProducto.ListaDelInformacionSucursales[i].Total + TotalPropina;
+                subtotal = subtotal + App.MVProducto.ListaDelInformacionSucursales[i].Subtotal;
             }
 
             txtTotalEnvio.Text = "$" + TotalEnvio.ToString("N2");
             txtCantidad.Text = cantidad.ToString();
             txtsubtotal.Text = "$" + subtotal.ToString("N2");
+            txtTotalPropina.Text = "$" + TotalPropina.ToString("N2");
             txtCantidadSucursales.Text = App.MVProducto.ListaDelInformacionSucursales.Count.ToString();
             txtPropina.Text = "$" + TotalPropina;
             txtTotal.Text = "$" + TotalPagar.ToString("N2");

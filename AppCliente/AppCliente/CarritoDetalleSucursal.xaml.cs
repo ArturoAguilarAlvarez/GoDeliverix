@@ -1,6 +1,8 @@
 ﻿using AppCliente.ViewModel;
 using AppCliente.WebApi;
+using CoreImage;
 using Newtonsoft.Json;
+using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,10 +25,12 @@ namespace AppCliente
         Button btnPagar;
         Button btnPagar2;
         ListView MyListViewCarritoEmpresa;
+        List<MVMProductos> listaDelCarrito = new List<MVMProductos>();
 
         decimal cantidad = 0;
         decimal subtotal = 0;
         decimal TotalEnvio = 0;
+        decimal TotalPropina = 0;
         decimal TotalPagar = 0;
 
         public CarritoDetalleSucursal()
@@ -71,8 +75,11 @@ namespace AppCliente
         {
             App.MVProducto.ListaDeDetallesDeOrden.Clear();
             List<MVMProductos> ListaDeDetallesDeOrden = new List<MVMProductos>();
-            List<MVMProductos> listaDelCarrito = new List<MVMProductos>();
-
+            cantidad = 0;
+            subtotal = 0;
+            TotalPropina = 0;
+            TotalEnvio = 0;
+            listaDelCarrito = new List<MVMProductos>();
             for (int i = 0; i < App.MVProducto.ListaDelCarrito.Count; i++)
             {
                 HttpClient _WebApi = new HttpClient();
@@ -97,10 +104,14 @@ namespace AppCliente
                 }
                 else
                 {
-                    ocolor = Color.BlanchedAlmond;
+                    ocolor = Color.White;
                 }
+                TotalPropina = App.MVProducto.ListaDelCarrito[i].DPropina;
+                TotalEnvio = App.MVProducto.ListaDelCarrito[i].CostoEnvio;
                 cantidad = cantidad + App.MVProducto.ListaDelCarrito[i].Cantidad;
                 decimal a = decimal.Parse(App.MVProducto.ListaDelCarrito[i].StrCosto);
+                subtotal += (App.MVProducto.ListaDelCarrito[i].Cantidad * a);
+
                 listaDelCarrito.Add(new MVMProductos()
                 {
                     UidRegistroProductoEnCarrito = App.MVProducto.ListaDelCarrito[i].UidRegistroProductoEnCarrito,
@@ -108,6 +119,7 @@ namespace AppCliente
                     Total = App.MVProducto.ListaDelCarrito[i].Total,
                     Subtotal = App.MVProducto.ListaDelCarrito[i].Subtotal,
                     CostoEnvio = App.MVProducto.ListaDelCarrito[i].CostoEnvio,
+                    DPropina = App.MVProducto.ListaDelCarrito[i].DPropina,
                     UID = App.MVProducto.ListaDelCarrito[i].UID,
                     UidSucursal = App.MVProducto.ListaDelCarrito[i].UidSucursal,
                     STRNOMBRE = App.MVProducto.ListaDelCarrito[i].STRNOMBRE,
@@ -128,6 +140,13 @@ namespace AppCliente
                     ListaDeDetallesDeOrden.Add(listaDelCarrito[i]);
                 }
             }
+            var b = listaDelCarrito[0];
+            lblPropina.Text = "$" + TotalPropina.ToString("N2");
+            lblTaria.Text = "$" + TotalEnvio.ToString("N2");
+            lblTotal.Text = "$" + (TotalEnvio + TotalPropina).ToString("N2");
+            lblResumenCantidad.Text = b.Cantidad.ToString();
+            lblResumenSubtotal.Text = b.Subtotal.ToString("C2");
+            MyListViewBusquedaProductos.ItemsSource = null;
             MyListViewBusquedaProductos.ItemsSource = ListaDeDetallesDeOrden;
         }
         private async void BtnDistribuidora_Clicked(object sender, EventArgs e)
@@ -154,7 +173,6 @@ namespace AppCliente
             MyListViewBusquedaProductos.ItemsSource = null;
             App.MVProducto.ListaDeDetallesDeOrden = null;
             App.MVProducto.ListaDeDetallesDeOrden = App.MVProducto.ListaDelCarrito.Where(p => p.UidSucursal == ObjItem.UidSucursal).ToList();
-
 
             ActualizarCarrito();
 
@@ -219,16 +237,12 @@ namespace AppCliente
             if (action)
             {
                 var item = sender as ImageButton;
-                var ObjItem = item.BindingContext as VMProducto;
-
+                var ObjItem = item.BindingContext as MVMProductos;
                 App.MVProducto.EliminaProductoDelCarrito(ObjItem.UidRegistroProductoEnCarrito);
-
                 MyListViewBusquedaProductos.ItemsSource = null;
                 App.MVProducto.ListaDeDetallesDeOrden = null;
                 App.MVProducto.ListaDeDetallesDeOrden = App.MVProducto.ListaDelCarrito.Where(p => p.UidSucursal == ObjItem.UidSucursal).ToList();
-
                 MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeDetallesDeOrden;
-
                 ActualizarCarrito();
             }
         }
@@ -236,7 +250,7 @@ namespace AppCliente
         private void ButtonEliminarUnProducto_Clicked(object sender, EventArgs e)
         {
             var item = sender as Button;
-            var ObjItem = item.BindingContext as VMProducto;
+            var ObjItem = item.BindingContext as MVMProductos;
 
             App.MVProducto.QuitarDelCarrito(ObjItem.UidRegistroProductoEnCarrito);
             //MyListViewBusquedaProductos.ItemsSource = null;
@@ -251,7 +265,7 @@ namespace AppCliente
         private void ButtonAgregarUnProducto_Clicked_1(object sender, EventArgs e)
         {
             var item = sender as Button;
-            var ObjItem = item.BindingContext as VMProducto;
+            var ObjItem = item.BindingContext as MVMProductos;
 
             Guid seccion = new Guid();
             App.MVProducto.AgregaAlCarrito(ObjItem.UidRegistroProductoEnCarrito, ObjItem.UidSucursal, seccion, "1", RegistroProductoEnCarrito: ObjItem.UidRegistroProductoEnCarrito);
@@ -283,6 +297,36 @@ namespace AppCliente
                 App.MVProducto.ListaDeDetallesDeOrden = App.MVProducto.ListaDelCarrito.Where(p => p.UidSucursal == ObjItem.UidSucursal).ToList();
                 MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeDetallesDeOrden;
             }
+        }
+
+        private async void btnPropina_Clicked(object sender, EventArgs e)
+        {
+            await PopupNavigation.Instance.PushAsync(new Popup.PopupLoanding());
+            var item = sender as Button;
+            var ObjItem = item.BindingContext as MVMProductos;
+            await Navigation.PushAsync(new ModificarPropina(UidSucursal: listaDelCarrito[0].UidSucursal, MyListViewCarritoEmpresa, btnPagar));
+            await PopupNavigation.Instance.PopAsync();
+        }
+
+        private async void btnTarifas_Clicked(object sender, EventArgs e)
+        {
+            await PopupNavigation.Instance.PushAsync(new Popup.PopupLoanding());
+            var item = sender as Button;
+            using (HttpClient _WebApiGoDeliverix = new HttpClient())
+            {
+                string url = "" + Helpers.Settings.sitio + "/api/Tarifario/GetBuscarTarifario?TipoDeBusqueda=Cliente&ZonaEntrega=" + App.UidColoniaABuscar + "&uidSucursal=" + ObjItem.UidSucursal.ToString() + "";
+
+                string content = await _WebApiGoDeliverix.GetStringAsync(url);
+                string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
+                App.MVTarifario = JsonConvert.DeserializeObject<VMTarifario>(obj);
+            }
+            await Navigation.PushAsync(new SeleccionarDistribuidoraCarrito(ObjItem, MyListViewCarritoEmpresa, btnPagar));
+            await PopupNavigation.Instance.PopAsync();
+        }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            CargaProductos();
         }
     }
 }

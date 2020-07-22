@@ -67,16 +67,16 @@
                             <ViewCell>
                                 <ContentView >
                                     <Frame Margin="0,5,0,0" >
-                                        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" >
-                                            <StackLayout Grid.Column="0" >
+                                        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" >
+                                            <StackLayout >
                                                 <ff:CachedImage
                                                     Source="{Binding STRRUTA}"
                                                     HorizontalOptions="Center"
                                                     VerticalOptions="Start"
                                                     LoadingPlaceholder   = "IconoCajaVacia"
                                                     ErrorPlaceholder     = "Error"
-                                                    WidthRequest         = "150"
-                                                    HeightRequest        = "150"
+                                                    WidthRequest         = "90"
+                                                    HeightRequest        = "90"
                                                     RetryCount           = "3"
                                                     RetryDelay           = "3"
                                                     DownsampleToViewSize = "False">
@@ -85,13 +85,36 @@
                                                     </ff:CachedImage.Transformations>
                                                 </ff:CachedImage>
                                             </StackLayout>
-                                            <StackLayout Grid.Column="1"  Orientation="Vertical">
-                                                <Label Text="{Binding STRNOMBRE}" MaxLines="1" LineBreakMode="CharacterWrap" HorizontalOptions="Start" VerticalOptions="Start" FontSize="Medium"/>
-                                                <Label Text="{Binding Empresa}" MaxLines="1" LineBreakMode="TailTruncation"></Label>
-                                                <Label  Text="{Binding STRDESCRIPCION}" MaxLines="1" LineBreakMode="HeadTruncation" FontSize="Micro" HorizontalOptions="Start"/>
-                                                <Label Text="{Binding StrCosto, StringFormat='${0}'}" x:Name="txtProductoPrecio" Margin="0,30,0,0" HorizontalOptions="End"  LineBreakMode="WordWrap" FontSize="Medium" TextColor="Black"/>
+
+                                            <StackLayout   Orientation="Vertical" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                                                <Label Text="{Binding STRNOMBRE}"  MaxLines="1" LineBreakMode="CharacterWrap" HorizontalOptions="Start" FontSize="Medium"/>
+                                                <Label  Text="{Binding STRDESCRIPCION}"  MaxLines="1"  LineBreakMode="TailTruncation" FontSize="Micro" HorizontalOptions="Start"/>
+                                                <StackLayout Orientation="Horizontal" Margin="0,-15,0,0" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand">
+                                                    <ff:CachedImage
+                                                    Source="{Binding STRRUTAImagenEmpresa}"
+                                                    HorizontalOptions="StartAndExpand"
+                                                    VerticalOptions="End"
+                                                    LoadingPlaceholder   = "IconoCajaVacia"
+                                                    ErrorPlaceholder     = "Error"
+                                                    WidthRequest         = "40"
+                                                    HeightRequest        = "40"
+                                                    RetryCount           = "3"
+                                                    RetryDelay           = "3"
+                                                    DownsampleToViewSize = "False">
+                                                        <ff:CachedImage.Transformations>
+                                                            <ffTrans:RoundedTransformation Radius="20" />
+                                                        </ff:CachedImage.Transformations>
+                                                    </ff:CachedImage>
+                                                    <Label Text="&#xF0D68;" VerticalOptions="End" IsVisible="{Binding IsSelected}" FontFamily="{StaticResource MatIcon}" FontSize="Large" TextColor="Black"></Label>
+
+                                                    <Label Text="{Binding StrCosto, StringFormat='${0:C2}'}"
+                                                               x:Name="txtProductoPrecio" Margin="0,30,0,0"
+                                                               HorizontalOptions="End"  LineBreakMode="WordWrap" FontSize="Medium" TextColor="Black"/>
+                                                </StackLayout>
+
+
                                             </StackLayout>
-                                        </Grid>
+                                        </StackLayout>
                                     </Frame>
                                 </ContentView>
                             </ViewCell>

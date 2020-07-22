@@ -24,7 +24,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>compuandsoft.GoDeliverixSuministradora</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.1</string>
+	<string>1.0.2</string>
 	<key>CFBundleName</key>
 	<string>AppPrueba</string>
 	<key>NSAppTransportSecurity</key>
@@ -44,5 +44,7 @@
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+	<key>MinimumOSVersion</key>
+	<string>13.3</string>
 </dict>
 </plist>

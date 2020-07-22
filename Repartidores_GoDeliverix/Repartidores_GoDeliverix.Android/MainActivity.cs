@@ -1,5 +1,4 @@
 ﻿using System;
-using Com.OneSignal;
 using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
@@ -7,7 +6,6 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using System.Collections.Generic;
-using Com.OneSignal.Abstractions;
 
 namespace Repartidores_GoDeliverix.Droid
 {
@@ -19,7 +17,7 @@ namespace Repartidores_GoDeliverix.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
             base.OnCreate(savedInstanceState);
-            OneSignal.Current.StartInit("170c0582-a7c3-4b75-b1a8-3fe4a952351f").Settings(settings: new Dictionary<string, bool>() { { IOSSettings.kOSSettingsKeyAutoPrompt, true },{ IOSSettings.kOSSettingsKeyInAppLaunchURL, true } }).EndInit();
+            
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             App.ScreenDensity = Resources.DisplayMetrics.Density;
             App.ScreenWidth = Resources.DisplayMetrics.WidthPixels;

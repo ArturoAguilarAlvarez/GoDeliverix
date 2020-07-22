@@ -15,6 +15,7 @@
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <ProvisioningType>manual</ProvisioningType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,12 +51,12 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>ARM64</MtouchArch>
-    <CodesignKey>Apple Development: Manuel Flores (LGKGVG5YC4)</CodesignKey>
+    <CodesignKey>Apple Distribution: Lugo Hernandez Osbel (H3NR49G9QZ)</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <CodesignEntitlements>
     </CodesignEntitlements>
     <MtouchI18n>west</MtouchI18n>
-    <CodesignProvision>GoDeliverixRepartidorPrueba</CodesignProvision>
+    <CodesignProvision>GoDeliverixRepartidor</CodesignProvision>
     <CodesignExtraArgs />
     <CodesignResourceRules />
   </PropertyGroup>
@@ -67,8 +68,9 @@
     <WarningLevel>4</WarningLevel>
     <MtouchArch>ARM64</MtouchArch>
     <ConsolePause>false</ConsolePause>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>Apple Distribution: Lugo Hernandez Osbel (H3NR49G9QZ)</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <CodesignProvision>GoDeliverixRepartidores</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>none</DebugType>
@@ -179,9 +181,6 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Com.OneSignal">
-      <Version>3.4.1</Version>
-    </PackageReference>
     <PackageReference Include="MvvmLightLibs">
       <Version>5.4.1.1</Version>
     </PackageReference>
@@ -200,10 +199,7 @@
     <PackageReference Include="Xamarin.Essentials">
       <Version>1.1.0</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Forms" Version="4.5.0.617" />
-    <PackageReference Include="Xamarin.Forms.GoogleMaps">
-      <Version>3.2.0</Version>
-    </PackageReference>
+    <PackageReference Include="Xamarin.Forms" Version="4.7.0.1142" />
     <PackageReference Include="Xamarin.Forms.Maps">
       <Version>3.4.0.1008975</Version>
     </PackageReference>
