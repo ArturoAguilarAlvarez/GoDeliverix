@@ -59,7 +59,7 @@
                         <Label x:Name="txtsubtotal" TextColor="Black"
                              FontSize="Large" FontAttributes="Bold" HorizontalOptions="End"></Label>
                         <!--Propina-->
-                        <Label x:Name="txtTotalPropina" TextColor="Black" Text=" $0.00"
+                        <Label x:Name="txtTotalPropina" TextColor="Black" Text=" $0.00" 
                             FontSize="Large"  FontAttributes="Bold" HorizontalOptions="End"></Label>
                         <!--Envio-->
                         <Label x:Name="txtTotalEnvio" TextColor="Black" Text=" $0.00"

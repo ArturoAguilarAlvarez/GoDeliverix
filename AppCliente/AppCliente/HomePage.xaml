@@ -101,7 +101,7 @@
         </Grid>
     </NavigationPage.TitleView>
     <ContentPage.Content>
-        <Grid VerticalOptions="FillAndExpand">
+        <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand">
             <StackLayout Orientation="Vertical" x:Name="PanelDireccionesVacias" IsVisible="False">
                 <Label Text=" Agrega una direccion y encuentra productos cerca de ti." FontAttributes="Bold" TextDecorations="None" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Start" Margin="20" FontSize="Large"></Label>
                 <Button Text="Administrar direcciones" HorizontalOptions="FillAndExpand" x:Name="btnAgregarDireccion" TextColor="White" FontSize="Medium"  BackgroundColor="Green" Clicked="BtnAgregarDireccion_Clicked"></Button>
@@ -111,17 +111,17 @@
                 <Button Text="Actualizar busqueda" HorizontalOptions="FillAndExpand" x:Name="btnRefrescar" TextColor="White" FontSize="Medium"  BackgroundColor="Green" Clicked="btnRefrescar_Clicked"></Button>
             </StackLayout>
 
-            <StackLayout Orientation="Vertical"  x:Name="PanelProductos">
-                <Button   HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand"
+            <StackLayout Orientation="Vertical"   VerticalOptions="StartAndExpand" x:Name="PanelProductos">
+                <Button   HorizontalOptions="FillAndExpand"
+                          HeightRequest="50" 
                     x:Name="btnSeleccionarDireccion" 
                     Clicked="BtnSeleccionarDireccion_Clicked"
-                          HeightRequest="50"
                     BackgroundColor="Transparent" FontSize="Small"
                     TextColor="Black" ></Button>
 
-                <StackLayout  x:Name="ScrollView_Productos" Orientation="Vertical" VerticalOptions="FillAndExpand">
+                <StackLayout  x:Name="ScrollView_Productos" Orientation="Vertical"  VerticalOptions="StartAndExpand">
                     <ActivityIndicator x:Name="acloading" Scale="3" Margin="0,50,0,0" HeightRequest="50"></ActivityIndicator>
-                    <ListView x:Name="MyListViewBusquedaProductosHome" ItemTapped="MyListViewBusquedaProductosHome_ItemTapped"
+                    <ListView x:Name="MyListViewBusquedaProductosHome" HeightRequest="600" ItemTapped="MyListViewBusquedaProductosHome_ItemTapped"
                           VerticalScrollBarVisibility="Always" 
                       SelectionMode="None" SeparatorVisibility="None"  IsPullToRefreshEnabled="True" Refreshing="MyListViewBusquedaProductosHome_Refreshing" HasUnevenRows="True">
                         <ListView.ItemTemplate>
@@ -255,6 +255,6 @@
 
             </StackLayout>
 
-        </Grid>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

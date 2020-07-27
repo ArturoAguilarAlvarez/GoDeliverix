@@ -45,7 +45,7 @@ namespace AppCliente.Pagos
                 subtotal += App.MVProducto.ListaDelInformacionSucursales[i].Subtotal;
                 TotalPropina += App.MVProducto.ListaDelInformacionSucursales[i].DPropina;
             }
-
+            TotalPagar = (decimal.Parse(TotalPagar) + TotalPropina).ToString("N2");
             UidOrden = Guid.NewGuid();
             UidOrdenPago = Guid.NewGuid();
 

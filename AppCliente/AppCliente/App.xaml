@@ -6,8 +6,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <OnPlatform x:TypeArguments="x:String" x:Key="MatIcon">
-                <On Platform="Android" Value="materialdesignicons-webfont.ttf#Material Design Icons" />
-                <On Platform="iOS" Value="materialdesignicons-webfont-Material Design Icons" />
+                <On Platform="Android" Value="materialdesigniconswebfont.ttf#Material Design Icons" />
+                <On Platform="iOS"  Value="Material Design Icons" />
             </OnPlatform>
         </ResourceDictionary>
     </Application.Resources>

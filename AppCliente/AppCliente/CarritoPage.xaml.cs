@@ -66,7 +66,7 @@ namespace AppCliente
                 }
                 cantidad += App.MVProducto.ListaDelCarrito[i].Cantidad;
                 decimal a = decimal.Parse(App.MVProducto.ListaDelCarrito[i].StrCosto);
-                subtotal += (App.MVProducto.ListaDelCarrito[i].Cantidad * a);
+                subtotal +=  a;
                 listaDelCarrito.Add(new MVMProductos()
                 {
                     UidRegistroProductoEnCarrito = App.MVProducto.ListaDelCarrito[i].UidRegistroProductoEnCarrito,

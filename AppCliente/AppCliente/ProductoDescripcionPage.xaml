@@ -13,7 +13,7 @@
   </NavigationPage.TitleView>-->
     <ContentPage.Content>
         <ScrollView>
-            <StackLayout VerticalOptions="FillAndExpand" Orientation="Vertical">
+            <StackLayout VerticalOptions="Fill" HorizontalOptions="FillAndExpand" Orientation="Vertical">
                 <ff:CachedImage x:Name="ImagenProducto" Margin="10"
                                                     HeightRequest="200"
                                                     LoadingPlaceholder   = "IconoCajaVacia"
@@ -115,13 +115,10 @@
                                 </StackLayout>
                             </Frame>
                         </StackLayout>
-
-
-
                     </StackLayout>
                 </StackLayout>
 
-                <Button  Text="Agregar  $0" VerticalOptions="EndAndExpand" x:Name="btnAgregarCarrito"  BackgroundColor="#20396e" TextColor="White" HorizontalOptions="FillAndExpand"  Clicked="ButtonCarrito_Clicked"></Button>
+                <Button  Text="Agregar  $0" VerticalOptions="End" x:Name="btnAgregarCarrito"  BackgroundColor="#20396e" TextColor="White" HorizontalOptions="FillAndExpand"  Clicked="ButtonCarrito_Clicked"></Button>
 
             </StackLayout>
 

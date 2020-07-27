@@ -46,7 +46,7 @@ namespace AppCliente.Pagos
             txtsubtotal.Text = "$" + subtotal.ToString("N2");
             txtTotalPropina.Text = "$" + TotalPropina.ToString("N2");
             txtCantidadSucursales.Text = App.MVProducto.ListaDelInformacionSucursales.Count.ToString();
-            txtPropina.Text = "$" + TotalPropina;
+            txtPropina.Text = "$" + TotalPropina.ToString("N2");
             txtTotal.Text = "$" + TotalPagar.ToString("N2");
 
             InformacionMonedero.IsVisible = false;

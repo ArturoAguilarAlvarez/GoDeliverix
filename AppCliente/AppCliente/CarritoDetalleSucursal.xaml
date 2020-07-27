@@ -46,14 +46,14 @@
                         <ViewCell >
                             <StackLayout Spacing="0"
                                 BackgroundColor="White"
-                                Padding="24,8,24,8">
+                                Padding="24,0,24,0">
                                 <Frame  VerticalOptions="FillAndExpand"
                                     Padding="0"
                                     CornerRadius="4">
                                     <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" >
                                         <ContentView>
                                             <StackLayout BackgroundColor="{Binding CColor}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Orientation="Horizontal">
-                                                <BoxView BackgroundColor="Red" WidthRequest="10" HorizontalOptions="FillAndExpand"></BoxView>
+                                                <BoxView BackgroundColor="Red"   HorizontalOptions="Start" WidthRequest="10"></BoxView>
                                                 <StackLayout  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
                                                     <ff:CachedImage
                                                             Source="{Binding STRRUTA}"
@@ -78,12 +78,12 @@
 
                                                     <Label Text="{Binding Subtotal, StringFormat='Importe {0:C2}'}" TextColor="#4ab046" x:Name="txtProductoPrecio"  HorizontalOptions="End" VerticalOptions="End" FontSize="Medium"   />
                                                     <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
-                                                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                                                        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
                                                             <!--<ImageButton Source="IconoEliminar" HeightRequest="40" WidthRequest="40" BackgroundColor="Orange" Clicked="ImageButtonEliminarProducto_Clicked"></ImageButton>-->
-                                                            <Button Text="-" VerticalOptions="Center" WidthRequest="40" HeightRequest="40" FontSize="24" Padding="0" BackgroundColor="White" BorderWidth="1" BorderColor="#efefef" Clicked="ButtonEliminarUnProducto_Clicked"></Button>
-                                                            <Entry Text="{Binding Cantidad, StringFormat='{0}'}" MinimumWidthRequest="40" WidthRequest="40" HorizontalTextAlignment="Center"></Entry>
+                                                            <Button Text="-" VerticalOptions="Center"  FontSize="24" Padding="0" BackgroundColor="White" BorderWidth="1" BorderColor="#efefef" Clicked="ButtonEliminarUnProducto_Clicked"></Button>
+                                                            <Entry Text="{Binding Cantidad, StringFormat='{0}'}"  HorizontalTextAlignment="Center"></Entry>
                                                             <!--<Label  TextDecorations="Underline"  FontSize="30"   HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand" TextColor="White" />-->
-                                                            <Button Text="+" VerticalOptions="Center" WidthRequest="40" HeightRequest="40" FontSize="24" Padding="0" BackgroundColor="White" BorderWidth="1" BorderColor="#efefef" Clicked="ButtonAgregarUnProducto_Clicked_1"></Button>
+                                                            <Button Text="+" VerticalOptions="Center"  FontSize="24" Padding="0" BackgroundColor="White" BorderWidth="1" BorderColor="#efefef" Clicked="ButtonAgregarUnProducto_Clicked_1"></Button>
                                                         </StackLayout>
                                                         <!--<Label FontSize="Small" TextColor="White" FontAttributes="Bold">Notas</Label>-->
                                                         <Entry  Text="{Binding StrNota}" TextColor="Black" Placeholder="Notas" PlaceholderColor="Black" x:Name="ENotas" TextChanged="ENotas_TextChanged"  HorizontalOptions="FillAndExpand" />

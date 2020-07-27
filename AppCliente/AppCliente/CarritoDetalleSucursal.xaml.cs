@@ -135,7 +135,7 @@ namespace AppCliente
             for (int i = 0; i < listaDelCarrito.Count; i++)
             {
                 listaDelCarrito[i].IsVisible = false;
-                if (ObjItem.UidSucursal == listaDelCarrito[i].UidSucursal)
+                if (ObjItem.UidSucursal == listaDelCarrito[i].UidSucursal && !ListaDeDetallesDeOrden.Exists(o=>o.UidRegistroProductoEnCarrito == listaDelCarrito[i].UidRegistroProductoEnCarrito))
                 {
                     ListaDeDetallesDeOrden.Add(listaDelCarrito[i]);
                 }
@@ -295,7 +295,8 @@ namespace AppCliente
                     objeto.StrNota = item.Text;
                 }
                 App.MVProducto.ListaDeDetallesDeOrden = App.MVProducto.ListaDelCarrito.Where(p => p.UidSucursal == ObjItem.UidSucursal).ToList();
-                MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeDetallesDeOrden;
+                //MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeDetallesDeOrden;
+                //CargaProductos();
             }
         }
 

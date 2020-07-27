@@ -23,7 +23,7 @@ namespace AppCliente
             new MVPago(){ NombreTipoDePago = "Pago con tarjeta", IconoTipoDePago = "TarjetaCredito" },
             new MVPago(){ NombreTipoDePago = "Efectivo", IconoTipoDePago ="Efectivo" },
             };
-            btnPagar.Text = "Pagaras $" + CantidadAPagar;
+            btnPagar.Text = "Pagaras $" + decimal.Parse(CantidadAPagar).ToString("N2");
             TotalAPagar = decimal.Parse(CantidadAPagar);
             LVMetodosDePago.ItemsSource = tipodepago;
         }
