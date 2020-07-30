@@ -655,7 +655,6 @@ Global
 		{75DBD2FA-9BD7-42BE-BC3A-61C7E4E42B07}.Release|ARM.ActiveCfg = Release|iPhone
 		{75DBD2FA-9BD7-42BE-BC3A-61C7E4E42B07}.Release|iPhone.ActiveCfg = Release|iPhone
 		{75DBD2FA-9BD7-42BE-BC3A-61C7E4E42B07}.Release|iPhone.Build.0 = Release|iPhone
-		{75DBD2FA-9BD7-42BE-BC3A-61C7E4E42B07}.Release|iPhone.Deploy.0 = Release|iPhone
 		{75DBD2FA-9BD7-42BE-BC3A-61C7E4E42B07}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
 		{75DBD2FA-9BD7-42BE-BC3A-61C7E4E42B07}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 		{75DBD2FA-9BD7-42BE-BC3A-61C7E4E42B07}.Release|x64.ActiveCfg = Release|iPhone

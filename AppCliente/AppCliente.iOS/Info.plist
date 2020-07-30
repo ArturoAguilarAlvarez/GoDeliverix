@@ -27,8 +27,6 @@
 	<string>GoDeliverix</string>
 	<key>CFBundleIdentifier</key>
 	<string>H3NR49G9QZ</string>
-	<key>CFBundleVersion</key>
-	<string>1.0.27</string>
 	<key>CFBundleName</key>
 	<string>AppCliente</string>
 	<key>XSAppIconAssets</key>
@@ -54,9 +52,11 @@
 	<string>LaunchScreen</string>
 	<key>XSLaunchImageAssets</key>
 	<string>Assets.xcassets/LaunchImages.launchimage</string>
-	<key>CFBundleShortVersionString</key>
-	<string>27</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.28</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.28</string>
 </dict>
 </plist>
