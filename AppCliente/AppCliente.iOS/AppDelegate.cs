@@ -29,7 +29,6 @@ namespace AppCliente.iOS
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();
             Xamarin.FormsGoogleMaps.Init("AIzaSyBiWETPG3f-5VYV30iPCAPv-39tu_EjOYo");
             global::Rg.Plugins.Popup.Popup.Init();
-
             LoadApplication(new App());
             return base.FinishedLaunching(app, options);
         }

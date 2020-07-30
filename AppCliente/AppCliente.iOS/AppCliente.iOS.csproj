@@ -75,20 +75,22 @@
     <OutputPath>bin\iPhone\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
+    <MtouchArch>ARM64</MtouchArch>
     <ConsolePause>false</ConsolePause>
     <CodesignKey>Apple Distribution: Lugo Hernandez Osbel (H3NR49G9QZ)</CodesignKey>
     <CodesignEntitlements>
     </CodesignEntitlements>
     <OptimizePNGs>true</OptimizePNGs>
-    <MtouchUseLlvm>true</MtouchUseLlvm>
+    <MtouchUseLlvm>false</MtouchUseLlvm>
     <CodesignProvision>GoDeliverixCliente</CodesignProvision>
     <CodesignExtraArgs />
     <CodesignResourceRules />
-    <MtouchLink>None</MtouchLink>
+    <MtouchLink>Full</MtouchLink>
     <MtouchEnableSGenConc>true</MtouchEnableSGenConc>
     <MtouchI18n>west</MtouchI18n>
     <BuildIpa>true</BuildIpa>
+    <MtouchFloat32>true</MtouchFloat32>
+    <MtouchExtraArgs>--optimize=experimental-xforms-product-type</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>none</DebugType>
