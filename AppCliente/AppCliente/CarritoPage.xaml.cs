@@ -36,6 +36,8 @@ namespace AppCliente
             TotalEnvio = 0;
             TotalPagar = 0;
             TotalPropina = 0;
+            btnPagar.IsEnabled = false;
+            btnPagar.Text = "Cargando...";
             List<MVMProductos> listaDelCarrito = new List<MVMProductos>();
             listainformacionsucursales = new List<MVMProductos>();
             for (int i = 0; i < App.MVProducto.ListaDelCarrito.Count; i++)
@@ -66,7 +68,7 @@ namespace AppCliente
                 }
                 cantidad += App.MVProducto.ListaDelCarrito[i].Cantidad;
                 decimal a = decimal.Parse(App.MVProducto.ListaDelCarrito[i].StrCosto);
-                subtotal += (App.MVProducto.ListaDelCarrito[i].Cantidad * a);
+                subtotal += a;
                 listaDelCarrito.Add(new MVMProductos()
                 {
                     UidRegistroProductoEnCarrito = App.MVProducto.ListaDelCarrito[i].UidRegistroProductoEnCarrito,
@@ -140,6 +142,7 @@ namespace AppCliente
             #region mostrar los datos al usuario
             TotalPagar += TotalPropina;
             btnPagar.Text = "Pagar  $" + TotalPagar.ToString("N2");
+            btnPagar.IsEnabled = true;
             #endregion
 
         }

@@ -135,7 +135,7 @@ namespace AppCliente
             for (int i = 0; i < listaDelCarrito.Count; i++)
             {
                 listaDelCarrito[i].IsVisible = false;
-                if (ObjItem.UidSucursal == listaDelCarrito[i].UidSucursal)
+                if (ObjItem.UidSucursal == listaDelCarrito[i].UidSucursal && !ListaDeDetallesDeOrden.Exists(o => o.UidRegistroProductoEnCarrito == listaDelCarrito[i].UidRegistroProductoEnCarrito))
                 {
                     ListaDeDetallesDeOrden.Add(listaDelCarrito[i]);
                 }
@@ -228,7 +228,7 @@ namespace AppCliente
                 subtotal = subtotal + App.MVProducto.ListaDelInformacionSucursales[i].Subtotal;
             }
             CargaProductos();
-            btnPagar.Text = "Pagar  $" + TotalPagar;
+            //btnPagar.Text = "Pagar  $" + TotalPagar;
         }
 
         private async void ImageButtonEliminarProducto_Clicked(object sender, EventArgs e)
@@ -294,8 +294,8 @@ namespace AppCliente
                 {
                     objeto.StrNota = item.Text;
                 }
-                App.MVProducto.ListaDeDetallesDeOrden = App.MVProducto.ListaDelCarrito.Where(p => p.UidSucursal == ObjItem.UidSucursal).ToList();
-                MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeDetallesDeOrden;
+                //App.MVProducto.ListaDeDetallesDeOrden = App.MVProducto.ListaDelCarrito.Where(p => p.UidSucursal == ObjItem.UidSucursal).ToList();
+                //MyListViewBusquedaProductos.ItemsSource = App.MVProducto.ListaDeDetallesDeOrden;
             }
         }
 

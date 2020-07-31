@@ -9,7 +9,7 @@
              x:Class="AppCliente.HomePage">
     <ContentPage.ToolbarItems>
         <ToolbarItem Clicked="btnAcceder_Clicked"  x:Name="btnAcceder">
-           
+
         </ToolbarItem>
         <ToolbarItem Clicked="MenuItemBuscar_Activted">
             <ToolbarItem.IconImageSource>
@@ -101,7 +101,7 @@
         </Grid>
     </NavigationPage.TitleView>
     <ContentPage.Content>
-        <Grid VerticalOptions="FillAndExpand">
+        <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand">
             <StackLayout Orientation="Vertical" x:Name="PanelDireccionesVacias" IsVisible="False">
                 <Label Text=" Agrega una direccion y encuentra productos cerca de ti." FontAttributes="Bold" TextDecorations="None" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Start" Margin="20" FontSize="Large"></Label>
                 <Button Text="Administrar direcciones" HorizontalOptions="FillAndExpand" x:Name="btnAgregarDireccion" TextColor="White" FontSize="Medium"  BackgroundColor="Green" Clicked="BtnAgregarDireccion_Clicked"></Button>
@@ -111,19 +111,28 @@
                 <Button Text="Actualizar busqueda" HorizontalOptions="FillAndExpand" x:Name="btnRefrescar" TextColor="White" FontSize="Medium"  BackgroundColor="Green" Clicked="btnRefrescar_Clicked"></Button>
             </StackLayout>
 
-            <StackLayout Orientation="Vertical"  x:Name="PanelProductos">
-                <Button   HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand"
+            <Grid  x:Name="PanelProductos">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Button   HorizontalOptions="FillAndExpand" VerticalOptions="Start"
                     x:Name="btnSeleccionarDireccion" 
                     Clicked="BtnSeleccionarDireccion_Clicked"
-                          HeightRequest="50"
+                     Grid.Row="0"
                     BackgroundColor="Transparent" FontSize="Small"
                     TextColor="Black" ></Button>
 
-                <StackLayout  x:Name="ScrollView_Productos" Orientation="Vertical" VerticalOptions="FillAndExpand">
+                <StackLayout Grid.Row="1"  x:Name="ScrollView_Productos" HorizontalOptions="Fill" Orientation="Vertical" VerticalOptions="Fill">
                     <ActivityIndicator x:Name="acloading" Scale="3" Margin="0,50,0,0" HeightRequest="50"></ActivityIndicator>
+                    
                     <ListView x:Name="MyListViewBusquedaProductosHome" ItemTapped="MyListViewBusquedaProductosHome_ItemTapped"
                           VerticalScrollBarVisibility="Always" 
-                      SelectionMode="None" SeparatorVisibility="None"  IsPullToRefreshEnabled="True" Refreshing="MyListViewBusquedaProductosHome_Refreshing" HasUnevenRows="True">
+                      SelectionMode="None"
+                      SeparatorVisibility="None" 
+                              IsPullToRefreshEnabled="True" 
+                              HasUnevenRows="True"
+                                Refreshing="MyListViewBusquedaProductosHome_Refreshing">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
@@ -173,8 +182,6 @@
                                                                x:Name="txtProductoPrecio" Margin="0,30,0,0"
                                                                HorizontalOptions="End"  LineBreakMode="WordWrap" FontSize="Medium" TextColor="Black"/>
                                                     </StackLayout>
-
-
                                                 </StackLayout>
                                             </StackLayout>
                                         </Frame>
@@ -184,7 +191,7 @@
                         </ListView.ItemTemplate>
                     </ListView>
                 </StackLayout>
-                <StackLayout x:Name="ScrollView_Empresas" VerticalOptions="Start" IsVisible="False">
+                <StackLayout Grid.Row="1" x:Name="ScrollView_Empresas" VerticalOptions="Start" IsVisible="False">
                     <ListView x:Name="MyListViewBusquedaEmpresas" VerticalScrollBarVisibility="Always" ItemsSource="{Binding VMEmpresas}"
                       SelectionMode="None" ItemTapped="MyListViewBusquedaEmpresas_ItemTapped"
                       SeparatorVisibility="None" IsPullToRefreshEnabled="False" HasUnevenRows="True">
@@ -238,23 +245,20 @@
                     </ListView>
                 </StackLayout>
 
-                <StackLayout IsVisible="False" x:Name="PanelProductoNoEncontrados" VerticalOptions="Start" >
+                <StackLayout Grid.Row="1" IsVisible="False" x:Name="PanelProductoNoEncontrados" VerticalOptions="Start" >
                     <Image Source="IconoCajaVacia" HorizontalOptions="Center" VerticalOptions="Center"></Image>
                     <Label Text="No hay productos disponibles en esta ubicacion" HorizontalOptions="Fill" HorizontalTextAlignment="Center" TextColor="Orange" VerticalOptions="Center"></Label>
                 </StackLayout>
-                <StackLayout IsVisible="False" x:Name="PanelUbicacionNoEstablecida" VerticalOptions="Start">
+                <StackLayout Grid.Row="1" IsVisible="False" x:Name="PanelUbicacionNoEstablecida" VerticalOptions="Start">
                     <Image Source="IconoDireccionesMenu" HorizontalOptions="Center" VerticalOptions="Center"></Image>
                     <Label FontSize="Medium" Text="No se ha establecido una ubicación" HorizontalOptions="Fill" HorizontalTextAlignment="Center" TextColor="Orange" VerticalOptions="Center"></Label>
                     <Label FontSize="Medium" Text="Para establecer una, seleccione en el menu 'Establecer ubicación' " HorizontalOptions="Fill" HorizontalTextAlignment="Center" TextColor="Orange" VerticalOptions="Center"></Label>
                 </StackLayout>
 
-
                 <!--<Label HorizontalOptions="FillAndExpand" Grid.Row="1" VerticalTextAlignment="Center" VerticalOptions="End" BackgroundColor="LightGray" HorizontalTextAlignment="Center" x:Name="lbCantidad"></Label>-->
 
+            </Grid>
 
-
-            </StackLayout>
-
-        </Grid>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

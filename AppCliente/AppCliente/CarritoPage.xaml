@@ -57,6 +57,7 @@
                     SelectionMode="None"                     
                     SeparatorVisibility="Default"
                     IsPullToRefreshEnabled="False"
+                    
                     HasUnevenRows="True">
 
                 <!--Custom View Cells-->
@@ -220,7 +221,7 @@
                         x:Name="btnPagar"
                         VerticalOptions="End"  
                         HorizontalOptions="FillAndExpand"
-                        Text="pagar $0.00" 
+                        Text="Cargando..." 
                         Clicked="BtnPagar_Clicked"
                         TextColor="White"
                         BackgroundColor="Green"></Button>

@@ -626,6 +626,7 @@ namespace AppCliente
                                 ListaDeProductosHome = App.ListaDeProductos;
 
                                 MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos;
+                                MyListViewBusquedaProductosHome.HeightRequest = 550;
                                 CantidadProductosMostrados = App.ListaDeProductos.Count;
                                 //lbCantidad.Text = App.ListaDeProductos.Count + " Productos disponibles";
                             }
