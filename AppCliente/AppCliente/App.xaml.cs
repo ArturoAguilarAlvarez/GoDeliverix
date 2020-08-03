@@ -75,7 +75,7 @@ namespace AppCliente
             //{
             if (string.IsNullOrEmpty(Usuario) || string.IsNullOrEmpty(Contrasena))
             {
-                MainPage = new EmptyPage();
+                MainPage = new MasterMenu();
             }
             else
             {
