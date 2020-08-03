@@ -132,7 +132,6 @@ namespace AppCliente
                         }
                     }
                 }
-
                 else
                 {
                     var action = await DisplayAlert("Actualizacion disponible", "Actualizar a la version " + oversion.StrVersion + "", "Aceptar", "Cancelar");
