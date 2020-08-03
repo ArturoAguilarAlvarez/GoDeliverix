@@ -11,7 +11,6 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using AppCliente.WebApi;
 using System.Threading.Tasks;
-using AppCliente.Test;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace AppCliente

@@ -6,7 +6,8 @@
     <StackLayout>
         <ListView x:Name="MenuItemsListView"
               SeparatorVisibility="None"
-              HasUnevenRows="true">
+              HasUnevenRows="true"
+              ItemsSource="{Binding MenuItems}">
             <ListView.Header>
                 <Grid BackgroundColor="White">
                     <Grid.ColumnDefinitions>
