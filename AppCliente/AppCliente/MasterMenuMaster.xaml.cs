@@ -24,9 +24,13 @@ namespace AppCliente
         {
             InitializeComponent();
 
-            BindingContext = new MasterMenuMasterViewModel();
-            ListView = MenuItemsListView;
-            cargaUsuario();
+            var list = new List<MasterMenuMenuItem>() {
+                new MasterMenuMenuItem { Id = 0, Title = "Iniciar sesión", TargetType = typeof(Login), UrlResource="IconoProfileMenu"},
+                new MasterMenuMenuItem { Id = 1, Title = "Busqueda", TargetType = typeof(HomePage), UrlResource="IconoHomeMenu"},
+                new MasterMenuMenuItem { Id = 3, Title = "Establecer ubicación",TargetType = typeof(SeleccionaColonia),UrlResource="IconoDireccionesMenu"}
+            };
+            this.MenuItemsListView.ItemsSource = list;
+            this.cargaUsuario();
         }
 
         public async void cargaUsuario()
