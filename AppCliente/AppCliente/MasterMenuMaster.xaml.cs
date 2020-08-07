@@ -31,14 +31,17 @@ namespace AppCliente
 
         public async void cargaUsuario()
         {
-            string _URL = (@"" + Helpers.Settings.sitio + "/api/Usuario/GetBuscarUsuarios?UidUsuario=" + App.Global1.ToString() + "" +
-               "&UidEmpresa=00000000-0000-0000-0000-000000000000" +
-               "&UIDPERFIL=4F1E1C4B-3253-4225-9E46-DD7D1940DA19");
-            var DatosObtenidos = await _client.GetAsync(_URL);
-            string res = await DatosObtenidos.Content.ReadAsStringAsync();
-            var asd = JsonConvert.DeserializeObject<ResponseHelper>(res).Data.ToString();
-            App.MVUsuarios = JsonConvert.DeserializeObject<VistaDelModelo.VMUsuarios>(asd);
-            MiNombre.Text = App.MVUsuarios.StrNombre + " " + App.MVUsuarios.StrApellidoPaterno;
+            if (!string.IsNullOrEmpty(App.Global1))
+            {
+                string _URL = (@"" + Helpers.Settings.sitio + "/api/Usuario/GetBuscarUsuarios?UidUsuario=" + App.Global1.ToString() + "" +
+                              "&UidEmpresa=00000000-0000-0000-0000-000000000000" +
+                              "&UIDPERFIL=4F1E1C4B-3253-4225-9E46-DD7D1940DA19");
+                var DatosObtenidos = await _client.GetAsync(_URL);
+                string res = await DatosObtenidos.Content.ReadAsStringAsync();
+                var asd = JsonConvert.DeserializeObject<ResponseHelper>(res).Data.ToString();
+                App.MVUsuarios = JsonConvert.DeserializeObject<VistaDelModelo.VMUsuarios>(asd);
+                MiNombre.Text = App.MVUsuarios.StrNombre + " " + App.MVUsuarios.StrApellidoPaterno;
+            }
         }
 
         class MasterMenuMasterViewModel : INotifyPropertyChanged
