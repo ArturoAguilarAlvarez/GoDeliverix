@@ -3,6 +3,8 @@ using System.Web.Http;
 using VistaDelModelo;
 using System.Collections;
 using WebApplication1.App_Start;
+using System.Net.Http;
+
 namespace WebApplication1.Controllers
 {
     public class OrdenController : ApiController
@@ -12,6 +14,43 @@ namespace WebApplication1.Controllers
 
 
         #region Aplicacion cliente
+
+
+        #region Xamarin Api
+
+        /// <summary>
+        /// Obtiene el estatus actual de un pedido
+        /// </summary>
+        /// <param name="UidPedido"></param>
+        /// <returns></returns>
+        public HttpResponseMessage GetObtenerEstatusDeOrden_Movil(string UidPedido)
+        {
+            MVOrden = new VMOrden();
+            return Request.CreateResponse(MVOrden.ObtenerEstatusOrden(UidPedido));
+        }
+        /// <summary>
+        /// Obtiene el historico de ordenes del cliente 
+        /// </summary>
+        /// <param name="UidUsuario"></param>
+        /// <param name="parametro"></param>
+        /// <returns></returns>
+        public HttpResponseMessage GetObtenerOrdenesCliente_Movil(string UidUsuario, string parametro)
+        {
+            MVOrden = new VMOrden();
+            MVOrden.ObtenerOrdenesCliente(UidUsuario, parametro);
+            return Request.CreateResponse(MVOrden.ListaDeOrdenes);
+        }
+        /// <summary>
+        /// Obtiene los pedidos  de una orden
+        /// </summary>
+        /// <param name="UidOrden"></param>
+        /// <returns></returns>
+        public HttpResponseMessage GetObtenerPedidosDeOrden_Movil(Guid UidOrden)
+        {
+            MVOrden = new VMOrden();
+            return Request.CreateResponse(MVOrden.ObtenerSucursaleDeOrden(UidOrden));
+        }
+        #endregion
         /// <summary>
         /// Guarda la orden del cliente al pagarla
         /// </summary>
@@ -24,7 +63,7 @@ namespace WebApplication1.Controllers
         /// <param name="UidRelacionOrdenSucursal"></param>
         /// <param name="LngCodigoDeEntrega"></param>
         /// <returns></returns>
-        public ResponseHelper GetGuardarOrden(Guid UIDORDEN, decimal Total, Guid Uidusuario, Guid UidDireccion, Guid Uidsucursal, decimal totalSucursal, Guid UidRelacionOrdenSucursal, long LngCodigoDeEntrega,string UidTarifario)
+        public ResponseHelper GetGuardarOrden(Guid UIDORDEN, decimal Total, Guid Uidusuario, Guid UidDireccion, Guid Uidsucursal, decimal totalSucursal, Guid UidRelacionOrdenSucursal, long LngCodigoDeEntrega, string UidTarifario)
         {
             MVOrden = new VMOrden();
             MVOrden.GuardaOrden(UIDORDEN, Total, Uidusuario, UidDireccion, Uidsucursal, totalSucursal, UidRelacionOrdenSucursal, LngCodigoDeEntrega, UidTarifario);

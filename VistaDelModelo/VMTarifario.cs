@@ -93,6 +93,15 @@ namespace VistaDelModelo
             set { _StrRuta = value; }
         }
         /// <summary>
+        /// Nombre de la Empresa de tarifario
+        /// </summary>
+        private string _StrNombreEmpresa;
+        public string StrNombreEmpresa
+        {
+            get { return _StrNombreEmpresa; }
+            set { _StrNombreEmpresa = value; }
+        }
+        /// <summary>
         /// Nombre de la sucursal de tarifario
         /// </summary>
         private string _StrNombreSucursal;
@@ -350,10 +359,11 @@ namespace VistaDelModelo
                         string NombreZonaEntrega = oDbTarifario.ObtenerNombreColoniaEntrega(UidRelacionZE.ToString());
                         Guid distribudiora = new Guid(item["UidSucursalDistribuidora"].ToString());
                         string NombreSucursal = item["Identificador"].ToString();
+                        string NombreEmpresa = item["NombreComercial"].ToString();
                         string Imagen = "../" + item["NVchRuta"].ToString();
                         if (!ListaDeTarifarios.Exists(t => t.UidRelacionZE == UidRelacionZE && t.UidRelacionZR == UidRelacionZR))
                         {
-                            ListaDeTarifarios.Add(new VMTarifario() { StrRuta = Imagen, StrNombreSucursal = NombreSucursal, GuidSucursalDistribuidora = distribudiora, UidTarifario = UidTarifario, UidRelacionZE = UidRelacionZE, UidRelacionZR = UidRelacionZR, DPrecio = DPrecio, StrNombreColoniaZE = NombreZonaEntrega, StrNombreColoniaZR = NombreZonaRecolecta });
+                            ListaDeTarifarios.Add(new VMTarifario() { StrRuta = Imagen, StrNombreSucursal = NombreSucursal, GuidSucursalDistribuidora = distribudiora, UidTarifario = UidTarifario, UidRelacionZE = UidRelacionZE, UidRelacionZR = UidRelacionZR, DPrecio = DPrecio, StrNombreColoniaZE = NombreZonaEntrega, StrNombreColoniaZR = NombreZonaRecolecta,StrNombreEmpresa = NombreEmpresa });
                         }
                     }
                 }

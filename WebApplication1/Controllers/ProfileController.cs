@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Web.Http;
 using VistaDelModelo;
 using WebApplication1.App_Start;
@@ -12,6 +13,15 @@ namespace WebApplication1.Controllers
         ResponseHelper Respuesta;
         #endregion
 
+        // GET: api/Profile
+        public HttpResponseMessage GetInicioDeSessionCliente_Movil(string Usuario, string Contrasena)
+        {
+            MVAcceso = new VMAcceso();
+            Guid id = MVAcceso.Ingresar(Usuario, Contrasena);
+            VMUsuarios mvusuario = new VMUsuarios();
+            mvusuario.BusquedaDeUsuario(UidUsuario: id, UIDPERFIL: new Guid("4F1E1C4B-3253-4225-9E46-DD7D1940DA19"));
+            return Request.CreateResponse(mvusuario);
+        }
         // GET: api/Profile
         public ResponseHelper Get(string Usuario, string Contrasena)
         {
@@ -118,12 +128,12 @@ namespace WebApplication1.Controllers
         }
 
         // POST: api/Profile
-        public void Post([FromBody]string value)
+        public void Post([FromBody] string value)
         {
         }
 
         // PUT: api/Profile/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody] string value)
         {
         }
 

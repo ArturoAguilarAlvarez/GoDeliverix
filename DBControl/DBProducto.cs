@@ -276,5 +276,9 @@ namespace DBControl
             string query = "select sp.UidSeccion,p.UidProducto,sp.UidSeccionProducto, p.VchNombre,sp.VchTiempoElaboracion,dbo.ObtenerPrecioConComision(sp.Mcosto,p.UidEmpresa )  as Mcosto, s.Identificador,s.UidSucursal, i.NVchRuta, sp.UidSeccionProducto from  productos p inner join SeccionProducto sp on sp.UidProducto = p.UidProducto inner join Seccion se on se.UidSeccion = sp.UidSeccion inner join Oferta o on o.UidOferta = se.UidOferta inner join Sucursales s on s.UidSucursal = o.Uidsucursal inner join ImagenProducto ip on ip.UidProducto = p.UidProducto   inner join imagenes i on i.UIdImagen = ip.UidImagen where p.uidProducto = '" + uidProducto.ToString() + "' and s.UidSucursal = '" + UidSucursal + "' and se.uidSeccion = '" + UidSeccion + "'";
             return oConexion.Consultas(query);
         }
+
+
+
+
     }
 }

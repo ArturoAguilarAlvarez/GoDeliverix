@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Web.Http;
 using VistaDelModelo;
 using WebApplication1.App_Start;
@@ -161,7 +162,55 @@ namespace WebApplication1.Controllers
                 fnacimiento: fnacimiento,
                 perfil: perfil);
         }
+        #region Xamarin ApiClient
 
+        public HttpResponseMessage GetBuscarUsuarios_Movil(string UidUsuario = "", string UidEmpresa = "", string NOMBRE = "", string USER = "", string APELLIDO = "", string ESTATUS = "", string UIDPERFIL = "")
+        {
+            MVUsuario = new VMUsuarios();
+
+            if (string.IsNullOrEmpty(UidEmpresa))
+            {
+                UidEmpresa = Guid.Empty.ToString();
+            }
+            if (string.IsNullOrEmpty(UidUsuario))
+            {
+                UidUsuario = Guid.Empty.ToString();
+            }
+
+            MVUsuario.BusquedaDeUsuario(new Guid(UidUsuario), new Guid(UidEmpresa), NOMBRE, USER, APELLIDO, ESTATUS, new Guid(UIDPERFIL));
+
+            if (!string.IsNullOrEmpty(UidUsuario))
+            {
+                return Request.CreateResponse(MVUsuario);
+            }
+            else
+            {
+                return Request.CreateResponse(MVUsuario.LISTADEUSUARIOS);
+            }
+
+        }
+
+        public HttpResponseMessage GetEnviarCodigoDeConfirmacion(string nombre, string apellidoP, string codigo, string correo,string idioma) 
+        {
+            VMAcceso MVAcceso = new VMAcceso();
+            MVAcceso.EnviarCodigoDeActivacion(nombre,apellidoP, correo,codigo, idioma);
+            return Request.CreateResponse("Correo enviado");
+        }
+
+        public HttpResponseMessage GetGuardarusuarioCliente_Movil(string UidUsuario, string nombre, string apellidoP, string apellidoM, string usuario, string contrasena, string fechaNacimiento)
+        {
+            ResponseHelper respuesta = new ResponseHelper();
+            VMUsuarios MVUsuarios = new VMUsuarios();
+            VMAcceso MVAcceso = new VMAcceso();
+
+            Guid uidusuaro = new Guid(UidUsuario);
+            respuesta.Data = MVUsuarios.GuardaUsuario(UidUsuario: uidusuaro, Nombre: nombre, ApellidoPaterno: apellidoP, ApellidoMaterno: apellidoM, usuario: usuario, password: contrasena, fnacimiento: fechaNacimiento, perfil: "4f1e1c4b-3253-4225-9e46-dd7d1940da19", estatus: "1", TIPODEUSUARIO: "Cliente");
+            //MVTelefono.AgregaTelefonoALista("f7bdd1d0-28e5-4f52-bc26-a17cd5c297de", telefono, "Principal");
+            // MVCorreoElectronico.AgregarCorreo(uidusuaro, "Usuario", correo, uidcorreo);
+            //MVAcceso.CorreoDeConfirmacion(uidusuaro, correo, usuario, contrasena, nombre, apellidoM + " " + apellidoM);
+            return Request.CreateResponse();
+        }
+        #endregion
 
     }
 }

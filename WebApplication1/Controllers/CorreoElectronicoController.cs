@@ -66,12 +66,12 @@ namespace WebApplication1.Controllers
         }
 
         // POST: api/Profile
-        public void Post([FromBody]string value)
+        public void Post([FromBody] string value)
         {
         }
 
         // PUT: api/Profile/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody] string value)
         {
         }
 
@@ -79,5 +79,28 @@ namespace WebApplication1.Controllers
         public void Delete(Guid UidUsuario)
         {
         }
+
+        #region Xamarin Api Cliente
+
+        public HttpResponseMessage GetBuscarCorreo_movil(string UidPropietario = "", string strParametroDebusqueda = "", string strCorreoElectronico = "", string UidCorreoElectronico = "")
+        {
+            if (string.IsNullOrEmpty(UidPropietario))
+            {
+                UidPropietario = Guid.Empty.ToString();
+            }
+            MVCorreoElectronico = new VMCorreoElectronico();
+            if (string.IsNullOrEmpty(UidCorreoElectronico))
+            {
+                UidCorreoElectronico = Guid.Empty.ToString();
+            }
+            MVCorreoElectronico.BuscarCorreos(new Guid(UidPropietario), strParametroDebusqueda, strCorreoElectronico, new Guid(UidCorreoElectronico));
+            return Request.CreateResponse(MVCorreoElectronico);
+        }
+        public HttpResponseMessage GetAgregarCorreo_movil(string UidPropietario, string strParametroDeInsercion, string strCorreoElectronico, string UidCorreoElectronico)
+        {
+            MVCorreoElectronico = new VMCorreoElectronico();
+            return Request.CreateResponse(MVCorreoElectronico.AgregarCorreo(new Guid(UidPropietario), strParametroDeInsercion, strCorreoElectronico, new Guid(UidCorreoElectronico)));
+        }
+        #endregion
     }
 }

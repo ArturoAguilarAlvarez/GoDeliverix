@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.CompuAndSoft.GDCliente" android:installLocation="preferExternal" android:versionName="1.0.15" android:versionCode="15">
-	<uses-sdk android:targetSdkVersion="28" android:minSdkVersion="22" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.CompuAndSoft.GDCliente" android:installLocation="preferExternal" android:versionName="1.0.16" android:versionCode="16">
+	<uses-sdk android:targetSdkVersion="28" android:minSdkVersion="21" />
 	<application android:label="GoDeliverix" android:roundIcon="@drawable/logo48round" android:usesCleartextTraffic="true">
 		<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyBiWETPG3f-5VYV30iPCAPv-39tu_EjOYo" />
 		<uses-library android:name="org.apache.http.legacy" android:required="false" />

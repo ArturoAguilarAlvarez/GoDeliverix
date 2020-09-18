@@ -60,7 +60,7 @@ namespace VistaDelModelo
             get { return _strRuta; }
             set { _strRuta = value; }
         }
-        
+
         private string _strRutaEmpresa;
 
         public string STRRUTAImagenEmpresa
@@ -118,6 +118,23 @@ namespace VistaDelModelo
             get { return _DPropina; }
             set { _DPropina = value; }
         }
+
+        private string _strDeliveryBranch;
+
+        public string StrDeliveryBranch
+        {
+            get { return _strDeliveryBranch; }
+            set { _strDeliveryBranch = value; }
+        }
+
+        private string _strDeliveryCompany;
+
+        public string strDeliveryCompany
+        {
+            get { return _strDeliveryCompany; }
+            set { _strDeliveryCompany = value; }
+        }
+
 
         private Guid _UidTarifario;
 
@@ -489,125 +506,7 @@ namespace VistaDelModelo
 
         }
 
-        public void AgregaAlCarrito(Guid uidProducto, Guid UidSucursal, Guid UidSeccion, string cantidad, decimal CostoDeEnvio = 0.0m, Guid UidTarifario = new Guid(), string strNota = "", Guid RegistroProductoEnCarrito = new Guid(), string URLEmpresa = "", string dPropina = "")
-        {
-            //Agrega un registro sin nota
-            //Agrega un registro con una nota
-            string nota = "";
-            Guid uidNota = Guid.Empty;
-            decimal dpropina = new decimal();
-            if (!string.IsNullOrEmpty(dPropina))
-            {
-                dpropina = decimal.Parse(dPropina, System.Globalization.NumberStyles.Float);
-            }
-            if (RegistroProductoEnCarrito == Guid.Empty)
-            {
 
-                if (!string.IsNullOrEmpty(strNota))
-                {
-                    uidNota = Guid.NewGuid();
-                    nota = strNota;
-                }
-
-                foreach (DataRow item in DatosProductos.ProductoCarrito(uidProducto, UidSucursal.ToString(), UidSeccion.ToString()).Rows)
-                {
-                    dpropina= 0.00m;
-                    Guid uidproducto = new Guid(item["UidProducto"].ToString());
-                    Guid uidsucursal = new Guid(item["UidSucursal"].ToString());
-                    Guid UidSeccionpoducto = new Guid(item["UidSeccionProducto"].ToString());
-                    string nombre = item["VchNombre"].ToString();
-                    string costo = item["Mcosto"].ToString();
-                    string sucursal = item["Identificador"].ToString();
-                    //string imagen = "../" + item["NVchRuta"].ToString();
-                    string imagen = "http://www.godeliverix.net/vista/" + item["NVchRuta"].ToString();
-                    decimal SubTotal = decimal.Parse(costo) * int.Parse(cantidad);
-                    decimal Total = SubTotal + CostoDeEnvio;
-                    dpropina = CostoDeEnvio * 0.1m;
-                    ListaDelCarrito.Add(new VMProducto()
-                    {
-                        UidRegistroProductoEnCarrito = Guid.NewGuid(),
-                        UidSeccionPoducto = UidSeccionpoducto,
-                        Total = Total,
-                        Subtotal = SubTotal,
-                        CostoEnvio = CostoDeEnvio,
-                        DPropina = dpropina,
-                        UID = uidproducto,
-                        UidSucursal = uidsucursal,
-                        STRNOMBRE = nombre,
-                        StrCosto = SubTotal.ToString(),
-                        Empresa = sucursal,
-                        STRRUTA = imagen,
-                        Cantidad = int.Parse(cantidad),
-                        UidNota = uidNota,
-                        StrNota = nota,
-                        ColorEstatusProducto = ""
-                    });
-
-                    if (!ListaDelInformacionSucursales.Exists(suc => suc.UidSucursal == uidsucursal))
-                    {
-                        ListaDelInformacionSucursales.Add(new VMProducto()
-                        {
-                            STRRUTA = URLEmpresa,
-                            UidTarifario = UidTarifario,
-                            UidSucursal = uidsucursal,
-                            Empresa = sucursal,
-                            Total = Total,
-                            CostoEnvio = CostoDeEnvio,
-                            Subtotal = SubTotal,
-                            Cantidad = int.Parse(cantidad),
-                            DPropina = dpropina
-                        });
-                    }
-                    else
-                    {
-                        if (ListaDelInformacionSucursales.Exists(suc => suc.UidSucursal == UidSucursal))
-                        {
-                            var Sucursal = ListaDelInformacionSucursales.Find(suc => suc.UidSucursal == UidSucursal);
-                            Sucursal.Subtotal = (Sucursal.Subtotal + SubTotal);
-                            Sucursal.Cantidad = Sucursal.Cantidad + int.Parse(cantidad);
-                            Sucursal.Total = (Sucursal.Subtotal + Sucursal.CostoEnvio);
-                            Sucursal.DPropina = dpropina;
-                        }
-                    }
-                }
-            }
-            else
-            //Si existe el producto en la lista y no tiene un mensaje
-            if (ListaDelCarrito.Exists(Objeto => Objeto.UidRegistroProductoEnCarrito == RegistroProductoEnCarrito))
-            {
-                var Producto = new VMProducto();
-                Producto = ListaDelCarrito.Find(Objeto => Objeto.UidRegistroProductoEnCarrito == RegistroProductoEnCarrito);
-
-                decimal precio = Producto.Subtotal / Producto.Cantidad;
-                Producto.Cantidad = Producto.Cantidad + int.Parse(cantidad);
-
-                Producto.Subtotal = (precio * Producto.Cantidad);
-                Producto.Total = Producto.Subtotal + Producto.CostoEnvio;
-
-                if (ListaDelInformacionSucursales.Exists(suc => suc.UidSucursal == Producto.UidSucursal))
-                {
-                    var sucursal = ListaDelInformacionSucursales.Find(suc => suc.UidSucursal == Producto.UidSucursal);
-                    decimal preciototal = 0.0m;
-
-                    var productos = ListaDelCarrito.Where(x => x.UidSucursal == sucursal.UidSucursal).ToList();
-                    foreach (var item in productos)
-                    {
-                        preciototal = preciototal + item.Subtotal;
-                    }
-                    sucursal.Subtotal = preciototal;
-                    sucursal.Cantidad = sucursal.Cantidad + int.Parse(cantidad);
-                    if (CostoDeEnvio != 0)
-                    {
-                        sucursal.CostoEnvio = CostoDeEnvio;
-                    }
-                    sucursal.Total = sucursal.Subtotal + sucursal.CostoEnvio;
-                    if (UidTarifario != Guid.Empty)
-                    {
-                        sucursal.UidTarifario = UidTarifario;
-                    }
-                }
-            }
-        }
         public void AgregaTarifarioOrden(Guid UidSucursal, Guid Uidtarifario, decimal dCostoDeEnvio)
         {
             var registro = ListaDelInformacionSucursales.Find(s => s.UidSucursal == UidSucursal);
@@ -914,7 +813,7 @@ namespace VistaDelModelo
                     Guid uidempresa = new Guid(item["UidEmpresa"].ToString());
                     string direccion = "";
                     odireccion.ObtenerDireccionSucursal(UidSucursal.ToString());
-                    direccion = odireccion.ObtenerNombreDeLaColonia(odireccion.COLONIA) +"-"+ odireccion.CALLE0;
+                    direccion = odireccion.ObtenerNombreDeLaColonia(odireccion.COLONIA) + "-" + odireccion.CALLE0;
                     if (!ListaDePreciosSucursales.Exists(p => p.UID == uidseccion))
                     {
                         ListaDePreciosSucursales.Add(new VMProducto()
@@ -936,7 +835,138 @@ namespace VistaDelModelo
             }
         }
 
+        public void AgregaAlCarrito(Guid uidProducto, Guid UidSucursal, Guid UidSeccion, string cantidad, decimal CostoDeEnvio = 0.0m, Guid UidTarifario = new Guid(), string strNota = "", Guid RegistroProductoEnCarrito = new Guid(), string URLEmpresa = "", string dPropina = "")
+        {
+            //Agrega un registro sin nota
+            //Agrega un registro con una nota
+            string nota = "";
+            Guid uidNota = Guid.Empty;
+            decimal dpropina = new decimal();
+            if (!string.IsNullOrEmpty(dPropina))
+            {
+                dpropina = decimal.Parse(dPropina, System.Globalization.NumberStyles.Float);
+            }
+            if (RegistroProductoEnCarrito == Guid.Empty)
+            {
 
+                if (!string.IsNullOrEmpty(strNota))
+                {
+                    uidNota = Guid.NewGuid();
+                    nota = strNota;
+                }
+
+                foreach (DataRow item in DatosProductos.ProductoCarrito(uidProducto, UidSucursal.ToString(), UidSeccion.ToString()).Rows)
+                {
+                    dpropina = 0.00m;
+                    Guid uidproducto = new Guid(item["UidProducto"].ToString());
+                    Guid uidsucursal = new Guid(item["UidSucursal"].ToString());
+                    Guid UidSeccionpoducto = new Guid(item["UidSeccionProducto"].ToString());
+                    string nombre = item["VchNombre"].ToString();
+                    string costo = item["Mcosto"].ToString();
+                    string sucursal = item["Identificador"].ToString();
+                    //string imagen = "../" + item["NVchRuta"].ToString();
+                    string imagen = "http://www.godeliverix.net/vista/" + item["NVchRuta"].ToString();
+                    decimal SubTotal = decimal.Parse(costo) * int.Parse(cantidad);
+                    decimal Total = SubTotal + CostoDeEnvio;
+                    dpropina = CostoDeEnvio * 0.1m;
+                    ListaDelCarrito.Add(new VMProducto()
+                    {
+                        UidRegistroProductoEnCarrito = Guid.NewGuid(),
+                        UidSeccionPoducto = UidSeccionpoducto,
+                        Total = Total,
+                        Subtotal = SubTotal,
+                        CostoEnvio = CostoDeEnvio,
+                        DPropina = dpropina,
+                        UID = uidproducto,
+                        UidSucursal = uidsucursal,
+                        STRNOMBRE = nombre,
+                        StrCosto = SubTotal.ToString(),
+                        Empresa = sucursal,
+                        STRRUTA = imagen,
+                        Cantidad = int.Parse(cantidad),
+                        UidNota = uidNota,
+                        StrNota = nota,
+                        ColorEstatusProducto = ""
+                    });
+
+                    if (!ListaDelInformacionSucursales.Exists(suc => suc.UidSucursal == uidsucursal))
+                    {
+                        ListaDelInformacionSucursales.Add(new VMProducto()
+                        {
+                            STRRUTA = URLEmpresa,
+                            UidTarifario = UidTarifario,
+                            UidSucursal = uidsucursal,
+                            Empresa = sucursal,
+                            Total = Total,
+                            CostoEnvio = CostoDeEnvio,
+                            Subtotal = SubTotal,
+                            Cantidad = int.Parse(cantidad),
+                            DPropina = dpropina
+                        });
+                    }
+                    else
+                    {
+                        if (ListaDelInformacionSucursales.Exists(suc => suc.UidSucursal == UidSucursal))
+                        {
+                            var Sucursal = ListaDelInformacionSucursales.Find(suc => suc.UidSucursal == UidSucursal);
+                            Sucursal.Subtotal = (Sucursal.Subtotal + SubTotal);
+                            Sucursal.Cantidad = Sucursal.Cantidad + int.Parse(cantidad);
+                            Sucursal.Total = (Sucursal.Subtotal + Sucursal.CostoEnvio);
+                            Sucursal.DPropina = dpropina;
+                        }
+                    }
+                }
+            }
+            else
+            //Si existe el producto en la lista y no tiene un mensaje
+            if (ListaDelCarrito.Exists(Objeto => Objeto.UidRegistroProductoEnCarrito == RegistroProductoEnCarrito))
+            {
+                var Producto = new VMProducto();
+                Producto = ListaDelCarrito.Find(Objeto => Objeto.UidRegistroProductoEnCarrito == RegistroProductoEnCarrito);
+
+                decimal precio = Producto.Subtotal / Producto.Cantidad;
+                Producto.Cantidad = Producto.Cantidad + int.Parse(cantidad);
+
+                Producto.Subtotal = (precio * Producto.Cantidad);
+                Producto.Total = Producto.Subtotal + Producto.CostoEnvio;
+
+                if (ListaDelInformacionSucursales.Exists(suc => suc.UidSucursal == Producto.UidSucursal))
+                {
+                    var sucursal = ListaDelInformacionSucursales.Find(suc => suc.UidSucursal == Producto.UidSucursal);
+                    decimal preciototal = 0.0m;
+
+                    var productos = ListaDelCarrito.Where(x => x.UidSucursal == sucursal.UidSucursal).ToList();
+                    foreach (var item in productos)
+                    {
+                        preciototal = preciototal + item.Subtotal;
+                    }
+                    sucursal.Subtotal = preciototal;
+                    sucursal.Cantidad = sucursal.Cantidad + int.Parse(cantidad);
+                    if (CostoDeEnvio != 0)
+                    {
+                        sucursal.CostoEnvio = CostoDeEnvio;
+                    }
+                    sucursal.Total = sucursal.Subtotal + sucursal.CostoEnvio;
+                    if (UidTarifario != Guid.Empty)
+                    {
+                        sucursal.UidTarifario = UidTarifario;
+                    }
+                }
+            }
+        }
+        public void InformacionDeProductoParaAgregarAlCarrito()
+        {
+            foreach (DataRow item in DatosProductos.ProductoCarrito(UID, UidSucursal.ToString(), UidSeccion.ToString()).Rows)
+            {
+                this.UID = new Guid(item["UidProducto"].ToString());
+                this.UidSucursal = new Guid(item["UidSucursal"].ToString());
+                UidSeccionPoducto = new Guid(item["UidSeccionProducto"].ToString());
+                STRNOMBRE = item["VchNombre"].ToString();
+                StrCosto = item["Mcosto"].ToString();
+                StrIdentificador = item["Identificador"].ToString();
+                STRRUTA =  item["NVchRuta"].ToString();                
+            }
+        }
         #endregion
         #endregion
     }

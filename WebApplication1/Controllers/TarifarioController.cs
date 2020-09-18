@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Web.Http;
 using VistaDelModelo;
 using WebApplication1.App_Start;
@@ -65,5 +66,14 @@ namespace WebApplication1.Controllers
             Respuesta.Message = "Informacion agregada satisfactoriamente";
             return Respuesta;
         }
+
+        #region Xamarin Api
+        public HttpResponseMessage GetBuscarTarifarios_Movil(string TipoDeBusqueda, string uidSucursal = "", string UidZonaRecolecta = "", string ZonaEntrega = "", string contrato = "", string UidSucursalDistribuidora = "")
+        {
+            MVTarifario = new VMTarifario();
+            MVTarifario.BuscarTarifario(TipoDeBusqueda, uidSucursal, UidZonaRecolecta, ZonaEntrega, contrato, UidSucursalDistribuidora);
+            return Request.CreateResponse(MVTarifario.ListaDeTarifarios);
+        }
+        #endregion
     }
 }

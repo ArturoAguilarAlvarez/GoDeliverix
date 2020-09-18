@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Data;
+using System.Net.Http;
 using System.Web.Http;
 using VistaDelModelo;
 using WebApplication1.App_Start;
@@ -149,7 +151,113 @@ namespace WebApplication1.Controllers
             MVDireccion = new VMDireccion();
             Respuesta = new ResponseHelper();
             MVUbicacion = new VMUbicacion();
-            MVDireccion.ObtenerDireccionConGoogle(StrNombreCiudad, CodigoPais, CodigoEstado);
+            string Estado = "";
+
+            switch (CodigoEstado.ToUpper())
+            {
+                case "AGUASCALIENTES":
+                    Estado = "AGS";
+                    break;
+                case "BAJA CALIFORNIA":
+                    Estado = "BC ";
+                    break;
+                case "BAJA CALIFORNIA SUR":
+                    Estado = "BCS";
+                    break;
+                case "CAMPECHE":
+                    Estado = "CAMP";
+                    break;
+                case "CHIAPAS":
+                    Estado = "CHIS";
+                    break;
+                case "CHIHUAHUA":
+                    Estado = "CHIH";
+                    break;
+                case "COAHUILA DE ZARAGOZA":
+                    Estado = "COAH";
+                    break;
+                case "COLIMA":
+                    Estado = "COL";
+                    break;
+                case "DISTRITO FEDERAL":
+                    Estado = "CDMX";
+                    break;
+                case "DURANGO":
+                    Estado = "DGO";
+                    break;
+                case "GUANAJUATO":
+                    Estado = "GTO";
+                    break;
+                case "GUERRERO":
+                    Estado = "GRO";
+                    break;
+                case "HIDALGO":
+                    Estado = "HGO";
+                    break;
+                case "JALISCO":
+                    Estado = "JAL";
+                    break;
+                case "ESTADO DE MÉXICO":
+                    Estado = "Edomex";
+                    break;
+                case "MICHOACÁN DE OCAMPO":
+                    Estado = "MICH";
+                    break;
+                case "MORELOS":
+                    Estado = "MOR";
+                    break;
+                case "NAYARIT":
+                    Estado = "NAY";
+                    break;
+                case "NUEVO LEÓN":
+                    Estado = "NL";
+                    break;
+                case "OAXACA":
+                    Estado = "OAX";
+                    break;
+                case "PUEBLA":
+                    Estado = "PUE";
+                    break;
+                case "QUERÉTARO":
+                    Estado = "QRO";
+                    break;
+                case "QUINTANA ROO":
+                    Estado = "QROO";
+                    break;
+                case "SAN LUIS POTOSÍ":
+                    Estado = "S.L.P.";
+                    break;
+                case "SINALOA":
+                    Estado = "SIN";
+                    break;
+                case "SONORA":
+                    Estado = "SON";
+                    break;
+                case "TABASCO":
+                    Estado = "TAB";
+                    break;
+                case "TAMAULIPAS":
+                    Estado = "TAMPS";
+                    break;
+                case "TLAXCALA":
+                    Estado = "TLAX";
+                    break;
+                case "VERACRUZ DE IGNACIO DE LA LLAVE":
+                    Estado = "VER";
+                    break;
+                case "YUCATÁN":
+                    Estado = "YUC";
+                    break;
+                case "ZACATECAS":
+                    Estado = "ZAC";
+                    break;
+                default:
+                    Estado = CodigoEstado;
+                    break;
+            }
+
+
+            MVDireccion.ObtenerDireccionConGoogle(StrNombreCiudad, CodigoPais, Estado);
 
             if (MVDireccion.ListaDIRECCIONES.Count != 0)
             {
@@ -169,7 +277,137 @@ namespace WebApplication1.Controllers
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;
         }
+        #region Xamarin api
+        public HttpResponseMessage GetObtenerDireccionConDatosDeGoogle_Movil(string StrNombreCiudad, string CodigoEstado, string CodigoPais)
+        {
+            MVDireccion = new VMDireccion();
+            MVUbicacion = new VMUbicacion();
+            string Estado = "";
+            string pais = "";
+            if (CodigoPais == "México")
+            {
+                pais = "MX";
+            }
+            switch (CodigoEstado.ToUpper())
+            {
+                case "AGUASCALIENTES":
+                    Estado = "AGS";
+                    break;
+                case "BAJA CALIFORNIA":
+                    Estado = "BC ";
+                    break;
+                case "BAJA CALIFORNIA SUR":
+                    Estado = "BCS";
+                    break;
+                case "CAMPECHE":
+                    Estado = "CAMP";
+                    break;
+                case "CHIAPAS":
+                    Estado = "CHIS";
+                    break;
+                case "CHIHUAHUA":
+                    Estado = "CHIH";
+                    break;
+                case "COAHUILA DE ZARAGOZA":
+                    Estado = "COAH";
+                    break;
+                case "COLIMA":
+                    Estado = "COL";
+                    break;
+                case "DISTRITO FEDERAL":
+                    Estado = "CDMX";
+                    break;
+                case "DURANGO":
+                    Estado = "DGO";
+                    break;
+                case "GUANAJUATO":
+                    Estado = "GTO";
+                    break;
+                case "GUERRERO":
+                    Estado = "GRO";
+                    break;
+                case "HIDALGO":
+                    Estado = "HGO";
+                    break;
+                case "JALISCO":
+                    Estado = "JAL";
+                    break;
+                case "ESTADO DE MÉXICO":
+                    Estado = "Edomex";
+                    break;
+                case "MICHOACÁN DE OCAMPO":
+                    Estado = "MICH";
+                    break;
+                case "MORELOS":
+                    Estado = "MOR";
+                    break;
+                case "NAYARIT":
+                    Estado = "NAY";
+                    break;
+                case "NUEVO LEÓN":
+                    Estado = "NL";
+                    break;
+                case "OAXACA":
+                    Estado = "OAX";
+                    break;
+                case "PUEBLA":
+                    Estado = "PUE";
+                    break;
+                case "QUERÉTARO":
+                    Estado = "QRO";
+                    break;
+                case "QUINTANA ROO":
+                    Estado = "QROO";
+                    break;
+                case "SAN LUIS POTOSÍ":
+                    Estado = "S.L.P.";
+                    break;
+                case "SINALOA":
+                    Estado = "SIN";
+                    break;
+                case "SONORA":
+                    Estado = "SON";
+                    break;
+                case "TABASCO":
+                    Estado = "TAB";
+                    break;
+                case "TAMAULIPAS":
+                    Estado = "TAMPS";
+                    break;
+                case "TLAXCALA":
+                    Estado = "TLAX";
+                    break;
+                case "VERACRUZ DE IGNACIO DE LA LLAVE":
+                    Estado = "VER";
+                    break;
+                case "YUCATÁN":
+                    Estado = "YUC";
+                    break;
+                case "ZACATECAS":
+                    Estado = "ZAC";
+                    break;
+                default:
+                    Estado = CodigoEstado;
+                    break;
+            }
 
+
+            MVDireccion.ObtenerDireccionConGoogle(StrNombreCiudad, pais, Estado);
+
+            return Request.CreateResponse(MVDireccion.ListaDIRECCIONES);
+
+        }
+
+        public HttpResponseMessage GetObtenerColonias_Movil(string UidCiudad) 
+        {
+            VMDireccion Colonias = new VMDireccion();
+            var dt = Colonias.Colonias(new Guid(UidCiudad));
+            
+            return Request.CreateResponse(System.Net.HttpStatusCode.OK, dt);
+        }
+
+
+        #endregion
         /// <summary>
         /// 
         /// </summary>

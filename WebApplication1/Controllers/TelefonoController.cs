@@ -127,5 +127,17 @@ namespace WebApplication1.Controllers
             Respuesta.Message = "Informacion eliminada satisfactoriamente";
             return Respuesta;
         }
+
+        #region Xamarin cliente
+        public HttpResponseMessage GetGuardaTelefono_Movil(Guid uidUsuario, string Parametro, Guid UidTelefono, string Numero, string UidTipoDeTelefono)
+        {
+            Respuesta = new ResponseHelper();
+            MVTelefono = new VMTelefono();
+
+            MVTelefono.GuardaTelefonoWepApi(uidUsuario, Parametro, UidTelefono, Numero, UidTipoDeTelefono);
+
+            return Request.CreateResponse(true); ;
+        }
+        #endregion
     }
 }
