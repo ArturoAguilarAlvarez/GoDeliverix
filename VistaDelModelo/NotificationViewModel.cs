@@ -50,6 +50,17 @@ namespace VistaDelModelo
         {
             try
             {
+                this._NotificationDataAccess.Add((int)target, targetUid, JsonConvert.SerializeObject(title), JsonConvert.SerializeObject(content), (int)type, typeUid);
+
+                CreateNotification create = new CreateNotification()
+                {
+                    Title = title,
+                    Content = content,
+                    IncludeExternalUserIds = new List<string>() { targetUid.ToString().ToLower() }
+                };
+
+                this.CreateOneSignalNotification(create);
+
                 return true;
             }
             catch (Exception ex)
@@ -96,7 +107,7 @@ namespace VistaDelModelo
             }
             catch (WebException ex)
             {
-                
+
             }
         }
         #endregion
