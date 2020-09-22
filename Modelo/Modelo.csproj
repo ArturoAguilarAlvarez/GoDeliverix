@@ -31,7 +31,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -53,12 +57,19 @@
     <Compile Include="Dia.cs" />
     <Compile Include="Direccion.cs" />
     <Compile Include="Empresa.cs" />
+    <Compile Include="Enums\NotificationTarget.cs" />
+    <Compile Include="Enums\NotificationType.cs" />
     <Compile Include="Estatus.cs" />
     <Compile Include="Giro.cs" />
     <Compile Include="Imagen.cs" />
     <Compile Include="Licencia.cs" />
     <Compile Include="Mensaje.cs" />
+    <Compile Include="Notification.cs" />
     <Compile Include="Oferta.cs" />
+    <Compile Include="OneSignal\CreateNotification.cs" />
+    <Compile Include="OneSignal\CreateNotificationResult.cs" />
+    <Compile Include="OneSignal\NotificationContent.cs" />
+    <Compile Include="OneSignal\NotificationTitle.cs" />
     <Compile Include="Orden.cs" />
     <Compile Include="Producto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -78,7 +89,9 @@
     <Compile Include="Vehiculo.cs" />
     <Compile Include="ZonaHoraria.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DBControl\DBControl.csproj">
       <Project>{325beb05-a5b9-4e3f-a6c1-1f858b1aae70}</Project>
