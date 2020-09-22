@@ -16,8 +16,8 @@ namespace VistaDelModelo
 {
     public class NotificationViewModel
     {
-        protected readonly string OneSignalApiKey = "MzM4YzhhYTktOTVmNC00MzUxLWFkOGMtZTYwYjE5MTVmN2I3";
-        protected readonly string OneSignalApplicationId = "2964843e-3741-468d-a8be-8b6d78df6759";
+        protected readonly string OneSignalApiKey = "";
+        protected readonly string OneSignalApplicationId = "";
         private NotificationDataAccess _NotificationDataAccess { get; set; }
 
         public NotificationViewModel()
