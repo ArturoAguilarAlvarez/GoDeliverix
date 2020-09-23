@@ -52,7 +52,7 @@ namespace WebApplication1.Controllers
             Respuesta.Message = "Informacion recibida satisfactoriamente";
             return Respuesta;
         }
-        
+
         public ResponseHelper GetObtenerHora(string UidEstado = "")
         {
             MVUsuario = new VMUsuarios();
@@ -116,12 +116,12 @@ namespace WebApplication1.Controllers
             return respuesta;
         }
         // POST: api/Profile
-        public void Post([FromBody]string value)
+        public void Post([FromBody] string value)
         {
         }
 
         // PUT: api/Profile/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody] string value)
         {
         }
 
@@ -190,10 +190,10 @@ namespace WebApplication1.Controllers
 
         }
 
-        public HttpResponseMessage GetEnviarCodigoDeConfirmacion(string nombre, string apellidoP, string codigo, string correo,string idioma) 
+        public HttpResponseMessage GetEnviarCodigoDeConfirmacion(string nombre, string apellidoP, string codigo, string correo, string idioma)
         {
             VMAcceso MVAcceso = new VMAcceso();
-            MVAcceso.EnviarCodigoDeActivacion(nombre,apellidoP, correo,codigo, idioma);
+            MVAcceso.EnviarCodigoDeActivacion(nombre, apellidoP, correo, codigo, idioma);
             return Request.CreateResponse("Correo enviado");
         }
 
@@ -209,6 +209,12 @@ namespace WebApplication1.Controllers
             // MVCorreoElectronico.AgregarCorreo(uidusuaro, "Usuario", correo, uidcorreo);
             //MVAcceso.CorreoDeConfirmacion(uidusuaro, correo, usuario, contrasena, nombre, apellidoM + " " + apellidoM);
             return Request.CreateResponse();
+        }
+
+        public HttpResponseMessage GetObtenerFolioCliente_Movil(string UidUsuario = "")
+        {
+            MVUsuario = new VMUsuarios();
+            return Request.CreateResponse(MVUsuario.ObtenerFolio(UidUsuario));
         }
         #endregion
 

@@ -278,6 +278,18 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
         #region Xamarin api
+        /// <summary>
+        /// Obtiene la direccion completa con los nombres del pais, estado,municipio,ciudad
+        /// </summary>
+        /// <param name="UidDireccion"></param>
+        /// <returns></returns>
+        public HttpResponseMessage GetDireccionCompleta_Movil(string UidDireccion)
+        {
+            MVDireccion = new VMDireccion();
+            Respuesta = new ResponseHelper();
+            MVDireccion.ObtenerDireccionCompleta(UidDireccion);
+           return Request.CreateResponse(MVDireccion);
+        }
         public HttpResponseMessage GetObtenerDireccionConDatosDeGoogle_Movil(string StrNombreCiudad, string CodigoEstado, string CodigoPais)
         {
             MVDireccion = new VMDireccion();
@@ -406,6 +418,12 @@ namespace WebApplication1.Controllers
             return Request.CreateResponse(System.Net.HttpStatusCode.OK, dt);
         }
 
+        public HttpResponseMessage GetObtenerDireccionUsuario_Movil(string UidUsuario)
+        {
+            MVDireccion = new VMDireccion();
+            MVDireccion.ObtenerDireccionesUsuario(UidUsuario);
+            return Request.CreateResponse(MVDireccion.ListaDIRECCIONES);
+        }
 
         #endregion
         /// <summary>
