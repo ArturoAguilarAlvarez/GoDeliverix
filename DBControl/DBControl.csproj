@@ -68,6 +68,7 @@
     <Compile Include="DbUsuarios.cs" />
     <Compile Include="DbVehiculo.cs" />
     <Compile Include="DbZonaHoraria.cs" />
+    <Compile Include="NotificationDataAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
