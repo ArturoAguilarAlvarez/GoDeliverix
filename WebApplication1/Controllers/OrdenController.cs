@@ -50,6 +50,91 @@ namespace WebApplication1.Controllers
             MVOrden = new VMOrden();
             return Request.CreateResponse(MVOrden.ObtenerSucursaleDeOrden(UidOrden));
         }
+        /// <summary>
+        /// Metodo para controlar el estatus publico de la orden
+        /// </summary>
+        /// <param name="UidUsuario"></param>
+        /// <param name="UidEstatus"></param>
+        /// <param name="StrParametro"></param>
+        /// <param name="Mensaje"></param>
+        /// <param name="UidOrden"></param>
+        /// <param name="LngFolio"></param>
+        /// <param name="UidLicencia"></param>
+        /// <param name="UidSucursal"></param>
+        /// <returns></returns>
+        public HttpResponseMessage GetAgregaEstatusALaOrden_Movil(string UidUsuario, Guid UidEstatus, string StrParametro, string Mensaje = "", string UidOrden = "", long LngFolio = 0, string UidLicencia = "", string UidSucursal = "")
+        {
+            MVOrden = new VMOrden();
+            //Se crean variables del cuerpo de la notificacion multiidioma
+            var TituloEs = string.Empty;
+            var TituloEN = string.Empty;
+            var ContenidoEs = string.Empty;
+            var ContenidoEN = string.Empty;
+
+            //Se valida el estatus
+            switch (UidEstatus.ToString())
+            {
+                //Creada
+                case "2D2F38B8-7757-45FB-9CA6-6ECFE20356ED":
+                    TituloEs = "";
+                    TituloEN = "";
+                    ContenidoEs = "";
+                    ContenidoEN = "";
+                    break;
+                //Confirmada
+                case "27E80591-3D79-4F77-B736-56C21A9113F6":
+                    TituloEs = "";
+                    TituloEN = "";
+                    ContenidoEs = "";
+                    ContenidoEN = "";
+                    break;
+                //Espera de confirmacion
+                case "DE294EFC-C549-4DDD-A0D1-B0E1E2039ECC":
+                    TituloEs = "";
+                    TituloEN = "";
+                    ContenidoEs = "";
+                    ContenidoEN = "";
+                    break;
+                //Elaborada
+                case "C412D367-7D05-45D8-AECA-B8FABBF129D9":
+                    break;
+                //Enviada
+                case "B6BFC834-7CC4-4E67-817D-5ECB0EB2FFA7":
+                    break;
+                //Cancelado
+                case "A2D33D7C-2E2E-4DC6-97E3-73F382F30D93":
+                    TituloEs = "";
+                    TituloEN = "";
+                    ContenidoEs = "";
+                    ContenidoEN = "";
+                    break;
+                default:
+                    break;
+            }
+
+
+            if (string.IsNullOrEmpty(UidSucursal))
+            {
+                UidSucursal = Guid.Empty.ToString();
+            }
+            if (string.IsNullOrEmpty(UidLicencia))
+            {
+                UidLicencia = Guid.Empty.ToString();
+            }
+            if (string.IsNullOrEmpty(UidOrden))
+            {
+                UidOrden = Guid.Empty.ToString();
+            }
+            if (string.IsNullOrEmpty(Mensaje))
+            {
+                Mensaje = Guid.Empty.ToString();
+            }
+
+            return Request.CreateResponse(MVOrden.AgregaEstatusALaOrden(UidEstatus, StrParametro, new Guid(Mensaje), new Guid(UidOrden), LngFolio, new Guid(UidLicencia), new Guid(UidSucursal)));
+        }
+
+
+
         #endregion
         /// <summary>
         /// Guarda la orden del cliente al pagarla

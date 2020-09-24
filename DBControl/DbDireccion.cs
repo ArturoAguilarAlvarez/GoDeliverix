@@ -119,7 +119,7 @@ namespace DBControl
         public DataTable ObtenerDireccion(Guid uidDireccion)
         {
             oConexcion = new Conexion();
-            string query = "select * from Direccion where UidDireccion  = '" + uidDireccion.ToString() + "'";
+            string query = "select* from Direccion d inner join DireccionUbicacion du on du.UidDireccion = d.UidDireccion inner join Ubicacion u  on u.UidUbicacion = du.UidUbicacion where d.UidDireccion  = '" + uidDireccion.ToString() + "'";
             return oConexcion.Consultas(query);
         }
 

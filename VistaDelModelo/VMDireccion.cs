@@ -338,6 +338,8 @@ namespace VistaDelModelo
                 CodigoPostal = item["CodigoPostal"].ToString();
                 REFERENCIA = item["Referencia"].ToString();
                 IDENTIFICADOR = item["Identificador"].ToString();
+                Longitud = item["VchLongitud"].ToString();
+                Latitud = item["VchLatitud"].ToString();
             }
         }
         public void QuitaDireeccionDeLista(string id)
