@@ -16,7 +16,7 @@ namespace DBControl
         //Conexion Toshiba
         //private SqlConnection myVar = new SqlConnection(connectionString: @"Data Source=192.168.100.50;Initial Catalog=Deliverix;User ID=sa;Password=12345678");
         //Conexion HP
-        //private readonly SqlConnection myVar = new SqlConnection(connectionString: @"Data Source=192.168.1.72;Initial Catalog=deliverix;Persist Security Info=True;User ID=sa;Password=12345678");
+        //private readonly SqlConnection myVar = new SqlConnection(connectionString: @"Data Source=192.168.1.78;Initial Catalog=deliverix;Persist Security Info=True;User ID=sa;Password=12345678");
 
         public SqlConnection Cn
         {

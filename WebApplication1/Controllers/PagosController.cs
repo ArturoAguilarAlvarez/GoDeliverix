@@ -26,7 +26,37 @@ namespace WebApplication1.Controllers
         {
             return new string[] { "value1", "value2" };
         }
+        #region Xamarin api
 
+        // GET: api/Pagos/GetInsertarPago
+        public HttpResponseMessage GetInsertarPago_Movil(Guid UidPago, Guid UidFormaDeCobro, Guid UidOrden, decimal MMonto, Guid UidEstatusDeCobro)
+        {
+            MVPago = new VMPagos();
+            MVPago.UidPago = UidPago;
+            MVPago.UidOrdenFormaDeCobro = UidFormaDeCobro;
+            MVPago.UidOrden = UidOrden;
+            MVPago.MMonto = MMonto;
+            MVPago.UidEstatusDeCobro = UidEstatusDeCobro;
+            return Request.CreateResponse(MVPago.IntegrarPago());
+        }
+        /// <summary>
+        /// valida si existe la transaccion del pago con tarjeta de la orden
+        /// </summary>
+        /// <param name="UidOrdenFormaDeCobro"></param>
+        /// <returns></returns>
+        public HttpResponseMessage GetValidarPagoOrdenTarjeta_Movil(string UidOrdenFormaDeCobro)
+        {
+            MVPago = new VMPagos();
+            return Request.CreateResponse(MVPago.ValidaPagoTarjeta(UidOrdenFormaDeCobro));
+        }
+        public HttpResponseMessage GetObtenerPagoTarjeta_movil(string UidOrdenFormaDeCobro)
+        {
+            MVPago = new VMPagos();
+            MVPago.UidOrdenFormaDeCobro = new Guid(UidOrdenFormaDeCobro);
+            MVPago.ObtenerEstatusPagoConTarjeta();
+            return Request.CreateResponse(MVPago.StrEstatusPagosTarjeta);
+        }
+        #endregion
         public ResponseHelper GetObtenerPagoTarjeta(string UidOrdenFormaDeCobro)
         {
             respuesta = new ResponseHelper();
@@ -328,7 +358,7 @@ namespace WebApplication1.Controllers
         //}
 
         // PUT: api/Pagos/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody] string value)
         {
         }
 

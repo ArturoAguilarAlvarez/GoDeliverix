@@ -74,6 +74,19 @@ namespace WebApplication1.Controllers
             MVTarifario.BuscarTarifario(TipoDeBusqueda, uidSucursal, UidZonaRecolecta, ZonaEntrega, contrato, UidSucursalDistribuidora);
             return Request.CreateResponse(MVTarifario.ListaDeTarifarios);
         }
+        /// <summary>
+        /// Guarda el tarifario desde que el cliente crea una orden
+        /// </summary>
+        /// <param name="UidOrdenSucursal"></param>
+        /// <param name="UidTarifario"></param>
+        /// <returns></returns>
+        public HttpResponseMessage GetGuardarTarifario_Movil(Guid UidOrdenSucursal, Guid UidTarifario, string DPropina)
+        {
+            MVTarifario = new VMTarifario();
+            MVTarifario.AgregarTarifarioOrden(UidOrden: UidOrdenSucursal, UidTarifario: UidTarifario, DPropina: decimal.Parse(DPropina));
+            return Request.CreateResponse(true);
+            
+        }
         #endregion
     }
 }

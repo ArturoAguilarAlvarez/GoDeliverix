@@ -133,9 +133,31 @@ namespace WebApplication1.Controllers
             return Request.CreateResponse(MVOrden.AgregaEstatusALaOrden(UidEstatus, StrParametro, new Guid(Mensaje), new Guid(UidOrden), LngFolio, new Guid(UidLicencia), new Guid(UidSucursal)));
         }
 
-
-
+        public HttpResponseMessage GetGuardarProductos_Movil(Guid UIDORDEN, Guid UIDSECCIONPRODUCTO, int INTCANTIDAD, string STRCOSTO, Guid UidSucursal, Guid UidRegistroEncarrito, Guid UidNota, String StrMensaje, string UidTarifario)
+        {
+            MVOrden = new VMOrden();
+            return Request.CreateResponse(MVOrden.GuardaProducto(UIDORDEN, UIDSECCIONPRODUCTO, INTCANTIDAD, STRCOSTO, UidSucursal, UidRegistroEncarrito, UidNota, StrMensaje, UidTarifario));
+        }
+        /// <summary>
+        /// Guarda la orden del cliente al pagarla
+        /// </summary>
+        /// <param name="UIDORDEN"></param>
+        /// <param name="Total"></param>
+        /// <param name="Uidusuario"></param>
+        /// <param name="UidDireccion"></param>
+        /// <param name="Uidsucursal"></param>
+        /// <param name="totalSucursal"></param>
+        /// <param name="UidRelacionOrdenSucursal"></param>
+        /// <param name="LngCodigoDeEntrega"></param>
+        /// <returns></returns>
+        public HttpResponseMessage GetGuardarOrden_Movil(Guid UIDORDEN, decimal Total, Guid Uidusuario, Guid UidDireccion, Guid Uidsucursal, decimal totalSucursal, Guid UidRelacionOrdenSucursal, long LngCodigoDeEntrega, string UidTarifario)
+        {
+            MVOrden = new VMOrden();
+            return Request.CreateResponse(MVOrden.GuardaOrden(UIDORDEN, Total, Uidusuario, UidDireccion, Uidsucursal, totalSucursal, UidRelacionOrdenSucursal, LngCodigoDeEntrega, UidTarifario));
+        }
         #endregion
+
+        //Viejo api
         /// <summary>
         /// Guarda la orden del cliente al pagarla
         /// </summary>

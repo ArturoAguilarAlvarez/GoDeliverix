@@ -17,7 +17,14 @@ namespace WebApplication1.Controllers
         {
             return new string[] { "value1", "value2" };
         }
-
+        #region Xamarin api
+        public HttpResponseMessage Get_Movil(string UidUsuario)
+        {
+            MVMonedero = new VMMonedero();
+            MVMonedero.ObtenerMonedero(new Guid(UidUsuario));
+            return Request.CreateResponse(MVMonedero.MMonto);
+        }
+        #endregion
         // GET: api/Monedero/5
         public ResponseHelper Get(string id)
         {
