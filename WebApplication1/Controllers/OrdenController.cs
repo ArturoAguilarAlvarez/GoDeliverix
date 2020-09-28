@@ -17,12 +17,13 @@ namespace WebApplication1.Controllers
 
 
         #region Xamarin Api
-
+        //Estos metodos son los que obtienen las compras, los pedidos, el detalle del pedido.
         /// <summary>
         /// Obtiene el estatus actual de un pedido
         /// </summary>
         /// <param name="UidPedido"></param>
         /// <returns></returns>
+        ///
         public HttpResponseMessage GetObtenerEstatusDeOrden_Movil(string UidPedido)
         {
             MVOrden = new VMOrden();
@@ -34,6 +35,7 @@ namespace WebApplication1.Controllers
         /// <param name="UidUsuario"></param>
         /// <param name="parametro"></param>
         /// <returns></returns>
+        /// 
         public HttpResponseMessage GetObtenerOrdenesCliente_Movil(string UidUsuario, string parametro)
         {
             MVOrden = new VMOrden();
@@ -45,10 +47,23 @@ namespace WebApplication1.Controllers
         /// </summary>
         /// <param name="UidOrden"></param>
         /// <returns></returns>
+        /// 
         public HttpResponseMessage GetObtenerPedidosDeOrden_Movil(Guid UidOrden)
         {
             MVOrden = new VMOrden();
             return Request.CreateResponse(MVOrden.ObtenerSucursaleDeOrden(UidOrden));
+        }
+        /// <summary>
+        /// Obtiene los productos de una orden (Orden sucursal)
+        /// </summary>
+        /// <param name="UidOrden"></param>
+        /// <returns></returns>
+        /// 
+        public HttpResponseMessage GetObtenerProductosDeOrden_Movil(string UidOrden)
+        {
+            MVOrden = new VMOrden();
+            MVOrden.ObtenerProductosDeOrden(UidOrden);
+            return Request.CreateResponse(MVOrden.ListaDeProductos);
         }
         /// <summary>
         /// Metodo para controlar el estatus publico de la orden
@@ -133,10 +148,10 @@ namespace WebApplication1.Controllers
             return Request.CreateResponse(MVOrden.AgregaEstatusALaOrden(UidEstatus, StrParametro, new Guid(Mensaje), new Guid(UidOrden), LngFolio, new Guid(UidLicencia), new Guid(UidSucursal)));
         }
 
-        public HttpResponseMessage GetGuardarProductos_Movil(Guid UIDORDEN, Guid UIDSECCIONPRODUCTO, int INTCANTIDAD, string STRCOSTO, Guid UidSucursal, Guid UidRegistroEncarrito, Guid UidNota, String StrMensaje, string UidTarifario)
+        public HttpResponseMessage GetGuardarProductos_Movil(Guid UIDORDEN, Guid UIDSECCIONPRODUCTO, int INTCANTIDAD, string STRCOSTO, Guid UidSucursal, Guid UidRegistroEncarrito,  string UidTarifario, string UidNota="", String StrMensaje = "")
         {
             MVOrden = new VMOrden();
-            return Request.CreateResponse(MVOrden.GuardaProducto(UIDORDEN, UIDSECCIONPRODUCTO, INTCANTIDAD, STRCOSTO, UidSucursal, UidRegistroEncarrito, UidNota, StrMensaje, UidTarifario));
+            return Request.CreateResponse(MVOrden.GuardaProducto(UIDORDEN, UIDSECCIONPRODUCTO, INTCANTIDAD, STRCOSTO, UidSucursal, UidRegistroEncarrito, new Guid(UidNota), StrMensaje, UidTarifario));
         }
         /// <summary>
         /// Guarda la orden del cliente al pagarla
