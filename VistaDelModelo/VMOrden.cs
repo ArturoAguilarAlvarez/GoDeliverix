@@ -474,6 +474,7 @@ namespace VistaDelModelo
                         MTotal = decimal.Parse(item["MTotal"].ToString()) + decimal.Parse(item["MPropina"].ToString()),
                         StrFormaDeCobro = item["FormaDeCobro"].ToString(),
                         LNGFolio = int.Parse(item["intFolio"].ToString()),
+                        UidDireccionCliente = new Guid(item["UidDireccion"].ToString())
                     };
                     ListaDeOrdenes.Add(orden);
                 }
@@ -1282,4 +1283,5 @@ namespace VistaDelModelo
         }
         #endregion
     }
+
 }

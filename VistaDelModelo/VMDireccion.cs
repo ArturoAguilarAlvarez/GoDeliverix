@@ -1018,6 +1018,8 @@ namespace VistaDelModelo
                                 NombreMunicipio = NombreMunicipio,
                                 CIUDAD = NombreCiudad,
                                 COLONIA = NombreColonia,
+                                Latitud = item["VchLatitud"].ToString(),
+                                Longitud = item["VchLongitud"].ToString()
                             });
                     }
                 }

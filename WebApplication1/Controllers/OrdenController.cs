@@ -4,6 +4,10 @@ using VistaDelModelo;
 using System.Collections;
 using WebApplication1.App_Start;
 using System.Net.Http;
+using Modelo;
+using System.Windows.Documents;
+using System.Collections.Generic;
+using System.Data;
 
 namespace WebApplication1.Controllers
 {
@@ -52,6 +56,44 @@ namespace WebApplication1.Controllers
         {
             MVOrden = new VMOrden();
             return Request.CreateResponse(MVOrden.ObtenerSucursaleDeOrden(UidOrden));
+        }
+        public HttpResponseMessage GetObtenerInformacionDeCompra_Movil(Guid UidOrden, string UidUsuario)
+        {
+            MVOrden = new VMOrden();
+            var MVDireccion = new VMDireccion();
+            var RepuestaDetallePedido = new OrderDetail();
+            RepuestaDetallePedido.PedidosList = new List<VMOrden>();
+            foreach (DataRow item in MVOrden.ObtenerSucursaleDeOrden(UidOrden).Rows)
+            {
+                try
+                {
+                    RepuestaDetallePedido.PedidosList.Add(new VMOrden()
+                    {
+                        Uidorden = new Guid(item["UidRelacionOrdenSucursal"].ToString()),
+                        LngCodigoDeEntrega = long.Parse(item["BintCodigoEntrega"].ToString()),
+                        Imagen = item["NVchRuta"].ToString(),
+                        Identificador = item["Identificador"].ToString(),
+                        MPropina = decimal.Parse(item["MPropina"].ToString()),
+                        MTotal = decimal.Parse(item["MTotal"].ToString()),
+                        LNGFolio = long.Parse(item["LNGFolio"].ToString()),
+                        CostoEnvio = item["CostoEnvio"].ToString()
+                    });
+                }
+                catch (Exception e)
+                {
+
+                    throw;
+                }
+
+            }
+            MVOrden.ObtenerOrdenesCliente(UidUsuario, "Usuario");
+            var order = MVOrden.ListaDeOrdenes.Find(o => o.Uidorden == UidOrden);
+            RepuestaDetallePedido.UidOrden = order.Uidorden.ToString();
+            RepuestaDetallePedido.FolioOrden = order.LNGFolio.ToString();
+            RepuestaDetallePedido.FormaDeCobro = order.StrFormaDeCobro;
+            MVDireccion.ObtenerDireccionCompleta(order.UidDireccionCliente.ToString());
+            RepuestaDetallePedido.oDeliveryAddress = MVDireccion;
+            return Request.CreateResponse(RepuestaDetallePedido);
         }
         /// <summary>
         /// Obtiene los productos de una orden (Orden sucursal)
@@ -148,7 +190,7 @@ namespace WebApplication1.Controllers
             return Request.CreateResponse(MVOrden.AgregaEstatusALaOrden(UidEstatus, StrParametro, new Guid(Mensaje), new Guid(UidOrden), LngFolio, new Guid(UidLicencia), new Guid(UidSucursal)));
         }
 
-        public HttpResponseMessage GetGuardarProductos_Movil(Guid UIDORDEN, Guid UIDSECCIONPRODUCTO, int INTCANTIDAD, string STRCOSTO, Guid UidSucursal, Guid UidRegistroEncarrito,  string UidTarifario, string UidNota="", String StrMensaje = "")
+        public HttpResponseMessage GetGuardarProductos_Movil(Guid UIDORDEN, Guid UIDSECCIONPRODUCTO, int INTCANTIDAD, string STRCOSTO, Guid UidSucursal, Guid UidRegistroEncarrito, string UidTarifario, string UidNota = "", String StrMensaje = "")
         {
             MVOrden = new VMOrden();
             return Request.CreateResponse(MVOrden.GuardaProducto(UIDORDEN, UIDSECCIONPRODUCTO, INTCANTIDAD, STRCOSTO, UidSucursal, UidRegistroEncarrito, new Guid(UidNota), StrMensaje, UidTarifario));
@@ -494,5 +536,14 @@ namespace WebApplication1.Controllers
 
         #endregion
 
+    }
+
+    public class OrderDetail
+    {
+        public string UidOrden { get; set; }
+        public string FolioOrden { get; set; }
+        public string FormaDeCobro { get; set; }
+        public VMDireccion oDeliveryAddress { get; set; }
+        public List<VMOrden> PedidosList { get; set; }
     }
 }
