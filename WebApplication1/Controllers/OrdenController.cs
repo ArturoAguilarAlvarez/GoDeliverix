@@ -8,6 +8,7 @@ using Modelo;
 using System.Windows.Documents;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace WebApplication1.Controllers
 {
@@ -57,43 +58,91 @@ namespace WebApplication1.Controllers
             MVOrden = new VMOrden();
             return Request.CreateResponse(MVOrden.ObtenerSucursaleDeOrden(UidOrden));
         }
-        public HttpResponseMessage GetObtenerInformacionDeCompra_Movil(Guid UidOrden, string UidUsuario)
+        public IHttpActionResult GetObtenerInformacionDeCompra_Movil(Guid UidOrden, string UidUsuario)
         {
-            MVOrden = new VMOrden();
-            var MVDireccion = new VMDireccion();
-            var RepuestaDetallePedido = new OrderDetail();
-            RepuestaDetallePedido.PedidosList = new List<VMOrden>();
-            foreach (DataRow item in MVOrden.ObtenerSucursaleDeOrden(UidOrden).Rows)
+            try
             {
-                try
+
+
+                MVOrden = new VMOrden();
+                var MVDireccion = new VMDireccion();
+                var RepuestaDetallePedido = new OrderDetail();
+                RepuestaDetallePedido.PedidosList = new List<VMOrden>();
+                foreach (DataRow item in MVOrden.ObtenerSucursaleDeOrden(UidOrden).Rows)
                 {
-                    RepuestaDetallePedido.PedidosList.Add(new VMOrden()
+                    try
                     {
-                        Uidorden = new Guid(item["UidRelacionOrdenSucursal"].ToString()),
-                        LngCodigoDeEntrega = long.Parse(item["BintCodigoEntrega"].ToString()),
-                        Imagen = item["NVchRuta"].ToString(),
-                        Identificador = item["Identificador"].ToString(),
-                        MPropina = decimal.Parse(item["MPropina"].ToString()),
-                        MTotal = decimal.Parse(item["MTotal"].ToString()),
-                        LNGFolio = long.Parse(item["LNGFolio"].ToString()),
-                        CostoEnvio = item["CostoEnvio"].ToString()
-                    });
+                        RepuestaDetallePedido.PedidosList.Add(new VMOrden()
+                        {
+                            Uidorden = new Guid(item["UidRelacionOrdenSucursal"].ToString()),
+                            LngCodigoDeEntrega = long.Parse(item["BintCodigoEntrega"].ToString()),
+                            Imagen = item["NVchRuta"].ToString(),
+                            Identificador = item["Identificador"].ToString(),
+                            MPropina = decimal.Parse(item["MPropina"].ToString()),
+                            MTotal = decimal.Parse(item["MTotal"].ToString()),
+                            LNGFolio = long.Parse(item["LNGFolio"].ToString()),
+                            CostoEnvio = item["CostoEnvio"].ToString()
+                        });
+                    }
+                    catch (Exception e)
+                    {
+
+                        throw;
+                    }
+
                 }
-                catch (Exception e)
+                MVOrden.ObtenerOrdenesCliente(UidUsuario, "Usuario");
+                var order = MVOrden.ListaDeOrdenes.Find(o => o.Uidorden == UidOrden);
+                RepuestaDetallePedido.UidOrden = order.Uidorden.ToString();
+                RepuestaDetallePedido.FolioOrden = order.LNGFolio.ToString();
+                RepuestaDetallePedido.FormaDeCobro = order.StrFormaDeCobro;
+                MVDireccion.ObtenerDireccionCompleta(order.UidDireccionCliente.ToString());
+                RepuestaDetallePedido.oDeliveryAddress = MVDireccion;
+
+                var result = new
                 {
+                    UidOrden = order.Uidorden,
+                    FolioOrden = order.LNGFolio,
+                    FormaDeCobro = order.StrFormaDeCobro,
+                    oDeliveryAddress = new
+                    {
+                        MVDireccion.ID,
+                        MVDireccion.IDENTIFICADOR,
+                        MVDireccion.COLONIA,
+                        MVDireccion.CIUDAD,
+                        MVDireccion.MUNICIPIO,
+                        MVDireccion.PAIS,
+                        MVDireccion.NOMBRECIUDAD,
+                        MVDireccion.ESTADO,
+                        MVDireccion.CALLE0,
+                        MVDireccion.CALLE1,
+                        MVDireccion.CALLE2,
+                        MVDireccion.MANZANA,
+                        MVDireccion.LOTE,
+                        MVDireccion.CodigoPostal,
+                        MVDireccion.REFERENCIA,
+                        MVDireccion.Longitud,
+                        MVDireccion.Latitud
+                    },
+                    PedidosList = RepuestaDetallePedido.PedidosList.Select(p => new
+                    {
+                        p.Uidorden,
+                        p.LngCodigoDeEntrega,
+                        p.Imagen,
+                        p.Identificador,
+                        p.MPropina,
+                        p.MTotal,
+                        p.LNGFolio,
+                        p.CostoEnvio
+                    })
+                };
 
-                    throw;
-                }
-
+                return Json(result);
             }
-            MVOrden.ObtenerOrdenesCliente(UidUsuario, "Usuario");
-            var order = MVOrden.ListaDeOrdenes.Find(o => o.Uidorden == UidOrden);
-            RepuestaDetallePedido.UidOrden = order.Uidorden.ToString();
-            RepuestaDetallePedido.FolioOrden = order.LNGFolio.ToString();
-            RepuestaDetallePedido.FormaDeCobro = order.StrFormaDeCobro;
-            MVDireccion.ObtenerDireccionCompleta(order.UidDireccionCliente.ToString());
-            RepuestaDetallePedido.oDeliveryAddress = MVDireccion;
-            return Request.CreateResponse(RepuestaDetallePedido);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         /// <summary>
         /// Obtiene los productos de una orden (Orden sucursal)
