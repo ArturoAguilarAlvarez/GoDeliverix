@@ -224,6 +224,7 @@ namespace VistaDelModelo
             set { _ListaDeOrdenesCanceladas = value; }
         }
 
+        public string StrDireccionDeEntrega { get; private set; }
 
         public List<VMOrden> ListaDeBitacoraDeOrdenes = new List<VMOrden>();
         public List<VMOrden> ListaDeInformacionDeOrden = new List<VMOrden>();
@@ -465,6 +466,9 @@ namespace VistaDelModelo
                     {
                         CodigoEntrega = long.Parse(item["BIntCodigoEntrega"].ToString());
                     }
+                    var odireccion = new VMDireccion();
+                    odireccion.ObtenerDireccionCompleta(item["UidDireccion"].ToString());
+                    string Identificador = odireccion.IDENTIFICADOR;
                     VMOrden orden = new VMOrden()
                     {
                         Uidorden = new Guid(item["UidOrden"].ToString()),
@@ -474,6 +478,7 @@ namespace VistaDelModelo
                         MTotal = decimal.Parse(item["MTotal"].ToString()) + decimal.Parse(item["MPropina"].ToString()),
                         StrFormaDeCobro = item["FormaDeCobro"].ToString(),
                         LNGFolio = int.Parse(item["intFolio"].ToString()),
+                        StrDireccionDeEntrega = Identificador,
                         UidDireccionCliente = new Guid(item["UidDireccion"].ToString())
                     };
                     ListaDeOrdenes.Add(orden);

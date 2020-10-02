@@ -41,12 +41,29 @@ namespace WebApplication1.Controllers
         /// <param name="parametro"></param>
         /// <returns></returns>
         /// 
-        public HttpResponseMessage GetObtenerOrdenesCliente_Movil(string UidUsuario, string parametro)
+        public IHttpActionResult GetObtenerOrdenesCliente_Movil(string UidUsuario, string parametro)
         {
             MVOrden = new VMOrden();
             MVOrden.ObtenerOrdenesCliente(UidUsuario, parametro);
-            return Request.CreateResponse(MVOrden.ListaDeOrdenes);
+            var result = new
+            {
+                OrderList = MVOrden.ListaDeOrdenes.Select(o => new
+                {
+                    o.Uidorden,
+                    o.EstatusCobro,
+                    o.LngCodigoDeEntrega,
+                    o.FechaDeOrden,
+                    o.MTotal,
+                    o.StrFormaDeCobro,
+                    o.LNGFolio,
+                    o.UidDireccionCliente,
+                    o.StrDireccionDeEntrega
+                })
+            };
+            return Json(result);
         }
+
+
         /// <summary>
         /// Obtiene los pedidos  de una orden
         /// </summary>
@@ -70,6 +87,12 @@ namespace WebApplication1.Controllers
                 RepuestaDetallePedido.PedidosList = new List<VMOrden>();
                 foreach (DataRow item in MVOrden.ObtenerSucursaleDeOrden(UidOrden).Rows)
                 {
+                    var statusOrden = new VMOrden();
+                    var UltimoEstatus = string.Empty;
+                    foreach (DataRow it in statusOrden.ObtenerEstatusOrden(item["UidRelacionOrdenSucursal"].ToString()).Rows)
+                    {
+                        UltimoEstatus = it["VchNombre"].ToString();
+                    }
                     try
                     {
                         RepuestaDetallePedido.PedidosList.Add(new VMOrden()
@@ -81,12 +104,12 @@ namespace WebApplication1.Controllers
                             MPropina = decimal.Parse(item["MPropina"].ToString()),
                             MTotal = decimal.Parse(item["MTotal"].ToString()),
                             LNGFolio = long.Parse(item["LNGFolio"].ToString()),
-                            CostoEnvio = item["CostoEnvio"].ToString()
+                            CostoEnvio = item["CostoEnvio"].ToString(),
+                            StrEstatusOrdenSucursal = UltimoEstatus
                         });
                     }
                     catch (Exception e)
                     {
-
                         throw;
                     }
 
@@ -133,7 +156,8 @@ namespace WebApplication1.Controllers
                         p.MPropina,
                         p.MTotal,
                         p.LNGFolio,
-                        p.CostoEnvio
+                        p.CostoEnvio,
+                        p.StrEstatusOrdenSucursal
                     })
                 };
 
