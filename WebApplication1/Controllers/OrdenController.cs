@@ -174,11 +174,70 @@ namespace WebApplication1.Controllers
         /// <param name="UidOrden"></param>
         /// <returns></returns>
         /// 
-        public HttpResponseMessage GetObtenerProductosDeOrden_Movil(string UidOrden)
+        public IHttpActionResult GetObtenerInformacionDelPedido(string UidOrden)
         {
             MVOrden = new VMOrden();
             MVOrden.ObtenerProductosDeOrden(UidOrden);
-            return Request.CreateResponse(MVOrden.ListaDeProductos);
+            var productos = MVOrden.ListaDeProductos;
+            MVOrden.BuscarOrdenes("Sucursal", TipoDeSucursal: "S", UidOrdenSucursal: UidOrden);
+            var InformacionDeEstatus = new VMEstatus();
+            InformacionDeEstatus.cargaEstatusOrdenSucursal(UidOrden);
+            var Orden = new VMOrden()
+            {
+                Uidorden = MVOrden.Uidorden,
+                LNGFolio = MVOrden.LNGFolio,
+                Identificador = MVOrden.Identificador,
+                MTotal = MVOrden.MTotal,
+                FechaDeOrden = MVOrden.FechaDeOrden,
+                Imagen = MVOrden.Imagen,
+                StrNombreSucursal = MVOrden.StrNombreSucursal,
+                UidEstatus = MVOrden.UidEstatus,
+                UidEmpresa = MVOrden.UidEmpresa,
+            };
+            var viewmodelImage = new VMImagen();
+            viewmodelImage.ObtenerImagenPerfilDeEmpresa(Orden.UidEmpresa.ToString());
+            Orden.Imagen = viewmodelImage.STRRUTA;
+            var DeliveryViewModel = new VMTarifario();
+            DeliveryViewModel.ObtenerTarifarioDeOrden(Orden.Uidorden);
+            var StatusInformation = new VMEstatus();
+            StatusInformation.cargaEstatusOrdenSucursal(Orden.Uidorden.ToString());
+            var result = new
+            {
+                StatusInformation = StatusInformation.ListaEstatus.Select(e => new { e.DtmFechaDeEstatus, e.NOMBRE }),
+                OrderInformation = new
+                {
+                    Orden.Uidorden,
+                    Orden.LNGFolio,
+                    Orden.Identificador,
+                    Orden.MTotal,
+                    Orden.FechaDeOrden,
+                    Orden.Imagen,
+                    Orden.StrNombreSucursal,
+                    Orden.UidEstatus
+                },
+                DeliveryInformation = new
+                {
+                    DeliveryViewModel.DPrecio,
+                    DeliveryViewModel.StrNombreEmpresa,
+                    DeliveryViewModel.StrCodigoDeEntrega,
+                },
+                ProductsInformation = productos.Select(p => new
+                {
+                    p.UidProducto,
+                    p.UidProductoEnOrden,
+                    p.StrNombreSucursal,
+                    p.StrNombreProducto,
+                    p.Imagen,
+                    p.intCantidad,
+                    p.UidSucursal,
+                    p.MPropina,
+                    p.MTotal,
+                    p.MTotalSucursal,
+                    p.MCostoTarifario,
+                    p.VisibilidadNota
+                })
+            };
+            return Json(result);
         }
         /// <summary>
         /// Metodo para controlar el estatus publico de la orden
@@ -469,7 +528,7 @@ namespace WebApplication1.Controllers
         /// <param name="TipoDeSucursal"></param>
         /// <param name="UidOrdenSucursal"></param>
         /// <returns></returns>
-        public ResponseHelper GetBuscarOrdenes(string Parametro, Guid Uidusuario = new Guid(), string FechaInicial = "", string FechaFinal = "", string NumeroOrden = "", Guid UidLicencia = new Guid(), string EstatusSucursal = "", string TipoDeSucursal = "", Guid UidOrdenSucursal = new Guid())
+        public ResponseHelper GetBuscarOrdenes(string Parametro, Guid Uidusuario = new Guid(), string FechaInicial = "", string FechaFinal = "", string NumeroOrden = "", Guid UidLicencia = new Guid(), string EstatusSucursal = "", string TipoDeSucursal = "", string UidOrdenSucursal = "")
         {
             MVOrden = new VMOrden();
             MVOrden.BuscarOrdenes(Parametro, Uidusuario, FechaInicial, FechaFinal, NumeroOrden, UidLicencia, EstatusSucursal, TipoDeSucursal, UidOrdenSucursal);

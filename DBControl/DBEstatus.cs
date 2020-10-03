@@ -31,5 +31,11 @@ namespace DBControl
             string Query = "(select '00000000-0000-0000-0000-000000000000' as UidEstatus,'  ' as  VchNombre)Union all(select Uidestatus,VchNombre from EstatusOrdenSucursal)";
             return oConexion.Consultas(Query);
         }
+        public DataTable ObtenerListaDeEstatusOrdenSucursal(string UidOrdenSucursal)
+        {
+            oConexion = new Conexion();
+            string Query = "select BO.DtmFecha,EO.VchNombre from BitacoraOrdenEstatus BO inner join EstatusDeOrden EO on BO.UidEstatusDeOrden = EO.UidEstatus inner join OrdenSucursal OS on OS.UidRelacionOrdenSucursal = BO.UidOrden where OS.UidRelacionOrdenSucursal ='" + UidOrdenSucursal + "'";
+            return oConexion.Consultas(Query);
+        }
     }
 }

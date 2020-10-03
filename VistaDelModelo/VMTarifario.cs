@@ -19,6 +19,14 @@ namespace VistaDelModelo
             get { return _UidTarifario; }
             set { _UidTarifario = value; }
         }
+        private string _StrCodigoDeEntrega;
+
+        public string StrCodigoDeEntrega
+        {
+            get { return _StrCodigoDeEntrega; }
+            set { _StrCodigoDeEntrega = value; }
+        }
+
 
         /// <summary>
         /// Relacion de zona de recoleccion
@@ -209,6 +217,8 @@ namespace VistaDelModelo
             foreach (DataRow item in oDbTarifario.ObtenerTarifarioDeOrden(uidOrden).Rows)
             {
                 DPrecio = decimal.Parse(item["MCosto"].ToString());
+                StrNombreEmpresa = item["NombreComercial"].ToString();
+                StrCodigoDeEntrega = item["BIntCodigoEntrega"].ToString();
             }
         }
 

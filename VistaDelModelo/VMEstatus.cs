@@ -32,6 +32,14 @@ namespace VistaDelModelo
             get { return _strNombre; }
             set { _strNombre = value; }
         }
+        private string _dtmFecha;
+
+        public string DtmFechaDeEstatus
+        {
+            get { return _dtmFecha; }
+            set { _dtmFecha = value; }
+        }
+
         public List<VMEstatus> ListaEstatus = new List<VMEstatus>();
         #endregion
         #region Metodos
@@ -49,7 +57,18 @@ namespace VistaDelModelo
             return DB.ObtenerEstatusActivo();
 
         }
-
+        public void cargaEstatusOrdenSucursal(string UidOrdenSucursal)
+        {
+            ListaEstatus = new List<VMEstatus>();
+            foreach (DataRow item in DB.ObtenerListaDeEstatusOrdenSucursal(UidOrdenSucursal).Rows)
+            {
+                ListaEstatus.Add(new VMEstatus()
+                {
+                    DtmFechaDeEstatus = item["DtmFecha"].ToString(),
+                    NOMBRE = item["VchNombre"].ToString()
+                });
+            }
+        }
         public void ObtnenerEstatusDeContrato()
         {
             foreach (DataRow item in DB.ObtenerEstatusDeContrato().Rows)

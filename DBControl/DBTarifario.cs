@@ -76,7 +76,7 @@ namespace DBControl
         public DataTable ObtenerTarifarioDeOrden(Guid uidOrden)
         {
             oConexion = new Conexion();
-            string query = "select * from OrdenTarifario ot inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario inner join OrdenSucursal os on os.UidRelacionOrdenSucursal = ot.UidOrden  where os.UidRelacionOrdenSucursal = '"+ uidOrden.ToString() + "'";
+            string query = "select * from OrdenTarifario ot inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario inner join ZonaDeServicio zs on zs.UidRelacionZonaServicio = t.UidRelacionZonaEntrega inner join OrdenSucursal os on os.UidRelacionOrdenSucursal = ot.UidOrden inner join Sucursales s on s.UidSucursal = zs.UidSucursal inner join Empresa e on e.UidEmpresa = s.UidEmpresa where os.UidRelacionOrdenSucursal = '"+ uidOrden.ToString() + "'";
             return oConexion.Consultas(query);
         }
     }

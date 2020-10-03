@@ -231,6 +231,7 @@
     <Resource Include="vistas\img\IconoGoDeliverix.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BaseDeDatos\script.sql" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
