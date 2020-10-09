@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Linq;
 using System.Net.Http;
 using System.Web.Helpers;
 using System.Web.Http;
@@ -559,5 +560,83 @@ namespace WebApplication1.Controllers
             Respuesta.Message = "Informacion eliminada satisfactoriamente";
             return Respuesta;
         }
+
+
+        #region Movil
+        [HttpGet]
+        public IHttpActionResult ObtenerPaises()
+        {
+            MVDireccion = new VMDireccion();
+            MVDireccion.Paises();
+
+            var result = MVDireccion.ListaPais.Select(p => new
+            {
+                Uid = p.ID,
+                Name = p.NombrePais
+            });
+
+            return Json(result);
+        }
+
+        [HttpGet]
+        public IHttpActionResult ObtenerEstadosPais(Guid UidPais)
+        {
+            MVDireccion = new VMDireccion();
+            MVDireccion.Estados(UidPais);
+
+            var result = MVDireccion.ListaEstado.Select(p => new
+            {
+                Uid = p.ID,
+                Name = p.NombreEstado
+            });
+
+            return Json(result);
+        }
+
+        [HttpGet]
+        public IHttpActionResult ObtenerMunicipiosEstado(Guid UidEstado)
+        {
+            MVDireccion = new VMDireccion();
+            MVDireccion.Municipios(UidEstado);
+
+            var result = MVDireccion.ListaMunicipio.Select(p => new
+            {
+                Uid = p.ID,
+                Name = p.NombreMunicipio
+            });
+
+            return Json(result);
+        }
+
+        [HttpGet]
+        public IHttpActionResult ObtenerCiudadesMunicipio(Guid UidMunicipio)
+        {
+            MVDireccion = new VMDireccion();
+            MVDireccion.Ciudades(UidMunicipio);
+
+            var result = MVDireccion.ListaCiudad.Select(p => new
+            {
+                Uid = p.ID,
+                Name = p.NOMBRECIUDAD
+            });
+
+            return Json(result);
+        }
+
+        [HttpGet]
+        public IHttpActionResult ObtenerColoniasCiudad(Guid UidCiudad)
+        {
+            MVDireccion = new VMDireccion();
+            MVDireccion.Colonias(UidCiudad);
+
+            var result = MVDireccion.ListaCiudades.Select(p => new
+            {
+                Uid = p.ID,
+                Name = p.NOMBRECOLONIA
+            });
+
+            return Json(result);
+        }
+        #endregion
     }
 }
