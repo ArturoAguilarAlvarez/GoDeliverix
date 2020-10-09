@@ -108,12 +108,12 @@ namespace WebApplication1.Controllers
         }
 
         // POST: api/Profile
-        public void Post([FromBody]string value)
+        public void Post([FromBody] string value)
         {
         }
 
         // PUT: api/Profile/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody] string value)
         {
         }
 
@@ -129,14 +129,65 @@ namespace WebApplication1.Controllers
         }
 
         #region Xamarin cliente
-        public HttpResponseMessage GetGuardaTelefono_Movil(Guid uidUsuario, string Parametro, Guid UidTelefono, string Numero, string UidTipoDeTelefono)
+        /// <summary>
+        /// Metodo para guardar registros independientes los telefonos
+        /// </summary>
+        /// <param name="uidUsuario"></param>
+        /// <param name="Parametro"></param>
+        /// <param name="UidTelefono"></param>
+        /// <param name="Numero"></param>
+        /// <param name="UidTipoDeTelefono"></param>
+        /// <returns></returns>
+        public IHttpActionResult GetGuardaTelefono_Movil(Guid uidUsuario, string Parametro, Guid UidTelefono, string Numero, string UidTipoDeTelefono)
+        {
+            MVTelefono = new VMTelefono();
+            MVTelefono.GuardaTelefonoWepApi(uidUsuario, Parametro, UidTelefono, Numero, UidTipoDeTelefono);
+            var result = new { resultado = true };
+            return Json(result); 
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="UidTelefono"></param>
+        /// <param name="Numero"></param>
+        /// <param name="UidTipoDeTelefono"></param>
+        /// <returns></returns>
+        public IHttpActionResult GetActualizaTelefono_Movil(Guid UidTelefono, string Numero, string UidTipoDeTelefono)
+        {
+            MVTelefono = new VMTelefono();
+            MVTelefono.ActualizaTelefonoWepApi(UidTelefono, Numero, UidTipoDeTelefono);
+            var result = new { resultado = true};
+            return Json(result);
+        }
+        public IHttpActionResult GetBuscarTelefonos_movil(string UidPropietario, string ParadetroDeBusqueda, string UidTelefono = "", string strTelefono = "")
         {
             Respuesta = new ResponseHelper();
             MVTelefono = new VMTelefono();
-
-            MVTelefono.GuardaTelefonoWepApi(uidUsuario, Parametro, UidTelefono, Numero, UidTipoDeTelefono);
-
-            return Request.CreateResponse(true); ;
+            if (String.IsNullOrEmpty(UidTelefono))
+            {
+                UidTelefono = Guid.Empty.ToString();
+            }
+            MVTelefono.BuscarTelefonos(new Guid(UidPropietario), ParadetroDeBusqueda, new Guid(UidTelefono), strTelefono);
+            var result = new
+            {
+                PhoneList = MVTelefono.ListaDeTelefonos.Select(t => new
+                {
+                    t.ID,
+                    t.UidTipo,
+                    t.NUMERO,
+                    t.StrNombreTipoDeTelefono,
+                    t.Estado
+                })
+            };
+            return Json(result);
+        }
+        // DELETE: api/Profile/5
+        public IHttpActionResult DeleteTelefonoUsuario_Movil(string UidTelefono)
+        {
+            MVTelefono = new VMTelefono();
+            MVTelefono.EliminaTelefonoUsuario(UidTelefono);
+            var resultado = new { Resultado = true };
+            return Json(resultado);
         }
         #endregion
     }

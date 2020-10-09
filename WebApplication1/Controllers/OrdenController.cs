@@ -45,6 +45,19 @@ namespace WebApplication1.Controllers
         {
             MVOrden = new VMOrden();
             MVOrden.ObtenerOrdenesCliente(UidUsuario, parametro);
+            foreach (var item in MVOrden.ListaDeOrdenes)
+            {
+                var Ordenes = new VMOrden();
+                item.IntCantidadDeOrdenes = Ordenes.ObtenerSucursaleDeOrden(item.Uidorden).Rows.Count;
+                var productos = 0;
+                foreach (DataRow orden in Ordenes.ObtenerSucursaleDeOrden(item.Uidorden).Rows)
+                {
+                    var ord = new VMOrden();
+                    ord.ObtenerProductosDeOrden(orden["UidRelacionOrdenSucursal"].ToString());
+                    productos += ord.ListaDeProductos.Count;
+                }
+                item.IntCantidadProductos = productos;
+            }
             var result = new
             {
                 OrderList = MVOrden.ListaDeOrdenes.Select(o => new
@@ -57,7 +70,9 @@ namespace WebApplication1.Controllers
                     o.StrFormaDeCobro,
                     o.LNGFolio,
                     o.UidDireccionCliente,
-                    o.StrDireccionDeEntrega
+                    o.StrDireccionDeEntrega,
+                    o.IntCantidadDeOrdenes,
+                    o.IntCantidadProductos
                 })
             };
             return Json(result);
@@ -95,6 +110,8 @@ namespace WebApplication1.Controllers
                     }
                     try
                     {
+                        MVOrden.ObtenerProductosDeOrden(item["UidRelacionOrdenSucursal"].ToString());
+                        var TotalDeProductos = MVOrden.ListaDeProductos.Count;
                         RepuestaDetallePedido.PedidosList.Add(new VMOrden()
                         {
                             Uidorden = new Guid(item["UidRelacionOrdenSucursal"].ToString()),
@@ -105,7 +122,9 @@ namespace WebApplication1.Controllers
                             MTotal = decimal.Parse(item["MTotal"].ToString()),
                             LNGFolio = long.Parse(item["LNGFolio"].ToString()),
                             CostoEnvio = item["CostoEnvio"].ToString(),
-                            StrEstatusOrdenSucursal = UltimoEstatus
+                            StrEstatusOrdenSucursal = UltimoEstatus,
+                            StrFormaDeCobro = item["EstatusCobro"].ToString(),
+                            intCantidad = TotalDeProductos
                         });
                     }
                     catch (Exception e)
@@ -114,10 +133,12 @@ namespace WebApplication1.Controllers
                     }
 
                 }
+
                 MVOrden.ObtenerOrdenesCliente(UidUsuario, "Usuario");
                 var order = MVOrden.ListaDeOrdenes.Find(o => o.Uidorden == UidOrden);
                 RepuestaDetallePedido.UidOrden = order.Uidorden.ToString();
                 RepuestaDetallePedido.FolioOrden = order.LNGFolio.ToString();
+                RepuestaDetallePedido.EstatusFormaDeCobro = RepuestaDetallePedido.PedidosList[0].StrFormaDeCobro;
                 RepuestaDetallePedido.FormaDeCobro = order.StrFormaDeCobro;
                 MVDireccion.ObtenerDireccionCompleta(order.UidDireccionCliente.ToString());
                 RepuestaDetallePedido.oDeliveryAddress = MVDireccion;
@@ -127,6 +148,7 @@ namespace WebApplication1.Controllers
                     UidOrden = order.Uidorden,
                     FolioOrden = order.LNGFolio,
                     FormaDeCobro = order.StrFormaDeCobro,
+                    EstatusCobro = RepuestaDetallePedido.PedidosList[0].StrFormaDeCobro,
                     oDeliveryAddress = new
                     {
                         MVDireccion.ID,
@@ -157,7 +179,9 @@ namespace WebApplication1.Controllers
                         p.MTotal,
                         p.LNGFolio,
                         p.CostoEnvio,
-                        p.StrEstatusOrdenSucursal
+                        p.StrEstatusOrdenSucursal,
+                        p.intCantidad,
+                        p.StrFormaDeCobro
                     })
                 };
 
@@ -182,6 +206,8 @@ namespace WebApplication1.Controllers
             MVOrden.BuscarOrdenes("Sucursal", TipoDeSucursal: "S", UidOrdenSucursal: UidOrden);
             var InformacionDeEstatus = new VMEstatus();
             InformacionDeEstatus.cargaEstatusOrdenSucursal(UidOrden);
+            var viewmodelImage = new VMImagen();
+            viewmodelImage.ObtenerImagenPerfilDeEmpresa(MVOrden.UidEmpresa.ToString());
             var Orden = new VMOrden()
             {
                 Uidorden = MVOrden.Uidorden,
@@ -189,14 +215,11 @@ namespace WebApplication1.Controllers
                 Identificador = MVOrden.Identificador,
                 MTotal = MVOrden.MTotal,
                 FechaDeOrden = MVOrden.FechaDeOrden,
-                Imagen = MVOrden.Imagen,
+                Imagen = viewmodelImage.STRRUTA,
                 StrNombreSucursal = MVOrden.StrNombreSucursal,
                 UidEstatus = MVOrden.UidEstatus,
                 UidEmpresa = MVOrden.UidEmpresa,
             };
-            var viewmodelImage = new VMImagen();
-            viewmodelImage.ObtenerImagenPerfilDeEmpresa(Orden.UidEmpresa.ToString());
-            Orden.Imagen = viewmodelImage.STRRUTA;
             var DeliveryViewModel = new VMTarifario();
             DeliveryViewModel.ObtenerTarifarioDeOrden(Orden.Uidorden);
             var StatusInformation = new VMEstatus();
@@ -674,6 +697,7 @@ namespace WebApplication1.Controllers
     {
         public string UidOrden { get; set; }
         public string FolioOrden { get; set; }
+        public string EstatusFormaDeCobro { get; set; }
         public string FormaDeCobro { get; set; }
         public VMDireccion oDeliveryAddress { get; set; }
         public List<VMOrden> PedidosList { get; set; }

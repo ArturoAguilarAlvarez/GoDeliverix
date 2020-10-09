@@ -226,6 +226,7 @@ namespace VistaDelModelo
         }
 
         public string StrDireccionDeEntrega { get; private set; }
+        
 
         public List<VMOrden> ListaDeBitacoraDeOrdenes = new List<VMOrden>();
         public List<VMOrden> ListaDeInformacionDeOrden = new List<VMOrden>();
@@ -241,6 +242,9 @@ namespace VistaDelModelo
         public List<VMOrden> ListaDeOrdenesEnviadas = new List<VMOrden>();
         public List<VMOrden> ListaDeOrdenesEmpresa = new List<VMOrden>();
         public List<VMOrden> ListaDeOrdenesCanceladasPermanentes = new List<VMOrden>();
+        //Informacion del historico
+        public int IntCantidadDeOrdenes { get; set; }
+        public int IntCantidadProductos { get; set; }
         #endregion
 
 
@@ -330,7 +334,7 @@ namespace VistaDelModelo
             DataTable DatoQuery = new DataTable();
             try
             {
-                string Query = $"select distinct OS.UidRelacionOrdenSucursal,os.BintCodigoEntrega, i.NVchRuta, S.Identificador,ot.MPropina, cast(cast(os.MTotalSucursal as decimal(10, 2)) + cast(t.MCosto as decimal(10, 2)) as decimal(10, 2)) as MTotal, os.IntFolio as LNGFolio, cast(os.MTotalSucursal as decimal(10, 2)) as MTotalSucursal,s.uidSucursal,cast(t.MCosto as decimal(10, 2)) as CostoEnvio, cast(ot.MPropina as decimal(10, 2)) as MPropina  from Ordenes o inner   join OrdenSucursal OS on o.UidOrden = OS.UidOrden inner  join Sucursales S on s.UidSucursal = OS.UidSucursal inner  join OrdenTarifario ot on ot.UidOrden = os.UidRelacionOrdenSucursal inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario  inner join OrdenProducto op on op.UidOrden = os.UidRelacionOrdenSucursal inner join SeccionProducto sp on sp.UidSeccionProducto = op.UidSeccionProducto inner join ImagenEmpresa IE on IE.UidEmpresa = S.UidEmpresa inner join Imagenes i on i.UIdImagen = IE.UidImagen where o.UidOrden = '{ UidOrden.ToString()}' and i.NVchRuta like '%FotoPerfil%' ";
+                string Query = $"select distinct OS.UidRelacionOrdenSucursal,os.BintCodigoEntrega, i.NVchRuta,dbo.ObtenerEstatusDeCobro(o.UidOrden) as EstatusCobro, S.Identificador,ot.MPropina, cast(cast(os.MTotalSucursal as decimal(10, 2)) + cast(t.MCosto as decimal(10, 2)) as decimal(10, 2)) as MTotal, os.IntFolio as LNGFolio, cast(os.MTotalSucursal as decimal(10, 2)) as MTotalSucursal,s.uidSucursal,cast(t.MCosto as decimal(10, 2)) as CostoEnvio, cast(ot.MPropina as decimal(10, 2)) as MPropina  from Ordenes o inner   join OrdenSucursal OS on o.UidOrden = OS.UidOrden inner  join Sucursales S on s.UidSucursal = OS.UidSucursal inner  join OrdenTarifario ot on ot.UidOrden = os.UidRelacionOrdenSucursal inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario  inner join OrdenProducto op on op.UidOrden = os.UidRelacionOrdenSucursal inner join SeccionProducto sp on sp.UidSeccionProducto = op.UidSeccionProducto inner join ImagenEmpresa IE on IE.UidEmpresa = S.UidEmpresa inner join Imagenes i on i.UIdImagen = IE.UidImagen where o.UidOrden = '{ UidOrden.ToString()}' and i.NVchRuta like '%FotoPerfil%' ";
                 DatoQuery = Datos.Consultas(Query);
             }
             catch (Exception)

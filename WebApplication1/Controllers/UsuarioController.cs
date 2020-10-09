@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Web.Helpers;
 using System.Web.Http;
 using VistaDelModelo;
 using WebApplication1.App_Start;
@@ -163,7 +164,40 @@ namespace WebApplication1.Controllers
                 perfil: perfil);
         }
         #region Xamarin ApiClient
-
+        public IHttpActionResult GetActualizarUsuario_Movil(
+            string UidUsuario,
+            string perfil,
+            string Nombre = "",
+            string ApellidoPaterno = "",
+            string ApellidoMaterno = "",
+            string usuario = "",
+            string password = "",
+            string fnacimiento = "",
+            string estatus = "",
+            string UidEmpresa = "",
+            string UidSucursal = "")
+        {
+            if (string.IsNullOrEmpty(UidEmpresa))
+            {
+                UidEmpresa = Guid.Empty.ToString();
+            }
+            if (string.IsNullOrEmpty(UidSucursal))
+            {
+                UidSucursal = Guid.Empty.ToString();
+            }
+            VMUsuarios MVUsuarios = new VMUsuarios();
+            var respo = MVUsuarios.ActualizarUsuario(
+                UidUsuario: new Guid(UidUsuario),
+                Nombre: Nombre,
+                ApellidoPaterno: ApellidoPaterno,
+                ApellidoMaterno: ApellidoMaterno,
+                usuario: usuario,
+                password: password,
+                fnacimiento: fnacimiento,
+                perfil: perfil);
+            var result = new { resultado = respo };
+            return Json(result);
+        }
         public HttpResponseMessage GetBuscarUsuarios_Movil(string UidUsuario = "", string UidEmpresa = "", string NOMBRE = "", string USER = "", string APELLIDO = "", string ESTATUS = "", string UIDPERFIL = "")
         {
             MVUsuario = new VMUsuarios();

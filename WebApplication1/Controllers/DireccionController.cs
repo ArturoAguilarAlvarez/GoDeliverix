@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Net.Http;
+using System.Web.Helpers;
 using System.Web.Http;
 using VistaDelModelo;
 using WebApplication1.App_Start;
@@ -278,6 +279,33 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
         #region Xamarin api
+        public IHttpActionResult GetGuardarDireccion_Movil(Guid UidUsuario, Guid UidPais, Guid UidEstado, Guid UidMunicipio, Guid UidCiudad, Guid UidColonia, string CallePrincipal, string CalleAux1, string CalleAux2, string Manzana, string Lote, string CodigoPostal, string Referencia, string NOMBRECIUDAD, string NOMBRECOLONIA, string Identificador, string Latitud, string Longitud, string UidDireccion = "")
+        {
+            MVDireccion = new VMDireccion();
+            MVUbicacion = new VMUbicacion();
+            Guid uidDirecion = new Guid();
+            if (string.IsNullOrEmpty(UidDireccion))
+            {
+                uidDirecion = Guid.NewGuid();
+            }
+            else
+            {
+                uidDirecion = new Guid(UidDireccion);
+            }
+
+            MVDireccion.AgregaDireccion("asp_AgregaDireccionUsuario", UidUsuario, uidDirecion, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador);
+            var result = new { result = MVUbicacion.GuardaUbicacionDireccion(uidDirecion, Guid.NewGuid(), Latitud, Longitud) };
+            return Json(result);
+        }
+        public IHttpActionResult GetActualizarDireccion_Movil(Guid UidPais, Guid UidEstado, Guid UidMunicipio, Guid UidCiudad, Guid UidColonia, string CallePrincipal, string CalleAux1, string CalleAux2, string Manzana, string Lote, string CodigoPostal, string Referencia, string NOMBRECIUDAD, string NOMBRECOLONIA, string Identificador, string Latitud, string Longitud, string UidDireccion)
+        {
+            MVDireccion = new VMDireccion();
+            MVUbicacion = new VMUbicacion();
+            MVDireccion.ActualizaDireccion(new Guid(UidDireccion), UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, CallePrincipal, CalleAux1, CalleAux2, Manzana, Lote, CodigoPostal, Referencia, Identificador);
+            var resp = MVUbicacion.GuardaUbicacionDireccion(new Guid(UidDireccion), Guid.NewGuid(), Latitud, Longitud);
+            var r = new { respuesta = resp };
+            return Json(r);
+        }
         /// <summary>
         /// Obtiene la direccion completa con los nombres del pais, estado,municipio,ciudad
         /// </summary>
@@ -288,7 +316,7 @@ namespace WebApplication1.Controllers
             MVDireccion = new VMDireccion();
             Respuesta = new ResponseHelper();
             MVDireccion.ObtenerDireccionCompleta(UidDireccion);
-           return Request.CreateResponse(MVDireccion);
+            return Request.CreateResponse(MVDireccion);
         }
         public HttpResponseMessage GetObtenerDireccionConDatosDeGoogle_Movil(string StrNombreCiudad, string CodigoEstado, string CodigoPais)
         {
@@ -410,11 +438,11 @@ namespace WebApplication1.Controllers
 
         }
 
-        public HttpResponseMessage GetObtenerColonias_Movil(string UidCiudad) 
+        public HttpResponseMessage GetObtenerColonias_Movil(string UidCiudad)
         {
             VMDireccion Colonias = new VMDireccion();
             var dt = Colonias.Colonias(new Guid(UidCiudad));
-            
+
             return Request.CreateResponse(System.Net.HttpStatusCode.OK, dt);
         }
 
@@ -502,12 +530,12 @@ namespace WebApplication1.Controllers
         }
 
         // POST: api/Profile
-        public void Post([FromBody]string value)
+        public void Post([FromBody] string value)
         {
         }
 
         // PUT: api/Profile/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody] string value)
         {
         }
 

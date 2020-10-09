@@ -75,6 +75,7 @@ namespace WebApplication1.Controllers
             producto.STRRUTAImagenEmpresa = CostoDeEnvio.StrRuta;
             producto.StrDeliveryBranch = CostoDeEnvio.StrNombreSucursal;
             producto.strDeliveryCompany = CostoDeEnvio.StrNombreEmpresa;
+            var viewmodelPago = new VMPagos();
             return Request.CreateResponse(producto);
         }
         #endregion

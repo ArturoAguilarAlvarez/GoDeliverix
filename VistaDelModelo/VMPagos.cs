@@ -378,7 +378,10 @@ namespace VistaDelModelo
                 throw;
             }
         }
-
+        public void ProductoIncluyePagoConTarjeta(string UidEmpresa) 
+        { 
+        
+        }
 
         /// <summary>
         /// Recupera el tipo de pago de una orden
