@@ -637,6 +637,95 @@ namespace WebApplication1.Controllers
 
             return Json(result);
         }
+
+        [HttpPost]
+        public IHttpActionResult Agregar([FromBody] DireccionModel model)
+        {
+            try
+            {
+                MVDireccion = new VMDireccion();
+                MVUbicacion = new VMUbicacion();
+                model.Uid = Guid.NewGuid();
+
+                MVDireccion.AgregaDireccion("asp_AgregaDireccionUsuario",
+                    model.UidUsuario,
+                    model.Uid,
+                    model.UidPais,
+                    model.UidEstado,
+                    model.UidMunicipio,
+                    model.UidCiudad,
+                    model.UidColonia,
+                    model.Calle,
+                    model.EntreCalle,
+                    model.yCalle,
+                    model.Manzana,
+                    model.Lote,
+                    model.CodigoPostal,
+                    model.Referencias,
+                    model.Identificador);
+
+                MVUbicacion.GuardaUbicacionDireccion(model.Uid, Guid.NewGuid(), model.Latitude, model.Longitude);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public IHttpActionResult Actualizar([FromBody] DireccionModel model)
+        {
+            try
+            {
+                MVDireccion = new VMDireccion();
+                MVUbicacion = new VMUbicacion();
+
+                MVDireccion.ActualizaDireccion(
+                    model.Uid,
+                    model.UidPais,
+                    model.UidEstado,
+                    model.UidMunicipio,
+                    model.UidCiudad,
+                    model.UidColonia,
+                    model.Calle,
+                    model.EntreCalle,
+                    model.yCalle,
+                    model.Manzana,
+                    model.Lote,
+                    model.CodigoPostal,
+                    model.Referencias,
+                    model.Identificador);
+                var resp = MVUbicacion.GuardaUbicacionDireccion(model.Uid, Guid.NewGuid(), model.Latitude, model.Longitude);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         #endregion
+    }
+
+    public class DireccionModel
+    {
+        public Guid Uid { get; set; }
+        public Guid UidPais { get; set; }
+        public Guid UidEstado { get; set; }
+        public Guid UidMunicipio { get; set; }
+        public Guid UidCiudad { get; set; }
+        public Guid UidColonia { get; set; }
+        public string Identificador { get; set; }
+        public string Calle { get; set; }
+        public string EntreCalle { get; set; }
+        public string yCalle { get; set; }
+        public string Manzana { get; set; }
+        public string Lote { get; set; }
+        public string CodigoPostal { get; set; }
+        public string Referencias { get; set; }
+
+        public Guid UidUsuario { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
     }
 }
