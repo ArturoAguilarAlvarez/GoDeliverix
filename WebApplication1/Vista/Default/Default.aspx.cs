@@ -122,10 +122,6 @@ namespace WebApplication1
             {
 
                 Guid Id = Guid.Empty;
-                //HttpClient _client = new HttpClient();
-                //string url = "http://godeliverix.net/api/Profile/GET?Usuario=" + usuario + "&Contrasena=" + password;
-                //string content = await _client.GetStringAsync(url);
-                //List<string> listaID = JsonConvert.DeserializeObject<List<string>>(content);
 
                 Id = MVAcceso.Ingresar(usuario, password);
                 if (Id != Guid.Empty)
@@ -194,7 +190,7 @@ namespace WebApplication1
                 }
                 else
                 {
-                    Response.Redirect("../");
+                    Response.Redirect("../Default.aspx");
                 }
             }
             else

@@ -18,10 +18,10 @@ namespace WebApplication1.Controllers
     {
 
         #region Xamarin movil
-        public IHttpActionResult ObtenerComisionEmpresa(string UidEmpresa,string provedor= "MITec")
+        public IHttpActionResult ObtenerComisionEmpresa(string provedor= "MITec")
         {
             var viewmodelComisiones = new VMComision();
-            viewmodelComisiones.ObtenerComisionPorEmpresa(new Guid(UidEmpresa));
+            viewmodelComisiones.ObtenerComisionPasarelaDeCobro(provedor);
             var bIncluyeComisionConTarjeta = viewmodelComisiones.BIncluyeComisionTarjeta;
             viewmodelComisiones.ObtenerComisionPasarelaDeCobro(provedor);
             var PorcentajeDeComision = viewmodelComisiones.FValor;

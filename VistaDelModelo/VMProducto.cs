@@ -203,6 +203,22 @@ namespace VistaDelModelo
             set { _EstatusProducto = value; }
         }
 
+        private bool _IncluyeComisionTarjetaProducto;
+
+        public bool IncluyeComisionTarjetaProducto
+        {
+            get { return _IncluyeComisionTarjetaProducto; }
+            set { _IncluyeComisionTarjetaProducto = value; }
+        }
+
+        private bool _IncluyeComisionTarjetaEnvio;
+
+        public bool IncluyeComisionTarjetaEnvio
+        {
+            get { return _IncluyeComisionTarjetaEnvio; }
+            set { _IncluyeComisionTarjetaEnvio = value; }
+        }
+
         #endregion
         #region Metodos
         public bool Guardar(string Nombre, string Descripcion, Guid UidEmpresa, Guid UidProducto, string Estatus)

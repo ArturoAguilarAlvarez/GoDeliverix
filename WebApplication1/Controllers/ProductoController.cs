@@ -75,7 +75,18 @@ namespace WebApplication1.Controllers
             producto.STRRUTAImagenEmpresa = CostoDeEnvio.StrRuta;
             producto.StrDeliveryBranch = CostoDeEnvio.StrNombreSucursal;
             producto.strDeliveryCompany = CostoDeEnvio.StrNombreEmpresa;
-            var viewmodelPago = new VMPagos();
+
+            var viewmodelSucursal = new VMSucursales();
+            var viewmodelComision = new VMComision();
+
+            viewmodelSucursal.BuscarSucursales(UidSucursal: UidSucursal);
+            //Comision de empresa suministradora
+            viewmodelComision.ObtenerComisionPorEmpresa(viewmodelSucursal.UidEmpresa);
+            producto.IncluyeComisionTarjetaProducto = viewmodelComision.BIncluyeComisionTarjeta;
+            //Comision de empresa distribuidora
+            viewmodelComision.ObtenerComisionPorEmpresa(CostoDeEnvio.GuidSucursalDistribuidora);
+            producto.IncluyeComisionTarjetaEnvio = viewmodelComision.BIncluyeComisionTarjeta;
+
             return Request.CreateResponse(producto);
         }
         #endregion

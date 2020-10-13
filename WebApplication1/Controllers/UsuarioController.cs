@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Web.Helpers;
 using System.Web.Http;
@@ -198,7 +199,7 @@ namespace WebApplication1.Controllers
             var result = new { resultado = respo };
             return Json(result);
         }
-        public HttpResponseMessage GetBuscarUsuarios_Movil(string UidUsuario = "", string UidEmpresa = "", string NOMBRE = "", string USER = "", string APELLIDO = "", string ESTATUS = "", string UIDPERFIL = "")
+        public IHttpActionResult GetBuscarUsuarios_Movil(string UidUsuario = "", string UidEmpresa = "", string NOMBRE = "", string USER = "", string APELLIDO = "", string ESTATUS = "", string UIDPERFIL = "")
         {
             MVUsuario = new VMUsuarios();
 
@@ -213,14 +214,40 @@ namespace WebApplication1.Controllers
 
             MVUsuario.BusquedaDeUsuario(new Guid(UidUsuario), new Guid(UidEmpresa), NOMBRE, USER, APELLIDO, ESTATUS, new Guid(UIDPERFIL));
 
-            if (!string.IsNullOrEmpty(UidUsuario))
+            object Respuesta;
+            if (!string.IsNullOrEmpty(UidUsuario) && UidUsuario != Guid.Empty.ToString())
             {
-                return Request.CreateResponse(MVUsuario);
+                var viewmodelCorreo = new VMCorreoElectronico();
+                viewmodelCorreo.BuscarCorreos(UidPropietario: new Guid(UidUsuario));
+                var viewmodelTelefono = new VMTelefono();
+                viewmodelTelefono.BuscarTelefonos(UidPropietario: new Guid(UidUsuario), ParadetroDeBusqueda: "Usuario");
+
+                var telefono = new VMTelefono();
+                if (viewmodelTelefono.ListaDeTelefonos != null)
+                {
+                    telefono = viewmodelTelefono.ListaDeTelefonos[0];
+                }
+                Respuesta = new { InformacionDeUsuario = MVUsuario, CorreoElectronico = viewmodelCorreo.CORREO, InformacionDelTelefono = telefono };
             }
             else
             {
-                return Request.CreateResponse(MVUsuario.LISTADEUSUARIOS);
+                Respuesta = new
+                {
+                    ListaDeUsuarios = MVUsuario.LISTADEUSUARIOS.Select(p => new
+                    {
+                        p.Uid,
+                        p.StrNombre,
+                        p.StrUsuario,
+                        p.StrApellidoPaterno,
+                        p.DtmFechaDeNacimiento,
+                        p.UidEmpresa,
+                        p.StrEstatus,
+                        p.StrPerfil,
+                        p.StrNombreDeSucursal
+                    })
+                };
             }
+            return Json(Respuesta);
 
         }
 
@@ -239,9 +266,6 @@ namespace WebApplication1.Controllers
 
             Guid uidusuaro = new Guid(UidUsuario);
             respuesta.Data = MVUsuarios.GuardaUsuario(UidUsuario: uidusuaro, Nombre: nombre, ApellidoPaterno: apellidoP, ApellidoMaterno: apellidoM, usuario: usuario, password: contrasena, fnacimiento: fechaNacimiento, perfil: "4f1e1c4b-3253-4225-9e46-dd7d1940da19", estatus: "1", TIPODEUSUARIO: "Cliente");
-            //MVTelefono.AgregaTelefonoALista("f7bdd1d0-28e5-4f52-bc26-a17cd5c297de", telefono, "Principal");
-            // MVCorreoElectronico.AgregarCorreo(uidusuaro, "Usuario", correo, uidcorreo);
-            //MVAcceso.CorreoDeConfirmacion(uidusuaro, correo, usuario, contrasena, nombre, apellidoM + " " + apellidoM);
             return Request.CreateResponse();
         }
 
