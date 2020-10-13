@@ -84,6 +84,20 @@ namespace Modelo
             set { _identificador = value; }
         }
 
+        private bool _BEstatus;
+
+        public bool BEstatus
+        {
+            get { return _BEstatus; }
+            set { _BEstatus = value; }
+        }
+        private bool _BPredeterminada;
+
+        public bool BPredeterminada
+        {
+            get { return _BPredeterminada; }
+            set { _BPredeterminada = value; }
+        }
 
 
         #endregion
@@ -146,6 +160,13 @@ namespace Modelo
                 //Dato 14
                 cmd.Parameters.Add("@Identificador", SqlDbType.NVarChar, 20);
                 cmd.Parameters["@Identificador"].Value = DIR.IDENTIFICADOR;
+                //Dato 15
+                cmd.Parameters.Add("@BEstatus", SqlDbType.Bit);
+                cmd.Parameters["@BEstatus"].Value = DIR.BEstatus;
+                //Dato 16
+                cmd.Parameters.Add("@BDireccionPredeterminada", SqlDbType.Bit);
+                cmd.Parameters["@BDireccionPredeterminada"].Value = DIR.BPredeterminada;
+
                 oConexion = new Conexion();
                 resultado = oConexion.ModificarDatos(cmd);
             }

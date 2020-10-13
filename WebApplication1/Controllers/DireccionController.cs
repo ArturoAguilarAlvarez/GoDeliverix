@@ -662,7 +662,9 @@ namespace WebApplication1.Controllers
                     model.Lote,
                     model.CodigoPostal,
                     model.Referencias,
-                    model.Identificador);
+                    model.Identificador,
+                    model.DefaultAddress.ToString(),
+                    model.Status.ToString());
 
                 MVUbicacion.GuardaUbicacionDireccion(model.Uid, Guid.NewGuid(), model.Latitude, model.Longitude);
                 return Ok();
@@ -695,7 +697,10 @@ namespace WebApplication1.Controllers
                     model.Lote,
                     model.CodigoPostal,
                     model.Referencias,
-                    model.Identificador);
+                    model.Identificador,
+                    model.DefaultAddress.ToString(),
+                    model.Status.ToString(),
+                    model.UidUsuario);
                 var resp = MVUbicacion.GuardaUbicacionDireccion(model.Uid, Guid.NewGuid(), model.Latitude, model.Longitude);
                 return Ok();
             }
@@ -727,5 +732,7 @@ namespace WebApplication1.Controllers
         public Guid UidUsuario { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
+        public bool Status { get; set; }
+        public bool DefaultAddress { get; set; }
     }
 }

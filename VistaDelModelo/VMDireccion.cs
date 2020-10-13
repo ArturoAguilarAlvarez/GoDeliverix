@@ -895,8 +895,16 @@ namespace VistaDelModelo
         }
 
 
-        public void AgregaDireccion(string StoreProcedure, Guid Usuario, Guid uidDireccion, Guid uidPais, Guid uidEstado, Guid uidMunicipio, Guid uidCiudad, Guid uidColonia, string callePrincipal, string calleAux1, string calleAux2, string manzana, string lote, string codigoPostal, string referencia, string identificador)
+        public void AgregaDireccion(string StoreProcedure, Guid Usuario, Guid uidDireccion, Guid uidPais, Guid uidEstado, Guid uidMunicipio, Guid uidCiudad, Guid uidColonia, string callePrincipal, string calleAux1, string calleAux2, string manzana, string lote, string codigoPostal, string referencia, string identificador, string  EstatusRegistro = "",string DireccionPredeterminada = "")
         {
+            if (string.IsNullOrEmpty(EstatusRegistro))
+            {
+                EstatusRegistro = "False";
+            }
+            if (string.IsNullOrEmpty(DireccionPredeterminada))
+            {
+                DireccionPredeterminada = "False";
+            }
             var direccion = new Direccion()
             {
                 ID = uidDireccion,
@@ -912,14 +920,24 @@ namespace VistaDelModelo
                 LOTE = lote,
                 CodigoPostal = codigoPostal,
                 REFERENCIA = referencia,
-                IDENTIFICADOR = identificador
+                IDENTIFICADOR = identificador,
+                BEstatus = bool.Parse(EstatusRegistro),
+                BPredeterminada = bool.Parse(DireccionPredeterminada)
             };
             Direccion = new Direccion();
             Direccion.GuardaDireccion(StoreProcedure, direccion, Usuario);
         }
 
-        public void ActualizaDireccion(Guid uidDireccion, Guid uidPais, Guid uidEstado, Guid uidMunicipio, Guid uidCiudad, Guid uidColonia, string callePrincipal, string calleAux1, string calleAux2, string manzana, string lote, string codigoPostal, string referencia, string identificador)
+        public void ActualizaDireccion(Guid uidDireccion, Guid uidPais, Guid uidEstado, Guid uidMunicipio, Guid uidCiudad, Guid uidColonia, string callePrincipal, string calleAux1, string calleAux2, string manzana, string lote, string codigoPostal, string referencia, string identificador, string EstatusRegistro = "", string DireccionPredeterminada = "", Guid UidUsuario = new Guid())
         {
+            if (string.IsNullOrEmpty(EstatusRegistro))
+            {
+                EstatusRegistro = "False";
+            }
+            if (string.IsNullOrEmpty(DireccionPredeterminada))
+            {
+                DireccionPredeterminada = "False";
+            }
             var direccion = new Direccion()
             {
                 ID = uidDireccion,
@@ -935,10 +953,12 @@ namespace VistaDelModelo
                 LOTE = lote,
                 CodigoPostal = codigoPostal,
                 REFERENCIA = referencia,
-                IDENTIFICADOR = identificador
+                IDENTIFICADOR = identificador,
+                BEstatus = bool.Parse(EstatusRegistro),
+                BPredeterminada = bool.Parse(DireccionPredeterminada)
             };
             Direccion = new Direccion();
-            Direccion.GuardaDireccion("asp_ActualizaDireccion", direccion, Guid.Empty);
+            Direccion.GuardaDireccion("asp_ActualizaDireccion", direccion, UidUsuario);
         }
 
         public void EliminaDireccion(string uidsucursal)

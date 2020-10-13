@@ -616,7 +616,6 @@ namespace VistaDelModelo
             }
             catch (Exception)
             {
-
                 throw;
             }
             return resultado;
