@@ -450,6 +450,7 @@ namespace VistaDelModelo
                                 UidEmpresa = new Guid(item["UidEmpresa"].ToString()),
                                 StrEstatus = item["ESTATUS"].ToString(),
                                 StrPerfil = item["Perfil"].ToString().ToUpper(),
+
                                 StrNombreDeSucursal = empresa
 
                             });
@@ -464,8 +465,10 @@ namespace VistaDelModelo
                                 StrApellidoPaterno = Apellido,
                                 DtmFechaDeNacimiento = FechaDeNacimiento,
                                 StrEstatus = item["ESTATUS"].ToString(),
-                                StrPerfil = item["Perfil"].ToString().ToUpper()
-                            });
+                                StrPerfil = item["Perfil"].ToString().ToUpper(),
+                                StrCotrasena = item["Contrasena"].ToString()
+
+                        });
                         }
 
                     }
@@ -487,6 +490,7 @@ namespace VistaDelModelo
                         this.DtmFechaDeNacimiento = item["FechaDeNacimiento"].ToString();
                         this.StrEstatus = item["ESTATUS"].ToString();
                         this.StrPerfil = item["Perfil"].ToString().ToUpper();
+                        this.StrCotrasena = item["Contrasena"].ToString();
                     }
                 }
             }

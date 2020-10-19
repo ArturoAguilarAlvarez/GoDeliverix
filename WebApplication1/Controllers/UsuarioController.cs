@@ -218,7 +218,7 @@ namespace WebApplication1.Controllers
             if (!string.IsNullOrEmpty(UidUsuario) && UidUsuario != Guid.Empty.ToString())
             {
                 var viewmodelCorreo = new VMCorreoElectronico();
-                viewmodelCorreo.BuscarCorreos(UidPropietario: new Guid(UidUsuario));
+                viewmodelCorreo.BuscarCorreos(UidPropietario: new Guid(UidUsuario),strParametroDebusqueda: "Usuario");
                 var viewmodelTelefono = new VMTelefono();
                 viewmodelTelefono.BuscarTelefonos(UidPropietario: new Guid(UidUsuario), ParadetroDeBusqueda: "Usuario");
 
@@ -243,7 +243,8 @@ namespace WebApplication1.Controllers
                         p.UidEmpresa,
                         p.StrEstatus,
                         p.StrPerfil,
-                        p.StrNombreDeSucursal
+                        p.StrNombreDeSucursal,
+                        p.StrCotrasena
                     })
                 };
             }

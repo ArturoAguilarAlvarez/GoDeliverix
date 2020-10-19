@@ -76,7 +76,7 @@ namespace DBControl
         public DataTable ObtenerDireccionesUsuario(string id)
         {
             oConexcion = new Conexion();
-            string sentencia = "SELECT D.UidDireccion,D.UidPais,D.UidEstado,D.UidMunicipio,D.UidCiudad,D.UidColonia,D.Calle0,D.Calle1,D.Calle2,D.Manzana,D.Lote,D.CodigoPostal,D.Referencia, D.Identificador,u.VchLatitud,u.VchLongitud FROM Direccion D inner join DireccionUsuario DE on DE.UidDireccion = D.UidDireccion inner join DireccionUbicacion du on du.UidDireccion = d.UidDireccion inner join Ubicacion u on u.UidUbicacion = du.UidUbicacion where DE.UidUsuario ='" + id + "'";
+            string sentencia = "SELECT D.BPredeterminada,D.UidDireccion,D.UidPais,D.UidEstado,D.UidMunicipio,D.UidCiudad,D.UidColonia,D.Calle0,D.Calle1,D.Calle2,D.Manzana,D.Lote,D.CodigoPostal,D.Referencia, D.Identificador,u.VchLatitud,u.VchLongitud FROM Direccion D inner join DireccionUsuario DE on DE.UidDireccion = D.UidDireccion inner join DireccionUbicacion du on du.UidDireccion = d.UidDireccion inner join Ubicacion u on u.UidUbicacion = du.UidUbicacion where DE.UidUsuario ='" + id + "' and D.BEstatus = 1 order by D.BPredeterminada desc";
             return oConexcion.Consultas(sentencia);
         }
         public DataTable ObtenerDireccionesEmpresa(string id)

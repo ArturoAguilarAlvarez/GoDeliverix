@@ -164,6 +164,20 @@ namespace VistaDelModelo
             get { return _identificador; }
             set { _identificador = value; }
         }
+        private bool status;
+
+        public bool Status
+        {
+            get { return status; }
+            set { status = value; }
+        }
+        private bool defaultAddress;
+
+        public bool DefaultAddress
+        {
+            get { return defaultAddress; }
+            set { defaultAddress = value; }
+        }
 
         #endregion
 
@@ -176,7 +190,7 @@ namespace VistaDelModelo
         //    }
         //}
 
-        public void ObtenerDireccionConGoogle(string strNombreCiudad , string CodigoPais,string CodigoEstado)
+        public void ObtenerDireccionConGoogle(string strNombreCiudad, string CodigoPais, string CodigoEstado)
         {
             SqlCommand cmd = new SqlCommand();
 
@@ -188,7 +202,7 @@ namespace VistaDelModelo
                 //Dato 1
                 cmd.Parameters.Add("@VchNombreCiudad", SqlDbType.NVarChar, 200);
                 cmd.Parameters["@VchNombreCiudad"].Value = strNombreCiudad;
-                
+
                 cmd.Parameters.Add("@VchCodigoPais", SqlDbType.NVarChar, 10);
                 cmd.Parameters["@VchCodigoPais"].Value = CodigoPais;
 
@@ -431,6 +445,9 @@ namespace VistaDelModelo
                 // Nombre de campos de ciudad y colonia
                 string NombreColonia = "No hay información";
                 string NombreCiudad = "No hay información";
+                string NombreEstado = "No hay información";
+                string NombrePais = "No hay información";
+                bool predeterminada = bool.Parse(item["BPredeterminada"].ToString());
                 //Validación de variables vacias
                 if (Identificador == "" && Identificador == string.Empty)
                 {
@@ -461,7 +478,9 @@ namespace VistaDelModelo
                 //Obtiene el nombre de la colonia y de la ciudad
                 NombreCiudad = ObtenerNombreDeLaCiudad(CIUDAD.ToString());
                 NombreColonia = ObtenerNombreDeLaColonia(COLONIA.ToString());
-                ListaDIRECCIONES.Add(new VMDireccion() { ID = IDDIRECCION, PAIS = PAIS.ToString(), ESTADO = ESTADO.ToString(), MUNICIPIO = MUNICIPIO.ToString(), CIUDAD = CIUDAD.ToString(), COLONIA = COLONIA.ToString(), CALLE0 = CALLE0, CALLE1 = CALLE1, CALLE2 = CALLE2, MANZANA = MANZANA, LOTE = LOTE, CodigoPostal = CP, REFERENCIA = Referencia, IDENTIFICADOR = Identificador, Latitud = oLatitud, Longitud = oLongitud, NOMBRECIUDAD = NombreCiudad, NOMBRECOLONIA = NombreColonia });
+                NombreEstado = ObtenerNombreDelEstado(ESTADO.ToString());
+                NombrePais = ObtenerNombrePais(PAIS.ToString());
+                ListaDIRECCIONES.Add(new VMDireccion() { ID = IDDIRECCION, PAIS = PAIS.ToString(), ESTADO = ESTADO.ToString(), MUNICIPIO = MUNICIPIO.ToString(), CIUDAD = CIUDAD.ToString(), COLONIA = COLONIA.ToString(), CALLE0 = CALLE0, CALLE1 = CALLE1, CALLE2 = CALLE2, MANZANA = MANZANA, LOTE = LOTE, CodigoPostal = CP, REFERENCIA = Referencia, IDENTIFICADOR = Identificador, Latitud = oLatitud, Longitud = oLongitud, NOMBRECIUDAD = NombreCiudad, NOMBRECOLONIA = NombreColonia, NombreEstado = NombreEstado, NombrePais = NombrePais, DefaultAddress = predeterminada });
             }
         }
         public string ObtenerCodigoPostal(Guid Colonia)
@@ -895,7 +914,7 @@ namespace VistaDelModelo
         }
 
 
-        public void AgregaDireccion(string StoreProcedure, Guid Usuario, Guid uidDireccion, Guid uidPais, Guid uidEstado, Guid uidMunicipio, Guid uidCiudad, Guid uidColonia, string callePrincipal, string calleAux1, string calleAux2, string manzana, string lote, string codigoPostal, string referencia, string identificador, string  EstatusRegistro = "",string DireccionPredeterminada = "")
+        public void AgregaDireccion(string StoreProcedure, Guid Usuario, Guid uidDireccion, Guid uidPais, Guid uidEstado, Guid uidMunicipio, Guid uidCiudad, Guid uidColonia, string callePrincipal, string calleAux1, string calleAux2, string manzana, string lote, string codigoPostal, string referencia, string identificador, string EstatusRegistro = "", string DireccionPredeterminada = "")
         {
             if (string.IsNullOrEmpty(EstatusRegistro))
             {

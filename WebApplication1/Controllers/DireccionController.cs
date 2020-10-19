@@ -637,7 +637,17 @@ namespace WebApplication1.Controllers
 
             return Json(result);
         }
+        [HttpGet]
+        public IHttpActionResult ObtenerCodigoPostal(Guid UidColonia)
+        {
+            MVDireccion = new VMDireccion();
+            var result = new
+            {
+                CodigoPostal = MVDireccion.ObtenerCodigoPostal(UidColonia)
+            };
 
+            return Json(result);
+            }
         [HttpPost]
         public IHttpActionResult Agregar([FromBody] DireccionModel model)
         {
