@@ -708,8 +708,8 @@ namespace WebApplication1.Controllers
                     model.CodigoPostal,
                     model.Referencias,
                     model.Identificador,
-                    model.DefaultAddress.ToString(),
                     model.Status.ToString(),
+                    model.DefaultAddress.ToString(),                    
                     model.UidUsuario);
                 var resp = MVUbicacion.GuardaUbicacionDireccion(model.Uid, Guid.NewGuid(), model.Latitude, model.Longitude);
                 return Ok();
