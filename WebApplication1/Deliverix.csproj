@@ -430,6 +430,7 @@
     <Compile Include="Controllers\ComisionesController.cs" />
     <Compile Include="Controllers\ContratoController.cs" />
     <Compile Include="Controllers\CorreoElectronicoController.cs" />
+    <Compile Include="Controllers\DealersController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\DireccionController.cs" />
     <Compile Include="Controllers\EmpresaController.cs" />
