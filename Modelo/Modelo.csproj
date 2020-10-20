@@ -48,6 +48,7 @@
     <Compile Include="ApiResponse\Address.cs" />
     <Compile Include="ApiResponse\DeliveryManLoginResult.cs" />
     <Compile Include="ApiResponse\Phone.cs" />
+    <Compile Include="ApiResponse\RepartidorUpdate.cs" />
     <Compile Include="Categoria.cs" />
     <Compile Include="Comision.cs" />
     <Compile Include="CorreoElectronico.cs" />

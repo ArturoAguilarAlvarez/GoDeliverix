@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Modelo.ApiResponse;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -14,6 +15,27 @@ namespace WebApplication1.Controllers
         public DealersController()
         {
             this.DealerVm = new DealersViewModel();
+        }
+
+        [HttpPost]
+        public IHttpActionResult Update([FromBody] RepartidorUpdate update)
+        {
+            try
+            {
+                bool result = this.DealerVm.Update(update);
+                if (result)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]

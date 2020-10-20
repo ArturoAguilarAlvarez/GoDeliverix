@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,39 @@ namespace DBControl
         public DealerDataAccess()
         {
             this.dbConexion = new Conexion();
+        }
+
+        public bool Update(Guid uid, string nombre = "", string apellidoPaterno = "", string apellidoMaterno = "", DateTime? fechaNacimiento = null)
+        {
+            string update = "";
+
+            if (!string.IsNullOrEmpty(nombre))
+            {
+                update += string.IsNullOrEmpty(update) ? $"[Nombre] = '{nombre}'" : $",[Nombre] = '{nombre}'";
+            }
+
+            if (!string.IsNullOrEmpty(apellidoPaterno))
+            {
+                update += string.IsNullOrEmpty(update) ? $"[ApellidoPaterno] = '{apellidoPaterno}'" : $",[ApellidoPaterno] = '{apellidoPaterno}'";
+            }
+
+            if (!string.IsNullOrEmpty(apellidoMaterno))
+            {
+                update += string.IsNullOrEmpty(update) ? $"[ApellidoMaterno] = '{apellidoMaterno}'" : $",[ApellidoMaterno] = '{apellidoMaterno}'";
+            }
+
+            if (fechaNacimiento.HasValue)
+            {
+                update += string.IsNullOrEmpty(update) ? $"[FechaDeNacimiento] = '{fechaNacimiento.Value.ToString("MM/dd/yyyy")}'" : $",[FechaDeNacimiento] = '{fechaNacimiento.Value.ToString("MM/dd/yyyy")}'";
+            }
+
+            string query = $"UPDATE [Usuarios] SET {update} WHERE [UidUsuario] = '{uid.ToString()}'";
+
+            SqlCommand sqlCommand = new SqlCommand();
+            sqlCommand.CommandText = query;
+            sqlCommand.CommandType = CommandType.Text;
+
+            return this.dbConexion.ModificarDatos(sqlCommand);
         }
 
         #region Direcciones
@@ -53,7 +87,8 @@ namespace DBControl
         #endregion
 
         #region Telefonos
-        public DataTable ReadAllPhonesByUserId(Guid uidUser) {
+        public DataTable ReadAllPhonesByUserId(Guid uidUser)
+        {
             string query = $@"
                 SELECT 
                     T.[UidTelefono],

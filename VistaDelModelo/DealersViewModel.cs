@@ -21,6 +21,19 @@ namespace VistaDelModelo
             this.DealerDb = new DealerDataAccess();
         }
 
+        public bool Update(RepartidorUpdate update)
+        {
+            if (string.IsNullOrEmpty(update.Nombre)
+                && string.IsNullOrEmpty(update.ApellidoPaterno)
+                && string.IsNullOrEmpty(update.ApellidoMaterno)
+                && !update.FechaNacimiento.HasValue)
+            {
+                return false;
+            }
+
+            return this.DealerDb.Update(update.Uid, update.Nombre, update.ApellidoPaterno, update.ApellidoMaterno, update.FechaNacimiento);
+        }
+
         #region Address
         public IEnumerable<Address> ReadAllAddresses(Guid uidUser)
         {
