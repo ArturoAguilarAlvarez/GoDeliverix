@@ -22,6 +22,8 @@ namespace Modelo.ApiResponse
 
         public Guid UidPerfil { get; set; }
 
+        public Guid UidRepartidor { get; set; }
+
         public string CorreoElectronico { get; set; }
     }
 }

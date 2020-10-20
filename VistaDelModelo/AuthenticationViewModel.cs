@@ -39,11 +39,12 @@ namespace VistaDelModelo
                         Uid = (Guid)row["UidUsuario"],
                         UidPerfil = (Guid)row["UidPerfil"],
                         Usuario = (string)row["Usuario"],
-                        CorreoElectronico = (string)row["Correo"],
+                        CorreoElectronico = row.IsNull("Correo") ? "" : (string)row["Correo"],
                         FechaNacimiento = (DateTime)row["FechaDeNacimiento"],
                         Nombre = row.IsNull("Nombre") ? "" : (string)row["Nombre"],
                         ApellidoPaterno = row.IsNull("ApellidoPaterno") ? "" : (string)row["ApellidoPaterno"],
-                        ApellidoMaterno = row.IsNull("ApellidoMaterno") ? "" : (string)row["ApellidoMaterno"]
+                        ApellidoMaterno = row.IsNull("ApellidoMaterno") ? "" : (string)row["ApellidoMaterno"],
+                        UidRepartidor = (Guid)row["UidRepartidor"],
                     };
                 }
             }

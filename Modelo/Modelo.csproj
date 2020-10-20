@@ -45,7 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiResponse\Address.cs" />
     <Compile Include="ApiResponse\DeliveryManLoginResult.cs" />
+    <Compile Include="ApiResponse\Phone.cs" />
     <Compile Include="Categoria.cs" />
     <Compile Include="Comision.cs" />
     <Compile Include="CorreoElectronico.cs" />

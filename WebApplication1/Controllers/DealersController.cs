@@ -15,5 +15,19 @@ namespace WebApplication1.Controllers
         {
             this.DealerVm = new DealersViewModel();
         }
+
+        [HttpGet]
+        public IHttpActionResult ReadAllPhones(Guid uidUser)
+        {
+            try
+            {
+                var result = this.DealerVm.ReadAllPhones(uidUser);
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

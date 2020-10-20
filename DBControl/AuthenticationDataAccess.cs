@@ -40,10 +40,12 @@ namespace DBControl
                     U.[ApellidoMaterno],
                     U.[FechaDeNacimiento],
                     U.[UidPerfil],
+                    R.[UidRepartidor],
                     C.[Correo]
                 FROM [Usuarios] AS U
-                    INNER JOIN [CorreoUsuario] AS CU ON CU.[UidUsuario] = U.[UidUsuario]
-                    INNER JOIN [CorreoElectronico] AS C ON C.[IdCorreo] = CU.[UidCorreo]
+                    INNER JOIN [Repartidor] AS R ON R.[UidUsuario] = U.[UidUsuario]
+                    LEFT JOIN [CorreoUsuario] AS CU ON CU.[UidUsuario] = U.[UidUsuario]
+                    LEFT JOIN [CorreoElectronico] AS C ON C.[IdCorreo] = CU.[UidCorreo]
                 WHERE [Usuario] = '{username}' 
                     AND [Contrasena] COLLATE Latin1_General_CS_AS =  '{password}'
                     AND [UidPerfil] = '{profileUid.ToString()}'";
