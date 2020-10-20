@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthenticationViewModel.cs" />
     <Compile Include="NotificationViewModel.cs" />
     <Compile Include="VMComision.cs" />
     <Compile Include="VMMonedero.cs" />
