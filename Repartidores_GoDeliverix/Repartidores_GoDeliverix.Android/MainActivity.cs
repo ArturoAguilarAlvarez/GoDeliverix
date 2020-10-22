@@ -23,7 +23,7 @@ namespace Repartidores_GoDeliverix.Droid
             App.ScreenWidth = Resources.DisplayMetrics.WidthPixels;
             App.ScreenHeight = Resources.DisplayMetrics.HeightPixels;
             global::Xamarin.FormsMaps.Init(this, savedInstanceState);
-            Xamarin.FormsGoogleMaps.Init(this, savedInstanceState);
+            //Xamarin.FormsGoogleMaps.Init(this, savedInstanceState);
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
             LoadApplication(new App());
         }

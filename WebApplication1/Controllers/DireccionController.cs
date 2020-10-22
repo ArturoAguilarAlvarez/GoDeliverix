@@ -325,7 +325,7 @@ namespace WebApplication1.Controllers
             MVUbicacion = new VMUbicacion();
             string Estado = "";
             string pais = "";
-            if (CodigoPais == "México")
+            if (CodigoPais == "México" || CodigoPais.ToLower() == "mexico")
             {
                 pais = "MX";
             }
