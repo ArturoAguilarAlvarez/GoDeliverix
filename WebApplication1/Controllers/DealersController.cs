@@ -51,5 +51,17 @@ namespace WebApplication1.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet]
+        public IHttpActionResult GetLastWorkShiftSummary(Guid userUid)
+        {
+            return Ok();
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetAssignedPurchaseShipmentSummary(Guid dealerUid)
+        {
+            return Ok();
+        }
     }
 }
