@@ -18,5 +18,15 @@ namespace Modelo.Common
         /// <see cref="https://stackoverflow.com/questions/37418372/firebase-where-is-my-account-secret-in-the-new-console"/>
         /// </summary>
         public static string FirebaseSecretKey = "";
+
+        /// <summary>
+        /// Google Maps Direccions Api Url
+        /// </summary>
+        public static string GoogleDirectionApiBaseURl = "https://maps.googleapis.com/maps/";
+
+        /// <summary>
+        /// Google Maps Direccion Api Key
+        /// </summary>
+        public static string GoogleDirectionApiKey = "";
     }
 }
