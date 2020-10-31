@@ -47,6 +47,8 @@
     <Compile Include="AuthenticationViewModel.cs" />
     <Compile Include="DealersViewModel.cs" />
     <Compile Include="NotificationViewModel.cs" />
+    <Compile Include="Services\FirebaseService.cs" />
+    <Compile Include="Services\GoogleService.cs" />
     <Compile Include="VMComision.cs" />
     <Compile Include="VMMonedero.cs" />
     <Compile Include="VMCorreoElectronico.cs" />
