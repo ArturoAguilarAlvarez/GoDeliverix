@@ -48,12 +48,17 @@
     <Compile Include="ApiResponse\Address.cs" />
     <Compile Include="ApiResponse\DeliveryManLoginResult.cs" />
     <Compile Include="ApiResponse\DeliveryOrderProductDetail.cs" />
+    <Compile Include="ApiResponse\Firebase\DeliveryDealerRouteLocation.cs" />
+    <Compile Include="ApiResponse\Firebase\FirebaseAddResponse.cs" />
+    <Compile Include="ApiResponse\Google\GoogleDirection.cs" />
     <Compile Include="ApiResponse\LastAssignedOrder.cs" />
     <Compile Include="ApiResponse\LastWorkShift.cs" />
+    <Compile Include="ApiResponse\MapCoordinates.cs" />
     <Compile Include="ApiResponse\Phone.cs" />
     <Compile Include="ApiResponse\RepartidorUpdate.cs" />
     <Compile Include="Categoria.cs" />
     <Compile Include="Comision.cs" />
+    <Compile Include="Common\ApplicationConstants.cs" />
     <Compile Include="CorreoElectronico.cs" />
     <Compile Include="Cuenta.cs" />
     <Compile Include="DatosDireccion\Ciudad.cs" />
