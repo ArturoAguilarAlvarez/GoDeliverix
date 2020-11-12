@@ -38,6 +38,25 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
+        #region Xamarin Api
+        public IHttpActionResult GetBusquedaDeOfertas(string dia,
+            string UidSucursal)
+        {
+            MVOferta = new VMOferta();
+
+            MVOferta.BuscarOfertasCliente(UidSucursal, dia);
+            var result = new
+            {
+                ListaDeOfertas = MVOferta.ListaDeOfertas.Select(o => new
+                {
+                    o.UID,
+                    o.STRNOMBRE,
+                    o.StrEstatus
+                })
+            };
+            return Json(result);
+        }
+        #endregion
         //// POST: api/Profile
         //public void Post([FromBody]string value)
         //{

@@ -146,7 +146,7 @@ d:DesignHeight="530" d:DesignWidth="1000"
                             <DataGridTextColumn Width="*"  Header="Folio" Binding="{ Binding LngFolio}"></DataGridTextColumn>
                             <DataGridTextColumn Width="*"  Header="Empresa" Binding="{ Binding NombreComercialEmpresa}"></DataGridTextColumn>
                             <DataGridTextColumn Width="*" Header="Sucursal" Binding="{ Binding StrIdentificadorSucursal}"></DataGridTextColumn>
-                            <DataGridTextColumn Width="*" Header="Hora" Binding="{ Binding DtmFechaDeOrden}"></DataGridTextColumn>
+                            <!--<DataGridTextColumn Width="*" Header="Hora" Binding="{ Binding DtmFechaDeOrden}"></DataGridTextColumn>-->
                             <DataGridTextColumn Width="*" Header="Total" Binding="{ Binding DCLTotal}"></DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>

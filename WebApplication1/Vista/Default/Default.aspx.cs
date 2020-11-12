@@ -82,10 +82,6 @@ namespace WebApplication1
                 Session.Remove("MVSeccion");
             }
 
-
-
-
-
             if (!IsPostBack)
             {
 
@@ -132,7 +128,6 @@ namespace WebApplication1
                         string perfil = MVAcceso.PerfilDeUsuario(Id.ToString());
                         //Obtener la empresa a la que pertenece el usuario
                         Guid UidEmpresa = MVUsuarios.ObtenerIdEmpresa(Id.ToString());
-                        
 
                         MVUsuarios.BusquedaDeUsuario(UidUsuario: Id, UIDPERFIL: new Guid(perfil), UidEmpresa: UidEmpresa);
                         Session["IdUsuario"] = Id;
@@ -209,7 +204,7 @@ namespace WebApplication1
             if (!string.IsNullOrEmpty(txtCorreoElectronico.Text))
             {
                 string correo = txtCorreoElectronico.Text;
-                if ( MVUsuarios.ValidarCorreoElectronicoDelUsuario(correo))
+                if (MVUsuarios.ValidarCorreoElectronicoDelUsuario(correo))
                 {
                     string password = Guid.NewGuid().ToString().Substring(0, 18);
                     MVUsuarios.ActualizarUsuario(UidUsuario: MVCorreoElectronico.UidPropietario, password: password, perfil: "4F1E1C4B-3253-4225-9E46-DD7D1940DA19");

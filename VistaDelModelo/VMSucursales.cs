@@ -548,7 +548,12 @@ namespace VistaDelModelo
                         }
                         if (!ListaDeSucursalesDeContrato.Exists(suc => suc.ID == id))
                         {
-                            ListaDeSucursalesDeContrato.Add(new VMSucursales() { ID = id, IDENTIFICADOR = IDENTIFICADOR, HORAAPARTURA = HA, HORACIERRE = HC, Estatus = estatus, UidEmpresa = uidEmpresa });
+                            ListaDeSucursalesDeContrato.Add(new VMSucursales() { ID = id,
+                                IDENTIFICADOR = IDENTIFICADOR,
+                                HORAAPARTURA = HA,
+                                HORACIERRE = HC,
+                                Estatus = estatus,
+                                UidEmpresa = uidEmpresa });
                         }
                     }
                 }

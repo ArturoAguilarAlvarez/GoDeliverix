@@ -1076,9 +1076,11 @@ namespace WebApplication1.Vista
             MVUsuarios = new VMUsuarios();
             MVDireccion = new VMDireccion();
             MVTelefono = new VMTelefono();
+            MVTelefono.ListaDeTelefonos = new List<VMTelefono>();
             Session["MVUsuarios"] = MVUsuarios;
             Session["MVDireccion"] = MVDireccion;
             Session["MVTelefono"] = MVTelefono;
+
             CargaGrid("Direccion");
             CargaGrid("Telefono");
             QuitaEstiloACamposObligatorios();
@@ -1176,7 +1178,7 @@ namespace WebApplication1.Vista
         #endregion
 
         #region Paneles de cajas de texto
-        
+
         private void TextboxActivados(string ControlDeACcion = "")
         {
             if (AccionesDeLaPagina == "Edicion" && ControlDeACcion == "Desactivado")
@@ -1242,7 +1244,7 @@ namespace WebApplication1.Vista
                 CargaGrid("Telefono");
             }
         }
-        
+
         private void LimpiarCajasDeTexto()
         {
 
@@ -1404,7 +1406,7 @@ namespace WebApplication1.Vista
 
                     else
                     {
-                        MVUsuarios.BusquedaDeUsuario(USER:usuario);
+                        MVUsuarios.BusquedaDeUsuario(USER: usuario);
                         if (MVUsuarios.LISTADEUSUARIOS.Count == 0)
                         {
 
@@ -1538,9 +1540,6 @@ namespace WebApplication1.Vista
                     txtdRFC.BorderColor = System.Drawing.Color.Red;
                 }
             }
-
-
-
         }
         protected void QuitaEstiloACamposObligatorios()
         {
@@ -1838,7 +1837,7 @@ namespace WebApplication1.Vista
                 else
                 {
                     Guid UidDireccion = Guid.NewGuid();
-                    MVDireccion.AgregaDireccionALista(UidDireccion,UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, Calle, Calle1, Calle2, Manzana, Lote, CodigoPostal, txtDReferencia.Text, NOMBRECOLONIA, NOMBRECIUDAD, Identificador);
+                    MVDireccion.AgregaDireccionALista(UidDireccion, UidPais, UidEstado, UidMunicipio, UidCiudad, UidColonia, Calle, Calle1, Calle2, Manzana, Lote, CodigoPostal, txtDReferencia.Text, NOMBRECOLONIA, NOMBRECIUDAD, Identificador);
                 }
                 Session["MVDireccion"] = MVDireccion;
                 GVDireccion.DataSource = MVDireccion.ListaDIRECCIONES;
@@ -2023,7 +2022,7 @@ namespace WebApplication1.Vista
 
         protected void GuardaTelefono()
         {
-            MVTelefono.AgregaTelefonoALista( DDLDTipoDETelefono.SelectedItem.Value.ToString(), txtDTelefono.Text, DDLDTipoDETelefono.SelectedItem.Text.ToString());
+            MVTelefono.AgregaTelefonoALista(DDLDTipoDETelefono.SelectedItem.Value.ToString(), txtDTelefono.Text, DDLDTipoDETelefono.SelectedItem.Text.ToString());
             DDLDTipoDETelefono.SelectedIndex = -1;
             txtDTelefono.Text = string.Empty;
             DDLDTipoDETelefono.Enabled = false;
@@ -2035,7 +2034,7 @@ namespace WebApplication1.Vista
         }
         protected void ActualizaTelefono()
         {
-            MVTelefono.ActualizaRegistroEnListaDeTelefonos(txtIdTelefono.Text, DDLDTipoDETelefono.SelectedItem.Value.ToString(),  txtDTelefono.Text);
+            MVTelefono.ActualizaRegistroEnListaDeTelefonos(txtIdTelefono.Text, DDLDTipoDETelefono.SelectedItem.Value.ToString(), txtDTelefono.Text);
 
             DDLDTipoDETelefono.SelectedIndex = -1;
             txtDTelefono.Text = string.Empty;
@@ -2290,6 +2289,6 @@ namespace WebApplication1.Vista
         }
         #endregion
 
-        
+
     }
 }

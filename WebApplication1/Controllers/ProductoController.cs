@@ -19,7 +19,6 @@ namespace WebApplication1.Controllers
         {
             MVProducto = new VMProducto();
             MVProducto.buscarProductosEmpresaDesdeCliente(StrParametroBusqueda, StrDia, UidEstado, UidColonia, UidBusquedaCategorias, StrNombreEmpresa);
-
             Respuesta = new ResponseHelper();
             Respuesta.Data = MVProducto;
             Respuesta.Status = true;
@@ -27,13 +26,22 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
-        public HttpResponseMessage GetBuscarProductosCliente_Movil(string StrParametroBusqueda, string StrDia, Guid UidEstado, Guid UidColonia, Guid UidBusquedaCategorias, string StrNombreEmpresa = "")
+        public HttpResponseMessage GetBuscarProductosCliente_Movil(string StrParametroBusqueda,
+            string StrDia,
+            Guid UidEstado,
+            Guid UidColonia,
+            Guid UidBusquedaCategorias,
+            string StrNombreEmpresa = "",
+            string UidOferta = "",
+            string UidSeccion = "",
+            string UidEmpresa = "")
         {
             MVProducto = new VMProducto();
-            MVProducto.buscarProductosEmpresaDesdeCliente(StrParametroBusqueda, StrDia, UidEstado, UidColonia, UidBusquedaCategorias, StrNombreEmpresa);
+            MVProducto.buscarProductosEmpresaDesdeCliente(StrParametroBusqueda, StrDia, UidEstado, UidColonia, UidBusquedaCategorias, StrNombreEmpresa, UidOferta,UidSeccion,UidEmpresa);
             return Request.CreateResponse(MVProducto.ListaDeProductos);
         }
 
+        
         public ResponseHelper GetObtenerInformacionDeProductoDeLaSucursal(string StrParametroBusqueda, string StrDia, string UidColonia, string UidEstado, string UidBusquedaCategorias, string UidProducto)
         {
             MVProducto = new VMProducto();

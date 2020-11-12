@@ -232,6 +232,7 @@ namespace VistaDelModelo
         public void Buscar(string Nombre = "", string Descripcion = "", string estatus = "", Guid UidEmpresa = new Guid(), Guid UidProducto = new Guid(), string Giro = "", string Categoria = "", string Subcategoria = "")
         {
             SqlCommand Comando = new SqlCommand();
+            ListaDeProductos = new List<VMProducto>();
             ListaDeProductos.Clear();
             try
             {
@@ -723,7 +724,15 @@ namespace VistaDelModelo
         }
 
         #region Busqueda de productos desde cliente
-        public void buscarProductosEmpresaDesdeCliente(string StrParametroBusqueda, string StrDia, Guid UidEstado, Guid UidColonia, Guid UidBusquedaCategorias, string StrNombreEmpresa = "")
+        public void buscarProductosEmpresaDesdeCliente(string StrParametroBusqueda,
+            string StrDia,
+            Guid UidEstado,
+            Guid UidColonia,
+            Guid UidBusquedaCategorias,
+            string StrNombreEmpresa = "",
+            string UidOferta = "",
+            string UidSeccion = "",
+            string UidEmpresa = "")
         {
             try
             {
@@ -740,6 +749,21 @@ namespace VistaDelModelo
                 {
                     CMD.Parameters.Add("@StrNombreProducto", SqlDbType.VarChar, 200);
                     CMD.Parameters["@StrNombreProducto"].Value = StrNombreEmpresa;
+                }
+                if (!string.IsNullOrEmpty(UidSeccion))
+                {
+                    CMD.Parameters.Add("@UidSeccion", SqlDbType.UniqueIdentifier);
+                    CMD.Parameters["@UidSeccion"].Value = new Guid(UidSeccion);
+                }
+                if (!string.IsNullOrEmpty(UidOferta))
+                {
+                    CMD.Parameters.Add("@UidOferta", SqlDbType.UniqueIdentifier);
+                    CMD.Parameters["@UidOferta"].Value = new Guid(UidOferta);
+                }
+                if (!string.IsNullOrEmpty(UidEmpresa))
+                {
+                    CMD.Parameters.Add("@UidEmpresa", SqlDbType.UniqueIdentifier);
+                    CMD.Parameters["@UidEmpresa"].Value = new Guid(UidEmpresa);
                 }
 
                 CMD.Parameters.Add("@StrDia", SqlDbType.VarChar, 20);
@@ -762,8 +786,7 @@ namespace VistaDelModelo
                     string descripcion = item["VchDescripcion"].ToString();
                     string ruta = "https://www.godeliverix.net/vista/" + item["NVchRuta"].ToString();
                     string rutaiamgenempresa = "https://www.godeliverix.net/vista/" + item["RutaEmpresa"].ToString();
-                    //string ruta = "../" + item["NVchRuta"].ToString();
-                    Guid UidEmpresa = new Guid(item["UidEmpresa"].ToString());
+                    Guid uiempresa = new Guid(item["UidEmpresa"].ToString());
 
                     if (!ListaDeProductos.Exists(p => p.UID == uidproducto))
                     {
@@ -771,7 +794,7 @@ namespace VistaDelModelo
                         {
                             UID = uidproducto,
                             Empresa = item["NombreComercial"].ToString(),
-                            UIDEMPRESA = UidEmpresa,
+                            UIDEMPRESA = uiempresa,
                             STRDESCRIPCION = descripcion,
                             STRNOMBRE = nombre,
                             STRRUTA = ruta,
@@ -980,7 +1003,7 @@ namespace VistaDelModelo
                 STRNOMBRE = item["VchNombre"].ToString();
                 StrCosto = item["Mcosto"].ToString();
                 StrIdentificador = item["Identificador"].ToString();
-                STRRUTA =  item["NVchRuta"].ToString();                
+                STRRUTA = item["NVchRuta"].ToString();
             }
         }
         #endregion

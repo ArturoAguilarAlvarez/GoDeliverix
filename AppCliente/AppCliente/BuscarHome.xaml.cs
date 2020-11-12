@@ -42,112 +42,113 @@ namespace AppCliente
             string categoria = App.categoria;
             string subcategoria = App.subcategoria;
 
-            if (giro == "")
-            {
-                giro = App.MVGiro.LISTADEGIRO[0].UIDVM.ToString();
-            }
-            if (categoria == "")
-            {
-                categoria = "00000000-0000-0000-0000-000000000000";
-            }
-            else
-            {
-                categoria = App.categoria;
-            }
-            if (subcategoria == "")
-            {
-                subcategoria = "00000000-0000-0000-0000-000000000000";
-            }
-            else
-            {
-                subcategoria = App.subcategoria;
-            }
+            //if (giro == "")
+            //{
+            //    giro = App.MVGiro.LISTADEGIRO[0].UIDVM.ToString();
+            //}
+            //if (categoria == "")
+            //{
+            //    categoria = "00000000-0000-0000-0000-000000000000";
+            //}
+            //else
+            //{
+            //    categoria = App.categoria;
+            //}
+            //if (subcategoria == "")
+            //{
+            //    subcategoria = "00000000-0000-0000-0000-000000000000";
+            //}
+            //else
+            //{
+            //    subcategoria = App.subcategoria;
+            //}
 
-            if (App.buscarPor == "")
-            {
-                App.buscarPor = "Productos";
-            }
-            Guid uidcolonia = new Guid(App.UidColoniaABuscar);
-            Guid uidestado = new Guid(App.UidEstadoABuscar);
-            string _URL = "";
-            string UidParametroDeBusqueda = "";
-            string tipoDeBusqueda = "";
-            ApiService ApiService = new ApiService("");
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
-            {
-                UidParametroDeBusqueda = giro;
-                tipoDeBusqueda = "Giro";
-            }
-            else if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
-            {
-                UidParametroDeBusqueda = categoria;
-                tipoDeBusqueda = "Categoria";
-            }
-            else if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || !string.IsNullOrWhiteSpace(subcategoria)))
-            {
-                UidParametroDeBusqueda = subcategoria;
-                tipoDeBusqueda = "Subcategoria";
-            }
+            //if (App.buscarPor == "")
+            //{
+            //    App.buscarPor = "Productos";
+            //}
+            //Guid uidcolonia = new Guid(App.UidColoniaABuscar);
+            //Guid uidestado = new Guid(App.UidEstadoABuscar);
+            //string _URL = "";
+            //string UidParametroDeBusqueda = "";
+            //string tipoDeBusqueda = "";
+            //ApiService ApiService = new ApiService("");
+            //Dictionary<string, string> parameters = new Dictionary<string, string>();
+            //if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
+            //{
+            //    UidParametroDeBusqueda = giro;
+            //    tipoDeBusqueda = "Giro";
+            //}
+            //else if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || string.IsNullOrWhiteSpace(subcategoria)))
+            //{
+            //    UidParametroDeBusqueda = categoria;
+            //    tipoDeBusqueda = "Categoria";
+            //}
+            //else if (giro != Guid.Empty.ToString() && (categoria == Guid.Empty.ToString() || !string.IsNullOrEmpty(categoria)) && (subcategoria == Guid.Empty.ToString() || !string.IsNullOrWhiteSpace(subcategoria)))
+            //{
+            //    UidParametroDeBusqueda = subcategoria;
+            //    tipoDeBusqueda = "Subcategoria";
+            //}
 
 
 
-            if (App.buscarPor == "Productos")
-            {
-                ApiService = new ApiService("/api/Producto");
-                parameters = new Dictionary<string, string>();
-                parameters.Add("StrParametroBusqueda", tipoDeBusqueda);
-                parameters.Add("StrDia", Dia);
-                parameters.Add("UidEstado", uidestado.ToString());
-                parameters.Add("UidColonia", uidcolonia.ToString());
-                parameters.Add("UidBusquedaCategorias", UidParametroDeBusqueda);
-                parameters.Add("StrNombreEmpresa", searchFor.Text);
-                var result = await ApiService.GET<VMProducto>(action: "GetBuscarProductosCliente", responseType: ApiService.ResponseType.Object, arguments: parameters);
-                var oReponse = result as ResponseHelper;
-                if (result != null && oReponse.Status != false)
-                {
-                    var BusquedaProducto = oReponse.Data as VMProducto;
-                    App.ListaDeProductos = new List<VMProducto>();
-                    if (BusquedaProducto.ListaDeProductos != null)
-                    {
-                        foreach (VMProducto item in BusquedaProducto.ListaDeProductos)
-                        {
-                            App.ListaDeProductos.Add(item);
-                        }
-                        PanelProductoNoEncontrados.IsVisible = false;
-                        MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos;
-                        CantidadProductosMostrados = App.ListaDeProductos.Count;
-                        lbCantidad.Text = App.ListaDeProductos.Count + " Productos disponibles";
-                        ScrollView_Empresas.IsVisible = false;
-                        ScrollView_Productos.IsVisible = true;
-                        MyListViewBusquedaProductosHome.ItemsSource = null;
-                        MyListViewBusquedaProductosHome.ItemsSource = BusquedaProducto.ListaDeProductos;
-                        CantidadProductosMostrados = BusquedaProducto.ListaDeProductos.Count;
-                        MyListViewBusquedaEmpresas.ItemsSource = null;
-                        if (BusquedaProducto.ListaDeProductos.Count == 0)
-                        {
-                            PanelProductoNoEncontrados.IsVisible = true;
-                            ScrollView_Productos.IsVisible = false;
-                        }
-                        else
-                        {
-                            PanelProductoNoEncontrados.IsVisible = false;
-                            ScrollView_Productos.IsVisible = true;
-                        }
-                    }
-                }
+            //if (App.buscarPor == "Productos")
+            //{
+            //    ApiService = new ApiService("/api/Producto");
+            //    parameters = new Dictionary<string, string>();
+            //    parameters.Add("StrParametroBusqueda", tipoDeBusqueda);
+            //    parameters.Add("StrDia", Dia);
+            //    parameters.Add("UidEstado", uidestado.ToString());
+            //    parameters.Add("UidColonia", uidcolonia.ToString());
+            //    parameters.Add("UidBusquedaCategorias", UidParametroDeBusqueda);
+            //    parameters.Add("StrNombreEmpresa", searchFor.Text);
+            //    var result = await ApiService.GET<VMProducto>(action: "GetBuscarProductosCliente", responseType: ApiService.ResponseType.Object, arguments: parameters);
+            //    var oReponse = result as ResponseHelper;
+            //    if (result != null && oReponse.Status != false)
+            //    {
+            //        var BusquedaProducto = oReponse.Data as VMProducto;
+            //        App.ListaDeProductos = new List<VMProducto>();
+            //        if (BusquedaProducto.ListaDeProductos != null)
+            //        {
+            //            foreach (VMProducto item in BusquedaProducto.ListaDeProductos)
+            //            {
+            //                App.ListaDeProductos.Add(item);
+            //            }
+            //            PanelProductoNoEncontrados.IsVisible = false;
+            //            MyListViewBusquedaProductosHome.ItemsSource = App.ListaDeProductos;
+            //            CantidadProductosMostrados = App.ListaDeProductos.Count;
+            //            lbCantidad.Text = App.ListaDeProductos.Count + " Productos disponibles";
+            //            ScrollView_Empresas.IsVisible = false;
+            //            ScrollView_Productos.IsVisible = true;
+            //            MyListViewBusquedaProductosHome.ItemsSource = null;
+            //            MyListViewBusquedaProductosHome.ItemsSource = BusquedaProducto.ListaDeProductos;
+            //            CantidadProductosMostrados = BusquedaProducto.ListaDeProductos.Count;
+            //            MyListViewBusquedaEmpresas.ItemsSource = null;
+            //            if (BusquedaProducto.ListaDeProductos.Count == 0)
+            //            {
+            //                PanelProductoNoEncontrados.IsVisible = true;
+            //                ScrollView_Productos.IsVisible = false;
+            //            }
+            //            else
+            //            {
+            //                PanelProductoNoEncontrados.IsVisible = false;
+            //                ScrollView_Productos.IsVisible = true;
+            //            }
+            //        }
+            //    }
 
-            }
-            else if (App.buscarPor == "Empresas")
+            //}
+            //else
+            if (App.buscarPor == "Empresas")
             {
-                ApiService = new ApiService("/api/Empresa");
-                parameters = new Dictionary<string, string>();
-                parameters.Add("StrParametroBusqueda", tipoDeBusqueda);
-                parameters.Add("StrDia", Dia);
-                parameters.Add("UidEstado", uidestado.ToString());
-                parameters.Add("UidColonia", uidcolonia.ToString());
-                parameters.Add("UidBusquedaCategorias", UidParametroDeBusqueda);
-                parameters.Add("StrNombreEmpresa", searchFor.Text);
+                var ApiService = new ApiService("/api/Empresa");
+                var parameters = new Dictionary<string, string>();
+                parameters.Add("StrParametroBusqueda", "Giro");
+                parameters.Add("StrDia", "martes");
+                parameters.Add("UidEstado", "1fce366d-c225-47fd-b4bb-5ee4549fe913");
+                parameters.Add("UidColonia", "f30f1394-c692-4766-a924-6d4a10209d80");
+                parameters.Add("UidBusquedaCategorias", "efaedc66-7834-4066-a634-41244a171175");
+                parameters.Add("StrNombreEmpresa", "");
                 var result = await ApiService.GET<VMEmpresas>(action: "GetObtenerEmpresaCliente", responseType: ApiService.ResponseType.Object, arguments: parameters);
                 var oReponse = result as ResponseHelper;
                 if (result != null && oReponse.Status != false)

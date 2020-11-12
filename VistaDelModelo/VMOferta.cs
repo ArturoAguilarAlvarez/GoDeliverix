@@ -85,6 +85,43 @@ namespace VistaDelModelo
                 throw;
             }
         }
+
+        public void BuscarOfertasCliente(string UIDSUCURSAL, string dia)
+        {
+            SqlCommand Comando = new SqlCommand();
+            ListaDeOfertas.Clear();
+            Datos = new Conexion();
+            try
+            {
+                Comando.CommandType = CommandType.StoredProcedure;
+                Comando.CommandText = "asp_BuscarOferta";
+
+                //Valida si esta buscando todas las ofertas o solo una
+
+                Comando.Parameters.Add("@UidSucursal", SqlDbType.UniqueIdentifier);
+                Comando.Parameters["@UidSucursal"].Value = new Guid(UIDSUCURSAL);
+
+                Comando.Parameters.Add("@IntEstatus", SqlDbType.Int);
+                Comando.Parameters["@IntEstatus"].Value = 1;
+
+                Comando.Parameters.Add("@Dia", SqlDbType.VarChar,20);
+                Comando.Parameters["@Dia"].Value = dia;
+
+                foreach (DataRow item in Datos.Busquedas(Comando).Rows)
+                {
+                    Guid uidoferta = new Guid(item["UidOferta"].ToString());
+                    string nombre = item["VchNombre"].ToString().ToUpper();
+                    string estatus = item["intEstatus"].ToString();
+                    ListaDeOfertas.Add(new VMOferta() { UID = uidoferta, STRNOMBRE = nombre, StrEstatus = estatus });
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public void Buscar(Guid UIDOFERTA = new Guid(), Guid UIDSUCURSAL = new Guid(), string NOMBRE = "", string ESTATUS = "", Guid UidEmpresa = new Guid())
         {
             SqlCommand Comando = new SqlCommand();

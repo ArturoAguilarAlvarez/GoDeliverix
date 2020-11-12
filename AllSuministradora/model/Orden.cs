@@ -197,6 +197,7 @@ namespace AllSuministradora.model
                 var sucursal = instance.VMSucursalesLocal.ListaDeSucursales.Where(x => x.UidSucursal == UidSucursal).FirstOrDefault();
                 var MVOrden = new VMOrden();
                 MVOrden.AgregarEstatusOrdenEnSucursal(new Guid("EAE7A7E6-3F19-405E-87A9-3162D36CE21B"), "S", sucursal.Licencia.ToString(), UidOrden: UidOrden, UidMensaje: SMensaje.UidMensaje);
+                MVOrden.AgregaEstatusALaOrden(new Guid("A2D33D7C-2E2E-4DC6-97E3-73F382F30D93"), UidOrden: UidOrden, UidLicencia: sucursal.Licencia, StrParametro: "S");
                 VMMonedero obj = new VMMonedero();
                 obj.uidOrdenSucursal = UidOrden;
                 obj.UidTipoDeMovimiento = new Guid("E85F0486-1FBE-494C-86A2-BFDDC733CA5D");

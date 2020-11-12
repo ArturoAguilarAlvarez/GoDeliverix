@@ -29,12 +29,12 @@ namespace AppCliente
             string Dia = ConfiguracionDiaEspanol.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
             txtNombreEmpresa.Text = ObjItem.NOMBRECOMERCIAL;
             UidEmpresa = ObjItem.UIDEMPRESA;
-            CargaPerfilEmpresa(Dia);
+             CargaPerfilEmpresa(Dia);
 
         }
         protected async void CargaPerfilEmpresa(string Dia)
         {
-            string uril = "" + Helpers.Settings.sitio + "/api/Sucursales/GetBuscarSucursalesDeUnProducto?uidEmpresa=" + ObjItem.UIDEMPRESA + "&day=" + Dia + "&UidEstado=" + App.UidEstadoABuscar + "&UidColonia=" + App.UidColoniaABuscar + "";
+            string uril = "" + Helpers.Settings.sitio + "/api/Sucursales/GetBuscarSucursalesDeUnProducto?uidEmpresa=" + ObjItem.UIDEMPRESA + "&day=" + Dia + "&UidEstado=" + "1fce366d-c225-47fd-b4bb-5ee4549fe913" + "&UidColonia=" + "f30f1394-c692-4766-a924-6d4a10209d80" + "";
             string content = "";
             using (HttpClient _webClient = new HttpClient())
             {
@@ -50,8 +50,8 @@ namespace AppCliente
             App.MVImagen.ObtenerImagenPerfilDeEmpresa(UidEmpresa.ToString());
             imgFotoPerfilEmpresa.Source = "" + Helpers.Settings.sitio + "/vista/" + App.MVImagen.STRRUTA;
             #endregion
-            Guid UidColonia = new Guid(App.UidColoniaABuscar);
-            Guid UidEstado = new Guid(App.UidEstadoABuscar);
+            //Guid UidColonia = new Guid(App.UidColoniaABuscar);
+            //Guid UidEstado = new Guid(App.UidEstadoABuscar);
             CantidadSucursales(Dia);
             #region busqueda de ListaOferta
             var registro = App.MVSucursales.LISTADESUCURSALES[0];
@@ -78,7 +78,7 @@ namespace AppCliente
         {
             using (HttpClient _webClient = new HttpClient())
             {
-                string uril = "" + Helpers.Settings.sitio + "/api/Sucursales/GetBuscarSucursalesDeUnProducto?uidEmpresa=" + ObjItem.UIDEMPRESA + "&day=" + Dia + "&UidEstado=" + App.UidEstadoABuscar + "&UidColonia=" + App.UidColoniaABuscar + "";
+                string uril = "" + Helpers.Settings.sitio + "/api/Sucursales/GetBuscarSucursalesDeUnProducto?uidEmpresa=" + ObjItem.UIDEMPRESA + "&day=" + Dia + "&UidEstado=" + "1fce366d-c225-47fd-b4bb-5ee4549fe913" + "&UidColonia=" + "f30f1394-c692-4766-a924-6d4a10209d80" + "";
                 string content = await _webClient.GetStringAsync(uril);
                 string obj = JsonConvert.DeserializeObject<ResponseHelper>(content).Data.ToString();
                 App.MVSucursales = JsonConvert.DeserializeObject<VMSucursales>(obj);

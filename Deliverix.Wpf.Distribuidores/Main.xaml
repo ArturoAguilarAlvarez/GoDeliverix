@@ -47,7 +47,7 @@
             </StackPanel>
             <TextBlock x:Name="txtSucursal" Text="Distribuidores" HorizontalAlignment="Center" Foreground="White" VerticalAlignment="Center" FontSize="28" ></TextBlock>
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
-                <TextBlock x:Name="txtUsuario" Text="Sup1dis1" Foreground="White" HorizontalAlignment="Center" FontSize="30" VerticalAlignment="Center"></TextBlock>
+                <TextBlock x:Name="txtUsuario"  Foreground="White" HorizontalAlignment="Center" FontSize="30" VerticalAlignment="Center"></TextBlock>
                 <materialDesign:PopupBox  Margin="10" Foreground="White" PlacementMode="BottomAndAlignRightEdges" StaysOpen="False">
                     <StackPanel Orientation="Vertical" Width="150">
                         <Button x:Name="btnInciarSesion" Click="btnInciarSesion_Click" Content="Iniciar Turno"/>

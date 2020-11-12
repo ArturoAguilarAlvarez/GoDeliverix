@@ -84,6 +84,7 @@ namespace Deliverix.Wpf.Distribuidores
                                         btnMenuPrincipal.IsEnabled = true;
                                         btnReportes.IsEnabled = true;
                                         btnRepartidores.IsEnabled = true;
+                                        btnInciarSesion.Visibility = Visibility.Hidden;
                                         btnConfiguracion.Visibility = Visibility.Visible;
                                         btnAyuda.Visibility = Visibility.Visible;
                                         btnCerrarSesion.Visibility = Visibility.Visible;
@@ -249,8 +250,6 @@ namespace Deliverix.Wpf.Distribuidores
                                 {
                                     btnInciarSesion.IsEnabled = true;
                                     btnLicencias.IsEnabled = true;
-
-
                                 }
                             }
                         }
@@ -402,11 +401,11 @@ namespace Deliverix.Wpf.Distribuidores
         {
             if (AccesoInternet())
             {
-                //MVAcceso.BitacoraRegistroSupervisores(new Guid(lblUidusuario.Content.ToString()), new Guid("83D5135E-95A4-4FFB-8F74-B6BAC980DFA3"));
-                //MVLicencia = new DeliverixSucursales.VMLicencia();
-                //MVLicencia.RecuperaLicencia();
-                //MVTurno = new VMTurno();
-                //MVTurno.TurnoDistribuidora(new Guid(lblUidusuario.Content.ToString()), new Guid(LblUidTurno.Content.ToString()));
+                MVAcceso.BitacoraRegistroSupervisores(new Guid(lblUidusuario.Content.ToString()), new Guid("83D5135E-95A4-4FFB-8F74-B6BAC980DFA3"));
+                MVLicencia = new DeliverixSucursales.VMLicencia();
+                MVLicencia.RecuperaLicencia();
+                MVTurno = new VMTurno();
+                MVTurno.TurnoDistribuidora(new Guid(lblUidusuario.Content.ToString()), new Guid(LblUidTurno.Content.ToString()));
                 ReporteCierreTurnoSucursal obj = new ReporteCierreTurnoSucursal(MVLicencia.Licencia, LblUidTurno.Content.ToString(), lblUidusuario.Content.ToString());
                 obj.Show();
                 lblUidusuario.Content = string.Empty;
@@ -423,6 +422,7 @@ namespace Deliverix.Wpf.Distribuidores
                         btnordenes.IsEnabled = true;
                         btnReportes.IsEnabled = true;
                         btnMenuPrincipal.IsEnabled = true;
+                        btnInciarSesion.Visibility = Visibility.Visible;
                         btnConfiguracion.Visibility = Visibility.Visible;
                         btnAyuda.Visibility = Visibility.Visible;
                         btnCerrarSesion.Visibility = Visibility.Visible;

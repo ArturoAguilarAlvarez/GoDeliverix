@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Modelo;
+using System;
+using System.Linq;
 using System.Web.Http;
 using VistaDelModelo;
 using WebApplication1.App_Start;
@@ -8,6 +10,36 @@ namespace WebApplication1.Controllers
     {
         VMSucursales MVSucursales;
         ResponseHelper Respuesta;
+
+
+        #region Xamarin api
+        public IHttpActionResult GetSucursalesDisponbiles(Guid uidEmpresa, string day, Guid UidEstado, Guid UidColonia)
+        {
+            MVSucursales = new VMSucursales();
+            MVSucursales.BuscarSucursalesCliente(uidEmpresa, day, UidEstado, UidColonia);
+            var MVEmpresa = new VMEmpresas();
+            MVEmpresa.BuscarEmpresas(UidEmpresa: uidEmpresa);
+            var imagenComercio = new VMImagen();
+            imagenComercio.ObtenerImagenPerfilDeEmpresa(uidEmpresa.ToString());
+
+            var result = new
+            {
+                UidComercio = MVEmpresa.UIDEMPRESA,
+                NombreComercio = MVEmpresa.NOMBRECOMERCIAL,
+                LogoComercio = imagenComercio.STRRUTA,
+                SucursalesDisponibles = MVSucursales.LISTADESUCURSALES.Select(s => new
+                {
+                    s.ID,
+                    s.IDENTIFICADOR,
+                    s.HORAAPARTURA,
+                    s.HORACIERRE,
+                    s.Estatus,
+                    s.UidEmpresa
+                })
+            };
+            return Json(result);
+        }
+        #endregion
         // GET: api/Profile/5
         public ResponseHelper GetBuscarSucursalesDeUnProducto(Guid uidEmpresa, string day, Guid UidEstado, Guid UidColonia)
         {
@@ -50,7 +82,7 @@ namespace WebApplication1.Controllers
             {
                 IdColonia = Guid.Empty.ToString();
             }
-            MVSucursales.BuscarSucursales(UidSucursal: UidSucursal,identificador: identificador,horaApertura: horaApertura,horaCierre: horaCierre,IdColonia: new Guid(IdColonia), Uidempresa: Uidempresa);
+            MVSucursales.BuscarSucursales(UidSucursal: UidSucursal, identificador: identificador, horaApertura: horaApertura, horaCierre: horaCierre, IdColonia: new Guid(IdColonia), Uidempresa: Uidempresa);
 
             if (!string.IsNullOrEmpty(UidSucursal))
             {
@@ -68,12 +100,12 @@ namespace WebApplication1.Controllers
 
 
         // POST: api/Profile
-        public void Post([FromBody]string value)
+        public void Post([FromBody] string value)
         {
         }
 
         // PUT: api/Profile/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody] string value)
         {
         }
 

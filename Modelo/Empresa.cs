@@ -99,8 +99,8 @@ namespace Modelo
                 cmd.Parameters.Add("@TipoDeEmpresa", SqlDbType.Int);
                 cmd.Parameters["@TipoDeEmpresa"].Value = EMPRESA.TIPO.ID;
 
-                cmd.Parameters.Add("@UidTipoDeComision", SqlDbType.UniqueIdentifier);
-                cmd.Parameters["@UidTipoDeComision"].Value = EMPRESA.oComision.UidTipoDeComision;
+                //cmd.Parameters.Add("@UidTipoDeComision", SqlDbType.UniqueIdentifier);
+                //cmd.Parameters["@UidTipoDeComision"].Value = EMPRESA.oComision.UidTipoDeComision;
 
                 cmd.Parameters.Add("@ABAbsorbe", SqlDbType.Bit);
                 cmd.Parameters["@ABAbsorbe"].Value = Convert.ToByte(EMPRESA.oComision.BAbsorveComision);

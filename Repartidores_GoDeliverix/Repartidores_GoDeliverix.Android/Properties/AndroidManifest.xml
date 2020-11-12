@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="3" android:versionName="1.0.2" package="com.CompuAndSoft.Repartidores" android:installLocation="auto">
-	<uses-sdk android:minSdkVersion="23" android:targetSdkVersion="28" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="4" android:versionName="1.0.3" package="com.CompuAndSoft.Repartidores" android:installLocation="auto">
+	<uses-sdk android:minSdkVersion="19" android:targetSdkVersion="30" />
 	<application android:label="GoDeliverix_Run" android:icon="@drawable/logo48" android:roundIcon="@drawable/logo48round" android:usesCleartextTraffic="true">
 		<!--<receiver android:name="com.onesignal.GcmBroadcastReceiver"
               android:permission="com.google.android.c2dm.permission.SEND" >

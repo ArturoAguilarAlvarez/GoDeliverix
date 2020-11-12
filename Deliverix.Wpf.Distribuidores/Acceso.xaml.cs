@@ -169,6 +169,7 @@ namespace Deliverix.Wpf.Distribuidores
                                         Label LblUidTurno = ventanaPrincial.FindName("LblUidTurno") as Label;
                                         Label lblHoraInicioTurno = ventanaPrincial.FindName("lblHoraInicioTurno") as Label;
                                         Label lblFolioTurno = ventanaPrincial.FindName("lblFolioTurno") as Label;
+                                        Button btnInciarSesion = ventanaPrincial.FindName("btnInciarSesion") as Button;
 
                                         MVUsuario.obtenerDatosDeSupervisor(Uidusuario);
                                         uidUsuario.Content = MVUsuario.Uid;
@@ -192,6 +193,7 @@ namespace Deliverix.Wpf.Distribuidores
 
                                             LblUidTurno.Content = UidTurnoDistribuidor.ToString();
                                         }
+                                        btnInciarSesion.Visibility = Visibility.Hidden;
                                         //MVAcceso.BitacoraRegistroSupervisores(MVUsuario.Uid, new Guid("C82A94F6-DEB0-4FCD-BCD6-22C1B2603041"));
 
                                         Close();

@@ -61,7 +61,24 @@ namespace VistaDelModelo
         public List<VMEmpresas> LISTADEEMPRESAS;
         public List<VMEmpresas> ListaDeEmpresaSeleccionadas = new List<VMEmpresas>();
 
-        public string StrRuta { get; set; }
+        private string _StrRuta;
+
+        public string StrRuta
+        {
+            get { return _StrRuta; }
+            set { _StrRuta = value; }
+        }
+
+        private int _SucursalesDisponibles;
+        /// <summary>
+        /// Verifica cuantas sucursales tiene abiertas una empresa
+        /// </summary>
+        public int SucursalesDisponibles
+        {
+            get { return _SucursalesDisponibles; }
+            set { _SucursalesDisponibles = value; }
+        }
+
         #endregion
 
         #region Metodos
@@ -386,18 +403,21 @@ namespace VistaDelModelo
                 oDbEmpresa = new DbEmpresas();
                 DT = oDbEmpresa.Busquedas(CMD);
                 LISTADEEMPRESAS.Clear();
-
+                VMSucursales MvSucursal = new VMSucursales();
                 foreach (DataRow item in oDbEmpresa.Busquedas(CMD).Rows)
                 {
-
+                    MvSucursal = new VMSucursales();
                     if (!LISTADEEMPRESAS.Exists(e => e.UIDEMPRESA == new Guid(item["UidEmpresa"].ToString())))
                     {
+                        MvSucursal.BuscarSucursalesCliente(uidEmpresa: new Guid(item["UidEmpresa"].ToString()), StrDia, UidEstado, UidColonia);
+
                         LISTADEEMPRESAS.Add(new VMEmpresas()
                         {
                             UIDEMPRESA = new Guid(item["UidEmpresa"].ToString()),
                             NOMBRECOMERCIAL = item["NombreComercial"].ToString(),
-                            StrRuta = item["NVchRuta"].ToString()
-                        });
+                            StrRuta = item["NVchRuta"].ToString(),
+                            SucursalesDisponibles = MvSucursal.LISTADESUCURSALES.Count
+                        }); ;
                     }
 
                 }

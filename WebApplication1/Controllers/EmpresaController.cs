@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Http;
+using System.Web.Mvc;
 using VistaDelModelo;
 using WebApplication1.App_Start;
 
@@ -10,6 +12,17 @@ namespace WebApplication1.Controllers
         VMEmpresas MVEmpresa;
         ResponseHelper Respuesta;
 
+
+
+        #region Xamarin api
+        public IHttpActionResult GetBusquedaDeEmpresasDisponibles_Movil(string StrParametroBusqueda,
+            string StrDia, Guid UidColonia, Guid UidEstado, Guid UidBusquedaCategorias, string StrNombreEmpresa = "")
+        {
+            MVEmpresa = new VMEmpresas();
+            MVEmpresa.BuscarEmpresaBusquedaCliente(StrParametroBusqueda, StrDia, UidEstado, UidColonia, UidBusquedaCategorias, StrNombreEmpresa);
+            return Json(MVEmpresa.LISTADEEMPRESAS);
+        }
+        #endregion
         // GET:
         public ResponseHelper GetObtenerEmpresaCliente(string StrParametroBusqueda, string StrDia, Guid UidColonia, Guid UidEstado, Guid UidBusquedaCategorias, string StrNombreEmpresa = "")
         {
@@ -24,7 +37,8 @@ namespace WebApplication1.Controllers
 
 
         //Busqueda de empresas
-        public ResponseHelper GetBuscarEmpresas(Guid UidEmpresa = new Guid(), string RazonSocial = "", string NombreComercial = "", string RFC = "", int tipo = 0, int status = 0)
+        public ResponseHelper GetBuscarEmpresas(Guid UidEmpresa = new Guid(),
+            string RazonSocial = "", string NombreComercial = "", string RFC = "", int tipo = 0, int status = 0)
         {
             MVEmpresa = new VMEmpresas();
             MVEmpresa.BuscarEmpresas(UidEmpresa, RazonSocial, NombreComercial, RFC, tipo, status);

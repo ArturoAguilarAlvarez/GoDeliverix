@@ -142,14 +142,20 @@
                                 </asp:DropDownList>
                             </div>
                             <%-- Seleccion de datos de oferta --%>
-                            <div class=" col-md-2 text-left">
-                                <label>Dias de oferta</label>
-                                <div class="checkbox">
-                                    <asp:CheckBox Text="Todos" ID="chkSeleccionarTodosLosDias" AutoPostBack="true" OnCheckedChanged="chkSeleccionarTodosLosDias_CheckedChanged" runat="server" />
-                                    <asp:CheckBoxList ID="chbxlistDiasOferta" RepeatDirection="vertical" RepeatLayout="Flow" runat="server">
-                                    </asp:CheckBoxList>
-                                </div>
-                            </div>
+                            <table class=" col-md-2 text-left">
+                                <th>Dias de oferta</th>
+                                <tr>
+                                    <td>
+                                        <asp:CheckBox Text="TODOS" ID="chkSeleccionarTodosLosDias" AutoPostBack="true" OnCheckedChanged="chkSeleccionarTodosLosDias_CheckedChanged" runat="server" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <asp:CheckBoxList ID="chbxlistDiasOferta" RepeatDirection="vertical" RepeatLayout="Flow" runat="server">
+                                        </asp:CheckBoxList>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
 
                     </asp:Panel>

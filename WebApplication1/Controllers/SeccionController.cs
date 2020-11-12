@@ -48,6 +48,36 @@ namespace WebApplication1.Controllers
 
         #region Xamarin Api
 
+
+        public IHttpActionResult GetBusquedaDeSecciones(string UIDSECCION = "", string UIDOFERTA = "", string NOMBRE = "", string HORAINICIO = "", string HORAFIN = "",  string UidDirecccion = "", string UidEstado = "", string UidColonia = "")
+        {
+            MVSeccion = new VMSeccion();
+            if (string.IsNullOrEmpty(UidDirecccion))
+            {
+                UidDirecccion = Guid.Empty.ToString();
+            }
+            if (string.IsNullOrEmpty(UIDOFERTA))
+            {
+                UIDOFERTA = Guid.Empty.ToString();
+            }
+            if (string.IsNullOrEmpty(UIDSECCION))
+            {
+                UIDSECCION = Guid.Empty.ToString();
+            }
+            MVSeccion.Buscar(new Guid(UIDSECCION), new Guid(UIDOFERTA), NOMBRE, HORAINICIO, HORAFIN, "1", new Guid(UidDirecccion), UidEstado, UidColonia);
+            var result = new
+            {
+                listaDeSecciones = MVSeccion.ListaDeSeccion.Select(s => new
+                {
+                    s.UID,
+                    s.StrNombre,
+                    s.StrHoraInicio,
+                    s.StrHoraFin,
+                    s.IntEstatus
+                })
+            };
+            return Json(result);
+        }
         public HttpResponseMessage GetBuscarSeccion_movil(string UIDSECCION = "", string UIDOFERTA = "", string NOMBRE = "", string HORAINICIO = "", string HORAFIN = "", string Estatus = "", string UidDirecccion = "", string UidEstado = "", string UidColonia = "")
         {
             MVSeccion = new VMSeccion();

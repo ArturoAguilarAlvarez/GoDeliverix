@@ -152,11 +152,11 @@ namespace VistaDelModelo
                     Comando.Parameters.Add("@UidOferta", SqlDbType.UniqueIdentifier);
                     Comando.Parameters["@UidOferta"].Value = UIDOFERTA;
 
-                    if (UidDirecccion != Guid.Empty)
-                    {
-                        Comando.Parameters.Add("@UidDireccion", SqlDbType.UniqueIdentifier);
-                        Comando.Parameters["@UidDireccion"].Value = UidDirecccion;
-                    }
+                    //if (UidDirecccion != Guid.Empty)
+                    //{
+                    //    Comando.Parameters.Add("@UidDireccion", SqlDbType.UniqueIdentifier);
+                    //    Comando.Parameters["@UidDireccion"].Value = UidDirecccion;
+                    //}
                     if (!string.IsNullOrEmpty(UidEstado))
                     {
                         Comando.Parameters.Add("@UidEstado", SqlDbType.UniqueIdentifier);

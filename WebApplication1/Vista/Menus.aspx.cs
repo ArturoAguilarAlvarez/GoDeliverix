@@ -1129,7 +1129,14 @@ namespace WebApplication1.Vista
                 //Porcentaje
                 if (MVComision.UidTipoDeComision == new Guid("960D9483-4058-4AC9-A1C3-79F5B303E3BA"))
                 {
-                    totalPorcentaje = (100 / MVComision.FValor) * resultado;
+                    if (MVComision.FValor != 0)
+                    {
+                        totalPorcentaje = (100 / MVComision.FValor) * resultado;
+                    }
+                    else
+                    {
+                        totalPorcentaje =  resultado;
+                    }
                     if (MVComision.BAbsorveComision)
                     {
                         total = resultado;
