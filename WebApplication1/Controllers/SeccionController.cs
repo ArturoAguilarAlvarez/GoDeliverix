@@ -65,17 +65,14 @@ namespace WebApplication1.Controllers
                 UIDSECCION = Guid.Empty.ToString();
             }
             MVSeccion.Buscar(new Guid(UIDSECCION), new Guid(UIDOFERTA), NOMBRE, HORAINICIO, HORAFIN, "1", new Guid(UidDirecccion), UidEstado, UidColonia);
-            var result = new
-            {
-                listaDeSecciones = MVSeccion.ListaDeSeccion.Select(s => new
+            var result = MVSeccion.ListaDeSeccion.Select(s => new
                 {
                     Uid = s.UID,
                     Name = s.StrNombre,
                     s.StrHoraInicio,
                     s.StrHoraFin,
                     s.IntEstatus
-                })
-            };
+                });
             return Json(result);
         }
         public HttpResponseMessage GetBuscarSeccion_movil(string UIDSECCION = "", string UIDOFERTA = "", string NOMBRE = "", string HORAINICIO = "", string HORAFIN = "", string Estatus = "", string UidDirecccion = "", string UidEstado = "", string UidColonia = "")

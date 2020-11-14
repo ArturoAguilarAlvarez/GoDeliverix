@@ -45,15 +45,12 @@ namespace WebApplication1.Controllers
             MVOferta = new VMOferta();
 
             MVOferta.BuscarOfertasCliente(UidSucursal, dia);
-            var result = new
+            var result = MVOferta.ListaDeOfertas.Select(o => new
             {
-                ListaDeOfertas = MVOferta.ListaDeOfertas.Select(o => new
-                {
-                    Uid = o.UID,
-                    Name = o.STRNOMBRE,
-                    Estatus = o.StrEstatus
-                })
-            };
+                Uid = o.UID,
+                Name = o.STRNOMBRE,
+                Estatus = o.StrEstatus
+            });
             return Json(result);
         }
         #endregion
