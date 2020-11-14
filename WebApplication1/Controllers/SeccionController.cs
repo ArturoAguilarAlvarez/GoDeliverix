@@ -69,8 +69,8 @@ namespace WebApplication1.Controllers
             {
                 listaDeSecciones = MVSeccion.ListaDeSeccion.Select(s => new
                 {
-                    s.UID,
-                    s.StrNombre,
+                    Uid = s.UID,
+                    Name = s.StrNombre,
                     s.StrHoraInicio,
                     s.StrHoraFin,
                     s.IntEstatus

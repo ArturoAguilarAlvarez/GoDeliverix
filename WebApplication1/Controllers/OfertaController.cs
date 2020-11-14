@@ -49,9 +49,9 @@ namespace WebApplication1.Controllers
             {
                 ListaDeOfertas = MVOferta.ListaDeOfertas.Select(o => new
                 {
-                    o.UID,
-                    o.STRNOMBRE,
-                    o.StrEstatus
+                    Uid = o.UID,
+                    Name = o.STRNOMBRE,
+                    Estatus = o.StrEstatus
                 })
             };
             return Json(result);
