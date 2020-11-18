@@ -81,7 +81,7 @@ namespace VistaDelModelo
             Conexion.EliminarImagenSubcategoria(IdSubcategoria);
         }
 
-        public bool ActualizarImagen(string UidImagen, string Ruta, string Descripcon = "")
+        public bool ActualizarImagenEmpresa(string UidImagen, string Ruta, string Descripcon = "")
         {
             bool Resultado = false;
             Imagen IMG = new Imagen() { ID = new Guid(UidImagen), STRRUTA = Ruta, STRDESCRIPCION = Descripcon };

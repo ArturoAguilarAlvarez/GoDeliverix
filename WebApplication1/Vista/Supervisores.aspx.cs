@@ -22,235 +22,242 @@ namespace WebApplication1.Vista
         #endregion
         protected void Page_Load(object sender, EventArgs e)
         {
-            MVUsuarios.CargaPerfilesDeUsuario("81232596-4c6b-4568-9005-8d4a0a382fda");
-
-            if (!IsPostBack)
+            if (Session["UidEmpresaSistema"] != null)
             {
-                PanelMensaje.Visible = false;
-                //Elimina las variables de sesion al entrar
-                Session.Remove("Accion");
-                Session["MVUsuarios"] = MVUsuarios;
-                Session["MVDireccion"] = MVDireccion;
-                Session["MVUsuarios"] = MVUsuarios;
-                Session["MVEstatus"] = MVEstatus;
-                Session["MVTelefono"] = MVTelefono;
-                Session["MVCorreoElectronico"] = MVCorreoElectronico;
-                #region Panel derecho
-                MVTelefono.TipoDeTelefonos();
-                #region Paneles
-                //Botones
-                btnEditar.Enabled = false;
-                //Visibilidad de paneles
-                pnlDatosGenerales.Visible = true;
-                pnlDireccion.Visible = false;
-                pnlContacto.Visible = false;
-                panelDatosEmpresa.Visible = false;
-                btnGuardar.Visible = false;
-                btnCancelar.Visible = false;
-                btnGuardarTelefono.Visible = false;
-                btnCancelarTelefono.Visible = false;
-                btnEditarTelefono.Enabled = false;
-                btnEdiarDireccion.Enabled = false;
-                //Agregacion de clase 'active' al boton general
-                liDatosGenerales.Attributes.Add("class", "active");
-                liDatosDireccion.Attributes.Add("class", " ");
-                liDatosContacto.Attributes.Add("class", "");
-                //Placeholders
-                txtDManzana.Attributes.Add("placeholder", "Manzana");
-                txtCalle1.Attributes.Add("plcaeholder", "Calle");
-                txtCalle2.Attributes.Add("plcaeholder", "Calle");
-                txtDApellidoPaterno.Attributes.Add("placeholder", "Apellido Paterno");
-                txtDApellidoMaterno.Attributes.Add("placeholder", "Apellido Materno");
-                txtDUsuario.Attributes.Add("placeholder", "Usuario");
-                txtDReferencia.Attributes.Add("placeholder", "Referencia");
-                txtDNombre.Attributes.Add("placeholder", "Nombre");
-                txtDCorreoElectronico.Attributes.Add("placeholder", "Correo electronico");
-                txtDTelefono.Attributes.Add("placeholder", "Telefono");
-                txtdContrasena.Attributes.Add("placeholder", "Contraseña");
-                //Desabilita los textbox al cargar la pagina
-                TextboxActivados();
-                //GridView telefonos
-                DGVTELEFONOS.DataSource = null;
-                DGVTELEFONOS.DataBind();
-                #endregion
-                #region DropdownList
-
-
-                //Obtiene datos de estatus
-                DDLDEstatus.DataSource = MVEstatus.ObtenerListaActiva();
-                DDLDEstatus.DataTextField = "Nombre";
-                DDLDEstatus.DataValueField = "IdEstatus";
-                DDLDEstatus.DataBind();
-
-
-                DDLDTipoDETelefono.DataSource = MVTelefono.ListaDeTipoDeTelefono;
-                DDLDTipoDETelefono.DataValueField = "UidTipo";
-                DDLDTipoDETelefono.DataTextField = "StrNombreTipoDeTelefono";
-                DDLDTipoDETelefono.DataBind();
-
-                #endregion
-                #region Limites
-                txtDUsuario.MaxLength = 150;
-                txtDNombre.MaxLength = 100;
-                txtDApellidoPaterno.MaxLength = 30;
-                txtDApellidoMaterno.MaxLength = 30;
-                txtCalle1.MaxLength = 100;
-                txtCalle2.MaxLength = 100;
-                txtDManzana.MaxLength = 4;
-                txtDLote.MaxLength = 8;
-                txtDReferencia.MaxLength = 500;
-                #endregion
-
-                #endregion
-                #region Panel izquierdo
-                #region Filtros
-                //Panel de filtros          
-                PnlFiltros.Visible = false;
-                lblVisibilidadfiltros.Text = " Mostrar";
-                //Placeholders del panel de filtros
-
-                txtFApellido.Attributes.Add("placeholder", "Apellido");
-                txtFUsuario.Attributes.Add("placeholder", "Usuario");
-                txtFNombreDeUsuario.Attributes.Add("placeholder", "Nombre");
-                txtDLote.Attributes.Add("placeholder", "Lote");
-                txtCalle0.Attributes.Add("placeholder", "Calle");
-                txtCalle1.Attributes.Add("placeholder", "Calle");
-                txtCalle2.Attributes.Add("placeholder", "Calle");
-                txtDCodigoPostal.Attributes.Add("placeholder", "Codigo Postal");
-                txtDTelefono.Attributes.Add("placeholder", "Telefono");
-                txtDReferencia.Attributes.Add("placeholder", "Referencia");
-                //Botones
-                btnBuscar.Enabled = false;
-                btnBorrarFiltros.Enabled = false;
-                //Busqueda ampliada
-                PanelBusquedaAmpliada.Visible = false;
-                DGVBUSQUEDAAMPLIADA.DataSource = null;
-                DGVBUSQUEDAAMPLIADA.DataBind();
-                #endregion
-                #region DropDownList
-
-                //Obtiene estatus
-                MVEstatus.OBTENERLISTA();
-                DDLFEstatus.DataSource = MVEstatus.ListaEstatus;
-                DDLFEstatus.DataTextField = "NOMBRE";
-                DDLFEstatus.DataValueField = "ID";
-                DDLFEstatus.DataBind();
-
-                //Alimenta dropdownlist del pais en busqueda avanzada.
-                DDLDBAPAIS.DataSource = MVDireccion.Paises();
-                DDLDBAPAIS.DataTextField = "Nombre";
-                DDLDBAPAIS.DataValueField = "UidPais";
-                DDLDBAPAIS.DataBind();
-
-
-                //DDLFPERFILDEUSUARIO.DataTextField = "NOMBRE";
-                //DDLFPERFILDEUSUARIO.DataValueField = "ID";
-                //DDLFPERFILDEUSUARIO.DataSource = MVUsuarios.Perfil;
-                //DDLFPERFILDEUSUARIO.DataBind();
-
-                #endregion
-                #region GridView empresa simple
-                //Ejecuta el metodo que obtiene todos los usuarios de la base de datos y llama al metodo para cargar su respectivo gridvie pasando por parametro del grid que qureemos que se cargue.
-                MVUsuarios.BusquedaDeUsuario(UIDPERFIL: new Guid("81232596-4c6b-4568-9005-8d4a0a382fda"), UidEmpresa: new Guid(Session["UidEmpresaSistema"].ToString()));
-                //Obtiene el nombre de la sucursal
-                foreach (var item in MVUsuarios.LISTADEUSUARIOS)
+                MVUsuarios.CargaPerfilesDeUsuario("81232596-4c6b-4568-9005-8d4a0a382fda");
+                if (!IsPostBack)
                 {
-                    item.StrNombreDeSucursal = MVSucursales.ObtenerSucursalSupervisor(item.Uid);
+                    PanelMensaje.Visible = false;
+                    //Elimina las variables de sesion al entrar
+                    Session.Remove("Accion");
+                    Session["MVUsuarios"] = MVUsuarios;
+                    Session["MVDireccion"] = MVDireccion;
+                    Session["MVUsuarios"] = MVUsuarios;
+                    Session["MVEstatus"] = MVEstatus;
+                    Session["MVTelefono"] = MVTelefono;
+                    Session["MVCorreoElectronico"] = MVCorreoElectronico;
+                    #region Panel derecho
+                    MVTelefono.TipoDeTelefonos();
+                    #region Paneles
+                    //Botones
+                    btnEditar.Enabled = false;
+                    //Visibilidad de paneles
+                    pnlDatosGenerales.Visible = true;
+                    pnlDireccion.Visible = false;
+                    pnlContacto.Visible = false;
+                    panelDatosEmpresa.Visible = false;
+                    btnGuardar.Visible = false;
+                    btnCancelar.Visible = false;
+                    btnGuardarTelefono.Visible = false;
+                    btnCancelarTelefono.Visible = false;
+                    btnEditarTelefono.Enabled = false;
+                    btnEdiarDireccion.Enabled = false;
+                    //Agregacion de clase 'active' al boton general
+                    liDatosGenerales.Attributes.Add("class", "active");
+                    liDatosDireccion.Attributes.Add("class", " ");
+                    liDatosContacto.Attributes.Add("class", "");
+                    //Placeholders
+                    txtDManzana.Attributes.Add("placeholder", "Manzana");
+                    txtCalle1.Attributes.Add("plcaeholder", "Calle");
+                    txtCalle2.Attributes.Add("plcaeholder", "Calle");
+                    txtDApellidoPaterno.Attributes.Add("placeholder", "Apellido Paterno");
+                    txtDApellidoMaterno.Attributes.Add("placeholder", "Apellido Materno");
+                    txtDUsuario.Attributes.Add("placeholder", "Usuario");
+                    txtDReferencia.Attributes.Add("placeholder", "Referencia");
+                    txtDNombre.Attributes.Add("placeholder", "Nombre");
+                    txtDCorreoElectronico.Attributes.Add("placeholder", "Correo electronico");
+                    txtDTelefono.Attributes.Add("placeholder", "Telefono");
+                    txtdContrasena.Attributes.Add("placeholder", "Contraseña");
+                    //Desabilita los textbox al cargar la pagina
+                    TextboxActivados();
+                    //GridView telefonos
+                    DGVTELEFONOS.DataSource = null;
+                    DGVTELEFONOS.DataBind();
+                    #endregion
+                    #region DropdownList
+
+
+                    //Obtiene datos de estatus
+                    DDLDEstatus.DataSource = MVEstatus.ObtenerListaActiva();
+                    DDLDEstatus.DataTextField = "Nombre";
+                    DDLDEstatus.DataValueField = "IdEstatus";
+                    DDLDEstatus.DataBind();
+
+
+                    DDLDTipoDETelefono.DataSource = MVTelefono.ListaDeTipoDeTelefono;
+                    DDLDTipoDETelefono.DataValueField = "UidTipo";
+                    DDLDTipoDETelefono.DataTextField = "StrNombreTipoDeTelefono";
+                    DDLDTipoDETelefono.DataBind();
+
+                    #endregion
+                    #region Limites
+                    txtDUsuario.MaxLength = 150;
+                    txtDNombre.MaxLength = 100;
+                    txtDApellidoPaterno.MaxLength = 30;
+                    txtDApellidoMaterno.MaxLength = 30;
+                    txtCalle1.MaxLength = 100;
+                    txtCalle2.MaxLength = 100;
+                    txtDManzana.MaxLength = 4;
+                    txtDLote.MaxLength = 8;
+                    txtDReferencia.MaxLength = 500;
+                    #endregion
+
+                    #endregion
+                    #region Panel izquierdo
+                    #region Filtros
+                    //Panel de filtros          
+                    PnlFiltros.Visible = false;
+                    lblVisibilidadfiltros.Text = " Mostrar";
+                    //Placeholders del panel de filtros
+
+                    txtFApellido.Attributes.Add("placeholder", "Apellido");
+                    txtFUsuario.Attributes.Add("placeholder", "Usuario");
+                    txtFNombreDeUsuario.Attributes.Add("placeholder", "Nombre");
+                    txtDLote.Attributes.Add("placeholder", "Lote");
+                    txtCalle0.Attributes.Add("placeholder", "Calle");
+                    txtCalle1.Attributes.Add("placeholder", "Calle");
+                    txtCalle2.Attributes.Add("placeholder", "Calle");
+                    txtDCodigoPostal.Attributes.Add("placeholder", "Codigo Postal");
+                    txtDTelefono.Attributes.Add("placeholder", "Telefono");
+                    txtDReferencia.Attributes.Add("placeholder", "Referencia");
+                    //Botones
+                    btnBuscar.Enabled = false;
+                    btnBorrarFiltros.Enabled = false;
+                    //Busqueda ampliada
+                    PanelBusquedaAmpliada.Visible = false;
+                    DGVBUSQUEDAAMPLIADA.DataSource = null;
+                    DGVBUSQUEDAAMPLIADA.DataBind();
+                    #endregion
+                    #region DropDownList
+
+                    //Obtiene estatus
+                    MVEstatus.OBTENERLISTA();
+                    DDLFEstatus.DataSource = MVEstatus.ListaEstatus;
+                    DDLFEstatus.DataTextField = "NOMBRE";
+                    DDLFEstatus.DataValueField = "ID";
+                    DDLFEstatus.DataBind();
+
+                    //Alimenta dropdownlist del pais en busqueda avanzada.
+                    DDLDBAPAIS.DataSource = MVDireccion.Paises();
+                    DDLDBAPAIS.DataTextField = "Nombre";
+                    DDLDBAPAIS.DataValueField = "UidPais";
+                    DDLDBAPAIS.DataBind();
+
+
+                    //DDLFPERFILDEUSUARIO.DataTextField = "NOMBRE";
+                    //DDLFPERFILDEUSUARIO.DataValueField = "ID";
+                    //DDLFPERFILDEUSUARIO.DataSource = MVUsuarios.Perfil;
+                    //DDLFPERFILDEUSUARIO.DataBind();
+
+                    #endregion
+                    #region GridView empresa simple
+                    //Ejecuta el metodo que obtiene todos los usuarios de la base de datos y llama al metodo para cargar su respectivo gridvie pasando por parametro del grid que qureemos que se cargue.
+                    MVUsuarios.BusquedaDeUsuario(UIDPERFIL: new Guid("81232596-4c6b-4568-9005-8d4a0a382fda"), UidEmpresa: new Guid(Session["UidEmpresaSistema"].ToString()));
+                    //Obtiene el nombre de la sucursal
+                    foreach (var item in MVUsuarios.LISTADEUSUARIOS)
+                    {
+                        item.StrNombreDeSucursal = MVSucursales.ObtenerSucursalSupervisor(item.Uid);
+                    }
+                    CargaGrid("Normal");
+                    #endregion
+                    #endregion
+
+                    #region Panel de direccion
+
+                    PanelDatosDireccion.Visible = false;
+                    //BotonMuestraAddCity.Visible = false;
+                    //PanelAddCity.Visible = false;
+                    GVDireccion.DataSource = null;
+                    GVDireccion.DataBind();
+                    txtIdentificadorDeDireccion.Attributes.Add("placeholder", "Identificador");
+                    //txtNombreCiudadOColonia.Attributes.Add("placeholder", "Ciudad o Colonia");
+                    txtIdentificadorDeDireccion.Text = "Predeterminado";
+
+                    #region DropdownList
+
+                    //Obtiene el pais
+                    DDLDPais.DataSource = MVDireccion.Paises();
+                    DDLDPais.DataTextField = "Nombre";
+                    DDLDPais.DataValueField = "UidPais";
+                    DDLDPais.DataBind();
+
+                    MuestraEstados("00000000-0000-0000-0000-000000000000", "Gestion");
+                    MuestraMunicipio("00000000-0000-0000-0000-000000000000", "Gestion");
+                    MuestraCiudad("00000000-0000-0000-0000-000000000000", "Gestion");
+                    MuestraColonia("00000000-0000-0000-0000-000000000000", "Gestion");
+
+                    #endregion
+                    #endregion
+
+                    #region Busqueda ampliada
+
+                    #region Filtros de busqueda ampliada
+                    lblBAFiltrosVisibilidad.Text = " Mostrar";
+                    PanelFiltrosBusquedaAmpliada.Visible = false;
+
+                    #endregion
+
+                    #region DropdownList
+
+                    //Obtiene estatus
+                    DDLBAEstatus.DataSource = MVEstatus.ListaEstatus;
+                    DDLBAEstatus.DataTextField = "NOMBRE";
+                    DDLBAEstatus.DataValueField = "ID";
+                    DDLBAEstatus.DataBind();
+
+                    //Obtiene datos de los perfiles de usuario
+                    //DDLBAPERFIL.DataTextField = "NOMBRE";
+                    //DDLBAPERFIL.DataValueField = "ID";
+                    //DDLBAPERFIL.DataSource = MVUsuarios.Perfil;
+                    //DDLBAPERFIL.DataBind();
+
+                    MuestraEstados("00000000-0000-0000-0000-000000000000", "Filtro");
+                    MuestraMunicipio("00000000-0000-0000-0000-000000000000", "Filtro");
+                    MuestraCiudad("00000000-0000-0000-0000-000000000000", "Filtro");
+                    MuestraColonia("00000000-0000-0000-0000-000000000000", "Filtro");
+                    #endregion
+
+                    #region Placeholders
+                    txtBaApellido.Attributes.Add("placeholder", "Apellido");
+                    txtBANombre.Attributes.Add("placeholder", "Nombre");
+                    txtBACorreoElectronico.Attributes.Add("placeholder", "Correo electronico");
+                    txtBACalle.Attributes.Add("placeholder", "Calle");
+                    txtBACOdigoPostal.Attributes.Add("placeholder", "Codigo Postal");
+                    txtBAUSuario.Attributes.Add("placeholder", "Usuario");
+                    #endregion
+
+                    #region Gridview Busqueda ampliada
+
+                    #endregion
+
+                    #endregion
+
+                    #region Busqueda de empresa
+
+
+                    txtdidentificador.Attributes.Add("placeholder", "Identificador");
+
+
+                    txtdidentificador.Text = string.Empty;
+                    txtdHoraApertura.Text = string.Empty;
+                    txtdHoraDeCierre.Text = string.Empty;
+                    #endregion
                 }
-                CargaGrid("Normal");
-                #endregion
-                #endregion
-
-                #region Panel de direccion
-
-                PanelDatosDireccion.Visible = false;
-                //BotonMuestraAddCity.Visible = false;
-                //PanelAddCity.Visible = false;
-                GVDireccion.DataSource = null;
-                GVDireccion.DataBind();
-                txtIdentificadorDeDireccion.Attributes.Add("placeholder", "Identificador");
-                //txtNombreCiudadOColonia.Attributes.Add("placeholder", "Ciudad o Colonia");
-                txtIdentificadorDeDireccion.Text = "Predeterminado";
-
-                #region DropdownList
-
-                //Obtiene el pais
-                DDLDPais.DataSource = MVDireccion.Paises();
-                DDLDPais.DataTextField = "Nombre";
-                DDLDPais.DataValueField = "UidPais";
-                DDLDPais.DataBind();
-
-                MuestraEstados("00000000-0000-0000-0000-000000000000", "Gestion");
-                MuestraMunicipio("00000000-0000-0000-0000-000000000000", "Gestion");
-                MuestraCiudad("00000000-0000-0000-0000-000000000000", "Gestion");
-                MuestraColonia("00000000-0000-0000-0000-000000000000", "Gestion");
-
-                #endregion
-                #endregion
-
-                #region Busqueda ampliada
-
-                #region Filtros de busqueda ampliada
-                lblBAFiltrosVisibilidad.Text = " Mostrar";
-                PanelFiltrosBusquedaAmpliada.Visible = false;
-
-                #endregion
-
-                #region DropdownList
-
-                //Obtiene estatus
-                DDLBAEstatus.DataSource = MVEstatus.ListaEstatus;
-                DDLBAEstatus.DataTextField = "NOMBRE";
-                DDLBAEstatus.DataValueField = "ID";
-                DDLBAEstatus.DataBind();
-
-                //Obtiene datos de los perfiles de usuario
-                //DDLBAPERFIL.DataTextField = "NOMBRE";
-                //DDLBAPERFIL.DataValueField = "ID";
-                //DDLBAPERFIL.DataSource = MVUsuarios.Perfil;
-                //DDLBAPERFIL.DataBind();
-
-                MuestraEstados("00000000-0000-0000-0000-000000000000", "Filtro");
-                MuestraMunicipio("00000000-0000-0000-0000-000000000000", "Filtro");
-                MuestraCiudad("00000000-0000-0000-0000-000000000000", "Filtro");
-                MuestraColonia("00000000-0000-0000-0000-000000000000", "Filtro");
-                #endregion
-
-                #region Placeholders
-                txtBaApellido.Attributes.Add("placeholder", "Apellido");
-                txtBANombre.Attributes.Add("placeholder", "Nombre");
-                txtBACorreoElectronico.Attributes.Add("placeholder", "Correo electronico");
-                txtBACalle.Attributes.Add("placeholder", "Calle");
-                txtBACOdigoPostal.Attributes.Add("placeholder", "Codigo Postal");
-                txtBAUSuario.Attributes.Add("placeholder", "Usuario");
-                #endregion
-
-                #region Gridview Busqueda ampliada
-
-                #endregion
-
-                #endregion
-
-                #region Busqueda de empresa
-
-
-                txtdidentificador.Attributes.Add("placeholder", "Identificador");
-
-
-                txtdidentificador.Text = string.Empty;
-                txtdHoraApertura.Text = string.Empty;
-                txtdHoraDeCierre.Text = string.Empty;
-                #endregion
+                else
+                {
+                    MVUsuarios = (VMUsuarios)Session["MVUsuarios"];
+                    MVUsuarios = (VMUsuarios)Session["MVUsuarios"];
+                    MVDireccion = (VMDireccion)Session["MVDireccion"];
+                    MVTelefono = (VMTelefono)Session["MVTelefono"];
+                    MVEstatus = (VMEstatus)Session["MVEstatus"];
+                    MVCorreoElectronico = (VMCorreoElectronico)Session["MVCorreoElectronico"];
+                }
             }
             else
             {
-                MVUsuarios = (VMUsuarios)Session["MVUsuarios"];
-                MVUsuarios = (VMUsuarios)Session["MVUsuarios"];
-                MVDireccion = (VMDireccion)Session["MVDireccion"];
-                MVTelefono = (VMTelefono)Session["MVTelefono"];
-                MVEstatus = (VMEstatus)Session["MVEstatus"];
-                MVCorreoElectronico = (VMCorreoElectronico)Session["MVCorreoElectronico"];
+                Response.Redirect("Default/Default.aspx");
             }
+
 
         }
 

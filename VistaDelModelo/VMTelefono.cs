@@ -55,6 +55,11 @@ namespace VistaDelModelo
         #endregion
 
         DbTelefono MVTelefono = new DbTelefono();
+
+        public VMTelefono()
+        {
+            ListaDeTelefonos = new List<VMTelefono>();
+        }
         public string ObtenerTipoDeTelefono(string UidTelefono)
         {
             string nombre = string.Empty;
@@ -176,7 +181,7 @@ namespace VistaDelModelo
         /// <param name="UidTelefono"></param>
         /// <param name="Numero"></param>
         /// <param name="UidTipoDeTelefono"></param>
-        public void ActualizaTelefonoWepApi( Guid UidTelefono, string Numero, string UidTipoDeTelefono)
+        public void ActualizaTelefonoWepApi(Guid UidTelefono, string Numero, string UidTipoDeTelefono)
         {
             var Telefono = new Telefono
             {
@@ -343,7 +348,7 @@ namespace VistaDelModelo
             foreach (DataRow item in oDbTelefono.ObtenerTipoDeTelefono().Rows)
             {
                 Guid id = new Guid(item["UidTipoDeTelefono"].ToString());
-                string nombre = item["Nombre"].ToString();                
+                string nombre = item["Nombre"].ToString();
                 ListaDeTipoDeTelefono.Add(new VMTelefono() { UidTipo = id, StrNombreTipoDeTelefono = nombre });
             }
 
@@ -353,7 +358,7 @@ namespace VistaDelModelo
             oDbTelefono = new DbTelefono();
             foreach (DataRow item in oDbTelefono.ObtenerTelefonoPrincipalUsuario(UidCliente).Rows)
             {
-               NUMERO = item["Numero"].ToString();
+                NUMERO = item["Numero"].ToString();
             }
         }
 

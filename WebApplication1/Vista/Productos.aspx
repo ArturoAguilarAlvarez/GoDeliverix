@@ -51,7 +51,7 @@
                             <asp:TextBox ID="txtFNombre" CssClass="form-control" runat="server" />
                         </div>
                     </div>
-                    <asp:GridView ID="dgvProductos" AutoGenerateColumns="false" AllowSorting="true" AllowPaging="True" PageSize="10" DataKeyNames="UID" OnSelectedIndexChanged="dgvProductos_SelectedIndexChanged" OnRowDataBound="dgvProductos_RowDataBound" CssClass="table table-bordered table-hover table-condensed table-striped input-sm" runat="server">
+                    <asp:GridView ID="dgvProductos" AutoGenerateColumns="false" AllowSorting="true" OnSorting="dgvProductos_Sorting" AllowPaging="True" OnPageIndexChanging="dgvProductos_PageIndexChanging" PageSize="10" DataKeyNames="UID" OnSelectedIndexChanged="dgvProductos_SelectedIndexChanged" OnRowDataBound="dgvProductos_RowDataBound" CssClass="table table-bordered table-hover table-condensed table-striped input-sm" runat="server">
                         <EmptyDataTemplate>
                             No hay informacion relacionada
                         </EmptyDataTemplate>
@@ -161,7 +161,7 @@
                         </div>
                         <div class="col-md-6">
                             <h6>Nombre</h6>
-                            <asp:TextBox CssClass="form-control" MaxLength="19" ID="txtNombre" runat="server" />
+                            <asp:TextBox CssClass="form-control" MaxLength="150" ID="txtNombre" runat="server" />
                             <h6>Estatus</h6>
                             <asp:DropDownList ID="ddlestatus" CssClass="form-control" runat="server">
                             </asp:DropDownList>

@@ -2,6 +2,7 @@
 using Modelo;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -1006,6 +1007,34 @@ namespace VistaDelModelo
                 STRRUTA = item["NVchRuta"].ToString();
             }
         }
+
+        //public DataView Sort(string sortExpression, string valor)
+        //{
+
+        //    //DataSet ds = new DataSet();
+
+        //    //PropertyDescriptorCollection properties =
+        //    //  TypeDescriptor.GetProperties(typeof(Suministros));
+        //    //DataTable table = new DataTable();
+        //    //foreach (PropertyDescriptor prop in properties)
+        //    //    table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+        //    //foreach (var item in ListaDeProductos)
+        //    //{
+        //    //    DataRow row = table.NewRow();
+        //    //    foreach (PropertyDescriptor prop in properties)
+        //    //        row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+        //    //    table.Rows.Add(row);
+        //    //}
+
+        //    //ds.Tables.Add(table);
+        //    //DataView dt = null;
+        //    //dt = new DataView(ds.Tables[0])
+        //    //{
+        //    //    Sort = sortExpression + " " + valor
+        //    //};
+
+        //    //return dt;
+        //}
         #endregion
         #endregion
     }

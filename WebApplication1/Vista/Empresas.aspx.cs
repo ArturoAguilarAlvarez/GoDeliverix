@@ -948,6 +948,7 @@ namespace WebApplication1.Vista
                 txtRutaImagen.Text = MVImagen.STRRUTA.ToString();
                 if (txtRutaImagen.Text == Guid.Empty.ToString())
                 {
+
                     ImageEmpresa.ImageUrl = "Img/Default.jpg";
                     ImageEmpresa.DataBind();
                 }
@@ -1612,7 +1613,7 @@ namespace WebApplication1.Vista
                                 }
 
                                 MVImagen.EliminaImagenEmpresa(UIDEMPRESA.ToString());
-                                MVImagen.GuardaImagen(txtRutaImagen.Text, UIDEMPRESA.ToString(), "asp_InsertaImagenEmpresa");
+                                MVImagen.ActualizarImagenEmpresa(MVImagen.ID.ToString(), txtRutaImagen.Text);
                             }
 
                         }

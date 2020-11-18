@@ -2272,7 +2272,7 @@ namespace WebApplication1.Vista
                                 {
                                     if (!string.IsNullOrWhiteSpace(item.VchIdentificador))
                                     {
-                                        MVLicencia.GuardaRelacionSucursal(item.UidLicencia, item.Propietario, item.UidEstatus, item.BLUso, item.VchIdentificador);
+                                        MVLicencia.GuardaRelacionSucursal(item.UidLicencia, new Guid(txtUidSucursal.Text), item.UidEstatus, item.BLUso, item.VchIdentificador);
                                     }
                                 }
                             }
@@ -2420,7 +2420,7 @@ namespace WebApplication1.Vista
                             {
                                 if (!string.IsNullOrWhiteSpace(item.VchIdentificador))
                                 {
-                                    MVLicencia.GuardaRelacionSucursal(item.UidLicencia, item.Propietario, item.UidEstatus, item.BLUso, item.VchIdentificador);
+                                    MVLicencia.GuardaRelacionSucursal(item.UidLicencia, new Guid(UIDSUCURSAL), item.UidEstatus, item.BLUso, item.VchIdentificador);
                                 }
                             }
                             #endregion

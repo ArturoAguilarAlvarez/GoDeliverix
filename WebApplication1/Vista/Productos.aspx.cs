@@ -515,7 +515,7 @@ namespace WebApplication1.Vista
                 MVSubcategoria.LISTADESUBCATEGORIAS.Clear();
                 MVSubcategoria.LISTADESUBCATEGORIASSELECCIONADAS.Clear();
                 //Vacia los controles
-                
+
                 DLGiro.DataSource = MVGiro.LISTADEGIRO;
                 DLGiro.DataBind();
                 DLGiroSeleccionado.DataSource = MVGiro.LISTADEGIROSELECCIONADO;
@@ -1386,5 +1386,34 @@ namespace WebApplication1.Vista
             PanelMensaje.Visible = false;
         }
         #endregion
+
+        protected void dgvProductos_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            dgvProductos.PageIndex = e.NewPageIndex;
+            dgvProductos.DataSource = MVProducto.ListaDeProductos;
+            dgvProductos.DataBind();
+        }
+
+        protected void dgvProductos_Sorting(object sender, GridViewSortEventArgs e)
+        {
+            string sortExpression = e.SortExpression;
+            Session["sortExpression"] = sortExpression;
+
+            if (Session["SortDirection"] != null && Session["SortDirection"].ToString() == SortDirection.Descending.ToString())
+            {
+                Session["SortDirection"] = SortDirection.Ascending;
+                Sort(sortExpression, "ASC", "Ampliada");
+            }
+            else
+            {
+                Session["SortDirection"] = SortDirection.Descending;
+                Sort(sortExpression, "DESC", "Ampliada");
+            }
+        }
+        private void Sort(string sortExpression, string Valor, string GridView)
+        {
+            //dgvProductos.DataSource = MVProducto.Sort(sortExpression, Valor); ;
+            //dgvProductos.DataBind();
+        }
     }
 }
