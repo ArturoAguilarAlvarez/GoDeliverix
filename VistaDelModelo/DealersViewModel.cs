@@ -102,16 +102,16 @@ namespace VistaDelModelo
             {
                 foreach (DataRow row in data.Rows)
                 {
-                    result = new LastWorkShift()
-                    {
-                        Uid = (Guid)row["Uid"],
-                        UidUsuario = (Guid)row["UidUsuario"],
-                        UidEstatusActual = row.IsNull("UidEstatusActual") ? Guid.Empty : (Guid)row["UidEstatusActual"],
-                        Folio = row.IsNull("Folio") ? 0 : (int)row["Folio"],
-                        Fondo = row.IsNull("Fondo") ? 0 : (decimal)row["Fondo"],
-                        FechaInicio = row.IsNull("FechaInicio") ? DateTime.Now : (DateTime)row["FechaInicio"],
-                        FechaFin = row.IsNull("FechaFin") ? null : (DateTime?)row["FechaFin"]
-                    };
+                    result = new LastWorkShift();
+
+                    result.Uid = (Guid)row["Uid"];
+                    result.UidUsuario = (Guid)row["UidUsuario"];
+                    result.UidEstatusActual = row.IsNull("UidEstatusActual") ? Guid.Empty : (Guid)row["UidEstatusActual"];
+                    result.Folio = row.IsNull("Folio") ? 0 : (Int64)row["Folio"];
+                    result.Fondo = row.IsNull("Fondo") ? 0 : (decimal)row["Fondo"];
+                    result.FechaInicio = row.IsNull("FechaInicio") ? DateTime.Now : (DateTime)row["FechaInicio"];
+                    result.FechaFin = row.IsNull("FechaFin") ? null : (DateTime?)row["FechaFin"];
+
                 }
             }
             return result;
@@ -119,7 +119,7 @@ namespace VistaDelModelo
         #endregion
 
         #region Ordenes
-        public LastAssignedOrder ReadLastAssignedOrder(Guid uidTurnoRepartidor)
+        public LastAssignedOrder GetLastAssignedOrder(Guid uidTurnoRepartidor)
         {
             LastAssignedOrder result = null;
             DataTable data = this.DealerDb.ReadLastAssignedOrder(uidTurnoRepartidor);

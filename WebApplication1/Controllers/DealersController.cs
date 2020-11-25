@@ -55,13 +55,44 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IHttpActionResult GetLastWorkShiftSummary(Guid userUid)
         {
-            return Ok();
+            try
+            {
+                var result = this.DealerVm.GetLastWorkShift(userUid);
+
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
-        public IHttpActionResult GetAssignedPurchaseShipmentSummary(Guid dealerUid)
+        public IHttpActionResult GetAssignedPurchaseShipmentSummary(Guid dealerWorkshiftUid)
         {
-            return Ok();
+            try
+            {
+                var result = this.DealerVm.GetLastAssignedOrder(dealerWorkshiftUid);
+
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public IHttpActionResult OpenWorkshift()
+        {
+            try
+            {
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

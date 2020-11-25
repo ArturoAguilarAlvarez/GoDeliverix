@@ -11,10 +11,12 @@ namespace WebApplication1.Controllers
     public class AuthController : ApiController
     {
         private AuthenticationViewModel AuthenticationVm { get; }
+        private DealersViewModel DealersVm { get; }
 
         public AuthController()
         {
             this.AuthenticationVm = new AuthenticationViewModel();
+            this.DealersVm = new DealersViewModel();
         }
 
         /// <summary>
@@ -32,6 +34,16 @@ namespace WebApplication1.Controllers
                 if (result == null)
                 {
                     return BadRequest("User does not exist");
+                }
+
+                if (result.Uid != Guid.Empty)
+                {
+                    result.Turno = this.DealersVm.GetLastWorkShift(result.Uid);
+
+                    if (result.Turno != null)
+                    {
+                        result.Orden = this.DealersVm.GetLastAssignedOrder(result.Turno.Uid);
+                    }
                 }
 
                 return Json(result);
