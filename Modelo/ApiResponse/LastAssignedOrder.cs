@@ -50,6 +50,8 @@ namespace Modelo.ApiResponse
 
         public string UrlLogoEmpresa { get; set; }
 
+        public string DireccionSucursal { get; set; }
+
         public LastAssignedOrder()
         {
             this.Productos = new HashSet<DeliveryOrderProductDetail>();

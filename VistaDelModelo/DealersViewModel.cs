@@ -127,20 +127,26 @@ namespace VistaDelModelo
             {
                 foreach (DataRow row in data.Rows)
                 {
-                    result = new LastAssignedOrder()
-                    {
-                        UidOrdenRepartidor = (Guid)row["UidOrdenRepartidor"],
-                        UidOrdenTarifario = (Guid)row["UidOrdenTarifario"],
-                        UidOrdenSucursal = (Guid)row["UidOrdenSucursal"],
-                        UidSucursal = (Guid)row["UidSucursal"],
-                        IdentificadorSucursal = row.IsNull("IdentificadorSucursal") ? "" : (string)row["IdentificadorSucursal"],
-                        FolioOrdenSucursal = row.IsNull("FolioOrdenSucursal") ? "" : (string)row["FolioOrdenSucursal"],
-                        UidDireccionCliente = (Guid)row["UidDireccionCliente"],
-                        UidEstatusOrdenGeneral = (Guid)row["UidEstatusOrdenGeneral"],
-                        UidEstatusOrdenRepartidor = (Guid)row["UidEstatusOrdenRepartidor"],
-                        UidEstatusOrdenTarifario = (Guid)row["UidEstatusOrdenTarifario"],
-                        UidOrden = (Guid)row["UidOrden"]
-                    };
+                    result = new LastAssignedOrder();
+
+                    result.UidOrdenRepartidor = (Guid)row["UidOrdenRepartidor"];
+                    result.UidOrdenTarifario = (Guid)row["UidOrdenTarifario"];
+                    result.UidOrdenSucursal = (Guid)row["UidOrdenSucursal"];
+                    result.UidSucursal = (Guid)row["UidSucursal"];
+                    result.IdentificadorSucursal = row.IsNull("IdentificadorSucursal") ? "" : (string)row["IdentificadorSucursal"];
+                    result.FolioOrdenSucursal = row.IsNull("FolioOrdenSucursal") ? "" : row["FolioOrdenSucursal"].ToString();
+                    result.UidDireccionCliente = (Guid)row["UidDireccionCliente"];
+                    result.UidEstatusOrdenGeneral = (Guid)row["UidEstatusOrdenGeneral"];
+                    result.UidEstatusOrdenRepartidor = (Guid)row["UidEstatusOrdenRepartidor"];
+                    result.UidEstatusOrdenTarifario = (Guid)row["UidEstatusOrdenTarifario"];
+                    result.UidOrden = (Guid)row["UidOrden"];
+                    result.LatSucursal = row.IsNull("LatSucursal") ? "0" : (string)row["LatSucursal"];
+                    result.LongSucursal = row.IsNull("LongSucursal") ? "0" : (string)row["LongSucursal"];
+                    result.LatCliente = row.IsNull("LatCliente") ? "0" : (string)row["LatCliente"];
+                    result.LongCliente = row.IsNull("LongCliente") ? "0" : (string)row["LongCliente"];
+                    result.NombreEmpresa = row.IsNull("NombreEmpresa") ? "" : (string)row["NombreEmpresa"];
+                    result.UrlLogoEmpresa = row.IsNull("UrlLogoEmpresa") ? "" : (string)row["UrlLogoEmpresa"];
+                    result.DireccionSucursal = row.IsNull("DireccionSucursal") ? "" : (string)row["DireccionSucursal"];
                 }
             }
 
