@@ -38,6 +38,20 @@ namespace Modelo.ApiResponse
 
         public IEnumerable<DeliveryOrderProductDetail> Productos { get; set; }
 
+        public string LatSucursal { get; set; }
+
+        public string LongSucursal { get; set; }
+
+        public string LatCliente { get; set; }
+
+        public string LongCliente { get; set; }
+
+        public string NombreEmpresa { get; set; }
+
+        public string UrlLogoEmpresa { get; set; }
+
+        public string DireccionSucursal { get; set; }
+
         public LastAssignedOrder()
         {
             this.Productos = new HashSet<DeliveryOrderProductDetail>();

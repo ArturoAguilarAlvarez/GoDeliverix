@@ -156,7 +156,18 @@ namespace DBControl
                     dbo.EstatusActualDeOrden(OS.[UidRelacionOrdenSucursal]) as UidEstatusOrdenGeneral, 
                     dbo.asp_ObtenerUltimoEstatusOrdenRepartidor(OD.[UidRelacionOrdenRepartidor]) as UidEstatusOrdenRepartidor,
                     M.[NombreComercial] AS [NombreEmpresa],
-                    ISNULL(E.NVchRuta, '') AS [UrlLogoEmpresa]
+                    ISNULL(E.NVchRuta, '') AS [UrlLogoEmpresa],
+                    ISNULL(US.[VchLatitud], '0') AS [LatSucursal],
+                    ISNULL(US.[VchLongitud], '0') AS [LongSucursal],
+                    ISNULL(UC.[VchLatitud], '0') AS [LatCliente],
+                    ISNULL(UC.[VchLongitud], '0') AS [LongCliente],
+                    CONCAT(
+                        ISNULL(DS.Calle0, ''), ' ',
+                        ISNULL(DS.Calle1, ''), ' ',
+                        ISNULL(DS.Calle2, ''), ', ',
+                        ISNULL(DS.CodigoPostal, ''), ', ',
+                        (SELECT TOP 1 Nombre FROM [Colonia] WHERE UidColonia = DS.UidColonia)
+                    ) AS DireccionSucursal
                 FROM [OrdenTarifario] AS OT
                     INNER JOIN [Tarifario] AS T ON T.[UidRegistroTarifario] = OT.[UidTarifario]
                     INNER JOIN [ZonaDeRecoleccion] AS ZR ON ZR.[UidZonaDeRecolecta] = T.[UidRelacionZonaRecolecta]
@@ -167,6 +178,9 @@ namespace DBControl
                     LEFT JOIN [Imagenes] AS E ON E.[UidImagen] = IE.[UidImagen]
                     INNER JOIN [OrdenRepartidor] AS OD ON OD.[UidOrden] = OT.[UidRelacionOrdenTarifario]
                     INNER JOIN [Ordenes] AS O ON O.[UidOrden] = OS.[UidOrden]
+                    LEFT JOIN [Ubicacion] AS US ON US.[UidUbicacion] = (SELECT TOP 1 [UidUbicacion] FROM [UbicacionSucursal] WHERE [UidSucursal] = S.[UidSucursal])
+                    LEFT JOIN [Ubicacion] AS UC ON UC.[UidUbicacion] = (SELECT TOP 1 [UidUbicacion] FROM [DireccionUbicacion] WHERE [UidDireccion] = O.[UidDireccion])
+                    LEFT JOIN [Direccion] AS DS ON DS.[UidDireccion] = S.[UidDireccion]
                 WHERE OD.[UidTurnoRepartidor] = '{uidTurnoRepartidor.ToString()}'
                 ORDER BY OD.[dtmFechaAsignacion] DESC";
             DataTable data = this.dbConexion.Consultas(query);
@@ -197,7 +211,32 @@ namespace DBControl
                     INNER JOIN [OrdenProducto] AS OP ON OP.[UidSeccionProducto] = SP.[UidSeccionProducto]
                     INNER JOIN [OrdenSucursal] AS OS ON OS.[UidRelacionOrdenSucursal] = OP.[UidOrden]
                     INNER JOIN [Ordenes] AS O ON O.[UidOrden] = OS.[UidOrden]
-                WHERE O.[UidOrden] = {uidOrden.ToString()}";
+                WHERE O.[UidOrden] = '{uidOrden.ToString()}'";
+            DataTable data = this.dbConexion.Consultas(query);
+            return data;
+        }
+        #endregion
+
+        #region Bitacora Estatus del repartidor
+        /// <summary>
+        /// Obtener el ultimo registro de la bitacora de estatus del repartidor
+        /// </summary>
+        /// <param name="uidUsuario"></param>
+        /// <returns></returns>
+        public DataTable ObtenerUltimoEstatusBitacora(Guid uidUsuario)
+        {
+            string query = $@"
+                SELECT
+                    TOP 1
+                    B.[UidRelacionEstatusRepartidor] AS [Uid],
+                    B.[UidEstatusRepartidor] AS [UidEstatus],
+                    B.[DtmFecha] AS [Fecha],
+                    B.[UidUsuario],
+                    E.VchNombre AS Estatus
+                FROM [BitacoraEstatusRepartidor] AS B
+                    INNER JOIN [EstatusRepartidor] AS E ON E.UidEstatusRepartidor = B.UidEstatusRepartidor
+                WHERE B.UidUsuario = '{uidUsuario.ToString()}' ORDER BY B.[DtmFecha] DESC";
+
             DataTable data = this.dbConexion.Consultas(query);
             return data;
         }

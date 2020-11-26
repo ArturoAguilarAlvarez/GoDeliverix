@@ -8,6 +8,9 @@ namespace Modelo.ApiResponse
 {
     public class DeliveryManLoginResult
     {
+        /// <summary>
+        /// Uid del Usuario
+        /// </summary>
         public Guid Uid { get; set; }
 
         public string Usuario { get; set; }
@@ -25,5 +28,9 @@ namespace Modelo.ApiResponse
         public Guid UidRepartidor { get; set; }
 
         public string CorreoElectronico { get; set; }
+
+        public LastWorkShift Turno { get; set; } = null;
+
+        public LastAssignedOrder Orden { get; set; } = null;
     }
 }

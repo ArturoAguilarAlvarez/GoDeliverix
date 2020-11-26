@@ -8,6 +8,9 @@ namespace Modelo.ApiResponse
 {
     public class LastWorkShift
     {
+        /// <summary>
+        /// Uid Turno Repartidor
+        /// </summary>
         public Guid Uid { get; set; }
 
         public Guid UidUsuario { get; set; }
@@ -18,7 +21,7 @@ namespace Modelo.ApiResponse
 
         public DateTime? FechaFin { get; set; }
 
-        public int Folio { get; set; }
+        public Int64 Folio { get; set; }
 
         public decimal Fondo { get; set; }
     }
