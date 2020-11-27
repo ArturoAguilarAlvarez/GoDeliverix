@@ -269,9 +269,9 @@ namespace VistaDelModelo
         }
         public void GuardaTarifario()
         {
-            foreach (var item in ListaDeTarifarios)
+            for (int i = 0; i < ListaDeTarifarios.Count; i++)
             {
-                oTarifario = new Tarifario() { UidTarifario = item.UidTarifario, UidRelacionZE = item.UidRelacionZE, UidRelacionZR = item.UidRelacionZR, DPrecio = item.DPrecio };
+                oTarifario = new Tarifario() { UidTarifario = ListaDeTarifarios[i].UidTarifario, UidRelacionZE = ListaDeTarifarios[i].UidRelacionZE, UidRelacionZR = ListaDeTarifarios[i].UidRelacionZR, DPrecio = ListaDeTarifarios[i].DPrecio };
                 oTarifario.Guardar();
             }
         }
@@ -342,18 +342,20 @@ namespace VistaDelModelo
                 //Recupera el tarifario para cualquier modulo a excepcion del modulo de clientes
                 if (string.IsNullOrEmpty(ZonaEntrega))
                 {
-                    foreach (DataRow item in oDbTarifario.Busquedas(CMD).Rows)
+                    var tarifarios = oDbTarifario.Busquedas(CMD);
+                    for (int i = 0; i < tarifarios.Rows.Count; i++)
                     {
-                        Guid UidTarifario = new Guid(item["Uidregistrotarifario"].ToString());
-                        Guid UidRelacionZR = new Guid(item["UidRelacionZonaRecolecta"].ToString());
-                        Guid UidRelacionZE = new Guid(item["UidRelacionZonaEntrega"].ToString());
-                        decimal DPrecio = decimal.Parse(item["MCosto"].ToString());
-                        string NombreZonaRecolecta = oDbTarifario.ObtenerNombreColoniaRecolecta(UidRelacionZR.ToString());
-                        string NombreZonaEntrega = oDbTarifario.ObtenerNombreColoniaEntrega(UidRelacionZE.ToString());
-
-                        if (!ListaDeTarifarios.Exists(t => t.UidRelacionZE == UidRelacionZE && t.UidRelacionZR == UidRelacionZR))
+                        if (!ListaDeTarifarios.Exists(t => t.UidRelacionZE == new Guid(tarifarios.Rows[i]["UidRelacionZonaEntrega"].ToString()) && t.UidRelacionZR == new Guid(tarifarios.Rows[i]["UidRelacionZonaRecolecta"].ToString())))
                         {
-                            ListaDeTarifarios.Add(new VMTarifario() { UidTarifario = UidTarifario, UidRelacionZE = UidRelacionZE, UidRelacionZR = UidRelacionZR, DPrecio = DPrecio, StrNombreColoniaZE = NombreZonaEntrega, StrNombreColoniaZR = NombreZonaRecolecta });
+                            ListaDeTarifarios.Add(new VMTarifario()
+                            {
+                                UidTarifario = new Guid(tarifarios.Rows[i]["Uidregistrotarifario"].ToString()),
+                                UidRelacionZE = new Guid(tarifarios.Rows[i]["UidRelacionZonaEntrega"].ToString()),
+                                UidRelacionZR = new Guid(tarifarios.Rows[i]["UidRelacionZonaRecolecta"].ToString()),
+                                DPrecio = decimal.Parse(tarifarios.Rows[i]["MCosto"].ToString()),
+                                StrNombreColoniaZE = oDbTarifario.ObtenerNombreColoniaEntrega(UidRelacionZE.ToString()),
+                                StrNombreColoniaZR = oDbTarifario.ObtenerNombreColoniaRecolecta(UidRelacionZR.ToString())
+                            });
                         }
                     }
                 }
@@ -373,7 +375,7 @@ namespace VistaDelModelo
                         string Imagen = "../" + item["NVchRuta"].ToString();
                         if (!ListaDeTarifarios.Exists(t => t.UidRelacionZE == UidRelacionZE && t.UidRelacionZR == UidRelacionZR))
                         {
-                            ListaDeTarifarios.Add(new VMTarifario() { StrRuta = Imagen, StrNombreSucursal = NombreSucursal, GuidSucursalDistribuidora = distribudiora, UidTarifario = UidTarifario, UidRelacionZE = UidRelacionZE, UidRelacionZR = UidRelacionZR, DPrecio = DPrecio, StrNombreColoniaZE = NombreZonaEntrega, StrNombreColoniaZR = NombreZonaRecolecta,StrNombreEmpresa = NombreEmpresa });
+                            ListaDeTarifarios.Add(new VMTarifario() { StrRuta = Imagen, StrNombreSucursal = NombreSucursal, GuidSucursalDistribuidora = distribudiora, UidTarifario = UidTarifario, UidRelacionZE = UidRelacionZE, UidRelacionZR = UidRelacionZR, DPrecio = DPrecio, StrNombreColoniaZE = NombreZonaEntrega, StrNombreColoniaZR = NombreZonaRecolecta, StrNombreEmpresa = NombreEmpresa });
                         }
                     }
                 }
@@ -444,10 +446,10 @@ namespace VistaDelModelo
             oDbTarifario.EliminaTarifarioDeSuministradora(UidSucursal.ToString());
         }
 
-        public void AgregarTarifarioOrden(Guid UidOrden, Guid UidTarifario,decimal DPropina)
+        public void AgregarTarifarioOrden(Guid UidOrden, Guid UidTarifario, decimal DPropina)
         {
             oTarifario = new Tarifario();
-            oTarifario.RelacionConOrden(uidorden: UidOrden, uidTarifario: UidTarifario,DPropina: DPropina);
+            oTarifario.RelacionConOrden(uidorden: UidOrden, uidTarifario: UidTarifario, DPropina: DPropina);
         }
 
         #endregion

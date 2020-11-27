@@ -24,13 +24,13 @@
     <link href="../Content/MisEstilos.css" rel="stylesheet" />
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <link href="https://code.jquery.com/ui/1.12.1/themes/dark-hive/jquery-ui.css" rel="stylesheet" />
-    
+
     <%--Carga Loader--%>
     <link href="../Content/Loader.css" rel="stylesheet" />
     <script>
-    $(document).ready(function(){
-        $('[data-toggle="tooltip"]').tooltip(); 
-    });
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
     </script>
 </head>
 <body style="background-color: lavender; padding-bottom: 50px; padding-top: 60px;">
@@ -85,12 +85,12 @@
                                             </asp:LinkButton>
                                         </li>
                                         <li role="presentation" class="text-left">
-                                            <asp:LinkButton ID="btnZonaHoraria" OnClick="btnZonaHoraria_Click" runat="server" >
+                                            <asp:LinkButton ID="btnZonaHoraria" OnClick="btnZonaHoraria_Click" runat="server">
                                                 <span class="glyphicon glyphicon-time"></span> Zona Horaria
                                             </asp:LinkButton>
                                         </li>
                                         <li role="presentation" class="text-left">
-                                            <asp:LinkButton ID="btnConfiguracionComisiones" OnClick="btnConfiguracionComisiones_Click" runat="server" >
+                                            <asp:LinkButton ID="btnConfiguracionComisiones" OnClick="btnConfiguracionComisiones_Click" runat="server">
                                                 <span class="glyphicon glyphicon glyphicon-globe"></span> Configuracion comisiones
                                             </asp:LinkButton>
                                         </li>
@@ -109,6 +109,13 @@
                                         <li role="presentation" class="text-center">
                                             <asp:LinkButton runat="server" ID="btnSupervisores" OnClick="RedireccionamientoSupervisores"><span class="glyphicon glyphicon-user"></span> Supervisores</asp:LinkButton></li>
                                     </ul>
+                                </li>
+
+                                <%--Modulo Tarifario--%>
+                                <li role="presentation" class="text-center">
+                                    <asp:LinkButton runat="server" ID="btnModuloTarifario" Style="color: white;" OnClick="btnModuloTarifario_Click">
+                                        <span class="glyphicon glyphicon-send"></span> Tarifario
+                                    </asp:LinkButton>
                                 </li>
                                 <%--Modulo Productos--%>
                                 <li role="presentation" class="text-center">

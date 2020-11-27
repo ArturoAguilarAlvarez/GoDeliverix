@@ -412,6 +412,7 @@
     <Content Include="Vista\Img\FondoAdmin.jpg" />
     <Content Include="Vista\Img\provedora.jpg" />
     <Content Include="Vista\AdministradoresDeEmpresas.aspx" />
+    <Content Include="Vista\Tarifario.aspx" />
     <Content Include="Vista\Vehiculos.aspx" />
     <Content Include="Vista\ZonaHoraria.aspx" />
     <Content Include="Web.config">
@@ -647,6 +648,13 @@
     </Compile>
     <Compile Include="Vista\MasterDeliverix.Master.designer.cs">
       <DependentUpon>MasterDeliverix.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Vista\Tarifario.aspx.cs">
+      <DependentUpon>Tarifario.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Vista\Tarifario.aspx.designer.cs">
+      <DependentUpon>Tarifario.aspx</DependentUpon>
     </Compile>
     <Compile Include="Vista\Vehiculos.aspx.cs">
       <DependentUpon>Vehiculos.aspx</DependentUpon>

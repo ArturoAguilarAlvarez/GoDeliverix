@@ -31,14 +31,20 @@ namespace WebApplication1.Controllers
             respuesta.Message = "Version actual de la aplicacion";
             return respuesta;
         }
+        public IHttpActionResult GetUltimaVersionMovil(string Uid)
+        {
+            MVersion = new VMVersion();
+            MVersion.ObtenerVersion(UidAplicacion: new Guid(Uid));
+            return Json(MVersion.StrVersion);
+        }
 
         // POST: api/Version
-        public void Post([FromBody]string value)
+        public void Post([FromBody] string value)
         {
         }
 
         // PUT: api/Version/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody] string value)
         {
         }
 

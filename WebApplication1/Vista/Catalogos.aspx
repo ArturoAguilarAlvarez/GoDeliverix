@@ -63,7 +63,7 @@
                             <%-- Panel de gridview Giro --%>
                             <asp:Panel ID="PanelGridGiro" runat="server">
 
-                                <asp:GridView ID="DGVGiro" AutoGenerateColumns="false" OnRowDataBound="DGVGiro_RowDataBound" OnPageIndexChanging="DGVGiro_PageIndexChanging" OnSelectedIndexChanged="DGVGiro_SelectedIndexChanged" Style="margin-top: 5px;" AllowSorting="true" AllowPaging="True" DataKeyNames="UIDVM" runat="server" CssClass="table table-bordered table-hover table-condensed table-striped input-sm text-center" PageSize="5">
+                                <asp:GridView ID="DGVGiro" AutoGenerateColumns="false"  OnRowDataBound="DGVGiro_RowDataBound" OnPageIndexChanging="DGVGiro_PageIndexChanging" OnSelectedIndexChanged="DGVGiro_SelectedIndexChanged" Style="margin-top: 5px;" AllowSorting="true" AllowPaging="True" DataKeyNames="UIDVM" runat="server" CssClass="table table-bordered table-hover table-condensed table-striped input-sm text-center" PageSize="20">
                                     <EmptyDataTemplate>
                                         No se encontro información 
                                     </EmptyDataTemplate>
@@ -88,7 +88,7 @@
                             <%-- Panel de gridview Categorias --%>
                             <asp:Panel ID="PanelGridCategoria" runat="server">
 
-                                <asp:GridView ID="DGVCategorias" PageSize="5" Style="margin-top: 5px;" AllowSorting="true" AllowPaging="True" DataKeyNames="UIDCATEGORIA" AutoGenerateColumns="false" OnRowDataBound="DGVCategorias_RowDataBound" OnSelectedIndexChanged="DGVCategorias_SelectedIndexChanged" CssClass="table table-bordered table-hover table-condensed table-striped input-sm text-center" runat="server">
+                                <asp:GridView ID="DGVCategorias" OnPageIndexChanging="DGVCategorias_PageIndexChanging" PageSize="20" Style="margin-top: 5px;" AllowSorting="true" AllowPaging="True" DataKeyNames="UIDCATEGORIA" AutoGenerateColumns="false" OnRowDataBound="DGVCategorias_RowDataBound" OnSelectedIndexChanged="DGVCategorias_SelectedIndexChanged" CssClass="table table-bordered table-hover table-condensed table-striped input-sm text-center" runat="server">
                                     <EmptyDataTemplate>
                                         No se encontro información
                                     </EmptyDataTemplate>
@@ -115,7 +115,7 @@
                             <asp:Panel ID="PanelGridSubcategoria" runat="server">
 
 
-                                <asp:GridView ID="DGVSubcategorias" AutoGenerateColumns="false" Style="margin-top: 5px;" AllowSorting="true" AllowPaging="True" OnRowDataBound="DGVSubcategorias_RowDataBound" DataKeyNames="UID" runat="server" OnSelectedIndexChanged="DGVSubcategorias_OnSelectedIndexChanged" CssClass="table table-bordered table-hover table-condensed table-striped input-sm text-center" PageSize="5">
+                                <asp:GridView ID="DGVSubcategorias" AutoGenerateColumns="false" OnPageIndexChanging="DGVSubcategorias_PageIndexChanging" Style="margin-top: 5px;" AllowSorting="true" AllowPaging="True" OnRowDataBound="DGVSubcategorias_RowDataBound" DataKeyNames="UID" runat="server" OnSelectedIndexChanged="DGVSubcategorias_OnSelectedIndexChanged" CssClass="table table-bordered table-hover table-condensed table-striped input-sm text-center" PageSize="20">
                                     <EmptyDataTemplate>
                                         No se encontro información 
                                     </EmptyDataTemplate>

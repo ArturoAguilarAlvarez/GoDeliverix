@@ -62,7 +62,7 @@ namespace Modelo
             return resultado;
         }
 
-        public virtual bool ACTUALIZAIMAGEN(Imagen img)
+        public virtual bool ACTUALIZAIMAGEN(Imagen img,Guid uidempresa)
         {
             bool resultado = false;
             SqlCommand cmd = new SqlCommand();
@@ -73,6 +73,8 @@ namespace Modelo
 
                 cmd.Parameters.Add("@UidImagen", SqlDbType.UniqueIdentifier);
                 cmd.Parameters["@UidImagen"].Value = img.ID;
+                cmd.Parameters.Add("@UidEmpresa", SqlDbType.UniqueIdentifier);
+                cmd.Parameters["@UidEmpresa"].Value = uidempresa;
 
 
                 cmd.Parameters.Add("@NVchRuta", SqlDbType.NVarChar, 500);

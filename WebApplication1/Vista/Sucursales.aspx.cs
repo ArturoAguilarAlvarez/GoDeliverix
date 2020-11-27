@@ -125,9 +125,6 @@ namespace WebApplication1.Vista
 
                     //Deshabilita los controles de los datos generales
                     EstatusControlesPanel(false);
-                    //Deshabilita los controles de la zona de servicio
-                    EstatusControlesZonaDeServicio(false, "Entrega");
-                    EstatusControlesZonaDeServicio(false, "Recolecta");
                     #endregion
                     #region DropdownList
 
@@ -146,29 +143,6 @@ namespace WebApplication1.Vista
                     txtDLote.MaxLength = 8;
                     txtDReferencia.MaxLength = 500;
                     #endregion
-
-                    #region Zona de servicio
-
-                    //Obtiene el pais para el dropdownlist
-                    DDLZonaPais.DataSource = MVDireccion.Paises();
-                    DDLZonaPais.DataTextField = "Nombre";
-                    DDLZonaPais.DataValueField = "UidPais";
-                    DDLZonaPais.DataBind();
-                    //Comienza en vacio el GridView de las ciudades
-                    DGVZonaCiudades.DataSource = null;
-                    DGVZonaCiudades.DataBind();
-                    //Limpia la lista de checkbox
-                    DeseleccionaCheckboxListColoniasEntrega();
-                    DeseleccionaCheckboxListColoniasRecolecta();
-                    #endregion
-
-                    #region Zona de recolecta
-                    DDLZRPais.DataSource = MVDireccion.Paises();
-                    DDLZRPais.DataTextField = "Nombre";
-                    DDLZRPais.DataValueField = "UidPais";
-                    DDLZRPais.DataBind();
-                    #endregion
-
                     #region Contrato
 
                     //DropdownList 
@@ -327,11 +301,6 @@ namespace WebApplication1.Vista
                     MVTelefono = (VMTelefono)Session["MVTelefono"];
                     MVMensaje = (VMMensaje)Session["MVMensaje"];
                     MVTarifario = (VMTarifario)Session["MVTarifario"];
-
-                    if (PanelTarifario.Visible == true)
-                    {
-                        CrearGridViewTarifario(MVTarifario.ListaDeTarifarios);
-                    }
                 }
             }
         }
@@ -1080,8 +1049,6 @@ namespace WebApplication1.Vista
             else //Si es por distribuidora solo por el uid trae los tarifarios
             {
                 txtFondoRepartidor.Text = MVSucursales.SUCURSAL.MFondo.ToString();
-                MVTarifario.BuscarTarifario("Gestion", uidSucursal: valor);
-                CrearGridViewTarifario(MVTarifario.ListaDeTarifarios);
             }
             #endregion
         }
@@ -1197,12 +1164,7 @@ namespace WebApplication1.Vista
             //Limpia los campos seleccionados
             MVDireccion.ListaCiudadesSeleccionadasEntrega.Clear();
             MVDireccion.ListaColoniasSeleccionadasEntrega.Clear();
-            //Limpia el gridview de las ciudades seleccionadas
-            DGVZonaCiudades.DataSource = null;
-            DGVZonaCiudades.DataBind();
-            //Limpia la lista de colonias
-            chklColonias.DataSource = null;
-            chklColonias.DataBind();
+
             //Limpia los telefonos 
             MVTelefono.ListaDeTelefonos = new List<VMTelefono>();
             //Limpia catalogos
@@ -1250,7 +1212,6 @@ namespace WebApplication1.Vista
                 EstatusControlesPanel(false);
                 DesactivarCajasDeTextoPanelGestion();
                 MuestraSucursalEnGestion(txtUidSucursal.Text);
-                MuestraZonaDeServicio(new Guid(txtUidSucursal.Text));
                 btnNuevo.CssClass = "btn btn-sm btn-default";
                 btnNuevo.Enabled = true;
 
@@ -1267,11 +1228,7 @@ namespace WebApplication1.Vista
             Session.Remove("Accion");
             DGVEMPRESAS.SelectedIndex = -1;
             DGVTELEFONOS.SelectedIndex = -1;
-            DGVZonaCiudades.SelectedIndex = -1;
 
-            //Limpia las colonias 
-            LimpiaListaDeColoniasEntrega();
-            LimpiaListaDeColoniasRecolecta();
         }
         protected void BorrarCamposDeGestion()
         {
@@ -1290,7 +1247,6 @@ namespace WebApplication1.Vista
             //Suministradora
             if (MVEmpresa.ObtenerTipoDeEmpresa(UidEmpresa))
             {
-                liDatosZonaDeServicio.Visible = false;
                 dvFondo.Visible = false;
             }
             else
@@ -1312,8 +1268,6 @@ namespace WebApplication1.Vista
         {
             //Visualiza el panel 
             MuestraPanel("General");
-            ColoniasSeleccionadas();
-
             //Obtiene las categorias seleccionadas
             if (DLCategoria.Items.Count != 0)
             {
@@ -1328,8 +1282,6 @@ namespace WebApplication1.Vista
         }
         protected void PanelDireccion(object sender, EventArgs e)
         {
-            ColoniasSeleccionadas();
-
             //Visualiza el panel 
             MuestraPanel("Direccion");
 
@@ -1349,8 +1301,6 @@ namespace WebApplication1.Vista
         {
             //Visualiza el panel 
             MuestraPanel("Contacto");
-            ColoniasSeleccionadas();
-
             //Obtiene las categorias seleccionadas
             if (DLCategoria.Items.Count != 0)
             {
@@ -1512,50 +1462,11 @@ namespace WebApplication1.Vista
 
         protected void BtnInformacionDireccion_Click(object sender, EventArgs e)
         {
-            ColoniasSeleccionadas();
-
             PanelDatosDireccion.Visible = true;
             PanelUbicacion.Visible = false;
 
             liInformacionDireccion.Attributes.Add("class", "active");
             liDatosUbicacion.Attributes.Add("class", "");
-        }
-        protected void btnDatosZonaDeServicio_Click(object sender, EventArgs e)
-        {
-
-            if (DGVTarifario.Visible)
-            {
-                GuardaTarifario();
-            }
-
-            ColoniasSeleccionadas();
-
-            //Visualiza el panel 
-            liZonaDeRecolecta.Attributes.Add("class", "");
-            liDatosZonaDeEntrega.Attributes.Add("class", "active");
-            liDatosTarifario.Attributes.Add("class", "");
-
-            PanelZonasServicio.Visible = true;
-            PanelZonaDeRecolecta.Visible = false;
-            PanelTarifario.Visible = false;
-
-        }
-        protected void btnZonaDeRecolecta_Click(object sender, EventArgs e)
-        {
-            if (DGVTarifario.Visible)
-            {
-                GuardaTarifario();
-            }
-            ColoniasSeleccionadas();
-
-            //Visualiza el panel 
-            liDatosZonaDeEntrega.Attributes.Add("class", "");
-            liDatosTarifario.Attributes.Add("class", "");
-            liZonaDeRecolecta.Attributes.Add("class", "active");
-
-            PanelZonasServicio.Visible = false;
-            PanelTarifario.Visible = false;
-            PanelZonaDeRecolecta.Visible = true;
         }
         protected void BtnZonaDeServicio_Click(object sender, EventArgs e)
         {
@@ -1570,24 +1481,10 @@ namespace WebApplication1.Vista
             {
                 ObtenerSubcategoriasSeleccionadas();
             }
-            ColoniasSeleccionadas();
-
-
-            liDatosZonaDeEntrega.Attributes.Add("class", "");
-            liDatosTarifario.Attributes.Add("class", "");
-            liZonaDeRecolecta.Attributes.Add("class", "active");
-            PanelZonasServicio.Visible = false;
-            PanelTarifario.Visible = false;
-            PanelZonaDeRecolecta.Visible = true;
         }
 
         protected void MuestraPanel(string panel)
         {
-            if (DGVTarifario.Visible)
-            {
-                GuardaTarifario();
-            }
-
             PanelDeInformacion.Visible = false;
 
             //Se visualiza el panel y se asigna su clase para que aparezca activo
@@ -1684,17 +1581,6 @@ namespace WebApplication1.Vista
                 PanelAtencionAClientes.Visible = false;
                 liDatosAtencionACliente.Attributes.Add("class", "");
             }
-            if (panel == "Zona de servicio")
-            {
-                PanelZonaDeServicio.Visible = true;
-                liDatosZonaDeServicio.Attributes.Add("class", "active");
-                liInformacionDireccion.Attributes.Add("class", "active");
-            }
-            else
-            {
-                PanelZonaDeServicio.Visible = false;
-                liDatosZonaDeServicio.Attributes.Add("class", "");
-            }
             if (Session["Accion"] != null)
             {
                 AccionesDeLaPagina = Session["Accion"].ToString();
@@ -1774,16 +1660,10 @@ namespace WebApplication1.Vista
 
             }
             EstatusControlesDireccion(estado);
-            EstatusControlesZonaDeServicio(estado, "Entrega");
-            EstatusControlesZonaDeServicio(estado, "Recolecta");
 
             //Modulo de direccion
             EstatusControlesDireccion(estado);
 
-            //Tarifario 
-            DGVTarifario.Enabled = estado;
-            BtnCopiarTarifarioAbajo.Enabled = estado;
-            BtnCopiarTarifarioArriba.Enabled = estado;
         }
         protected void ActivarCajasDeTextoGestor()
         {
@@ -1888,18 +1768,6 @@ namespace WebApplication1.Vista
                     DDLDBAESTADO.DataTextField = "Nombre";
                     DDLDBAESTADO.DataBind();
                     break;
-                case "Zona de servicio":
-                    DDLZonaEstado.DataSource = MVDireccion.Estados(Pais);
-                    DDLZonaEstado.DataValueField = "IdEstado";
-                    DDLZonaEstado.DataTextField = "Nombre";
-                    DDLZonaEstado.DataBind();
-                    break;
-                case "Recolecta":
-                    DDLZREstado.DataSource = MVDireccion.Estados(Pais);
-                    DDLZREstado.DataValueField = "IdEstado";
-                    DDLZREstado.DataTextField = "Nombre";
-                    DDLZREstado.DataBind();
-                    break;
                 default:
                     break;
             }
@@ -1921,18 +1789,6 @@ namespace WebApplication1.Vista
                     DDLDBAMUNICIPIO.DataValueField = "IDMUNICIPIO";
                     DDLDBAMUNICIPIO.DataBind();
                     break;
-                case "Zona de servicio":
-                    DDLZonaMunicipio.DataSource = MVDireccion.Municipios(estado);
-                    DDLZonaMunicipio.DataTextField = "NOMBRE";
-                    DDLZonaMunicipio.DataValueField = "IDMUNICIPIO";
-                    DDLZonaMunicipio.DataBind();
-                    break;
-                case "Recolecta":
-                    DDLZRMunicipio.DataSource = MVDireccion.Municipios(estado);
-                    DDLZRMunicipio.DataTextField = "NOMBRE";
-                    DDLZRMunicipio.DataValueField = "IDMUNICIPIO";
-                    DDLZRMunicipio.DataBind();
-                    break;
                 default:
                     break;
             }
@@ -1953,18 +1809,6 @@ namespace WebApplication1.Vista
                     DDLDBACIUDAD.DataTextField = "Nombre";
                     DDLDBACIUDAD.DataValueField = "IdCiudad";
                     DDLDBACIUDAD.DataBind();
-                    break;
-                case "Zona de servicio":
-                    DDLZonaCiudad.DataSource = MVDireccion.Ciudades(Municipio);
-                    DDLZonaCiudad.DataTextField = "Nombre";
-                    DDLZonaCiudad.DataValueField = "IdCiudad";
-                    DDLZonaCiudad.DataBind();
-                    break;
-                case "Recolecta":
-                    DDLZRCiudad.DataSource = MVDireccion.Ciudades(Municipio);
-                    DDLZRCiudad.DataTextField = "Nombre";
-                    DDLZRCiudad.DataValueField = "IdCiudad";
-                    DDLZRCiudad.DataBind();
                     break;
                 default:
                     break;
@@ -2023,22 +1867,10 @@ namespace WebApplication1.Vista
                     }
                     break;
                 case "DDLZonaPais":
-                    if (DDLZonaPais.SelectedItem.Value.ToString() != "00000000-0000-0000-0000-000000000000")
-                    {
-                        MuestraEstados(DDLZonaPais.SelectedItem.Value.ToString(), "Zona de servicio");
-                        MuestraMunicipio("00000000-0000-0000-0000-000000000000", "Zona de servicio");
-                        MuestraCiudad("00000000-0000-0000-0000-000000000000", "Zona de servicio");
-                        MuestraColonia("00000000-0000-0000-0000-000000000000", "Zona de servicio");
-                    }
+
                     break;
                 case "DDLZRPais":
-                    if (DDLZRPais.SelectedItem.Value.ToString() != "00000000-0000-0000-0000-000000000000")
-                    {
-                        MuestraEstados(DDLZRPais.SelectedItem.Value.ToString(), "Recolecta");
-                        MuestraMunicipio("00000000-0000-0000-0000-000000000000", "Recolecta");
-                        MuestraCiudad("00000000-0000-0000-0000-000000000000", "Recolecta");
-                        MuestraColonia("00000000-0000-0000-0000-000000000000", "Recolecta");
-                    }
+
                     break;
             }
         }
@@ -2064,26 +1896,10 @@ namespace WebApplication1.Vista
                     }
                     break;
                 case "DDLZonaEstado":
-                    if (DDLZonaEstado.SelectedItem != null)
-                    {
-                        if (DDLZonaEstado.SelectedItem.Value.ToString() != "00000000-0000-0000-0000-000000000000")
-                        {
-                            MuestraMunicipio(DDLZonaEstado.SelectedItem.Value.ToString(), "Zona de servicio");
-                            MuestraCiudad("00000000-0000-0000-0000-000000000000", "Zona de servicio");
-                            MuestraColonia("00000000-0000-0000-0000-000000000000", "Zona de servicio");
-                        }
-                    }
+
                     break;
                 case "DDLZREstado":
-                    if (DDLZREstado.SelectedItem != null)
-                    {
-                        if (DDLZREstado.SelectedItem.Value.ToString() != "00000000-0000-0000-0000-000000000000")
-                        {
-                            MuestraMunicipio(DDLZREstado.SelectedItem.Value.ToString(), "Recolecta");
-                            MuestraCiudad("00000000-0000-0000-0000-000000000000", "Recolecta");
-                            MuestraColonia("00000000-0000-0000-0000-000000000000", "Recolecta");
-                        }
-                    }
+
                     break;
             }
         }
@@ -2106,26 +1922,6 @@ namespace WebApplication1.Vista
                         MuestraColonia("00000000-0000-0000-0000-000000000000", "Filtro");
                     }
                     break;
-                case "DDLZonaMunicipio":
-                    if (DDLZonaMunicipio.SelectedItem != null)
-                    {
-                        if (DDLZonaMunicipio.SelectedItem.Value.ToString() != "00000000-0000-0000-0000-000000000000")
-                        {
-                            MuestraCiudad(DDLZonaMunicipio.SelectedItem.Value.ToString(), "Zona de servicio");
-                            MuestraColonia("00000000-0000-0000-0000-000000000000", "Zona de servicio");
-                        }
-                    }
-                    break;
-                case "DDLZRMunicipio":
-                    if (DDLZRMunicipio.SelectedItem != null)
-                    {
-                        if (DDLZRMunicipio.SelectedItem.Value.ToString() != "00000000-0000-0000-0000-000000000000")
-                        {
-                            MuestraCiudad(DDLZRMunicipio.SelectedItem.Value.ToString(), "Recolecta");
-                            MuestraColonia("00000000-0000-0000-0000-000000000000", "Recolecta");
-                        }
-                    }
-                    break;
             }
         }
         protected void ObtenerColonia(object sender, EventArgs e)
@@ -2145,12 +1941,6 @@ namespace WebApplication1.Vista
                         MuestraColonia(DDLDBACIUDAD.SelectedItem.Value.ToString(), "Filtro");
                     }
                     break;
-                case "DDLZonaCiudad":
-                    if (DDLZonaCiudad.SelectedItem.Value.ToString() != "00000000-0000-0000-0000-000000000000")
-                    {
-                        MuestraColonia(DDLZonaCiudad.SelectedItem.Value.ToString(), "Filtro");
-                    }
-                    break;
                 default:
                     break;
             }
@@ -2166,7 +1956,6 @@ namespace WebApplication1.Vista
         protected void GuardarDatos(object sender, EventArgs e)
         {
             QuitarColorACamposObligatorios();
-            ColoniasSeleccionadas();
             if (txtIdetificador.Text != string.Empty)
             {
                 #region Variables
@@ -2240,30 +2029,7 @@ namespace WebApplication1.Vista
                                 MVTelefono.GuardaTelefono(UidSucursal, "Sucursal");
                             }
 
-                            #region Zona de servicio
 
-                            //Zona de recolecta
-                            if (MVDireccion.ListaColoniasSeleccionadasEntrega.Count > 0 && MVDireccion.ListaColoniasSeleccionadasEntrega != null)
-                            {
-                                foreach (var item in MVDireccion.ListaColoniasSeleccionadasEntrega)
-                                {
-                                    MVSucursales.GuardaZona(item.UidRegistro, UidSucursal, item.ID, "Entrega");
-                                }
-                                //Limpia colonias
-                                LimpiaListaDeColoniasEntrega();
-                            }
-                            //Zona de entrega
-                            if (MVDireccion.ListaColoniasSeleccionadasRecolecta.Count > 0 && MVDireccion.ListaColoniasSeleccionadasRecolecta != null)
-                            {
-                                foreach (var item in MVDireccion.ListaColoniasSeleccionadasRecolecta)
-                                {
-                                    MVSucursales.GuardaZona(item.UidRegistro, UidSucursal, item.ID, "Recolecta");
-                                }
-                                //Limpia las colonias 
-                                LimpiaListaDeColoniasRecolecta();
-                            }
-
-                            #endregion
 
                             #region Licencia
                             if (MVLicencia.ListaDeLicencias.Count > 0 && MVLicencia.ListaDeLicencias != null)
@@ -2298,11 +2064,6 @@ namespace WebApplication1.Vista
 
 
                             #region Tarifario
-                            if (MVTarifario.ListaDeTarifarios.Count > 0 && DGVTarifario.Visible)
-                            {
-                                GuardaTarifario();
-                                MVTarifario.GuardaTarifario();
-                            }
 
                             if (MVTarifario.ListaDeTarifariosSeleccionados.Count > 0)
                             {
@@ -2387,28 +2148,7 @@ namespace WebApplication1.Vista
                             #endregion
 
                             #region Zona de servicio
-                            //Elimina los registros de la base de datos
-                            MVSucursales.EliminaZona(new Guid(UIDSUCURSAL));
-                            //Zona de recolecta
-                            if (MVDireccion.ListaColoniasSeleccionadasEntrega.Count > 0 && MVDireccion.ListaColoniasSeleccionadasEntrega != null)
-                            {
-                                foreach (var item in MVDireccion.ListaColoniasSeleccionadasEntrega)
-                                {
-                                    MVSucursales.GuardaZona(item.UidRegistro, new Guid(UIDSUCURSAL), item.ID, "Entrega");
-                                }
-                                //Limpia colonias
-                                LimpiaListaDeColoniasEntrega();
-                            }
-                            //Zona de entrega
-                            if (MVDireccion.ListaColoniasSeleccionadasRecolecta.Count > 0 && MVDireccion.ListaColoniasSeleccionadasRecolecta != null)
-                            {
-                                foreach (var item in MVDireccion.ListaColoniasSeleccionadasRecolecta)
-                                {
-                                    MVSucursales.GuardaZona(item.UidRegistro, new Guid(UIDSUCURSAL), item.ID, "Recolecta");
-                                }
-                                //Limpia las colonias 
-                                LimpiaListaDeColoniasRecolecta();
-                            }
+
 
                             #endregion
 
@@ -2446,20 +2186,7 @@ namespace WebApplication1.Vista
                             }
                             #endregion
 
-                            #region Tarifario
-                            if (MVTarifario.ListaDeTarifarios.Count > 0 && DGVTarifario.Visible)
-                            {
-                                GuardaTarifario();
-                                MVTarifario.EliminaTarifarioDeBaseDeDatos(UIDSUCURSAL);
-                                MVTarifario.GuardaTarifario();
-                            }
-
-                            #endregion
-
                             //Actualiza el datagrid de las ciudades de la zona de servicio
-                            MuestraZonaDeServicio(new Guid(txtUidSucursal.Text));
-                            EstatusControlesZonaDeServicio(false, "Entrega");
-                            EstatusControlesZonaDeServicio(false, "Recolecta");
                             MVUbicacion.GuardaUbicacionsucursal(new Guid(UIDSUCURSAL), UidUbicacion, DbLatitud.ToString(), DbLongitud.ToString());
 
                             if (MVEmpresa.ObtenerTipoDeEmpresa(Session["UidEmpresaSistema"].ToString()))
@@ -2608,31 +2335,7 @@ namespace WebApplication1.Vista
             txtDLote.Text = MVDireccion.LOTE;
             txtDCodigoPostal.Text = MVDireccion.CodigoPostal;
             txtDReferencia.Text = MVDireccion.REFERENCIA;
-
-
-
-
-            DeseleccionaCheckboxListColoniasEntrega();
-            DeseleccionaCheckboxListColoniasRecolecta();
-
-            chklColonias.Items.Clear();
-            chklColonias.DataBind();
-
-
-            chklZR.Items.Clear();
-            chklZR.DataBind();
-
-            if (DGVZonaCiudades.SelectedValue != null)
-            {
-                LinkButton boton = DGVZonaCiudades.Rows[DGVZonaCiudades.SelectedIndex].FindControl("btnEliminaZona") as LinkButton;
-
-                boton.Enabled = false;
-                boton.CssClass = "btn btn-sm btn-default disabled";
-
-                DGVZonaCiudades.SelectedIndex = -1;
-            }
             //Recupera zona de servicio
-            MuestraZonaDeServicio(new Guid(id));
 
         }
 
@@ -3161,585 +2864,13 @@ namespace WebApplication1.Vista
 
         #region Zona de servicio
 
-        protected void LimpiaListaDeColoniasEntrega()
-        {
-            chklColonias.Items.Clear();
-            chklColonias.DataBind();
-        }
-        protected void LimpiaListaDeColoniasRecolecta()
-        {
-            chklZR.Items.Clear();
-            chklZR.DataBind();
-        }
-        protected void MuestraZonaDeServicio(Guid uidsucursal = new Guid())
-        {
-            //Limpia la lista de checkbox
-            //DeseleccionaCheckboxListColonias();
-            //Recupera la zona de servicio
-            MVSucursales.RecuperaZonaEntrega(uidsucursal);
-            MVSucursales.RecuperaZonaRecoleccion(uidsucursal);
-            //limpia las ciudades seleccionadas
-            MVDireccion.ListaCiudadesSeleccionadasEntrega.Clear();
-            MVDireccion.ListaColoniasSeleccionadasEntrega.Clear();
-            MVDireccion.ListaCiudadesSeleccionadasRecolecta.Clear();
-            MVDireccion.ListaColoniasSeleccionadasRecolecta.Clear();
-
-            foreach (var item in MVSucursales.ListaDeColoniasEntrega)
-            {
-                MVDireccion.SeleccionarCiudadEntrega(item.ID);
-                MVDireccion.SeleccionarColoniaEntrega(item.UidRelacionRegistro, item.UidColonia, item.ID, item.StrNombreColonia);
-            }
-
-            foreach (var item in MVSucursales.ListaDeColoniasRecolecta)
-            {
-                MVDireccion.SeleccionarCiudadRecolecta(item.ID);
-                MVDireccion.SeleccionarColoniaRecolecta(item.UidRelacionRegistro, item.UidColonia, item.ID, item.StrNombreColonia);
-            }
-            //Recarga el gridview de las ciudades asociadas
-            DGVZonaCiudades.DataSource = MVDireccion.ListaCiudadesSeleccionadasEntrega;
-            DGVZonaCiudades.DataBind();
-            DGVZRCiudades.DataSource = MVDireccion.ListaCiudadesSeleccionadasRecolecta;
-            DGVZRCiudades.DataBind();
-
-        }
 
 
-        protected void EstatusControlesZonaDeServicio(bool estatus, string panel)
-        {
-            if (panel == "Entrega")
-            {
-                //Zona de servicio
-                btnAgregarCiudad.Enabled = estatus;
-                DGVZonaCiudades.Enabled = estatus;
-                btnBusquedaColonia.Enabled = estatus;
-                if (estatus)
-                {
-                    btnBusquedaColonia.CssClass = "input-group-addon";
-                    btnAgregarCiudad.CssClass = "btn btn-sm btn-success";
-                }
-                else
-                {
-                    btnBusquedaColonia.CssClass = "input-group-addon disabled";
-                    btnAgregarCiudad.CssClass = "btn btn-sm btn-success disabled";
-                }
 
-                chklColonias.Enabled = estatus;
-                chkSeleccionarTodos.Enabled = estatus;
-            }
-            if (panel == "Recolecta")
-            {
-                //Zona de servicio
-                btnZRAgregaCiudad.Enabled = estatus;
-                DGVZRCiudades.Enabled = estatus;
-                btnZrBusquedaColonia.Enabled = estatus;
-                if (estatus)
-                {
-                    btnZrBusquedaColonia.CssClass = "input-group-addon";
-                    btnZRAgregaCiudad.CssClass = "btn btn-sm btn-success";
-                }
-                else
-                {
-                    btnZrBusquedaColonia.CssClass = "input-group-addon disabled";
-                    btnZRAgregaCiudad.CssClass = "btn btn-sm btn-success disabled";
-                }
-
-                chklZRSeleccionaTodos.Enabled = estatus;
-                chklZR.Enabled = estatus;
-            }
-        }
         /// <summary>
         /// Este metodo selecciona las colonias ya sea de entrega o recolecta, valida que se haya seleccionado la ciudad y la guarda junto con las colonias en una lista temporal.
         /// </summary>
-        protected void ColoniasSeleccionadas()
-        {
-            if (DGVZonaCiudades.SelectedValue != null)
-            {
-                if (chklColonias.Items.Count != 0)
-                {
-                    foreach (ListItem item in chklColonias.Items)
-                    {
-                        if (item.Selected)
-                        {
 
-                            MVDireccion.SeleccionarColoniaEntrega(Guid.NewGuid(), new Guid(item.Value), new Guid(DGVZonaCiudades.SelectedValue.ToString()), StrNombreColonia: item.Text);
-                        }
-                        else
-                        {
-                            if (DGVZonaCiudades.SelectedValue != null)
-                            {
-                                MVDireccion.DeseleccionarColoniaEntrega(UidColonia: new Guid(item.Value), UidCiudad: new Guid(DGVZonaCiudades.SelectedValue.ToString()));
-                            }
-                        }
-                    }
-                }
-            }
-            if (DGVZRCiudades.SelectedValue != null)
-            {
-                if (chklZR.Items.Count != 0)
-                {
-                    foreach (ListItem item in chklZR.Items)
-                    {
-                        if (item.Selected)
-                        {
-                            MVDireccion.SeleccionarColoniaRecolecta(Guid.NewGuid(), new Guid(item.Value), new Guid(DGVZRCiudades.SelectedValue.ToString()), StrNombreColonia: item.Text);
-                        }
-                        else
-                        {
-                            if (DGVZRCiudades.SelectedValue != null)
-                            {
-                                MVDireccion.DeseleccionarColoniaRecolecta(UidColonia: new Guid(item.Value), UidCiudad: new Guid(DGVZRCiudades.SelectedValue.ToString()));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        protected void SeleccionaColonias()
-        {
-            int contador = 0;
-            if (chklColonias.Items.Count != 0)
-            {
-                foreach (ListItem item in chklColonias.Items)
-                {
-                    if (MVDireccion.ListaColoniasSeleccionadasEntrega.Exists(Col => Col.ID.ToString() == item.Value))
-                    {
-                        contador = contador + 1;
-                        item.Selected = true;
-                    }
-                    else
-                    {
-                        item.Selected = false;
-                    }
-                }
-            }
-            if (contador == chklColonias.Items.Count)
-            {
-                chkSeleccionarTodos.Checked = true;
-            }
-            else
-            {
-                chkSeleccionarTodos.Checked = false;
-            }
-        }
-
-        protected void chkSeleccionarTodos_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chkSeleccionarTodos.Checked)
-            {
-                SeleccionaTodasLasColoniasEntrega();
-            }
-            else
-            {
-                DeseleccionaCheckboxListColoniasEntrega();
-            }
-        }
-        protected void chklZTSeleccionaTodos_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chklZRSeleccionaTodos.Checked)
-            {
-                SeleccionaTodasLasColoniasRecolecta();
-            }
-            else
-            {
-                DeseleccionaCheckboxListColoniasRecolecta();
-            }
-        }
-        protected void DeseleccionaCheckboxListColoniasEntrega()
-        {
-            //Recorre la lista y desselecciona los checkbox
-            foreach (ListItem item in chklColonias.Items)
-            {
-                item.Selected = false;
-            }
-        }
-        protected void DeseleccionaCheckboxListColoniasRecolecta()
-        {
-            //Recorre la lista y desselecciona los checkbox
-            foreach (ListItem item in chklZR.Items)
-            {
-                item.Selected = false;
-            }
-        }
-        protected void btnAgregarCiudad_Click(object sender, EventArgs e)
-        {
-            if (DDLZonaCiudad.SelectedItem != null)
-            {
-                Guid ciudad = new Guid(DDLZonaCiudad.SelectedItem.Value);
-                MVDireccion.SeleccionarCiudadEntrega(ciudad);
-
-                //Actualiza el datagrid
-                DGVZonaCiudades.DataSource = MVDireccion.ListaCiudadesSeleccionadasEntrega;
-                DGVZonaCiudades.DataBind();
-
-                if (DGVZonaCiudades.SelectedIndex != -1)
-                {
-                    LinkButton boton = DGVZonaCiudades.SelectedRow.FindControl("btnEliminaZona") as LinkButton;
-                    boton.Enabled = false;
-                    boton.CssClass = "btn btn-sm btn-default disabled";
-                }
-
-                DGVZonaCiudades.SelectedIndex = -1;
-
-                //Verifica si existen colonias seleccionadas
-                ColoniasSeleccionadas();
-
-                DGVZonaCiudades.SelectedIndex = -1;
-                LimpiaListaDeColoniasEntrega();
-            }
-            if (DDLZRCiudad.SelectedItem != null)
-            {
-                Guid ciudad = new Guid(DDLZRCiudad.SelectedItem.Value);
-                MVDireccion.SeleccionarCiudadRecolecta(ciudad);
-
-                //Actualiza el datagrid
-                DGVZRCiudades.DataSource = MVDireccion.ListaCiudadesSeleccionadasRecolecta;
-                DGVZRCiudades.DataBind();
-
-                if (DGVZRCiudades.SelectedIndex != -1)
-                {
-                    LinkButton boton = DGVZRCiudades.SelectedRow.FindControl("btnEliminaZona") as LinkButton;
-                    boton.Enabled = false;
-                    boton.CssClass = "btn btn-sm btn-default disabled";
-                }
-
-                DGVZRCiudades.SelectedIndex = -1;
-
-                //Verifica si existen colonias seleccionadas
-                ColoniasSeleccionadas();
-
-                DGVZonaCiudades.SelectedIndex = -1;
-                LimpiaListaDeColoniasEntrega();
-            }
-
-        }
-
-        protected void DGVZonaCiudades_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //Guarda las colonias seleccionadas
-            ColoniasSeleccionadas();
-
-            Guid ciudad = new Guid(DGVZonaCiudades.SelectedDataKey.Value.ToString());
-            //Recupera la zona de servicio
-            // MuestraZonaDeServicio();
-
-            //Recarga la lista de colonias 
-            chklColonias.DataSource = MVDireccion.Colonias(ciudad, "CheckboxList");
-            chklColonias.DataTextField = "Nombre";
-            chklColonias.DataValueField = "IdColonia";
-            chklColonias.DataBind();
-
-            SeleccionaCheckboxListColoniasEntrega();
-
-            EstatusControlesZonaDeServicio(true, "Entrega");
-
-            LinkButton boton = DGVZonaCiudades.SelectedRow.FindControl("btnEliminaZona") as LinkButton;
-            boton.Enabled = true;
-            boton.CssClass = "btn btn-sm btn-default";
-
-            //Actualiza el datagrid
-            DGVZonaCiudades.DataSource = MVDireccion.ListaCiudadesSeleccionadasEntrega;
-            DGVZonaCiudades.DataBind();
-
-
-
-            //Si hay colonias seleccionadas las selecciona en el control
-            SeleccionaColonias();
-        }
-
-        protected void DGVZRCiudades_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //Guarda las colonias seleccionadas
-            ColoniasSeleccionadas();
-
-            Guid ciudad = new Guid(DGVZRCiudades.SelectedDataKey.Value.ToString());
-            //Recupera la zona de servicio
-            // MuestraZonaDeServicio();
-
-            //Recarga la lista de colonias 
-            chklZR.DataSource = MVDireccion.Colonias(ciudad, "CheckboxList");
-            chklZR.DataTextField = "Nombre";
-            chklZR.DataValueField = "IdColonia";
-            chklZR.DataBind();
-
-            SeleccionaCheckboxListColoniasRecolecta();
-
-            EstatusControlesZonaDeServicio(true, "Recolecta");
-
-            LinkButton boton = DGVZRCiudades.SelectedRow.FindControl("btnEliminaZona") as LinkButton;
-            boton.Enabled = true;
-            boton.CssClass = "btn btn-sm btn-default";
-
-            //Actualiza el datagrid
-            DGVZRCiudades.DataSource = MVDireccion.ListaCiudadesSeleccionadasRecolecta;
-            DGVZRCiudades.DataBind();
-
-
-
-            //Si hay colonias seleccionadas las selecciona en el control
-            SeleccionaColonias();
-        }
-
-        public void SeleccionaCheckboxListColoniasEntrega()
-        {
-            foreach (ListItem chk in chklColonias.Items)
-            {
-                if (MVDireccion.ListaColoniasSeleccionadasEntrega.Exists(objeto => objeto.ID.ToString() == chk.Value))
-                {
-                    chk.Selected = true;
-                }
-                else
-                {
-                    chk.Selected = false;
-                }
-            }
-        }
-
-        public void SeleccionaCheckboxListColoniasRecolecta()
-        {
-            foreach (ListItem chk in chklZR.Items)
-            {
-                if (MVDireccion.ListaColoniasSeleccionadasRecolecta.Exists(objeto => objeto.ID.ToString() == chk.Value))
-                {
-                    chk.Selected = true;
-                }
-                else
-                {
-                    chk.Selected = false;
-                }
-            }
-        }
-
-        protected void DGVZonaCiudades_RowDataBound(object sender, GridViewRowEventArgs e)
-        {
-
-            if (e.Row.RowType == DataControlRowType.DataRow)
-            {
-                e.Row.Attributes["onclick"] = Page.ClientScript.GetPostBackClientHyperlink(DGVZonaCiudades, "Select$" + e.Row.RowIndex);
-                LinkButton boton = e.Row.FindControl("btnEliminaZona") as LinkButton;
-
-                if (e.Row.RowIndex != DGVZonaCiudades.SelectedIndex)
-                {
-                    boton.Enabled = false;
-                    boton.CssClass = "btn btn-sm btn-default disabled";
-                }
-
-            }
-        }
-
-        protected void DGVZonaCiudades_RowCommand(object sender, GridViewCommandEventArgs e)
-        {
-
-            if (e.CommandName == "Delete")
-            {
-                int index = Convert.ToInt32(e.CommandArgument);
-                //Obtiene el datakey del gridzonadeservicio
-                string uid = DGVZonaCiudades.DataKeys[index].Value.ToString();
-                Guid uidCiudad = new Guid(uid);
-                // MVDireccion.EliminaColoniasDeZonaDeServicio(uidCiudad, txtUidSucursal.Text);
-                // MVDireccion.DeseleccionarCiudad(uidCiudad);
-
-
-                //Limpia el checkboxlist
-                chklColonias.DataSource = MVDireccion.Colonias(uidCiudad, "CheckboxList");
-                chklColonias.DataTextField = "Nombre";
-                chklColonias.DataValueField = "IdColonia";
-                chklColonias.DataBind();
-
-                foreach (ListItem item in chklColonias.Items)
-                {
-                    //Elimina las colonias asociadas a la ciudad
-                    MVDireccion.DeseleccionarColoniaEntrega(UidCiudad: uidCiudad, UidColonia: new Guid(item.Value.ToString()));
-                }
-
-                //Limpia el checkboxlist
-                LimpiaListaDeColoniasEntrega();
-
-                //Elimina la ciudad de la lista
-                MVDireccion.DeseleccionarCiudadEntrega(uidCiudad);
-
-            }
-
-        }
-        protected void DGVZRCiudades_RowCommand(object sender, GridViewCommandEventArgs e)
-        {
-            if (e.CommandName == "Delete")
-            {
-                int index = Convert.ToInt32(e.CommandArgument);
-                //Obtiene el datakey del gridzonadeservicio
-                string uid = DGVZRCiudades.DataKeys[index].Value.ToString();
-                Guid uidCiudad = new Guid(uid);
-                // MVDireccion.EliminaColoniasDeZonaDeServicio(uidCiudad, txtUidSucursal.Text);
-                // MVDireccion.DeseleccionarCiudad(uidCiudad);
-
-
-                //Limpia el checkboxlist
-                chklZR.DataSource = MVDireccion.Colonias(uidCiudad, "CheckboxList");
-                chklZR.DataTextField = "Nombre";
-                chklZR.DataValueField = "IdColonia";
-                chklZR.DataBind();
-
-                foreach (ListItem item in chklZR.Items)
-                {
-                    //Elimina las colonias asociadas a la ciudad
-                    MVDireccion.DeseleccionarColoniaEntrega(UidCiudad: uidCiudad, UidColonia: new Guid(item.Value.ToString()));
-                }
-
-                //Limpia el checkboxlist
-                LimpiaListaDeColoniasRecolecta();
-
-                //Elimina la ciudad de la lista
-                MVDireccion.DeseleccionarCiudadEntrega(uidCiudad);
-
-            }
-
-        }
-        protected void DGVZonaCiudades_RowDeleting(object sender, GridViewDeleteEventArgs e)
-        {
-
-            DGVZonaCiudades.SelectedIndex = -1;
-            //Actualiza el datagrid
-            DGVZonaCiudades.DataSource = MVDireccion.ListaCiudadesSeleccionadasEntrega;
-            DGVZonaCiudades.DataBind();
-        }
-        protected void DGVZRCiudades_RowDeleting(object sender, GridViewDeleteEventArgs e)
-        {
-            DGVZRCiudades.SelectedIndex = -1;
-            //Actualiza el datagrid
-            DGVZRCiudades.DataSource = MVDireccion.ListaCiudadesSeleccionadasRecolecta;
-            DGVZRCiudades.DataBind();
-        }
-        protected void btnBusquedaColonia_Click(object sender, EventArgs e)
-        {
-            if (DGVZonaCiudades.SelectedIndex != -1)
-            {
-                //Guarda las colonias seleccionadas en la lista
-                ColoniasSeleccionadas();
-
-
-                if (string.IsNullOrWhiteSpace(txtBusquedaColonia.Text))
-                {
-                    //Retorna todas las colonias
-                    chklColonias.DataSource = MVDireccion.Colonias(new Guid(DGVZonaCiudades.DataKeys[Convert.ToInt32(DGVZonaCiudades.SelectedIndex)].Value.ToString()), "CheckboxList");
-                }
-                else
-                {
-                    //Retorna colonias filtradas por nombre
-                    chklColonias.DataSource = MVDireccion.Colonias(new Guid(DGVZonaCiudades.DataKeys[Convert.ToInt32(DGVZonaCiudades.SelectedIndex)].Value.ToString()), Nombre: txtBusquedaColonia.Text);
-                }
-
-                chklColonias.DataTextField = "Nombre";
-                chklColonias.DataValueField = "IdColonia";
-                chklColonias.DataBind();
-
-                //Si hay colonias seleccionadas en la lista y selecciona en el control
-                SeleccionaColonias();
-            }
-        }
-        protected void btnZrBusquedaColonia_Click(object sender, EventArgs e)
-        {
-            if (DGVZRCiudades.SelectedIndex != -1)
-            {
-                //Guarda las colonias seleccionadas en la lista
-                ColoniasSeleccionadas();
-
-                if (string.IsNullOrWhiteSpace(txtZRBusquedaColonia.Text))
-                {
-                    //Retorna todas las colonias
-                    chklZR.DataSource = MVDireccion.Colonias(new Guid(DGVZRCiudades.DataKeys[Convert.ToInt32(DGVZRCiudades.SelectedIndex)].Value.ToString()), "CheckboxList");
-                }
-                else
-                {
-                    //Retorna colonias filtradas por nombre
-                    chklZR.DataSource = MVDireccion.Colonias(new Guid(DGVZRCiudades.DataKeys[Convert.ToInt32(DGVZRCiudades.SelectedIndex)].Value.ToString()), Nombre: txtZRBusquedaColonia.Text);
-                }
-
-                chklZR.DataTextField = "Nombre";
-                chklZR.DataValueField = "IdColonia";
-                chklZR.DataBind();
-
-                //Si hay colonias seleccionadas en la lista y selecciona en el control
-                SeleccionaColonias();
-            }
-        }
-        protected void DDLTipoDeColonias_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (DGVZonaCiudades.SelectedIndex != -1)
-            {
-                string tipo = DDLTipoDeColonias.SelectedItem.Text;
-                Guid ciudad = new Guid(DGVZonaCiudades.SelectedDataKey.Value.ToString());
-                ColoniasSeleccionadas();
-                if (chklColonias.Items.Count > 0)
-                {
-                    //Recarga la lista de colonias 
-                    chklColonias.DataSource = MVDireccion.Colonias(ciudad, "CheckboxList");
-                    chklColonias.DataTextField = "Nombre";
-                    chklColonias.DataValueField = "IdColonia";
-                    chklColonias.DataBind();
-                    switch (tipo)
-                    {
-                        case "Todos":
-                            SeleccionaCheckboxListColoniasEntrega();
-                            break;
-                        case "Seleccionados":
-                            //Se crea la lista, 
-                            List<ListItem> Seleccionados = new List<ListItem>();
-
-                            //Recorre los elemtentos del control y si existe un valor, marca su checkbox
-                            for (int i = 0; i < chklColonias.Items.Count; i++)
-                            {
-                                if (MVDireccion.ListaColoniasSeleccionadasEntrega.Exists(dir => dir.ID.ToString() == chklColonias.Items[i].Value))
-                                { chklColonias.Items[i].Selected = true; }
-                                else { Seleccionados.Add(chklColonias.Items[i]); }
-                            }
-                            //Si el elemto  existe en la lista, este lo elimina
-                            for (int i = 0; i < Seleccionados.Count; i++)
-                            {
-                                chklColonias.Items.Remove(Seleccionados[i]);
-                            }
-
-                            break;
-                        case "Deseleccionados":
-
-                            List<ListItem> Deseleccionados = new List<ListItem>();
-
-                            for (int i = 0; i < chklColonias.Items.Count; i++)
-                            {
-                                if (!MVDireccion.ListaColoniasSeleccionadasEntrega.Exists(dir => dir.ID.ToString() == chklColonias.Items[i].Value))
-                                { chklColonias.Items[i].Selected = false; }
-                                else { Deseleccionados.Add(chklColonias.Items[i]); }
-                            }
-
-                            for (int i = 0; i < Deseleccionados.Count; i++)
-                            {
-                                chklColonias.Items.Remove(Deseleccionados[i]);
-                            }
-
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-            }
-        }
-
-        protected void SeleccionaTodasLasColoniasEntrega()
-        {
-            //Recorre la lista y desselecciona los checkbox
-            foreach (ListItem item in chklColonias.Items)
-            {
-                item.Selected = true;
-            }
-        }
-        protected void SeleccionaTodasLasColoniasRecolecta()
-        {
-            //Recorre la lista y desselecciona los checkbox
-            foreach (ListItem item in chklZR.Items)
-            {
-                item.Selected = true;
-            }
-        }
 
 
 
@@ -4116,81 +3247,6 @@ namespace WebApplication1.Vista
             }
             txtClaveDeBusqueda.Text = Guid.NewGuid().ToString();
         }
-
-        protected void DGVZRCiudades_RowDataBound(object sender, GridViewRowEventArgs e)
-        {
-            if (e.Row.RowType == DataControlRowType.DataRow)
-            {
-                e.Row.Attributes["onclick"] = Page.ClientScript.GetPostBackClientHyperlink(DGVZRCiudades, "Select$" + e.Row.RowIndex);
-                LinkButton boton = e.Row.FindControl("btnEliminaZona") as LinkButton;
-
-                if (e.Row.RowIndex != DGVZRCiudades.SelectedIndex)
-                {
-                    boton.Enabled = false;
-                    boton.CssClass = "btn btn-sm btn-default disabled";
-                }
-            }
-        }
-
-        protected void ddlZRTIpoSeleccion_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (DGVZRCiudades.SelectedIndex != -1)
-            {
-                string tipo = ddlZRTIpoSeleccion.SelectedItem.Text;
-                Guid ciudad = new Guid(DGVZRCiudades.SelectedDataKey.Value.ToString());
-                ColoniasSeleccionadas();
-                if (chklZR.Items.Count > 0)
-                {
-                    //Recarga la lista de colonias 
-                    chklZR.DataSource = MVDireccion.Colonias(ciudad, "CheckboxList");
-                    chklZR.DataTextField = "Nombre";
-                    chklZR.DataValueField = "IdColonia";
-                    chklZR.DataBind();
-                    switch (tipo)
-                    {
-                        case "Todos":
-                            SeleccionaCheckboxListColoniasRecolecta();
-                            break;
-                        case "Seleccionados":
-                            List<ListItem> Seleccionados = new List<ListItem>();
-
-                            for (int i = 0; i < chklZR.Items.Count; i++)
-                            {
-                                if (MVDireccion.ListaColoniasSeleccionadasRecolecta.Exists(dir => dir.ID.ToString() == chklZR.Items[i].Value))
-                                { chklZR.Items[i].Selected = true; }
-                                else { Seleccionados.Add(chklZR.Items[i]); }
-                            }
-
-                            for (int i = 0; i < Seleccionados.Count; i++)
-                            {
-                                chklZR.Items.Remove(Seleccionados[i]);
-                            }
-
-                            break;
-                        case "Deseleccionados":
-
-                            List<ListItem> Deseleccionados = new List<ListItem>();
-
-                            for (int i = 0; i < chklZR.Items.Count; i++)
-                            {
-                                if (!MVDireccion.ListaColoniasSeleccionadasRecolecta.Exists(dir => dir.ID.ToString() == chklZR.Items[i].Value))
-                                { chklZR.Items[i].Selected = false; }
-                                else { Deseleccionados.Add(chklZR.Items[i]); }
-                            }
-
-                            for (int i = 0; i < Deseleccionados.Count; i++)
-                            {
-                                chklZR.Items.Remove(Deseleccionados[i]);
-                            }
-
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-        }
-
         protected void btnRenovarLicencia_Click(object sender, EventArgs e)
         {
             int index = DgvLicencia.SelectedIndex;
@@ -4975,8 +4031,6 @@ namespace WebApplication1.Vista
 
             liInformacionTelefono.Attributes.Add("class", "");
             liInformacionTarifario.Attributes.Add("class", "active");
-            DGVTarifario.Visible = true;
-
         }
         protected void btnCerrarPanelInformacion_Click(object sender, EventArgs e)
         {
@@ -5235,388 +4289,6 @@ namespace WebApplication1.Vista
         }
         #endregion
 
-        #region Tarifario
-        protected System.Data.DataTable CreaTarifario(List<VMTarifario> ListaDePrecios)
-        {
-            var tabla = new System.Data.DataTable();
-            //Creacion de columnas
-            foreach (var item in ListaDePrecios.OrderBy(x => x.StrNombreColoniaZE).ToList())
-            {
-                if (tabla.Columns.Count == 0)
-                {
-                    tabla.Columns.Add("Recolecta\\Entrega", typeof(string));
-                    tabla.Columns.Add(item.StrNombreColoniaZE, typeof(string));
-                }
-                else
-                {
-                    if (!tabla.Columns.Contains(item.StrNombreColoniaZE))
-                    {
-                        tabla.Columns.Add(item.StrNombreColoniaZE, typeof(string));
-                    }
-                }
-            }
-            //Creacion del contenido
-            var registros = new List<VMTarifario>();
-            for (int i = 0; i < MVDireccion.ListaColoniasSeleccionadasRecolecta.Count; i++)
-            {
-                MVDireccion.ListaColoniasSeleccionadasRecolecta.OrderBy(x => x.NOMBRECOLONIA).ToList();
-                if (!registros.Exists(x => x.UidRelacionZR != MVDireccion.ListaColoniasSeleccionadasRecolecta[i].UidRegistro))
-                {
-                    registros = ListaDePrecios.FindAll(T => T.UidRelacionZR == MVDireccion.ListaColoniasSeleccionadasRecolecta[i].UidRegistro);
-                    var Row = tabla.NewRow();
-                    tabla.Rows.Add(Row);
-                    registros.OrderBy(x => x.StrNombreColoniaZE).ToList();
 
-                    for (int p = 0; p < registros.Count; p++)
-                    {
-                        var campo = "";
-                        if ((p + 1) < tabla.Columns.Count)
-                        {
-                            campo = tabla.Columns[p + 1].ColumnName;
-                        }
-                        var row = tabla.Rows.Count - 1;
-
-                        if (p == 0)
-                        {
-                            tabla.Rows[row][p] = registros[p].StrNombreColoniaZR + "," + registros[p].UidRelacionZR;
-                            VMTarifario registro = registros.Find(x => x.StrNombreColoniaZE == campo);
-                            if (registro != null)
-                            {
-                                tabla.Rows[row][p + 1] = registro.DPrecio.ToString() + "," + registro.UidTarifario + "," + registro.StrNombreColoniaZR;
-                            }
-                            else
-                            {
-                                tabla.Columns.RemoveAt(p);
-                            }
-                        }
-                        else if ((p + 1) <= registros.Count)
-                        {
-                            VMTarifario registro = registros.Find(x => x.StrNombreColoniaZE == campo);
-                            if (registro != null)
-                            {
-                                tabla.Rows[row][p + 1] = registro.DPrecio.ToString() + "," + registro.UidTarifario + "," + registro.StrNombreColoniaZR;
-                            }
-                            else
-                            {
-                                if (!string.IsNullOrWhiteSpace(campo))
-                                {
-                                    tabla.Columns.RemoveAt(p);
-                                }
-                            }
-                        }
-                    }
-                    registros.Clear();
-                }
-            }
-            return tabla;
-        }
-
-        protected void CrearGridViewTarifario(List<VMTarifario> Precios)
-        {
-
-
-            for (int i = 0; DGVTarifario.Columns.Count > i;)
-            {
-                DGVTarifario.Columns.RemoveAt(i);
-            }
-            System.Data.DataTable t = CreaTarifario(Precios);
-            int r = 1;
-
-            DGVTarifario.DataSource = t;
-            DGVTarifario.DataBind();
-            foreach (TableRow item in DGVTarifario.Rows)
-            {
-                int j = 0;
-                double precio;
-                Guid newGuid;
-                foreach (TableCell celda in item.Cells)
-                {
-
-                    TemplateField campo = new TemplateField();
-                    string ColumnName = celda.Text.ToString();
-
-
-                    TableCell tc = new TableCell();
-
-                    campo.HeaderStyle.HorizontalAlign = HorizontalAlign.Justify;
-                    campo.HeaderText = ColumnName;
-
-
-                    if (!DGVTarifario.Columns.Equals(ColumnName))
-                    {
-                        DGVTarifario.Columns.Add(campo);
-                    }
-
-                    if (j != 0)
-                    {
-                        string[] ColumnValues = celda.Text.Split(new char[] { ',' });
-                        string ColumnValue = string.Empty;
-                        string ColumnaName = string.Empty;
-                        string FilaZonaRecolecta = string.Empty;
-                        foreach (string columnas in ColumnValues)
-                        {
-                            if (Guid.TryParse(columnas, out newGuid))
-                            {
-                                ColumnValue = columnas;
-                            }
-                            else if (double.TryParse(columnas, out precio))
-                            {
-                                ColumnaName = columnas;
-                            }
-                            else
-                            {
-                                FilaZonaRecolecta = columnas;
-                            }
-                        }
-
-                        Label lblUid = new Label();
-                        lblUid.Text = ColumnValue;
-                        lblUid.ID = "UidRegistro" + (r + j).ToString();
-                        lblUid.Visible = false;
-                        celda.Controls.Add(lblUid);
-
-                        string Id = "txt," + r + "," + j;
-                        TextBox txtBox = new TextBox();
-                        txtBox.ID = Id;
-                        txtBox.Text = ColumnaName;
-                        txtBox.TextChanged += new EventHandler(CambiarTexto);
-                        txtBox.AutoPostBack = true;
-                        txtBox.Width = 100;
-                        txtBox.CssClass = "form-control text-center";
-                        celda.Controls.Add(txtBox);
-
-                        CompareValidator cv = new CompareValidator(); // Create validator and configure
-                        cv.SetFocusOnError = true;
-                        cv.Operator = ValidationCompareOperator.GreaterThan;
-                        cv.ValueToCompare = "-1";
-                        cv.Type = ValidationDataType.Double;
-                        cv.Display = ValidatorDisplay.Dynamic;
-                        cv.ErrorMessage = "<br/>Campo no valido";
-                        cv.ForeColor = Color.Red;
-                        cv.ControlToValidate = txtBox.ID;
-                        celda.Controls.Add(cv);
-                        //Create and add AsyncPostBackTrigger
-                        AsyncPostBackTrigger APBT_trig = new AsyncPostBackTrigger();
-                        APBT_trig.EventName = "TextChanged";
-                        APBT_trig.ControlID = txtBox.UniqueID;
-                        UPSucursales.Triggers.Add(APBT_trig);
-
-                        j++;
-                    }
-                    else
-                    {
-                        string[] ColumnValues = celda.Text.Split(new char[] { ',' });
-                        string ColumnValue = string.Empty;
-                        foreach (string columnas in ColumnValues)
-                        {
-                            if (Guid.TryParse(columnas, out newGuid))
-                            {
-                                ColumnValue = columnas;
-                            }
-                            else
-                            {
-                                ColumnName = columnas;
-                            }
-                        }
-
-
-                        Label etiqueta = new Label();
-                        etiqueta.ID = "LblUidZonaRecolecta";
-                        etiqueta.Text = ColumnValue;
-                        etiqueta.Visible = false;
-                        celda.Controls.Add(etiqueta);
-
-                        Label Nombre = new Label();
-                        Nombre.Text = ColumnName;
-
-                        Nombre.Visible = true;
-                        celda.Controls.Add(Nombre);
-
-
-                        j++;
-                    }
-                }
-                r++;
-            }
-        }
-
-        protected void CambiarTexto(object Sender, EventArgs e)
-        {
-            TextBox txt = Sender as TextBox;
-            var t = txt.Text;
-            var y = txt.ID;
-            string[] valores = y.Split(new char[] { ',' });
-            if (lblCelda.Text != valores[2])
-            {
-                lblFila.Text = valores[1];
-                lblCelda.Text = valores[2];
-                lblPrecio.Text = t;
-            }
-        }
-        protected void GuardaTarifario()
-        {
-            string UidZonaRecolecta = "";
-            string precio = "";
-            string ZonaEntrega = "";
-            // verificar que la lista no se cree de nuevo al momento del postback porque le cambia los id a la lista y no deja actualizar
-            foreach (GridViewRow item in DGVTarifario.Rows)
-            {
-                int number = 0;
-                foreach (TableCell celda in item.Cells)
-                {
-                    if (number == 0)
-                    {
-                        var UidZR = celda.FindControl("LblUidZonaRecolecta") as Label;
-                        if (UidZR != null)
-                        {
-                            UidZonaRecolecta = UidZR.Text;
-                        }
-
-                    }
-                    else
-                    {
-                        var txtPrecio = celda.Controls[1] as TextBox;
-                        var lblUidRegistro = celda.Controls[0] as Label;
-                        ZonaEntrega = lblUidRegistro.Text;
-                        precio = txtPrecio.Text;
-                    }
-                    if (!string.IsNullOrEmpty(UidZonaRecolecta) && !string.IsNullOrEmpty(precio) && !string.IsNullOrEmpty(ZonaEntrega))
-                    {
-                        MVTarifario.ActualizaLista(UidZonaRecolecta, precio, ZonaEntrega);
-                    }
-                    number++;
-                }
-            }
-        }
-
-        protected void BtnCopiarTarifarioArriba_Click(object sender, EventArgs e)
-        {
-            if (lblFila.Text == (1).ToString())
-            {
-                PanelMensaje.Visible = true;
-                LblMensaje.Text = "No se puede copiar la primera fila hacia arriba";
-            }
-            else
-            {
-                var fila = int.Parse(lblFila.Text);
-                for (int i = 1; i < DGVTarifario.Rows[fila].Cells.Count; i++)
-                {
-                    TextBox TxtCopiado = DGVTarifario.Rows[fila].Cells[i].Controls[1] as TextBox;
-                    TextBox txtAsignarValor = DGVTarifario.Rows[fila + 1].Cells[i].Controls[1] as TextBox;
-                }
-            }
-        }
-
-        protected void BtnCopiarTarifarioAbajo_Click(object sender, EventArgs e)
-        {
-            if (lblFila.Text == DGVTarifario.Rows.Count.ToString())
-            {
-                PanelMensaje.Visible = true;
-                LblMensaje.Text = "No se puede copiar la ultima fila hacia abajo";
-            }
-            else
-            {
-                var fila = int.Parse(lblFila.Text);
-                for (int i = 1; i < DGVTarifario.Rows[fila].Cells.Count; i++)
-                {
-                    TextBox TxtCopiado = DGVTarifario.Rows[fila].Cells[i].Controls[1] as TextBox;
-                    TextBox txtAsignarValor = DGVTarifario.Rows[fila - 1].Cells[i].Controls[1] as TextBox;
-                }
-            }
-        }
-
-        protected void BtnCopiarDerecha_Click(object sender, EventArgs e)
-        {
-            var fila = int.Parse(lblFila.Text);
-            var celda = int.Parse(lblCelda.Text);
-            if (lblCelda.Text == (DGVTarifario.Columns.Count).ToString())
-            {
-                PanelMensaje.Visible = true;
-                LblMensaje.Text = "No se puede copiar la primera columna hacia la derecha";
-            }
-            else
-            {
-                for (int i = 0; i < DGVTarifario.Rows.Count; i++)
-                {
-                    TextBox TxtCopiado = DGVTarifario.Rows[i].Cells[celda].Controls[1] as TextBox;
-                    TextBox txtAsignarValor = DGVTarifario.Rows[i].Cells[celda + 1].Controls[1] as TextBox;
-                    txtAsignarValor.Text = TxtCopiado.Text;
-                }
-            }
-        }
-
-        protected void BtnCopiarIzquierda_Click(object sender, EventArgs e)
-        {
-            var fila = int.Parse(lblFila.Text);
-            var celda = int.Parse(lblCelda.Text);
-            if (lblCelda.Text == (1).ToString())
-            {
-                PanelMensaje.Visible = true;
-                LblMensaje.Text = "No se puede copiar la primera columna hacia la izquierda";
-            }
-            else
-            {
-                for (int i = 0; i < DGVTarifario.Rows.Count; i++)
-                {
-                    TextBox TxtCopiado = DGVTarifario.Rows[i].Cells[celda].Controls[1] as TextBox;
-                    TextBox txtAsignarValor = DGVTarifario.Rows[i].Cells[celda - 1].Controls[1] as TextBox;
-                    txtAsignarValor.Text = TxtCopiado.Text;
-                }
-            }
-        }
-
-        protected void BtnCopiarTodaLaTabla_Click(object sender, EventArgs e)
-        {
-            var precio = lblPrecio.Text;
-            for (int i = 0; i < DGVTarifario.Rows.Count; i++)
-            {
-                for (int j = 1; j < DGVTarifario.Rows[i].Cells.Count; j++)
-                {
-                    TextBox TxtCopiado = DGVTarifario.Rows[i].Cells[j].Controls[1] as TextBox;
-                    TxtCopiado.Text = precio;
-                }
-            }
-        }
-
-
-        protected void BtnTarifario_Click(object sender, EventArgs e)
-        {
-
-            MuestraPanel("Zona de servicio");
-            if (DLCategoria.Items.Count != 0)
-            {
-                ObtenerCategoriasSeleccionadas();
-            }
-            //Obtiene las subcategorias seleccionadas
-            if (dlSubcategoria.Items.Count != 0)
-            {
-                ObtenerSubcategoriasSeleccionadas();
-            }
-            liDatosZonaDeEntrega.Attributes.Add("class", "");
-            liDatosTarifario.Attributes.Add("class", "active");
-            liZonaDeRecolecta.Attributes.Add("class", "");
-            PanelZonasServicio.Visible = false;
-            PanelZonaDeRecolecta.Visible = false;
-            PanelTarifario.Visible = true;
-            ColoniasSeleccionadas();
-            for (int i = 0; i < MVDireccion.ListaColoniasSeleccionadasRecolecta.Count; i++)
-            {
-                for (int j = 0; j < MVDireccion.ListaColoniasSeleccionadasEntrega.Count; j++)
-                {
-                    MVTarifario.AgregaALista(MVDireccion.ListaColoniasSeleccionadasEntrega[j].UidRegistro, UidZonaRecoleccion: MVDireccion.ListaColoniasSeleccionadasRecolecta[i].UidRegistro, NombreZE: MVDireccion.ListaColoniasSeleccionadasEntrega[j].NOMBRECOLONIA, NombreZR: MVDireccion.ListaColoniasSeleccionadasRecolecta[i].NOMBRECOLONIA);
-                }
-            }
-
-            for (int i = 0; i < MVTarifario.ListaDeTarifarios.Count; i++)
-            {
-                if (!MVDireccion.ListaColoniasSeleccionadasEntrega.Exists(o => o.UidRegistro == MVTarifario.ListaDeTarifarios[i].UidRelacionZE))
-                {
-                    var obj = MVTarifario.ListaDeTarifarios[i];
-                    MVTarifario.ListaDeTarifarios.Remove(obj);
-                }
-            }
-            CrearGridViewTarifario(MVTarifario.ListaDeTarifarios);
-        }
-        #endregion
     }
 }

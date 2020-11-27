@@ -873,6 +873,7 @@ namespace WebApplication1.Vista
             //Obtiene los botones de los modulos para que cuando se seleccione una empresa estos cambien dinamicamente acuerdo a la empresa seleccionada.
             var btnRepartidores = (Master.FindControl("btnRepartidores") as LinkButton);
             var btnVehiculos = (Master.FindControl("btnVehiculos") as LinkButton);
+            var btnModuloTarifario = (Master.FindControl("btnModuloTarifario") as LinkButton);
             var btnModuloProductos = (Master.FindControl("btnModuloProductos") as LinkButton);
             var btnModuloMenu = (Master.FindControl("btnModuloMenu") as LinkButton);
 
@@ -884,6 +885,7 @@ namespace WebApplication1.Vista
             if (MVEmpresas.ObtenerTipoDeEmpresa(valor))
             {
                 //Modulos distribuidora
+                btnModuloTarifario.Visible = false;
                 btnRepartidores.Visible = false;
                 btnVehiculos.Visible = false;
                 //Modulo suministradora
@@ -897,6 +899,7 @@ namespace WebApplication1.Vista
                 //Modulo distribuidora
                 btnRepartidores.Visible = true;
                 btnVehiculos.Visible = true;
+                btnModuloTarifario.Visible = true;
                 //Modulo suministradora
                 btnModuloProductos.Visible = false;
                 btnModuloMenu.Visible = false;
@@ -1613,9 +1616,18 @@ namespace WebApplication1.Vista
                                 }
 
                                 MVImagen.EliminaImagenEmpresa(UIDEMPRESA.ToString());
-                                MVImagen.ActualizarImagenEmpresa(MVImagen.ID.ToString(), txtRutaImagen.Text);
-                            }
 
+                                var uidimagen = "";
+                                if (MVImagen.ID != Guid.Empty)
+                                {
+                                    uidimagen = MVImagen.ID.ToString();
+                                }
+                                else
+                                {
+                                    uidimagen = Guid.NewGuid().ToString();
+                                }
+                                MVImagen.ActualizarImagenEmpresa(uidimagen, txtRutaImagen.Text, UIDEMPRESA);
+                            }
                         }
                         //Mensaje al usuario
                         PanelMensaje.Visible = true;

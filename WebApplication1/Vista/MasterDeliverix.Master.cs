@@ -22,46 +22,35 @@ namespace WebApplication1.Vista
         {
             string uidusuario = string.Empty;
             //Valida si existe un usuario en el sistema
-            if (Session["IdUsuario"] != null)
+            if (Session["IdUsuario"] != null && Session["UidEmpresaSistema"] != null)
             {
                 uidusuario = Session["IdUsuario"].ToString();
                 MVEmpresaSistema = new VMEmpresas();
                 //Obtiene el perfil del usuario
                 lblNombreUsuario.Text = MVAcceso.NombreDeUsuario(new Guid(uidusuario));
-                //Valida que este asociado con una empresa
-                if (Session["UidEmpresaSistema"] != null)
-                {
-                    string nombrecomercial = string.Empty;
+                string nombrecomercial = string.Empty;
 
-                    Guid uidempresa = new Guid(Session["UidEmpresaSistema"].ToString());
-                    if (!IsPostBack)
+                Guid uidempresa = new Guid(Session["UidEmpresaSistema"].ToString());
+                if (!IsPostBack)
+                {
+                    if (uidempresa == null && uidempresa == Guid.Empty)
                     {
-                        if (uidempresa == null && uidempresa == Guid.Empty)
+                        //Obtiene el nombe de la empresa asociada
+                        MVEmpresaSistema.ObtenerNombreComercial(uidusuario);
+                        if (MVEmpresaSistema.NOMBRECOMERCIAL != null && string.IsNullOrEmpty(MVEmpresaSistema.NOMBRECOMERCIAL))
                         {
-                            //Obtiene el nombe de la empresa asociada
-                            MVEmpresaSistema.ObtenerNombreComercial(uidusuario);
-                            if (MVEmpresaSistema.NOMBRECOMERCIAL != null && string.IsNullOrEmpty(MVEmpresaSistema.NOMBRECOMERCIAL))
-                            {
-                                nombrecomercial = MVEmpresaSistema.NOMBRECOMERCIAL;
-                            }
-                            else
-                            {
-                                nombrecomercial = "Go-Deliverix";
-                            }
-                            if (MVEmpresaSistema.UIDEMPRESA != null)
-                            {
-                                Session["UidEmpresaSistema"] = MVEmpresaSistema.UIDEMPRESA;
-                            }
-                            
-                            ArmaElMenu(uidusuario, uidempresa.ToString());
+                            nombrecomercial = MVEmpresaSistema.NOMBRECOMERCIAL;
                         }
                         else
                         {
-                            MVEmpresaSistema.BuscarEmpresas(UidEmpresa: uidempresa);
-                            nombrecomercial = MVEmpresaSistema.NOMBRECOMERCIAL;
-                            lblNombreDeEmpresa.Text = nombrecomercial;
-                            ArmaElMenu(uidusuario, uidempresa.ToString());
+                            nombrecomercial = "Go-Deliverix";
                         }
+                        if (MVEmpresaSistema.UIDEMPRESA != null)
+                        {
+                            Session["UidEmpresaSistema"] = MVEmpresaSistema.UIDEMPRESA;
+                        }
+
+                        ArmaElMenu(uidusuario, uidempresa.ToString());
                     }
                     else
                     {
@@ -70,6 +59,13 @@ namespace WebApplication1.Vista
                         lblNombreDeEmpresa.Text = nombrecomercial;
                         ArmaElMenu(uidusuario, uidempresa.ToString());
                     }
+                }
+                else
+                {
+                    MVEmpresaSistema.BuscarEmpresas(UidEmpresa: uidempresa);
+                    nombrecomercial = MVEmpresaSistema.NOMBRECOMERCIAL;
+                    lblNombreDeEmpresa.Text = nombrecomercial;
+                    ArmaElMenu(uidusuario, uidempresa.ToString());
                 }
             }
             else
@@ -90,10 +86,12 @@ namespace WebApplication1.Vista
             //Modulos distribuidora
             btnRepartidores.Visible = false;
             btnVehiculos.Visible = false;
+            btnModuloTarifario.Visible = false;
             //Modulo suministradora
             btnModuloProductos.Visible = false;
             btnModuloMenu.Visible = false;
             btnSucursalesMenus.Visible = false;
+
 
             //Perfil de super adimistrador
             if (Perfil == "8d2e2925-a2a7-421f-a72b-56f2e8296d77")
@@ -102,10 +100,10 @@ namespace WebApplication1.Vista
                 btnEmpresasMenus.Visible = true;
                 btnEmpresas.Visible = true;
                 btnAdministradores.Visible = true;
-                
+
                 if (uidEmpresa != Guid.Empty.ToString() && !string.IsNullOrEmpty(uidEmpresa))
                 {
-                    
+
                     if (MVEmpresaSistema.ObtenerTipoDeEmpresa(uidEmpresa))
                     {
                         //Modulo suministradora
@@ -119,6 +117,7 @@ namespace WebApplication1.Vista
                         btnRepartidores.Visible = true;
                         btnSucursalesMenus.Visible = true;
                         btnVehiculos.Visible = true;
+                        btnModuloTarifario.Visible = true;
                     }
                 }
 
@@ -139,6 +138,7 @@ namespace WebApplication1.Vista
                     //Modulo distribuidora
                     btnRepartidores.Visible = true;
                     btnVehiculos.Visible = true;
+                    btnModuloTarifario.Visible = true;
                 }
 
             }
@@ -316,6 +316,11 @@ namespace WebApplication1.Vista
         protected void btnConfiguracionComisiones_Click(object sender, EventArgs e)
         {
             Response.Redirect("ConfiguracionComisiones.aspx");
+        }
+
+        protected void btnModuloTarifario_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Tarifario.aspx");
         }
     }
 }

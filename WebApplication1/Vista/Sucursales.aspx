@@ -276,11 +276,7 @@
                                         <span class="glyphicon glyphicon-object-align-left"></span>
                                         SUBCATEGORIA
                                     </asp:LinkButton></li>
-                                <li role="presentation" id="liDatosZonaDeServicio" runat="server">
-                                    <asp:LinkButton ID="BtnZonaDeServicio" OnClick="BtnZonaDeServicio_Click" runat="server">
-                                        <span class="glyphicon glyphicon-dashboard"></span>
-                                        ZONA DE SERVICIO
-                                    </asp:LinkButton></li>
+
                                 <li role="presentation" id="liDatosContrato" runat="server">
                                     <asp:LinkButton ID="btnContrato" OnClick="btnContrato_Click" runat="server">
                                         <span class="glyphicon glyphicon-link"></span>
@@ -755,383 +751,6 @@
                                     </asp:DataList>
                                 </div>
                             </asp:Panel>
-                            <asp:Panel ID="PanelZonaDeServicio" runat="server">
-
-                                <ul class="nav nav-pills">
-                                    <li role="presentation" id="liZonaDeRecolecta" runat="server">
-                                        <asp:LinkButton ID="btnZonaDeRecolecta" OnClick="btnZonaDeRecolecta_Click" runat="server">
-                                        <span class="glyphicon glyphicon-cloud-download"></span>
-                                        RECOLECTA
-                                        </asp:LinkButton></li>
-                                    <li role="presentation" id="liDatosZonaDeEntrega" runat="server">
-                                        <asp:LinkButton ID="btnDatosZonaDeServicio" OnClick="btnDatosZonaDeServicio_Click" runat="server">
-                                        <span class="glyphicon glyphicon-cloud-upload"></span>
-                                        ENTREGA
-                                        </asp:LinkButton></li>
-                                    <li role="presentation" id="liDatosTarifario" runat="server">
-                                        <asp:LinkButton ID="BtnTarifario" OnClick="BtnTarifario_Click" runat="server">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                            TARIFARIO
-                                        </asp:LinkButton></li>
-                                </ul>
-                                <%-- Panel de zona de servicio --%><asp:Panel ID="PanelZonasServicio" runat="server">
-                                    <div style="margin-top: 15px">
-                                        <div class="pull-left">
-                                        </div>
-                                        <div class="clearfix"></div>
-                                        <%-- Filtros para la seleccion de ciudad --%>
-
-                                        <div class=" col-md-12 text-center" style="border: solid; border-color: gainsboro;">
-
-                                            <div class="col-md-12">
-                                                <label>Busqueda de ciudad</label>
-                                            </div>
-                                            <div class="col-md-10 container" style="margin-bottom: 10px;">
-                                                <div class="col-md-3">
-                                                    <h6>Pais</h6>
-                                                    <asp:DropDownList ID="DDLZonaPais" runat="server" OnSelectedIndexChanged="ObtenerEstado" AutoPostBack="true" OnTextChanged="ObtenerEstado" CssClass="form-control"></asp:DropDownList>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <h6>Estado</h6>
-                                                    <asp:DropDownList ID="DDLZonaEstado" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ObtenerMunicipio"></asp:DropDownList>
-
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <h6>Municipio</h6>
-                                                    <asp:DropDownList ID="DDLZonaMunicipio" runat="server" OnSelectedIndexChanged="ObtenerCiudad" AutoPostBack="true" CssClass="form-control"></asp:DropDownList>
-
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <h6>Ciudad</h6>
-                                                    <asp:DropDownList ID="DDLZonaCiudad" AutoPostBack="true" OnSelectedIndexChanged="ObtenerColonia" runat="server" CssClass="form-control"></asp:DropDownList>
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-2" style="margin-bottom: 10px;">
-                                                <asp:LinkButton ID="btnAgregarCiudad" Style="margin-top: 37px;" ToolTip="Agregar" OnClick="btnAgregarCiudad_Click" CssClass="btn btn-sm btn-success" runat="server">
-                                                <span class="glyphicon glyphicon-plus"></span>
-                                                </asp:LinkButton>
-                                            </div>
-                                        </div>
-                                        <%-- Contenido del panel --%><div class="col-md-12">
-                                            <div class="col-md-5" style="margin-top: 20px;">
-
-                                                <%-- Filtros de busqueda y control de la lista de colonias --%>
-                                                <div class="row">
-                                                    <%-- Filtros de busqueda --%>
-                                                    <div class="col-md-6">
-                                                        <label>Mostrar</label>
-                                                        <asp:DropDownList ID="DDLTipoDeColonias" AutoPostBack="true" OnSelectedIndexChanged="DDLTipoDeColonias_SelectedIndexChanged" CssClass="form-control" runat="server">
-                                                            <asp:ListItem Text="Todos" />
-                                                            <asp:ListItem Text="Seleccionados" />
-                                                            <asp:ListItem Text="Deseleccionados" />
-                                                        </asp:DropDownList>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="input-group">
-                                                            <asp:TextBox ID="txtBusquedaColonia" CssClass="form-control" runat="server" />
-                                                            <asp:LinkButton ID="btnBusquedaColonia" OnClick="btnBusquedaColonia_Click" CssClass=" input-group-addon" ToolTip="Buscar" runat="server">
-                                                        <span class="glyphicon glyphicon-search">
-                                                        </span>
-                                                            </asp:LinkButton>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div style="margin-top: 20px;">
-                                                    <div class="col-md-offset-4">
-                                                    </div>
-                                                </div>
-                                                <%-- Gridview de las ciudades seleccionadas --%>
-                                                <div class="table table-responsive">
-                                                    <asp:GridView runat="server" ID="DGVZonaCiudades" OnRowCommand="DGVZonaCiudades_RowCommand" OnRowDeleting="DGVZonaCiudades_RowDeleting" OnRowDataBound="DGVZonaCiudades_RowDataBound" OnSelectedIndexChanged="DGVZonaCiudades_SelectedIndexChanged" PageSize="10" AllowSorting="false" Style="margin-top: 5px;" CssClass="table table-bordered table-hover table-condensed table-striped input-sm" AutoGenerateColumns="false" DataKeyNames="ID" AllowPaging="True">
-                                                        <EmptyDataTemplate>
-                                                            <div class="info">No hay ciudades seleccionadas </div>
-                                                        </EmptyDataTemplate>
-                                                        <SelectedRowStyle CssClass="table table-hover input-sm success" />
-                                                        <%--                                                <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />--%>
-                                                        <Columns>
-                                                            <asp:ButtonField CommandName="Select" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide">
-                                                                <FooterStyle CssClass="hide" />
-                                                                <HeaderStyle CssClass="hide" />
-                                                                <ItemStyle CssClass="hide" />
-                                                            </asp:ButtonField>
-                                                            <asp:BoundField DataField="NOMBRECIUDAD" HeaderText="Ciudad" SortExpression="NOMBRECIUDAD" />
-
-                                                            <asp:TemplateField>
-                                                                <ItemStyle CssClass="text-center" />
-                                                                <ItemTemplate>
-                                                                    <asp:LinkButton ID="btnEliminaZona" CommandName="Delete" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" CssClass="btn btn-sm btn-default" ToolTip="Quitar ciudad" runat="server">
-                                                <span class="glyphicon glyphicon-trash"></span>
-                                                                    </asp:LinkButton>
-                                                                </ItemTemplate>
-                                                            </asp:TemplateField>
-                                                        </Columns>
-                                                    </asp:GridView>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-7" style="margin-top: 15px;">
-                                                <div style="overflow-x: hidden; overflow: scroll; height: 400px;">
-
-                                                    <asp:CheckBox Text="TODOS" AutoPostBack="true" Style="margin-left: 50px;" TextAlign="Right" CssClass="checkbox" ToolTip="seleccionar todos" ID="chkSeleccionarTodos" OnCheckedChanged="chkSeleccionarTodos_CheckedChanged" runat="server" />
-                                                    <asp:CheckBoxList ID="chklColonias" AutoPostBack="false" Style="margin-left: 50px;" RepeatColumns="1" RepeatDirection="Vertical" RepeatLayout="Table" CssClass="checkbox" runat="server">
-                                                    </asp:CheckBoxList>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </asp:Panel>
-                                <%-- Panel de zona de recolecta --%>
-                                <asp:Panel ID="PanelZonaDeRecolecta" runat="server">
-                                    <div style="margin-top: 15px">
-                                        <div class="pull-left">
-                                        </div>
-                                        <div class="clearfix"></div>
-                                        <%-- Filtros para la seleccion de ciudad --%>
-                                        <div class=" col-md-12 text-center" style="border: solid; border-color: gainsboro;">
-                                            <div class="col-md-12">
-                                                <label>Busqueda de ciudad</label>
-                                            </div>
-                                            <div class="col-md-10 container" style="margin-bottom: 10px;">
-                                                <div class="col-md-3">
-                                                    <h6>Pais</h6>
-                                                    <asp:DropDownList ID="DDLZRPais" runat="server" OnSelectedIndexChanged="ObtenerEstado" AutoPostBack="true" OnTextChanged="ObtenerEstado" CssClass="form-control"></asp:DropDownList>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <h6>Estado</h6>
-                                                    <asp:DropDownList ID="DDLZREstado" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ObtenerMunicipio"></asp:DropDownList>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <h6>Municipio</h6>
-                                                    <asp:DropDownList ID="DDLZRMunicipio" runat="server" OnSelectedIndexChanged="ObtenerCiudad" AutoPostBack="true" CssClass="form-control"></asp:DropDownList>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <h6>Ciudad</h6>
-                                                    <asp:DropDownList ID="DDLZRCiudad" AutoPostBack="true" OnSelectedIndexChanged="ObtenerColonia" runat="server" CssClass="form-control"></asp:DropDownList>
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-2" style="margin-bottom: 10px;">
-                                                <asp:LinkButton ID="btnZRAgregaCiudad" Style="margin-top: 37px;" ToolTip="Agregar" OnClick="btnAgregarCiudad_Click" CssClass="btn btn-sm btn-success" runat="server">
-                                                <span class="glyphicon glyphicon-plus"></span>
-                                                </asp:LinkButton>
-                                            </div>
-                                        </div>
-                                        <%-- Contenido del panel --%><div class="col-md-12">
-                                            <div class="col-md-5" style="margin-top: 20px;">
-
-                                                <%-- Filtros de busqueda y control de la lista de colonias --%>
-                                                <div class="row">
-                                                    <%-- Filtros de busqueda --%>
-                                                    <div class="col-md-6">
-                                                        <label>Mostrar</label>
-                                                        <asp:DropDownList ID="ddlZRTIpoSeleccion" AutoPostBack="true" OnSelectedIndexChanged="ddlZRTIpoSeleccion_SelectedIndexChanged" CssClass="form-control" runat="server">
-                                                            <asp:ListItem Text="Todos" />
-                                                            <asp:ListItem Text="Seleccionados" />
-                                                            <asp:ListItem Text="Deseleccionados" />
-                                                        </asp:DropDownList>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="input-group">
-                                                            <asp:TextBox ID="txtZRBusquedaColonia" CssClass="form-control" runat="server" />
-                                                            <asp:LinkButton ID="btnZrBusquedaColonia" OnClick="btnZrBusquedaColonia_Click" CssClass=" input-group-addon" ToolTip="Buscar" runat="server">
-                                                        <span class="glyphicon glyphicon-search">
-                                                        </span>
-                                                            </asp:LinkButton>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div style="margin-top: 20px;">
-                                                    <div class="col-md-offset-4">
-                                                    </div>
-                                                </div>
-                                                <%-- Gridview de las ciudades seleccionadas --%>
-                                                <div class="table table-responsive">
-                                                    <asp:GridView runat="server" ID="DGVZRCiudades" OnRowCommand="DGVZRCiudades_RowCommand" OnRowDeleting="DGVZRCiudades_RowDeleting" OnRowDataBound="DGVZRCiudades_RowDataBound" OnSelectedIndexChanged="DGVZRCiudades_SelectedIndexChanged" PageSize="10" AllowSorting="false" Style="margin-top: 5px;" CssClass="table table-bordered table-hover table-condensed table-striped input-sm" AutoGenerateColumns="false" DataKeyNames="ID" AllowPaging="True">
-                                                        <EmptyDataTemplate>
-                                                            <div class="info">No hay ciudades seleccionadas </div>
-                                                        </EmptyDataTemplate>
-                                                        <SelectedRowStyle CssClass="table table-hover input-sm success" />
-                                                        <%--                                                <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />--%>
-                                                        <Columns>
-                                                            <asp:ButtonField CommandName="Select" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide">
-                                                                <FooterStyle CssClass="hide" />
-                                                                <HeaderStyle CssClass="hide" />
-                                                                <ItemStyle CssClass="hide" />
-                                                            </asp:ButtonField>
-                                                            <asp:BoundField DataField="NOMBRECIUDAD" HeaderText="Ciudad" SortExpression="NOMBRECIUDAD" />
-
-                                                            <asp:TemplateField>
-                                                                <ItemStyle CssClass="text-center" />
-                                                                <ItemTemplate>
-                                                                    <asp:LinkButton ID="btnEliminaZona" CommandName="Delete" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" CssClass="btn btn-sm btn-default" ToolTip="Quitar ciudad" runat="server">
-                                                <span class="glyphicon glyphicon-trash"></span>
-                                                                    </asp:LinkButton>
-                                                                </ItemTemplate>
-                                                            </asp:TemplateField>
-                                                        </Columns>
-                                                    </asp:GridView>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-7" style="margin-top: 15px;">
-                                                <div style="overflow-x: hidden; overflow: scroll; height: 400px;">
-                                                    <asp:CheckBox Text="TODOS" AutoPostBack="true" Style="margin-left: 50px;" TextAlign="Right" CssClass="checkbox" ToolTip="seleccionar todos" ID="chklZRSeleccionaTodos" OnCheckedChanged="chklZTSeleccionaTodos_CheckedChanged" runat="server" />
-                                                    <asp:CheckBoxList ID="chklZR" AutoPostBack="false" Style="margin-left: 50px;" RepeatColumns="1" RepeatDirection="Vertical" RepeatLayout="Table" CssClass="checkbox" runat="server">
-                                                    </asp:CheckBoxList>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </asp:Panel>
-                                <%--Panel de tarifario--%>
-                                <asp:Panel ID="PanelTarifario" Height="350" runat="server">
-
-                                    <asp:Label Text="Copiar" runat="server" />
-                                    <asp:LinkButton CssClass="btn btn-sm btn-default" ID="BtnCopiarTarifarioArriba" OnClick="BtnCopiarTarifarioArriba_Click" runat="server">
-                                        <span class="glyphicon glyphicon-arrow-up"></span>
-                                        Arriba
-                                    </asp:LinkButton><asp:LinkButton CssClass="btn btn-sm btn-default" ID="BtnCopiarTarifarioAbajo" OnClick="BtnCopiarTarifarioAbajo_Click" runat="server">
-                                        <span class="glyphicon glyphicon-arrow-down"></span>
-                                        Abajo
-                                    </asp:LinkButton><asp:LinkButton CssClass="btn btn-sm btn-default" ID="BtnCopiarDerecha" OnClick="BtnCopiarDerecha_Click" runat="server">
-                                        <span class="glyphicon glyphicon-arrow-right"></span>
-                                        Derecha
-                                    </asp:LinkButton><asp:LinkButton CssClass="btn btn-sm btn-default" ID="BtnCopiarIzquierda" OnClick="BtnCopiarIzquierda_Click" runat="server">
-                                        <span class="glyphicon glyphicon-arrow-left"></span>
-                                        Izquierda
-                                    </asp:LinkButton><asp:LinkButton CssClass="btn btn-sm btn-default" ID="BtnCopiarTodaLaTabla" OnClick="BtnCopiarTodaLaTabla_Click" runat="server">
-                                        <span class=".glyphicon-glyphicon-refresh"></span>
-                                        Toda la tabla
-                                    </asp:LinkButton><div class="pull-right">
-                                        <asp:Label Text="Informacion de la celda" runat="server" />
-                                        <label>Fila:</label>
-                                        <asp:Label ID="lblFila" runat="server" />
-                                        <label>Celda:</label>
-                                        <asp:Label ID="lblCelda" runat="server" />
-                                        <label>Precio:</label>
-                                        <asp:Label ID="lblPrecio" runat="server" />
-                                    </div>
-
-                                    <div style="overflow: auto; white-space: nowrap; height: 300px;">
-                                        <asp:GridView runat="server"
-                                            EnableViewState="true"
-                                            Height="300"
-                                            ViewStateMode="Enabled"
-                                            AllowSorting="true" ID="DGVTarifario"
-                                            Style="margin-top: 5px;"
-                                            CssClass="table table-bordered table-hover table-condensed table-striped input-sm  "
-                                            AutoGenerateColumns="true">
-                                            <EmptyDataTemplate>
-                                                <div class="info">No hay ciudades en el tarifario </div>
-                                            </EmptyDataTemplate>
-                                            <SelectedRowStyle CssClass="table table-hover input-sm success" />
-                                            <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />
-                                            <Columns>
-                                            </Columns>
-                                        </asp:GridView>
-                                    </div>
-
-                                    <script>
-                                        function MandaInformacionACampos(Identificador) {
-                                            var txt = document.getElementById(Identificador);
-                                        }
-                                    </script>
-                                    <%--<style type="text/css">
-                                        .Pintatabla tr td:first-child {
-                                            position: fixed;
-                                            z-index: 1;
-                                            overflow-x: hidden;
-                                            overflow-y: hidden;
-                                            width: 200px;
-                                            height: 100px;
-                                        }
-
-                                        .Pintatabla th:first-child {
-                                            position: fixed;
-                                            z-index: 1;
-                                            overflow-x: hidden;
-                                            overflow-y: hidden;
-                                            width: 200px;
-                                            height: 100px;
-                                        }
-                                    </style>--%>
-                                    <%--                                    <div id="DivRoot" style="align-content: flex-end">
-                                        <div style="overflow: hidden;" id="DivHeaderRow">
-                                        </div>
-
-                                        <div style="overflow: scroll; height: 300px" onscroll="OnScrollDiv(this)" id="DivMainContent">
-                                        </div>
-
-                                        <div id="DivFooterRow" style="overflow: hidden">
-                                        </div>
-                                    </div>
-                                    <script type="text/javascript">
-
-                                        $(document).ready(function () {
-                                            $('#DGVTarifario').DataTable({
-                                                "scrollY": "200px",
-                                                "scrollCollapse": true,
-                                                "paging": true
-                                            });
-                                        });
-                                        //function MakeStaticHeader(gridId, height, width, headerHeight, isFooter) {
-                                        //    var tbl = document.getElementById(gridId);
-
-
-                                        //    if (tbl) {
-                                        //        var DivHR = document.getElementById('DivHeaderRow');
-                                        //        var DivMC = document.getElementById('DivMainContent');
-                                        //        var DivFR = document.getElementById('DivFooterRow');
-
-                                        //        //*** Set divheaderRow Properties ****
-                                        //        DivHR.style.height = headerHeight + 'px';
-                                        //        DivHR.style.width = (parseInt(width) - 16) + 'px';
-                                        //        DivHR.style.position = 'relative';
-                                        //        DivHR.style.top = '0px';
-                                        //        DivHR.style.zIndex = '10';
-                                        //        DivHR.style.verticalAlign = 'top';
-
-                                        //        //*** Set divMainContent Properties ****
-                                        //        DivMC.style.width = width + 'px';
-                                        //        DivMC.style.height = height + 'px';
-                                        //        DivMC.style.position = 'relative';
-                                        //        DivMC.style.top = -headerHeight + 'px';
-                                        //        DivMC.style.zIndex = '1';
-
-                                        //        //*** Set divFooterRow Properties ****
-                                        //        DivFR.style.width = (parseInt(width) - 16) + 'px';
-                                        //        DivFR.style.position = 'relative';
-                                        //        DivFR.style.top = -headerHeight + 'px';
-                                        //        DivFR.style.verticalAlign = 'top';
-                                        //        DivFR.style.paddingtop = '2px';
-
-                                        //        if (isFooter) {
-                                        //            var tblfr = tbl.cloneNode(true);
-                                        //            tblfr.removeChild(tblfr.getElementsByTagName('tbody')[0]);
-                                        //            var tblBody = document.createElement('tbody');
-                                        //            tblfr.style.width = '100%';
-                                        //            tblfr.cellSpacing = "0";
-                                        //            tblfr.border = "0px";
-                                        //            tblfr.rules = "none";
-                                        //            //*****In the case of Footer Row *******
-                                        //            tblBody.appendChild(tbl.rows[tbl.rows.length - 1]);
-                                        //            tblfr.appendChild(tblBody);
-                                        //            DivFR.appendChild(tblfr);
-                                        //        }
-                                        //        //****Copy Header in divHeaderRow****
-                                        //        DivHR.appendChild(tbl.cloneNode(true));
-                                        //    }
-                                        //}
-
-                                        //function OnScrollDiv(Scrollablediv) {
-                                        //    document.getElementById('DivHeaderRow').scrollLeft = Scrollablediv.scrollLeft;
-                                        //    document.getElementById('DivFooterRow').scrollLeft = Scrollablediv.scrollLeft;
-                                        //}
-
-                                    </script>--%>
-                                </asp:Panel>
-                            </asp:Panel>
-
                             <%-- Panel de contrato --%>
                             <asp:Panel ID="PanelDeContrato" runat="server">
                                 <%--Panel de informacion de suscursal--%>
@@ -1195,116 +814,114 @@
                                         <asp:TextBox CssClass="form-control" ID="txtComisionProducto" OnTextChanged="txtComisionProducto_TextChanged" runat="server" />
                                     </div>
                                     <div class="form-group">
-                                        <asp:CheckBox ID="ChbxPagoOrdenAlRecolectar" Style="margin: 0,5,0,0" runat="server" />
+                                        <asp:CheckBox ID="ChbxPagoOrdenAlRecolectar" Style="margin: 0,5,0,0;" runat="server" />
                                         <label>Pagar ordenes al recolectar</label>
                                     </div>
-                        </div>
-                        <div class="clearfix"></div>
-                        <ul class="nav nav-tabs" style="margin-bottom: 5px;">
-                            <li role="presentation" runat="server" id="liInformacionTelefono">
-                                <asp:LinkButton ID="btnInformacionTelefono" OnClick="btnInformacionTelefono_Click" runat="server">
+                                    <div class="clearfix"></div>
+                                    <ul class="nav nav-tabs" style="margin-bottom: 5px;">
+                                        <li role="presentation" runat="server" id="liInformacionTelefono">
+                                            <asp:LinkButton ID="btnInformacionTelefono" OnClick="btnInformacionTelefono_Click" runat="server">
                                     <span class="glyphicon glyphicon-phone"></span>
                                     Contacto
                                             </asp:LinkButton></li>
-                            <li role="presentation" id="liInformacionTarifario" runat="server">
-                                <asp:LinkButton ID="btnInformacionTarifario" OnClick="btnInformacionTarifario_Click" runat="server">
+                                        <li role="presentation" id="liInformacionTarifario" runat="server">
+                                            <asp:LinkButton ID="btnInformacionTarifario" OnClick="btnInformacionTarifario_Click" runat="server">
                                     <span ></span>
                                     Zonas de entrega
                                             </asp:LinkButton></li>
-                        </ul>
-                        <%--Panel de informacion de la empresa suministradora--%>
-                        <asp:Panel ID="panelInformacionContacto" OnInit="panelInformacionContacto_Init" runat="server">
-                            <asp:GridView runat="server" ID="DGVInformacionTelefonica" OnRowDataBound="DGVInformacionTelefonica_RowDataBound" Style="margin-top: 10px;" AutoGenerateColumns="false" DataKeyNames="ID" CssClass="table table-bordered table-hover table-condensed table-striped input-sm">
-                                <EmptyDataTemplate>
-                                    <div class="info">
-                                        No existen telefonos guardados                                               
-                                    </div>
-                                </EmptyDataTemplate>
-                                <SelectedRowStyle CssClass="table table-hover input-sm success" />
-                                <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />
-                                <Columns>
-                                    <asp:ButtonField CommandName="Select" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" />
-                                    <asp:BoundField DataField="Tipo" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" />
-                                    <asp:TemplateField HeaderText="Tipo de telefono">
-                                        <ItemTemplate>
-                                            <asp:Label ID="txtTipoDeTelefono" runat="server" />
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                    <asp:TemplateField HeaderText="Telefono">
-                                        <ItemTemplate>
-                                            <asp:HyperLink ID="HlnkTelefono" runat="server" />
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                    <asp:BoundField DataField="NUMERO" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" HeaderText="Numero" />
-                                </Columns>
-                            </asp:GridView>
-                        </asp:Panel>
+                                    </ul>
+                                    <%--Panel de informacion de la empresa suministradora--%>
+                                    <asp:Panel ID="panelInformacionContacto" OnInit="panelInformacionContacto_Init" runat="server">
+                                        <asp:GridView runat="server" ID="DGVInformacionTelefonica" OnRowDataBound="DGVInformacionTelefonica_RowDataBound" Style="margin-top: 10px;" AutoGenerateColumns="false" DataKeyNames="ID" CssClass="table table-bordered table-hover table-condensed table-striped input-sm">
+                                            <EmptyDataTemplate>
+                                                <div class="info">
+                                                    No existen telefonos guardados                                               
+                                                </div>
+                                            </EmptyDataTemplate>
+                                            <SelectedRowStyle CssClass="table table-hover input-sm success" />
+                                            <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />
+                                            <Columns>
+                                                <asp:ButtonField CommandName="Select" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" />
+                                                <asp:BoundField DataField="Tipo" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" />
+                                                <asp:TemplateField HeaderText="Tipo de telefono">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="txtTipoDeTelefono" runat="server" />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="Telefono">
+                                                    <ItemTemplate>
+                                                        <asp:HyperLink ID="HlnkTelefono" runat="server" />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:BoundField DataField="NUMERO" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" HeaderText="Numero" />
+                                            </Columns>
+                                        </asp:GridView>
 
-                        <asp:Panel ID="panelInformacionTarifario" runat="server">
+                                        <asp:Panel ID="panelInformacionTarifario" runat="server">
 
-                            <asp:Panel ID="PanelTarifarioSuministradora" runat="server">
+                                            <asp:Panel ID="PanelTarifarioSuministradora" runat="server">
 
-                                <div class="form-inline">
-                                    <div class="form-group">
-                                        <label>Colonia</label>
-                                        <asp:TextBox ID="txtPITxtColonia" CssClass="form-control" runat="server" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Registros</label>
-                                        <asp:DropDownList CssClass="form-control" AutoPostBack="true" ID="DDLPIColonias" OnSelectedIndexChanged="DDLPIColonias_SelectedIndexChanged" runat="server">
-                                            <asp:ListItem Value="Todos" Text="Todos" />
-                                            <asp:ListItem Value="Seleccionado" Text="Seleccionados" />
-                                            <asp:ListItem Value="Deseleccionados" Text="Deseleccionados" />
-                                        </asp:DropDownList>
-                                    </div>
-                                    <div class="form-group">
-                                        <asp:LinkButton CssClass="btn btn-default btn-sm" ID="BTNPIBuscarColonia" OnClick="BTNPIBuscarColonia_Click" runat="server">
+                                                <div class="form-inline">
+                                                    <div class="form-group">
+                                                        <label>Colonia</label>
+                                                        <asp:TextBox ID="txtPITxtColonia" CssClass="form-control" runat="server" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Registros</label>
+                                                        <asp:DropDownList CssClass="form-control" AutoPostBack="true" ID="DDLPIColonias" OnSelectedIndexChanged="DDLPIColonias_SelectedIndexChanged" runat="server">
+                                                            <asp:ListItem Value="Todos" Text="Todos" />
+                                                            <asp:ListItem Value="Seleccionado" Text="Seleccionados" />
+                                                            <asp:ListItem Value="Deseleccionados" Text="Deseleccionados" />
+                                                        </asp:DropDownList>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <asp:LinkButton CssClass="btn btn-default btn-sm" ID="BTNPIBuscarColonia" OnClick="BTNPIBuscarColonia_Click" runat="server">
                                                 <span class="glyphicon glyphicon-search"></span>
-                                                    </asp:LinkButton>
-                                    </div>
-                                </div>
-                                <asp:GridView runat="server" ID="DgvInformacionTarifario" Style="margin-top: 10px;" OnRowDataBound="DgvInformacionTarifario_RowDataBound" AutoGenerateColumns="false" DataKeyNames="UidTarifario" CssClass="table table-bordered table-hover table-condensed table-striped input-sm">
-                                    <EmptyDataTemplate>
-                                        <div class="info">
-                                            No hay zonas de entrega disponibles para mostrar                                                   
-                                        </div>
-                                    </EmptyDataTemplate>
-                                    <SelectedRowStyle CssClass="table table-hover input-sm success" />
-                                    <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />
-                                    <Columns>
-                                        <asp:ButtonField CommandName="Select" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" />
-                                        <asp:TemplateField ItemStyle-Width="10">
-                                            <ItemTemplate>
-                                                <asp:CheckBox ID="chkbTarifario" runat="server" />
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
-                                        <asp:BoundField DataField="DPrecio" ItemStyle-Width="10" HeaderText="Precio" />
-                                        <asp:BoundField DataField="StrNombreColoniaZE" HeaderText="Colonia a entregar" />
-                                    </Columns>
-                                </asp:GridView>
-                            </asp:Panel>
+                                                        </asp:LinkButton>
+                                                    </div>
+                                                </div>
+                                                <asp:GridView runat="server" ID="DgvInformacionTarifario" Style="margin-top: 10px;" OnRowDataBound="DgvInformacionTarifario_RowDataBound" AutoGenerateColumns="false" DataKeyNames="UidTarifario" CssClass="table table-bordered table-hover table-condensed table-striped input-sm">
+                                                    <EmptyDataTemplate>
+                                                        <div class="info">
+                                                            No hay zonas de entrega disponibles para mostrar                                                   
+                                                        </div>
+                                                    </EmptyDataTemplate>
+                                                    <SelectedRowStyle CssClass="table table-hover input-sm success" />
+                                                    <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />
+                                                    <Columns>
+                                                        <asp:ButtonField CommandName="Select" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" />
+                                                        <asp:TemplateField ItemStyle-Width="10">
+                                                            <ItemTemplate>
+                                                                <asp:CheckBox ID="chkbTarifario" runat="server" />
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:BoundField DataField="DPrecio" ItemStyle-Width="10" HeaderText="Precio" />
+                                                        <asp:BoundField DataField="StrNombreColoniaZE" HeaderText="Colonia a entregar" />
+                                                    </Columns>
+                                                </asp:GridView>
+                                            </asp:Panel>
 
-                            <asp:Panel ID="PanelTarifarioDistribuidora" runat="server">
+                                            <asp:Panel ID="PanelTarifarioDistribuidora" runat="server">
 
-                                <asp:GridView runat="server" ID="DGVInformacionTarifarioDistribuidora" Style="margin-top: 10px;" AutoGenerateColumns="false" DataKeyNames="UidTarifario" CssClass="table table-bordered table-hover table-condensed table-striped input-sm">
-                                    <EmptyDataTemplate>
-                                        <div class="info">
-                                            No hay zonas de entrega disponibles para mostrar
+                                                <asp:GridView runat="server" ID="DGVInformacionTarifarioDistribuidora" Style="margin-top: 10px;" AutoGenerateColumns="false" DataKeyNames="UidTarifario" CssClass="table table-bordered table-hover table-condensed table-striped input-sm">
+                                                    <EmptyDataTemplate>
+                                                        <div class="info">
+                                                            No hay zonas de entrega disponibles para mostrar
                                                    
-                                        </div>
-                                    </EmptyDataTemplate>
-                                    <SelectedRowStyle CssClass="table table-hover input-sm success" />
-                                    <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />
-                                    <Columns>
-                                        <asp:BoundField DataField="StrNombreColoniaZE" HeaderText="Colonia a entregar" />
-                                        <asp:BoundField DataField="DPrecio" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" HeaderText="Precio" />
-                                    </Columns>
-                                </asp:GridView>
-                            </asp:Panel>
+                                                        </div>
+                                                    </EmptyDataTemplate>
+                                                    <SelectedRowStyle CssClass="table table-hover input-sm success" />
+                                                    <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />
+                                                    <Columns>
+                                                        <asp:BoundField DataField="StrNombreColoniaZE" HeaderText="Colonia a entregar" />
+                                                        <asp:BoundField DataField="DPrecio" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" HeaderText="Precio" />
+                                                    </Columns>
+                                                </asp:GridView>
+                                            </asp:Panel>
 
-                        </asp:Panel>
-
-                        </asp:Panel>
+                                        </asp:Panel>
+                                    </asp:Panel>
+                                </asp:Panel>
 
                                 <div style="margin-top: 15px">
                                     <div style="margin-top: 5px;">
@@ -1341,51 +958,50 @@
                                             <asp:TextBox runat="server" ID="txtBCodigo" CssClass="form-control"></asp:TextBox>
                                         </div>
                                     </div>
-                                    <%--DataGridView Contrato--%>
-                                    <div class="table table-responsive">
-                                        <asp:GridView runat="server" ID="dgvBusquedaDeEmpresa" OnRowCommand="dgvBusquedaDeEmpresa_RowCommand" Style="margin-top: 10px;" OnRowDataBound="dgvBusquedaDeEmpresa_RowDataBound" AutoGenerateColumns="false" DataKeyNames="ID" CssClass="table table-bordered table-hover table-condensed table-striped input-sm">
-                                            <EmptyDataTemplate>No hay coincidencia de busqueda</EmptyDataTemplate>
-                                            <Columns>
-                                                <asp:ButtonField CommandName="Select" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide">
-                                                    <FooterStyle CssClass="hide" />
-                                                    <HeaderStyle CssClass="hide" />
-                                                    <ItemStyle CssClass="hide" />
-                                                </asp:ButtonField>
-                                                <asp:TemplateField ItemStyle-CssClass="text-center" HeaderStyle-CssClass="text-center" HeaderText="Estatus">
-                                                    <ItemTemplate>
-                                                        <asp:Image ID="imgEstatus" Width="20" Height="20" runat="server" />
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                                <asp:TemplateField ItemStyle-CssClass="text-center" HeaderStyle-CssClass="text-center" HeaderText="Acciones">
-                                                    <ItemTemplate>
-                                                        <asp:LinkButton ID="btnEstatusContrato" CommandName="Contrato" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" runat="server">
-                                                            <asp:Image ID="lblIconoEstatusContrato" Width="20" Height="20" runat="server" />
-                                                        </asp:LinkButton><asp:LinkButton CommandName="Aceptar" ID="btnAceptar" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" CssClass="btn btn-sm btn-success" runat="server">
-                                                                <span class="glyphicon glyphicon-ok"></span>
-                                                        </asp:LinkButton><asp:LinkButton CommandName="Cancelar" ID="btnCancelar" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" CssClass="btn btn-sm btn-danger" runat="server">
-                                                                <span class="glyphicon glyphicon-remove"></span>
-                                                        </asp:LinkButton>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                                <asp:TemplateField ItemStyle-CssClass="text-center" HeaderStyle-CssClass="text-center" HeaderText="INFORMACION">
-                                                    <ItemTemplate>
-                                                        <asp:LinkButton ID="btnInfoContacto" CommandName="Informacion" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" CssClass="btn btn-sm btn-info" runat="server">
-                                                        <span class="glyphicon glyphicon-info-sign"></span>
-                                                        </asp:LinkButton>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                                <asp:BoundField DataField="IDENTIFICADOR" HeaderText="Sucursal" />
-                                                <asp:BoundField DataField="HORAAPARTURA" HeaderText="Hora de apaertural" />
-                                                <asp:BoundField DataField="HORACIERRE" HeaderText="Hora de cierre" />
-                                            </Columns>
-                                        </asp:GridView>
-                                    </div>
                                 </div>
+                                <%--DataGridView Contrato--%>
+                                <div class="table table-responsive">
+                                    <asp:GridView runat="server" ID="dgvBusquedaDeEmpresa" OnRowCommand="dgvBusquedaDeEmpresa_RowCommand" Style="margin-top: 10px;" OnRowDataBound="dgvBusquedaDeEmpresa_RowDataBound" AutoGenerateColumns="false" DataKeyNames="ID" CssClass="table table-bordered table-hover table-condensed table-striped input-sm">
+                                        <EmptyDataTemplate>No hay coincidencia de busqueda</EmptyDataTemplate>
+                                        <Columns>
+                                            <asp:ButtonField CommandName="Select" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide">
+                                                <FooterStyle CssClass="hide" />
+                                                <HeaderStyle CssClass="hide" />
+                                                <ItemStyle CssClass="hide" />
+                                            </asp:ButtonField>
+                                            <asp:TemplateField ItemStyle-CssClass="text-center" HeaderStyle-CssClass="text-center" HeaderText="Estatus">
+                                                <ItemTemplate>
+                                                    <asp:Image ID="imgEstatus" Width="20" Height="20" runat="server" />
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField ItemStyle-CssClass="text-center" HeaderStyle-CssClass="text-center" HeaderText="Acciones">
+                                                <ItemTemplate>
+                                                    <asp:LinkButton ID="btnEstatusContrato" CommandName="Contrato" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" runat="server">
+                                                        <asp:Image ID="lblIconoEstatusContrato" Width="20" Height="20" runat="server" />
+                                                    </asp:LinkButton><asp:LinkButton CommandName="Aceptar" ID="btnAceptar" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" CssClass="btn btn-sm btn-success" runat="server">
+                                                                <span class="glyphicon glyphicon-ok"></span>
+                                                    </asp:LinkButton><asp:LinkButton CommandName="Cancelar" ID="btnCancelar" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" CssClass="btn btn-sm btn-danger" runat="server">
+                                                                <span class="glyphicon glyphicon-remove"></span>
+                                                    </asp:LinkButton>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField ItemStyle-CssClass="text-center" HeaderStyle-CssClass="text-center" HeaderText="INFORMACION">
+                                                <ItemTemplate>
+                                                    <asp:LinkButton ID="btnInfoContacto" CommandName="Informacion" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" CssClass="btn btn-sm btn-info" runat="server">
+                                                        <span class="glyphicon glyphicon-info-sign"></span>
+                                                    </asp:LinkButton>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:BoundField DataField="IDENTIFICADOR" HeaderText="Sucursal" />
+                                            <asp:BoundField DataField="HORAAPARTURA" HeaderText="Hora de apaertural" />
+                                            <asp:BoundField DataField="HORACIERRE" HeaderText="Hora de cierre" />
+                                        </Columns>
+                                    </asp:GridView>
+                                </div>
+                            </asp:Panel>
+                        </div>
 
-
-
-                        </asp:Panel>
-                            <%--Panel de servicio a clientes--%>
+                        <%--Panel de servicio a clientes--%>
                         <asp:Panel ID="PanelAtencionAClientes" runat="server">
                             <div class="col-md-12">
 
@@ -1395,7 +1011,7 @@
                                     <asp:LinkButton CssClass="btn btn-sm btn-success" ID="btnAgregarMensaje" OnClick="btnAgregarMensaje_Click" ToolTip="Agregar" runat="server">
                                                 <span class="glyphicon glyphicon-plus"></span>
                                             <i>Agregar</i>
-                                        </asp:LinkButton>
+                                    </asp:LinkButton>
                                 </div>
                             </div>
                             <div class="col-md-12">
@@ -1416,7 +1032,7 @@
                                             <ItemTemplate>
                                                 <asp:LinkButton ID="btnInfoContacto" CommandName="Eliminar" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" ToolTip="Eliminar" CssClass="btn btn-sm btn-default" runat="server">
                                                         <span class="glyphicon glyphicon-trash"></span>
-                                                    </asp:LinkButton>
+                                                </asp:LinkButton>
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                     </Columns>
@@ -1424,12 +1040,14 @@
                             </div>
                         </asp:Panel>
                     </div>
+
                 </div>
             </div>
             </div>
+            </div>
         </ContentTemplate>
-        <Triggers>
+        <%--        <Triggers>
             <asp:AsyncPostBackTrigger ControlID="chklColonias" EventName="SelectedIndexChanged" />
-        </Triggers>
+        </Triggers>--%>
     </asp:UpdatePanel>
 </asp:Content>

@@ -1135,7 +1135,7 @@ namespace WebApplication1.Vista
                     }
                     else
                     {
-                        totalPorcentaje =  resultado;
+                        totalPorcentaje = resultado;
                     }
                     if (MVComision.BAbsorveComision)
                     {
@@ -1167,6 +1167,18 @@ namespace WebApplication1.Vista
             {
                 txtCostoComision.BorderColor = Color.Red;
             }
+        }
+
+        protected void dgvoferta_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            dgvoferta.PageIndex = e.NewPageIndex;
+            CargaGrid("Oferta");
+        }
+
+        protected void DGVSeccion_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            DGVSeccion.PageIndex = e.NewPageIndex;
+            CargaGrid("Seccion");
         }
     }
 }

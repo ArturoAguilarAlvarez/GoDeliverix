@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
-using System.Web.Http;
 using VistaDelModelo;
 using System.Collections;
 using WebApplication1.App_Start;
@@ -10,15 +8,15 @@ using System.Net.Http;
 using Modelo;
 using System.Windows.Documents;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
+using System.Web.Http;
+
 namespace WebApplication1.Controllers
 {
     public class ComisionesController : ApiController
     {
 
         #region Xamarin movil
-        public IHttpActionResult ObtenerComisionEmpresa(string provedor= "MITec")
+        public IHttpActionResult ObtenerComisionEmpresa(string provedor = "MITec")
         {
             var viewmodelComisiones = new VMComision();
             viewmodelComisiones.ObtenerComisionPasarelaDeCobro(provedor);

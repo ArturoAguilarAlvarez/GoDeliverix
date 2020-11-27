@@ -115,7 +115,7 @@ namespace WebApplication1.Vista.Cliente
                         //Envia la orden a la sucursal suministradora
                         //Crea el codigo de entrega
                         Random Codigo = new Random();
-                        decimal DPropina = 0.0m;
+                        //decimal DPropina = 0.0m;
                         long CodigoDeEnrega = Codigo.Next(00001, 99999);
                         MVOrden.GuardaOrden(UidOrden, total, UidUsuario, UidDireccion, objeto.UidSucursal, totalSucursal, UidOrdenSucursal, CodigoDeEnrega);
                         // Envia la orden a la sucursal distribuidora

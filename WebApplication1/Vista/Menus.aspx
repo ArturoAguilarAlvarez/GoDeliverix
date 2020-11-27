@@ -112,7 +112,7 @@
                         <div class="col-md-12">
                             <div class="col-md-6">
                                 <%-- GridView de ofertas --%>
-                                <asp:GridView runat="server" DataKeyNames="UID" OnRowDataBound="dgvoferta_RowDataBound" OnSelectedIndexChanged="dgvoferta_SelectedIndexChanged" ID="dgvoferta" CssClass="table table-bordered table-hover table-condensed table-striped input-sm" PageSize="10" AllowSorting="true" Style="margin-top: 5px;" AllowPaging="True" AutoGenerateColumns="false">
+                                <asp:GridView runat="server" DataKeyNames="UID" OnPageIndexChanging="dgvoferta_PageIndexChanging" OnRowDataBound="dgvoferta_RowDataBound" OnSelectedIndexChanged="dgvoferta_SelectedIndexChanged" ID="dgvoferta" CssClass="table table-bordered table-hover table-condensed table-striped input-sm" PageSize="10" AllowSorting="true" Style="margin-top: 5px;" AllowPaging="True" AutoGenerateColumns="false">
                                     <EmptyDataTemplate>
                                         <div class="info">Para ver información debe hacer una consulta </div>
                                     </EmptyDataTemplate>
@@ -172,7 +172,7 @@
 
                         <div class="col-md-6">
                             <!-- GridView de secciones-->
-                            <asp:GridView runat="server" ID="DGVSeccion" PageSize="10" AllowSorting="true" Style="margin-top: 5px;" OnRowDataBound="DGVSeccion_RowDataBound" OnSelectedIndexChanged="DGVSeccion_SelectedIndexChanged" CssClass="table table-bordered table-hover table-condensed table-striped input-sm" AutoGenerateColumns="false" DataKeyNames="UID" AllowPaging="True">
+                            <asp:GridView runat="server" ID="DGVSeccion" PageSize="10" OnPageIndexChanging="DGVSeccion_PageIndexChanging" AllowSorting="true" Style="margin-top: 5px;" OnRowDataBound="DGVSeccion_RowDataBound" OnSelectedIndexChanged="DGVSeccion_SelectedIndexChanged" CssClass="table table-bordered table-hover table-condensed table-striped input-sm" AutoGenerateColumns="false" DataKeyNames="UID" AllowPaging="True">
                                 <EmptyDataTemplate>
                                     <div class="info">Para ver información debe hacer una consulta </div>
                                 </EmptyDataTemplate>

@@ -252,7 +252,10 @@ namespace WebApplication1.Vista
                     break;
             }
         }
-
+        /// <summary>
+        /// Giro, Categoria, Subcategoria
+        /// </summary>
+        /// <param name="Grid"></param>
         protected void CargaGrid(String Grid)
         {
             switch (Grid)
@@ -1206,9 +1209,17 @@ namespace WebApplication1.Vista
             txtDescripcionGiro.BorderColor = Color.Empty;
         }
 
+        protected void DGVCategorias_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            DGVCategorias.PageIndex = e.NewPageIndex;
+            CargaGrid("Categoria");
+        }
 
-
-
+        protected void DGVSubcategorias_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            DGVSubcategorias.PageIndex = e.NewPageIndex;
+            CargaGrid("Subcategoria");
+        }
     }
 
 

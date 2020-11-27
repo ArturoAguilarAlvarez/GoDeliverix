@@ -15,7 +15,6 @@ namespace WebApplication1.Controllers
         public VMGiro MVGiro { get; set; }
         public VMCategoria MVCategoria { get; set; }
         public VMSubCategoria MVSubCategoria { get; set; }
-        ResponseHelper Respuesta;
         // GET: api/Profile/5
         //public ResponseHelper Get()
         //{
@@ -62,12 +61,12 @@ namespace WebApplication1.Controllers
         }
 
         // POST: api/CatalogosDeFiltros
-        public void Post([FromBody]string value)
+        public void Post([FromBody] string value)
         {
         }
 
         // PUT: api/CatalogosDeFiltros/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody] string value)
         {
         }
 

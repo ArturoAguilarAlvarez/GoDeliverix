@@ -81,11 +81,11 @@ namespace VistaDelModelo
             Conexion.EliminarImagenSubcategoria(IdSubcategoria);
         }
 
-        public bool ActualizarImagenEmpresa(string UidImagen, string Ruta, string Descripcon = "")
+        public bool ActualizarImagenEmpresa(string UidImagen, string Ruta, Guid uidempresa, string Descripcon = "")
         {
             bool Resultado = false;
             Imagen IMG = new Imagen() { ID = new Guid(UidImagen), STRRUTA = Ruta, STRDESCRIPCION = Descripcon };
-            Img.ACTUALIZAIMAGEN(IMG);
+            Img.ACTUALIZAIMAGEN(IMG, uidempresa);
             return Resultado;
         }
         public bool ValidarExtencionImagen(string extencion)
@@ -244,7 +244,7 @@ namespace VistaDelModelo
         {
             Conexion.EliminaImagenProducto(uidproducto);
         }
-        
+
         public void EliminaImagenSubcategoria(Guid uidSubcategoria)
         {
             Conexion.EliminarImagenSubcategoria(uidSubcategoria);
