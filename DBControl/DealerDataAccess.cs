@@ -131,6 +131,31 @@ namespace DBControl
             DataTable data = this.dbConexion.Consultas(query);
             return data;
         }
+
+        public DataTable GetWorkOrderWorkShiftBalance(Guid uidTurnoRepartidor)
+        {
+            string query = $@"
+                SELECT 
+                    count(*) AS TotalOrdenes,
+                    sum(os.MTotalSucursal) AS TotalSucursal,
+                    sum(ot.MtotalEnvio) AS TotalEnvio, 
+                    dbo.asp_ObtenerLaCantidadDeEfectivoEnMano(tr.UidTurnoRepartidor) AS Efectivo, 
+                    dbo.ObtenerLiquidacionesTurnoRepartidor(tr.uidturnorepartidor) AS Liquidacion, 
+                    dbo.ObtenerLasGananciasRepartidor(tr.Uidturnorepartidor) AS Ganancias, 
+                    dbo.ObtenerMontoDePagosDeOrdenesEnTurnoRepartidor(tr.uidturnorepartidor) AS PagosSucursales, 
+                    dbo.ObtenerCantidadOrdenesPagadasTurnoRepartidor(tr.uidturnorepartidor) AS CantidadDePagos, 
+                    dbo.ObtenerRecargasTurnoRepartidor(tr.uidturnorepartidor) AS Recarga, 
+                    SUM(ot.MPropina) as Propina  
+                FROM OrdenSucursal os 
+                    inner join OrdenTarifario ot ON ot.UidOrden = os.UidRelacionOrdenSucursal 
+                    inner join OrdenRepartidor orep ON orep.UidOrden = ot.UidRelacionOrdenTarifario 
+                    inner join TurnoRepartidor tr ON tr.UidTurnoRepartidor = orep.UidTurnoRepartidor and dbo.asp_ObtenerUltimoEstatusOrdenRepartidor(orep.UidRelacionOrdenRepartidor) != '12748F8A-E746-427D-8836-B54432A38C07' and dbo.asp_ObtenerUltimoEstatusOrdenRepartidor(orep.UidRelacionOrdenRepartidor) = '7DA3A42F-2271-47B4-B9B8-EDD311F56864' 
+                WHERE tr.UidTurnoRepartidor = '{uidTurnoRepartidor.ToString()}' 
+                GROUP BY tr.UidTurnoRepartidor";
+
+            DataTable data = this.dbConexion.Consultas(query);
+            return data;
+        }
         #endregion
 
         #region Ordenes
@@ -167,7 +192,22 @@ namespace DBControl
                         ISNULL(DS.Calle2, ''), ', ',
                         ISNULL(DS.CodigoPostal, ''), ', ',
                         (SELECT TOP 1 Nombre FROM [Colonia] WHERE UidColonia = DS.UidColonia)
-                    ) AS DireccionSucursal
+                    ) AS DireccionSucursal,
+                    dbo.ObtenerEstatusDeCobro(OT.[UidOrden]) AS EstatusPago,
+                    (
+                    SELECT 
+                        COUNT(*) 
+                    FROM ContratoDeServicio 
+                    WHERE UidSucursalSuministradora = (select uidsucursal from OrdenSucursal where UidRelacionOrdenSucursal = OT.UidOrden)
+                        AND UidSucursalDistribuidora IN (
+                            SELECT 
+                                szr.UidSucursal 
+                            FROM OrdenSucursal sos 
+                                INNER JOIN OrdenTarifario sot ON ot.UidOrden = sos.UidRelacionOrdenSucursal 
+                                INNER JOIN Tarifario st ON t.UidRegistroTarifario = sot.UidTarifario 
+                                INNER JOIN ZonaDeRecoleccion szr on st.UidRelacionZonaRecolecta = szr.UidZonaDeRecolecta 
+                            where sos.UidRelacionOrdenSucursal = OT.UidOrden) AND BiPagaAlRecogerOrdenes = 1
+                    ) AS IntPagoEnRecolecta
                 FROM [OrdenTarifario] AS OT
                     INNER JOIN [Tarifario] AS T ON T.[UidRegistroTarifario] = OT.[UidTarifario]
                     INNER JOIN [ZonaDeRecoleccion] AS ZR ON ZR.[UidZonaDeRecolecta] = T.[UidRelacionZonaRecolecta]

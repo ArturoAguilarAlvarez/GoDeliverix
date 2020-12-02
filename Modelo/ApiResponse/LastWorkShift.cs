@@ -24,5 +24,26 @@ namespace Modelo.ApiResponse
         public Int64 Folio { get; set; }
 
         public decimal Fondo { get; set; }
+
+        // Summary
+        public int TotalOrdenes { get; set; }
+
+        public double TotalSucursal { get; set; }
+
+        public double TotalEnvio { get; set; }
+
+        public double Efectivo { get; set; }
+
+        public double Liquidacion { get; set; }
+
+        public double Ganancias { get; set; }
+
+        public double PagosSucursales { get; set; }
+
+        public double CantidadPagos { get; set; }
+
+        public double Recarga { get; set; }
+
+        public double Propina { get; set; }
     }
 }

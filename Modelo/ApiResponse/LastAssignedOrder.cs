@@ -52,6 +52,12 @@ namespace Modelo.ApiResponse
 
         public string DireccionSucursal { get; set; }
 
+        public string EstatusPago { get; set; }
+
+        public int IntPagoEnRecolecta { get; set; }
+
+        public bool PagoEnRecolecta => this.IntPagoEnRecolecta == 1;
+
         public LastAssignedOrder()
         {
             this.Productos = new HashSet<DeliveryOrderProductDetail>();

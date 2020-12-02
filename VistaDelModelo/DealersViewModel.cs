@@ -22,6 +22,12 @@ namespace VistaDelModelo
         public const string OrdenRechazada = "12748F8A-E746-427D-8836-B54432A38C07";
         public const string OrdenPendiente = "6294DACE-C9D1-4F9F-A942-FF12B6E7E957";
 
+        public const string TurnoAbierto = "81494F49-F416-4431-99F4-E0AA4CF7E9F6";
+        public const string TurnoCerrado = "3BE9EF83-4A39-4A60-9FA9-7F50AD60CA3A";
+        public const string TurnoLiquidando = "AE28F243-AA0D-43BD-BF10-124256B75B00";
+        public const string TurnoLiquidado = "38FA16DF-4727-41FD-A03E-E2E43FA78F3F";
+        public const string TurnoRecargando = "B03E3407-F76D-4DFA-8BF9-7F059DC76141";
+        public const string TurnoRecargado = "CCAFB7D6-A27C-4F5B-A4A6-13D35138471F";
         public DealersViewModel()
         {
             this.DealerDb = new DealerDataAccess();
@@ -114,7 +120,35 @@ namespace VistaDelModelo
 
                 }
             }
+
+            DataTable balance = this.DealerDb.GetWorkOrderWorkShiftBalance(result.Uid);
+            if (data.Rows.Count > 0)
+            {
+                foreach (DataRow row in balance.Rows)
+                {
+                    result.TotalOrdenes = row.IsNull("TotalOrdenes") ? 0 : (int)row["TotalOrdenes"];
+                    result.TotalSucursal = row.IsNull("TotalSucursal") ? 0 : (double)row["TotalSucursal"];
+                    result.TotalEnvio = row.IsNull("TotalEnvio") ? 0 : (double)row["TotalEnvio"];
+                    result.Efectivo = row.IsNull("Efectivo") ? 0 : (double)row["Efectivo"];
+                    result.Liquidacion = row.IsNull("Liquidacion") ? 0 : (double)row["Liquidacion"];
+                    result.Ganancias = row.IsNull("Ganancias") ? 0 : (double)row["Ganancias"];
+                    result.PagosSucursales = row.IsNull("PagosSucursales") ? 0 : (double)row["PagosSucursales"];
+                    result.CantidadPagos = row.IsNull("CantidadDePagos") ? 0 : (double)row["CantidadDePagos"];
+                    result.Recarga = row.IsNull("Recarga") ? 0 : (double)row["Recarga"];
+                    result.Propina = row.IsNull("Propina") ? 0 : (double)row["Propina"];
+                }
+            }
             return result;
+        }
+
+        public Message OpenWorkshift()
+        {
+            return new Message();
+        }
+
+        public Message CloseWorkshift()
+        {
+            return new Message();
         }
         #endregion
 
