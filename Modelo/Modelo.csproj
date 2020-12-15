@@ -58,9 +58,12 @@
     <Compile Include="ApiResponse\Message.cs" />
     <Compile Include="ApiResponse\Phone.cs" />
     <Compile Include="ApiResponse\RepartidorUpdate.cs" />
+    <Compile Include="ApiResponse\Wallet.cs" />
     <Compile Include="Categoria.cs" />
     <Compile Include="Comision.cs" />
     <Compile Include="Common\ApplicationConstants.cs" />
+    <Compile Include="Common\ConceptoUid.cs" />
+    <Compile Include="Common\TipoMovimientoUid.cs" />
     <Compile Include="CorreoElectronico.cs" />
     <Compile Include="Cuenta.cs" />
     <Compile Include="DatosDireccion\Ciudad.cs" />

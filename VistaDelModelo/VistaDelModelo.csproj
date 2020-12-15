@@ -80,6 +80,7 @@
     <Compile Include="VMVehiculo.cs" />
     <Compile Include="VMVersion.cs" />
     <Compile Include="VMZonaHoraria.cs" />
+    <Compile Include="WalletViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DBControl\DBControl.csproj">

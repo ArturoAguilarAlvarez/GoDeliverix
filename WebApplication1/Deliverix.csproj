@@ -454,6 +454,7 @@
     <Compile Include="Controllers\UbicacionController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Controllers\VersionController.cs" />
+    <Compile Include="Controllers\WalletController.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
