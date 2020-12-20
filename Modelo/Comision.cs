@@ -197,5 +197,12 @@ namespace Modelo
             return oConexion.Consultas(query);
         }
         #endregion
+
+        public DataTable ObtenerComisionDefault(string proveedor = "MITec")
+        {
+            string query = $"select * from ComisionesPasarela cp inner join ProvedoresPasarela pp on pp.UidProvedorPasarela = cp.UidProvedorPasarela where pp.StrProvedor = '{proveedor}'";
+            oConexion = new Conexion();
+            return oConexion.Consultas(query);
+        }
     }
 }

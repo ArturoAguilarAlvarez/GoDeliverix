@@ -153,7 +153,7 @@ namespace VistaDelModelo
         public string ObtenerGananciasRepartidor(string valor)
         {
             oComosion = new Comision();
-           return oComosion.ObtenerComisionDeGananciaRepartidor(valor);
+            return oComosion.ObtenerComisionDeGananciaRepartidor(valor);
         }
 
         public void ObtenerComisionGoDeliverix(string StrNombreDeComision)
@@ -166,6 +166,17 @@ namespace VistaDelModelo
         }
 
         #endregion
+
+        public decimal ComisionPagoTarjeta { get; set; }
+        public void ObtenerComisionDefault()
+        {
+            oComosion = new Comision();
+            DataTable data = this.oComosion.ObtenerComisionDefault();
+            foreach (DataRow row in data.Rows)
+            {
+                ComisionPagoTarjeta = row.IsNull("IntComisionUsoPasarela") ? Decimal.Parse("4.06") : (decimal)row["IntComisionUsoPasarela"];
+            }
+        }
         #endregion
     }
 }

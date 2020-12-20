@@ -27,31 +27,18 @@ namespace WebApplication1.Controllers
             return Json(result);
         }
         #endregion
-        // GET: api/Comisiones
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
-        // GET: api/Comisiones/5
-        public string Get(int id)
+        [HttpGet]
+        public IHttpActionResult ReadComission()
         {
-            return "value";
-        }
+            var viewmodelComisiones = new VMComision();
+            viewmodelComisiones.ObtenerComisionDefault();
 
-        // POST: api/Comisiones
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT: api/Comisiones/5
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE: api/Comisiones/5
-        public void Delete(int id)
-        {
+            var result = new { 
+                IncluyeComisionConTarjeta = false, 
+                Comision = viewmodelComisiones.ComisionPagoTarjeta
+            };
+            return Json(result);
         }
     }
 }
