@@ -56,7 +56,7 @@
     <Compile Include="ApiResponse\LastWorkShift.cs" />
     <Compile Include="ApiResponse\MapCoordinates.cs" />
     <Compile Include="ApiResponse\Message.cs" />
-    <Compile Include="ApiResponse\Payment.cs" />
+    <Compile Include="ApiResponse\BranchePayment.cs" />
     <Compile Include="ApiResponse\Phone.cs" />
     <Compile Include="ApiResponse\RepartidorUpdate.cs" />
     <Compile Include="ApiResponse\Wallet.cs" />

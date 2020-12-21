@@ -19,9 +19,9 @@ namespace VistaDelModelo
         }
 
 
-        public bool Add(Payment payment)
+        public bool AddBranchePayment(BranchePayment payment)
         {
-            bool result = this.PaymentDb.Registry(Guid.NewGuid(), payment.UidFormaCobro, payment.UidOrden, payment.UidEstatusCobro, payment.Monto, payment.DescuentoMonedero);
+            bool result = this.PaymentDb.RegistryBranchePayment(payment.UidOrden, payment.UidUsuario, payment.UidDireccion, payment.UidSucursal, payment.UidRelacionOrdenSucursal, payment.UidTarifario, payment.CodigoEntrega, payment.Monto, payment.MontoSucursal, payment.DescuentoMonedero, payment.ComisionTarjeta);
 
             if (result && payment.DescuentoMonedero.HasValue)
             {

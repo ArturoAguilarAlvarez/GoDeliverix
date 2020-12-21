@@ -18,11 +18,11 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Registry([FromBody] Payment payment)
+        public IHttpActionResult RegistryBranchePayment([FromBody] BranchePayment payment)
         {
             try
             {
-                bool result = this.PaymentVm.Add(payment);
+                bool result = this.PaymentVm.AddBranchePayment(payment);
                 if (result)
                 {
                     return Ok();
