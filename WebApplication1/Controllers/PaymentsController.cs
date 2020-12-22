@@ -20,6 +20,11 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IHttpActionResult RegistryBranchePayment([FromBody] BranchePayment payment)
         {
+            if (payment == null)
+            {
+                return BadRequest("Invalid format");
+            }
+
             try
             {
                 bool result = this.PaymentVm.AddBranchePayment(payment);
