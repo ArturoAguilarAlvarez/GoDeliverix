@@ -23,10 +23,11 @@ namespace VistaDelModelo
         {
             bool result = this.PaymentDb.RegistryBranchePayment(payment.UidOrden, payment.UidUsuario, payment.UidDireccion, payment.UidSucursal, payment.UidRelacionOrdenSucursal, payment.UidTarifario, payment.CodigoEntrega, payment.Monto, payment.MontoSucursal, payment.DescuentoMonedero, payment.ComisionTarjeta);
 
-            if (result && payment.DescuentoMonedero.HasValue)
-            {
-                this.PaymentDb.RegistryWalletTransaction(payment.UidUsuario, TipoMovimientoUid.Retirar, ConceptoUid.PagoEnGoDeliverix, payment.UidDireccion, payment.DescuentoMonedero.Value);
-            }
+            // Este proceso se realiza desde el backend
+            //if (result && payment.DescuentoMonedero.HasValue)
+            //{
+            //    this.PaymentDb.RegistryWalletTransaction(payment.UidUsuario, TipoMovimientoUid.Retirar, ConceptoUid.PagoEnGoDeliverix, payment.UidDireccion, payment.DescuentoMonedero.Value);
+            //}
 
             return result;
         }
