@@ -442,6 +442,7 @@
     <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\OfertaController.cs" />
     <Compile Include="Controllers\OrdenController.cs" />
+    <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\PagosController.cs" />
     <Compile Include="Controllers\PaymentsController.cs" />
     <Compile Include="Controllers\ProductoController.cs" />

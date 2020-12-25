@@ -119,5 +119,44 @@ namespace DBControl
                 return false;
             }
         }
+
+        /// <summary>
+        /// Cancelar la orden y regresar aplicar reembolso al monedero
+        /// </summary>
+        /// <param name="UidOrden"></param>
+        /// <param name="UidUsuario"></param>
+        /// <param name="UidDireccion"></param>
+        /// <returns></returns>
+        public bool CancelOrderAndApplyDiscount(Guid UidOrdenSucursal, Guid UidUsuario, Guid UidDireccion)
+        {
+
+            SqlCommand command = new SqlCommand();
+            try
+            {
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.CommandText = "BitacoraEstatusOrdenReembolso";
+
+                command.Parameters.Add("@SPUidOrdenSucursal", SqlDbType.UniqueIdentifier);
+                command.Parameters["@SPUidOrdenSucursal"].Value = UidOrdenSucursal;
+
+                command.Parameters.Add("@SPUidEstatusEnOrden", SqlDbType.UniqueIdentifier);
+                command.Parameters["@SPUidEstatusEnOrden"].Value = Guid.Parse("A2D33D7C-2E2E-4DC6-97E3-73F382F30D93");
+
+                command.Parameters.Add("@SPParametro", SqlDbType.VarChar,1);
+                command.Parameters["@SPParametro"].Value = char.Parse("S");
+
+                command.Parameters.Add("@SPUidUsuario", SqlDbType.UniqueIdentifier);
+                command.Parameters["@SPUidUsuario"].Value = UidUsuario;
+
+                command.Parameters.Add("@SPUidDireccion", SqlDbType.UniqueIdentifier);
+                command.Parameters["@SPUidDireccion"].Value = UidDireccion;
+
+                return this.dbConexion.ModificarDatos(command);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }
