@@ -76,13 +76,13 @@ namespace DBControl
 
                 if (descuentoMonedero.HasValue)
                 {
-                    command.Parameters.Add("@DescuentoMonedero", SqlDbType.Decimal);
+                    command.Parameters.Add("@DescuentoMonedero", SqlDbType.Money);
                     command.Parameters["@DescuentoMonedero"].Value = descuentoMonedero;
                 }
 
                 if (comisionPagoTarjeta.HasValue)
                 {
-                    command.Parameters.Add("@ComisionPagoTarjeta", SqlDbType.Decimal);
+                    command.Parameters.Add("@ComisionPagoTarjeta", SqlDbType.Money);
                     command.Parameters["@ComisionPagoTarjeta"].Value = comisionPagoTarjeta;
                 }
 
