@@ -36,5 +36,28 @@ namespace VistaDelModelo
 
             return result;
         }
+
+        public IEnumerable<WalletTransactionGrid> ReadAllTransactions(Guid uidUser, Guid? uidConcept = null, Guid? uidType = null)
+        {
+            List<WalletTransactionGrid> result = new List<WalletTransactionGrid>();
+            DataTable data = this.WalletData.ReadAllUserTransactions(uidUser, uidConcept, uidType);
+
+            foreach (DataRow row in data.Rows)
+            {
+                result.Add(new WalletTransactionGrid()
+                {
+                    Uid = (Guid)row["Uid"],
+                    UidConcept = (Guid)row["UidConcept"],
+                    UidType = (Guid)row["UidType"],
+                    Amount = (decimal)row["Amount"],
+                    Concept = (string)row["Concept"],
+                    Date = (DateTime)row["Date"],
+                    Folio = (long)row["Folio"],
+                    Type = (string)row["Type"]
+                });
+            }
+
+            return result;
+        }
     }
 }

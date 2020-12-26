@@ -36,5 +36,19 @@ namespace WebApplication1.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet]
+        public IHttpActionResult ReadAllTransactions(Guid uidUser, Guid? uidConcept = null, Guid? uidType = null)
+        {
+            try
+            {
+                var result = this.WalletVm.ReadAllTransactions(uidUser, uidConcept, uidType);
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

@@ -60,6 +60,7 @@
     <Compile Include="ApiResponse\Phone.cs" />
     <Compile Include="ApiResponse\RepartidorUpdate.cs" />
     <Compile Include="ApiResponse\Wallet.cs" />
+    <Compile Include="ApiResponse\WalletTransactionGrid.cs" />
     <Compile Include="Categoria.cs" />
     <Compile Include="Comision.cs" />
     <Compile Include="Common\ApplicationConstants.cs" />
