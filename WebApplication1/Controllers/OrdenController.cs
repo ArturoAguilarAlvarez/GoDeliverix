@@ -104,7 +104,8 @@ namespace WebApplication1.Controllers
                     o.IntCantidadDeOrdenes,
                     o.IntCantidadProductos,
                     o.ListaDeOrdenes,
-                    o.intCantidad
+                    o.intCantidad,
+                    o.WalletDiscount
                 })
             };
 
