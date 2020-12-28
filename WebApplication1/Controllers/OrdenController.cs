@@ -125,7 +125,8 @@ namespace WebApplication1.Controllers
                             CostoEnvio = item["CostoEnvio"].ToString(),
                             StrEstatusOrdenSucursal = UltimoEstatus,
                             StrFormaDeCobro = item["EstatusCobro"].ToString(),
-                            intCantidad = TotalDeProductos
+                            intCantidad = TotalDeProductos,
+                            WalletDiscount = item.IsNull("WalletDiscount") ? null : (decimal?)item["WalletDiscount"]
                         });
                     }
                     catch (Exception e)
@@ -182,7 +183,8 @@ namespace WebApplication1.Controllers
                         p.CostoEnvio,
                         p.StrEstatusOrdenSucursal,
                         p.intCantidad,
-                        p.StrFormaDeCobro
+                        p.StrFormaDeCobro,
+                        p.WalletDiscount
                     })
                 };
 
