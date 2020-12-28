@@ -222,6 +222,7 @@ namespace WebApplication1.Controllers
                 StrNombreSucursal = MVOrden.StrNombreSucursal,
                 UidEstatus = MVOrden.UidEstatus,
                 UidEmpresa = MVOrden.UidEmpresa,
+                WalletDiscount = MVOrden.WalletDiscount
             };
             var DeliveryViewModel = new VMTarifario();
             DeliveryViewModel.ObtenerTarifarioDeOrden(Orden.Uidorden);
@@ -239,7 +240,8 @@ namespace WebApplication1.Controllers
                     Orden.FechaDeOrden,
                     Orden.Imagen,
                     Orden.StrNombreSucursal,
-                    Orden.UidEstatus
+                    Orden.UidEstatus,
+                    Orden.WalletDiscount
                 },
                 DeliveryInformation = new
                 {

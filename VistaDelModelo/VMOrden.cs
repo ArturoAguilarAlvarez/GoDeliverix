@@ -772,7 +772,7 @@ namespace VistaDelModelo
                                 StrNombreSucursal = item["NombreComercial"].ToString();
                                 UidEstatus = new Guid(item["estatus"].ToString().ToLower());
                                 StrEstatusOrdenGeneral = NombreDeEstatus;
-
+                                WalletDiscount = item.IsNull("WalletDiscount") ? null : (decimal?)item["WalletDiscount"];
                             }
                         }
 
