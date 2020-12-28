@@ -226,7 +226,7 @@ namespace VistaDelModelo
         }
 
         public string StrDireccionDeEntrega { get; private set; }
-        
+
 
         public List<VMOrden> ListaDeBitacoraDeOrdenes = new List<VMOrden>();
         public List<VMOrden> ListaDeInformacionDeOrden = new List<VMOrden>();
@@ -485,7 +485,8 @@ namespace VistaDelModelo
                         StrFormaDeCobro = item["FormaDeCobro"].ToString(),
                         LNGFolio = int.Parse(item["intFolio"].ToString()),
                         StrDireccionDeEntrega = Identificador,
-                        UidDireccionCliente = new Guid(item["UidDireccion"].ToString())
+                        UidDireccionCliente = new Guid(item["UidDireccion"].ToString()),
+                        WalletDiscount = item.IsNull("WalletDiscount") ? null : (decimal?)item["WalletDiscount"]
                     };
                     ListaDeOrdenes.Add(orden);
                 }
@@ -1327,6 +1328,10 @@ namespace VistaDelModelo
                 ListaDeOrdenes.Add(new VMOrden() { Uidorden = new Guid(item["UidRelacionOrdenSucursal"].ToString()), MTotal = decimal.Parse(item["MTotalSucursal"].ToString()), UidEstatus = new Guid(item["Estatus"].ToString()) });
             }
         }
+        #endregion
+
+        #region Properties
+        public decimal? WalletDiscount { get; set; }
         #endregion
     }
 

@@ -72,7 +72,8 @@ namespace WebApplication1.Controllers
                     o.UidDireccionCliente,
                     o.StrDireccionDeEntrega,
                     o.IntCantidadDeOrdenes,
-                    o.IntCantidadProductos
+                    o.IntCantidadProductos,
+                    o.WalletDiscount
                 })
             };
             return Json(result);
