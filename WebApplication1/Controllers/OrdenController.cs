@@ -57,6 +57,36 @@ namespace WebApplication1.Controllers
                     productos += ord.ListaDeProductos.Count;
                 }
                 item.IntCantidadProductos = productos;
+                item.ListaDeOrdenes = new List<VMOrden>();
+
+                foreach (DataRow ord in MVOrden.ObtenerSucursaleDeOrden(item.Uidorden).Rows)
+                {
+                    var statusOrden = new VMOrden();
+                    var UltimoEstatus = string.Empty;
+                    foreach (DataRow it in statusOrden.ObtenerEstatusOrden(ord["UidRelacionOrdenSucursal"].ToString()).Rows)
+                    {
+                        UltimoEstatus = it["VchNombre"].ToString();
+                    }
+                    int cantidad = 0;
+                    var vmord = new VMOrden();
+                    var emp = new VMEmpresas();
+                    emp.BuscarEmpresas(UidEmpresa: new Guid(ord["uidempresa"].ToString()));
+                    vmord.ObtenerProductosDeOrden(ord["UidRelacionOrdenSucursal"].ToString());
+                    cantidad = vmord.ListaDeProductos.Count;
+
+                    item.ListaDeOrdenes.Add(new VMOrden()
+                    {
+                        UidRelacionOrdenSucursal = ord["UidRelacionOrdenSucursal"].ToString(),
+                        Imagen = ord["NVchRuta"].ToString(),
+                        Identificador = ord["Identificador"].ToString(),
+                        LNGFolio = long.Parse(ord["LNGFolio"].ToString()),
+                        StrEstatusOrdenSucursal = UltimoEstatus,
+                        MTotal = decimal.Parse(ord["MTotal"].ToString()),
+                        intCantidad = cantidad,
+                        StrNombreEmpresa = emp.NOMBRECOMERCIAL
+                    });
+                }
+
             }
             var result = new
             {
@@ -73,9 +103,12 @@ namespace WebApplication1.Controllers
                     o.StrDireccionDeEntrega,
                     o.IntCantidadDeOrdenes,
                     o.IntCantidadProductos,
-                    o.WalletDiscount
+                    o.ListaDeOrdenes,
+                    o.intCantidad
                 })
             };
+
+
             return Json(result);
         }
 

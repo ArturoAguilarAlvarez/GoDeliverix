@@ -13,11 +13,13 @@ namespace DBControl
         Conexion oConexcion;
         #endregion
         #region Metodos
-        public DataTable IngresoAlSitio(string USUARIO, string PASSWORD)
+        public DataTable IngresoAlSitio(string USUARIO, string PASSWORD, string correoElectronico = "")
         {
             oConexcion = new Conexion();
             //Crea la variable de acceso que define el resultado del registro a buscar
-            string query = "select UidUsuario from Usuarios where Usuario = '" + USUARIO + "' and Contrasena = '" + PASSWORD + "'";
+            string query = $" select u.UidUsuario from Usuarios u inner join CorreoUsuario cu on cu.UidUsuario = u.UidUsuario " +
+                $"inner join CorreoElectronico ce on ce.IdCorreo = cu.UidCorreo where('{USUARIO}' != '' and Usuario = '{USUARIO}' or('{USUARIO}' = '')) and" +
+                $" (('{correoElectronico}' != '' and ce.Correo = '{correoElectronico}')or('{correoElectronico}' = '')) and Contrasena = '{PASSWORD}'";
             return oConexcion.Consultas(query);
         }
         public DataTable EstatusUsuario(string UidUsuario)

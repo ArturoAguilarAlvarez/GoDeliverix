@@ -99,6 +99,13 @@ namespace VistaDelModelo
             get { return _StrNombreSucursal; }
             set { _StrNombreSucursal = value; }
         }
+        private string _StrNombreEmpresa;
+
+        public string StrNombreEmpresa
+        {
+            get { return _StrNombreEmpresa; }
+            set { _StrNombreEmpresa = value; }
+        }
         private DateTime _dtmFecha;
 
         public DateTime DtmFecha
@@ -334,7 +341,7 @@ namespace VistaDelModelo
             DataTable DatoQuery = new DataTable();
             try
             {
-                string Query = $"select distinct OS.UidRelacionOrdenSucursal,os.BintCodigoEntrega, i.NVchRuta,dbo.ObtenerEstatusDeCobro(o.UidOrden) as EstatusCobro, S.Identificador,ot.MPropina, cast(cast(os.MTotalSucursal as decimal(10, 2)) + cast(t.MCosto as decimal(10, 2)) as decimal(10, 2)) as MTotal, os.IntFolio as LNGFolio, cast(os.MTotalSucursal as decimal(10, 2)) as MTotalSucursal,s.uidSucursal,cast(t.MCosto as decimal(10, 2)) as CostoEnvio, cast(ot.MPropina as decimal(10, 2)) as MPropina,os.DescuentoMonedero AS WalletDiscount  from Ordenes o inner   join OrdenSucursal OS on o.UidOrden = OS.UidOrden inner  join Sucursales S on s.UidSucursal = OS.UidSucursal inner  join OrdenTarifario ot on ot.UidOrden = os.UidRelacionOrdenSucursal inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario  inner join OrdenProducto op on op.UidOrden = os.UidRelacionOrdenSucursal inner join SeccionProducto sp on sp.UidSeccionProducto = op.UidSeccionProducto inner join ImagenEmpresa IE on IE.UidEmpresa = S.UidEmpresa inner join Imagenes i on i.UIdImagen = IE.UidImagen where o.UidOrden = '{ UidOrden.ToString()}' and i.NVchRuta like '%FotoPerfil%' ";
+                string Query = $"select distinct OS.UidRelacionOrdenSucursal,os.BintCodigoEntrega,s.uidempresa, i.NVchRuta,dbo.ObtenerEstatusDeCobro(o.UidOrden) as EstatusCobro, S.Identificador,ot.MPropina, cast(cast(os.MTotalSucursal as decimal(10, 2)) + cast(t.MCosto as decimal(10, 2)) as decimal(10, 2)) as MTotal, os.IntFolio as LNGFolio, cast(os.MTotalSucursal as decimal(10, 2)) as MTotalSucursal,s.uidSucursal,cast(t.MCosto as decimal(10, 2)) as CostoEnvio, cast(ot.MPropina as decimal(10, 2)) as MPropina  from Ordenes o inner   join OrdenSucursal OS on o.UidOrden = OS.UidOrden inner  join Sucursales S on s.UidSucursal = OS.UidSucursal inner  join OrdenTarifario ot on ot.UidOrden = os.UidRelacionOrdenSucursal inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario  inner join OrdenProducto op on op.UidOrden = os.UidRelacionOrdenSucursal inner join SeccionProducto sp on sp.UidSeccionProducto = op.UidSeccionProducto inner join ImagenEmpresa IE on IE.UidEmpresa = S.UidEmpresa inner join Imagenes i on i.UIdImagen = IE.UidImagen where o.UidOrden = '{ UidOrden.ToString()}' and i.NVchRuta like '%FotoPerfil%' ";
                 DatoQuery = Datos.Consultas(Query);
             }
             catch (Exception)

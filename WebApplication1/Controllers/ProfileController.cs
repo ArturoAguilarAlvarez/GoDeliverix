@@ -14,10 +14,10 @@ namespace WebApplication1.Controllers
         #endregion
 
         // GET: api/Profile
-        public HttpResponseMessage GetInicioDeSessionCliente_Movil(string Usuario, string Contrasena)
+        public HttpResponseMessage GetInicioDeSessionCliente_Movil(string Contrasena, string Usuario = "", string correoElectronico = "")
         {
             MVAcceso = new VMAcceso();
-            Guid id = MVAcceso.Ingresar(Usuario, Contrasena);
+            Guid id = MVAcceso.Ingresar(Usuario, Contrasena, correoElectronico);
             VMUsuarios mvusuario = new VMUsuarios();
             mvusuario.BusquedaDeUsuario(UidUsuario: id, UIDPERFIL: new Guid("4F1E1C4B-3253-4225-9E46-DD7D1940DA19"));
             return Request.CreateResponse(mvusuario);

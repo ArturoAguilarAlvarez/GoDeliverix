@@ -443,10 +443,10 @@ namespace VistaDelModelo
                 string Referencia = item["Referencia"].ToString();
                 string Identificador = item["Identificador"].ToString();
                 // Nombre de campos de ciudad y colonia
-                string NombreColonia = "No hay información";
-                string NombreCiudad = "No hay información";
-                string NombreEstado = "No hay información";
-                string NombrePais = "No hay información";
+                string NombreColonia = "";
+                string NombreCiudad = "";
+                string NombreEstado = "";
+                string NombrePais = "";
                 bool predeterminada = bool.Parse(item["BPredeterminada"].ToString());
                 //Validación de variables vacias
                 if (Identificador == "" && Identificador == string.Empty)
@@ -455,15 +455,15 @@ namespace VistaDelModelo
                 }
                 if (CP == "" && CP == string.Empty)
                 {
-                    CP = "No indicado";
+                    CP = "";
                 }
                 if (CALLE0 == "" && CALLE0 == string.Empty)
                 {
-                    CALLE0 = "No hay información";
+                    CALLE0 = "";
                 }
                 if (Referencia == "" && Referencia == string.Empty)
                 {
-                    Referencia = "No hay información";
+                    Referencia = "";
                 }
                 string oLongitud = "";
                 string oLatitud = "";

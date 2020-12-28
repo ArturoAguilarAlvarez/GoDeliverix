@@ -166,7 +166,7 @@ namespace Modelo.Usuario
                 cmd.Parameters.Add("@APellidoMaterno", SqlDbType.NVarChar, 100);
                 cmd.Parameters["@APellidoMaterno"].Value = user.APELLIDOMATERNO;
 
-                cmd.Parameters.Add("@Usuario", SqlDbType.NVarChar, 100);
+                cmd.Parameters.Add("@Usuario", SqlDbType.NVarChar, 200);
                 cmd.Parameters["@Usuario"].Value = user.USUARIO;
 
                 cmd.Parameters.Add("@Password", SqlDbType.NVarChar, 100);

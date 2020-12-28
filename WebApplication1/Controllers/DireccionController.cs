@@ -647,7 +647,7 @@ namespace WebApplication1.Controllers
             };
 
             return Json(result);
-            }
+        }
         [HttpPost]
         public IHttpActionResult Agregar([FromBody] DireccionModel model)
         {
@@ -673,8 +673,8 @@ namespace WebApplication1.Controllers
                     model.CodigoPostal,
                     model.Referencias,
                     model.Identificador,
-                    model.DefaultAddress.ToString(),
-                    model.Status.ToString());
+                    model.Status.ToString(),
+                    model.DefaultAddress.ToString());
 
                 MVUbicacion.GuardaUbicacionDireccion(model.Uid, Guid.NewGuid(), model.Latitude, model.Longitude);
                 return Ok();
@@ -709,7 +709,7 @@ namespace WebApplication1.Controllers
                     model.Referencias,
                     model.Identificador,
                     model.Status.ToString(),
-                    model.DefaultAddress.ToString(),                    
+                    model.DefaultAddress.ToString(),
                     model.UidUsuario);
                 var resp = MVUbicacion.GuardaUbicacionDireccion(model.Uid, Guid.NewGuid(), model.Latitude, model.Longitude);
                 return Ok();
