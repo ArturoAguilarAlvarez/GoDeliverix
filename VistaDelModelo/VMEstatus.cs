@@ -65,7 +65,8 @@ namespace VistaDelModelo
                 ListaEstatus.Add(new VMEstatus()
                 {
                     DtmFechaDeEstatus = item["DtmFecha"].ToString(),
-                    NOMBRE = item["VchNombre"].ToString()
+                    NOMBRE = item["VchNombre"].ToString(),
+                    DtFecha = (DateTime)item["DtmFecha"]
                 });
             }
         }
@@ -88,6 +89,10 @@ namespace VistaDelModelo
                 ListaEstatus.Add(new VMEstatus() { UidEstatus = id, NOMBRE = Nombre });
             }
         }
+        #endregion
+
+        #region Properties
+        public DateTime DtFecha { get; set; }
         #endregion
     }
 }

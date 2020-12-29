@@ -83,7 +83,8 @@ namespace WebApplication1.Controllers
                         StrEstatusOrdenSucursal = UltimoEstatus,
                         MTotal = decimal.Parse(ord["MTotal"].ToString()),
                         intCantidad = cantidad,
-                        StrNombreEmpresa = emp.NOMBRECOMERCIAL
+                        StrNombreEmpresa = emp.NOMBRECOMERCIAL,
+                        LngCodigoDeEntrega = ord.IsNull("BintCodigoEntrega") ? 0 :(long)ord["BintCodigoEntrega"]
                     });
                 }
 
@@ -264,7 +265,12 @@ namespace WebApplication1.Controllers
             StatusInformation.cargaEstatusOrdenSucursal(Orden.Uidorden.ToString());
             var result = new
             {
-                StatusInformation = StatusInformation.ListaEstatus.Select(e => new { e.DtmFechaDeEstatus, e.NOMBRE }),
+                StatusInformation = StatusInformation.ListaEstatus.Select(e => new
+                {
+                    e.DtmFechaDeEstatus,
+                    e.NOMBRE,
+                    e.DtFecha
+                }),
                 OrderInformation = new
                 {
                     Orden.Uidorden,
