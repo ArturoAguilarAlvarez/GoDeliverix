@@ -855,12 +855,13 @@ namespace WebApplication1.Vista
             MVUsuarios.obtenerUsuario(valor);
             // MVUsuarios.ObtenerTelefonos(valor);
             MVDireccion.ObtenerDireccionesUsuario(valor);
+            MVCorreoElectronico.BuscarCorreos(UidPropietario: new Guid(valor), strParametroDebusqueda: "Usuario");
             MVTelefono.BuscarTelefonos(UidPropietario: new Guid(valor), ParadetroDeBusqueda: "Usuario");
 
             txtMontoMaximoAPortar.Text = MVTurno.ObtenerMontoAPortar(valor);
             txtPorcentajePagoRepartidor.Text = MVComision.ObtenerGananciasRepartidor(valor);
             txtUidUsuario.Text = MVUsuarios.Uid.ToString();
-
+            txtDCorreoElectronico.Text = MVCorreoElectronico.CORREO;
             txtDNombre.Text = MVUsuarios.StrNombre;
             txtDApellidoPaterno.Text = MVUsuarios.StrApellidoPaterno;
             txtDApellidoMaterno.Text = MVUsuarios.StrApellidoMaterno;

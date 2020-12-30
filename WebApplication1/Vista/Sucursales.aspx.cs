@@ -2196,8 +2196,8 @@ namespace WebApplication1.Vista
                                 if (MVTarifario.ListaDeTarifariosSeleccionados.Count > 0)
                                 {
                                     //crear el metodo y verificar que este borre los datos relacionados al contrato
-
-                                    MVTarifario.EliminarTarifarioDeSucursal(new Guid(UidSuministradora));
+                                    var viewTarifario = new VMTarifario();
+                                    viewTarifario.EliminarTarifarioDeSucursal(new Guid(UidSuministradora));
 
                                     MVTarifario.GuardaTarifarioConContrato();
                                 }
@@ -3763,25 +3763,32 @@ namespace WebApplication1.Vista
                 PanelDeInformacion.Visible = true;
 
 
-                var objeto = MVContrato.ListaDeSucursalesEnContrato.Find(p => p.UidSucursalDistribuidora.ToString() == UidSucursal);
-                if (objeto != null)
-                {
-                    ChbxPagoOrdenAlRecolectar.Checked = objeto.BiPagoAlRecoletar;
-                    txtComisionProducto.Text = objeto.IntPorcentajeComisionContrato.ToString();
-                }
+
                 //Oculta los botones para la edicion del contrato
                 btnEditarContrato.Visible = false;
                 btnAceptarEdicionContrato.Visible = false;
                 PanelMensajeContrato.Visible = false;
-                ChbxPagoOrdenAlRecolectar.Enabled = false;
+                ChbxPagoOrdenAlRecolectar.Enabled = true;
                 txtComisionProducto.Enabled = false;
                 txtComisionProducto.Text = lblComisionGoDeliverix.Text.Replace("%", "");
                 //Obtiene la informacion del tarifario dependiendo de la zona de recoleccion de la empresa suministradora
                 if (MVEmpresa.ObtenerTipoDeEmpresa(Session["UidEmpresaSistema"].ToString())) // si es empresa suministradora
                 {
+
                     MVTarifario.BuscarTarifario("Gestion", uidSucursal: UidSucursal, UidZonaRecolecta: DDLDColonia.SelectedItem.Value);
                     DgvInformacionTarifario.DataSource = MVTarifario.ListaDeTarifarios;
                     DgvInformacionTarifario.DataBind();
+                    var objeto = MVContrato.ListaDeSucursalesEnContrato.Find(p => p.UidSucursalDistribuidora.ToString() == UidSucursal);
+                    if (objeto != null)
+                    {
+                        ChbxPagoOrdenAlRecolectar.Checked = objeto.BiPagoAlRecoletar;
+                        txtComisionProducto.Text = objeto.IntPorcentajeComisionContrato.ToString();
+                        foreach (var item in MVTarifario.ListaDeTarifariosSeleccionados)
+                        {
+                            item.UidContrato = objeto.Uid;
+                        }
+                    }
+
                     //for (int i = 0; i < MVTarifario.ListaDeTarifariosSeleccionados.Count; i++)
                     //{
                     //    if (MVTarifario.ListaDeTarifariosSeleccionados[i].UidContrato == Guid.Empty)
@@ -3792,12 +3799,12 @@ namespace WebApplication1.Vista
                     //    }
                     //}
 
+
                     foreach (GridViewRow item in DgvInformacionTarifario.Rows)
                     {
                         CheckBox chk = item.FindControl("chkbTarifario") as CheckBox;
 
                         item.Cells[2].Text = "$" + item.Cells[2].Text;
-
                         chk.Checked = true;
                         if (MVTarifario.ListaDeTarifariosSeleccionados.Exists(t => t.GuidSucursalDistribuidora == new Guid(UidSucursal)))
                         {
@@ -3827,6 +3834,12 @@ namespace WebApplication1.Vista
                 }
                 else
                 {
+                    var objeto = MVContrato.ListaDeSucursalesEnContrato.Find(p => p.UidSucursalSuministradora.ToString() == UidSucursal);
+                    if (objeto != null)
+                    {
+                        ChbxPagoOrdenAlRecolectar.Checked = objeto.BiPagoAlRecoletar;
+                        txtComisionProducto.Text = objeto.IntPorcentajeComisionContrato.ToString();
+                    }
                     MVTarifario.BuscarTarifario("Informacion distribuidora", uidSucursal: UidSucursal, UidSucursalDistribuidora: txtUidSucursal.Text);
                     DGVInformacionTarifarioDistribuidora.DataSource = MVTarifario.ListaDeTarifarios;
                     DGVInformacionTarifarioDistribuidora.DataBind();
@@ -4240,8 +4253,6 @@ namespace WebApplication1.Vista
                         }
                     }
                 }
-
-
             }
         }
         #endregion

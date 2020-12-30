@@ -179,7 +179,6 @@ namespace VistaDelModelo
                         StrNombreColoniaZE = NombreZonaEntrega,
                         StrNombreColoniaZR = NombreZonaRecolecta
                     };
-
                     ListaDeTarifariosSeleccionados.Add(registro);
                 }
             }

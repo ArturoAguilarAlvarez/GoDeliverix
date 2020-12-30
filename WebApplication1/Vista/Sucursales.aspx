@@ -906,8 +906,7 @@
                                                 <asp:GridView runat="server" ID="DGVInformacionTarifarioDistribuidora" Style="margin-top: 10px;" AutoGenerateColumns="false" DataKeyNames="UidTarifario" CssClass="table table-bordered table-hover table-condensed table-striped input-sm">
                                                     <EmptyDataTemplate>
                                                         <div class="info">
-                                                            No hay zonas de entrega disponibles para mostrar
-                                                   
+                                                            No hay zonas de entrega disponibles para mostrar                                                   
                                                         </div>
                                                     </EmptyDataTemplate>
                                                     <SelectedRowStyle CssClass="table table-hover input-sm success" />
@@ -999,8 +998,7 @@
                                     </asp:GridView>
                                 </div>
                             </asp:Panel>
-                        </div>
-
+                            
                         <%--Panel de servicio a clientes--%>
                         <asp:Panel ID="PanelAtencionAClientes" runat="server">
                             <div class="col-md-12">
@@ -1039,6 +1037,8 @@
                                 </asp:GridView>
                             </div>
                         </asp:Panel>
+                        </div>
+
                     </div>
 
                 </div>
