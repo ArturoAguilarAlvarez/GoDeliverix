@@ -60,11 +60,14 @@ namespace DBControl
                     T.[UidTipoDeMovimiento] AS [UidType],
                     T.[VchNombre] AS [Type],
                     C.[UidConcepto] AS [UidConcept],
-                    C.[VchNombre] AS [Concept]
+                    C.[VchNombre] AS [Concept],
+                    OS.[IntFolio] AS [FolioOrdenSucursal]
                 FROM [Movimientos] AS M
                     INNER JOIN [Monedero] AS W ON W.[UidMonedero] = M.[UidMonedero]
                     INNER JOIN [TipoDeMovimiento] AS T ON T.[UidTipoDeMovimiento] = M.[UidTipoDeMovimiento]
                     INNER JOIN [Conceptos] AS C ON C.[UidConcepto] = M.[UidConcepto]
+                    LEFT JOIN [OrdenSucursalMovimientoMonedero] AS O ON O.[UidMovimiento] = M.[UidMovimiento]
+                    LEFT JOIN [OrdenSucursal] AS OS ON OS.[UidRelacionOrdenSucursal] = O.[UidOrdenSucursal]
                 WHERE W.[UidUsuario] = '{uidUser.ToString()}' {where}";
 
             DataTable data = this.dbConexion.Consultas(query);

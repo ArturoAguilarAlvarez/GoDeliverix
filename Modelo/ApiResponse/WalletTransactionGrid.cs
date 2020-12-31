@@ -23,5 +23,7 @@ namespace Modelo.ApiResponse
         public Guid UidConcept { get; set; }
 
         public string Concept { get; set; }
+
+        public long? FolioOrdenSucursal { get; set; }
     }
 }
