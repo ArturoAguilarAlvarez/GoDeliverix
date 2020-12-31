@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AllSuministradora.Recursos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -110,7 +111,9 @@ namespace AllSuministradora.model
         {
             bool respuesta = false;
             VMTurno oturno = new VMTurno();
-            respuesta = oturno.TurnoAbierto(UidSucursal);
+            var instance = ControlGeneral.GetInstance();
+
+            respuesta = oturno.TurnoAbierto(UidSucursal, instance.Principal.UidUsuario);
             if (respuesta)
             {
                 oturno.ConsultarUltimoTurnoSuministradora(UidLicencia.ToString());

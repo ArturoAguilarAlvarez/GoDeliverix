@@ -171,7 +171,6 @@ namespace AllSuministradora.model
             }
             else if (oTurno != null)
             {
-
                 VMOrden MVOrden = new VMOrden();
                 MVOrden.InformacionDeOrdenesDeTurnoSuministradoraTurnoCallCenter(UidSucursal.ToString(), instance.Principal.oTurno.UidTurno);
                 bool PosibilidadDeCerrar = true;
@@ -179,7 +178,8 @@ namespace AllSuministradora.model
                 {
                     foreach (var o in MVOrden.ListaDeOrdenes)
                     {
-                        if (o.UidEstatus.ToString().ToUpper() == "E2BAD7D9-9CD0-4698-959D-0A211800545F")
+                        //Estatus Enviado, Cancelado, Entregado
+                        if (o.UidEstatus.ToString().ToUpper() == "A2D33D7C-2E2E-4DC6-97E3-73F382F30D93" || o.UidEstatus.ToString().ToUpper() == "B6BFC834-7CC4-4E67-817D-5ECB0EB2FFA7" || o.UidEstatus.ToString().ToUpper() == "2FDEE8E7-0D54-4616-B4C1-037F5A37409D")
                         {
                             PosibilidadDeCerrar = true;
                         }
@@ -188,18 +188,17 @@ namespace AllSuministradora.model
                             PosibilidadDeCerrar = false;
                         }
                     }
-
                 }
 
                 if (PosibilidadDeCerrar)
                 {
-                    //VMTurno MVTUrno = new VMTurno();
-                    //MVTUrno.InformacionDeCierreDeTurnoSucursalSuministradora("Suministradora", UidLicencia: Licencia.ToString());
-                    //oTurno = new Turno() { UidUsuario = new Guid(instance.Principal.UidUsuario), UidLicencia = Licencia };
-                    //oTurno.ControlDeTurno();
-                    //oTurno = null;
-                    //StrEstatusTurno = "Comenzar";
-                    //CcolorTurno = Brushes.Green;
+                    VMTurno MVTUrno = new VMTurno();
+                    MVTUrno.InformacionDeCierreDeTurnoSucursalSuministradora("Suministradora", UidLicencia: Licencia.ToString());
+                    oTurno = new Turno() { UidUsuario = new Guid(instance.Principal.UidUsuario), UidLicencia = Licencia };
+                    oTurno.ControlDeTurno();
+                    oTurno = null;
+                    StrEstatusTurno = "Comenzar";
+                    CcolorTurno = Brushes.Green;
                     vistas.Reportes.ReporteCierreTurnoSucursal obj = new vistas.Reportes.ReporteCierreTurnoSucursal(Licencia.ToString());
                     obj.Show();
                 }
@@ -208,7 +207,7 @@ namespace AllSuministradora.model
                     MessageBox.Show("No puedes cerrar turno si no has completado las ordenes");
                 }
             }
-            //instance.VMSucursalesLocal.ObtenSucursales();
+            instance.VMSucursalesLocal.ObtenSucursales();
         }
         #endregion
     }

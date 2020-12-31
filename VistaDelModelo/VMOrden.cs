@@ -1332,7 +1332,12 @@ namespace VistaDelModelo
             ListaDeOrdenes = new List<VMOrden>();
             foreach (DataRow item in oOrden.InformacionDeOrdenesTurnoCallCenter(v, uidTurno).Rows)
             {
-                ListaDeOrdenes.Add(new VMOrden() { Uidorden = new Guid(item["UidRelacionOrdenSucursal"].ToString()), MTotal = decimal.Parse(item["MTotalSucursal"].ToString()), UidEstatus = new Guid(item["Estatus"].ToString()) });
+                ListaDeOrdenes.Add(new VMOrden()
+                {
+                    Uidorden = new Guid(item["UidRelacionOrdenSucursal"].ToString()),
+                    MTotal = decimal.Parse(item["MTotalSucursal"].ToString()),
+                    UidEstatus = new Guid(item["Estatus"].ToString())
+                });
             }
         }
         #endregion

@@ -486,7 +486,7 @@ namespace VistaDelModelo
                     {
                         DRecarga = decimal.Parse(item["recargas"].ToString());
                     }
-                    
+
                 }
             }
             catch (Exception)
@@ -957,11 +957,11 @@ namespace VistaDelModelo
             }
         }
 
-        public bool TurnoAbierto(Guid UidSucursal)
+        public bool TurnoAbierto(Guid UidSucursal, string UidUsuario)
         {
             oConexion = new Conexion();
             bool resultado = false;
-            string query = "select top 1 * from TurnoSuministradora ts where ts.DtmHoraFin is  null and ts.UidSucursal = '" + UidSucursal.ToString() + "'";
+            string query = "select top 1 * from TurnoSuministradora ts where ts.DtmHoraFin is  null and ts.UidUsuario = '" + UidUsuario + "' and ts.UidSucursal = '" + UidSucursal.ToString() + "'";
             if (oConexion.Consultas(query).Rows.Count > 0)
             {
                 resultado = true;
@@ -1013,7 +1013,7 @@ namespace VistaDelModelo
                         });
                     }
                 }
-                else if(StrTipoDeSucursal == "Distribuidora")
+                else if (StrTipoDeSucursal == "Distribuidora")
                 {
                     foreach (DataRow item in oConexion.Busquedas(cmd).Rows)
                     {
@@ -1022,13 +1022,13 @@ namespace VistaDelModelo
                             LngFolio = long.Parse(item["Orden"].ToString()),
                             LngFolioGeneral = long.Parse(item["FolioOrdenDistribuidora"].ToString()),
                             DPagosASucursal = decimal.Parse(item["MontoSucursal"].ToString()),
-                            DPagoDeComision = decimal.Parse(item["Pagado"].ToString()),                            
+                            DPagoDeComision = decimal.Parse(item["Pagado"].ToString()),
                             DGananciasSucursal = decimal.Parse(item["Ingresos"].ToString()),
                             DGanancias = decimal.Parse(item["GananciasRepartidor"].ToString()),
                             StrTipoDePagoDeOrden = item["TipoDePago"].ToString(),
                             StrEmpresaDistribuidora = item["Empresa"].ToString(),
                             strNombreSucursal = item["Sucursal"].ToString(),
-                            strUsuario =item["Repartidor"].ToString(),
+                            strUsuario = item["Repartidor"].ToString(),
                             DPropina = decimal.Parse(item["Propina"].ToString()),
                             DTotalEnvio = decimal.Parse(item["Envio"].ToString())
                         });

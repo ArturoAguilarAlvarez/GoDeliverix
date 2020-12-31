@@ -240,7 +240,7 @@ namespace Modelo
         public DataTable InformacionDeOrdenesTurnoCallCenter(string v, Guid uidTurno)
         {
             Datos = new Conexion();
-            string query = "select os.UidRelacionOrdenSucursal,os.IntFolio,os.MTotalSucursal,dbo.ObtenUltimoEstatusDeOrdenEnSucursal(os.UidRelacionOrdenSucursal, 's') as Estatus from OrdenSucursal os  where os.UidTurnoSuministradora in (select top 1 rt.UidTurnoSuministradora from RelacionTurnoSuministradoraTurnoCallcenter rt inner join TurnoSuministradora ts on ts.UidTurnoSuministradora = rt.UidTurnoSuministradora inner join TurnoCallCenter tc on tc.UidTunoCallCenter = rt.UidTurnoCallCenter where ts.UidSucursal = '" + v + "' and tc.UidTunoCallCenter = '" + uidTurno.ToString() + "' )";
+            string query = "select os.UidRelacionOrdenSucursal,os.IntFolio,os.MTotalSucursal,dbo.EstatusActualDeOrden(os.UidRelacionOrdenSucursal) as Estatus from OrdenSucursal os  where os.UidTurnoSuministradora in (select top 1 rt.UidTurnoSuministradora from RelacionTurnoSuministradoraTurnoCallcenter rt inner join TurnoSuministradora ts on ts.UidTurnoSuministradora = rt.UidTurnoSuministradora inner join TurnoCallCenter tc on tc.UidTunoCallCenter = rt.UidTurnoCallCenter where ts.UidSucursal = '" + v + "' and tc.UidTunoCallCenter = '" + uidTurno.ToString() + "' )";
             return Datos.Consultas(query);
         }
         public bool AsociarOrdenConDistribuidora(Guid uidorden, Guid iD, Guid Codigo, Guid uidLicencia, long LngFolio)
