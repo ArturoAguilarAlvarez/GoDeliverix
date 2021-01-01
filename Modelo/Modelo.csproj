@@ -58,7 +58,9 @@
     <Compile Include="ApiResponse\Message.cs" />
     <Compile Include="ApiResponse\BranchePayment.cs" />
     <Compile Include="ApiResponse\Phone.cs" />
+    <Compile Include="ApiResponse\ProductStoreGrid.cs" />
     <Compile Include="ApiResponse\RepartidorUpdate.cs" />
+    <Compile Include="ApiResponse\StoreSearchRequest.cs" />
     <Compile Include="ApiResponse\Wallet.cs" />
     <Compile Include="ApiResponse\WalletTransactionGrid.cs" />
     <Compile Include="Categoria.cs" />

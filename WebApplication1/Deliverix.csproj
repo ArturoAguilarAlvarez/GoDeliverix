@@ -448,6 +448,7 @@
     <Compile Include="Controllers\ProductoController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\SeccionController.cs" />
+    <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Controllers\SubcategoriaController.cs" />
     <Compile Include="Controllers\SucursalesController.cs" />
     <Compile Include="Controllers\TarifarioController.cs" />
