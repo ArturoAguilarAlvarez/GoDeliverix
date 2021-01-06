@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="ApiResponse\Address.cs" />
     <Compile Include="ApiResponse\BitacoraEstatusRepartidor.cs" />
+    <Compile Include="ApiResponse\CommonListViewSource.cs" />
     <Compile Include="ApiResponse\DeliveryManLoginResult.cs" />
     <Compile Include="ApiResponse\DeliveryOrderProductDetail.cs" />
     <Compile Include="ApiResponse\Firebase\DeliveryDealerRouteLocation.cs" />

@@ -18,8 +18,10 @@ namespace VistaDelModelo
             this.ProductDb = new ProductDataAccess();
         }
 
-        public IEnumerable<ProductStoreGrid> ReadAllToStore(StoreSearchRequest request)
+        public CommonListViewSource<ProductStoreGrid> ReadAllToStore(StoreSearchRequest request)
         {
+            CommonListViewSource<ProductStoreGrid> result = new CommonListViewSource<ProductStoreGrid>() { };
+
             DataTable data = this.ProductDb.ReadAllStore(request.PageSize,
                 request.PageNumber,
                 request.SortField,
@@ -35,10 +37,11 @@ namespace VistaDelModelo
                 request.UidEmpresa);
 
 
-            List<ProductStoreGrid> result = new List<ProductStoreGrid>();
+            List<ProductStoreGrid> products = new List<ProductStoreGrid>();
+
             foreach (DataRow row in data.Rows)
             {
-                result.Add(new ProductStoreGrid()
+                products.Add(new ProductStoreGrid()
                 {
                     Uid = row.IsNull("Uid") ? Guid.Empty : (Guid)row["Uid"],
                     UidCompany = row.IsNull("UidCompany") ? Guid.Empty : (Guid)row["UidCompany"],
@@ -50,6 +53,9 @@ namespace VistaDelModelo
                     Price = row.IsNull("Price") ? 0 : (decimal)row["Price"]
                 });
             }
+
+            result.Payload = products;
+            result.Count = data.Rows.Count > 0 ? (int)data.Rows[0]["Count"] : 0;
 
             return result;
         }
