@@ -163,7 +163,9 @@ namespace WebApplication1.Controllers
                             StrEstatusOrdenSucursal = UltimoEstatus,
                             StrFormaDeCobro = item["EstatusCobro"].ToString(),
                             intCantidad = TotalDeProductos,
-                            WalletDiscount = item.IsNull("WalletDiscount") ? null : (decimal?)item["WalletDiscount"]
+                            WalletDiscount = item.IsNull("WalletDiscount") ? null : (decimal?)item["WalletDiscount"],
+                            CardPaymentCommission = item.IsNull("ComisionPagoTarjeta") ? null : (decimal?)item["ComisionPagoTarjeta"],
+                            DeliveryCardPaymentCommission = item.IsNull("ComisionPagoTarjetaRepartidor") ? null : (decimal?)item["ComisionPagoTarjetaRepartidor"],
                         });
                     }
                     catch (Exception e)
@@ -221,7 +223,9 @@ namespace WebApplication1.Controllers
                         p.StrEstatusOrdenSucursal,
                         p.intCantidad,
                         p.StrFormaDeCobro,
-                        p.WalletDiscount
+                        p.WalletDiscount,
+                        p.CardPaymentCommission,
+                        p.DeliveryCardPaymentCommission
                     })
                 };
 
