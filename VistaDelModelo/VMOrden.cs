@@ -782,6 +782,8 @@ namespace VistaDelModelo
                                 UidEstatus = new Guid(item["estatus"].ToString().ToLower());
                                 StrEstatusOrdenGeneral = NombreDeEstatus;
                                 WalletDiscount = item.IsNull("WalletDiscount") ? null : (decimal?)item["WalletDiscount"];
+                                CardPaymentCommission = item.IsNull("CardPaymentCommission") ? null : (decimal?)item["CardPaymentCommission"];
+                                DeliveryCardPaymentCommission = item.IsNull("DeliveryCardPaymentCommission") ? null : (decimal?)item["DeliveryCardPaymentCommission"];
                             }
                         }
 
