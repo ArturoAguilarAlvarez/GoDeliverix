@@ -493,7 +493,9 @@ namespace VistaDelModelo
                         LNGFolio = int.Parse(item["intFolio"].ToString()),
                         StrDireccionDeEntrega = Identificador,
                         UidDireccionCliente = new Guid(item["UidDireccion"].ToString()),
-                        WalletDiscount = item.IsNull("WalletDiscount") ? null : (decimal?)item["WalletDiscount"]
+                        WalletDiscount = item.IsNull("WalletDiscount") ? null : (decimal?)item["WalletDiscount"],
+                        CardPaymentCommission = item.IsNull("CardPaymentCommission") ? null : (decimal?)item["CardPaymentCommission"],
+                        DeliveryCardPaymentCommission = item.IsNull("DeliveryCardPaymentCommission") ? null : (decimal?)item["DeliveryCardPaymentCommission"]
                     };
                     ListaDeOrdenes.Add(orden);
                 }
@@ -1344,6 +1346,8 @@ namespace VistaDelModelo
 
         #region Properties
         public decimal? WalletDiscount { get; set; }
+        public decimal? CardPaymentCommission { get; set; }
+        public decimal? DeliveryCardPaymentCommission { get; set; }
         #endregion
     }
 

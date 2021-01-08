@@ -29,5 +29,7 @@ namespace Modelo.ApiResponse
         public decimal? DescuentoMonedero { get; set; }
 
         public decimal? ComisionTarjeta { get; set; }
+
+        public decimal? ComisionTarjetaRepartidor { get; set; }
     }
 }

@@ -106,7 +106,9 @@ namespace WebApplication1.Controllers
                     o.IntCantidadProductos,
                     o.ListaDeOrdenes,
                     o.intCantidad,
-                    o.WalletDiscount
+                    o.WalletDiscount,
+                    o.CardPaymentCommission,
+                    o.DeliveryCardPaymentCommission
                 })
             };
 
