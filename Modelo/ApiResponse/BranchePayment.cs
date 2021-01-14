@@ -31,5 +31,15 @@ namespace Modelo.ApiResponse
         public decimal? ComisionTarjeta { get; set; }
 
         public decimal? ComisionTarjetaRepartidor { get; set; }
+
+        /// <summary>
+        /// Suministradora Absorbe Comision pago con tarjeta
+        /// </summary>
+        public bool IncludeCPTS { get; set; }
+
+        /// <summary>
+        /// Distribuidor Absorbe Comision pago con tarjeta
+        /// </summary>
+        public bool IncludeCPTD { get; set; }
     }
 }

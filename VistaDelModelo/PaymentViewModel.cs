@@ -21,7 +21,7 @@ namespace VistaDelModelo
 
         public bool AddBranchePayment(BranchePayment payment)
         {
-            bool result = this.PaymentDb.RegistryBranchePayment(payment.UidOrden, payment.UidUsuario, payment.UidDireccion, payment.UidSucursal, payment.UidRelacionOrdenSucursal, payment.UidTarifario, payment.CodigoEntrega, payment.Monto, payment.MontoSucursal, payment.DescuentoMonedero, payment.ComisionTarjeta, payment.ComisionTarjetaRepartidor);
+            bool result = this.PaymentDb.RegistryBranchePayment(payment.UidOrden, payment.UidUsuario, payment.UidDireccion, payment.UidSucursal, payment.UidRelacionOrdenSucursal, payment.UidTarifario, payment.CodigoEntrega, payment.Monto, payment.MontoSucursal, payment.IncludeCPTD, payment.IncludeCPTS, payment.DescuentoMonedero, payment.ComisionTarjeta, payment.ComisionTarjetaRepartidor);
 
             // Este proceso se realiza desde el backend
             //if (result && payment.DescuentoMonedero.HasValue)
