@@ -166,6 +166,8 @@ namespace WebApplication1.Controllers
                             WalletDiscount = item.IsNull("WalletDiscount") ? null : (decimal?)item["WalletDiscount"],
                             CardPaymentCommission = item.IsNull("ComisionPagoTarjeta") ? null : (decimal?)item["ComisionPagoTarjeta"],
                             DeliveryCardPaymentCommission = item.IsNull("ComisionPagoTarjetaRepartidor") ? null : (decimal?)item["ComisionPagoTarjetaRepartidor"],
+                            IncludeCPTS = (bool)item["IncludeCPTS"],
+                            IncludeCPTD = (bool)item["IncludeCPTD"],
                         });
                     }
                     catch (Exception e)
@@ -225,7 +227,9 @@ namespace WebApplication1.Controllers
                         p.StrFormaDeCobro,
                         p.WalletDiscount,
                         p.CardPaymentCommission,
-                        p.DeliveryCardPaymentCommission
+                        p.DeliveryCardPaymentCommission,
+                        p.IncludeCPTD,
+                        p.IncludeCPTS
                     })
                 };
 
