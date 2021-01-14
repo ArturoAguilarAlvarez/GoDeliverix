@@ -174,7 +174,7 @@ namespace VistaDelModelo
             DataTable data = this.oComosion.ObtenerComisionDefault();
             foreach (DataRow row in data.Rows)
             {
-                ComisionPagoTarjeta = row.IsNull("IntComisionUsoPasarela") ? Decimal.Parse("4.06") : (decimal)row["IntComisionUsoPasarela"];
+                ComisionPagoTarjeta = row.IsNull("IntComisionUsoPasarela") ? decimal.Parse("4.06") : (decimal)row["IntComisionUsoPasarela"];
             }
         }
         #endregion
