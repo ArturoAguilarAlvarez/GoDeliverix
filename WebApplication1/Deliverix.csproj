@@ -453,6 +453,7 @@
     <Compile Include="Controllers\SucursalesController.cs" />
     <Compile Include="Controllers\TarifarioController.cs" />
     <Compile Include="Controllers\TelefonoController.cs" />
+    <Compile Include="Controllers\TerminosYCondicionesController.cs" />
     <Compile Include="Controllers\TurnoController.cs" />
     <Compile Include="Controllers\UbicacionController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
@@ -687,6 +688,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Mit\" />
+    <Folder Include="Views\TerminosYCondiciones\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

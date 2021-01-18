@@ -76,6 +76,13 @@ namespace DBControl
             string query = "select top 1 Numero from Telefono t inner join TipoDeTelefono tdt on t.UidTipoDeTelefono = tdt.UidTipoDeTelefono inner join TelefonoUsuario tu on tu.UidTelefono = t.UidTelefono where tu.UidUsuario = '"+uidCliente+"' and tdt.Nombre = 'Principal' ";
             return oConexion.Consultas(query);
         }
+
+        public DataTable ObtenerLadas()
+        {
+            oConexion = new Conexion();
+            string query = "select UidLada,Vchterminacion,UidPais from ladasinternacional";
+            return oConexion.Consultas(query);
+        }
         #endregion
 
     }

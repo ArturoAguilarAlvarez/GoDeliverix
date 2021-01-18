@@ -76,6 +76,7 @@
     <Compile Include="VMSucursales.cs" />
     <Compile Include="VMTarifario.cs" />
     <Compile Include="VMTelefono.cs" />
+    <Compile Include="VMTerminosYCondiciones.cs" />
     <Compile Include="VMTurno.cs" />
     <Compile Include="VMUbicacion.cs" />
     <Compile Include="VMUsuarios.cs" />

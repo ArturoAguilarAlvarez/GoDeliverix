@@ -181,6 +181,16 @@ namespace WebApplication1.Controllers
             };
             return Json(result);
         }
+
+        public IHttpActionResult GetReadAllInternationalLadas()
+        {
+            Respuesta = new ResponseHelper();
+            MVTelefono = new VMTelefono();
+
+            MVTelefono.ReadAllLadasInternational();
+            var result = MVTelefono.ListaDeLadasInternacionales.Select(e => new { e.UidLada,e.StrLada }) ;
+            return Json(result);
+        }
         // DELETE: api/Profile/5
         public IHttpActionResult DeleteTelefonoUsuario_Movil(string UidTelefono)
         {

@@ -19,6 +19,22 @@ namespace VistaDelModelo
             get { return UidTelefono; }
             set { UidTelefono = value; }
         }
+
+        private string _UidLada;
+
+        public string UidLada
+        {
+            get { return _UidLada; }
+            set { _UidLada = value; }
+        }
+        private string _StrLada;
+
+        public string StrLada
+        {
+            get { return _StrLada; }
+            set { _StrLada = value; }
+        }
+
         private string StrNumero;
         public string NUMERO
         {
@@ -50,6 +66,13 @@ namespace VistaDelModelo
         {
             get { return _ListaDeTipoDeTelefono; }
             set { _ListaDeTipoDeTelefono = value; }
+        }
+        private List<VMTelefono> _ListaDeLadasInternacionales;
+
+        public List<VMTelefono> ListaDeLadasInternacionales
+        {
+            get { return _ListaDeLadasInternacionales; }
+            set { _ListaDeLadasInternacionales = value; }
         }
 
         #endregion
@@ -353,6 +376,22 @@ namespace VistaDelModelo
             }
 
         }
+        public void ReadAllLadasInternational()
+        {
+            ListaDeLadasInternacionales = new List<VMTelefono>();
+            oDbTelefono = new DbTelefono();
+            foreach (DataRow item in oDbTelefono.ObtenerLadas().Rows)
+            {
+                string uidlada = item["UidLada"].ToString();
+                Guid uidpais = new Guid(item["UidPais"].ToString());
+                string nombre = item["VchTerminacion"].ToString();
+                ListaDeLadasInternacionales.Add(new VMTelefono() { UidLada = uidlada, StrLada = nombre });
+            }
+        }
+
+
+
+
         public void ObtenerTelefonoPrincipalDelCliente(string UidCliente)
         {
             oDbTelefono = new DbTelefono();
