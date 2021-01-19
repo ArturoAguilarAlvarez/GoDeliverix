@@ -39,7 +39,7 @@ namespace DBControl
         /// <param name="descuentoMonedero"></param>
         /// <param name="comisionPagoTarjeta"></param>
         /// <returns></returns>
-        public bool RegistryBranchePayment(Guid uidOrden, Guid uidUsuario, Guid uidDireccion, Guid uidSucursal, Guid uidRelacionOrdenSucursal, Guid uidTarifario, long codigoEntrega, decimal total, decimal totalSucursal, bool includeCPTD, bool includeCPTS, decimal? descuentoMonedero, decimal? comisionPagoTarjeta, decimal? comisionPagoTarjetaRepartidor)
+        public bool RegistryBranchePayment(Guid uidOrden, Guid uidUsuario, Guid uidDireccion, Guid uidSucursal, Guid uidRelacionOrdenSucursal, Guid uidTarifario, long codigoEntrega, decimal total, decimal totalSucursal, bool includeCPTD, bool includeCPTS, decimal? descuentoMonedero, decimal? comisionPagoTarjeta, decimal? comisionPagoTarjetaRepartidor, decimal ComisionPagoTarjetaPropina)
         {
             SqlCommand command = new SqlCommand();
             try
@@ -97,6 +97,9 @@ namespace DBControl
 
                 command.Parameters.Add("@IncludeCPTS", SqlDbType.Bit);
                 command.Parameters["@IncludeCPTS"].Value = includeCPTS;
+
+                command.Parameters.Add("@ComisionPagoTarjetaPropina", SqlDbType.Money);
+                command.Parameters["@ComisionPagoTarjetaPropina"].Value = ComisionPagoTarjetaPropina;
 
 
                 return this.dbConexion.ModificarDatos(command);

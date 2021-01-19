@@ -41,5 +41,7 @@ namespace Modelo.ApiResponse
         /// Distribuidor Absorbe Comision pago con tarjeta
         /// </summary>
         public bool IncludeCPTD { get; set; }
+
+        public decimal ComisionPagoTarjetaPropina { get; set; } = 0;
     }
 }
