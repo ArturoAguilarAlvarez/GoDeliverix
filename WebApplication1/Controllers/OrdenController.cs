@@ -303,6 +303,7 @@ namespace WebApplication1.Controllers
                 DeliveryInformation = new
                 {
                     DeliveryViewModel.DPrecio,
+                    DeliveryViewModel.MPropina,
                     DeliveryViewModel.StrNombreEmpresa,
                     DeliveryViewModel.StrCodigoDeEntrega,
                 },
