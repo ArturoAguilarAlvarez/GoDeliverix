@@ -784,6 +784,9 @@ namespace VistaDelModelo
                                 WalletDiscount = item.IsNull("WalletDiscount") ? null : (decimal?)item["WalletDiscount"];
                                 CardPaymentCommission = item.IsNull("CardPaymentCommission") ? null : (decimal?)item["CardPaymentCommission"];
                                 DeliveryCardPaymentCommission = item.IsNull("DeliveryCardPaymentCommission") ? null : (decimal?)item["DeliveryCardPaymentCommission"];
+                                ComisionPagoTarjetaPropina = item.IsNull("ComisionPagoTarjetaPropina") ? 0 : (decimal)item["ComisionPagoTarjetaPropina"];
+                                IncludeCPTD  = item.IsNull("IncludeCPTD") ? false : (bool)item["IncludeCPTD"];
+                                IncludeCPTS = item.IsNull("IncludeCPTS") ? false : (bool)item["IncludeCPTS"];
                             }
                         }
 
@@ -1350,6 +1353,7 @@ namespace VistaDelModelo
         public decimal? WalletDiscount { get; set; }
         public decimal? CardPaymentCommission { get; set; }
         public decimal? DeliveryCardPaymentCommission { get; set; }
+        public decimal ComisionPagoTarjetaPropina { get; set; };
         public bool IncludeCPTD { get; set; }
         public bool IncludeCPTS { get; set; }
         #endregion

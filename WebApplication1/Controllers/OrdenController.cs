@@ -269,7 +269,10 @@ namespace WebApplication1.Controllers
                 UidEmpresa = MVOrden.UidEmpresa,
                 WalletDiscount = MVOrden.WalletDiscount,
                 DeliveryCardPaymentCommission = MVOrden.DeliveryCardPaymentCommission,
-                CardPaymentCommission = MVOrden.CardPaymentCommission
+                CardPaymentCommission = MVOrden.CardPaymentCommission,
+                ComisionPagoTarjetaPropina = MVOrden.ComisionPagoTarjetaPropina,
+                IncludeCPTD = MVOrden.IncludeCPTD,
+                IncludeCPTS = MVOrden.IncludeCPTS
             };
             var DeliveryViewModel = new VMTarifario();
             DeliveryViewModel.ObtenerTarifarioDeOrden(Orden.Uidorden);
