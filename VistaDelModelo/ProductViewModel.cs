@@ -59,5 +59,39 @@ namespace VistaDelModelo
 
             return result;
         }
+
+        public CommonListViewSource<CompanyStoreGrid> ReadAllCompaniesToStore(CompaniesSearchRequest request)
+        {
+            CommonListViewSource<CompanyStoreGrid> result = new CommonListViewSource<CompanyStoreGrid>() { };
+
+            DataTable data = this.ProductDb.ReadAllStores(request.PageSize,
+                request.PageNumber,
+                request.SortField,
+                request.SortDirection,
+                request.UidEstado,
+                request.UidColonia,
+                request.Dia,
+                request.TipoFiltro,
+                request.UidFiltro,
+                request.Filtro);
+
+
+            List<CompanyStoreGrid> companies = new List<CompanyStoreGrid>();
+
+            foreach (DataRow row in data.Rows)
+            {
+                companies.Add(new CompanyStoreGrid()
+                {
+                    Uid = row.IsNull("Uid") ? Guid.Empty : (Guid)row["Uid"],
+                    Name = row.IsNull("Name") ? "" : (string)row["Name"],
+                    ImgUrl = row.IsNull("ImgUrl") ? "" : (string)row["ImgUrl"],
+                });
+            }
+
+            result.Payload = companies;
+            result.Count = data.Rows.Count > 0 ? (int)data.Rows[0]["Count"] : 0;
+
+            return result;
+        }
     }
 }

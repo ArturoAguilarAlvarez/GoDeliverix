@@ -30,5 +30,19 @@ namespace WebApplication1.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet]
+        public IHttpActionResult ReadAllCompanies([FromUri] CompaniesSearchRequest request)
+        {
+            try
+            {
+                var result = this.ProductVm.ReadAllCompaniesToStore(request);
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
