@@ -85,6 +85,7 @@ namespace VistaDelModelo
                     Uid = row.IsNull("Uid") ? Guid.Empty : (Guid)row["Uid"],
                     Name = row.IsNull("Name") ? "" : (string)row["Name"],
                     ImgUrl = row.IsNull("ImgUrl") ? "" : (string)row["ImgUrl"],
+                    AvailableBranches = row.IsNull("AvailableBranches") ? 0 : (int)row["AvailableBranches"],
                 });
             }
 

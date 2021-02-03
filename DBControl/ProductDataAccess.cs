@@ -237,7 +237,25 @@ SELECT *, [Count] = COUNT (*) OVER() FROM (
     SELECT DISTINCT 
         E.UidEmpresa AS [Uid], 
         E.NombreComercial AS [Name],
-        I.NVchRuta AS [ImgUrl]
+        I.NVchRuta AS [ImgUrl],
+(SELECT COUNT(*) FROM (
+        SELECT 
+            distinct 
+            S.UidSucursal
+        FROM Sucursales s 
+	        inner join ContratoDeServicio CDS on CDS.UidSucursalSuministradora = s.UidSucursal 
+	        inner join turnosuministradora ts on ts.uidsucursal = CDS.UidSucursalSuministradora and ts.dtmhorafin is null
+		    inner join TurnoDistribuidora td on td.UidSucursal = CDS.UidSucursalDistribuidora and td.DtmHoraFin is null
+            inner join ZonaDeRepartoDeContrato ZDRC on ZDRC.UidContrato = CDS.UidContrato 
+	        inner join Oferta o on o.Uidsucursal = s.UidSucursal
+	        inner join DiaOferta do on do.UidOferta = o.UidOferta
+	        inner join Tarifario t on t.Uidregistrotarifario  = ZDRC.UidTarifario
+	        inner join ZonaDeServicio ZDS on ZDS.UidRelacionZonaServicio = t.UidRelacionZonaEntrega
+	    where  @UserTime between s.HorarioApertura and s.HorarioCierre
+	        and ZDS.UidColonia = @UidColonia
+	        and s.UidEmpresa = E.UidEmpresa
+	        and s.IntEstatus = 1
+	        and CDS.UidEstatusContrato = 'CD20F9BF-EBA2-4128-88FB-647544457B2D') AS [AvailableBranches]) AS [AvailableBranches]
     FROM Empresa E
         INNER JOIN Productos p on e.UidEmpresa = p.UidEmpresa
 	    INNER JOIN SeccionProducto sp on sp.UidProducto = p.UidProducto 
