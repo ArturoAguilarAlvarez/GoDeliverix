@@ -216,6 +216,7 @@ namespace VistaDelModelo
             foreach (DataRow item in oDbTarifario.ObtenerTarifarioDeOrden(uidOrden).Rows)
             {
                 DPrecio = decimal.Parse(item["MCosto"].ToString());
+                MPropina = decimal.Parse(item["MCosto"].ToString());
                 StrNombreEmpresa = item["NombreComercial"].ToString();
                 StrCodigoDeEntrega = item["BIntCodigoEntrega"].ToString();
             }
