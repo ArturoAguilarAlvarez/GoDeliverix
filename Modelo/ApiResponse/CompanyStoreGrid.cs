@@ -13,5 +13,7 @@ namespace Modelo.ApiResponse
         public string Name { get; set; }
 
         public string ImgUrl { get; set; }
+
+        public int AvailableBranches { get; set; }
     }
 }
