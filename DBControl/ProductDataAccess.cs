@@ -222,6 +222,10 @@ namespace DBControl
             -- Hora actual del usuario
             DECLARE @UserTime VARCHAR(20);
 
+            DECLARE @ValorComision INT;
+
+            SELECT @ValorComision = intComision FROM ComisionGoDeliverix WHERE StrNombreComision = 'Orden';
+
             -- Obtener zona horaria del estado
             SELECT
                 @TimeZone = Z.IdZonaHoraria
@@ -245,7 +249,12 @@ namespace DBControl
                     P.VchDescripcion AS [Description],
                     EMP.[UidEmpresa] AS [UidCompany],
                     EMP.[NombreComercial] AS [CompanyName],
-                    MIN(SP.Mcosto) AS [Price]
+                    MIN(
+                    CASE 
+                        WHEN COM.BAboserveComision = 1 THEN SP.Mcosto
+                        ELSE ((SP.Mcosto / 100)*@ValorComision) + SP.Mcosto
+                    END 
+                    ) AS [Price]
                 FROM [Productos] AS P    
                     INNER JOIN [SeccionProducto] AS SP ON P.[UidProducto] = SP.[UidProducto]
                     INNER JOIN [Seccion] AS SEC ON SEC.UidSeccion = SP.UidSeccion AND SEC.IntEstatus = 1
@@ -272,6 +281,7 @@ namespace DBControl
     
 	                INNER JOIN turnosuministradora TS on TS.uidsucursal = CDS.UidSucursalSuministradora and TS.dtmhorafin is null
 	                INNER JOIN TurnoDistribuidora TD on TD.UidSucursal = CDS.UidSucursalDistribuidora and TD.DtmHoraFin is null 
+                    INNER JOIN Comision AS COM ON COM.UidEmpresa = EMP.UidEmpresa
                     {filterJoin}
                 WHERE 
                     @UserTime BETWEEN SEC.VchHoraInicio AND SEC.VchHoraFin    
