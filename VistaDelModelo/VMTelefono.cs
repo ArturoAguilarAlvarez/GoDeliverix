@@ -42,6 +42,13 @@ namespace VistaDelModelo
             set { StrNumero = value; }
         }
         private Guid _Tipo;
+        private string _CodigoDePais;
+
+        public string CodigoDePais
+        {
+            get { return _CodigoDePais; }
+            set { _CodigoDePais = value; }
+        }
 
         public Guid UidTipo
         {
@@ -188,13 +195,14 @@ namespace VistaDelModelo
         /// <param name="UidTelefono"></param>
         /// <param name="Numero"></param>
         /// <param name="UidTipoDeTelefono"></param>
-        public void GuardaTelefonoWepApi(Guid uidUsuario, string Parametro, Guid UidTelefono, string Numero, string UidTipoDeTelefono)
+        public void GuardaTelefonoWepApi(Guid uidUsuario, string Parametro, Guid UidTelefono, string Numero, string UidTipoDeTelefono, string uidlada)
         {
             var Telefono = new Telefono
             {
                 ID = UidTelefono,
                 NUMERO = Numero,
-                Tipo = UidTipoDeTelefono
+                Tipo = UidTipoDeTelefono,
+                UidLada = uidlada
             };
             Telefono.GuardaTelefono(uidUsuario, Parametro);
         }
@@ -204,14 +212,29 @@ namespace VistaDelModelo
         /// <param name="UidTelefono"></param>
         /// <param name="Numero"></param>
         /// <param name="UidTipoDeTelefono"></param>
-        public void ActualizaTelefonoWepApi(Guid UidTelefono, string Numero, string UidTipoDeTelefono)
+        public void ActualizaTelefonoWepApi(Guid UidTelefono, string Numero, string UidTipoDeTelefono, string UidLada = "")
         {
-            var Telefono = new Telefono
+            var Telefono = new Telefono();
+            if (!string.IsNullOrEmpty(UidLada))
             {
-                ID = UidTelefono,
-                NUMERO = Numero,
-                Tipo = UidTipoDeTelefono
-            };
+                Telefono = new Telefono
+                {
+                    ID = UidTelefono,
+                    NUMERO = Numero,
+                    Tipo = UidTipoDeTelefono,
+                    UidLada = UidLada
+                };
+            }
+            else
+            {
+                Telefono = new Telefono
+                {
+                    ID = UidTelefono,
+                    NUMERO = Numero,
+                    Tipo = UidTipoDeTelefono
+                };
+            }
+            
             Telefono.Actualiza();
         }
 
@@ -291,9 +314,14 @@ namespace VistaDelModelo
                     foreach (DataRow item in oConexion.Busquedas(Comando).Rows)
                     {
                         string tipo = string.Empty;
+                        string lada = string.Empty;
                         if (item["TipoDeTelefono"] != null)
                         {
                             tipo = item["TipoDeTelefono"].ToString();
+                        }
+                        if (item["UidLada"] != null)
+                        {
+                            lada = item["UidLada"].ToString();
                         }
                         ListaDeTelefonos.Add(
                             new VMTelefono()
@@ -302,7 +330,8 @@ namespace VistaDelModelo
                                 UidTipo = new Guid(item["UidTipoDetelefono"].ToString()),
                                 NUMERO = item["Numero"].ToString(),
                                 StrNombreTipoDeTelefono = tipo,
-                                Estado = false
+                                Estado = false,
+                                UidLada = lada
                             }
                             );
                     }
@@ -385,7 +414,8 @@ namespace VistaDelModelo
                 string uidlada = item["UidLada"].ToString();
                 Guid uidpais = new Guid(item["UidPais"].ToString());
                 string nombre = item["VchTerminacion"].ToString();
-                ListaDeLadasInternacionales.Add(new VMTelefono() { UidLada = uidlada, StrLada = nombre });
+                string codigodepais = item["CodigoPais"].ToString();
+                ListaDeLadasInternacionales.Add(new VMTelefono() { UidLada = uidlada, StrLada = codigodepais + " " + nombre });
             }
         }
 

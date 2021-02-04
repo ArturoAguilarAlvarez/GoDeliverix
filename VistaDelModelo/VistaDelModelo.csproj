@@ -53,6 +53,7 @@
     <Compile Include="Services\FirebaseService.cs" />
     <Compile Include="Services\GoogleService.cs" />
     <Compile Include="VMComision.cs" />
+    <Compile Include="VMConfiguracionCliente.cs" />
     <Compile Include="VMMonedero.cs" />
     <Compile Include="VMCorreoElectronico.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

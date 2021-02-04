@@ -30,6 +30,14 @@ namespace Modelo
         }
 
         public TipoDeTelefono TIPO;
+        private string _lada;
+
+        public string UidLada
+        {
+            get { return _lada; }
+            set { _lada = value; }
+        }
+
         #endregion
         #region Constructores
         public Telefono()
@@ -54,6 +62,11 @@ namespace Modelo
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "asp_AgregarTelefono";
+                if (UidLada != string.Empty)
+                {
+                    cmd.Parameters.Add("@Uidlada", SqlDbType.UniqueIdentifier);
+                    cmd.Parameters["@Uidlada"].Value = new Guid(UidLada);
+                }
 
                 cmd.Parameters.Add("@UidUsuario", SqlDbType.UniqueIdentifier);
                 cmd.Parameters["@UidUsuario"].Value = idPropietario;
@@ -89,7 +102,12 @@ namespace Modelo
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "asp_ActualizaTelefono";
-                
+
+                if (!string.IsNullOrEmpty(UidLada))
+                {
+                    cmd.Parameters.Add("@UidLada", SqlDbType.UniqueIdentifier);
+                    cmd.Parameters["@UidLada"].Value = new Guid(UidLada);
+                }
 
                 cmd.Parameters.Add("@IdTelefono", SqlDbType.UniqueIdentifier);
                 cmd.Parameters["@IdTelefono"].Value = ID;

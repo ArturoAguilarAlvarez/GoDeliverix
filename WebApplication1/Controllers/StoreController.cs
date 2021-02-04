@@ -18,7 +18,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult ReadAll([FromUri] StoreSearchRequest request)
+        public IHttpActionResult ReadAllv1([FromUri] StoreSearchRequest request)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult ReadAllV2([FromUri] StoreSearchRequest request)
+        public IHttpActionResult ReadAll([FromUri] StoreSearchRequest request)
         {
             try
             {

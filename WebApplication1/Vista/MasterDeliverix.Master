@@ -78,7 +78,7 @@
                                         <li role="presentation" class="text-left">
                                             <asp:LinkButton runat="server" ID="btnAdministradores" OnClick="Usuarios"><span class="glyphicon glyphicon-user"></span> Administradores</asp:LinkButton></li>
                                         <li role="presentation" class="text-left">
-                                            <asp:LinkButton runat="server" ID="btnCatalogos" OnClick="Catalogos"><span class="glyphicon glyphicon-tasks"></span> Giro</asp:LinkButton></li>
+                                            <asp:LinkButton runat="server" ID="btnCatalogos" OnClick="Catalogos"><span class="glyphicon glyphicon-tasks"></span> Categorias de busqueda</asp:LinkButton></li>
                                         <li role="presentation" class="text-left">
                                             <asp:LinkButton ID="btnClientes" OnClick="btnClientes_Click" runat="server">
                                                <span class="glyphicon glyphicon-piggy-bank"></span> Clientes

@@ -92,7 +92,7 @@ namespace WebApplication1.Controllers
                 UidSucursal = Guid.Empty.ToString();
             }
             MVUsuario = new VMUsuarios();
-            MVUsuario.GuardaUsuario(new Guid(UidUsuario), Nombre, ApellidoPaterno, ApellidoMaterno, usuario, password, fnacimiento, perfil, estatus, TIPODEUSUARIO, new Guid(UidEmpresa), new Guid(UidSucursal));
+            MVUsuario.GuardaUsuario(new Guid(UidUsuario), Nombre, ApellidoPaterno,  usuario, password, fnacimiento, perfil, estatus, TIPODEUSUARIO, new Guid(UidEmpresa), new Guid(UidSucursal), ApellidoMaterno);
 
             Respuesta = new ResponseHelper();
 
@@ -259,14 +259,14 @@ namespace WebApplication1.Controllers
             return Request.CreateResponse("Correo enviado");
         }
 
-        public HttpResponseMessage GetGuardarusuarioCliente_Movil(string UidUsuario, string nombre, string apellidoP, string apellidoM, string usuario, string contrasena, string fechaNacimiento)
+        public HttpResponseMessage GetGuardarusuarioCliente_Movil(string UidUsuario, string nombre, string apellidoP,  string usuario, string contrasena, string fechaNacimiento)
         {
             ResponseHelper respuesta = new ResponseHelper();
             VMUsuarios MVUsuarios = new VMUsuarios();
             VMAcceso MVAcceso = new VMAcceso();
 
             Guid uidusuaro = new Guid(UidUsuario);
-            respuesta.Data = MVUsuarios.GuardaUsuario(UidUsuario: uidusuaro, Nombre: nombre, ApellidoPaterno: apellidoP, ApellidoMaterno: apellidoM, usuario: usuario, password: contrasena, fnacimiento: fechaNacimiento, perfil: "4f1e1c4b-3253-4225-9e46-dd7d1940da19", estatus: "1", TIPODEUSUARIO: "Cliente");
+            respuesta.Data = MVUsuarios.GuardaUsuario(UidUsuario: uidusuaro, Nombre: nombre, ApellidoPaterno: apellidoP,  usuario: usuario, password: contrasena, fnacimiento: fechaNacimiento, perfil: "4f1e1c4b-3253-4225-9e46-dd7d1940da19", estatus: "1", TIPODEUSUARIO: "Cliente");
             return Request.CreateResponse();
         }
 

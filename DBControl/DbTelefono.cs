@@ -80,7 +80,7 @@ namespace DBControl
         public DataTable ObtenerLadas()
         {
             oConexion = new Conexion();
-            string query = "select UidLada,Vchterminacion,UidPais from ladasinternacional";
+            string query = "select li.UidLada,li.Vchterminacion,p.UidPais,p.CodigoPais from ladasinternacional li inner join Paises p on p.UidPais = li.UidPais";
             return oConexion.Consultas(query);
         }
         #endregion

@@ -588,7 +588,7 @@ namespace VistaDelModelo
         /// <param name="IdEmpresa">Parametro opcional para clientes, obligario en administradores y usuarios del sistema</param>
         /// <param name="Sucursal">Parametro opcional unicamente para usuarios pertenecientes a una empresa</param>
         /// <returns></returns>
-        public bool GuardaUsuario(Guid UidUsuario, string Nombre, string ApellidoPaterno, string ApellidoMaterno, string usuario, string password, string fnacimiento, string perfil, string estatus, string TIPODEUSUARIO, Guid IdEmpresa = new Guid(), Guid Sucursal = new Guid())
+        public bool GuardaUsuario(Guid UidUsuario, string Nombre, string ApellidoPaterno, string usuario, string password, string fnacimiento, string perfil, string estatus, string TIPODEUSUARIO, Guid IdEmpresa = new Guid(), Guid Sucursal = new Guid(), string ApellidoMaterno = "")
         {
 
             Guid UidCorreo = Guid.NewGuid();

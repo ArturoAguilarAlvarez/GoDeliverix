@@ -1615,7 +1615,7 @@ namespace WebApplication1.Vista
                                     File.Delete(Server.MapPath(Ruta));
                                 }
 
-                                MVImagen.EliminaImagenEmpresa(UIDEMPRESA.ToString());
+                                MVImagen.EliminaImagenEmpresa(MVImagen.STRRUTA);
 
                                 var uidimagen = "";
                                 if (MVImagen.ID != Guid.Empty)
@@ -1638,7 +1638,6 @@ namespace WebApplication1.Vista
                         PanelMensaje.Visible = true;
                         LblMensaje.Text = "Servicio no disponible, intente más tarde.";
                     }
-
                     Session.Remove("Accion");
                     MVEmpresas = new VMEmpresas();
                     MVEmpresas.BuscarEmpresas();

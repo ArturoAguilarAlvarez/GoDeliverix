@@ -430,6 +430,7 @@
     <Compile Include="Controllers\CatalogosDeFiltrosController.cs" />
     <Compile Include="Controllers\CategoriaController.cs" />
     <Compile Include="Controllers\ComisionesController.cs" />
+    <Compile Include="Controllers\ConfiguracionInicialController.cs" />
     <Compile Include="Controllers\ContratoController.cs" />
     <Compile Include="Controllers\CorreoElectronicoController.cs" />
     <Compile Include="Controllers\DealersController.cs" />
@@ -695,6 +696,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Views\ConfiguracionInicial\" />
     <Folder Include="Views\Mit\" />
     <Folder Include="Views\TerminosYCondiciones\" />
   </ItemGroup>

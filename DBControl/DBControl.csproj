@@ -45,6 +45,7 @@
     <Compile Include="Conexion.cs" />
     <Compile Include="DBAcceso.cs" />
     <Compile Include="DbCategoria.cs" />
+    <Compile Include="DBConfiguracionClientemovil.cs" />
     <Compile Include="DBContrato.cs" />
     <Compile Include="DbCorreoElectronico.cs" />
     <Compile Include="DbDia.cs" />

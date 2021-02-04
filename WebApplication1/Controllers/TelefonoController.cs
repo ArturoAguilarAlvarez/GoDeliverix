@@ -33,12 +33,12 @@ namespace WebApplication1.Controllers
         /// <param name="Numero"></param>
         /// <param name="UidTipoDeTelefono"></param>
         /// <returns></returns>
-        public ResponseHelper GetGuardaTelefonoApi(Guid uidUsuario, string Parametro, Guid UidTelefono, string Numero, string UidTipoDeTelefono)
+        public ResponseHelper GetGuardaTelefonoApi(Guid uidUsuario, string Parametro, Guid UidTelefono, string Numero, string UidTipoDeTelefono, string uidlada = "")
         {
             Respuesta = new ResponseHelper();
             MVTelefono = new VMTelefono();
 
-            MVTelefono.GuardaTelefonoWepApi(uidUsuario, Parametro, UidTelefono, Numero, UidTipoDeTelefono);
+            MVTelefono.GuardaTelefonoWepApi(uidUsuario, Parametro, UidTelefono, Numero, UidTipoDeTelefono, uidlada);
 
             Respuesta.Status = true;
             Respuesta.Message = "Informacion agregada satisfactoriamente";
@@ -141,9 +141,9 @@ namespace WebApplication1.Controllers
         public IHttpActionResult GetGuardaTelefono_Movil(Guid uidUsuario, string Parametro, Guid UidTelefono, string Numero, string UidTipoDeTelefono)
         {
             MVTelefono = new VMTelefono();
-            MVTelefono.GuardaTelefonoWepApi(uidUsuario, Parametro, UidTelefono, Numero, UidTipoDeTelefono);
+            MVTelefono.GuardaTelefonoWepApi(uidUsuario, Parametro, UidTelefono, Numero, UidTipoDeTelefono, "");
             var result = new { resultado = true };
-            return Json(result); 
+            return Json(result);
         }
         /// <summary>
         /// 
@@ -156,7 +156,14 @@ namespace WebApplication1.Controllers
         {
             MVTelefono = new VMTelefono();
             MVTelefono.ActualizaTelefonoWepApi(UidTelefono, Numero, UidTipoDeTelefono);
-            var result = new { resultado = true};
+            var result = new { resultado = true };
+            return Json(result);
+        }
+        public IHttpActionResult GetActualizaTelefono_MovilConLada(Guid UidTelefono, string Numero, string UidTipoDeTelefono,string UidLada)
+        {
+            MVTelefono = new VMTelefono();
+            MVTelefono.ActualizaTelefonoWepApi(UidTelefono, Numero, UidTipoDeTelefono, UidLada);
+            var result = new { resultado = true };
             return Json(result);
         }
         public IHttpActionResult GetBuscarTelefonos_movil(string UidPropietario, string ParadetroDeBusqueda, string UidTelefono = "", string strTelefono = "")
@@ -188,7 +195,7 @@ namespace WebApplication1.Controllers
             MVTelefono = new VMTelefono();
 
             MVTelefono.ReadAllLadasInternational();
-            var result = MVTelefono.ListaDeLadasInternacionales.Select(e => new { e.UidLada,e.StrLada }) ;
+            var result = MVTelefono.ListaDeLadasInternacionales.Select(e => new { e.UidLada, e.StrLada });
             return Json(result);
         }
         // DELETE: api/Profile/5
