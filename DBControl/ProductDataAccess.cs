@@ -304,6 +304,46 @@ namespace DBControl
             return data;
         }
 
+        public DataTable ReadAllStoreStoreProcedure(int pageSize, int pageNumber, string sortField, string sortOrder, Guid uidEstado, Guid uidColonia, string dia, string tipoFiltro, Guid uidFiltro, string filtro = null, Guid? uidSeccion = null, Guid? uidOferta = null, Guid? uidEmpresa = null)
+        {
+            SqlCommand command = new SqlCommand();
+            command.CommandType = CommandType.StoredProcedure;
+            command.CommandText = "asp_SearchProductsFromStore";
+
+            command.Parameters.AddWithValue("@pageSize", pageSize);
+            command.Parameters.AddWithValue("@pageNumber", pageNumber);
+            command.Parameters.AddWithValue("@UidColonia", uidColonia);
+            command.Parameters.AddWithValue("@UidEstado", uidEstado);
+            command.Parameters.AddWithValue("@Dia", dia);
+            command.Parameters.AddWithValue("@FilterType", tipoFiltro);
+            command.Parameters.AddWithValue("@UidFilter", uidFiltro);
+            command.Parameters.AddWithValue("@SortField", uidFiltro);
+            command.Parameters.AddWithValue("@SortDirection", uidFiltro);
+
+            if (!string.IsNullOrEmpty(filtro))
+            {
+                command.Parameters.AddWithValue("@Filter", filtro);
+            }
+
+            if (uidSeccion.HasValue)
+            {
+                command.Parameters.AddWithValue("@UidSeccion", uidSeccion);
+            }
+
+            if (uidOferta.HasValue)
+            {
+                command.Parameters.AddWithValue("@UidOferta", uidOferta);
+            }
+
+            if (uidEmpresa.HasValue)
+            {
+                command.Parameters.AddWithValue("@UidEmpresa", uidEmpresa);
+            }
+
+            DataTable data = this.dbConexion.Busquedas(command);
+            return data;
+        }
+
         /// <summary>
         /// Realizar busqueda de los comercios
         /// </summary>
