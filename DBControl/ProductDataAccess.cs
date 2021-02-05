@@ -175,6 +175,10 @@ namespace DBControl
                 filterJoin = "INNER JOIN [SubcategoriaProducto] as SCP ON SCP.UidProducto = P.UidProducto";
                 filterWhere = "AND SCP.UidSubcategoria = @UidFilter";
             }
+            else if (tipoFiltro.Equals("None") || string.IsNullOrEmpty(tipoFiltro))
+            {
+                filterJoin = "INNER JOIN [GiroProducto] as GP ON GP.UidProducto = P.UidProducto";
+            }
 
             string order = (string.IsNullOrEmpty(sortField) || string.IsNullOrEmpty(sortOrder)) ? " UID DESC " : $"{sortField} {sortOrder.ToUpper()}";
 
