@@ -368,8 +368,6 @@ namespace DBControl
             string filterWhere = string.Empty;
             string where = string.Empty;
 
-
-
             SqlCommand command = new SqlCommand();
             command.CommandType = CommandType.Text;
 
@@ -402,6 +400,10 @@ namespace DBControl
                 filterJoin = " INNER JOIN SubcategoriaProducto scp on scp.UidProducto = p.UidProducto ";
                 filterWhere = " scp.UidSubcategoria = @UidFilter ";
             }
+            else if (tipoFiltro.Equals("None") || string.IsNullOrEmpty(tipoFiltro))
+            {
+                filterJoin = " INNER JOIN GiroProducto gp on gp.UidProducto = p.UidProducto ";
+            }
 
             string order = (string.IsNullOrEmpty(sortField) || string.IsNullOrEmpty(sortOrder)) ? " Uid " : $"{sortField} {sortOrder.ToUpper()}";
 
@@ -433,24 +435,7 @@ SELECT *, [Count] = COUNT (*) OVER() FROM (
         E.UidEmpresa AS [Uid], 
         E.NombreComercial AS [Name],
         I.NVchRuta AS [ImgUrl],
-(SELECT COUNT(*) FROM (
-        SELECT 
-            distinct 
-            S.UidSucursal
-        FROM Sucursales s 
-	        inner join ContratoDeServicio CDS on CDS.UidSucursalSuministradora = s.UidSucursal 
-	        inner join turnosuministradora ts on ts.uidsucursal = CDS.UidSucursalSuministradora and ts.dtmhorafin is null
-		    inner join TurnoDistribuidora td on td.UidSucursal = CDS.UidSucursalDistribuidora and td.DtmHoraFin is null
-            inner join ZonaDeRepartoDeContrato ZDRC on ZDRC.UidContrato = CDS.UidContrato 
-	        inner join Oferta o on o.Uidsucursal = s.UidSucursal
-	        inner join DiaOferta do on do.UidOferta = o.UidOferta
-	        inner join Tarifario t on t.Uidregistrotarifario  = ZDRC.UidTarifario
-	        inner join ZonaDeServicio ZDS on ZDS.UidRelacionZonaServicio = t.UidRelacionZonaEntrega
-	    where  @UserTime between s.HorarioApertura and s.HorarioCierre
-	        and ZDS.UidColonia = @UidColonia
-	        and s.UidEmpresa = E.UidEmpresa
-	        and s.IntEstatus = 1
-	        and CDS.UidEstatusContrato = 'CD20F9BF-EBA2-4128-88FB-647544457B2D') AS [AvailableBranches]) AS [AvailableBranches]
+        COUNT(DISTINCT S.UidSucursal) AS [AvailableBranches]
     FROM Empresa E
         INNER JOIN Productos p on e.UidEmpresa = p.UidEmpresa
 	    INNER JOIN SeccionProducto sp on sp.UidProducto = p.UidProducto 
@@ -469,8 +454,7 @@ SELECT *, [Count] = COUNT (*) OVER() FROM (
 	    INNER JOIN Imagenes i on ie.UidImagen = i.UIdImagen 	
         {filterJoin}
     WHERE   
-        {filterWhere} {where}
-        AND @UserTime between se.VchHoraInicio and se.VchHoraFin 
+        @UserTime between se.VchHoraInicio and se.VchHoraFin 
 	    AND zd.UidColonia = @UidColonia 
         AND p.IntEstatus = 1 
         AND	D.VchNombre = @Dia 
@@ -491,7 +475,8 @@ SELECT *, [Count] = COUNT (*) OVER() FROM (
                 INNER JOIN Empresa e on e.UidEmpresa = s.UidEmpresa 
             WHERE  @UserTime between s.HorarioApertura and s.HorarioCierre  and ZHP.IdZonaHoraria = @TimeZone) 
         AND e.IdEstatus = 1 
-        AND s.IntEstatus = 1
+        AND s.IntEstatus = 1 {filterWhere} {where}
+    GROUP BY  E.UidEmpresa, E.NombreComercial, I.NVchRuta
 ) payload 
 ORDER BY {order}
 OFFSET @pageSize * @pageNumber ROWS
