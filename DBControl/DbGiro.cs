@@ -11,7 +11,7 @@ namespace DBControl
             oConexion = new Conexion();
             string Query = "";
 
-            Query = "select g.UidGiro, g.VchNombre, g.VchDescripcion, i.NVchRuta from Giro g inner join ImagenGiro ig on ig.UidGiro = g.UidGiro inner join Imagenes I on i.UIdImagen = ig.UidImagen";
+            Query = "select g.UidGiro, g.VchNombre, g.VchDescripcion, i.NVchRuta from Giro g inner join ImagenGiro ig on ig.UidGiro = g.UidGiro inner join Imagenes I on i.UIdImagen = ig.UidImagen order by g.VchNombre asc";
 
             return oConexion.Consultas(Query);
         }
@@ -19,7 +19,7 @@ namespace DBControl
         public DataTable GiroConImagen(string uidGiro)
         {
             oConexion = new Conexion();
-            string Query = "select g.UidGiro, g.VchNombre, g.VchDescripcion, i.NVchRuta from Giro g inner join ImagenGiro ig on ig.UidGiro = g.UidGiro inner join Imagenes I on i.UIdImagen = ig.UidImagen where g.uidGiro = '" + uidGiro + "'";
+            string Query = "select g.UidGiro, g.VchNombre, g.VchDescripcion, i.NVchRuta from Giro g inner join ImagenGiro ig on ig.UidGiro = g.UidGiro inner join Imagenes I on i.UIdImagen = ig.UidImagen where g.uidGiro = '" + uidGiro + "' order by g.VchNombre asc";
 
             return oConexion.Consultas(Query);
         }
