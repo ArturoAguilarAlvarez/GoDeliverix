@@ -388,17 +388,17 @@ namespace DBControl
             if (tipoFiltro.Equals("Giro"))
             {
                 filterJoin = " INNER JOIN GiroProducto gp on gp.UidProducto = p.UidProducto ";
-                filterWhere = " gp.UidGiro = @UidFilter ";
+                filterWhere = " AND gp.UidGiro = @UidFilter ";
             }
             else if (tipoFiltro.Equals("Categoria"))
             {
                 filterJoin = " INNER JOIN CategoriaProducto cp on cp.UidProducto = p.UidProducto ";
-                filterWhere = " cp.UidCategoria = @UidFilter ";
+                filterWhere = " AND cp.UidCategoria = @UidFilter ";
             }
             else if (tipoFiltro.Equals("Subcategoria"))
             {
                 filterJoin = " INNER JOIN SubcategoriaProducto scp on scp.UidProducto = p.UidProducto ";
-                filterWhere = " scp.UidSubcategoria = @UidFilter ";
+                filterWhere = " AND scp.UidSubcategoria = @UidFilter ";
             }
             else if (tipoFiltro.Equals("None") || string.IsNullOrEmpty(tipoFiltro))
             {
