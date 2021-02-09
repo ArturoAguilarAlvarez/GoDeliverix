@@ -407,84 +407,54 @@ namespace DBControl
 
             string order = (string.IsNullOrEmpty(sortField) || string.IsNullOrEmpty(sortOrder)) ? " Uid " : $"{sortField} {sortOrder.ToUpper()}";
 
-            string query = $@"
--- Zona horaria del usuario acorde al estado
-DECLARE @TimeZone VARCHAR(50);
--- Fecha y Hora local del usuario
-DECLARE @UserDateTime DATETIME;
--- Hora actual del usuario
-DECLARE @UserTime VARCHAR(20);
-
-
--- Obtener zona horaria del estado
-SELECT
-    @TimeZone = Z.IdZonaHoraria
-FROM [ZonaHoraria] AS Z
-    INNER JOIN [ZonaHorariaPais] AS P ON P.[IdZonaHoraria] = Z.[IdZonaHoraria]
-    INNER JOIN [ZonaHorariaEstado] AS E ON E.[UidRelacionZonaPaisEstado] = P.[UidZonaHorariaPais]
-WHERE E.UidEstado = @UidEstado
-
--- Obtener DateTime del la zona horaria
-SELECT @UserDateTime = SYSDATETIMEOFFSET() AT TIME ZONE @TimeZone 
-
--- Obtener Time del DateTime
-SELECT @UserTime = CONVERT(VARCHAR, @UserDateTime, 8)
-
-SELECT *, [Count] = COUNT (*) OVER() FROM (
-    SELECT DISTINCT 
-        E.UidEmpresa AS [Uid], 
-        E.NombreComercial AS [Name],
-        I.NVchRuta AS [ImgUrl],
-        COUNT(DISTINCT S.UidSucursal) AS [AvailableBranches]
-    FROM Empresa E
-        INNER JOIN Productos p on e.UidEmpresa = p.UidEmpresa
-	    INNER JOIN SeccionProducto sp on sp.UidProducto = p.UidProducto 
-	    INNER JOIN Seccion se on se.UidSeccion = sp.UidSeccion 
-	    INNER JOIN Oferta O on O.UidOferta = se.UidOferta 
-	    INNER JOIN DiaOferta DO on DO.UidOferta = O.UidOferta 
-	    INNER JOIN Dias D on D.UidDia = DO.UidDia 
-	    INNER JOIN Sucursales s on s.UidSucursal = o.Uidsucursal 
-	    INNER JOIN ContratoDeServicio CDS on CDS.UidSucursalSuministradora = s.UidSucursal 
-	    INNER JOIN turnosuministradora ts on ts.uidsucursal = CDS.UidSucursalSuministradora and ts.dtmhorafin is null
-	    INNER JOIN TurnoDistribuidora td on td.UidSucursal = CDS.UidSucursalDistribuidora and td.DtmHoraFin is null
-	    INNER JOIN ZonaDeRepartoDeContrato ZDRC on ZDRC.UidContrato = CDS.UidContrato 
-	    INNER JOIN Tarifario t on t.UidRegistroTarifario = ZDRC.UidTarifario 
-	    INNER JOIN ZonaDeServicio zd on zd.UidColonia = @UidColonia and zd.UidRelacionZonaServicio = t.UidRelacionZonaEntrega 
-	    INNER JOIN ImagenEmpresa ie on ie.UidEmpresa = e.UidEmpresa 
-	    INNER JOIN Imagenes i on ie.UidImagen = i.UIdImagen 	
-        {filterJoin}
-    WHERE   
-        @UserTime between se.VchHoraInicio and se.VchHoraFin 
-	    AND zd.UidColonia = @UidColonia 
-        AND p.IntEstatus = 1 
-        AND	D.VchNombre = @Dia 
-        AND O.IntEstatus = 1 
-        AND se.IntEstatus = 1 
-        AND sp.VchTiempoElaboracion IS NOT NULL 
-        AND CDS.UidEstatusContrato = 'CD20F9BF-EBA2-4128-88FB-647544457B2D'
-	    -- AND ((@Filter is not null AND e.NombreComercial like '%'+@Filter+'%')or(@Filter is null))
-        AND i.NVchRuta not like '%/Portada/%'
-        AND i.NVchRuta LIKE '%FotoPerfil%'
-        AND s.UidSucursal IN( 
-            select  
-                s.UidSucursal 
-            from Sucursales s 
-                INNER JOIN Direccion d on d.UidDireccion = s.UidDireccion 
-                INNER JOIN ZonaHorariaEstado ZHE on ZHE.UidEstado = d.UidEstado
-                INNER JOIN ZonaHorariaPais ZHP on ZHP.UidZonaHorariaPais = ZHE.UidRelacionZonaPaisEstado 
-                INNER JOIN Empresa e on e.UidEmpresa = s.UidEmpresa 
-            WHERE  @UserTime between s.HorarioApertura and s.HorarioCierre  and ZHP.IdZonaHoraria = @TimeZone) 
-        AND e.IdEstatus = 1 
-        AND s.IntEstatus = 1 {filterWhere} {where}
-    GROUP BY  E.UidEmpresa, E.NombreComercial, I.NVchRuta
-) payload 
-ORDER BY {order}
-OFFSET @pageSize * @pageNumber ROWS
-FETCH NEXT @pageSize ROWS ONLY";
+            string query = 
+                "DECLARE @TimeZone VARCHAR(50); " +
+                "DECLARE @UserDateTime DATETIME; " +
+                "DECLARE @UserTime VARCHAR(20);" +
+                "SELECT @TimeZone = Z.IdZonaHoraria FROM [ZonaHoraria] AS Z" +
+                " INNER JOIN [ZonaHorariaPais] AS P ON P.[IdZonaHoraria] = Z.[IdZonaHoraria]" +
+                " INNER JOIN [ZonaHorariaEstado] AS E ON E.[UidRelacionZonaPaisEstado] = P.[UidZonaHorariaPais] " +
+                "WHERE E.UidEstado =  '" + uidEstado + "' " +
+                "SELECT @UserDateTime = SYSDATETIMEOFFSET() AT TIME ZONE @TimeZone " +
+                "SELECT @UserTime = CONVERT(VARCHAR, @UserDateTime, 8)" +
+                "SELECT *, [Count] = COUNT (*) OVER() FROM (SELECT DISTINCT E.UidEmpresa AS [Uid], " +
+                "E.NombreComercial AS [Name],I.NVchRuta AS [ImgUrl],COUNT(DISTINCT S.UidSucursal) AS [AvailableBranches] " +
+                "FROM Empresa E INNER JOIN Productos p on e.UidEmpresa = p.UidEmpresa" +
+                " INNER JOIN SeccionProducto sp on sp.UidProducto = p.UidProducto " +
+                "INNER JOIN Seccion se on se.UidSeccion = sp.UidSeccion " +
+                "INNER JOIN Oferta O on O.UidOferta = se.UidOferta " +
+                "INNER JOIN DiaOferta DO on DO.UidOferta = O.UidOferta " +
+                "INNER JOIN Dias D on D.UidDia = DO.UidDia " +
+                "INNER JOIN Sucursales s on s.UidSucursal = o.Uidsucursal " +
+                "INNER JOIN ContratoDeServicio CDS on CDS.UidSucursalSuministradora = s.UidSucursal " +
+                "INNER JOIN turnosuministradora ts on ts.uidsucursal = CDS.UidSucursalSuministradora and ts.dtmhorafin is null " +
+                "INNER JOIN TurnoDistribuidora td on td.UidSucursal = CDS.UidSucursalDistribuidora and td.DtmHoraFin is null " +
+                "INNER JOIN ZonaDeRepartoDeContrato ZDRC on ZDRC.UidContrato = CDS.UidContrato " +
+                "INNER JOIN Tarifario t on t.UidRegistroTarifario = ZDRC.UidTarifario " +
+                "INNER JOIN ZonaDeServicio zd on zd.UidColonia =  '" + uidColonia + "' and zd.UidRelacionZonaServicio = t.UidRelacionZonaEntrega " +
+                "INNER JOIN ImagenEmpresa ie on ie.UidEmpresa = e.UidEmpresa " +
+                " INNER JOIN Imagenes i on ie.UidImagen = i.UIdImagen  " + filterJoin + "  WHERE " +
+                "@UserTime between se.VchHoraInicio and se.VchHoraFin AND zd.UidColonia =  '" + uidColonia + "' " +
+                "AND p.IntEstatus = 1 " +
+                "AND D.VchNombre =  '" + dia + "' " +
+                "AND O.IntEstatus = 1 " +
+                "AND se.IntEstatus = 1 " +
+                "AND sp.VchTiempoElaboracion IS NOT NULL " +
+                "AND CDS.UidEstatusContrato = 'CD20F9BF-EBA2-4128-88FB-647544457B2D'" +
+                "AND i.NVchRuta not like '%/Portada/%' " +
+                "AND i.NVchRuta LIKE '%FotoPerfil%' " +
+                "AND s.UidSucursal IN(select s.UidSucursal from Sucursales s " +
+                "INNER JOIN Direccion d on d.UidDireccion = s.UidDireccion " +
+                "INNER JOIN ZonaHorariaEstado ZHE on ZHE.UidEstado = d.UidEstado " +
+                "INNER JOIN ZonaHorariaPais ZHP on ZHP.UidZonaHorariaPais = ZHE.UidRelacionZonaPaisEstado " +
+                "INNER JOIN Empresa e on e.UidEmpresa = s.UidEmpresa " +
+                "WHERE  @UserTime between s.HorarioApertura and s.HorarioCierre  and ZHP.IdZonaHoraria = @TimeZone) " +
+                "AND e.IdEstatus = 1 AND s.IntEstatus = 1 and " + filterWhere + " GROUP BY  E.UidEmpresa, E.NombreComercial, I.NVchRuta)" +
+                " payload ORDER BY "+order+" OFFSET "+ pageSize + " *  " + pageNumber + " ROWS FETCH NEXT  " + pageSize + " ROWS ONLY";
 
             command.CommandText = query;
 
-            DataTable data = this.dbConexion.Busquedas(command);
+            DataTable data = this.dbConexion.Consultas(query);
             return data;
         }
     }
