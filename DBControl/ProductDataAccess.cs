@@ -311,6 +311,197 @@ namespace DBControl
             return data;
         }
 
+        /// <summary>
+        /// VERSION 3 DE LA BUSQUEDA DE PRODUCTOS, PERMITE OBTENER PARAMETROS PARA DETERMINAR SI ESTA DISPONIBLE O NO
+        /// </summary>
+        /// <param name="pageSize"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="sortField"></param>
+        /// <param name="sortOrder"></param>
+        /// <param name="uidEstado"></param>
+        /// <param name="uidColonia"></param>
+        /// <param name="dia"></param>
+        /// <param name="tipoFiltro"></param>
+        /// <param name="uidFiltro"></param>
+        /// <param name="filtro"></param>
+        /// <param name="uidSeccion"></param>
+        /// <param name="uidOferta"></param>
+        /// <param name="uidEmpresa"></param>
+        /// <returns></returns>
+        public DataTable ReadAllStoreVersion3(int pageSize, int pageNumber, string sortField, string sortOrder, Guid uidEstado, Guid uidColonia, string dia, string tipoFiltro, Guid uidFiltro, string filtro = null, Guid? uidSeccion = null, Guid? uidOferta = null, Guid? uidEmpresa = null, bool? available = null)
+        {
+
+            string filterJoin = string.Empty;
+            string filterWhere = string.Empty;
+            string where = string.Empty;
+            if (string.IsNullOrEmpty(tipoFiltro))
+            {
+                tipoFiltro = string.Empty;
+            }
+            if (tipoFiltro.Equals("Giro"))
+            {
+                filterJoin = "INNER JOIN [GiroProducto] as GP ON GP.UidProducto = P.UidProducto";
+                filterWhere = "AND GP.UidGiro = @UidFilter";
+            }
+            else if (tipoFiltro.Equals("Categoria"))
+            {
+                filterJoin = "INNER JOIN [CategoriaProducto] as CP ON CP.UidProducto = P.UidProducto";
+                filterWhere = "AND CP.UidCategoria = @UidFilter";
+            }
+            else if (tipoFiltro.Equals("Subcategoria"))
+            {
+                filterJoin = "INNER JOIN [SubcategoriaProducto] as SCP ON SCP.UidProducto = P.UidProducto";
+                filterWhere = "AND SCP.UidSubcategoria = @UidFilter";
+            }
+            else if (tipoFiltro.Equals("None") || string.IsNullOrEmpty(tipoFiltro))
+            {
+                filterJoin = "INNER JOIN [GiroProducto] as GP ON GP.UidProducto = P.UidProducto";
+            }
+
+            string order = (string.IsNullOrEmpty(sortField) || string.IsNullOrEmpty(sortOrder)) ? " UID DESC " : $"{sortField} {sortOrder.ToUpper()}";
+
+            SqlCommand command = new SqlCommand();
+            command.CommandType = CommandType.Text;
+
+            command.Parameters.AddWithValue("@pageSize", pageSize);
+            command.Parameters.AddWithValue("@pageNumber", pageNumber);
+            command.Parameters.AddWithValue("@UidColonia", uidColonia);
+            command.Parameters.AddWithValue("@UidEstado", uidEstado);
+            command.Parameters.AddWithValue("@Dia", dia);
+            command.Parameters.AddWithValue("@FilterType", tipoFiltro);
+            command.Parameters.AddWithValue("@UidFilter", uidFiltro);
+
+            if (!string.IsNullOrEmpty(filtro))
+            {
+                command.Parameters.AddWithValue("@Filter", filtro);
+                where += " and P.VchNombre like '%'+@Filter+'%' ";
+            }
+
+            if (uidSeccion.HasValue)
+            {
+                command.Parameters.AddWithValue("@UidSeccion", uidSeccion);
+                where += " and SEC.UidSeccion = @UidSeccion ";
+            }
+
+            if (uidOferta.HasValue)
+            {
+                command.Parameters.AddWithValue("@UidOferta", uidOferta);
+                where += " and O.UidOferta = @UidOferta ";
+            }
+
+            if (uidEmpresa.HasValue)
+            {
+                command.Parameters.AddWithValue("@UidEmpresa", uidEmpresa);
+                where += " and EMP.UidEmpresa = @UidEmpresa ";
+            }
+
+            string outerWhere = "";
+            if (available.HasValue)
+            {
+                outerWhere += " AND Available = @Available ";
+                command.Parameters.AddWithValue("@Available", available);
+            }
+
+            string query = $@"
+            -- Zona horaria del usuario acorde al estado
+            DECLARE @TimeZone VARCHAR(50);
+            -- Fecha y Hora local del usuario
+            DECLARE @UserDateTime DATETIME;
+            -- Hora actual del usuario
+            DECLARE @UserTime VARCHAR(20);
+
+            DECLARE @ValorComision INT;
+
+            SELECT @ValorComision = intComision FROM ComisionGoDeliverix WHERE StrNombreComision = 'Orden';
+
+            -- Obtener zona horaria del estado
+            SELECT
+                @TimeZone = Z.IdZonaHoraria
+            FROM [ZonaHoraria] AS Z
+                INNER JOIN [ZonaHorariaPais] AS P ON P.[IdZonaHoraria] = Z.[IdZonaHoraria]
+                INNER JOIN [ZonaHorariaEstado] AS E ON E.[UidRelacionZonaPaisEstado] = P.[UidZonaHorariaPais]
+            WHERE E.UidEstado = @UidEstado
+
+            -- Obtener DateTime del la zona horaria
+            SELECT @UserDateTime = SYSDATETIMEOFFSET() AT TIME ZONE @TimeZone 
+
+            -- Obtener Time del DateTime
+            SELECT @UserTime = CONVERT(VARCHAR, @UserDateTime, 8)
+
+            SELECT 
+                *,
+                (CASE 
+                    WHEN [SecAvailable] = 0 OR [SucAvailable] = 0 OR [TdAvailable] = 0 OR [TsAvailable] = 0 THEN CAST(0 AS BIT)
+                    ELSE CAST(1 AS BIT)
+                END) AS [Available], 
+                [Count] = COUNT (*) OVER()  
+            FROM (
+                SELECT     
+                    P.[UidProducto] AS [Uid],
+                    IPROD.NVchRuta  AS [ImgUrl],
+                    IEMP.NVchRuta AS [CompanyImgUrl],
+                    P.VchNombre AS [Name],
+                    P.VchDescripcion AS [Description],
+                    EMP.[UidEmpresa] AS [UidCompany],
+                    EMP.[NombreComercial] AS [CompanyName],
+                    MIN(
+                    CASE 
+                        WHEN COM.BAboserveComision = 1 THEN SP.Mcosto
+                        ELSE ((SP.Mcosto / 100)*@ValorComision) + SP.Mcosto
+                    END 
+                    ) AS [Price],
+                    SUM (CASE WHEN @UserTime BETWEEN SEC.VchHoraInicio AND SEC.VchHoraFin THEN 1 ELSE 0 END ) AS [SecAvailable],
+                    SUM (CASE WHEN @UserTime between SUC.HorarioApertura and SUC.HorarioCierre THEN 1 ELSE 0 END) AS [SucAvailable],
+                    SUM (CASE WHEN  CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME)  AND TS.DtmHoraFin IS NULL THEN 1 ELSE 0 END) AS [TsAvailable],
+                    SUM (CASE WHEN CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL THEN 1 ELSE 0 END) AS [TdAvailable]
+                FROM [Productos] AS P    
+                    INNER JOIN [SeccionProducto] AS SP ON P.[UidProducto] = SP.[UidProducto]
+                    INNER JOIN [Seccion] AS SEC ON SEC.UidSeccion = SP.UidSeccion AND SEC.IntEstatus = 1
+                    INNER JOIN [ImagenProducto] AS [IP] ON [IP].[UidProducto] = P.[UidProducto]
+                    INNER JOIN [Imagenes] AS IPROD ON IPROD.UIdImagen = [IP].UidImagen
+                    INNER JOIN [ImagenEmpresa] AS IE ON IE.UidRelacion = (SELECT TOP 1 UidRelacion FROM ImagenEmpresa WHERE UidEmpresa = P.UidEmpresa)
+                    INNER JOIN [Imagenes] AS IEMP ON IEMP.UIdImagen = [IE].UidImagen
+
+                    INNER JOIN [Oferta] AS O ON O.UidOferta= SEC.UidOferta AND O.IntEstatus = 1
+                    INNER JOIN DiaOferta AS DO ON DO.UidOferta = O.UidOferta
+                    INNER JOIN Dias AS D ON D.UidDia = DO.UidDia
+                    INNER JOIN Sucursales AS SUC ON SUC.UidSucursal = O.Uidsucursal AND SUC.IntEstatus = 1
+
+                    INNER JOIN Empresa AS EMP ON EMP.UidEmpresa = P.UidEmpresa AND EMP.IdEstatus =1
+
+                    INNER JOIN Direccion AS DIR ON DIR.UidDireccion = SUC.UidDireccion
+                    INNER JOIN ZonaHorariaEstado AS ZHE ON ZHE.UidEstado = DIR.UidEstado
+                    INNER JOIN ZonaHorariaPais ZHP ON ZHP.UidZonaHorariaPais = ZHE.UidRelacionZonaPaisEstado
+
+                    INNER JOIN ContratoDeServicio CDS on CDS.UidSucursalSuministradora = SUC.UidSucursal 
+                    INNER JOIN ZonaDeRepartoDeContrato ZDRDC on ZDRDC.UidContrato = CDS.UidContrato 
+	                INNER JOIN Tarifario T on t.UidRegistroTarifario = ZDRDC.UidTarifario 
+	                INNER JOIN ZonaDeServicio ZDS on ZDS.UidColonia = @UidColonia and ZDS.UidRelacionZonaServicio = T.UidRelacionZonaEntrega 
+    
+	                INNER JOIN turnosuministradora TS on TS.uidsucursal = CDS.UidSucursalSuministradora
+	                INNER JOIN TurnoDistribuidora TD on TD.UidSucursal = CDS.UidSucursalDistribuidora
+                    INNER JOIN Comision AS COM ON COM.UidEmpresa = EMP.UidEmpresa
+                    {filterJoin}
+                WHERE 
+                     D.VchNombre = @Dia    
+                    AND SP.VchTiempoElaboracion IS NOT NULL 
+                    AND ZDS.UidColonia = @UidColonia 
+                    AND CDS.UidEstatusContrato = 'CD20F9BF-EBA2-4128-88FB-647544457B2D'
+                    AND ZHP.IdZonaHoraria = @TimeZone    
+                    AND P.intEstatus = 1
+                    {filterWhere} {where}
+                GROUP BY P.UidProducto,P.[VchNombre],IPROD.NVchRuta,IEMP.NVchRuta,EMP.[UidEmpresa],EMP.[NombreComercial],P.VchDescripcion
+            ) payload 
+            WHERE 1=1 
+            ORDER BY {order}
+            OFFSET @pageSize * @pageNumber ROWS
+            FETCH NEXT @pageSize ROWS ONLY";
+            command.CommandText = query;
+
+            DataTable data = this.dbConexion.Busquedas(command);
+            return data;
+        }
+
         public DataTable ReadAllStoreStoreProcedure(int pageSize, int pageNumber, string sortField, string sortOrder, Guid uidEstado, Guid uidColonia, string dia, string tipoFiltro, Guid uidFiltro, string filtro = null, Guid? uidSeccion = null, Guid? uidOferta = null, Guid? uidEmpresa = null)
         {
             SqlCommand command = new SqlCommand();

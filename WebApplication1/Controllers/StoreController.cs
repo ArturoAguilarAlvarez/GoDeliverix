@@ -59,6 +59,21 @@ namespace WebApplication1.Controllers
             }
         }
 
+
+        [HttpGet]
+        public IHttpActionResult SearchProducts([FromUri] StoreSearchRequest request)
+        {
+            try
+            {
+                var result = this.ProductVm.ReadAllToStoreVersion3(request);
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet]
         public IHttpActionResult ReadAllCompanies([FromUri] CompaniesSearchRequest request)
         {

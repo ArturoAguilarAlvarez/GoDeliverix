@@ -102,6 +102,50 @@ namespace VistaDelModelo
             return result;
         }
 
+        public CommonListViewSource<ProductStoreGrid> ReadAllToStoreVersion3(StoreSearchRequest request)
+        {
+            CommonListViewSource<ProductStoreGrid> result = new CommonListViewSource<ProductStoreGrid>() { };
+
+            DataTable data = this.ProductDb.ReadAllStoreVersion3(request.PageSize,
+                request.PageNumber,
+                request.SortField,
+                request.SortDirection,
+                request.UidEstado,
+                request.UidColonia,
+                request.Dia,
+                request.TipoFiltro,
+                request.UidFiltro,
+                request.Filtro,
+                request.UidSeccion,
+                request.UidOferta,
+                request.UidEmpresa,
+                request.Available);
+
+
+            List<ProductStoreGrid> products = new List<ProductStoreGrid>();
+
+            foreach (DataRow row in data.Rows)
+            {
+                products.Add(new ProductStoreGrid()
+                {
+                    Uid = row.IsNull("Uid") ? Guid.Empty : (Guid)row["Uid"],
+                    UidCompany = row.IsNull("UidCompany") ? Guid.Empty : (Guid)row["UidCompany"],
+                    Name = row.IsNull("Name") ? "" : (string)row["Name"],
+                    CompanyName = row.IsNull("CompanyName") ? "" : (string)row["CompanyName"],
+                    Description = row.IsNull("Description") ? "" : (string)row["Description"],
+                    CompanyImgUrl = row.IsNull("CompanyImgUrl") ? "" : (string)row["CompanyImgUrl"],
+                    ImgUrl = row.IsNull("ImgUrl") ? "" : (string)row["ImgUrl"],
+                    Price = row.IsNull("Price") ? 0 : (decimal)row["Price"],
+                    Available = (bool)row["Available"]
+                });
+            }
+
+            result.Payload = products;
+            result.Count = data.Rows.Count > 0 ? (int)data.Rows[0]["Count"] : 0;
+
+            return result;
+        }
+
         public CommonListViewSource<ProductStoreGrid> ReadAllToStoreStoreProcedure(StoreSearchRequest request)
         {
             CommonListViewSource<ProductStoreGrid> result = new CommonListViewSource<ProductStoreGrid>() { };
