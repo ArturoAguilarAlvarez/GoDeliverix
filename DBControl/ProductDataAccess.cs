@@ -394,13 +394,28 @@ namespace DBControl
                 command.Parameters.AddWithValue("@UidEmpresa", uidEmpresa);
                 where += " and EMP.UidEmpresa = @UidEmpresa ";
             }
+                        
+            string outerParams = $",(CASE WHEN [SecAvailable] = 0 OR [SucAvailable] = 0 OR [TdAvailable] = 0 OR [TsAvailable] = 0 THEN CAST(0 AS BIT) ELSE CAST(1 AS BIT) END) AS [Available]";
 
-            string outerWhere = "";
+            string AvailableSelectStatemens = "";
+            string AvailableWhereStatemens = "";
+
+            AvailableSelectStatemens = @"
+,SUM (CASE WHEN @UserTime BETWEEN SEC.VchHoraInicio AND SEC.VchHoraFin THEN 1 ELSE 0 END ) AS [SecAvailable],
+SUM (CASE WHEN @UserTime between SUC.HorarioApertura and SUC.HorarioCierre THEN 1 ELSE 0 END) AS [SucAvailable],
+SUM (CASE WHEN  CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME)  AND TS.DtmHoraFin IS NULL THEN 1 ELSE 0 END) AS [TsAvailable],
+SUM (CASE WHEN CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL THEN 1 ELSE 0 END) AS [TdAvailable]";
+
             if (available.HasValue)
             {
-                outerWhere += " AND Available = @Available ";
-                command.Parameters.AddWithValue("@Available", available);
+                outerParams = ",(CAST(1 AS BIT)) AS [Available]";
+                AvailableSelectStatemens = "";
+                AvailableWhereStatemens = @" AND @UserTime BETWEEN SEC.VchHoraInicio AND SEC.VchHoraFin ";
+                AvailableWhereStatemens += " AND @UserTime between SUC.HorarioApertura and SUC.HorarioCierre ";
+                AvailableWhereStatemens += " AND CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME)  AND TS.DtmHoraFin IS NULL ";
+                AvailableWhereStatemens += " AND CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL ";
             }
+
 
             string query = $@"
             -- Zona horaria del usuario acorde al estado
@@ -429,12 +444,7 @@ namespace DBControl
             SELECT @UserTime = CONVERT(VARCHAR, @UserDateTime, 8)
 
             SELECT 
-                *,
-                (CASE 
-                    WHEN [SecAvailable] = 0 OR [SucAvailable] = 0 OR [TdAvailable] = 0 OR [TsAvailable] = 0 THEN CAST(0 AS BIT)
-                    ELSE CAST(1 AS BIT)
-                END) AS [Available], 
-                [Count] = COUNT (*) OVER()  
+                * {outerParams},[Count] = COUNT (*) OVER()  
             FROM (
                 SELECT     
                     P.[UidProducto] AS [Uid],
@@ -449,11 +459,7 @@ namespace DBControl
                         WHEN COM.BAboserveComision = 1 THEN SP.Mcosto
                         ELSE ((SP.Mcosto / 100)*@ValorComision) + SP.Mcosto
                     END 
-                    ) AS [Price],
-                    SUM (CASE WHEN @UserTime BETWEEN SEC.VchHoraInicio AND SEC.VchHoraFin THEN 1 ELSE 0 END ) AS [SecAvailable],
-                    SUM (CASE WHEN @UserTime between SUC.HorarioApertura and SUC.HorarioCierre THEN 1 ELSE 0 END) AS [SucAvailable],
-                    SUM (CASE WHEN  CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME)  AND TS.DtmHoraFin IS NULL THEN 1 ELSE 0 END) AS [TsAvailable],
-                    SUM (CASE WHEN CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL THEN 1 ELSE 0 END) AS [TdAvailable]
+                    ) AS [Price] {AvailableSelectStatemens}                    
                 FROM [Productos] AS P    
                     INNER JOIN [SeccionProducto] AS SP ON P.[UidProducto] = SP.[UidProducto]
                     INNER JOIN [Seccion] AS SEC ON SEC.UidSeccion = SP.UidSeccion AND SEC.IntEstatus = 1
@@ -489,7 +495,7 @@ namespace DBControl
                     AND CDS.UidEstatusContrato = 'CD20F9BF-EBA2-4128-88FB-647544457B2D'
                     AND ZHP.IdZonaHoraria = @TimeZone    
                     AND P.intEstatus = 1
-                    {filterWhere} {where}
+                    {filterWhere} {where} {AvailableWhereStatemens}
                 GROUP BY P.UidProducto,P.[VchNombre],IPROD.NVchRuta,IEMP.NVchRuta,EMP.[UidEmpresa],EMP.[NombreComercial],P.VchDescripcion
             ) payload 
             WHERE 1=1 
