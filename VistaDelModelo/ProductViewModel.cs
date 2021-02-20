@@ -255,6 +255,7 @@ namespace VistaDelModelo
             {
                 result.Uid = row.IsNull("Uid") ? Guid.Empty : (Guid)row["Uid"];
                 result.Name = row.IsNull("Name") ? "" : (string)row["Name"];
+                result.ImgUrl = row.IsNull("ImgUrl") ? "" : (string)row["ImgUrl"];
             }
 
             DataTable branchesDt = this.ProductDb.ReadAllCompanyBranch(uidEmpresa, uidEstado, uidColonia);

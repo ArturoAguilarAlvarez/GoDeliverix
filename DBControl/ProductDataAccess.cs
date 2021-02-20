@@ -755,7 +755,15 @@ ORDER BY [Identifier]";
             command.CommandType = CommandType.Text;
 
             command.Parameters.AddWithValue("@UidEmpresa", uidEmpresa);
-            string query = "SELECT UidEmpresa AS [Uid], NombreComercial AS [Name] FROM Empresa WHERE UidEmpresa = @UidEmpresa";
+            string query = $@"
+SELECT
+    E.UidEmpresa AS[Uid],
+    E.NombreComercial AS[Name],
+    I.NVchRuta AS[ImgUrl]
+FROM Empresa AS E
+    INNER JOIN ImagenEmpresa AS IE ON IE.UidEmpresa = E.UidEmpresa
+    INNER JOIN Imagenes AS I ON I.UIdImagen = IE.UidImagen AND I.NVchRuta LIKE '%FotoPerfil%'
+WHERE E.UidEmpresa = @UidEmpresa";
             command.CommandText = query;
 
             DataTable data = this.dbConexion.Busquedas(command);

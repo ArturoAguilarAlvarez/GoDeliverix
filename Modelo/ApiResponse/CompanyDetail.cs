@@ -12,6 +12,8 @@ namespace Modelo.ApiResponse
 
         public string Name { get; set; }
 
+        public string ImgUrl { get; set; }
+
         public IEnumerable<CompanyBranch> Branches { get; set; }
 
         public CompanyDetail()
