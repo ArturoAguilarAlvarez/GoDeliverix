@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +16,7 @@ namespace Modelo.ApiResponse
         public string ImgUrl { get; set; }
 
         public int AvailableBranches { get; set; }
+
+        public bool Available { get; set; }
     }
 }

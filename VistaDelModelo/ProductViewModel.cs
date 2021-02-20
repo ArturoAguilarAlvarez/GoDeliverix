@@ -214,6 +214,7 @@ namespace VistaDelModelo
                     Name = row.IsNull("Name") ? "" : (string)row["Name"],
                     ImgUrl = row.IsNull("ImgUrl") ? "" : (string)row["ImgUrl"],
                     AvailableBranches = row.IsNull("AvailableBranches") ? 0 : (int)row["AvailableBranches"],
+                    Available = row.IsNull("Available") ? false : (bool)row["Available"],
                 });
             }
 

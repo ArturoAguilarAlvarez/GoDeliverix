@@ -630,7 +630,17 @@ SELECT *, [Count] = COUNT (*) OVER() FROM (
         E.UidEmpresa AS [Uid], 
         E.NombreComercial AS [Name],
         I.NVchRuta AS [ImgUrl],
-        COUNT(DISTINCT S.UidSucursal) AS [AvailableBranches]
+        COUNT(DISTINCT S.UidSucursal) AS [AvailableBranches],
+        CASE WHEN 
+        SUM(
+        CASE 
+            WHEN 
+                @UserTime between S.HorarioApertura and S.HorarioCierre and ZHP.IdZonaHoraria = @TimeZone
+                AND CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME)  AND TS.DtmHoraFin IS NULL
+                AND CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL
+                AND @UserTime between se.VchHoraInicio and se.VchHoraFin 
+            THEN 1 ELSE 0 
+        END) = 0 THEN CAST(0 AS BIT) ELSE CAST(1 AS BIT) END AS [Available]
     FROM Empresa E
         INNER JOIN Productos p on e.UidEmpresa = p.UidEmpresa
 	    INNER JOIN SeccionProducto sp on sp.UidProducto = p.UidProducto 
@@ -646,7 +656,12 @@ SELECT *, [Count] = COUNT (*) OVER() FROM (
 	    INNER JOIN Tarifario t on t.UidRegistroTarifario = ZDRC.UidTarifario 
 	    INNER JOIN ZonaDeServicio zd on zd.UidColonia = @UidColonia and zd.UidRelacionZonaServicio = t.UidRelacionZonaEntrega 
 	    INNER JOIN ImagenEmpresa ie on ie.UidEmpresa = e.UidEmpresa 
-	    INNER JOIN Imagenes i on ie.UidImagen = i.UIdImagen 	
+	    INNER JOIN Imagenes i on ie.UidImagen = i.UIdImagen 		
+
+        INNER JOIN Direccion AS DIR ON DIR.UidDireccion = S.UidDireccion
+        INNER JOIN ZonaHorariaEstado ZHE on ZHE.UidEstado = DIR.UidEstado
+        INNER JOIN ZonaHorariaPais ZHP on ZHP.UidZonaHorariaPais = ZHE.UidRelacionZonaPaisEstado 
+
         {filterJoin}
     WHERE   
         @UserTime between se.VchHoraInicio and se.VchHoraFin 
@@ -660,15 +675,6 @@ SELECT *, [Count] = COUNT (*) OVER() FROM (
 	    -- AND ((@Filter is not null AND e.NombreComercial like '%'+@Filter+'%')or(@Filter is null))
         AND i.NVchRuta not like '%/Portada/%'
         AND i.NVchRuta LIKE '%FotoPerfil%'
-        AND s.UidSucursal IN( 
-            select  
-                s.UidSucursal 
-            from Sucursales s 
-                INNER JOIN Direccion d on d.UidDireccion = s.UidDireccion 
-                INNER JOIN ZonaHorariaEstado ZHE on ZHE.UidEstado = d.UidEstado
-                INNER JOIN ZonaHorariaPais ZHP on ZHP.UidZonaHorariaPais = ZHE.UidRelacionZonaPaisEstado 
-                INNER JOIN Empresa e on e.UidEmpresa = s.UidEmpresa 
-            WHERE  @UserTime between s.HorarioApertura and s.HorarioCierre  and ZHP.IdZonaHoraria = @TimeZone) 
         AND e.IdEstatus = 1 
         AND s.IntEstatus = 1 {filterWhere} {where}
     GROUP BY  E.UidEmpresa, E.NombreComercial, I.NVchRuta
