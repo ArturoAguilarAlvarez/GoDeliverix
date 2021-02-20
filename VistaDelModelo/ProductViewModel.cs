@@ -222,5 +222,27 @@ namespace VistaDelModelo
 
             return result;
         }
+
+        public IEnumerable<CompanyBranch> ReadAllCompanyBranches(Guid uidEmpresa, Guid uidEstado, Guid uidColonia)
+        {
+            List<CompanyBranch> result = new List<CompanyBranch>() { };
+
+            DataTable data = this.ProductDb.ReadAllCompanyBranch(uidEmpresa, uidEstado, uidColonia);
+
+            foreach (DataRow row in data.Rows)
+            {
+                result.Add(new CompanyBranch()
+                {
+                    Uid = row.IsNull("Uid") ? Guid.Empty : (Guid)row["Uid"],
+                    Identifier = row.IsNull("Identifier") ? "" : (string)row["Identifier"],
+                    OpenAt = row.IsNull("CloseAt") ? "" : (string)row["CloseAt"],
+                    CloseAt = row.IsNull("OpenAt") ? "" : (string)row["OpenAt"],
+                    Available = row.IsNull("Available") ? false  : (bool)row["Available"],
+                    Status  = row.IsNull("Status") ? 0 : (int)row["Status"]
+                });
+            }
+
+            return result;
+        }
     }
 }

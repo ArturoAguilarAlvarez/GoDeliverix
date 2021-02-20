@@ -49,6 +49,8 @@
     <Compile Include="ApiResponse\BitacoraEstatusRepartidor.cs" />
     <Compile Include="ApiResponse\CommonListViewSource.cs" />
     <Compile Include="ApiResponse\CompaniesSearchRequest.cs" />
+    <Compile Include="ApiResponse\CompanyBranch.cs" />
+    <Compile Include="ApiResponse\CompanyBranchRequest.cs" />
     <Compile Include="ApiResponse\CompanyStoreGrid.cs" />
     <Compile Include="ApiResponse\DeliveryManLoginResult.cs" />
     <Compile Include="ApiResponse\DeliveryOrderProductDetail.cs" />

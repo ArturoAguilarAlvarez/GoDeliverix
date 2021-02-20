@@ -394,7 +394,7 @@ namespace DBControl
                 command.Parameters.AddWithValue("@UidEmpresa", uidEmpresa);
                 where += " and EMP.UidEmpresa = @UidEmpresa ";
             }
-                        
+
             string outerParams = $",(CASE WHEN [SecAvailable] = 0 OR [SucAvailable] = 0 OR [TdAvailable] = 0 OR [TsAvailable] = 0 THEN CAST(0 AS BIT) ELSE CAST(1 AS BIT) END) AS [Available]";
 
             string AvailableSelectStatemens = "";
@@ -676,6 +676,66 @@ SELECT *, [Count] = COUNT (*) OVER() FROM (
 ORDER BY {order}
 OFFSET @pageSize * @pageNumber ROWS
 FETCH NEXT @pageSize ROWS ONLY";
+
+            command.CommandText = query;
+
+            DataTable data = this.dbConexion.Busquedas(command);
+            return data;
+        }
+
+        public DataTable ReadAllCompanyBranch(Guid uidEmpresa, Guid uidEstado, Guid uidColonia)
+        {
+            SqlCommand command = new SqlCommand();
+            command.CommandType = CommandType.Text;
+
+            command.Parameters.AddWithValue("@UidEmpresa", uidEmpresa);
+            command.Parameters.AddWithValue("@UidColonia", uidColonia);
+            command.Parameters.AddWithValue("@UidEstado", uidEstado);
+
+            string query = $@"
+-- Zona horaria del usuario acorde al estado
+DECLARE @TimeZone VARCHAR(50);
+-- Fecha y Hora local del usuario
+DECLARE @UserDateTime DATETIME;
+-- Hora actual del usuario
+DECLARE @UserTime VARCHAR(20);
+
+-- Obtener zona horaria del estado
+SELECT
+    @TimeZone = Z.IdZonaHoraria
+FROM [ZonaHoraria] AS Z
+    INNER JOIN [ZonaHorariaPais] AS P ON P.[IdZonaHoraria] = Z.[IdZonaHoraria]
+    INNER JOIN [ZonaHorariaEstado] AS E ON E.[UidRelacionZonaPaisEstado] = P.[UidZonaHorariaPais]
+WHERE E.UidEstado = @UidEstado
+
+-- Obtener DateTime del la zona horaria
+SELECT @UserDateTime = SYSDATETIMEOFFSET() AT TIME ZONE @TimeZone 
+
+-- Obtener Time del DateTime
+SELECT @UserTime = CONVERT(VARCHAR, @UserDateTime, 8)
+
+SELECT 
+    s.UidSucursal AS [Uid],
+    s.HorarioApertura AS [OpenAt],
+    s.HorarioCierre AS [CloseAt],
+    s.Identificador AS [Identifier], 
+    s.IntEstatus AS [Status],
+    CASE WHEN @UserTime between s.HorarioApertura and s.HorarioCierre THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS [Available]
+FROM Sucursales s 
+	inner join ContratoDeServicio CDS on CDS.UidSucursalSuministradora = s.UidSucursal 
+	inner join turnosuministradora ts on ts.uidsucursal = CDS.UidSucursalSuministradora and ts.dtmhorafin is null
+    inner join TurnoDistribuidora td on td.UidSucursal = CDS.UidSucursalDistribuidora and td.DtmHoraFin is null
+    inner join ZonaDeRepartoDeContrato ZDRC on ZDRC.UidContrato = CDS.UidContrato 
+	inner join Oferta o on o.Uidsucursal = s.UidSucursal
+	inner join DiaOferta do on do.UidOferta = o.UidOferta
+	inner join Tarifario t on t.Uidregistrotarifario  = ZDRC.UidTarifario
+	inner join ZonaDeServicio ZDS on ZDS.UidRelacionZonaServicio = t.UidRelacionZonaEntrega
+WHERE ZDS.UidColonia = @UidColonia
+	AND s.UidEmpresa = @UidEmpresa
+	AND s.IntEstatus = 1
+	AND CDS.UidEstatusContrato = 'CD20F9BF-EBA2-4128-88FB-647544457B2D'
+    -- AND @UserTime between s.HorarioApertura and s.HorarioCierre
+ORDER BY [Identifier]";
 
             command.CommandText = query;
 
