@@ -101,5 +101,19 @@ namespace WebApplication1.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet]
+        public IHttpActionResult GetCompanyDetail([FromUri] CompanyBranchRequest request)
+        {
+            try
+            {
+                var result = this.ProductVm.GetCompanyDetail(request.UidEmpresa, request.UidEstado, request.UidColonia);
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

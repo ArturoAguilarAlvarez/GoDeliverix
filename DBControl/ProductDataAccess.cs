@@ -748,5 +748,18 @@ ORDER BY [Identifier]";
             DataTable data = this.dbConexion.Busquedas(command);
             return data;
         }
+
+        public DataTable Company(Guid uidEmpresa)
+        {
+            SqlCommand command = new SqlCommand();
+            command.CommandType = CommandType.Text;
+
+            command.Parameters.AddWithValue("@UidEmpresa", uidEmpresa);
+            string query = "SELECT UidEmpresa AS [Uid], NombreComercial AS [Name] FROM Empresa WHERE UidEmpresa = @UidEmpresa";
+            command.CommandText = query;
+
+            DataTable data = this.dbConexion.Busquedas(command);
+            return data;
+        }
     }
 }

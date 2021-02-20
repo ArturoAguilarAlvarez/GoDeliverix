@@ -238,10 +238,42 @@ namespace VistaDelModelo
                     Identifier = row.IsNull("Identifier") ? "" : (string)row["Identifier"],
                     OpenAt = row.IsNull("CloseAt") ? "" : (string)row["CloseAt"],
                     CloseAt = row.IsNull("OpenAt") ? "" : (string)row["OpenAt"],
-                    Available = row.IsNull("Available") ? false  : (bool)row["Available"],
-                    Status  = row.IsNull("Status") ? 0 : (int)row["Status"]
+                    Available = row.IsNull("Available") ? false : (bool)row["Available"],
+                    Status = row.IsNull("Status") ? 0 : (int)row["Status"]
                 });
             }
+
+            return result;
+        }
+
+        public CompanyDetail GetCompanyDetail(Guid uidEmpresa, Guid uidEstado, Guid uidColonia)
+        {
+            CompanyDetail result = new CompanyDetail();
+
+            DataTable companyDt = this.ProductDb.Company(uidEmpresa);
+            foreach (DataRow row in companyDt.Rows)
+            {
+                result.Uid = row.IsNull("Uid") ? Guid.Empty : (Guid)row["Uid"];
+                result.Name = row.IsNull("Name") ? "" : (string)row["Name"];
+            }
+
+            DataTable branchesDt = this.ProductDb.ReadAllCompanyBranch(uidEmpresa, uidEstado, uidColonia);
+
+            List<CompanyBranch> branches = new List<CompanyBranch>();
+            foreach (DataRow row in branchesDt.Rows)
+            {
+                branches.Add(new CompanyBranch()
+                {
+                    Uid = row.IsNull("Uid") ? Guid.Empty : (Guid)row["Uid"],
+                    Identifier = row.IsNull("Identifier") ? "" : (string)row["Identifier"],
+                    OpenAt = row.IsNull("CloseAt") ? "" : (string)row["CloseAt"],
+                    CloseAt = row.IsNull("OpenAt") ? "" : (string)row["OpenAt"],
+                    Available = row.IsNull("Available") ? false : (bool)row["Available"],
+                    Status = row.IsNull("Status") ? 0 : (int)row["Status"]
+                });
+            }
+
+            result.Branches = branches.AsEnumerable();
 
             return result;
         }
