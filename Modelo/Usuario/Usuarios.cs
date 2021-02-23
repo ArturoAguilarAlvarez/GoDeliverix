@@ -172,7 +172,7 @@ namespace Modelo.Usuario
                 cmd.Parameters.Add("@Password", SqlDbType.NVarChar, 100);
                 cmd.Parameters["@Password"].Value = user.PASSWORD;
 
-                cmd.Parameters.Add("@FechaDeNacimiento", SqlDbType.NVarChar, 100);
+                cmd.Parameters.Add("@FechaDeNacimiento", SqlDbType.VarChar, 10);
                 cmd.Parameters["@FechaDeNacimiento"].Value = user.FECHADENACIMIENTO;
 
                 if (user.EMPRESA != null)

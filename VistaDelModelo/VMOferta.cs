@@ -14,6 +14,7 @@ namespace VistaDelModelo
         Conexion Datos;
 
         Oferta oOferta;
+        DBOferta odboferta;
 
         private Guid _uidOferta;
 
@@ -104,7 +105,7 @@ namespace VistaDelModelo
                 Comando.Parameters.Add("@IntEstatus", SqlDbType.Int);
                 Comando.Parameters["@IntEstatus"].Value = 1;
 
-                Comando.Parameters.Add("@Dia", SqlDbType.VarChar,20);
+                Comando.Parameters.Add("@Dia", SqlDbType.VarChar, 20);
                 Comando.Parameters["@Dia"].Value = dia;
 
                 foreach (DataRow item in Datos.Busquedas(Comando).Rows)
@@ -185,6 +186,12 @@ namespace VistaDelModelo
 
                 throw;
             }
+        }
+
+        public DataTable ExportarExcel(string uidsucursal)
+        {
+            odboferta = new DBOferta();
+            return odboferta.ProductosExportar(uidsucursal);
         }
         #endregion
     }
