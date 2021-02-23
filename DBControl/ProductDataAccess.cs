@@ -721,7 +721,7 @@ SELECT @UserDateTime = SYSDATETIMEOFFSET() AT TIME ZONE @TimeZone
 SELECT @UserTime = CONVERT(VARCHAR, @UserDateTime, 8)
 
 SELECT 
-    s.UidSucursal AS [Uid],
+    DISTINCT s.UidSucursal AS [Uid],
     s.HorarioApertura AS [OpenAt],
     s.HorarioCierre AS [CloseAt],
     s.Identificador AS [Identifier], 
