@@ -12,10 +12,12 @@ namespace VistaDelModelo
     public class ProductViewModel
     {
         private ProductDataAccess ProductDb { get; }
+        private OfertaDataAccess OfertaDb { get; }
 
         public ProductViewModel()
         {
             this.ProductDb = new ProductDataAccess();
+            this.OfertaDb = new OfertaDataAccess();
         }
 
         public CommonListViewSource<ProductStoreGrid> ReadAllToStore(StoreSearchRequest request)
@@ -276,6 +278,26 @@ namespace VistaDelModelo
             }
 
             result.Branches = branches.AsEnumerable();
+
+            return result;
+        }
+
+        public IEnumerable<OfertaListBox> GetBranchDeals(Guid uidSucursal, string dia)
+        {
+            List<OfertaListBox> result = new List<OfertaListBox>() { };
+
+            DataTable data = this.OfertaDb.ObtenerOfertasSucursal(dia, uidSucursal);
+
+            foreach (DataRow row in data.Rows)
+            {
+                result.Add(new OfertaListBox()
+                {
+                    Uid = row.IsNull("Uid") ? Guid.Empty : (Guid)row["Uid"],
+                    Available = row.IsNull("Available") ? false : (bool)row["Available"],
+                    Status = row.IsNull("Status") ? 0 : (int)row["Status"],
+                    Name = row.IsNull("Name") ? "" : (string)row["Name"],
+                });
+            }
 
             return result;
         }

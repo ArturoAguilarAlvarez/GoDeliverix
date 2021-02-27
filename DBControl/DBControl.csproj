@@ -74,6 +74,7 @@
     <Compile Include="DbZonaHoraria.cs" />
     <Compile Include="DealerDataAccess.cs" />
     <Compile Include="NotificationDataAccess.cs" />
+    <Compile Include="OfertaDataAccess.cs" />
     <Compile Include="PaymentDataAccess.cs" />
     <Compile Include="ProductDataAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -115,5 +115,19 @@ namespace WebApplication1.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet]
+        public IHttpActionResult GetBranchDeals(Guid uidSucursal, string dia)
+        {
+            try
+            {
+                var result = this.ProductVm.GetBranchDeals(uidSucursal, dia);
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
