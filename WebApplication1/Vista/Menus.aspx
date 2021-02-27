@@ -67,8 +67,8 @@
 
         <div class="col-md-8">
             <div class="panel panel-primary">
-                <div class="panel-heading text-center">
-                    <p>
+                <div class="panel-heading">
+                    <div class="text-left">
                         <asp:Label ID="lblSeleccionSucursal" runat="server">Sucursal:</asp:Label><asp:Label ID="lblSucursal" runat="server" />
                         <asp:TextBox ID="txtUidSucursal" CssClass="hide" runat="server" />
 
@@ -77,9 +77,58 @@
 
                         <asp:Label ID="lblSeleccionSeccion" runat="server">Sección:</asp:Label><asp:Label ID="lblSeccion" runat="server" />
                         <asp:TextBox ID="txtUidSeccion" CssClass="hide" runat="server" />
-                    </p>
+                    </div>
                 </div>
+                <div class="clearfix">
+                    <%--importacion y exportacion de Menu--%>
+                    <div class="col-md-12" style="margin-top: 10px;">
+                        <div class="pull-right">
+
+
+                            <asp:UpdatePanel runat="server">
+                                <ContentTemplate>
+                                    <asp:LinkButton ID="BtnExportarMenu" runat="server" OnClick="BtnExportarMenu_Click" CssClass="btn btn-sm btn-success " ToolTip="Descargar">
+                                        <span class="glyphicon glyphicon-save">
+                                        </span>
+                                        Descargar menu
+                                    </asp:LinkButton>
+                                    <script type="text/javascript">
+                                        function UploadFile(fileUpload) {
+                                            if (fileUpload.value != '') {
+                                                document.getElementById("<%=btnSubirImagen.ClientID %>").click();
+                                            }
+                                        }
+                                    </script>
+                                    <asp:LinkButton CssClass="btn btn-sm btn-warning " ID="BtnImportarMenu" runat="server">
+                                                <span class="glyphicon glyphicon-open">
+                                                </span>
+                                                Importar menu
+                                    </asp:LinkButton>
+                                    <asp:FileUpload ID="FUImportExcel" CssClass="hide" runat="server" />
+                                    <asp:Button Text="Subir" OnClick="MuestraFoto" CssClass="hide" ID="btnSubirImagen" runat="server" />
+                                </ContentTemplate>
+                                <Triggers>
+                                    <asp:PostBackTrigger ControlID="btnSubirImagen" />
+                                </Triggers>
+                            </asp:UpdatePanel>
+                        </div>
+                    </div>
+                    <%--importacion y exportacion de Menu--%>
+                </div>
+                <%--Panel de mensaje de sistema--%>
+                <asp:Panel CssClass=" alert alert-danger " Style="padding: 10px;" ID="PanelMensaje" runat="server">
+                    <span class="glyphicon glyphicon-info-sign"></span>
+                    <asp:Label ID="LblMensaje" Text="Mensaje del sistema" Font-Size="Large" runat="server" />
+
+                    <div class="pull-right">
+                        <asp:LinkButton ID="BtnCerrarPanelMensaje" CssClass="btn btn-sm btn-danger" OnClick="BtnCerrarPanelMensaje_Click" ForeColor="White" runat="server">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </asp:LinkButton>
+                    </div>
+                </asp:Panel>
+                <div class="clearfix"></div>
                 <div class="panel-body">
+
                     <%-- Barra de navegacion --%>
                     <ul class="nav nav-tabs">
                         <li role="presentation" id="liDatosOferta" runat="server">

@@ -7,7 +7,6 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="favicon" runat="server">
     <link rel="icon" href="../FavIcon/empresaicon.png" />
-
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
@@ -162,9 +161,6 @@
                                                 </asp:DropDownList>
 
                                                 Pagina:
-                                              
-                                                 
-
                                                 <asp:DropDownList runat="server" ID="DDLDBANUMERODEPAGINAS" AutoPostBack="true" OnTextChanged="PaginaSeleccionadaBusquedaAmpliada" OnSelectedIndexChanged="PaginaSeleccionadaBusquedaAmpliada">
                                                 </asp:DropDownList>
                                             </td>
@@ -410,15 +406,12 @@
                 <asp:Panel CssClass=" alert alert-danger " Style="padding: 10px;" ID="PanelMensaje" runat="server">
                     <span class="glyphicon glyphicon-info-sign"></span>
                     <asp:Label ID="LblMensaje" Text="Mensaje del sistema" Font-Size="Large" runat="server" />
-
                     <div class="pull-right">
                         <asp:LinkButton ID="BtnCerrarPanelMensaje" CssClass="btn btn-sm btn-danger" OnClick="BtnCerrarPanelMensaje_Click" ForeColor="White" runat="server">
                             <span class="glyphicon glyphicon-remove"></span>
                         </asp:LinkButton>
                     </div>
                 </asp:Panel>
-
-
                 <div class="panel-body">
                     <%-- Menu para la navegacion entre paneles --%>
                     <asp:UpdatePanel runat="server">

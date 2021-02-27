@@ -57,6 +57,7 @@
     <Compile Include="DBLicencia.cs" />
     <Compile Include="DBMensajes.cs" />
     <Compile Include="DBMonedero.cs" />
+    <Compile Include="DBOferta.cs" />
     <Compile Include="DBOrden.cs" />
     <Compile Include="DBPago.cs" />
     <Compile Include="DBProducto.cs" />

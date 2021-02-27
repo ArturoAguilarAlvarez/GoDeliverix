@@ -7,6 +7,10 @@ using VistaDelModelo;
 using System.Linq;
 using System.Timers;
 using System.Drawing;
+using System.Data;
+using System.IO;
+using ClosedXML;
+using ClosedXML.Excel;
 
 namespace WebApplication1.Vista
 {
@@ -28,8 +32,12 @@ namespace WebApplication1.Vista
         #endregion
         protected void Page_Load(object sender, EventArgs e)
         {
+
             if (!IsPostBack)
             {
+                BtnImportarMenu.Attributes.Add("onclick", "document.getElementById('" + FUImportExcel.ClientID + "').click(); return false;");
+                FUImportExcel.Attributes["onchange"] = "UploadFile(this)";
+
                 Session["MVSucursales"] = MVSucursales;
                 Session["MVProducto"] = MVProducto;
                 Session["MVGiro"] = MVGiro;
@@ -40,7 +48,6 @@ namespace WebApplication1.Vista
                 Session["MVOferta"] = MVOferta;
                 Session["MVDia"] = MVDia;
                 Session["MVComision"] = MVComision;
-
 
                 DGVSucursales.DataSource = null;
                 DGVSucursales.DataBind();
@@ -96,8 +103,7 @@ namespace WebApplication1.Vista
                 txtUidSeccion.Text = string.Empty;
 
 
-
-
+                MuestraMensajeError("", false);
 
             }
             else
@@ -1180,5 +1186,152 @@ namespace WebApplication1.Vista
             DGVSeccion.PageIndex = e.NewPageIndex;
             CargaGrid("Seccion");
         }
+
+        protected void BtnExportarMenu_Click(object sender, EventArgs e)
+        {
+            if (!lblSeleccionSucursal.Visible)
+            {
+                MuestraMensajeError("Ninguna sucursal seleccionada", true);
+                return;
+            }
+            else
+            {
+                Session["UidSucursal"] = txtUidSucursal.Text;
+                string _open = "window.open('Office/ExportarMenu.aspx', '_blank');";
+                ScriptManager.RegisterStartupScript(this, this.GetType(), Guid.NewGuid().ToString(), _open, true);
+            }
+        }
+
+        protected void BtnImportarMenu_Click(object sender, EventArgs e)
+        {
+            if (!lblSeleccionSucursal.Visible)
+            {
+                MuestraMensajeError("Ninguna sucursal seleccionada", true);
+                return;
+            }
+            else
+            {
+            }
+        }
+
+
+        #region Panel mensaje de sistema
+        protected void BtnCerrarPanelMensaje_Click(object sender, EventArgs e)
+        {
+            PanelMensaje.Visible = false;
+        }
+        protected void MuestraMensajeError(string texto, bool visible)
+        {
+            PanelMensaje.Visible = visible;
+            LblMensaje.Text = texto;
+        }
+        protected void MuestraFoto(object sender, EventArgs e)
+        {
+            if (FUImportExcel.HasFile)
+            {
+                if (".xlsx" == Path.GetExtension(FUImportExcel.FileName))
+                {
+                    try
+                    {
+                        byte[] buffer = new byte[FUImportExcel.FileBytes.Length];
+                        FUImportExcel.FileContent.Seek(0, SeekOrigin.Begin);
+                        FUImportExcel.FileContent.Read(buffer, 0, Convert.ToInt32(FUImportExcel.FileContent.Length));
+
+                        Stream stream2 = new MemoryStream(buffer);
+
+                        DataTable dt = new DataTable();
+                        using (XLWorkbook workbook = new XLWorkbook(stream2))
+                        {
+                            IXLWorksheet sheet = workbook.Worksheet(1);
+                            bool FirstRow = true;
+                            string readRange = "1:1";
+                            foreach (IXLRow row in sheet.RowsUsed())
+                            {
+                                //If Reading the First Row (used) then add them as column name  
+                                if (FirstRow)
+                                {
+                                    //Checking the Last cellused for column generation in datatable  
+                                    readRange = string.Format("{0}:{1}", 1, row.LastCellUsed().Address.ColumnNumber);
+                                    foreach (IXLCell cell in row.Cells(readRange))
+                                    {
+                                        dt.Columns.Add(cell.Value.ToString());
+                                    }
+                                    FirstRow = false;
+                                }
+                                else
+                                {
+                                    //Adding a Row in datatable  
+                                    dt.Rows.Add();
+                                    int cellIndex = 0;
+                                    //Updating the values of datatable  
+                                    foreach (IXLCell cell in row.Cells(readRange))
+                                    {
+                                        dt.Rows[dt.Rows.Count - 1][cellIndex] = cell.Value.ToString();
+                                        cellIndex++;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (dt.Columns.Contains("UidSeccion".Trim()) && dt.Columns.Contains("UidProducto".Trim()) && dt.Columns.Contains("Empresa".Trim()) && dt.Columns.Contains("Sucursal".Trim()) && dt.Columns.Contains("Oferta".Trim()) && dt.Columns.Contains("Seccion".Trim()) && dt.Columns.Contains("Producto".Trim()) && dt.Columns.Contains("Precio".Trim()) && dt.Columns.Contains("Tiempo".Trim()))
+                        {
+                            if (!lblSucursal.Text.Contains(dt.Rows[1].ItemArray[3].ToString()))
+                            {
+                                MuestraMensajeError("No coincide la sucursal", true);
+                                return;
+                            }
+                            MuestraMensajeError("Todo bien", true);
+
+                            foreach (DataRow item in dt.Rows)
+                            {
+                                try
+                                {
+                                    MVProducto.ActualizarProducto(item[1].ToString(), item[8].ToString(), item[7].ToString(), item[0].ToString());
+
+                                }
+                                catch (Exception ex)
+                                {
+                                    MuestraMensajeError(ex.Message, true);
+                                    throw;
+                                }
+                            }
+                            MuestraMensajeError("Menu actualizado", true);
+                        }
+                        else
+                        {
+                            MuestraMensajeError("el archivo no tiene las columnas correctas", true);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MuestraMensajeError(ex.Message, true);
+                    }
+                }
+                else
+                {
+                    MuestraMensajeError("Formato del archivo es incompatible.Formato valido: .xlsx", true);
+                }
+            }
+            else
+            {
+                MuestraMensajeError("Error al cargar el archivo. Intentelo mas tarde", true);
+            }
+        }
+        public bool ValidarExtencionArchivoExcel(string extencion)
+        {
+            bool correcto = false;
+            string[] extensionePerfmitidas = { ".xlsx" };
+
+            for (int i = 0; i < extensionePerfmitidas.Length; i++)
+            {
+                if (extencion == extensionePerfmitidas[i])
+                {
+                    correcto = true;
+                }
+            }
+            return correcto;
+        }
+
+        #endregion
     }
 }
