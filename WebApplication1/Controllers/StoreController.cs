@@ -129,5 +129,19 @@ namespace WebApplication1.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet]
+        public IHttpActionResult GetDealSections(Guid uidOferta, Guid uidEstado)
+        {
+            try
+            {
+                var result = this.ProductVm.GetDealSections(uidOferta, uidEstado);
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
