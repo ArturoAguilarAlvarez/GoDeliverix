@@ -562,7 +562,7 @@ SUM (CASE WHEN CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATET
         /// <param name="uidFiltro"></param>
         /// <param name="filtro"></param>
         /// <returns></returns>
-        public DataTable ReadAllStores(int pageSize, int pageNumber, string sortField, string sortOrder, Guid uidEstado, Guid uidColonia, string dia, string tipoFiltro, Guid uidFiltro, string filtro = null)
+        public DataTable ReadAllStores(int pageSize, int pageNumber, string sortField, string sortOrder, Guid uidEstado, Guid uidColonia, string dia, string tipoFiltro, Guid uidFiltro, string filtro = null, bool? available = null)
         {
             string filterJoin = string.Empty;
             string filterWhere = string.Empty;
@@ -584,12 +584,12 @@ SUM (CASE WHEN CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATET
                 command.Parameters.AddWithValue("@Filter", filtro);
                 where += " AND e.NombreComercial like '%'+@Filter+'%' ";
             }
+
             if (string.IsNullOrEmpty(tipoFiltro) || tipoFiltro.Equals("None"))
             {
                 filterJoin = " INNER JOIN GiroProducto gp on gp.UidProducto = p.UidProducto ";
             }
-            else
-            if (tipoFiltro.Equals("Giro"))
+            else if (tipoFiltro.Equals("Giro"))
             {
                 filterJoin = " INNER JOIN GiroProducto gp on gp.UidProducto = p.UidProducto ";
                 filterWhere = " AND gp.UidGiro = @UidFilter ";
@@ -603,6 +603,23 @@ SUM (CASE WHEN CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATET
             {
                 filterJoin = " INNER JOIN SubcategoriaProducto scp on scp.UidProducto = p.UidProducto ";
                 filterWhere = " AND scp.UidSubcategoria = @UidFilter ";
+            }
+
+            string selectAvailability = $@"
+@UserTime between S.HorarioApertura and S.HorarioCierre and ZHP.IdZonaHoraria = @TimeZone 
+AND CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME)  AND TS.DtmHoraFin IS NULL
+AND CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL
+AND @UserTime between se.VchHoraInicio and se.VchHoraFin ";
+            string whereAvailability = $@" AND 1=1 ";
+
+            if (available.HasValue)
+            {
+                selectAvailability = " 1=1 ";
+                whereAvailability = $@"
+AND @UserTime between S.HorarioApertura and S.HorarioCierre and ZHP.IdZonaHoraria = @TimeZone
+AND CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME)  AND TS.DtmHoraFin IS NULL
+AND CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL
+AND @UserTime between se.VchHoraInicio and se.VchHoraFin ";
             }
 
             string order = (string.IsNullOrEmpty(sortField) || string.IsNullOrEmpty(sortOrder)) ? " Uid " : $"{sortField} {sortOrder.ToUpper()}";
@@ -634,12 +651,7 @@ SELECT *, [Count] = COUNT (*) OVER() FROM (
         CASE WHEN 
         SUM(
         CASE 
-            WHEN 
-                @UserTime between S.HorarioApertura and S.HorarioCierre and ZHP.IdZonaHoraria = @TimeZone
-                AND CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME)  AND TS.DtmHoraFin IS NULL
-                AND CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL
-                AND @UserTime between se.VchHoraInicio and se.VchHoraFin 
-            THEN 1 ELSE 0 
+            WHEN {selectAvailability} THEN 1 ELSE 0 
         END) = 0 THEN CAST(0 AS BIT) ELSE CAST(1 AS BIT) END AS [Available]
     FROM Empresa E
         INNER JOIN Productos p on e.UidEmpresa = p.UidEmpresa
@@ -676,7 +688,7 @@ SELECT *, [Count] = COUNT (*) OVER() FROM (
         AND i.NVchRuta not like '%/Portada/%'
         AND i.NVchRuta LIKE '%FotoPerfil%'
         AND e.IdEstatus = 1 
-        AND s.IntEstatus = 1 {filterWhere} {where}
+        AND s.IntEstatus = 1 {filterWhere} {where} {whereAvailability}
     GROUP BY  E.UidEmpresa, E.NombreComercial, I.NVchRuta
 ) payload 
 ORDER BY {order}

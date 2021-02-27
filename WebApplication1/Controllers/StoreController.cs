@@ -94,7 +94,7 @@ namespace WebApplication1.Controllers
             try
             {
                 var result = this.ProductVm.ReadAllCompanyBranches(request.UidEmpresa, request.UidEstado, request.UidColonia);
-                return Json(result  );
+                return Json(result);
             }
             catch (Exception ex)
             {

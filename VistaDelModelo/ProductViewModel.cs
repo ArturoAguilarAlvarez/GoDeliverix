@@ -201,7 +201,8 @@ namespace VistaDelModelo
                 request.Dia,
                 request.TipoFiltro,
                 request.UidFiltro,
-                request.Filtro);
+                request.Filtro,
+                request.Available);
 
 
             List<CompanyStoreGrid> companies = new List<CompanyStoreGrid>();
