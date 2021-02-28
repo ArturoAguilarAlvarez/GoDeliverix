@@ -24,14 +24,14 @@ namespace DBControl
         {
             string query = @"
 SELECT 
-    O.UidOferta AS [Uid],
+    DISTINCT O.UidOferta AS [Uid],
     O.VchNombre AS [Name],
     O.IntEstatus AS [Status],
-    CASE WHEN D.VchNombre = @Dia  THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS [Available]
+    CASE WHEN D.UidDia IS NOT NULL THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS [Available]
 FROM [Oferta] AS O
     INNER JOIN [DiaOferta] AS DO ON DO.UidOferta = O.UidOferta
     INNER JOIN [Dias] AS D ON D.UidDia = DO.UidDia
-WHERE O.IntEstatus = 1 AND O.Uidsucursal = @UidSucursal;";
+WHERE O.IntEstatus = 1 AND O.Uidsucursal = @UidSucursal AND D.VchNombre = @Dia;";
 
             SqlCommand command = new SqlCommand();
             command.CommandText = query;
