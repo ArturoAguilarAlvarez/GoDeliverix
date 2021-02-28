@@ -21,5 +21,7 @@ namespace Modelo.ApiResponse
         public string TipoFiltro { get; set; }
         public Guid UidFiltro { get; set; }
         public string Filtro { get; set; } = null;
+
+        public bool? Available { get; set; } = null;
     }
 }

@@ -94,7 +94,7 @@ namespace WebApplication1.Controllers
             try
             {
                 var result = this.ProductVm.ReadAllCompanyBranches(request.UidEmpresa, request.UidEstado, request.UidColonia);
-                return Json(result  );
+                return Json(result);
             }
             catch (Exception ex)
             {
@@ -108,6 +108,34 @@ namespace WebApplication1.Controllers
             try
             {
                 var result = this.ProductVm.GetCompanyDetail(request.UidEmpresa, request.UidEstado, request.UidColonia);
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetBranchDeals(Guid uidSucursal, string dia)
+        {
+            try
+            {
+                var result = this.ProductVm.GetBranchDeals(uidSucursal, dia);
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetDealSections(Guid uidOferta, Guid uidEstado)
+        {
+            try
+            {
+                var result = this.ProductVm.GetDealSections(uidOferta, uidEstado);
                 return Json(result);
             }
             catch (Exception ex)
