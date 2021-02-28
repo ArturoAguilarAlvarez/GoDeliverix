@@ -84,7 +84,6 @@
                     <div class="col-md-12" style="margin-top: 10px;">
                         <div class="pull-right">
 
-
                             <asp:UpdatePanel runat="server">
                                 <ContentTemplate>
                                     <asp:LinkButton ID="BtnExportarMenu" runat="server" OnClick="BtnExportarMenu_Click" CssClass="btn btn-sm btn-success " ToolTip="Descargar">
@@ -150,12 +149,47 @@
                             </asp:LinkButton></li>
                     </ul>
                     <%-- Pnel de Oferta --%><asp:Panel ID="PanelOferta" runat="server">
+                        <%--importacion y exportacion de Menu--%>
+                        <div class="col-md-12" style="margin-top: 10px;">
+                            <div class="pull-right">
+
+                                <asp:UpdatePanel runat="server">
+                                    <ContentTemplate>
+                                        <asp:LinkButton ID="btnExportarSecciones" runat="server" OnClick="btnExportarSecciones_Click" CssClass="btn btn-sm btn-success " ToolTip="Descargar">
+                                        <span class="glyphicon glyphicon-save">
+                                        </span>
+                                        Descargar secciones
+                                        </asp:LinkButton>
+                                        <script type="text/javascript">
+                                            function UploadFile1(fileUpload) {
+                                                if (fileUpload.value != '') {
+                                                    document.getElementById("<%=btnSubirseccion.ClientID %>").click();
+                                                }
+                                            }
+                                        </script>
+                                        <asp:LinkButton CssClass="btn btn-sm btn-warning " ID="BtnImportarSecciones" runat="server">
+                                                <span class="glyphicon glyphicon-open">
+                                                </span>
+                                                Importar secciones
+                                        </asp:LinkButton>
+                                        <asp:FileUpload ID="FUImportarSecciones" CssClass="hide" runat="server" />
+                                        <asp:Button Text="Subir" OnClick="MuestraSeccion" CssClass="hide" ID="btnSubirseccion" runat="server" />
+                                    </ContentTemplate>
+                                    <Triggers>
+                                        <asp:PostBackTrigger ControlID="btnSubirseccion" />
+                                    </Triggers>
+                                </asp:UpdatePanel>
+                            </div>
+                        </div>
+                        <%--importacion y exportacion de Menu--%>
                         <%-- Barra de controles --%>
                         <div class="clearfix"></div>
                         <div class=" pull-left" style="margin-top: 5px; margin-left: 30px;">
                             <asp:LinkButton runat="server" ID="btnNuevoOferta" OnClick="btnNuevoOferta_Click" CssClass="btn btn-sm btn-default "><span class="glyphicon glyphicon-file"></span> Nuevo</asp:LinkButton><asp:LinkButton runat="server" ID="btnEditarOferta" OnClick="btnEditarOferta_Click" CssClass="btn btn-sm btn-default disabled"><span class="glyphicon glyphicon-cog"></span> Editar</asp:LinkButton><asp:LinkButton runat="server" ID="btnGuardarOferta" OnClick="btnGuardarOferta_Click" CssClass="btn btn-sm btn-success ">
                                 <asp:Label runat="server" ID="lblAccionOferta"></asp:Label>
                             </asp:LinkButton><asp:LinkButton runat="server" ID="btnCancelarOferta" OnClick="btnCancelarOferta_Click" CssClass="btn btn-sm btn-danger "><asp:label CssClass=" glyphicon glyphicon-remove" runat="server" /></asp:LinkButton><asp:Label runat="server" ID="Label7"></asp:Label>
+                            <div class="clearfix">
+                            </div>
                         </div>
                         <div class="clearfix"></div>
                         <div class="col-md-12">

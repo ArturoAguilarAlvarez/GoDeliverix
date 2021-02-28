@@ -321,6 +321,42 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.Panel PanelOferta;
 
         /// <summary>
+        /// btnExportarSecciones control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnExportarSecciones;
+
+        /// <summary>
+        /// BtnImportarSecciones control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton BtnImportarSecciones;
+
+        /// <summary>
+        /// FUImportarSecciones control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.FileUpload FUImportarSecciones;
+
+        /// <summary>
+        /// btnSubirseccion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSubirseccion;
+
+        /// <summary>
         /// btnNuevoOferta control.
         /// </summary>
         /// <remarks>

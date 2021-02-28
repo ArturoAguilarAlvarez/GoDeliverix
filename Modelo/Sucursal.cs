@@ -127,27 +127,41 @@ namespace Modelo
                 cmd.Parameters.Add("@Sucursal", SqlDbType.UniqueIdentifier);
                 cmd.Parameters["@Sucursal"].Value = SUCURSAL.ID;
 
-                cmd.Parameters.Add("@Identificador", SqlDbType.NVarChar, 50);
-                cmd.Parameters["@Identificador"].Value = SUCURSAL.IDENTIFICADOR;
-
-                cmd.Parameters.Add("@HoraApertura", SqlDbType.NVarChar, 20);
-                cmd.Parameters["@HoraApertura"].Value = SUCURSAL.HORAAPARTURA;
-
-                cmd.Parameters.Add("@HoraCierre", SqlDbType.NVarChar, 20);
-                cmd.Parameters["@HoraCierre"].Value = SUCURSAL.HORACIERRE;
-
-                cmd.Parameters.Add("@IntEstatus", SqlDbType.Int);
-                cmd.Parameters["@IntEstatus"].Value = SUCURSAL.Estatus.ID;
-
-                cmd.Parameters.Add("@BVisibilidadInformacion", SqlDbType.Bit);
-                cmd.Parameters["@BVisibilidadInformacion"].Value = SUCURSAL.BVisibilidad;
-
-                cmd.Parameters.Add("@MFondo", SqlDbType.Money);
-                cmd.Parameters["@MFondo"].Value = SUCURSAL.MFondo;
-
-                cmd.Parameters.Add("@Codigo", SqlDbType.VarChar, 40);
-                cmd.Parameters["@Codigo"].Value = SUCURSAL.StrCodigo;
-
+                if (!string.IsNullOrEmpty(SUCURSAL.IDENTIFICADOR))
+                {
+                    cmd.Parameters.Add("@Identificador", SqlDbType.NVarChar, 50);
+                    cmd.Parameters["@Identificador"].Value = SUCURSAL.IDENTIFICADOR;
+                }
+                if (!string.IsNullOrEmpty(SUCURSAL.HORAAPARTURA))
+                {
+                    cmd.Parameters.Add("@HoraApertura", SqlDbType.NVarChar, 20);
+                    cmd.Parameters["@HoraApertura"].Value = SUCURSAL.HORAAPARTURA;
+                }
+                if (!string.IsNullOrEmpty(SUCURSAL.HORACIERRE))
+                {
+                    cmd.Parameters.Add("@HoraCierre", SqlDbType.NVarChar, 20);
+                    cmd.Parameters["@HoraCierre"].Value = SUCURSAL.HORACIERRE;
+                }
+                if (!string.IsNullOrEmpty(SUCURSAL.IDENTIFICADOR))
+                {
+                    cmd.Parameters.Add("@IntEstatus", SqlDbType.Int);
+                    cmd.Parameters["@IntEstatus"].Value = SUCURSAL.Estatus.ID;
+                }
+                if (!string.IsNullOrEmpty(SUCURSAL.StrCodigo))
+                {
+                    cmd.Parameters.Add("@BVisibilidadInformacion", SqlDbType.Bit);
+                    cmd.Parameters["@BVisibilidadInformacion"].Value = SUCURSAL.BVisibilidad;
+                }
+                if (!string.IsNullOrEmpty(StrCodigo))
+                {
+                    cmd.Parameters.Add("@MFondo", SqlDbType.Money);
+                    cmd.Parameters["@MFondo"].Value = SUCURSAL.MFondo;
+                }
+                if (!string.IsNullOrEmpty(SUCURSAL.StrCodigo))
+                {
+                    cmd.Parameters.Add("@Codigo", SqlDbType.VarChar, 40);
+                    cmd.Parameters["@Codigo"].Value = SUCURSAL.StrCodigo;
+                }
                 resultado = Conexion.ModificarDatos(cmd);
             }
             catch (Exception)

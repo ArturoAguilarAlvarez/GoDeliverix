@@ -388,6 +388,41 @@
                     <h5>Datos de EMPRESA</h5>
                 </div>
                 <div class="clearfix"></div>
+                <div class="clearfix">
+                    <%--importacion y exportacion de Menu--%>
+                    <div class="col-md-12" style="margin-top: 10px;">
+                        <div class="pull-right">
+
+                            <asp:UpdatePanel runat="server">
+                                <ContentTemplate>
+                                    <asp:LinkButton ID="BtnExportarMenu" runat="server" OnClick="BtnExportarMenu_Click" CssClass="btn btn-sm btn-success " ToolTip="Descargar">
+                                        <span class="glyphicon glyphicon-save">
+                                        </span>
+                                        Descargar sucursales
+                                    </asp:LinkButton>
+                                    <script type="text/javascript">
+                                        function Upload(fileUpload) {
+                                            if (fileUpload.value != '') {
+                                                document.getElementById("<%=btnCargarExcel.ClientID %>").click();
+                                            }
+                                        }
+                                    </script>
+                                    <asp:LinkButton CssClass="btn btn-sm btn-warning " ID="BtnImportarMenu" runat="server">
+                                                <span class="glyphicon glyphicon-open">
+                                                </span>
+                                                Importar sucursales
+                                    </asp:LinkButton>
+                                    <asp:FileUpload ID="FUImportExcel" CssClass="hide" runat="server" />
+                                    <asp:Button Text="Subir" OnClick="MuestraExcel" CssClass="hide" ID="btnCargarExcel" runat="server" />
+                                </ContentTemplate>
+                                <Triggers>
+                                    <asp:PostBackTrigger ControlID="btnCargarExcel" />
+                                </Triggers>
+                            </asp:UpdatePanel>
+                        </div>
+                    </div>
+                    <%--importacion y exportacion de Menu--%>
+                </div>
                 <%-- Update Panel Controlador de las acciones de usuario --%>
                 <asp:UpdatePanel runat="server">
                     <ContentTemplate>
@@ -440,6 +475,7 @@
                                             <asp:Image runat="server" CssClass="img img-thumbnail" ID="ImageEmpresa" Width="200px" />
                                         </div>
                                         <div class="clearfix"></div>
+
                                         <div class=" col-md-12 text-center" style="margin-top: 5px;">
                                             <script type="text/javascript">
                                                 function UploadFile(fileUpload) {
@@ -449,7 +485,7 @@
                                                 }
                                             </script>
                                             <asp:TextBox ID="txtRutaImagen" CssClass="hide" runat="server" />
-                                            <asp:LinkButton CssClass="btn btn-sm btn-default" ID="BtnCargarImagen" OnClick="SeleccionarImagen" runat="server">
+                                            <asp:LinkButton CssClass="btn btn-sm btn-default" ID="BtnCargarImagen" runat="server">
                                                 <span class="glyphicon glyphicon-open">
                                                 </span>
                                                 Cargar Imagen
@@ -457,6 +493,7 @@
                                             <asp:FileUpload ID="FUImagen" CssClass="hide" runat="server" />
                                             <asp:Button Text="Subir" OnClick="MuestraFoto" CssClass="hide" ID="btnSubirImagen" runat="server" />
                                         </div>
+
                                     </div>
                                     <div class="col-md-9">
 
@@ -502,8 +539,7 @@
                                         CssClass="table table-bordered table-hover table-condensed table-striped input-sm">
                                         <EmptyDataTemplate>
                                             <div class="info">
-                                                No existen direcciones guardadas
-                                           
+                                                No existen direcciones guardadas                                           
                                             </div>
                                         </EmptyDataTemplate>
                                         <SelectedRowStyle CssClass="table table-hover input-sm success" />
@@ -564,8 +600,7 @@
                                     <asp:GridView runat="server" Style="margin-top: 10px;" DataKeyNames="ID" ID="DGVTELEFONOS" OnRowCommand="DGVTELEFONOS_RowCommand" OnSelectedIndexChanged="DGVTELEFONOS_SelectedIndexChanged" OnRowDataBound="DGVTELEFONOS_RowDataBound" AutoGenerateColumns="false" CssClass="table table-bordered table-hover table-condensed table-striped input-sm">
                                         <EmptyDataTemplate>
                                             <div class="info">
-                                                No existen telefonos guardados 
-                                           
+                                                No existen telefonos guardados                                            
                                             </div>
                                         </EmptyDataTemplate>
                                         <SelectedRowStyle CssClass="table table-hover input-sm success" />

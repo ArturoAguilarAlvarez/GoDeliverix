@@ -739,7 +739,7 @@ namespace VistaDelModelo
             }
             return UIDEMPRESA;
         }
-        public bool ActualizarDatos(string IdSucursal, string IDENTIFICADOR, string HoraApertura, string HoraCierre, string estatus, bool bVisibilidadInformacion, string codigo, decimal fondo)
+        public bool ActualizarDatos(string IdSucursal, string IDENTIFICADOR= "", string HoraApertura = "", string HoraCierre = "", string estatus = "", bool bVisibilidadInformacion = false, string codigo = "", decimal fondo = 0.0m)
         {
             bool resultado = false;
             Guid ID = new Guid(IdSucursal);
