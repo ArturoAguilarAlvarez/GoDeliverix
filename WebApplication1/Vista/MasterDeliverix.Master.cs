@@ -29,8 +29,11 @@ namespace WebApplication1.Vista
                 //Obtiene el perfil del usuario
                 lblNombreUsuario.Text = MVAcceso.NombreDeUsuario(new Guid(uidusuario));
                 string nombrecomercial = string.Empty;
-
-                Guid uidempresa = new Guid(Session["UidEmpresaSistema"].ToString());
+                Guid uidempresa = new Guid();
+                if (!string.IsNullOrEmpty(Session["UidEmpresaSistema"].ToString()))
+                {
+                    uidempresa = new Guid(Session["UidEmpresaSistema"].ToString());
+                }
                 if (!IsPostBack)
                 {
                     if (uidempresa == null && uidempresa == Guid.Empty)

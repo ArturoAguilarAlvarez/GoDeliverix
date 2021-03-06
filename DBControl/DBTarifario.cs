@@ -62,7 +62,7 @@ namespace DBControl
         public void ActualizaTarifario(Guid uidOrdenSucursal, string mPropina)
         {
             oConexion = new Conexion();
-            string query = "update OrdenTarifario set MPropina = "+ mPropina + " where UidOrden = '"+ uidOrdenSucursal + "'";
+            string query = "update OrdenTarifario set MPropina = " + mPropina + " where UidOrden = '" + uidOrdenSucursal + "'";
             oConexion.Consultas(query);
         }
 
@@ -76,8 +76,26 @@ namespace DBControl
         public DataTable ObtenerTarifarioDeOrden(Guid uidOrden)
         {
             oConexion = new Conexion();
-            string query = "select * from OrdenTarifario ot inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario inner join ZonaDeServicio zs on zs.UidRelacionZonaServicio = t.UidRelacionZonaEntrega inner join OrdenSucursal os on os.UidRelacionOrdenSucursal = ot.UidOrden inner join Sucursales s on s.UidSucursal = zs.UidSucursal inner join Empresa e on e.UidEmpresa = s.UidEmpresa where os.UidRelacionOrdenSucursal = '"+ uidOrden.ToString() + "'";
+            string query = "select * from OrdenTarifario ot inner join Tarifario t on t.UidRegistroTarifario = ot.UidTarifario inner join ZonaDeServicio zs on zs.UidRelacionZonaServicio = t.UidRelacionZonaEntrega inner join OrdenSucursal os on os.UidRelacionOrdenSucursal = ot.UidOrden inner join Sucursales s on s.UidSucursal = zs.UidSucursal inner join Empresa e on e.UidEmpresa = s.UidEmpresa where os.UidRelacionOrdenSucursal = '" + uidOrden.ToString() + "'";
             return oConexion.Consultas(query);
+        }
+
+        public DataTable ExportarExcel(string Uidempresa = "")
+        {
+            string Filtro = "";
+            if (!string.IsNullOrEmpty(Uidempresa))
+            {
+                Filtro = "where Emp.UidEmpresa = '" + Uidempresa + "'";
+            }
+            string query = "select t.UidRegistroTarifario as ID, Emp.NombreComercial as Distribuidor,Col.Nombre as Recolecta, C.Nombre as Entrega, t.MCosto as Precio from Tarifario t inner join ZonaDeRecoleccion ZDR on ZDR.UidZonaDeRecolecta = t.UidRelacionZonaRecolecta inner join  ZonaDeServicio ZDS on ZDS.UidRelacionZonaServicio = t.UidRelacionZonaEntrega  inner join Sucursales suc on suc.UidSucursal = ZDR.UidSucursal inner join Sucursales S on s.UidSucursal = ZDS.UidSucursal inner join Colonia col on col.UidColonia = ZDR.UidColonia  inner join Colonia C on c.UidColonia = ZDS.UidColonia inner join empresa emp on emp.UidEmpresa = suc.UidEmpresa " + Filtro + " order by Col.Nombre,C.Nombre asc";
+            oConexion = new Conexion();
+            return oConexion.Consultas(query);
+        }
+        public void ActualizaTarifario(string UidTarifario, decimal DPrecio)
+        {
+            oConexion = new Conexion();
+            string query = "update Tarifario set MCosto = " + DPrecio + " where UidRegistroTarifario = '" + UidTarifario + "'";
+            oConexion.Consultas(query);
         }
     }
 }

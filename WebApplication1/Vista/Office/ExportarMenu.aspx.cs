@@ -17,88 +17,122 @@ namespace WebApplication1.Vista.Office
         VMSeccion MVSeccion = new VMSeccion();
         VMSucursales MVSucursal = new VMSucursales();
         VMEmpresas MVEmpresa = new VMEmpresas();
+        VMTarifario MVTarifario = new VMTarifario();
+
 
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            if (Session["IdUsuario"] != null && Session["UidEmpresaSistema"] != null)
             {
-                DateTime dateTime = DateTime.Now;
-
-                DataTable lsError = null;
-
-                if (lsError != null)
+                if (!IsPostBack)
                 {
+                    DateTime dateTime = DateTime.Now;
 
+                    DataTable lsError = null;
 
-                    // Expor("Error " + dateTime.ToString("ddMMyyyyHHmmssfff"), gvAlumnos);
-                }
-                else
-                {
-                    DataTable data = new DataTable();
-                    DataRow DR;
-                    string NombreDearchivo = "";
-                    switch (Session["ParametroVentanaExcel"].ToString())
+                    if (lsError != null)
                     {
-                        case "Horario de sucursales":
-                            MVSucursal.BuscarSucursales(Uidempresa: Session["UidEmpresaSistema"].ToString());
-                            MVEmpresa.BuscarEmpresas(UidEmpresa: new Guid(Session["UidEmpresaSistema"].ToString()));
-                            data = ExcelSucursales();
-                            foreach (var item in MVSucursal.LISTADESUCURSALES)
-                            {
-                                DR = data.NewRow();
-                                // Then add the new row to the collection.
-                                DR["ID"] = item.ID;
-                                DR["EMPRESA"] = MVEmpresa.NOMBRECOMERCIAL;
-                                DR["IDENTIFICADOR"] = item.IDENTIFICADOR;
-                                DR["HORAAPARTURA"] = item.HORAAPARTURA;
-                                DR["HORACIERRE"] = item.HORACIERRE;
-                                data.Rows.Add(DR);
-                            }
-                            NombreDearchivo = "HorarioSucursales";
-                            break;
-                        case "Precio de productos":
-                            data = MVOferta.ExportarExcel(Session["UidSucursal"].ToString());
-                            NombreDearchivo = "PrecioYTiempoProductosEnMenu";
-                            break;
-                        case "Horario secciones":
-                            var secciones = new List<VMSeccion>();
-                            string uid = Session["UidSucursal"].ToString();
-                            MVOferta.Buscar(UIDSUCURSAL: new Guid(uid));
-                            MVSucursal.BuscarSucursales(UidSucursal: uid);
-                            data = ExcelSecciones();
-                            foreach (var oferta in MVOferta.ListaDeOfertas)
-                            {
-                                MVSeccion.Buscar(UIDOFERTA: oferta.UID);
-                                foreach (var item in MVSeccion.ListaDeSeccion)
+
+
+                        // Expor("Error " + dateTime.ToString("ddMMyyyyHHmmssfff"), gvAlumnos);
+                    }
+                    else
+                    {
+                        DataTable data = new DataTable();
+                        DataRow DR;
+                        string NombreDearchivo = "";
+                        switch (Session["ParametroVentanaExcel"].ToString())
+                        {
+                            case "Horario de sucursales":
+                                MVSucursal.BuscarSucursales(Uidempresa: Session["UidEmpresaSistema"].ToString());
+                                MVEmpresa.BuscarEmpresas(UidEmpresa: new Guid(Session["UidEmpresaSistema"].ToString()));
+                                data = ExcelSucursales();
+                                foreach (var item in MVSucursal.LISTADESUCURSALES)
                                 {
                                     DR = data.NewRow();
                                     // Then add the new row to the collection.
-                                    DR["UID"] = item.UID;
-                                    DR["Sucursal"] = MVSucursal.IDENTIFICADOR;
-                                    DR["SECCION"] = item.StrNombre;
-                                    DR["HORAAPARTURA"] = item.StrHoraInicio;
-                                    DR["HORACIERRE"] = item.StrHoraFin;
+                                    DR["ID"] = item.ID;
+                                    DR["EMPRESA"] = MVEmpresa.NOMBRECOMERCIAL;
+                                    DR["IDENTIFICADOR"] = item.IDENTIFICADOR;
+                                    DR["HORAAPARTURA"] = item.HORAAPARTURA;
+                                    DR["HORACIERRE"] = item.HORACIERRE;
                                     data.Rows.Add(DR);
                                 }
-                            }
-                            NombreDearchivo = "TiempoSecciones";
-                            break;
-                        default:
-                            break;
+                                NombreDearchivo = "HorarioSucursales";
+                                break;
+                            case "Todas las sucursales":
+                                MVEmpresa.BuscarEmpresas();
+                                data = ExcelSucursales();
+                                foreach (var item in MVEmpresa.LISTADEEMPRESAS)
+                                {
+                                    MVSucursal.BuscarSucursales(Uidempresa: item.UIDEMPRESA.ToString());
+                                    foreach (var suc in MVSucursal.LISTADESUCURSALES)
+                                    {
+                                        DR = data.NewRow();
+                                        // Then add the new row to the collection.
+                                        DR["ID"] = suc.ID;
+                                        DR["EMPRESA"] = item.NOMBRECOMERCIAL;
+                                        DR["IDENTIFICADOR"] = suc.IDENTIFICADOR;
+                                        DR["HORAAPARTURA"] = suc.HORAAPARTURA;
+                                        DR["HORACIERRE"] = suc.HORACIERRE;
+                                        data.Rows.Add(DR);
+                                    }
+                                }
+                                NombreDearchivo = "HorarioDeTodasLasSucursales";
+                                break;
+                            case "Precio de productos":
+                                data = MVOferta.ExportarExcel(Session["UidSucursal"].ToString());
+                                NombreDearchivo = "PrecioYTiempoProductosEnMenu";
+                                break;
+                            case "Horario secciones":
+                                var secciones = new List<VMSeccion>();
+                                string uid = Session["UidSucursal"].ToString();
+                                MVOferta.Buscar(UIDSUCURSAL: new Guid(uid));
+                                MVSucursal.BuscarSucursales(UidSucursal: uid);
+                                data = ExcelSecciones();
+                                foreach (var oferta in MVOferta.ListaDeOfertas)
+                                {
+                                    MVSeccion.Buscar(UIDOFERTA: oferta.UID);
+                                    foreach (var item in MVSeccion.ListaDeSeccion)
+                                    {
+                                        DR = data.NewRow();
+                                        // Then add the new row to the collection.
+                                        DR["UID"] = item.UID;
+                                        DR["Sucursal"] = MVSucursal.IDENTIFICADOR;
+                                        DR["SECCION"] = item.StrNombre;
+                                        DR["HORAAPARTURA"] = item.StrHoraInicio;
+                                        DR["HORACIERRE"] = item.StrHoraFin;
+                                        data.Rows.Add(DR);
+                                    }
+                                }
+                                NombreDearchivo = "TiempoSecciones";
+                                break;
+                            case "Todos los tarifarios":
+                                data = MVTarifario.ExportarTarifario();
+                                NombreDearchivo = "TodasLasTarifas";
+                                break;
+                            default:
+                                break;
+                        }
+                        using (DataTable dt = data)
+                        {
+                            ExporttoExcel(dt, dateTime.ToString("ddMMyyyyHHmmssfff") + NombreDearchivo);
+                        }
                     }
-                    using (DataTable dt = data)
-                    {
-                        ExporttoExcel(dt, dateTime.ToString("ddMMyyyyHHmmssfff") + NombreDearchivo);
-                    }
+                }
+                else
+                {
+
                 }
             }
             else
             {
-
+                Response.Redirect("../Default/Default.aspx");
             }
-
         }
+
+
         private DataTable ExcelSucursales()
         {
             // Create a new DataTable titled 'Names.'

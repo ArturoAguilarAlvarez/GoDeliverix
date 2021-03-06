@@ -1,8 +1,11 @@
-﻿using Subgurim.Controles;
+﻿using ClosedXML.Excel;
+using Subgurim.Controles;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -23,6 +26,9 @@ namespace WebApplication1.Vista
             {
                 if (!IsPostBack)
                 {
+                    BtnImportarTodasSucursales.Attributes.Add("onclick", "document.getElementById('" + FUAllSucursales.ClientID + "').click(); return false;");
+                    FUAllSucursales.Attributes["onchange"] = "Upload2(this)";
+
                     Session["MVDireccion"] = MVDireccion;
                     Session["MVTarifario"] = MVTarifario;
                     Session["MVSucursales"] = MVSucursales;
@@ -53,7 +59,7 @@ namespace WebApplication1.Vista
 
                     SeleccionaPanel("Recolecta");
                     //Oculta el mensaje
-                    PanelMensaje.Visible = false;
+                    Mensaje.Visible = false;
                     activaEdicion(false, "Informacion");
                     activaEdicion(false, "Gestion");
                     lblUidSucursal.Text = string.Empty;
@@ -622,7 +628,7 @@ namespace WebApplication1.Vista
         {
             if (lblFila.Text == (1).ToString())
             {
-                PanelMensaje.Visible = true;
+                Mensaje.Visible = true;
                 LblMensaje.Text = "No se puede copiar la primera fila hacia arriba";
             }
             else
@@ -640,7 +646,7 @@ namespace WebApplication1.Vista
         {
             if (lblFila.Text == DGVTarifario.Rows.Count.ToString())
             {
-                PanelMensaje.Visible = true;
+                Mensaje.Visible = true;
                 LblMensaje.Text = "No se puede copiar la ultima fila hacia abajo";
             }
             else
@@ -660,7 +666,7 @@ namespace WebApplication1.Vista
             var celda = int.Parse(lblCelda.Text);
             if (lblCelda.Text == (DGVTarifario.Columns.Count).ToString())
             {
-                PanelMensaje.Visible = true;
+                Mensaje.Visible = true;
                 LblMensaje.Text = "No se puede copiar la primera columna hacia la derecha";
             }
             else
@@ -680,7 +686,7 @@ namespace WebApplication1.Vista
             var celda = int.Parse(lblCelda.Text);
             if (lblCelda.Text == (1).ToString())
             {
-                PanelMensaje.Visible = true;
+                Mensaje.Visible = true;
                 LblMensaje.Text = "No se puede copiar la primera columna hacia la izquierda";
             }
             else
@@ -1659,7 +1665,7 @@ namespace WebApplication1.Vista
         #region Panel mensaje de sistema
         protected void BtnCerrarPanelMensaje_Click(object sender, EventArgs e)
         {
-            PanelMensaje.Visible = false;
+            Mensaje.Visible = false;
         }
         #endregion
 
@@ -1724,5 +1730,111 @@ namespace WebApplication1.Vista
         {
             activaEdicion(false, "Gestion");
         }
+
+
+        #region Exportar importar todos los tarifarios
+        protected void btnExportarTodasLasSucursales_Click(object sender, EventArgs e)
+        {
+            Session["ParametroVentanaExcel"] = "Todos los tarifarios";
+            string _open = "window.open('Office/ExportarMenu.aspx', '_blank');";
+            ScriptManager.RegisterStartupScript(this, this.GetType(), Guid.NewGuid().ToString(), _open, true);
+        }
+        protected void MuestraExcelTodasLAsSucursales(object sender, EventArgs e)
+        {
+            if (FUAllSucursales.HasFile)
+            {
+                if (".xlsx" == Path.GetExtension(FUAllSucursales.FileName))
+                {
+                    try
+                    {
+                        byte[] buffer = new byte[FUAllSucursales.FileBytes.Length];
+                        FUAllSucursales.FileContent.Seek(0, SeekOrigin.Begin);
+                        FUAllSucursales.FileContent.Read(buffer, 0, Convert.ToInt32(FUAllSucursales.FileContent.Length));
+
+                        Stream stream2 = new MemoryStream(buffer);
+
+                        DataTable dt = new DataTable();
+                        using (XLWorkbook workbook = new XLWorkbook(stream2))
+                        {
+                            IXLWorksheet sheet = workbook.Worksheet(1);
+                            bool FirstRow = true;
+                            string readRange = "1:1";
+                            foreach (IXLRow row in sheet.RowsUsed())
+                            {
+                                //If Reading the First Row (used) then add them as column name  
+                                if (FirstRow)
+                                {
+                                    //Checking the Last cellused for column generation in datatable  
+                                    readRange = string.Format("{0}:{1}", 1, row.LastCellUsed().Address.ColumnNumber);
+                                    foreach (IXLCell cell in row.Cells(readRange))
+                                    {
+                                        dt.Columns.Add(cell.Value.ToString());
+                                    }
+                                    FirstRow = false;
+                                }
+                                else
+                                {
+                                    //Adding a Row in datatable  
+                                    dt.Rows.Add();
+                                    int cellIndex = 0;
+                                    //Updating the values of datatable  
+                                    foreach (IXLCell cell in row.Cells(readRange))
+                                    {
+                                        dt.Rows[dt.Rows.Count - 1][cellIndex] = cell.Value.ToString();
+                                        cellIndex++;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (dt.Columns.Contains("ID".Trim()) && dt.Columns.Contains("Distribuidor".Trim()) && dt.Columns.Contains("Recolecta".Trim()) && dt.Columns.Contains("Entrega".Trim()) && dt.Columns.Contains("Precio".Trim()))
+                        {
+                            int registroACtual = 0;
+                            int TotalDeRegistros = dt.Rows.Count;
+                            foreach (DataRow item in dt.Rows)
+                            {
+                                try
+                                {
+                                    MVTarifario.ActualizaTarifario(item[0].ToString(), decimal.Parse(item[4].ToString()));
+                                    registroACtual++;
+                                    MuestraMensajeError("Actualiando " + registroACtual + " de " + TotalDeRegistros + "", true);
+                                }
+                                catch (Exception ex)
+                                {
+                                    MuestraMensajeError(ex.Message, true);
+                                    throw;
+                                }
+                            }
+                            MuestraMensajeError("Se han actualizado todos los tarifarios", true);
+                        }
+                        else
+                        {
+                            MuestraMensajeError("el archivo no tiene las columnas correctas", true);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MuestraMensajeError(ex.Message, true);
+                    }
+                }
+                else
+                {
+                    MuestraMensajeError("Formato del archivo es incompatible.Formato valido: .xlsx", true);
+                }
+            }
+            else
+            {
+                MuestraMensajeError("Error al cargar el archivo. Intentelo mas tarde", true);
+            }
+        }
+
+        protected void MuestraMensajeError(string texto, bool visible)
+        {
+            Mensaje.Visible = visible;
+            LblMensaje.Text = texto;
+        }
+
+
+        #endregion
     }
 }

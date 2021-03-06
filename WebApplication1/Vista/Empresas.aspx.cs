@@ -33,8 +33,10 @@ namespace WebApplication1.Vista
             {
                 BtnImportarMenu.Attributes.Add("onclick", "document.getElementById('" + FUImportExcel.ClientID + "').click(); return false;");
                 BtnCargarImagen.Attributes.Add("onclick", "document.getElementById('" + FUImagen.ClientID + "').click(); return false;");
+                BtnImportarTodasSucursales.Attributes.Add("onclick", "document.getElementById('" + FUAllSucursales.ClientID + "').click(); return false;");
                 FUImagen.Attributes["onchange"] = "UploadFile(this)";
                 FUImportExcel.Attributes["onchange"] = "Upload(this)";
+                FUAllSucursales.Attributes["onchange"] = "Upload2(this)";
                 Session.Remove("Accion");
                 //Instancias de la vista del modelo
                 MVTelefono = new VMTelefono();
@@ -2416,8 +2418,8 @@ namespace WebApplication1.Vista
                                 {
                                     var mvsucursales = new VMSucursales();
                                     mvsucursales.BuscarSucursales(UidSucursal: item[0].ToString());
-                                    var horainicio = DateTime.Parse(item[3].ToString());
-                                    var horafin = DateTime.Parse(item[4].ToString());
+                                    var horainicio = DateTime.Parse(item[3].ToString().Replace(';', ':'));
+                                    var horafin = DateTime.Parse(item[4].ToString().Replace(';', ':'));
                                     var hora = "";
                                     var Minuto = "";
                                     if (horainicio.Hour < 10)
@@ -2487,6 +2489,145 @@ namespace WebApplication1.Vista
             }
         }
 
+
+
+        #region Importar y exportar todas las sucursales
+        protected void btnExportarTodasLasSucursales_Click(object sender, EventArgs e)
+        {
+            Session["ParametroVentanaExcel"] = "Todas las sucursales";
+            Session["UidEmpresaSistema"] = lblUidEmpresa.Text;
+            string _open = "window.open('Office/ExportarMenu.aspx', '_blank');";
+            ScriptManager.RegisterStartupScript(this, this.GetType(), Guid.NewGuid().ToString(), _open, true);
+        }
+        protected void MuestraExcelTodasLAsSucursales(object sender, EventArgs e)
+        {
+            if (FUAllSucursales.HasFile)
+            {
+                if (".xlsx" == Path.GetExtension(FUAllSucursales.FileName))
+                {
+                    try
+                    {
+                        byte[] buffer = new byte[FUAllSucursales.FileBytes.Length];
+                        FUAllSucursales.FileContent.Seek(0, SeekOrigin.Begin);
+                        FUAllSucursales.FileContent.Read(buffer, 0, Convert.ToInt32(FUAllSucursales.FileContent.Length));
+
+                        Stream stream2 = new MemoryStream(buffer);
+
+                        DataTable dt = new DataTable();
+                        using (XLWorkbook workbook = new XLWorkbook(stream2))
+                        {
+                            IXLWorksheet sheet = workbook.Worksheet(1);
+                            bool FirstRow = true;
+                            string readRange = "1:1";
+                            foreach (IXLRow row in sheet.RowsUsed())
+                            {
+                                //If Reading the First Row (used) then add them as column name  
+                                if (FirstRow)
+                                {
+                                    //Checking the Last cellused for column generation in datatable  
+                                    readRange = string.Format("{0}:{1}", 1, row.LastCellUsed().Address.ColumnNumber);
+                                    foreach (IXLCell cell in row.Cells(readRange))
+                                    {
+                                        dt.Columns.Add(cell.Value.ToString());
+                                    }
+                                    FirstRow = false;
+                                }
+                                else
+                                {
+                                    //Adding a Row in datatable  
+                                    dt.Rows.Add();
+                                    int cellIndex = 0;
+                                    //Updating the values of datatable  
+                                    foreach (IXLCell cell in row.Cells(readRange))
+                                    {
+                                        dt.Rows[dt.Rows.Count - 1][cellIndex] = cell.Value.ToString();
+                                        cellIndex++;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (dt.Columns.Contains("ID".Trim()) && dt.Columns.Contains("EMPRESA".Trim()) && dt.Columns.Contains("IDENTIFICADOR".Trim()) && dt.Columns.Contains("HORAAPARTURA".Trim()) && dt.Columns.Contains("HORACIERRE".Trim()))
+                        {
+                            foreach (DataRow item in dt.Rows)
+                            {
+                                try
+                                {
+                                    var mvsucursales = new VMSucursales();
+                                    mvsucursales.BuscarSucursales(UidSucursal: item[0].ToString());
+                                    var horainicio = DateTime.Parse(item[3].ToString().Replace(';', ':'));
+                                    var horafin = DateTime.Parse(item[4].ToString().Replace(';', ':'));
+                                    var hora = "";
+                                    var Minuto = "";
+                                    if (horainicio.Hour < 10)
+                                    {
+                                        hora = "0" + horainicio.Hour;
+                                    }
+                                    else
+                                    {
+                                        hora = horainicio.Hour.ToString();
+                                    }
+                                    if (horainicio.Minute < 10)
+                                    {
+                                        Minuto = "0" + horainicio.Minute;
+                                    }
+                                    else
+                                    {
+                                        Minuto = horainicio.Minute.ToString();
+                                    }
+                                    var formatoIncio = hora + ":" + Minuto;
+                                    hora = string.Empty;
+                                    Minuto = string.Empty;
+                                    if (horafin.Hour < 10)
+                                    {
+                                        hora = "0" + horafin.Hour;
+                                    }
+                                    else
+                                    {
+                                        hora = horafin.Hour.ToString();
+                                    }
+                                    if (horafin.Minute < 10)
+                                    {
+                                        Minuto = "0" + horafin.Minute;
+                                    }
+                                    else
+                                    {
+                                        Minuto = horafin.Minute.ToString();
+                                    }
+                                    var formatoFIn = hora + ":" + Minuto;
+                                    var b = mvsucursales.ActualizarDatos(IdSucursal: item[0].ToString(), IDENTIFICADOR: mvsucursales.IDENTIFICADOR, HoraApertura: formatoIncio, HoraCierre: formatoFIn, estatus: mvsucursales.Estatus.ToString());
+                                }
+                                catch (Exception ex)
+                                {
+                                    MuestraMensajeError(ex.Message, true);
+                                    throw;
+                                }
+                            }
+                            MuestraMensajeError("Se han actualizado las sucursales", true);
+                        }
+                        else
+                        {
+                            MuestraMensajeError("el archivo no tiene las columnas correctas", true);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MuestraMensajeError(ex.Message, true);
+                    }
+                }
+                else
+                {
+                    MuestraMensajeError("Formato del archivo es incompatible.Formato valido: .xlsx", true);
+                }
+            }
+            else
+            {
+                MuestraMensajeError("Error al cargar el archivo. Intentelo mas tarde", true);
+            }
+        }
+
+
+        #endregion
         protected void MuestraMensajeError(string texto, bool visible)
         {
             PanelMensaje.Visible = visible;

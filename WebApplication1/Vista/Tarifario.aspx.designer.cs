@@ -15,31 +15,40 @@ namespace WebApplication1.Vista
     {
 
         /// <summary>
-        /// PanelMensaje control.
+        /// btnExportarTodasLasSucursales control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel PanelMensaje;
+        protected global::System.Web.UI.WebControls.LinkButton btnExportarTodasLasSucursales;
 
         /// <summary>
-        /// LblMensaje control.
+        /// BtnImportarTodasSucursales control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LblMensaje;
+        protected global::System.Web.UI.WebControls.LinkButton BtnImportarTodasSucursales;
 
         /// <summary>
-        /// BtnCerrarPanelMensaje control.
+        /// FUAllSucursales control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton BtnCerrarPanelMensaje;
+        protected global::System.Web.UI.WebControls.FileUpload FUAllSucursales;
+
+        /// <summary>
+        /// btnCargarTodasLAsSucursales control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCargarTodasLAsSucursales;
 
         /// <summary>
         /// btnMostrarFiltros control.
@@ -121,6 +130,33 @@ namespace WebApplication1.Vista
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView DgvSucursales;
+
+        /// <summary>
+        /// Mensaje control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel Mensaje;
+
+        /// <summary>
+        /// LblMensaje control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LblMensaje;
+
+        /// <summary>
+        /// BtnCerrarPanelMensaje control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton BtnCerrarPanelMensaje;
 
         /// <summary>
         /// txtUidSucursal control.
