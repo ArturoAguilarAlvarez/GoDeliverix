@@ -781,5 +781,55 @@ WHERE E.UidEmpresa = @UidEmpresa";
             DataTable data = this.dbConexion.Busquedas(command);
             return data;
         }
+
+        /// <summary>
+        /// Obtener las sucursales di
+        /// </summary>
+        /// <param name="uidProducto"></param>
+        /// <param name="uidEstado"></param>
+        /// <param name="uidColonia"></param>
+        /// <param name="dia"></param>
+        /// <returns></returns>
+        public DataTable GetProductBranches(Guid uidProducto, Guid uidEstado, Guid uidColonia, string dia)
+        {
+            string query = $@"sp_ObtenerSucursalesProductoTienda";
+
+            SqlCommand command = new SqlCommand();
+            command.CommandType = CommandType.StoredProcedure;
+            command.CommandText = query;
+
+            command.Parameters.AddWithValue("@UidProducto", uidProducto);
+            command.Parameters.AddWithValue("@UidEstado", uidEstado);
+            command.Parameters.AddWithValue("@UidColonia", uidColonia);
+            command.Parameters.AddWithValue("@Dia", dia);
+
+            DataTable data = this.dbConexion.Busquedas(command);
+            return data;
+        }
+
+        /// <summary>
+        /// Obtener el detalle del producto para la tienda
+        /// </summary>
+        /// <param name="uidProducto"></param>
+        /// <param name="uidEstado"></param>
+        /// <param name="uidColonia"></param>
+        /// <param name="dia"></param>
+        /// <returns></returns>
+        public DataTable GetProductDetail(Guid uidProducto, Guid uidEstado, Guid uidColonia, string dia)
+        {
+            string query = $@"sp_ObtenerDetalleProductoTienda";
+
+            SqlCommand command = new SqlCommand();
+            command.CommandType = CommandType.StoredProcedure;
+            command.CommandText = query;
+
+            command.Parameters.AddWithValue("@UidProducto", uidProducto);
+            command.Parameters.AddWithValue("@UidEstado", uidEstado);
+            command.Parameters.AddWithValue("@UidColonia", uidColonia);
+            command.Parameters.AddWithValue("@Dia", dia);
+
+            DataTable data = this.dbConexion.Busquedas(command);
+            return data;
+        }
     }
 }

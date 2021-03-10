@@ -31,5 +31,19 @@ namespace WebApplication1.Controllers.v2
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet]
+        public IHttpActionResult GetDetail([FromUri] ProductDetailRequest request)
+        {
+            try
+            {
+                var result = this.ProductVm.GetProductDetail(request);
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
