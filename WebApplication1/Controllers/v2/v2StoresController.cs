@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Modelo.ApiResponse;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,14 +13,14 @@ namespace WebApplication1.Controllers.v2
     {
         private ProductViewModel ProductVm { get; }
 
-        public v2ProductsController()
+        public v2StoresController()
         {
             this.ProductVm = new ProductViewModel();
         }
 
 
         [HttpGet]
-        public IHttpActionResult Search([FromUri] StoreSearchRequest request)
+        public IHttpActionResult Search([FromUri] CompaniesSearchRequest request)
         {
             try
             {

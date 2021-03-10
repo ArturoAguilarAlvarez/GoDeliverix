@@ -322,5 +322,41 @@ namespace VistaDelModelo
 
             return result;
         }
+
+        public StoreProductDetail GetProductDetail(ProductDetailRequest vm)
+        {
+            StoreProductDetail result = new StoreProductDetail();
+
+            DataTable pData = this.ProductDb.GetProductDetail(vm.UidProducto, vm.UidEstado, vm.UidColonia, vm.Dia);
+            foreach (DataRow row in pData.Rows)
+            {
+                result.Uid = row.IsNull("Uid") ? Guid.Empty : (Guid)row["Uid"];
+                result.Name = row.IsNull("Name") ? string.Empty : (string)row["Name"];
+                result.Description = row.IsNull("Description") ? string.Empty : (string)row["Description"];
+                result.ImgUrl = row.IsNull("ImgUrl") ? string.Empty : (string)row["ImgUrl"];
+                result.Price = row.IsNull("Price") ? 0 : (decimal)row["Price"];
+            }
+
+            DataTable pBranch = this.ProductDb.GetProductBranches(vm.UidProducto, vm.UidEstado, vm.UidColonia, vm.Dia);
+            List<StoreProductBranch> branches = new List<StoreProductBranch>();
+            foreach (DataRow row in pBranch.Rows)
+            {
+                branches.Add(new StoreProductBranch()
+                {
+                    Uid = row.IsNull("Uid") ? Guid.Empty : (Guid)row["Uid"],
+                    Identifier = row.IsNull("Identifier") ? string.Empty : (string)row["Identifier"],
+                    Price = row.IsNull("Price") ? 0 : (decimal)row["Price"],
+                    ClosedAt = row.IsNull("ClosedAt") ? string.Empty : (string)row["ClosedAt"],
+                    OpenAt = row.IsNull("OpenAt") ? string.Empty : (string)row["OpenAt"],
+                    ShortAddress = row.IsNull("ShortAddress") ? string.Empty : (string)row["ShortAddress"],
+                    UidCommissionType = row.IsNull("UidCommissionType") ? Guid.Empty : (Guid)row["UidCommissionType"],
+                    ViewInformation = row.IsNull("ViewInformation") ? false : (bool)row["ViewInformation"],
+                    BranchIncludeCardPaymentCommission = row.IsNull("BranchIncludeCardPaymentCommission") ? false : (bool)row["BranchIncludeCardPaymentCommission"],
+                });
+            }
+            result.Branches = branches.AsEnumerable();
+
+            return result;
+        }
     }
 }
