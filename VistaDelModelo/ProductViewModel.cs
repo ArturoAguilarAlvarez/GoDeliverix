@@ -335,6 +335,7 @@ namespace VistaDelModelo
                 result.Description = row.IsNull("Description") ? string.Empty : (string)row["Description"];
                 result.ImgUrl = row.IsNull("ImgUrl") ? string.Empty : (string)row["ImgUrl"];
                 result.Price = row.IsNull("Price") ? 0 : (decimal)row["Price"];
+                result.CompanyName = row.IsNull("CompanyName") ? "" : (string)row["CompanyName"];
             }
 
             DataTable pBranch = this.ProductDb.GetProductBranches(vm.UidProducto, vm.UidEstado, vm.UidColonia, vm.Dia);
@@ -358,5 +359,64 @@ namespace VistaDelModelo
 
             return result;
         }
+
+        #region Giros        
+        public IEnumerable<StoreGiro> GetAllGiros()
+        {
+            List<StoreGiro> result = new List<StoreGiro>() { };
+
+            DataTable data = this.ProductDb.GetGiros();
+
+            foreach (DataRow row in data.Rows)
+            {
+                result.Add(new StoreGiro()
+                {
+                    Uid = row.IsNull("Uid") ? Guid.Empty : (Guid)row["Uid"],
+                    Name = row.IsNull("Name") ? "" : (string)row["Name"],
+                    Description = row.IsNull("Description") ? "" : (string)row["Description"],
+                    ImgUrl = row.IsNull("ImgUrl") ? "" : (string)row["ImgUrl"],
+                });
+            }
+
+            return result;
+        }
+
+        public IEnumerable<CommonListBox> GetCategorias(Guid uid)
+        {
+            List<CommonListBox> result = new List<CommonListBox>() { };
+
+            DataTable data = this.ProductDb.GetCategories(uid);
+
+            foreach (DataRow row in data.Rows)
+            {
+                result.Add(new CommonListBox()
+                {
+                    Uid = row.IsNull("Uid") ? Guid.Empty : (Guid)row["Uid"],
+                    Name = row.IsNull("Name") ? "" : (string)row["Name"]
+                });
+            }
+
+            return result;
+        }
+
+        public IEnumerable<CommonListBox> GetSubcategorias(Guid uid)
+        {
+            List<CommonListBox> result = new List<CommonListBox>() { };
+
+            DataTable data = this.ProductDb.GetSubcategories(uid);
+
+            foreach (DataRow row in data.Rows)
+            {
+                result.Add(new CommonListBox()
+                {
+                    Uid = row.IsNull("Uid") ? Guid.Empty : (Guid)row["Uid"],
+                    Name = row.IsNull("Name") ? "" : (string)row["Name"]
+                });
+            }
+
+            return result;
+        }
+        #endregion
+
     }
 }

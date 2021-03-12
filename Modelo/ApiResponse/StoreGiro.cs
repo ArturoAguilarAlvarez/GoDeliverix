@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Modelo.ApiResponse
 {
-    public class StoreProductDetail
+    public class StoreGiro
     {
         public Guid Uid { get; set; }
 
@@ -14,17 +14,6 @@ namespace Modelo.ApiResponse
 
         public string Description { get; set; }
 
-        public decimal Price { get; set; }
-
         public string ImgUrl { get; set; }
-
-        public string CompanyName { get; set; }
-
-        public IEnumerable<StoreProductBranch> Branches { get; set; }
-
-        public StoreProductDetail()
-        {
-            this.Branches = new HashSet<StoreProductBranch>();
-        }
     }
 }
