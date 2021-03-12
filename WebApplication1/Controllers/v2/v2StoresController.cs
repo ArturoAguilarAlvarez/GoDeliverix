@@ -34,20 +34,6 @@ namespace WebApplication1.Controllers.v2
         }
 
         [HttpGet]
-        public IHttpActionResult ReadAllCompanyBranches([FromUri] CompanyBranchRequest request)
-        {
-            try
-            {
-                var result = this.ProductVm.ReadAllCompanyBranches(request.UidEmpresa, request.UidEstado, request.UidColonia);
-                return Json(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpGet]
         public IHttpActionResult GetCompanyDetail([FromUri] CompanyBranchRequest request)
         {
             try
@@ -61,12 +47,13 @@ namespace WebApplication1.Controllers.v2
             }
         }
 
+
         [HttpGet]
-        public IHttpActionResult GetBranchDeals(Guid uidSucursal, string dia)
+        public IHttpActionResult ReadAllCompanyBranches([FromUri] CompanyBranchRequest request)
         {
             try
             {
-                var result = this.ProductVm.GetBranchDeals(uidSucursal, dia);
+                var result = this.ProductVm.ReadAllCompanyBranches(request.UidEmpresa, request.UidEstado, request.UidColonia);
                 return Json(result);
             }
             catch (Exception ex)
@@ -75,18 +62,5 @@ namespace WebApplication1.Controllers.v2
             }
         }
 
-        [HttpGet]
-        public IHttpActionResult GetDealSections(Guid uidOferta, Guid uidEstado)
-        {
-            try
-            {
-                var result = this.ProductVm.GetDealSections(uidOferta, uidEstado);
-                return Json(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
     }
 }

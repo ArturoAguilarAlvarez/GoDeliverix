@@ -831,5 +831,67 @@ WHERE E.UidEmpresa = @UidEmpresa";
             DataTable data = this.dbConexion.Busquedas(command);
             return data;
         }
+
+        #region Categoria
+        public DataTable GetGiros()
+        {
+            string query = $@"
+SELECT 
+    G.UidGiro AS [Uid], 
+    G.VchNombre AS [Name], 
+    G.VchDescripcion AS [Description], 
+    I.NVchRuta AS [ImgUrl] 
+FROM Giro G
+    inner join ImagenGiro IG on IG.UidGiro = G.UidGiro 
+    inner join Imagenes I on I.UIdImagen = IG.UidImagen 
+WHERE G.intEstatus = 1
+ORDER BY G.VchNombre ASC";
+
+            SqlCommand command = new SqlCommand();
+            command.CommandType = CommandType.Text;
+            command.CommandText = query;
+
+            DataTable data = this.dbConexion.Busquedas(command);
+            return data;
+        }
+
+        public DataTable GetCategories(Guid Uid)
+        {
+            string query = $@"
+SELECT 
+    [UidCategoria] AS [Uid],
+    [VchNombre] AS [Name]
+FROM [Categorias]
+WHERE [UidGiro] = @Uid AND [intEstatus] = 1;";
+
+            SqlCommand command = new SqlCommand();
+            command.CommandType = CommandType.Text;
+            command.CommandText = query;
+
+            command.Parameters.AddWithValue("@Uid", Uid);
+
+            DataTable data = this.dbConexion.Busquedas(command);
+            return data;
+        }
+
+        public DataTable GetSubcategories(Guid Uid)
+        {
+            string query = $@"
+SELECT 
+    [UidSubcategoria] AS [Uid],
+    [VchNombre] AS [Name]
+FROM [Subcategoria]
+WHERE [UidCategoria] = @Uid AND [intEstatus] = 1;";
+
+            SqlCommand command = new SqlCommand();
+            command.CommandType = CommandType.Text;
+            command.CommandText = query;
+
+            command.Parameters.AddWithValue("@Uid", Uid);
+
+            DataTable data = this.dbConexion.Busquedas(command);
+            return data;
+        }
+        #endregion
     }
 }
