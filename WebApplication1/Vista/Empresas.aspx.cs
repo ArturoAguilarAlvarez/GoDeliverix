@@ -1405,7 +1405,7 @@ namespace WebApplication1.Vista
                             //El archivo no existe en el servidor
                             if (!File.Exists(Server.MapPath(txtRutaImagen.Text)))
                             {
-                                string Nombre = Path.GetFileNameWithoutExtension(FU.FileName);
+                                string Nombre = Path.GetFileNameWithoutExtension(FU.FileName).Trim();
                                 long Random = new Random().Next(999999999);
                                 string RutaCompleta = RUTA + "/" + Random + Nombre + ".png";
                                 txtRutaImagen.Text = RutaCompleta;
