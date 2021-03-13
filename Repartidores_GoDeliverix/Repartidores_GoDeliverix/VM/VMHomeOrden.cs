@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using VistaDelModelo;
 using Xamarin.Forms;
@@ -89,6 +90,7 @@ namespace Repartidores_GoDeliverix.VM
             get { return _LngFolio; }
             set { SetValue(ref _LngFolio, value); }
         }
+
 
         #region Propiedades del producto
         private Guid _UidProducto;
@@ -185,6 +187,13 @@ namespace Repartidores_GoDeliverix.VM
         {
             get { return _StrCodigo; }
             set { SetValue(ref _StrCodigo, value); }
+        }
+        private string _StrNota;
+
+        public string StrNota
+        {
+            get { return _StrNota; }
+            set { SetValue(ref _StrNota, value); }
         }
         #endregion
 
@@ -296,6 +305,13 @@ namespace Repartidores_GoDeliverix.VM
             get { return _strPagoAlRecolectar; }
             set { SetValue(ref _strPagoAlRecolectar, value); }
         }
+        private string _strNotaDeProducto;
+
+        public string StrNotaDeProducto
+        {
+            get { return _strNotaDeProducto; }
+            set { SetValue(ref _strNotaDeProducto, value); }
+        }
 
         #endregion
         #endregion
@@ -306,7 +322,12 @@ namespace Repartidores_GoDeliverix.VM
         public ICommand ConfirmOrder { get { return new RelayCommand(ConfirmarOrder); } }
         public ICommand CancelOrder { get { return new RelayCommand(CanelarOrden); } }
         public ICommand GetCode { get { return new RelayCommand(ObtenerCodigo); } }
-        public ICommand RefreshAll { get { return new RelayCommand(CargaOrden); } }
+        public ICommand RefreshAll { get { return new RelayCommand(RefrescaOrden); } }
+
+        private void RefrescaOrden()
+        {
+            Device.InvokeOnMainThreadAsync(async () => { await CargaOrden(); });
+        }
         private async void CanelarOrden()
         {
             using (var _WebApiGoDeliverix = new HttpClient())
@@ -447,7 +468,6 @@ namespace Repartidores_GoDeliverix.VM
 
             StrUbicacionSucursal = MVUbicacion.VchLatitud + "," + MVUbicacion.VchLongitud;
 
-
             StrColoniaSucursal = NombreColonia;
 
             using (var _WebApiGoDeliverix = new HttpClient())
@@ -489,7 +509,7 @@ namespace Repartidores_GoDeliverix.VM
         {
 
         }
-        public async void CargaOrden()
+        public async Task CargaOrden()
         {
             try
             {
@@ -583,16 +603,17 @@ namespace Repartidores_GoDeliverix.VM
                 }
                 MTotal = 0.0m;
                 MSTotal = 0.0m;
-                ListaProductos = new List<Productos>();
                 foreach (VMOrden item in MVOrden.ListaDeProductos)
                 {
                     MTotalTarifario = 0.0m;
                     ListaProductos.Add(new Productos()
                     {
+                        UidProducto = item.UidProductoEnOrden.ToString(),
                         StrNombreProducto = item.StrNombreProducto,
                         IntCantidad = item.intCantidad,
                         MSubTotal = decimal.Parse(item.MTotalSucursal),
-                        MTotal = item.MTotal
+                        MTotal = item.MTotal,
+                        BTieneNota = string.IsNullOrEmpty(item.VisibilidadNota) ? false : true
                     });
                     MPropina = item.MPropina;
                     MTotalTarifario = decimal.Parse(item.MCostoTarifario.ToString());
@@ -602,12 +623,25 @@ namespace Repartidores_GoDeliverix.VM
                 MTotalConPropina = MTotal + MPropina + MTotalTarifario;
                 MSubTotal = MSubTotal;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                GenerateMessage("Aviso", "Sin acceso a los servidores", "OK");
+                GenerateMessage("Error", e.Message, "OK");
             }
             //MVOrden.ObtenerProductosDeOrden(StrUidOrden);
         }
+        public async Task MuestraNota(string uidProducto)
+        {
+            using (var _WebApiGoDeliverix = new HttpClient())
+            {
+                var ordennota = new VMOrden();
+                url = "" + Helpers.settings.Sitio + "api/Orden/GetObtenerNotaDeProducto?uidProductoEnOrden=" + uidProducto + "";
+                string DatosObtenidos = await _WebApiGoDeliverix.GetStringAsync(url);
+                var DatosProductos = JsonConvert.DeserializeObject<ResponseHelper>(DatosObtenidos).Data.ToString();
+                ordennota = JsonConvert.DeserializeObject<VMOrden>(DatosProductos);
+                StrNota = ordennota.StrNota;
+            }
+        }
+
         protected async void GenerateMessage(string Tittle, string Message, string TextOption)
         {
             await Application.Current.MainPage.DisplayAlert(

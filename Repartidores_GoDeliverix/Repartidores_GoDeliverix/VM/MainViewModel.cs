@@ -13,7 +13,14 @@ namespace Repartidores_GoDeliverix.VM
         public VMTurnoOrden MVTurnoOrden { get; set; }
         public VMAjustesTelefono MVAjustesTelefono { get; set; }
         public VMHome MVHome { get; set; }
-        public VMHomeOrden MVHomeOrden { get; set; }
+        private VMHomeOrden _MVHomeOrden;
+
+        public VMHomeOrden MVHomeOrden
+        {
+            get { return _MVHomeOrden; }
+            set { SetValue(ref _MVHomeOrden, value); }
+        }
+
         public VMAjustesDireccion vmAjustesDireccion { get; set; }
         public Session Session_ { get; set; }
         private string _Nombre;
@@ -21,9 +28,9 @@ namespace Repartidores_GoDeliverix.VM
         public string Nombre
         {
             get { return _Nombre; }
-            set { SetValue(ref _Nombre , value); }
+            set { SetValue(ref _Nombre, value); }
         }
-        
+
 
         #endregion
         #region Metodos

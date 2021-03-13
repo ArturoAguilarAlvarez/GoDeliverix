@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Repartidores_GoDeliverix.Modelo;
+using Repartidores_GoDeliverix.VM;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,12 +24,19 @@ namespace Repartidores_GoDeliverix.Views
         {
             //await Navigation.PopAsync();
         }
-
+        private async void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            var producto = e.Item as Productos;
+            var viewmodel = new VMHomeOrden();
+            await viewmodel.MuestraNota(producto.UidProducto);
+            var nota = string.IsNullOrEmpty(viewmodel.StrNota) ? "No hay nota" : viewmodel.StrNota;
+            await DisplayAlert("Nota", nota, "Entendido");
+        }
         private void LblNumeroCliente_Clicked(object sender, EventArgs e)
         {
             try
             {
-                 PhoneDialer.Open(lblNumeroCliente.Text);
+                PhoneDialer.Open(lblNumeroCliente.Text);
             }
             //catch (ArgumentNullException anEx)
             //{
@@ -56,5 +65,6 @@ namespace Repartidores_GoDeliverix.Views
                 });
             };
         }
+
     }
 }
