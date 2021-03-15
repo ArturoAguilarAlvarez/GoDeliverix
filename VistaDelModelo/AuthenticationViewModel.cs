@@ -12,10 +12,12 @@ namespace VistaDelModelo
     public class AuthenticationViewModel
     {
         private AuthenticationDataAccess DbAuthentication { get; }
+        private AddressDataAccess DbAddress { get; }
 
         public AuthenticationViewModel()
         {
             this.DbAuthentication = new AuthenticationDataAccess();
+            this.DbAddress = new AddressDataAccess();
         }
 
         /// <summary>
@@ -49,6 +51,37 @@ namespace VistaDelModelo
                 }
             }
             return result;
+        }
+
+        public StoreLoginResult LoginStore(string password, string username = "", string email = "")
+        {
+            StoreLoginResult login = new StoreLoginResult();
+
+            DataTable data = this.DbAuthentication.LoginStore(password, username, email);
+
+            if (data.Rows.Count == 0)
+            {
+                throw new Exception();
+            }
+            else
+            {
+                foreach (DataRow row in data.Rows)
+                {
+                    login = new StoreLoginResult()
+                    {
+                        Uid = row.IsNull("Uid") ? Guid.Empty : (Guid)row["Uid"],
+                        UidPerfil = row.IsNull("UidPerfil") ? Guid.Empty : (Guid)row["UidPerfil"],
+                        Email = row.IsNull("Email") ? string.Empty : (string)row["Email"],
+                        FirstLastName = row.IsNull("FirstLastName") ? string.Empty : (string)row["FirstLastName"],
+                        Name = row.IsNull("Name") ? string.Empty : (string)row["Name"],
+                        ProfileName = row.IsNull("ProfileName") ? string.Empty : (string)row["ProfileName"],
+                        SecondLastName = row.IsNull("SecondLastName") ? string.Empty : (string)row["SecondLastName"],
+                        Usuario = row.IsNull("Usuario") ? string.Empty : (string)row["Usuario"]
+                    };
+                }
+            }
+
+            return login;
         }
     }
 }
