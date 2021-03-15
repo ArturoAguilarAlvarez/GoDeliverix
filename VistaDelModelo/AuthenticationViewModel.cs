@@ -1,4 +1,5 @@
-﻿using DBControl;
+﻿using DataAccess;
+using DBControl;
 using Modelo.ApiResponse;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,15 @@ namespace VistaDelModelo
     {
         private AuthenticationDataAccess DbAuthentication { get; }
         private AddressDataAccess DbAddress { get; }
+        private AuthDb DbAuth { get; }
+        private AddressDb DbDapperAddress { get; }
 
         public AuthenticationViewModel()
         {
             this.DbAuthentication = new AuthenticationDataAccess();
             this.DbAddress = new AddressDataAccess();
+            this.DbAuth = new AuthDb();
+            this.DbDapperAddress = new AddressDb();
         }
 
         /// <summary>
@@ -79,6 +84,18 @@ namespace VistaDelModelo
                         Usuario = row.IsNull("Usuario") ? string.Empty : (string)row["Usuario"]
                     };
                 }
+            }
+
+            return login;
+        }
+
+        public StoreLoginResult LoginStoreDapper(string password, string username = "", string email = "")
+        {
+            StoreLoginResult login = this.DbAuth.LoginStore(password, username, email);
+
+            if (login != null)
+            {
+                login.Addresses = this.DbDapperAddress.ReadAllUserAddress(login.Uid);
             }
 
             return login;

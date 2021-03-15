@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddressDb.cs" />
+    <Compile Include="AuthDb.cs" />
     <Compile Include="Common\BaseDapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

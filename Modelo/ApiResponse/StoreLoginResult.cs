@@ -16,5 +16,12 @@ namespace Modelo.ApiResponse
         public string Usuario { get; set; }
         public string Email { get; set; }
         public string ProfileName { get; set; }
+
+        public IEnumerable<AddressCustomer> Addresses { get; set; }
+
+        public StoreLoginResult()
+        {
+            this.Addresses = new HashSet<AddressCustomer>();
+        }
     }
 }
