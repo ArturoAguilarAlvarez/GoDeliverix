@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiResponse\Address.cs" />
+    <Compile Include="ApiResponse\AddressCustomer.cs" />
     <Compile Include="ApiResponse\BitacoraEstatusRepartidor.cs" />
     <Compile Include="ApiResponse\CommonListBox.cs" />
     <Compile Include="ApiResponse\CommonListViewSource.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="ApiResponse\RepartidorUpdate.cs" />
     <Compile Include="ApiResponse\SeccionListbox.cs" />
     <Compile Include="ApiResponse\StoreGiro.cs" />
+    <Compile Include="ApiResponse\StoreLoginResult.cs" />
     <Compile Include="ApiResponse\StoreProductBranch.cs" />
     <Compile Include="ApiResponse\StoreProductDetail.cs" />
     <Compile Include="ApiResponse\StoreSearchRequest.cs" />

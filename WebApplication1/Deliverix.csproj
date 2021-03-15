@@ -485,6 +485,8 @@
     <Compile Include="Controllers\TurnoController.cs" />
     <Compile Include="Controllers\UbicacionController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
+    <Compile Include="Controllers\v2\v2AddressesController.cs" />
+    <Compile Include="Controllers\v2\v2AuthController.cs" />
     <Compile Include="Controllers\v2\v2CategoriesController.cs" />
     <Compile Include="Controllers\v2\v2LocationsController.cs" />
     <Compile Include="Controllers\v2\v2ProductsController.cs" />
