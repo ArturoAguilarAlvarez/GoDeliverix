@@ -290,10 +290,11 @@ namespace Repartidores_GoDeliverix.VM
                 UidOrdenTarifario = UidOrdenTarifario,
                 UidordenRepartidor = UidordenRepartidor,
                 StrIdentificadorSucursal = MVSucursal.IDENTIFICADOR,
-                StrCodigo = MVOrden.CodigoOrdenTarifario
+                StrCodigo = MVOrden.CodigoOrdenTarifario,
+                ListaProductos = new System.Collections.Generic.List<Modelo.Productos>()
             };
             AppInstance.MVHomeOrden.StrCodigo = string.Empty;
-            AppInstance.MVHomeOrden.CargaOrden();
+            await AppInstance.MVHomeOrden.CargaOrden();
 
 
             await Application.Current.MainPage.Navigation.PushAsync(new Home_Entregar());
@@ -367,9 +368,10 @@ namespace Repartidores_GoDeliverix.VM
                 UidOrdenTarifario = UidOrdenTarifario,
                 UidordenRepartidor = UidordenRepartidor,
                 StrIdentificadorSucursal = MVSucursal.IDENTIFICADOR,
-                StrCodigo = MVOrden.CodigoOrdenTarifario
+                StrCodigo = MVOrden.CodigoOrdenTarifario,
+                ListaProductos = new System.Collections.Generic.List<Modelo.Productos>()
             };
-            AppInstance.MVHomeOrden.CargaOrden();
+            await AppInstance.MVHomeOrden.CargaOrden();
             IsLoading = false;
             IsEnable = true;
 
@@ -382,18 +384,23 @@ namespace Repartidores_GoDeliverix.VM
         {
             IsLoading = true;
             IsEnable = false;
-            var AppInstance = MainViewModel.GetInstance();
-            AppInstance.MVHomeOrden = new VMHomeOrden
+            await Device.InvokeOnMainThreadAsync(async () =>
             {
-                StrUidOrden = UidOrden.ToString(),
-                UidDireccionDelCliente = UidDireccionCliente.ToString(),
-                UidSucursal = UidSucursal,
-                LngFolio = LngFolio,
-                UidOrdenTarifario = UidOrdenTarifario,
-                UidordenRepartidor = UidordenRepartidor,
-                ListaProductos = new System.Collections.Generic.List<Modelo.Productos>()
-            };
-            AppInstance.MVHomeOrden.CargaOrden();
+                var AppInstance = MainViewModel.GetInstance();
+
+                AppInstance.MVHomeOrden = new VMHomeOrden
+                {
+                    StrUidOrden = UidOrden.ToString(),
+                    UidDireccionDelCliente = UidDireccionCliente.ToString(),
+                    UidSucursal = UidSucursal,
+                    LngFolio = LngFolio,
+                    UidOrdenTarifario = UidOrdenTarifario,
+                    UidordenRepartidor = UidordenRepartidor,
+                    ListaProductos = new System.Collections.Generic.List<Modelo.Productos>()
+                };
+                await AppInstance.MVHomeOrden.CargaOrden();
+            });
+
             IsLoading = false;
             IsEnable = true;
             await Application.Current.MainPage.Navigation.PushAsync(new Home_NuevaOrden());
@@ -468,7 +475,8 @@ namespace Repartidores_GoDeliverix.VM
                                     BlNuevaOrden = false;
                                     BlRecolecta = false;
                                     BlEntrega = false;
-                                }else if (UidEstatusTurno == new Guid("B03E3407-F76D-4DFA-8BF9-7F059DC76141"))
+                                }
+                                else if (UidEstatusTurno == new Guid("B03E3407-F76D-4DFA-8BF9-7F059DC76141"))
                                 {
                                     Texto = "Debes recargar para recibir ordenes";
                                     BlSinAsignar = true;

@@ -183,6 +183,13 @@ namespace VistaDelModelo
                 }
             }
         }
+
+        public DataTable ExportarTarifario()
+        {
+            oDbTarifario = new DBTarifario();
+            return oDbTarifario.ExportarExcel();
+        }
+
         /// <summary>
         /// Quita de la lista un tarifario mediante el uid
         /// </summary>
@@ -450,6 +457,12 @@ namespace VistaDelModelo
         {
             oTarifario = new Tarifario();
             oTarifario.RelacionConOrden(uidorden: UidOrden, uidTarifario: UidTarifario, DPropina: DPropina);
+        }
+
+        public void ActualizaTarifario(string UidTarifario, decimal Precio)
+        {
+            oDbTarifario = new DBTarifario();
+            oDbTarifario.ActualizaTarifario(UidTarifario, Precio);
         }
 
         #endregion

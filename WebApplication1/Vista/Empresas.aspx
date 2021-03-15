@@ -267,6 +267,34 @@
                                 <%--<div class="pull-left">
                                     <asp:LinkButton runat="server" ID="btnBusquedaAmpliada" OnClick="BusquedaAvanzada" CssClass="btn btn-sm btn-default"><span class="glyphicon glyphicon-zoom-in"></span> Busqueda ampliada</asp:LinkButton>
                                 </div>--%>
+                                <div class="pull-left">
+                                    <asp:UpdatePanel runat="server">
+                                        <ContentTemplate>
+                                            <asp:LinkButton ID="btnExportarTodasLasSucursales" runat="server" OnClick="btnExportarTodasLasSucursales_Click" CssClass="btn btn-sm btn-success " ToolTip="Descargar">
+                                        <span class="glyphicon glyphicon-save">
+                                        </span>
+                                        Descargar todas las sucursales
+                                            </asp:LinkButton>
+                                            <script type="text/javascript">
+                                                function Upload2(fileUpload) {
+                                                    if (fileUpload.value != '') {
+                                                        document.getElementById("<%=btnCargarTodasLAsSucursales.ClientID %>").click();
+                                                    }
+                                                }
+                                            </script>
+                                            <asp:LinkButton CssClass="btn btn-sm btn-warning " ID="BtnImportarTodasSucursales" runat="server">
+                                                <span class="glyphicon glyphicon-open">
+                                                </span>
+                                                Importar todas las sucursales
+                                            </asp:LinkButton>
+                                            <asp:FileUpload ID="FUAllSucursales" CssClass="hide" runat="server" />
+                                            <asp:Button Text="Subir" OnClick="MuestraExcelTodasLAsSucursales" CssClass="hide" ID="btnCargarTodasLAsSucursales" runat="server" />
+                                        </ContentTemplate>
+                                        <Triggers>
+                                            <asp:PostBackTrigger ControlID="btnCargarTodasLAsSucursales" />
+                                        </Triggers>
+                                    </asp:UpdatePanel>
+                                </div>
                                 <div class="pull-right">
                                     <asp:LinkButton runat="server" ID="btnMostrarFiltros" OnClick="MostrarYOcultarFiltrosBusquedaNormal" CssClass="btn btn-sm btn-default">
                                         <span class="glyphicon glyphicon-eye-open"></span>
@@ -276,6 +304,7 @@
                                     <asp:LinkButton runat="server" ID="btnBuscar" OnClick="BuscarEmpresasBusquedaNormal" CssClass="btn btn-sm btn-default disabled"><span class="glyphicon glyphicon-search"></span> Buscar</asp:LinkButton>
                                 </div>
                             </div>
+
                             <!-- Contenido del panel-->
                             <div class="panel-body">
                                 <asp:Panel runat="server" ID="PnlFiltros">

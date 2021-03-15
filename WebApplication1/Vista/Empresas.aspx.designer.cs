@@ -420,6 +420,42 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.Panel PanelDeBusqueda;
 
         /// <summary>
+        /// btnExportarTodasLasSucursales control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnExportarTodasLasSucursales;
+
+        /// <summary>
+        /// BtnImportarTodasSucursales control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton BtnImportarTodasSucursales;
+
+        /// <summary>
+        /// FUAllSucursales control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.FileUpload FUAllSucursales;
+
+        /// <summary>
+        /// btnCargarTodasLAsSucursales control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCargarTodasLAsSucursales;
+
+        /// <summary>
         /// btnMostrarFiltros control.
         /// </summary>
         /// <remarks>

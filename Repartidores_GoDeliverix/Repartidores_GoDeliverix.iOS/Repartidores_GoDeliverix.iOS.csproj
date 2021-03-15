@@ -51,12 +51,12 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>ARM64</MtouchArch>
-    <CodesignKey>Apple Distribution: Lugo Hernandez Osbel (H3NR49G9QZ)</CodesignKey>
+    <CodesignKey>Apple Development: Manuel Flores (LGKGVG5YC4)</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <CodesignEntitlements>
     </CodesignEntitlements>
     <MtouchI18n>west</MtouchI18n>
-    <CodesignProvision>GoDeliverixRepartidor</CodesignProvision>
+    <CodesignProvision>GoDeliverix Rep dev</CodesignProvision>
     <CodesignExtraArgs />
     <CodesignResourceRules />
   </PropertyGroup>
@@ -70,7 +70,7 @@
     <ConsolePause>false</ConsolePause>
     <CodesignKey>Apple Distribution: Lugo Hernandez Osbel (H3NR49G9QZ)</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <CodesignProvision>GoDeliverixRepartidores</CodesignProvision>
+    <CodesignProvision>GoDeliverix Rep dist</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>none</DebugType>

@@ -5,88 +5,80 @@
              Title="Nueva orden"
              x:Class="Repartidores_GoDeliverix.Views.Home_NuevaOrden">
 
-    <Grid HorizontalOptions="Fill" BindingContext="{Binding MVHomeOrden}" VerticalOptions="Fill">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="4*"></RowDefinition>
-            <RowDefinition Height="4*"></RowDefinition>
-            <RowDefinition Height="1*"></RowDefinition>
-        </Grid.RowDefinitions>
-        <StackLayout   VerticalOptions="Center">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="5*"></RowDefinition>
-                    <RowDefinition Height="5*"></RowDefinition>
-                </Grid.RowDefinitions>
-                <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="0">
-                    <Label  Text="Empresa" FontSize="Large"  TextColor="Black"></Label>
-                    <Label  Text="{Binding StrEmpresaNombreComercial}" TextColor="Purple" FontSize="Medium" ></Label>
-                </StackLayout>
-                <StackLayout Orientation="Vertical" Grid.Row="1" Grid.Column="0" HorizontalOptions="Center">
-                    <Label  Text="Numero de orden" FontSize="Large"  TextColor="Black"></Label>
-                    <Label  Text="{Binding LngFolio}" TextColor="Purple" FontSize="Medium" ></Label>
-                </StackLayout>
-                <StackLayout Orientation="Vertical" Grid.Row="1" Grid.Column="1" HorizontalOptions="Center">
-                    <Label  Text="Pago" FontSize="Large"  TextColor="Black"></Label>
-                    <Label  Text="{Binding StrPagoAlRecolectar}" TextColor="Purple" FontSize="Medium" ></Label>
-                </StackLayout>
-                <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="1">
-                    <Label  Text="Sucursal" FontSize="Large" TextColor="Black"></Label>
-                    <Label x:Name="lblSucursal" Text="{Binding StrIdentificadorSucursal}" TextColor="Purple" FontSize="Medium" ></Label>
-                </StackLayout>
-            </Grid>
+    <StackLayout HorizontalOptions="FillAndExpand" BindingContext="{Binding MVHomeOrden}" VerticalOptions="FillAndExpand">
+        <StackLayout Orientation="Vertical" Padding="10,0,0,0" >
+            <Label  Text="{Binding LngFolio,StringFormat='Orden #{0}'}" HorizontalOptions="Center" TextColor="Black" FontSize="Title" ></Label>
+
+            <StackLayout Orientation="Horizontal" VerticalOptions="Center"  >
+                <Label  Text="Cliente" FontSize="Medium"  TextColor="#333"></Label>
+                <Label  Text="{Binding StrNombreUsuario}" TextColor="#555" HorizontalOptions="FillAndExpand" FontSize="Medium" ></Label>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" VerticalOptions="Center">
+                <Label  Text="Telefono" FontSize="Medium"  TextColor="#333"></Label>
+                <Button BackgroundColor="WhiteSmoke" TextColor="Blue" HorizontalOptions="FillAndExpand" Text="{Binding StrNumeroCliente}" x:Name="lblNumeroCliente"  Clicked="LblNumeroCliente_Clicked" FontSize="Medium" >
+                </Button>
+            </StackLayout>
+
+            <Label  Text="{Binding StrEmpresaNombreComercial}" TextColor="Black" FontSize="Title" ></Label>
+            <Label x:Name="lblSucursal" Text="{Binding StrIdentificadorSucursal}" TextColor="Black" FontSize="Caption" ></Label>
         </StackLayout>
 
+        <StackLayout  HorizontalOptions="FillAndExpand" Padding="10,0,10,0" >
+            <StackLayout  Orientation="Vertical" HorizontalOptions="FillAndExpand" >
+                <Label Text="Productos" FontSize="Medium" TextColor="Black" HorizontalTextAlignment="Start" HorizontalOptions="FillAndExpand"></Label>
 
-        <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="1">
-            <Grid >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"></RowDefinition>
-                    <RowDefinition Height="8*"></RowDefinition>
-                    <RowDefinition Height="1*"></RowDefinition>
-                </Grid.RowDefinitions>
-
-                <StackLayout Grid.Row="0" Padding="10,0,0,0"  >
-                    <Grid >
-                        <Label Text="Cantidad" FontSize="Medium" TextColor="Black"  Grid.Column="0" HorizontalTextAlignment="Start" ></Label>
-                        <Label Text="Producto" FontSize="Medium" TextColor="Black"  Grid.Column="1" HorizontalTextAlignment="Start"></Label>
-                        <Label Text="Importe"  FontSize="Medium" TextColor="Black"  Grid.Column="2" HorizontalTextAlignment="Start" ></Label>
-                    </Grid>
+                <!--<StackLayout Orientation="Horizontal">
+                    <Label Text="Cantidad" FontSize="Medium" TextColor="Black" HorizontalTextAlignment="Start" HorizontalOptions="FillAndExpand"></Label>
+                    <Label Text="Producto" FontSize="Medium" TextColor="Black" HorizontalTextAlignment="Start" HorizontalOptions="FillAndExpand"></Label>
+                    <Label Text="Importe"  FontSize="Medium" TextColor="Black" HorizontalTextAlignment="Start" HorizontalOptions="FillAndExpand"></Label>
+                    <Label Text="Notas"    FontSize="Medium" TextColor="Black" HorizontalTextAlignment="Start" HorizontalOptions="FillAndExpand"></Label>
+                </StackLayout>-->
+                <StackLayout Orientation="Horizontal">
+                    <ListView   ItemsSource="{Binding ListaProductos,Mode=TwoWay}" ItemTapped="ListView_ItemTapped" HorizontalOptions="FillAndExpand">
+                        <ListView.Header>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Cantidad" FontSize="Medium" TextColor="Black" HorizontalTextAlignment="Start" HorizontalOptions="FillAndExpand"></Label>
+                                <Label Text="Producto" FontSize="Medium" TextColor="Black" HorizontalTextAlignment="Start" HorizontalOptions="FillAndExpand"></Label>
+                                <Label Text="Importe"  FontSize="Medium" TextColor="Black" HorizontalTextAlignment="Start" HorizontalOptions="FillAndExpand"></Label>
+                                <Label Text="Notas"    FontSize="Medium" TextColor="Black" HorizontalTextAlignment="Start" HorizontalOptions="FillAndExpand"></Label>
+                            </StackLayout>
+                        </ListView.Header>
+                        <ListView.ItemTemplate >
+                            <DataTemplate>
+                                <ViewCell >
+                                    <StackLayout Orientation="Horizontal"  HorizontalOptions="FillAndExpand">
+                                        <Label TextColor="Black" HorizontalOptions="FillAndExpand" FontSize="Medium" Text="{Binding IntCantidad}" ></Label>
+                                        <Label TextColor="Black" HorizontalOptions="FillAndExpand" FontSize="Medium" Text="{Binding StrNombreProducto}"  ></Label>
+                                        <Label TextColor="Black" HorizontalOptions="FillAndExpand" FontSize="Medium" Text="{Binding MSubTotal, StringFormat='${0}'}" ></Label>
+                                        <Label TextColor="Black" HorizontalOptions="FillAndExpand" FontSize="Medium" Text="Ver" IsVisible="{Binding BTieneNota}" ></Label>
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </StackLayout>
-                <!--<StackLayout Grid.Row="1"  Padding="10,0,0,0"  >-->
-                <!--<ScrollView VerticalOptions="Fill">-->
-                <ListView  Grid.Row="1"  ItemsSource="{Binding ListaProductos}" >
-                    <ListView.ItemTemplate >
-                        <DataTemplate>
-                            <ViewCell >
-                                <Grid Padding="10,0,0,0">
-                                    <Label TextColor="Purple" Grid.Column="0"   HorizontalOptions="Center" FontSize="Medium" Text="{Binding IntCantidad}" ></Label>
 
-                                    <Label TextColor="Purple" Grid.Column="1" HorizontalOptions="Center" FontSize="Medium" Text="{Binding StrNombreProducto}"  ></Label>
-                                    <Label TextColor="Purple" Grid.Column="2" HorizontalOptions="Center" FontSize="Medium" Text="{Binding MSubTotal, StringFormat='${0}'}" ></Label>
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                <!--</ScrollView>-->
-                <!--</StackLayout>-->
+            </StackLayout>
 
-                <StackLayout  Grid.Row="2" Padding="10,0,0,0"  >
-                    <Grid >
-                        <Label Text="Envio"      FontSize="Medium" TextColor="Black"  Grid.Column="0"></Label>
-                        <Label Text="{Binding MTotalTarifario,StringFormat='${0}'}"      FontSize="Medium" TextColor="MediumPurple"  Grid.Column="1"></Label>
-                        <Label Text="Total" FontSize="Medium" TextColor="Black"  Grid.Column="2"></Label>
-                        <Label Text="{Binding MTotal,StringFormat='${0}'}"  FontSize="Medium" TextColor="MediumPurple"  Grid.Column="3"></Label>
-                    </Grid>
+
+            <Label  Text="{Binding StrPagoAlRecolectar}" HorizontalOptions="Center" TextColor="Black" FontSize="Title" ></Label>
+
+            <StackLayout   Padding="10,0,0,0" Orientation="Horizontal" HorizontalOptions="FillAndExpand" >
+                <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+                    <Label Text="Envio" FontSize="Medium" TextColor="Black" ></Label>
+                    <Label Text="{Binding MTotalTarifario,StringFormat='${0}'}"      FontSize="Medium" TextColor="Black"  ></Label>
                 </StackLayout>
-            </Grid>
+                <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+                    <Label Text="Total" FontSize="Medium" TextColor="Black"  ></Label>
+                    <Label Text="{Binding MTotal,StringFormat='${0}'}"  FontSize="Medium" TextColor="Black"  ></Label>
+                </StackLayout>
+            </StackLayout>
         </StackLayout>
 
-        <StackLayout  Grid.Row="2" VerticalOptions="End">
-            <Grid>
-                <Button  Text="Si" FontSize="Large" Command="{Binding ConfirmOrder}" x:Name="btnAceptar" Clicked="BtnAceptar_Clicked" TextColor="White"  Grid.Column="0" BackgroundColor="Green"></Button>
-                <Button Text="No" FontSize="Large" Command="{Binding CancelOrder}"  x:Name="btnCancelar" Clicked="BtnCancelar_Clicked" TextColor="White" Grid.Column="1"  BackgroundColor="Red"  ></Button>
-            </Grid>
+        <StackLayout   VerticalOptions="EndAndExpand" Orientation="Horizontal">
+            <Button  Text="Aceptar" FontSize="Large" Command="{Binding ConfirmOrder}" x:Name="btnAceptar" Clicked="BtnAceptar_Clicked" TextColor="White"  HorizontalOptions="FillAndExpand" BackgroundColor="Green"></Button>
+            <Button Text="Rechazar" FontSize="Large" Command="{Binding CancelOrder}"  x:Name="btnCancelar" Clicked="BtnCancelar_Clicked" TextColor="White" HorizontalOptions="FillAndExpand"  BackgroundColor="Red"  ></Button>
+
         </StackLayout>
-    </Grid>
+    </StackLayout>
 </ContentPage>

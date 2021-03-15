@@ -6,17 +6,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="favicon" runat="server">
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <%--Panel de mensaje de sistema--%>
-    <asp:Panel CssClass=" alert alert-danger " Style="padding: 10px;" ID="PanelMensaje" runat="server">
-        <span class="glyphicon glyphicon-info-sign"></span>
-        <asp:Label ID="LblMensaje" Text="Mensaje del sistema" Font-Size="Large" runat="server" />
 
-        <div class="pull-right">
-            <asp:LinkButton ID="BtnCerrarPanelMensaje" CssClass="btn btn-sm btn-danger" OnClick="BtnCerrarPanelMensaje_Click" ForeColor="White" runat="server">
-                            <span class="glyphicon glyphicon-remove"></span>
-            </asp:LinkButton>
-        </div>
-    </asp:Panel>
     <div class="col-md-4">
         <div class="panel panel-primary">
             <%--Panel de busqueda--%>
@@ -28,7 +18,37 @@
                 <%--<div class="pull-left">
                                     <asp:LinkButton runat="server" ID="btnBusquedaAmpliada" OnClick="BusquedaAvanzada" CssClass="btn btn-sm btn-default"><span class="glyphicon glyphicon-zoom-in"></span> Busqueda ampliada</asp:LinkButton>
                                 </div>--%>
+                <div class="pull-left">
+                    <asp:UpdatePanel runat="server">
+                        <ContentTemplate>
+                            <asp:LinkButton ID="btnExportarTodasLasSucursales" runat="server" OnClick="btnExportarTodasLasSucursales_Click" CssClass="btn btn-sm btn-success " ToolTip="Descargar">
+                                        <span class="glyphicon glyphicon-save">
+                                        </span>
+                                        Descargar tarifarios
+                            </asp:LinkButton>
+                            <script type="text/javascript">
+                                function Upload2(fileUpload) {
+                                    if (fileUpload.value != '') {
+                                        document.getElementById("<%=btnCargarTodasLAsSucursales.ClientID %>").click();
+                                    }
+                                }
+                            </script>
+                            <asp:LinkButton CssClass="btn btn-sm btn-warning " ID="BtnImportarTodasSucursales" runat="server">
+                                                <span class="glyphicon glyphicon-open">
+                                                </span>
+                                                Importar tarifarios
+                            </asp:LinkButton>
+                            <asp:FileUpload ID="FUAllSucursales" CssClass="hide" runat="server" />
+                            <asp:Button Text="Subir" OnClick="MuestraExcelTodasLAsSucursales" CssClass="hide" ID="btnCargarTodasLAsSucursales" runat="server" />
+                        </ContentTemplate>
+                        <Triggers>
+                            <asp:PostBackTrigger ControlID="btnCargarTodasLAsSucursales" />
+                            <asp:PostBackTrigger ControlID="BtnImportarTodasSucursales" />
+                        </Triggers>
+                    </asp:UpdatePanel>
+                </div>
                 <div class="pull-right">
+
                     <asp:LinkButton runat="server" ID="btnMostrarFiltros" OnClick="MostrarYOcultarFiltrosBusquedaNormal" CssClass="btn btn-sm btn-default">
                         <span class="glyphicon glyphicon-eye-open"></span>
                         <asp:Label ID="lblVisibilidadfiltros" runat="server" />
@@ -107,6 +127,19 @@
             <div class="panel-heading text-center">
                 <label>Tarifario</label>
             </div>
+            <%--Panel de mensaje de sistema--%>
+            <asp:UpdatePanel CssClass=" alert alert-danger " Style="padding: 10px;" ID="Mensaje" runat="server">
+                <ContentTemplate>
+                    <span class="glyphicon glyphicon-info-sign"></span>
+                    <asp:Label ID="LblMensaje" Text="Mensaje del sistema" Font-Size="Large" runat="server" />
+
+                    <div class="pull-right">
+                        <asp:LinkButton ID="BtnCerrarPanelMensaje" CssClass="btn btn-sm btn-danger" OnClick="BtnCerrarPanelMensaje_Click" ForeColor="White" runat="server">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </asp:LinkButton>
+                    </div>
+                </ContentTemplate>
+            </asp:UpdatePanel>
             <div class="clearfix"></div>
             <div class=" pull-left">
                 <asp:TextBox ID="txtUidSucursal" CssClass="hide" runat="server" />

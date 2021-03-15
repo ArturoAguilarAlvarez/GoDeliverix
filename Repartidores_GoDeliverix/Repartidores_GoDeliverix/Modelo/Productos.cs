@@ -6,6 +6,12 @@ namespace Repartidores_GoDeliverix.Modelo
 {
     public class Productos : ControlsController
     {
+        private string _UidProducto;
+        public string UidProducto
+        {
+            get { return _UidProducto; }
+            set { SetValue(ref _UidProducto, value); }
+        }
         private string _StrNombreProducto;
         public string StrNombreProducto
         {
@@ -33,6 +39,13 @@ namespace Repartidores_GoDeliverix.Modelo
         {
             get { return _MSubTotal; }
             set { SetValue(ref _MSubTotal, value); }
+        }
+        private bool _BTieneNota;
+
+        public bool BTieneNota
+        {
+            get { return _BTieneNota; }
+            set { SetValue(ref _BTieneNota, value); }
         }
     }
 }
