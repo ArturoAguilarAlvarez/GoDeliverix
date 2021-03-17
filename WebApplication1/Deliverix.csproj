@@ -513,6 +513,7 @@
     <Compile Include="Controllers\v2\v2CategoriesController.cs" />
     <Compile Include="Controllers\v2\v2LocationsController.cs" />
     <Compile Include="Controllers\v2\v2ProductsController.cs" />
+    <Compile Include="Controllers\v2\v2ProfilesController.cs" />
     <Compile Include="Controllers\v2\v2StoresController.cs" />
     <Compile Include="Controllers\VersionController.cs" />
     <Compile Include="Controllers\WalletController.cs" />

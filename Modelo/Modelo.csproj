@@ -77,6 +77,7 @@
     <Compile Include="ApiResponse\StoreProductBranch.cs" />
     <Compile Include="ApiResponse\StoreProductDetail.cs" />
     <Compile Include="ApiResponse\StoreSearchRequest.cs" />
+    <Compile Include="ApiResponse\User.cs" />
     <Compile Include="ApiResponse\Wallet.cs" />
     <Compile Include="ApiResponse\WalletTransactionGrid.cs" />
     <Compile Include="Categoria.cs" />
