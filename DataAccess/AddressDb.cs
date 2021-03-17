@@ -42,5 +42,15 @@ ORDER BY D.Identificador DESC";
 
             return this.Query<AddressCustomer>(query, parameters);
         }
+
+        public IEnumerable<NeighborhoodSearch> SearchNeighborhood(string name)
+        {
+            string query = @"sp_BusquedaColoniasTienda";
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@filter", name);
+
+            return this.Query<NeighborhoodSearch>(query, parameters, System.Data.CommandType.StoredProcedure);
+        }
     }
 }

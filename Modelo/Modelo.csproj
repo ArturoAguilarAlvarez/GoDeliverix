@@ -65,6 +65,7 @@
     <Compile Include="ApiResponse\MapCoordinates.cs" />
     <Compile Include="ApiResponse\Message.cs" />
     <Compile Include="ApiResponse\BranchePayment.cs" />
+    <Compile Include="ApiResponse\NeighborhoodSearch.cs" />
     <Compile Include="ApiResponse\OfertaListBox.cs" />
     <Compile Include="ApiResponse\Phone.cs" />
     <Compile Include="ApiResponse\ProductDetailRequest.cs" />

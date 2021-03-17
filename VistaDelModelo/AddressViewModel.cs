@@ -21,5 +21,10 @@ namespace VistaDelModelo
         {
             return this.DbAddress.ReadAllUserAddress(uid);
         }
+
+        public IEnumerable<NeighborhoodSearch> SearchNeighborhood(string filter)
+        {
+            return this.DbAddress.SearchNeighborhood(filter);
+        }
     }
 }
