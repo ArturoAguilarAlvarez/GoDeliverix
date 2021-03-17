@@ -7,7 +7,7 @@ using VistaDelModelo;
 
 namespace WebApplication1.Controllers.v2
 {
-    [Route("api/v2/Auth/{action}")]
+    [Route("api/v2/StoreAuth/{action}")]
     public class v2AuthController : ApiController
     {
         private AuthenticationViewModel AuthenticationVm { get; }
