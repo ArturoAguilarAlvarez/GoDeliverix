@@ -24,5 +24,8 @@ namespace Modelo.ApiResponse
         public string Identificador { get; set; }
         public bool BPredeterminada { get; set; }
         public bool BEstatus { get; set; }
+
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
     }
 }

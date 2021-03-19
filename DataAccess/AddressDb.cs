@@ -29,7 +29,9 @@ SELECT
     D.[CodigoPostal],
     D.[Referencia],
     D.[Identificador],
-    D.[BPredeterminada]
+    D.[BPredeterminada],
+    U.VchLatitud AS Latitude,
+    U.VchLongitud AS Longitude
 FROM [Direccion] AS D
     INNER JOIN [DireccionUsuario] AS DU ON DU.[UidDireccion] = D.UidDireccion
     INNER JOIN [DireccionUbicacion] AS DM ON DM.UidDireccion = D.[UidDireccion]
