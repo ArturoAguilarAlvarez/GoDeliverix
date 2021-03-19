@@ -7,22 +7,22 @@ using VistaDelModelo;
 
 namespace WebApplication1.Controllers.v2
 {
-    [Route("api/v2/Locations/{action}")]
-    public class v2LocationsController : ApiController
+    [Route("api/v2/Profiles/{action}")]
+    public class v2ProfilesController : ApiController
     {
-        private AddressViewModel AddressVm { get; }
+        private UserViewModel UserVm { get; }
 
-        public v2LocationsController()
+        public v2ProfilesController()
         {
-            this.AddressVm = new AddressViewModel();
+            this.UserVm = new UserViewModel();
         }
 
         [HttpGet]
-        public IHttpActionResult SearchNeighborhood(string filter)
+        public IHttpActionResult Get(Guid uid)
         {
             try
             {
-                var result = this.AddressVm.SearchNeighborhood(filter);
+                var result = this.UserVm.GetAllByUserId(uid);
                 return Json(result);
             }
             catch (Exception ex)

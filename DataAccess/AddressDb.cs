@@ -29,7 +29,9 @@ SELECT
     D.[CodigoPostal],
     D.[Referencia],
     D.[Identificador],
-    D.[BPredeterminada]
+    D.[BPredeterminada],
+    U.VchLatitud AS Latitude,
+    U.VchLongitud AS Longitude
 FROM [Direccion] AS D
     INNER JOIN [DireccionUsuario] AS DU ON DU.[UidDireccion] = D.UidDireccion
     INNER JOIN [DireccionUbicacion] AS DM ON DM.UidDireccion = D.[UidDireccion]
@@ -41,6 +43,16 @@ ORDER BY D.Identificador DESC";
             parameters.Add("@UidUsuario", uid);
 
             return this.Query<AddressCustomer>(query, parameters);
+        }
+
+        public IEnumerable<NeighborhoodSearch> SearchNeighborhood(string name)
+        {
+            string query = @"sp_BusquedaColoniasTienda";
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@filter", name);
+
+            return this.Query<NeighborhoodSearch>(query, parameters, System.Data.CommandType.StoredProcedure);
         }
     }
 }

@@ -65,6 +65,7 @@
     <Compile Include="ApiResponse\MapCoordinates.cs" />
     <Compile Include="ApiResponse\Message.cs" />
     <Compile Include="ApiResponse\BranchePayment.cs" />
+    <Compile Include="ApiResponse\NeighborhoodSearch.cs" />
     <Compile Include="ApiResponse\OfertaListBox.cs" />
     <Compile Include="ApiResponse\Phone.cs" />
     <Compile Include="ApiResponse\ProductDetailRequest.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="ApiResponse\StoreProductBranch.cs" />
     <Compile Include="ApiResponse\StoreProductDetail.cs" />
     <Compile Include="ApiResponse\StoreSearchRequest.cs" />
+    <Compile Include="ApiResponse\User.cs" />
     <Compile Include="ApiResponse\Wallet.cs" />
     <Compile Include="ApiResponse\WalletTransactionGrid.cs" />
     <Compile Include="Categoria.cs" />

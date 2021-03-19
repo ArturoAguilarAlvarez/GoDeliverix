@@ -48,6 +48,7 @@
     <Compile Include="AuthDb.cs" />
     <Compile Include="Common\BaseDapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserDb.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

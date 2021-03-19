@@ -53,6 +53,7 @@
     <Compile Include="ProductViewModel.cs" />
     <Compile Include="Services\FirebaseService.cs" />
     <Compile Include="Services\GoogleService.cs" />
+    <Compile Include="UserViewModel.cs" />
     <Compile Include="VMComision.cs" />
     <Compile Include="VMConfiguracionCliente.cs" />
     <Compile Include="VMMonedero.cs" />
