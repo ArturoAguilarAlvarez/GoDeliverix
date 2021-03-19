@@ -128,14 +128,12 @@ namespace Deliverix.Wpf.Distribuidores
                     }
                     else
                     {
-                        DataBase wBDLocal = new DataBase();
-                        wBDLocal.Show();
+                        FrameContenido.Content = new PageLicencia(this);
                     }
                 }
                 else
                 {
-                    DataBase wBDLocal = new DataBase();
-                    wBDLocal.Show();
+                    FrameContenido.Content = new PageLicencia(this);
                 }
             }
         }
