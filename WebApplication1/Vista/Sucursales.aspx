@@ -552,12 +552,12 @@
                                     <div class="row">
                                         <asp:Label ID="LblUidUbicacion" Visible="false" runat="server" />
                                         <div class="col-md-6">
-                                            <h6>Longitud</h6>
-                                            <asp:TextBox ID="txtLongitud" runat="server" CssClass="form-control"></asp:TextBox>
-                                        </div>
-                                        <div class="col-md-6">
                                             <h6>Latitud</h6>
                                             <asp:TextBox ID="TxtLatitud" runat="server" CssClass="form-control"></asp:TextBox>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>Longitud</h6>
+                                            <asp:TextBox ID="txtLongitud" runat="server" CssClass="form-control"></asp:TextBox>
                                         </div>
                                     </div>
                                     <%-- AIzaSyAnrh2zheeNGeywmv1YVwddIeKgLMCWRN0 API Key Google Maps --%>

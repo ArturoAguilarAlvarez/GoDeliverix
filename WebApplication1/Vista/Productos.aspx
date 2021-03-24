@@ -123,9 +123,6 @@
                             </asp:LinkButton>
                         </li>
                     </ul>
-
-
-
                     <asp:Panel ID="panelGeneral" runat="server">
                         <div class="col-md-6">
                             <asp:UpdatePanel runat="server">
@@ -157,7 +154,6 @@
                                     <asp:PostBackTrigger ControlID="btnImagenGiro" />
                                 </Triggers>
                             </asp:UpdatePanel>
-
                         </div>
                         <div class="col-md-6">
                             <h6>Nombre</h6>

@@ -852,15 +852,6 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.Label LblUidUbicacion;
 
         /// <summary>
-        /// txtLongitud control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtLongitud;
-
-        /// <summary>
         /// TxtLatitud control.
         /// </summary>
         /// <remarks>
@@ -868,6 +859,15 @@ namespace WebApplication1.Vista
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TxtLatitud;
+
+        /// <summary>
+        /// txtLongitud control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtLongitud;
 
         /// <summary>
         /// pnlContacto control.
