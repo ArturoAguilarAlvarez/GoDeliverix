@@ -632,11 +632,11 @@
                     <asp:Panel ID="PanelInformacionDeTrabajo" runat="server" Style="margin: 10px">
                         <div class="col-md-6">
                             <p>Monto maximo a portar($)</p>
-                            <asp:TextBox class="form-control" TextMode="Number" ID="txtMontoMaximoAPortar" runat="server" />
+                            <asp:TextBox class="form-control" ID="txtMontoMaximoAPortar" runat="server" />
                         </div>
                         <div class="col-md-6">
                             <p>Porcentaje de pago de pago</p>
-                            <asp:TextBox class="form-control" TextMode="Number" ID="txtPorcentajePagoRepartidor" OnTextChanged="txtPorcentajePagoRepartidor_TextChanged" runat="server" />
+                            <asp:TextBox class="form-control" ID="txtPorcentajePagoRepartidor" OnTextChanged="txtPorcentajePagoRepartidor_TextChanged" runat="server" />
                         </div>
                     </asp:Panel>
                 </div>

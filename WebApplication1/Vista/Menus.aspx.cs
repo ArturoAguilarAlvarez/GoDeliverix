@@ -1127,13 +1127,13 @@ namespace WebApplication1.Vista
 
         protected void txtCostoProduto_TextChanged(object sender, EventArgs e)
         {
-            float resultado = 0;
+            decimal resultado = 0.0m;
 
-            if (float.TryParse(txtCostoProduto.Text, out resultado))
+            if (decimal.TryParse(txtCostoProduto.Text, out resultado))
             {
                 MVComision.ObtenerComisionPorEmpresa(new Guid(Session["UidEmpresaSistema"].ToString()));
-                float total = 0f;
-                var totalPorcentaje = 0f;
+                decimal total = 0.0m;
+                var totalPorcentaje = 0.0m;
                 //Porcentaje
                 if (MVComision.UidTipoDeComision == new Guid("960D9483-4058-4AC9-A1C3-79F5B303E3BA"))
                 {

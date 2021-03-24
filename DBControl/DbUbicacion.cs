@@ -16,12 +16,6 @@ namespace DBControl
             return oConexion.Consultas(query);
         }
 
-        public void EliminarUbicacionSucursal(Guid uidSucursal)
-        {
-            oConexion = new Conexion();
-            string query = "delete from Ubicacion where UidUbicacion in (select UidUbicacion from UbicacionSucursal where UidSucursal = '" + uidSucursal.ToString() + "');delete from ubicacionsucursal where uidsucursal ='" + uidSucursal.ToString() + "'";
-            oConexion.Consultas(query);
-        }
 
         public void EliminarUbicacionDireccion(Guid uidDireccion)
         {

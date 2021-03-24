@@ -46,15 +46,15 @@ namespace WebApplication1.Vista
             //MVSucursales.Estatus();
             MVSucursales.TipoDeTelefonos();
             //new GLatLng(20.634701674933097, -87.07286689780835)
-            MapaPrueba.Language = "es";
-            MapaPrueba.GZoom = 17;
-            MapaPrueba.mapType = TipoMapa;
-            MapaPrueba.enableRotation = true;
+            //MapaPrueba.Language = "es";
+            //MapaPrueba.GZoom = 17;
+            //MapaPrueba.mapType = TipoMapa;
+            //MapaPrueba.enableRotation = true;
             MarketOPciones.draggable = true;
             Marcador.options = MarketOPciones;
-            MapaPrueba.Add(ventana);
-            MapaPrueba.Add(new GMapUI());
-            MapaPrueba.resetInfoWindows();
+            //MapaPrueba.Add(ventana);
+            //MapaPrueba.Add(new GMapUI());
+            //MapaPrueba.resetInfoWindows();
             if (Session["UidEmpresaSistema"] == null)
             {
                 Response.Redirect("Default/");
@@ -869,12 +869,12 @@ namespace WebApplication1.Vista
 
         protected void MuestraUbicacionEnMapa(Double latitud, double longitud, string mensajeVentana, int zoom)
         {
-            MapaPrueba.setCenter(new GLatLng(latitud, longitud), zoom, TipoMapa);
+            //MapaPrueba.setCenter(new GLatLng(latitud, longitud), zoom, TipoMapa);
             Marcador = new GMarker(new GLatLng(latitud, longitud));
             Marcador.options = MarketOPciones;
             Session["Marcador"] = Marcador;
             ventana = new GInfoWindow(Marcador, mensajeVentana, true);
-            MapaPrueba.Add(ventana);
+            //MapaPrueba.Add(ventana);
 
         }
         protected void MuestraSucursalEnGestion(string valor)
@@ -919,32 +919,29 @@ namespace WebApplication1.Vista
             ddlEstatusSucursal.SelectedIndex = ddlEstatusSucursal.Items.IndexOf(ddlEstatusSucursal.Items.FindByValue(MVSucursales.Estatus.ToString()));
             ddlEstatusSucursal.DataBind();
 
-            MapaPrueba.resetInfoWindows();
-            double Latitud, Longitud;
+            //MapaPrueba.resetInfoWindows();
             Random numero = new Random();
 
-            if (string.IsNullOrEmpty(MVUbicacion.VchLatitud) && string.IsNullOrEmpty(MVUbicacion.VchLongitud))
-            {
-                Latitud = numero.Next(-90, 90);
-                Longitud = numero.Next(-90, 90);
-                Zoom = 17;
-                PlantillaMensajeVentana = "<label>No existe la ubicación de esta sucursal(" + MVSucursales.IDENTIFICADOR + ")</label>\n<p>Elige una ubicacion para que tus clientes puedan verte!!</p>";
-            }
-            else
-            {
-                Latitud = Double.Parse(MVUbicacion.VchLatitud);
-                Longitud = double.Parse(MVUbicacion.VchLongitud);
-                Zoom = 14;
-                PlantillaMensajeVentana = "<center>" + MVSucursales.IDENTIFICADOR + "</center>\n ";
-            }
-
-
+            //if (string.IsNullOrEmpty(MVUbicacion.VchLatitud) && string.IsNullOrEmpty(MVUbicacion.VchLongitud))
+            //{
+            //    Latitud = numero.Next(-90, 90);
+            //    Longitud = numero.Next(-90, 90);
+            //    Zoom = 17;
+            //    PlantillaMensajeVentana = "<label>No existe la ubicación de esta sucursal(" + MVSucursales.IDENTIFICADOR + ")</label>\n<p>Elige una ubicacion para que tus clientes puedan verte!!</p>";
+            //}
+            //else
+            //{
+            //    Latitud = Double.Parse(MVUbicacion.VchLatitud);
+            //    Longitud = double.Parse(MVUbicacion.VchLongitud);
+            //    Zoom = 14;
+            //    PlantillaMensajeVentana = "<center>" + MVSucursales.IDENTIFICADOR + "</center>\n ";
+            //}
+            txtLongitud.Text = MVUbicacion.VchLongitud;
+            TxtLatitud.Text = MVUbicacion.VchLatitud;
+            LblUidUbicacion.Text = MVUbicacion.UID.ToString();
             Session["PlantillaMensajeVentana"] = PlantillaMensajeVentana;
             Session["Zoom"] = Zoom;
-            MuestraUbicacionEnMapa(Latitud, Longitud, PlantillaMensajeVentana, Zoom);
-
-
-
+            //MuestraUbicacionEnMapa(Latitud, Longitud, PlantillaMensajeVentana, Zoom);
 
             MuestraDireccion(valor);
             Session["MVSucursales"] = MVSucursales;
@@ -956,7 +953,6 @@ namespace WebApplication1.Vista
             txtClaveDeBusqueda.Text = MVSucursales.SUCURSAL.StrCodigo;
             chkVisibilidadInformacion.Checked = MVSucursales.SUCURSAL.BVisibilidad;
             PanelMensaje.Visible = false;
-
 
             #region Tarifario
             //Si es suministradora lo obtiene por el contrato
@@ -1614,11 +1610,11 @@ namespace WebApplication1.Vista
             DlCategoriaSeleccionada.Enabled = estado;
 
             //Control de mapa 
-            btnBuscarUbicacion.Enabled = estado;
-            txtBusquedaUbicacion.Enabled = estado;
-            MapaPrueba.Enabled = estado;
+            //btnBuscarUbicacion.Enabled = estado;
+            //txtBusquedaUbicacion.Enabled = estado;
+            //MapaPrueba.Enabled = estado;
 
-            btnMiUbicacion.Enabled = estado;
+            //btnMiUbicacion.Enabled = estado;
             DgvLicencia.Enabled = estado;
             DGVTELEFONOS.Enabled = estado;
 
@@ -1644,8 +1640,8 @@ namespace WebApplication1.Vista
             {
                 btnAgregarMensaje.CssClass = "btn btn-sm btn-success";
                 btnNuevoTelefono.CssClass = "btn btn-sm btn-default";
-                btnMiUbicacion.CssClass = "btn btn-sm btn-default";
-                btnBuscarUbicacion.CssClass = "input-group-addon";
+                //btnMiUbicacion.CssClass = "btn btn-sm btn-default";
+                //btnBuscarUbicacion.CssClass = "input-group-addon";
                 btnGenerarCodigoDeBusqueda.CssClass = "btn btn-sm btn-default";
             }
             else
@@ -1654,8 +1650,8 @@ namespace WebApplication1.Vista
                 DgvLicencia.EditIndex = -1;
                 btnAgregarMensaje.CssClass = "btn btn-sm btn-success disabled";
                 btnNuevoTelefono.CssClass = "btn btn-sm btn-default disabled";
-                btnMiUbicacion.CssClass = "btn btn-sm btn-default disabled";
-                btnBuscarUbicacion.CssClass = "input-group-addon disabled";
+                //btnMiUbicacion.CssClass = "btn btn-sm btn-default disabled";
+                //btnBuscarUbicacion.CssClass = "input-group-addon disabled";
                 btnGenerarCodigoDeBusqueda.CssClass = "btn btn-sm btn-default disabled";
 
             }
@@ -1687,7 +1683,7 @@ namespace WebApplication1.Vista
                     Marcador = (GMarker)Session["Marcador"];
                     PlantillaMensajeVentana = (string)Session["PlantillaMensajeVentana"];
                     Zoom = (int)Session["Zoom"];
-                    MuestraUbicacionEnMapa(Marcador.point.lat, Marcador.point.lng, PlantillaMensajeVentana, Zoom);
+                    //MuestraUbicacionEnMapa(Marcador.point.lat, Marcador.point.lng, PlantillaMensajeVentana, Zoom);
                 }
             }
             else if (AccionesDeLaPagina == "NuevoRegistro" && ControlDeACcion == "Activado")
@@ -1709,7 +1705,7 @@ namespace WebApplication1.Vista
             }
             else if (ControlDeACcion == "")
             {
-                MapaPrueba.resetInfoWindows();
+                //MapaPrueba.resetInfoWindows();
                 DesactivarCajasDeTextoPanelGestion();
                 DesactivarCamposDeDireccion();
                 btnNuevo.Enabled = true;
@@ -2185,10 +2181,8 @@ namespace WebApplication1.Vista
                                 MVTelefono.GuardaTelefono(new Guid(UIDSUCURSAL), "Sucursal");
                             }
                             #endregion
-
                             //Actualiza el datagrid de las ciudades de la zona de servicio
-                            MVUbicacion.GuardaUbicacionsucursal(new Guid(UIDSUCURSAL), UidUbicacion, DbLatitud.ToString(), DbLongitud.ToString());
-
+                            MVUbicacion.actualizaUbicacion(new Guid(LblUidUbicacion.Text), TxtLatitud.Text, txtLongitud.Text);
                             if (MVEmpresa.ObtenerTipoDeEmpresa(Session["UidEmpresaSistema"].ToString()))
                             {
                                 string UidSuministradora = txtUidSucursal.Text;
@@ -2281,6 +2275,8 @@ namespace WebApplication1.Vista
             txtCalle2.Enabled = estatus;
             txtDCodigoPostal.Enabled = estatus;
             DDLDCiudad.Enabled = estatus;
+            txtLongitud.Enabled = estatus;
+            TxtLatitud.Enabled = estatus;
         }
         protected void ActivarCamposDeDireccion()
         {
@@ -2780,19 +2776,19 @@ namespace WebApplication1.Vista
             }
         }
 
-        protected void btnBuscarUbicacion_Click(object sender, EventArgs e)
-        {
+        //protected void btnBuscarUbicacion_Click(object sender, EventArgs e)
+        //{
 
-            if (!string.IsNullOrEmpty(txtBusquedaUbicacion.Text))
-            {
-                string key = ConfigurationManager.AppSettings.Get("googlemaps.subgurim.net");
-                GeoCode Informacion = GMap.geoCodeRequest(txtBusquedaUbicacion.Text, key, new GLatLngBounds(new GLatLng(40, 10), new GLatLng(50, 20)));
-                MapaPrueba.resetInfoWindows();
-                Marcador = new GMarker(Informacion.Placemark.coordinates);
-                PlantillaMensajeVentana = "<center>" + Informacion.Placemark.address + "</center>";
-                MuestraUbicacionEnMapa(Marcador.point.lat, Marcador.point.lng, PlantillaMensajeVentana, 17);
-            }
-        }
+        //    if (!string.IsNullOrEmpty(txtBusquedaUbicacion.Text))
+        //    {
+        //        string key = ConfigurationManager.AppSettings.Get("googlemaps.subgurim.net");
+        //        GeoCode Informacion = GMap.geoCodeRequest(txtBusquedaUbicacion.Text, key, new GLatLngBounds(new GLatLng(40, 10), new GLatLng(50, 20)));
+        //        MapaPrueba.resetInfoWindows();
+        //        Marcador = new GMarker(Informacion.Placemark.coordinates);
+        //        PlantillaMensajeVentana = "<center>" + Informacion.Placemark.address + "</center>";
+        //        MuestraUbicacionEnMapa(Marcador.point.lat, Marcador.point.lng, PlantillaMensajeVentana, 17);
+        //    }
+        //}
 
         protected void btnMiUbicacion_Click(object sender, EventArgs e)
         {
@@ -2809,44 +2805,44 @@ namespace WebApplication1.Vista
 
         protected void btnRadioMarcador_Click(object sender, EventArgs e)
         {
-            string[] Alfabeto = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
+            //string[] Alfabeto = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
 
-            for (int i = 0; i < txtRadio.Text.Length; i++)
-            {
-                for (int j = 0; j < Alfabeto.Length; j++)
-                {
-                    if (txtRadio.Text.Substring(i, 1) == Alfabeto[j])
-                    {
-                        txtRadio.BorderColor = Color.Red;
-                        txtRadio.ToolTip = "El campo solo acepta numeros decimales";
-                        break;
-                    }
-                }
-            }
+            //for (int i = 0; i < txtRadio.Text.Length; i++)
+            //{
+            //    for (int j = 0; j < Alfabeto.Length; j++)
+            //    {
+            //        if (txtRadio.Text.Substring(i, 1) == Alfabeto[j])
+            //        {
+            //            txtRadio.BorderColor = Color.Red;
+            //            txtRadio.ToolTip = "El campo solo acepta numeros decimales";
+            //            break;
+            //        }
+            //    }
+            //}
 
 
-            double latitud = double.Parse(Session["DbLatitud"].ToString());
-            double longitud = double.Parse(Session["DbLongitud"].ToString());
-            var earthsradius = 6376;
-            var d2r = Math.PI / 180;   // degrees to radians
-            var r2d = 180 / Math.PI;   // radians to degrees
-            double radio = double.Parse(txtRadio.Text);
-            var rlatitud = (radio / earthsradius) * r2d;
-            var rLongitud = rlatitud / Math.Cos(double.Parse(Session["DbLatitud"].ToString()) * d2r);
-            List<GLatLng> puntos = new List<GLatLng>();
-            for (int i = 0; i < radio; i++)
-            {
-                double theta = Math.PI * (i / (double)(radio / 2));
-                double ex = rLongitud + (rLongitud * Math.Cos(theta));
-                double ey = rlatitud + (rlatitud * Math.Sin(theta));
-                puntos.Add(new GLatLng(ey, ex));
-            }
+            //double latitud = double.Parse(Session["DbLatitud"].ToString());
+            //double longitud = double.Parse(Session["DbLongitud"].ToString());
+            //var earthsradius = 6376;
+            //var d2r = Math.PI / 180;   // degrees to radians
+            //var r2d = 180 / Math.PI;   // radians to degrees
+            //double radio = double.Parse(txtRadio.Text);
+            //var rlatitud = (radio / earthsradius) * r2d;
+            //var rLongitud = rlatitud / Math.Cos(double.Parse(Session["DbLatitud"].ToString()) * d2r);
+            //List<GLatLng> puntos = new List<GLatLng>();
+            //for (int i = 0; i < radio; i++)
+            //{
+            //    double theta = Math.PI * (i / (double)(radio / 2));
+            //    double ex = rLongitud + (rLongitud * Math.Cos(theta));
+            //    double ey = rlatitud + (rlatitud * Math.Sin(theta));
+            //    puntos.Add(new GLatLng(ey, ex));
+            //}
 
-            GPolygon circulo = new GPolygon(puntos, Color.Red, 3, 1, Color.Red, 1);
-            circulo.createPolygon(new GLatLng(latitud, longitud), 20, radio);
-            circulo.close();
-            MapaPrueba.Add(circulo);
-            // MuestraUbicacionEnMapa()
+            //GPolygon circulo = new GPolygon(puntos, Color.Red, 3, 1, Color.Red, 1);
+            //circulo.createPolygon(new GLatLng(latitud, longitud), 20, radio);
+            //circulo.close();
+            ////MapaPrueba.Add(circulo);
+            //// MuestraUbicacionEnMapa()
 
 
         }

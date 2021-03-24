@@ -85,7 +85,7 @@ namespace Modelo
                 Comando.Parameters.Add("@VchNombre", SqlDbType.VarChar, 50);
                 Comando.Parameters["@VchNombre"].Value = Objeto.STRNOMBRE;
 
-                Comando.Parameters.Add("@VchDescripcion", SqlDbType.VarChar, 300);
+                Comando.Parameters.Add("@VchDescripcion", SqlDbType.VarChar, 3000);
                 Comando.Parameters["@VchDescripcion"].Value = Objeto.STRDESCRIPCION;
 
                 Comando.Parameters.Add("@UidEmpresa", SqlDbType.UniqueIdentifier);

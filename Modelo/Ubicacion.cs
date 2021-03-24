@@ -53,9 +53,11 @@ namespace Modelo
 
                 Comando.Parameters.Add("@UidUbicacion", SqlDbType.UniqueIdentifier);
                 Comando.Parameters["@UidUbicacion"].Value = UID;
-
-                Comando.Parameters.Add("@uidPropietario", SqlDbType.UniqueIdentifier);
-                Comando.Parameters["@uidPropietario"].Value = uidPropietario;
+                if (uidPropietario != Guid.Empty)
+                {
+                    Comando.Parameters.Add("@uidPropietario", SqlDbType.UniqueIdentifier);
+                    Comando.Parameters["@uidPropietario"].Value = uidPropietario;
+                }
 
                 Comando.Parameters.Add("@VchLatitud", SqlDbType.VarChar, 500);
                 Comando.Parameters["@VchLatitud"].Value = VchLatitud;

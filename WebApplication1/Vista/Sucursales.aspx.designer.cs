@@ -843,67 +843,31 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.Panel PanelUbicacion;
 
         /// <summary>
-        /// txtRadio control.
+        /// LblUidUbicacion control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtRadio;
+        protected global::System.Web.UI.WebControls.Label LblUidUbicacion;
 
         /// <summary>
-        /// btnRadioMarcador control.
+        /// txtLongitud control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnRadioMarcador;
+        protected global::System.Web.UI.WebControls.TextBox txtLongitud;
 
         /// <summary>
-        /// txtUidUbicacion control.
+        /// TxtLatitud control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtUidUbicacion;
-
-        /// <summary>
-        /// txtBusquedaUbicacion control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtBusquedaUbicacion;
-
-        /// <summary>
-        /// btnBuscarUbicacion control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnBuscarUbicacion;
-
-        /// <summary>
-        /// btnMiUbicacion control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnMiUbicacion;
-
-        /// <summary>
-        /// MapaPrueba control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Subgurim.Controles.GMap MapaPrueba;
+        protected global::System.Web.UI.WebControls.TextBox TxtLatitud;
 
         /// <summary>
         /// pnlContacto control.

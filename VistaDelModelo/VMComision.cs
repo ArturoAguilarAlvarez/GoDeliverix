@@ -40,9 +40,9 @@ namespace VistaDelModelo
             set { _strNombreTipo = value; }
         }
 
-        private int _FValor;
+        private decimal _FValor;
 
-        public int FValor
+        public decimal FValor
         {
             get { return _FValor; }
             set { _FValor = value; }
@@ -141,7 +141,7 @@ namespace VistaDelModelo
             foreach (DataRow item in oComosion.ObtenerComisionPasarelaDeCobro(StrNombreProvedor).Rows)
             {
                 UidComision = new Guid(item["UidComisionPasarela"].ToString());
-                FValor = int.Parse(item["IntComisionUsoPasarela"].ToString());
+                FValor = decimal.Parse(item["IntComisionUsoPasarela"].ToString());
             }
         }
         public bool ActualizaComisionTarjeta(int valorComision, string Comision)

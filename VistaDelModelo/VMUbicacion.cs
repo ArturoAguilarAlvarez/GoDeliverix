@@ -46,12 +46,19 @@ namespace VistaDelModelo
         /// <returns></returns>
         public bool GuardaUbicacionsucursal(Guid UidSucursal, Guid UidUbicacion, string LATITUD, string LONGITUD)
         {
-            Datos.EliminarUbicacionSucursal(UidSucursal);
             oUbicacion = new Ubicacion();
             oUbicacion.UID = UidUbicacion;
             oUbicacion.VchLatitud = LATITUD;
             oUbicacion.VchLongitud = LONGITUD;
             return oUbicacion.Guardar("asp_AgregaUbicacionSucursal", UidSucursal);
+        }
+        public bool actualizaUbicacion(Guid UidUbicacion, string LATITUD, string LONGITUD)
+        {
+            oUbicacion = new Ubicacion();
+            oUbicacion.UID = UidUbicacion;
+            oUbicacion.VchLatitud = LATITUD;
+            oUbicacion.VchLongitud = LONGITUD;
+            return oUbicacion.Guardar("asp_actualizarUbicacion", Guid.Empty);
         }
         /// <summary>
         /// Guarda la  ubicacion de una direccion

@@ -515,10 +515,11 @@
                                         <asp:TextBox ID="txtDReferencia" TextMode="MultiLine" MaxLength="500" Columns="20" Rows="5" runat="server" CssClass="form-control"></asp:TextBox>
                                     </div>
                                 </asp:Panel>
-                                <%-- Panel de ubicacion --%><asp:Panel ID="PanelUbicacion" runat="server">
+                                <%-- Panel de ubicacion --%>
+                                <asp:Panel ID="PanelUbicacion" runat="server">
 
-                                    <%-- Funcion de javaScript para mandar la latitud y longitud a los campos de texto corresponientes --%>
-                                    <div class="col-md-3">
+                                    <%--                                    <%-- Funcion de javaScript para mandar la latitud y longitud a los campos de texto corresponientes --%>
+                                    <%--<div class="col-md-3">
                                         <label>Radio de alcance(KM)</label>
                                         <div class=" input-group">
                                             <asp:TextBox CssClass="form-control" ID="txtRadio" runat="server" ToolTip="Kilometros" TextMode="Number" />
@@ -547,8 +548,18 @@
                                         <div class="container-fluid">
                                             <cc1:GMap ID="MapaPrueba" enableServerEvents="true" OnMarkerClick="MapaPrueba_MarkerClick" Width="100%" runat="server" />
                                         </div>
+                                    </div>--%>
+                                    <div class="row">
+                                        <asp:Label ID="LblUidUbicacion" Visible="false" runat="server" />
+                                        <div class="col-md-6">
+                                            <h6>Longitud</h6>
+                                            <asp:TextBox ID="txtLongitud" runat="server" CssClass="form-control"></asp:TextBox>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>Latitud</h6>
+                                            <asp:TextBox ID="TxtLatitud" runat="server" CssClass="form-control"></asp:TextBox>
+                                        </div>
                                     </div>
-
                                     <%-- AIzaSyAnrh2zheeNGeywmv1YVwddIeKgLMCWRN0 API Key Google Maps --%>
                                 </asp:Panel>
 
@@ -998,45 +1009,45 @@
                                     </asp:GridView>
                                 </div>
                             </asp:Panel>
-                            
-                        <%--Panel de servicio a clientes--%>
-                        <asp:Panel ID="PanelAtencionAClientes" runat="server">
-                            <div class="col-md-12">
 
-                                <h4>Mensaje</h4>
-                                <asp:TextBox TextMode="MultiLine" Rows="5" CssClass="form-control" ID="txtMensaje" runat="server" />
-                                <div class="pull-right" style="margin-top: 10px">
-                                    <asp:LinkButton CssClass="btn btn-sm btn-success" ID="btnAgregarMensaje" OnClick="btnAgregarMensaje_Click" ToolTip="Agregar" runat="server">
+                            <%--Panel de servicio a clientes--%>
+                            <asp:Panel ID="PanelAtencionAClientes" runat="server">
+                                <div class="col-md-12">
+
+                                    <h4>Mensaje</h4>
+                                    <asp:TextBox TextMode="MultiLine" Rows="5" CssClass="form-control" ID="txtMensaje" runat="server" />
+                                    <div class="pull-right" style="margin-top: 10px">
+                                        <asp:LinkButton CssClass="btn btn-sm btn-success" ID="btnAgregarMensaje" OnClick="btnAgregarMensaje_Click" ToolTip="Agregar" runat="server">
                                                 <span class="glyphicon glyphicon-plus"></span>
                                             <i>Agregar</i>
-                                    </asp:LinkButton>
+                                        </asp:LinkButton>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-12">
-                                <asp:GridView runat="server" OnRowCommand="DgvMensajes_RowCommand" DataKeyNames="Uid" AutoGenerateColumns="false" Style="margin-top: 10px" ID="DgvMensajes" CssClass="table table-bordered table-hover table-condensed table-striped input-sm">
-                                    <EmptyDataTemplate>
-                                        Sin mensajes para clientes
+                                <div class="col-md-12">
+                                    <asp:GridView runat="server" OnRowCommand="DgvMensajes_RowCommand" DataKeyNames="Uid" AutoGenerateColumns="false" Style="margin-top: 10px" ID="DgvMensajes" CssClass="table table-bordered table-hover table-condensed table-striped input-sm">
+                                        <EmptyDataTemplate>
+                                            Sin mensajes para clientes
                                        
-                                    </EmptyDataTemplate>
-                                    <EmptyDataRowStyle CssClass="text-center" />
-                                    <SelectedRowStyle CssClass="table table-hover input-sm success" />
-                                    <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />
-                                    <Columns>
-                                        <asp:ButtonField CommandName="Select" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" />
-                                        <asp:BoundField DataField="StrMensaje" HeaderText="Mensaje" />
+                                        </EmptyDataTemplate>
+                                        <EmptyDataRowStyle CssClass="text-center" />
+                                        <SelectedRowStyle CssClass="table table-hover input-sm success" />
+                                        <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />
+                                        <Columns>
+                                            <asp:ButtonField CommandName="Select" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" />
+                                            <asp:BoundField DataField="StrMensaje" HeaderText="Mensaje" />
 
 
-                                        <asp:TemplateField ItemStyle-CssClass="text-center" HeaderStyle-CssClass="text-center" HeaderText="Acciones">
-                                            <ItemTemplate>
-                                                <asp:LinkButton ID="btnInfoContacto" CommandName="Eliminar" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" ToolTip="Eliminar" CssClass="btn btn-sm btn-default" runat="server">
+                                            <asp:TemplateField ItemStyle-CssClass="text-center" HeaderStyle-CssClass="text-center" HeaderText="Acciones">
+                                                <ItemTemplate>
+                                                    <asp:LinkButton ID="btnInfoContacto" CommandName="Eliminar" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" ToolTip="Eliminar" CssClass="btn btn-sm btn-default" runat="server">
                                                         <span class="glyphicon glyphicon-trash"></span>
-                                                </asp:LinkButton>
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
-                                    </Columns>
-                                </asp:GridView>
-                            </div>
-                        </asp:Panel>
+                                                    </asp:LinkButton>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                        </Columns>
+                                    </asp:GridView>
+                                </div>
+                            </asp:Panel>
                         </div>
 
                     </div>
