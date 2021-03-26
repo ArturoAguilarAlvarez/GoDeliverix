@@ -320,7 +320,8 @@ namespace WebApplication1.Controllers
                     p.MTotal,
                     p.MTotalSucursal,
                     p.MCostoTarifario,
-                    p.VisibilidadNota
+                    p.VisibilidadNota,
+                    p.StrNota
                 })
             };
             return Json(result);

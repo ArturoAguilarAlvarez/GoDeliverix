@@ -11,7 +11,22 @@ namespace WebApplication1
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            Response.Redirect("Vista/Default/");
+            var plataforma = Request.UserAgent;
+            switch (plataforma)
+            {
+                case "Android":
+                    Response.Redirect("https://play.google.com/store/apps/details?id=com.CompuAndSoft.GDCliente");
+                    break;
+                case "iPad":
+                    Response.Redirect("http://appstore.com/compuandsoft/godeliverix");
+                    break;
+                case "iPhone":
+                    Response.Redirect("http://appstore.com/compuandsoft/godeliverix");
+                    break;
+                default:
+                    Response.Redirect("Vista/Default/");
+                    break;
+            }
         }
     }
 }
