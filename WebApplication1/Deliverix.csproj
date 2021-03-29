@@ -511,6 +511,7 @@
     <Compile Include="Controllers\v2\v2AddressesController.cs" />
     <Compile Include="Controllers\v2\v2AuthController.cs" />
     <Compile Include="Controllers\v2\v2CategoriesController.cs" />
+    <Compile Include="Controllers\v2\v2CodesController.cs" />
     <Compile Include="Controllers\v2\v2LocationsController.cs" />
     <Compile Include="Controllers\v2\v2ProductsController.cs" />
     <Compile Include="Controllers\v2\v2ProfilesController.cs" />
@@ -749,6 +750,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj">
+      <Project>{4AF8BA98-8F25-4C67-A972-E61B2B370F02}</Project>
+      <Name>DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Modelo\Modelo.csproj">
       <Project>{1BBD5430-599E-4CD5-8FE8-9D771CD8FBCD}</Project>
       <Name>Modelo</Name>

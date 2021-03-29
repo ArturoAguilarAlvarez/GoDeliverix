@@ -35,6 +35,7 @@
       <HintPath>..\packages\Dapper.1.50.1\lib\net45\Dapper.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -47,8 +48,12 @@
     <Compile Include="AddressDb.cs" />
     <Compile Include="AuthDb.cs" />
     <Compile Include="Common\BaseDapper.cs" />
+    <Compile Include="Entities\SignInRewardCodesConfig.cs" />
+    <Compile Include="Entities\UserSignInRewardCode.cs" />
+    <Compile Include="Entities\UserSignInRewardCodeLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserDb.cs" />
+    <Compile Include="UserSignInRewardCodeDb.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
