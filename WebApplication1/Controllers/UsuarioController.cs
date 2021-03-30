@@ -12,6 +12,13 @@ namespace WebApplication1.Controllers
     {
         VMUsuarios MVUsuario;
         ResponseHelper Respuesta;
+        private CodesViewModel VmCodes { get; }
+
+        public UsuarioController()
+        {
+            this.VmCodes = new CodesViewModel();
+        }
+
         // GET: api/Profile/5
         public ResponseHelper GetBuscarUsuarios(string UidUsuario = "", string UidEmpresa = "", string NOMBRE = "", string USER = "", string APELLIDO = "", string ESTATUS = "", string UIDPERFIL = "")
         {
@@ -92,7 +99,7 @@ namespace WebApplication1.Controllers
                 UidSucursal = Guid.Empty.ToString();
             }
             MVUsuario = new VMUsuarios();
-            MVUsuario.GuardaUsuario(new Guid(UidUsuario), Nombre, ApellidoPaterno,  usuario, password, fnacimiento, perfil, estatus, TIPODEUSUARIO, new Guid(UidEmpresa), new Guid(UidSucursal), ApellidoMaterno);
+            MVUsuario.GuardaUsuario(new Guid(UidUsuario), Nombre, ApellidoPaterno, usuario, password, fnacimiento, perfil, estatus, TIPODEUSUARIO, new Guid(UidEmpresa), new Guid(UidSucursal), ApellidoMaterno);
 
             Respuesta = new ResponseHelper();
 
@@ -218,7 +225,7 @@ namespace WebApplication1.Controllers
             if (!string.IsNullOrEmpty(UidUsuario) && UidUsuario != Guid.Empty.ToString())
             {
                 var viewmodelCorreo = new VMCorreoElectronico();
-                viewmodelCorreo.BuscarCorreos(UidPropietario: new Guid(UidUsuario),strParametroDebusqueda: "Usuario");
+                viewmodelCorreo.BuscarCorreos(UidPropietario: new Guid(UidUsuario), strParametroDebusqueda: "Usuario");
                 var viewmodelTelefono = new VMTelefono();
                 viewmodelTelefono.BuscarTelefonos(UidPropietario: new Guid(UidUsuario), ParadetroDeBusqueda: "Usuario");
 
@@ -259,14 +266,21 @@ namespace WebApplication1.Controllers
             return Request.CreateResponse("Correo enviado");
         }
 
-        public HttpResponseMessage GetGuardarusuarioCliente_Movil(string UidUsuario, string nombre, string apellidoP,  string usuario, string contrasena, string fechaNacimiento)
+        public HttpResponseMessage GetGuardarusuarioCliente_Movil(string UidUsuario, string nombre, string apellidoP, string usuario, string contrasena, string fechaNacimiento, string codigoPromocion = "None")
         {
             ResponseHelper respuesta = new ResponseHelper();
             VMUsuarios MVUsuarios = new VMUsuarios();
             VMAcceso MVAcceso = new VMAcceso();
 
             Guid uidusuaro = new Guid(UidUsuario);
-            respuesta.Data = MVUsuarios.GuardaUsuario(UidUsuario: uidusuaro, Nombre: nombre, ApellidoPaterno: apellidoP,  usuario: usuario, password: contrasena, fnacimiento: fechaNacimiento, perfil: "4f1e1c4b-3253-4225-9e46-dd7d1940da19", estatus: "1", TIPODEUSUARIO: "Cliente");
+            bool resultado = MVUsuarios.GuardaUsuario(UidUsuario: uidusuaro, Nombre: nombre, ApellidoPaterno: apellidoP, usuario: usuario, password: contrasena, fnacimiento: fechaNacimiento, perfil: "4f1e1c4b-3253-4225-9e46-dd7d1940da19", estatus: "1", TIPODEUSUARIO: "Cliente");
+
+            if ((!string.IsNullOrEmpty(codigoPromocion.Trim()) || codigoPromocion != "None") && resultado)
+            {
+                this.VmCodes.VerifyAndApplySignInCode(uidusuaro, codigoPromocion);
+            }
+
+            respuesta.Data = resultado;
             return Request.CreateResponse();
         }
 

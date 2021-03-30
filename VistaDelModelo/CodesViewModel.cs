@@ -27,7 +27,10 @@ namespace VistaDelModelo
         {
             return this.SignInRewardCodeDb.GetByUserUid(uid);
         }
-
+        public int VerifyAndApplySignInCode(Guid uidUser,string code)
+        {
+            return this.SignInRewardCodeDb.VerifyAndApplyCode(uidUser, code);
+        }
         #endregion
     }
 }

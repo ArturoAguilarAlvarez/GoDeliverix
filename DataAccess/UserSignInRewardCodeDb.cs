@@ -41,6 +41,11 @@ namespace DataAccess
             }
         }
 
+        /// <summary>
+        /// Obtener datos del codigo de promocion de registro del usuario
+        /// </summary>
+        /// <param name="uid"></param>
+        /// <returns></returns>
         public UserSignInRewardCode GetByUserUid(Guid uid)
         {
             string query = "sp_UserSignInRewardCode_FindByUserId";
@@ -49,6 +54,20 @@ namespace DataAccess
             parameters.Add("@UserUid", uid);
 
             return this.QuerySingleOrDefault<UserSignInRewardCode>(query, parameters, System.Data.CommandType.StoredProcedure);
+        }
+
+        public int VerifyAndApplyCode(Guid uid, string code)
+        {
+            string query = "sp_UserSignInRewardCode_VerifyAndApply";
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@UidUser", uid);
+            parameters.Add("@Code", code);
+            parameters.Add("@Result", dbType: System.Data.DbType.Int32, direction: System.Data.ParameterDirection.Output);
+
+            this.Execute(query, parameters, System.Data.CommandType.StoredProcedure);
+
+            return parameters.Get<int>("@Result");
         }
     }
 }
