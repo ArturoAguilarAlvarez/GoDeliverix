@@ -133,9 +133,12 @@
 
     <script>
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            // true for mobile device
-            location.href ="http://godeliverix.com/"
+            if (/Android/i.test(navigator.userAgent)) {
+                location.href = "https://play.google.com/store/apps/details?id=com.CompuAndSoft.GDCliente";
+            } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                location.href = "https://apps.apple.com/app/godeliverix/id1495911877";
+            }            
         }
-</script>
+    </script>
 </body>
 </html>
