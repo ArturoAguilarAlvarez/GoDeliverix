@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="AddressViewModel.cs" />
     <Compile Include="AuthenticationViewModel.cs" />
+    <Compile Include="CodesViewModel.cs" />
     <Compile Include="DealersViewModel.cs" />
     <Compile Include="NotificationViewModel.cs" />
     <Compile Include="OrderViewModel.cs" />

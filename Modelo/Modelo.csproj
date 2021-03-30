@@ -95,8 +95,10 @@
     <Compile Include="Dia.cs" />
     <Compile Include="Direccion.cs" />
     <Compile Include="Empresa.cs" />
+    <Compile Include="Enums\CodeRewardType.cs" />
     <Compile Include="Enums\NotificationTarget.cs" />
     <Compile Include="Enums\NotificationType.cs" />
+    <Compile Include="Enums\UserWebSharedCodeLogType.cs" />
     <Compile Include="Estatus.cs" />
     <Compile Include="Giro.cs" />
     <Compile Include="Imagen.cs" />
