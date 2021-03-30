@@ -160,24 +160,24 @@ namespace WebApplication1
             if (IngresarAsync(txtUser.Text, txtPass.Text))
             {
                 //Crea el proceso para recordar la sesion en las cookies
-                if (chkRecuerdame.Checked == true)
-                {
-                    HttpCookie cookieUser = new HttpCookie("Usuario");
-                    HttpCookie cookiePass = new HttpCookie("Password");
-                    //Agrega tiempo en el que expira la coockie
-                    cookieUser.Expires = DateTime.Now.AddDays(30);
-                    cookiePass.Expires = DateTime.Now.AddDays(30);
-                    //Asigna el valor que va a contener la cookie
-                    cookieUser.Value = txtUser.Text;
-                    cookiePass.Value = txtPass.Text;
-                    Response.Cookies.Add(cookieUser);
-                    Response.Cookies.Add(cookiePass);
-                }
-                else
-                {
+                //if (chkRecuerdame.Checked == true)
+                //{
+                //    HttpCookie cookieUser = new HttpCookie("Usuario");
+                //    HttpCookie cookiePass = new HttpCookie("Password");
+                //    //Agrega tiempo en el que expira la coockie
+                //    cookieUser.Expires = DateTime.Now.AddDays(30);
+                //    cookiePass.Expires = DateTime.Now.AddDays(30);
+                //    //Asigna el valor que va a contener la cookie
+                //    cookieUser.Value = txtUser.Text;
+                //    cookiePass.Value = txtPass.Text;
+                //    Response.Cookies.Add(cookieUser);
+                //    Response.Cookies.Add(cookiePass);
+                //}
+                //else
+                //{
                     Response.Cookies["Usuario"].Expires = DateTime.Now.AddDays(-1);
                     Response.Cookies["Password"].Expires = DateTime.Now.AddDays(-1);
-                }
+                //}
                 Guid Perfil = new Guid(MVAcceso.PerfilDeUsuario(Session["IdUsuario"].ToString()));
                 if (Perfil == new Guid("4F1E1C4B-3253-4225-9E46-DD7D1940DA19"))
                 {

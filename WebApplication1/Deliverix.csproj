@@ -345,6 +345,8 @@
     <Content Include="Vista\Img\Categoria\908277495Ciencias.png" />
     <Content Include="Vista\Img\Categoria\Default.jpg" />
     <Content Include="Vista\Img\Default.jpg" />
+    <Content Include="Vista\Img\DownloadIcons\AppleStore.jpg" />
+    <Content Include="Vista\Img\DownloadIcons\GooglePlay.png" />
     <Content Include="Vista\Img\Iconos\D.png" />
     <Content Include="Vista\Img\Iconos\Contratado.png" />
     <Content Include="Vista\Img\Iconos\Contrato.png" />

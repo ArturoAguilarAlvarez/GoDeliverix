@@ -23,11 +23,11 @@
         <asp:ScriptManager runat="server" />
         <asp:UpdatePanel ID="PanelCentral" runat="server">
             <ContentTemplate>
-                <div class="col-lg-offset-1  col-lg-8 col-md-offset-2 col-md-6 col-md-offset-3 col-sm-11 col-xs-11" style="margin-top:70px; z-index:1;position:absolute">
+                <div class="col-lg-offset-1  col-lg-8 col-md-offset-2 col-md-6 col-md-offset-3 col-sm-11 col-xs-11" style="margin-top: 70px; z-index: 1; position: absolute">
                     <!-- Modal -->
-                    <asp:Panel id="PanelRecuperarContrasenia" runat="server" class="panel panel-primary" style="z-index:1; position:absolute;">
+                    <asp:Panel ID="PanelRecuperarContrasenia" runat="server" class="panel panel-primary" Style="z-index: 1; position: absolute;">
                         <div class="panel-heading">
-                            <asp:LinkButton runat="server" ID="BtnCerrarPanelRecuperarPassword" OnClick="BtnCerrarPanelRecuperarPassword_Click" CssClass="close" >&times;</asp:LinkButton>
+                            <asp:LinkButton runat="server" ID="BtnCerrarPanelRecuperarPassword" OnClick="BtnCerrarPanelRecuperarPassword_Click" CssClass="close">&times;</asp:LinkButton>
                             <h4 class="modal-title">Recuperar contraseña</h4>
                         </div>
                         <div class="panel-body">
@@ -49,7 +49,7 @@
                     </asp:Panel>
                 </div>
 
-                <div class="col-lg-offset-1 col-lg-10 col-md-offset-1 col-md-6" style="z-index:0; margin-top:-100px;">
+                <div class="col-lg-offset-1 col-lg-10 col-md-offset-1 col-md-6" style="z-index: 0; margin-top: -100px;">
                     <div class="panel panel-primary" style="align-content: center; margin-top: 5cm;">
                         <div class="panel-body text-center">
                             <asp:Panel ID="panelMensaje" Visible="false" runat="server">
@@ -82,7 +82,7 @@
                             <asp:LinkButton runat="server" CssClass=" form-control btn btn-success" OnClick="btnAcceso_Click" ID="btnAcceso">
                             <span class="glyphicon glyphicon-log-in"></span> Entrar
                             </asp:LinkButton>
-                            <div class="col-md-6" style="margin-top: 15px;">
+                            <%--<div class="col-md-6" style="margin-top: 15px;">
                                 <i>No tienes cuenta? 
                         <asp:LinkButton runat="server" CssClass=" btn btn-link" ID="BtnRegistro" OnClick="BtnRegistro_Click" >
                             <span class="glyphicon glyphicon-arrow-right"></span>
@@ -92,14 +92,20 @@
                                     <span class="glyphicon glyphicon-arrow-right"></span>
                                     Olvidaste tu contraseña?</asp:LinkButton>
                                 
-                            </div>
-                            <asp:CheckBox ID="chkRecuerdame" Text="Recuerdame" CssClass="checkbox" runat="server" />
+                            </div>--%>
+                            <%--                            <asp:CheckBox ID="chkRecuerdame" Text="Recuerdame" CssClass="checkbox" runat="server" />--%>
+                            <a href="https://play.google.com/store/apps/details?id=com.CompuAndSoft.GDCliente">
+                                <img src="../Img/DownloadIcons/GooglePlay.png" height="100" />
+                            </a>
+                            <a href="http://appstore.com/compuandsoft/godeliverix">
+                                <img src="../Img/DownloadIcons/AppleStore.jpg" height="88" />
+                            </a>
                         </div>
                         <div class="panel-footer">
                         </div>
                     </div>
                 </div>
-                
+
             </ContentTemplate>
         </asp:UpdatePanel>
         <asp:UpdateProgress AssociatedUpdatePanelID="PanelCentral" runat="server">
