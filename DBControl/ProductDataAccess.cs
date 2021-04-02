@@ -676,7 +676,7 @@ SELECT *, [Count] = COUNT (*) OVER() FROM (
 
         {filterJoin}
     WHERE   
-        @UserTime between se.VchHoraInicio and se.VchHoraFin 
+        1=1
 	    AND zd.UidColonia = @UidColonia 
         AND p.IntEstatus = 1 
         AND	D.VchNombre = @Dia 
