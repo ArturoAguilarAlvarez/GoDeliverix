@@ -266,7 +266,7 @@ namespace WebApplication1.Controllers
             return Request.CreateResponse("Correo enviado");
         }
 
-        public HttpResponseMessage GetGuardarusuarioCliente_Movil(string UidUsuario, string nombre, string apellidoP, string usuario, string contrasena, string fechaNacimiento, string codigoPromocion = "None")
+        public HttpResponseMessage GetGuardarusuarioCliente_Movil(string UidUsuario, string nombre, string apellidoP, string usuario, string contrasena, string fechaNacimiento, string codigoPromocion = "")
         {
             ResponseHelper respuesta = new ResponseHelper();
             VMUsuarios MVUsuarios = new VMUsuarios();
@@ -275,7 +275,7 @@ namespace WebApplication1.Controllers
             Guid uidusuaro = new Guid(UidUsuario);
             bool resultado = MVUsuarios.GuardaUsuario(UidUsuario: uidusuaro, Nombre: nombre, ApellidoPaterno: apellidoP, usuario: usuario, password: contrasena, fnacimiento: fechaNacimiento, perfil: "4f1e1c4b-3253-4225-9e46-dd7d1940da19", estatus: "1", TIPODEUSUARIO: "Cliente");
 
-            if ((!string.IsNullOrEmpty(codigoPromocion.Trim()) || codigoPromocion != "None") && resultado)
+            if (!string.IsNullOrEmpty(codigoPromocion.Trim()) && resultado)
             {
                 this.VmCodes.VerifyAndApplySignInCode(uidusuaro, codigoPromocion);
             }
