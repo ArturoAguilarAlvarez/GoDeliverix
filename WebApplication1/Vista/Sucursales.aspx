@@ -220,8 +220,7 @@
                 <div runat="server" id="PanelDerecho" class="col-md-9">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <h5>Gention de sucursal:
-                               
+                            <h5>Gention de sucursal:                               
                                 <asp:Label ID="txtNombreDeSucursal" runat="server" /></h5>
                         </div>
                         <div class="clearfix"></div>
@@ -806,27 +805,20 @@
                                             <label>Correo Electronico</label>
                                             <asp:HyperLink ID="HlnkCorreoElectronico" NavigateUrl="navigateurl" runat="server" />
                                         </div>
-
-                                    </div>
-                                    <div class="form-inline">
-                                        <div class="form-group">
-                                            <label>Comision de GoDeliverix</label>
-                                            <asp:Label ID="lblComisionGoDeliverix" runat="server" />
-                                        </div>
-                                    </div>
-                                    <div class="form-inline">
-                                        <div class="form-group">
-                                            <label>Comision sucursal distribuidora</label>
-                                            <asp:Label ID="lblComisionSucursal" runat="server" />
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Porcentaje de comision</label>
-                                        <asp:TextBox CssClass="form-control" ID="txtComisionProducto" OnTextChanged="txtComisionProducto_TextChanged" runat="server" />
                                     </div>
                                     <div class="form-group">
                                         <asp:CheckBox ID="ChbxPagoOrdenAlRecolectar" Style="margin: 0,5,0,0;" runat="server" />
                                         <label>Pagar ordenes al recolectar</label>
+                                    </div>
+                                    <div class="form-inline">
+                                        <div class="form-group">
+                                            <label>Comision por producto</label>
+                                            <asp:TextBox CssClass="form-control" ID="txtComisionProducto" OnTextChanged="txtComisionProducto_TextChanged" runat="server" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Comision por envio</label>
+                                            <asp:TextBox CssClass="form-control" ID="txtComisionEnvio" OnTextChanged="txtComisionEnvio_TextChanged" runat="server" />
+                                        </div>
                                     </div>
                                     <div class="clearfix"></div>
                                     <ul class="nav nav-tabs" style="margin-bottom: 5px;">

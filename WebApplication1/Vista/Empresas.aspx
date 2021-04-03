@@ -103,10 +103,6 @@
                                 <asp:Label ID="lblprueba" runat="server" />
                             </asp:Panel>
 
-
-
-
-
                             <asp:GridView runat="server" ID="DGVBUSQUEDAAMPLIADA" OnSorting="GridViewBusquedaAmplicada_Sorting" OnPreRender="GridViewPreRender" AllowSorting="true" Style="margin-top: 5px;" PageSize="10" CssClass="table table-bordered table-hover table-condensed table-striped input-sm" AutoGenerateColumns="false" DataKeyNames="UIDEMPRESA" OnRowDataBound="GVWEmpresaAmpliada_RowDataBound" OnSelectedIndexChanged="GVBusquedaAvanzadaEmpresa_SelectedIndexChanged" AllowPaging="True" OnPageIndexChanging="GridViewBusquedaAmpliada_PageIndexChanging">
                                 <EmptyDataTemplate>
                                     <div class="info">No hay coincidencia de busqueda</div>
@@ -296,12 +292,21 @@
                                     </asp:UpdatePanel>
                                 </div>
                                 <div class="pull-right">
-                                    <asp:LinkButton runat="server" ID="btnMostrarFiltros" OnClick="MostrarYOcultarFiltrosBusquedaNormal" CssClass="btn btn-sm btn-default">
-                                        <span class="glyphicon glyphicon-eye-open"></span>
-                                        <asp:Label ID="lblVisibilidadfiltros" runat="server" />
-                                    </asp:LinkButton>
-                                    <asp:LinkButton runat="server" ID="btnBorrarFiltros" OnClick="VaciarFiltros" CssClass="btn btn-sm btn-default disabled"><span class="glyphicon glyphicon-trash"></span> Limpiar</asp:LinkButton>
-                                    <asp:LinkButton runat="server" ID="btnBuscar" OnClick="BuscarEmpresasBusquedaNormal" CssClass="btn btn-sm btn-default disabled"><span class="glyphicon glyphicon-search"></span> Buscar</asp:LinkButton>
+                                    <asp:UpdatePanel runat="server">
+                                        <ContentTemplate>
+                                            <asp:LinkButton runat="server" ID="btnMostrarFiltros" OnClick="MostrarYOcultarFiltrosBusquedaNormal" CssClass="btn btn-sm btn-default">
+                                                <span class="glyphicon glyphicon-eye-open"></span>
+                                                <asp:Label ID="lblVisibilidadfiltros" runat="server" />
+                                            </asp:LinkButton>
+                                            <asp:LinkButton runat="server" ID="btnBorrarFiltros" OnClick="VaciarFiltros" CssClass="btn btn-sm btn-default disabled"><span class="glyphicon glyphicon-trash"></span> Limpiar</asp:LinkButton>
+                                            <asp:LinkButton runat="server" ID="btnBuscar" OnClick="BuscarEmpresasBusquedaNormal" CssClass="btn btn-sm btn-default disabled"><span class="glyphicon glyphicon-search"></span> Buscar</asp:LinkButton>
+                                        </ContentTemplate>
+                                        <Triggers>
+                                            <asp:PostBackTrigger ControlID="btnMostrarFiltros" />
+                                            <asp:PostBackTrigger ControlID="btnBorrarFiltros" />
+                                            <asp:PostBackTrigger ControlID="btnBuscar" />
+                                        </Triggers>
+                                    </asp:UpdatePanel>
                                 </div>
                             </div>
 
@@ -347,62 +352,69 @@
                                 </asp:Panel>
 
                                 <!-- GridView de empresas simple-->
-                                <div style="overflow-x: auto;" class="table-responsibe">
-                                    <asp:GridView runat="server" ID="DGVEMPRESAS" OnPreRender="GridViewPreRender" PageSize="10" AllowSorting="true" Style="margin-top: 5px;" OnSorting="DGVEMPRESASNORMAL_Sorting" CssClass="table table-bordered table-hover table-condensed table-striped input-sm" AutoGenerateColumns="false" DataKeyNames="UIDEMPRESA" OnRowDataBound="GVWEmpresaNormal_RowDataBound" OnSelectedIndexChanged="GVWEmpresaBusquedaNormal_SelectedIndexChanged" AllowPaging="True" OnPageIndexChanging="GridViewBusquedaNormal_PageIndexChanging" PagerSettings-Mode="NextPreviousFirstLast">
-                                        <EmptyDataTemplate>
-                                            <div class="info">Para ver información debe hacer una consulta </div>
-                                        </EmptyDataTemplate>
-                                        <SelectedRowStyle CssClass="table table-hover input-sm success" />
-                                        <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />
-                                        <Columns>
-                                            <asp:ButtonField CommandName="Select" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide">
-                                                <FooterStyle CssClass="hide" />
-                                                <HeaderStyle CssClass="hide" />
-                                                <ItemStyle CssClass="hide" />
-                                            </asp:ButtonField>
-                                            <asp:BoundField DataField="NOMBRECOMERCIAL" HeaderText="Nombre comercial" SortExpression="NOMBRECOMERCIAL" />
-                                            <asp:BoundField DataField="RFC" HeaderText="Rfc" SortExpression="Rfc" />
-                                            <asp:TemplateField HeaderText="Estatus" SortExpression="STATUS">
-                                                <ItemTemplate>
-                                                    <asp:Label ID="lblEstatus" CssClass="tooltip " data-toggle="tooltip" data-placement="top" data-html="true" runat="server" />
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-                                            <asp:BoundField DataField="StrEstatus" HeaderText="Estatus" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" />
-                                            <asp:TemplateField HeaderText="Tipo" SortExpression="Tipo">
-                                                <ItemTemplate>
-                                                    <asp:Label ID="lblTipo" Enabled="false" CssClass="tooltip" data-placement="top" data-html="true" data-toggle="tooltip" runat="server">
-                                                    </asp:Label>
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-                                            <asp:BoundField DataField="StrTipoDeEmpresa" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" />
-                                        </Columns>
-                                        <PagerSettings Mode="NextPreviousFirstLast" Position="Top" />
-                                        <PagerStyle HorizontalAlign="Center" />
-                                        <PagerTemplate>
+                                <asp:UpdatePanel runat="server">
+                                    <ContentTemplate>
+                                        <div style="overflow-x: auto;" class="table-responsibe">
+                                            <asp:GridView runat="server" ID="DGVEMPRESAS" OnPreRender="GridViewPreRender" PageSize="10" AllowSorting="true" Style="margin-top: 5px;" OnSorting="DGVEMPRESASNORMAL_Sorting" CssClass="table table-bordered table-hover table-condensed table-striped input-sm" AutoGenerateColumns="false" DataKeyNames="UIDEMPRESA" OnRowDataBound="GVWEmpresaNormal_RowDataBound" OnSelectedIndexChanged="GVWEmpresaBusquedaNormal_SelectedIndexChanged" AllowPaging="True" OnPageIndexChanging="GridViewBusquedaNormal_PageIndexChanging" PagerSettings-Mode="NextPreviousFirstLast">
+                                                <EmptyDataTemplate>
+                                                    <div class="info">Para ver información debe hacer una consulta </div>
+                                                </EmptyDataTemplate>
+                                                <SelectedRowStyle CssClass="table table-hover input-sm success" />
+                                                <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />
+                                                <Columns>
+                                                    <asp:ButtonField CommandName="Select" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide">
+                                                        <FooterStyle CssClass="hide" />
+                                                        <HeaderStyle CssClass="hide" />
+                                                        <ItemStyle CssClass="hide" />
+                                                    </asp:ButtonField>
+                                                    <asp:BoundField DataField="NOMBRECOMERCIAL" HeaderText="Nombre comercial" SortExpression="NOMBRECOMERCIAL" />
+                                                    <asp:BoundField DataField="RFC" HeaderText="Rfc" SortExpression="Rfc" />
+                                                    <asp:TemplateField HeaderText="Estatus" SortExpression="STATUS">
+                                                        <ItemTemplate>
+                                                            <asp:Label ID="lblEstatus" CssClass="tooltip " data-toggle="tooltip" data-placement="top" data-html="true" runat="server" />
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:BoundField DataField="StrEstatus" HeaderText="Estatus" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" />
+                                                    <asp:TemplateField HeaderText="Tipo" SortExpression="Tipo">
+                                                        <ItemTemplate>
+                                                            <asp:Label ID="lblTipo" Enabled="false" CssClass="tooltip" data-placement="top" data-html="true" data-toggle="tooltip" runat="server">
+                                                            </asp:Label>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:BoundField DataField="StrTipoDeEmpresa" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" />
+                                                </Columns>
+                                                <PagerSettings Mode="NextPreviousFirstLast" Position="Top" />
+                                                <PagerStyle HorizontalAlign="Center" />
+                                                <PagerTemplate>
 
-                                            <table class="text-center">
-                                                <tr>
+                                                    <table class="text-center">
+                                                        <tr>
 
-                                                    <td>
-                                                        <asp:ImageButton ImageUrl="~/Vista/Img/FlechasDoblesIzquierda.png" ID="btnPrimero" runat="server" CommandName="Page" CommandArgument="First" />
-                                                        <asp:ImageButton ImageUrl="~/Vista/Img/FechaIzquierda.png" ID="btnAnterior" runat="server" CommandName="Page" CommandArgument="Prev" />
+                                                            <td>
+                                                                <asp:ImageButton ImageUrl="~/Vista/Img/FlechasDoblesIzquierda.png" ID="btnPrimero" runat="server" CommandName="Page" CommandArgument="First" />
+                                                                <asp:ImageButton ImageUrl="~/Vista/Img/FechaIzquierda.png" ID="btnAnterior" runat="server" CommandName="Page" CommandArgument="Prev" />
 
-                                                        <asp:Label ID="lblTotalDeRegistros" runat="server" />
-                                                        <asp:ImageButton ImageUrl="~/Vista/Img/FechaDerecha.png" ID="btnSiguiente" runat="server" CommandName="Page" CommandArgument="Next" />
-                                                        <asp:ImageButton ImageUrl="~/Vista/Img/FlechasDoblesDerecha.png" ID="btnUltimo" runat="server" CommandName="Page" CommandArgument="Last" />
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Pagina
+                                                                <asp:Label ID="lblTotalDeRegistros" runat="server" />
+                                                                <asp:ImageButton ImageUrl="~/Vista/Img/FechaDerecha.png" ID="btnSiguiente" runat="server" CommandName="Page" CommandArgument="Next" />
+                                                                <asp:ImageButton ImageUrl="~/Vista/Img/FlechasDoblesDerecha.png" ID="btnUltimo" runat="server" CommandName="Page" CommandArgument="Last" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Pagina
                                                      
                                                         <asp:DropDownList runat="server" ID="DDLDNUMERODEPAGINAS" AutoPostBack="true" OnTextChanged="PaginaSeleccionadaBusquedaNormal" OnSelectedIndexChanged="PaginaSeleccionadaBusquedaNormal">
                                                         </asp:DropDownList>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </PagerTemplate>
-                                    </asp:GridView>
-                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </PagerTemplate>
+                                            </asp:GridView>
+                                    </ContentTemplate>
+                                    <Triggers>
+                                        <asp:PostBackTrigger ControlID="DGVEMPRESAS" />
+                                    </Triggers>
+                                </asp:UpdatePanel>
+
                             </div>
                         </div>
                     </asp:Panel>
@@ -464,6 +476,12 @@
                                     <asp:LinkButton runat="server" ID="btnCancelar" OnClick="CancelarAgregacion" CssClass="btn btn-sm btn-danger "><asp:label CssClass=" glyphicon glyphicon-remove" runat="server" /></asp:LinkButton><asp:Label runat="server" ID="lblEstado"></asp:Label>
                                 </div>
                             </ContentTemplate>
+                            <Triggers>
+                                <asp:PostBackTrigger ControlID="btnNuevo" />
+                                <asp:PostBackTrigger ControlID="btnEditar" />
+                                <asp:PostBackTrigger ControlID="btnGuardar" />
+                                <asp:PostBackTrigger ControlID="btnCancelar" />
+                            </Triggers>
                         </asp:UpdatePanel>
                     </div>
                     <div class="clearfix"></div>
@@ -492,6 +510,12 @@
                                         <asp:LinkButton runat="server" ID="btnDatosComision" OnClick="PanelCoMision"><span class="glyphicon glyphicon-phone"></span> COMISIONES</asp:LinkButton></li>
                                 </ul>
                             </ContentTemplate>
+                            <Triggers>
+                                <asp:PostBackTrigger ControlID="btnDatosGenerales" />
+                                <asp:PostBackTrigger ControlID="btnDatosDireccion" />
+                                <asp:PostBackTrigger ControlID="btnDatosDeConectado" />
+                                <asp:PostBackTrigger ControlID="btnDatosComision" />
+                            </Triggers>
                         </asp:UpdatePanel>
 
                         <asp:UpdatePanel runat="server">
@@ -652,13 +676,23 @@
 
                                 </asp:Panel>
                                 <asp:Panel ID="PnlComisiones" runat="server">
-                                    <div class="col-md-6">
-                                        <h6>Incluir comisión de pago con tarjeta </h6>
-                                        <asp:CheckBox ID="chkbxComisionTarjeta" runat="server" />
-                                    </div>
-                                    <div class="col-md-6" id="panelComisionGoDeliverix" runat="server">
-                                        <h6>Incluir comisión de GoDeliverix </h6>
-                                        <asp:CheckBox ID="chkbxComision" runat="server" />
+                                    <div class="row container-fluid">
+                                        <div class="col-md-6">
+                                            <h6>Incluir comisión de pago con tarjeta </h6>
+                                            <asp:CheckBox ID="chkbxComisionTarjeta" runat="server" />
+                                        </div>
+                                        <div class="col-md-6" id="panelComisionGoDeliverix" runat="server">
+                                            <h6>Incluir comisión de GoDeliverix </h6>
+                                            <asp:CheckBox ID="chkbxComision" runat="server" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>Comisión por productos</h6>
+                                            <asp:TextBox ID="txtComisionProductos" CssClass="form-control" runat="server" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>Comisión por envio</h6>
+                                            <asp:TextBox ID="txtComisionEnvio" CssClass="form-control" runat="server" />
+                                        </div>
                                     </div>
                                 </asp:Panel>
                             </ContentTemplate>
@@ -670,9 +704,7 @@
 
                     </div>
                 </div>
+            </div>
+
         </div>
-
-    </div>
-
-
 </asp:Content>

@@ -15,10 +15,10 @@ namespace DBControl
         public DataTable RecuperarRelacionContrato(string UidSucursal)
         {
             oConexion = new Conexion();
-            string query = "select UidContrato, UidSucursalSuministradora, UidSucursalDistribuidora, DtmFechaDeCreacion, UidEstatusContrato, BlConfirmacionSuministradora, BlConfirmacionDistribuidora, BiPagaAlRecogerOrdenes, ComisionBackSite, DiferenciaComisionDistribuidora, ComisionDistribuidora from ContratoDeServicio where UidSucursalSuministradora = '" + UidSucursal + "' or UidSucursalDistribuidora = '" + UidSucursal + "'";
+            string query = "select UidContrato, UidSucursalSuministradora, UidSucursalDistribuidora, DtmFechaDeCreacion, UidEstatusContrato, BlConfirmacionSuministradora, BlConfirmacionDistribuidora, BiPagaAlRecogerOrdenes,ComisionTotalEnvio,ComisionTotalProducto from ContratoDeServicio where UidSucursalSuministradora = '" + UidSucursal + "' or UidSucursalDistribuidora = '" + UidSucursal + "'";
             return oConexion.Consultas(query);
         }
-        public bool GuardaRelacionDeContrato(Guid UidContrato, Guid uidSucursalSumunistradora, Guid uidSucursalDistribuidora, Guid UidEstatus, bool confirmacionSuministradora, bool ConfirmacionDistribuidora, bool PagoAlRecolectar, int ComisionDeProducto)
+        public bool GuardaRelacionDeContrato(Guid UidContrato, Guid uidSucursalSumunistradora, Guid uidSucursalDistribuidora, Guid UidEstatus, bool confirmacionSuministradora, bool ConfirmacionDistribuidora, bool PagoAlRecolectar, int ComisionDeEnvio, int ComisiondeProducto)
         {
             oConexion = new Conexion();
             bool resultado = false;
@@ -49,8 +49,11 @@ namespace DBControl
                 cmd.Parameters.Add("@BiPagaAlRecogerOrdenes", SqlDbType.Bit);
                 cmd.Parameters["@BiPagaAlRecogerOrdenes"].Value = PagoAlRecolectar;
 
-                cmd.Parameters.Add("@ComisionContrato", SqlDbType.Int);
-                cmd.Parameters["@ComisionContrato"].Value = ComisionDeProducto;
+                cmd.Parameters.Add("@ComisionTotalEnvio", SqlDbType.Int);
+                cmd.Parameters["@ComisionTotalEnvio"].Value = ComisionDeEnvio;
+
+                cmd.Parameters.Add("@ComisionTotalProducto", SqlDbType.Int);
+                cmd.Parameters["@ComisionTotalProducto"].Value = ComisiondeProducto;
                 //Mandar comando a ejecución
                 resultado = oConexion.ModificarDatos(cmd);
             }

@@ -531,7 +531,7 @@ namespace WebApplication1.Vista
             TextboxActivados();
 
             string valor = DGVEMPRESAS.SelectedDataKey.Value.ToString();
-
+            
             btnEditar.CssClass = "btn btn-sm btn-default";
             btnEditar.Enabled = true;
 

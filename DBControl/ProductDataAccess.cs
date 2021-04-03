@@ -231,8 +231,6 @@ namespace DBControl
 
             DECLARE @ValorComision INT;
 
-            SELECT @ValorComision = intComision FROM ComisionGoDeliverix WHERE StrNombreComision = 'Orden';
-
             -- Obtener zona horaria del estado
             SELECT
                 @TimeZone = Z.IdZonaHoraria
@@ -257,10 +255,7 @@ namespace DBControl
                     EMP.[UidEmpresa] AS [UidCompany],
                     EMP.[NombreComercial] AS [CompanyName],
                     MIN(
-                    CASE 
-                        WHEN COM.BAboserveComision = 1 THEN SP.Mcosto
-                        ELSE ((SP.Mcosto / 100)*@ValorComision) + SP.Mcosto
-                    END 
+                    ObtenerPrecioDeProductoDesdeContrato(s.UidSucursal,SP.Mcosto)
                     ) AS [Price]
                 FROM [Productos] AS P    
                     INNER JOIN [SeccionProducto] AS SP ON P.[UidProducto] = SP.[UidProducto]
@@ -269,12 +264,10 @@ namespace DBControl
                     INNER JOIN [Imagenes] AS IPROD ON IPROD.UIdImagen = [IP].UidImagen
                     INNER JOIN [ImagenEmpresa] AS IE ON IE.UidRelacion = (SELECT TOP 1 UidRelacion FROM ImagenEmpresa WHERE UidEmpresa = P.UidEmpresa)
                     INNER JOIN [Imagenes] AS IEMP ON IEMP.UIdImagen = [IE].UidImagen
-
                     INNER JOIN [Oferta] AS O ON O.UidOferta= SEC.UidOferta AND O.IntEstatus = 1
                     INNER JOIN DiaOferta AS DO ON DO.UidOferta = O.UidOferta
                     INNER JOIN Dias AS D ON D.UidDia = DO.UidDia
                     INNER JOIN Sucursales AS SUC ON SUC.UidSucursal = O.Uidsucursal AND SUC.IntEstatus = 1
-
                     INNER JOIN Empresa AS EMP ON EMP.UidEmpresa = P.UidEmpresa AND EMP.IdEstatus =1
 
                     INNER JOIN Direccion AS DIR ON DIR.UidDireccion = SUC.UidDireccion
@@ -427,8 +420,6 @@ SUM (CASE WHEN CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATET
 
             DECLARE @ValorComision INT;
 
-            SELECT @ValorComision = intComision FROM ComisionGoDeliverix WHERE StrNombreComision = 'Orden';
-
             -- Obtener zona horaria del estado
             SELECT
                 @TimeZone = Z.IdZonaHoraria
@@ -456,8 +447,8 @@ SUM (CASE WHEN CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATET
                     EMP.[NombreComercial] AS [CompanyName],
                     MIN(
                     CASE 
-                        WHEN COM.BAboserveComision = 1 THEN SP.Mcosto
-                        ELSE ((SP.Mcosto / 100)*@ValorComision) + SP.Mcosto
+                         WHEN COM.BAboserveComision = 1 THEN SP.Mcosto
+                         ELSE ((SP.Mcosto / 100)*CDS.ComisionTotalProducto) + SP.Mcosto
                     END 
                     ) AS [Price] {AvailableSelectStatemens}                    
                 FROM [Productos] AS P    

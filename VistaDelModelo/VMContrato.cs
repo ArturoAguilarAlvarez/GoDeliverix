@@ -64,38 +64,42 @@ namespace VistaDelModelo
             set { _BlPagoAlRecolectar = value; }
         }
 
-        private int _PorcentajeComisionContrato;
+        private int _ComisionTotalEnvio;
 
-        public int IntPorcentajeComisionContrato
+        public int IntComisionTotalEnvio
         {
-            get { return _PorcentajeComisionContrato; }
-            set { _PorcentajeComisionContrato = value; }
-        }
-        private int _ComisionDistribuidora;
-
-        public int IntComisionDistribuidora
-        {
-            get { return _ComisionDistribuidora; }
-            set { _ComisionDistribuidora = value; }
-        }
-        private int _IntComisionEnvioGodeliverix;
-
-        public int IntComisionEnvioGoDeliverix
-        {
-            get { return _IntComisionEnvioGodeliverix; }
-            set { _IntComisionEnvioGodeliverix = value; }
+            get { return _ComisionTotalEnvio; }
+            set { _ComisionTotalEnvio = value; }
         }
 
+        private int _IntComisionTotalProducto;
+
+        public int IntComisionTotalProducto
+        {
+            get { return _IntComisionTotalProducto; }
+            set { _IntComisionTotalProducto = value; }
+        }
 
         public List<VMContrato> ListaDeSucursalesEnContrato = new List<VMContrato>();
 
         #endregion
         #region Metodo
-        public void SeleccionarEmpresa(Guid UidContrato, Guid UidSuministradora, Guid UidDistribuidora, Guid UidEstatus, bool ConfirmacionSuministradora, bool ConfirmacionDistribuidora, bool PagoAlRecolectar, int comisionProducto)
+        public void SeleccionarEmpresa(Guid UidContrato, Guid UidSuministradora, Guid UidDistribuidora, Guid UidEstatus, bool ConfirmacionSuministradora, bool ConfirmacionDistribuidora, bool PagoAlRecolectar, int comisionProducto, int comisionEnvio)
         {
             if (!ListaDeSucursalesEnContrato.Exists(sucursal => sucursal.UidSucursalSuministradora == UidSuministradora && sucursal.UidSucursalDistribuidora == UidDistribuidora))
             {
-                ListaDeSucursalesEnContrato.Add(new VMContrato() { Uid = UidContrato, UidSucursalSuministradora = UidSuministradora, UidSucursalDistribuidora = UidDistribuidora, UidEstatus = UidEstatus, BlConfirmacionSuministadora = ConfirmacionSuministradora, BlConfirmacionDistribuidora = ConfirmacionDistribuidora, BiPagoAlRecoletar = PagoAlRecolectar, IntPorcentajeComisionContrato = comisionProducto });
+                ListaDeSucursalesEnContrato.Add(new VMContrato()
+                {
+                    Uid = UidContrato,
+                    UidSucursalSuministradora = UidSuministradora,
+                    UidSucursalDistribuidora = UidDistribuidora,
+                    UidEstatus = UidEstatus,
+                    BlConfirmacionSuministadora = ConfirmacionSuministradora,
+                    BlConfirmacionDistribuidora = ConfirmacionDistribuidora,
+                    BiPagoAlRecoletar = PagoAlRecolectar,
+                    IntComisionTotalEnvio = comisionEnvio,
+                    IntComisionTotalProducto = comisionProducto
+                });
             }
         }
         public void DeseleccionarEmpresa(Guid UidSucursal)
@@ -117,23 +121,28 @@ namespace VistaDelModelo
                 bool blConfirmacionSuministradora = bool.Parse(item["BlConfirmacionSuministradora"].ToString());
                 bool blConfirmacionDistribuidora = bool.Parse(item["BlConfirmacionDistribuidora"].ToString());
                 bool PagoAlRecolectar = false;
-                int ComisionDelSistema = 0;
+                int ComisionDelEnvio = 0;
+                int ComisionDelProducto = 0;
                 if (!string.IsNullOrEmpty(item["BiPagaAlRecogerOrdenes"].ToString()))
                 {
                     PagoAlRecolectar = bool.Parse(item["BiPagaAlRecogerOrdenes"].ToString());
                 }
-                if (!string.IsNullOrEmpty(item["ComisionDistribuidora"].ToString()))
+                if (!string.IsNullOrEmpty(item["ComisionTotalProducto"].ToString()))
                 {
-                    ComisionDelSistema = int.Parse(item["ComisionDistribuidora"].ToString());
+                    ComisionDelProducto = int.Parse(item["ComisionTotalProducto"].ToString());
                 }
-                SeleccionarEmpresa(UidContrato, Suministradora, Distribuidora, UidEstatus, blConfirmacionSuministradora, blConfirmacionDistribuidora, PagoAlRecolectar, ComisionDelSistema);
+                if (!string.IsNullOrEmpty(item["ComisionTotalEnvio"].ToString()))
+                {
+                    ComisionDelEnvio = int.Parse(item["ComisionTotalEnvio"].ToString());
+                }
+                SeleccionarEmpresa(UidContrato, Suministradora, Distribuidora, UidEstatus, blConfirmacionSuministradora, blConfirmacionDistribuidora, PagoAlRecolectar, ComisionDelProducto, ComisionDelEnvio);
             }
         }
         public void GuardaRelacionDeContrato()
         {
             foreach (var item in ListaDeSucursalesEnContrato)
             {
-                Datos.GuardaRelacionDeContrato(item.Uid, item.UidSucursalSuministradora, item.UidSucursalDistribuidora, item.UidEstatus, item.BlConfirmacionSuministadora, item.BlConfirmacionDistribuidora, item.BiPagoAlRecoletar,item.IntPorcentajeComisionContrato);
+                Datos.GuardaRelacionDeContrato(item.Uid, item.UidSucursalSuministradora, item.UidSucursalDistribuidora, item.UidEstatus, item.BlConfirmacionSuministadora, item.BlConfirmacionDistribuidora, item.BiPagoAlRecoletar, item.IntComisionTotalEnvio, item.IntComisionTotalProducto);
             }
         }
 
@@ -181,7 +190,6 @@ namespace VistaDelModelo
 
             return resultado;
         }
-
 
         #endregion
     }
