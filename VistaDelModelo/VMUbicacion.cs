@@ -52,13 +52,13 @@ namespace VistaDelModelo
             oUbicacion.VchLongitud = LONGITUD;
             return oUbicacion.Guardar("asp_AgregaUbicacionSucursal", UidSucursal);
         }
-        public bool actualizaUbicacion(Guid UidUbicacion, string LATITUD, string LONGITUD)
+        public bool actualizaUbicacion(Guid UidUbicacion, string LATITUD, string LONGITUD, string UidPropietario)
         {
             oUbicacion = new Ubicacion();
             oUbicacion.UID = UidUbicacion;
             oUbicacion.VchLatitud = LATITUD;
             oUbicacion.VchLongitud = LONGITUD;
-            return oUbicacion.Guardar("asp_actualizarUbicacion", Guid.Empty);
+            return oUbicacion.Guardar("asp_actualizarUbicacion", new Guid(UidPropietario));
         }
         /// <summary>
         /// Guarda la  ubicacion de una direccion

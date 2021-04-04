@@ -1977,8 +1977,16 @@ namespace WebApplication1.Vista
 
                 //Variables de ubicacion
                 Guid UidUbicacion = Guid.NewGuid();
-                DbLatitud = (double)Session["DbLatitud"];
-                DbLongitud = (double)Session["DbLongitud"];
+                if (double.TryParse(txtLongitud.Text, out DbLongitud))
+                {
+                    PanelMensaje.Visible = true;
+                    LblMensaje.Text = "Longitud invalida, introduce valores numeros!";
+                }
+                if (double.TryParse(TxtLatitud.Text, out DbLatitud))
+                {
+                    PanelMensaje.Visible = true;
+                    LblMensaje.Text = "Latitud invalida, introduce valores numericos!";
+                }
                 #endregion
                 if (Session["Accion"].ToString() == "NuevoRegistro")
                 {
@@ -2182,10 +2190,15 @@ namespace WebApplication1.Vista
                             }
                             #endregion
                             //Actualiza el datagrid de las ciudades de la zona de servicio
-                            MVUbicacion.actualizaUbicacion(new Guid(LblUidUbicacion.Text), TxtLatitud.Text, txtLongitud.Text);
+                            if (LblUidUbicacion.Text != Guid.Empty.ToString())
+                            {
+                                UidUbicacion = new Guid(LblUidUbicacion.Text);
+                            }
+                            string UidSuministradora = txtUidSucursal.Text;
+
+                            MVUbicacion.actualizaUbicacion(UidUbicacion, TxtLatitud.Text, txtLongitud.Text, UidSuministradora);
                             if (MVEmpresa.ObtenerTipoDeEmpresa(Session["UidEmpresaSistema"].ToString()))
                             {
-                                string UidSuministradora = txtUidSucursal.Text;
 
                                 if (MVTarifario.ListaDeTarifariosSeleccionados.Count > 0)
                                 {
