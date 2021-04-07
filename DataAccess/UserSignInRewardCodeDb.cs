@@ -69,5 +69,14 @@ namespace DataAccess
 
             return parameters.Get<int>("@Result");
         }
+
+        public IEnumerable<UserSignInRewardCode> ReadAllChildUserCodes(Guid CodeUid)
+        {
+            string query = "SELECT * FROM [UserSignInRewardCode] WHERE [ParentCodeUid] = @UidCode";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@UidCode", CodeUid);
+
+            return this.Query<UserSignInRewardCode>(query, parameters);
+        }
     }
 }
