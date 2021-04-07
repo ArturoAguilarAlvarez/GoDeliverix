@@ -148,7 +148,7 @@ namespace WebApplication1.Controllers
             return Respuesta;
         }
 
-        public ResponseHelper GetObtenerDireccionConDatosDeGoogle(string StrNombreCiudad, string CodigoEstado, string CodigoPais)
+        public ResponseHelper GetObtenerDireccionConDatosDeGoogle(string CodigoEstado, string CodigoPais, string StrNombreCiudad = "")
         {
             MVDireccion = new VMDireccion();
             Respuesta = new ResponseHelper();
@@ -257,9 +257,7 @@ namespace WebApplication1.Controllers
                     Estado = CodigoEstado;
                     break;
             }
-
-
-            MVDireccion.ObtenerDireccionConGoogle(StrNombreCiudad, CodigoPais, Estado);
+            MVDireccion.ObtenerDireccionConGoogle(CodigoPais, Estado, strNombreCiudad: StrNombreCiudad);
 
             if (MVDireccion.ListaDIRECCIONES.Count != 0)
             {
@@ -319,7 +317,7 @@ namespace WebApplication1.Controllers
             MVDireccion.ObtenerDireccionCompleta(UidDireccion);
             return Request.CreateResponse(MVDireccion);
         }
-        public HttpResponseMessage GetObtenerDireccionConDatosDeGoogle_Movil(string StrNombreCiudad, string CodigoEstado, string CodigoPais)
+        public HttpResponseMessage GetObtenerDireccionConDatosDeGoogle_Movil(string CodigoEstado, string CodigoPais, string StrNombreCiudad = "")
         {
             MVDireccion = new VMDireccion();
             MVUbicacion = new VMUbicacion();
@@ -433,7 +431,7 @@ namespace WebApplication1.Controllers
             }
 
 
-            MVDireccion.ObtenerDireccionConGoogle(StrNombreCiudad, pais, Estado);
+            MVDireccion.ObtenerDireccionConGoogle(pais, Estado, strNombreCiudad: StrNombreCiudad);
 
             return Request.CreateResponse(MVDireccion.ListaDIRECCIONES);
 

@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Acceso</title>
+    <title>Descarga nuestra app GoDeliverix</title>
     <!-- Declaracion de scripts -->
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -16,7 +16,7 @@
     <!-- Declaracion de CSS -->
     <link href="../../Content/bootstrap.css" rel="stylesheet" />
     <link href="../../Content/bootstrap-theme.css" rel="stylesheet" />
-    <link rel="icon" href="../../Vista/FavIcon/login.png" />
+    <link rel="icon" href="../../Vista/FavIcon/Favicon.png" />
 </head>
 <body class="container">
     <form id="form1" runat="server">
@@ -62,9 +62,8 @@
                                     </asp:LinkButton>
                                 </div>
                             </asp:Panel>
-
-                            <h1>GoDeliverix</h1>
-                            <div class="input-group">
+                            <asp:Image ImageUrl="~/Vista/Img/Logo.png" Width="200"  runat="server" />
+                            <div class="input-group" style="margin-top:10px;">
                                 <i class="input-group-addon">
                                     <span class="glyphicon glyphicon-user"></span>
                                 </i>

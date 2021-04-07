@@ -332,6 +332,7 @@
     <Content Include="Vista\Default.aspx" />
     <Content Include="Vista\EmpresaSite\Default.aspx" />
     <Content Include="Vista\EnviarCorreoDeConfirmacion.aspx" />
+    <Content Include="Vista\FavIcon\Favicon.png" />
     <Content Include="Vista\fichadepago.xml" />
     <Content Include="Vista\Img\alert-246-759619.png" />
     <Content Include="Vista\Img\Cargando.gif" />
@@ -361,6 +362,7 @@
     <Content Include="Vista\Img\Iconos\Recolecta.png" />
     <Content Include="Vista\Img\Iconos\MenuCliente.png" />
     <Content Include="Vista\Img\Iconos\Pendiente.png" />
+    <Content Include="Vista\Img\Logo.png" />
     <Content Include="Vista\Img\Productos\414053938Pastas.png" />
     <Content Include="Vista\Img\Productos\482608959acsxz.png" />
     <Content Include="Vista\Img\Productos\522136138vvfdsc.png" />

@@ -16,6 +16,7 @@
     <!-- Importacionde scripts -->
     <!-- Importacionde scripts -->
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <link rel="icon" href="FavIcon/Favicon.png" />
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <!-- Importacion de archivos css -->
@@ -42,7 +43,7 @@
         <asp:UpdatePanel runat="server">
             <ContentTemplate>
                 <%-- Barra de navegacion --%>
-                <nav class="navbar navbar-inverse  navbar-fixed-top ">
+                <nav class="navbar navbar-fixed-top " style="background: white;">
                     <div class="col-md-12">
                         <div class="navbar-header">
                             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
@@ -52,9 +53,9 @@
                                 <span class="icon-bar"></span>
                             </button>
                             <!-- <asp:LinkButton CssClass="navbar-brand" ID="LBnBotonMenuInicio" runat="server" OnClick="RedireccionamientoInicio">-->
-                            <div class="navbar-brand text-center">
-                                <a href="Default.aspx" style="color: white">
-                                    <label>GoDeliverix</label>
+                            <div class="navbar-brand t">
+                                <a href="Default.aspx">
+                                    <asp:Image ImageUrl="~/Vista/Img/Logo.png" Width="70" runat="server" />
                                 </a>
                             </div>
                             <!-- <asp:Image ID="ImgLogo" Style="max-height:50px;margin-top:-15px;" CssClass="img-responsive" ImageAlign="TextTop" runat="server" ImageUrl="~/Imgs/logo_dellser.png" /> -->
@@ -64,10 +65,10 @@
                         <div class="collapse navbar-collapse navbar-ex1-collapse">
                             <ul class="nav navbar-nav">
                                 <li role="presentation" class="text-center">
-                                    <asp:LinkButton runat="server" ID="btnInicio" Style="color: white;" OnClick="RedireccionamientoInicio"><span class="glyphicon glyphicon-home"></span> Inicio</asp:LinkButton></li>
+                                    <asp:LinkButton runat="server" ID="btnInicio" ForeColor="Black" OnClick="RedireccionamientoInicio"><span class="glyphicon glyphicon-home"></span> Inicio</asp:LinkButton></li>
                                 <%--Modulo Empresas--%>
                                 <li class="dropdown text-center">
-                                    <a runat="server" id="btnEmpresasMenus" href="#" class="dropdown-toggle" style="color: white;" data-toggle="dropdown">
+                                    <a runat="server" id="btnEmpresasMenus" href="#"  style="color:black;" class="dropdown-toggle" data-toggle="dropdown">
                                         <span class="glyphicon glyphicon-cog"></span>
                                         <asp:Label ID="Label1" runat="server" Text="Empresas" />
                                         <span class="glyphicon glyphicon-triangle-bottom"></span>
@@ -98,7 +99,7 @@
                                 </li>
                                 <%--Modulo sucursales--%>
                                 <li class="dropdown text-center">
-                                    <a href="#" runat="server" id="btnSucursalesMenus" class="dropdown-toggle" style="color: white;" data-toggle="dropdown">
+                                    <a href="#" runat="server" id="btnSucursalesMenus" style="color: black;" class="dropdown-toggle" data-toggle="dropdown">
                                         <span class="glyphicon glyphicon-cog"></span>
                                         <asp:Label ID="Label2" runat="server" Text="Sucursales" />
                                         <span class="glyphicon glyphicon-triangle-bottom"></span>
@@ -113,19 +114,19 @@
 
                                 <%--Modulo Tarifario--%>
                                 <li role="presentation" class="text-center">
-                                    <asp:LinkButton runat="server" ID="btnModuloTarifario" Style="color: white;" OnClick="btnModuloTarifario_Click">
+                                    <asp:LinkButton runat="server" ID="btnModuloTarifario" ForeColor="Black" OnClick="btnModuloTarifario_Click">
                                         <span class="glyphicon glyphicon-send"></span> Tarifario
                                     </asp:LinkButton>
                                 </li>
                                 <%--Modulo Productos--%>
                                 <li role="presentation" class="text-center">
-                                    <asp:LinkButton runat="server" ID="btnModuloProductos" Style="color: white;" OnClick="BtnModuloProductos_Click">
+                                    <asp:LinkButton runat="server" ID="btnModuloProductos" ForeColor="Black" OnClick="BtnModuloProductos_Click">
                                         <span class="glyphicon glyphicon-gift"></span> Productos
                                     </asp:LinkButton>
                                 </li>
                                 <%--Modulo Menu--%>
                                 <li role="presentation" class="text-center">
-                                    <asp:LinkButton runat="server" ID="btnModuloMenu" Style="color: white;" OnClick="BtnModuloMenu_Click">
+                                    <asp:LinkButton runat="server" ID="btnModuloMenu" ForeColor="Black" OnClick="BtnModuloMenu_Click">
                                         <span class="glyphicon glyphicon-list"></span> Menu
                                     </asp:LinkButton>
                                 </li>
@@ -137,14 +138,14 @@
                                 </li>--%>
                                 <%--Modulo Repartidores--%>
                                 <li role="presentation" class="text-center">
-                                    <asp:LinkButton ID="btnRepartidores" OnClick="BtnRepartidores_Click" Style="color: white;" runat="server">
+                                    <asp:LinkButton ID="btnRepartidores" ForeColor="Black" OnClick="BtnRepartidores_Click" runat="server">
                                         <img src="Img/Iconos/Delivery.png" height="20" />
                                         Repartidores
                                     </asp:LinkButton>
                                 </li>
                                 <%--Modulo Vehiculos--%>
                                 <li role="presentation" class="text-center">
-                                    <asp:LinkButton ID="btnVehiculos" OnClick="BtnVehiculos_Click" Style="color: white;" runat="server">
+                                    <asp:LinkButton ID="btnVehiculos" ForeColor="Black" OnClick="BtnVehiculos_Click" runat="server">
                                         <img src="Img/Iconos/Delivery.png" height="20" />
                                         Vehiculos
                                     </asp:LinkButton>
@@ -155,15 +156,15 @@
                                 <%--Informacion de la empresa que entro--%>
                                 <li role="presentation" class="dropdown text-center">
 
-                                    <asp:TextBox CssClass="hidden" ID="txtUidEmpresaSistema" runat="server"></asp:TextBox>
-                                    <asp:LinkButton Style="color: white" runat="server">
-                                        <asp:Label ID="lblNombreDeEmpresa" runat="server" />
+                                    <asp:TextBox CssClass="hidden" ForeColor="Black" ID="txtUidEmpresaSistema" runat="server"></asp:TextBox>
+                                    <asp:LinkButton runat="server">
+                                        <asp:Label ID="lblNombreDeEmpresa" ForeColor="Black" runat="server" />
                                     </asp:LinkButton>
                                 </li>
                                 <%--Informacion del usuario--%>
                                 <li role="presentation" class="text-center">
-                                    <asp:TextBox ID="txtUidUsuarioSistema" CssClass="hidden" runat="server"></asp:TextBox>
-                                    <a href="#" class="dropdown-toggle" style="color: white;" data-toggle="dropdown">
+                                    <asp:TextBox ID="txtUidUsuarioSistema" ForeColor="Black" CssClass="hidden" runat="server"></asp:TextBox>
+                                    <a href="#" class="dropdown-toggle" style="color: black;" data-toggle="dropdown">
                                         <span class="glyphicon glyphicon-cog"></span>
                                         <asp:Label ID="lblNombreUsuario" runat="server" />
                                         <span class="glyphicon glyphicon-triangle-bottom"></span>

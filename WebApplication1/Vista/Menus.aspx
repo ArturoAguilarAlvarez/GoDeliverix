@@ -107,6 +107,7 @@
                                     <asp:Button Text="Subir" OnClick="MuestraFoto" CssClass="hide" ID="btnSubirImagen" runat="server" />
                                 </ContentTemplate>
                                 <Triggers>
+                                    <asp:PostBackTrigger ControlID="BtnExportarMenu" />
                                     <asp:PostBackTrigger ControlID="btnSubirImagen" />
                                 </Triggers>
                             </asp:UpdatePanel>
@@ -176,6 +177,7 @@
                                         <asp:Button Text="Subir" OnClick="MuestraSeccion" CssClass="hide" ID="btnSubirseccion" runat="server" />
                                     </ContentTemplate>
                                     <Triggers>
+                                        <asp:PostBackTrigger ControlID="btnExportarSecciones" />
                                         <asp:PostBackTrigger ControlID="btnSubirseccion" />
                                     </Triggers>
                                 </asp:UpdatePanel>
