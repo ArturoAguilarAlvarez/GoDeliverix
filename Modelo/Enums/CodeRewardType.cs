@@ -19,10 +19,6 @@ namespace Modelo.Enums
         /// <summary>
         /// Envio gratis
         /// </summary>
-        FreeDelivery,
-        /// <summary>
-        /// Porcentage de descuento
-        /// </summary>
-        PercentageDiscount
+        FreeDelivery
     }
 }

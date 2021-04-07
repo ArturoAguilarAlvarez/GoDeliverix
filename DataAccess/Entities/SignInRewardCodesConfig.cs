@@ -14,12 +14,12 @@ namespace Modelo.DbContext
         /// <summary>
         /// Fecha en la que expira el codigo
         /// </summary>
-        public DateTime ExpirationDate { get; set; }
+        public DateTime? ExpirationDate { get; set; }
 
         /// <summary>
         /// Numero de canjeos requeridos para aplicar promocion
         /// </summary>
-        public int RequiredRedeems { get; set; }
+        public int RedeemsRequired { get; set; }
 
         /// <summary>
         /// Limite de canjeos por usuario
