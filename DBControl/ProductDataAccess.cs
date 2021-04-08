@@ -662,8 +662,8 @@ SELECT *, [Count] = COUNT (*) OVER() FROM (
 	    INNER JOIN Dias D on D.UidDia = DO.UidDia 
 	    INNER JOIN Sucursales s on s.UidSucursal = o.Uidsucursal 
 	    INNER JOIN ContratoDeServicio CDS on CDS.UidSucursalSuministradora = s.UidSucursal 
-	    INNER JOIN turnosuministradora ts on ts.uidsucursal = CDS.UidSucursalSuministradora and ts.dtmhorafin is null
-	    INNER JOIN TurnoDistribuidora td on td.UidSucursal = CDS.UidSucursalDistribuidora and td.DtmHoraFin is null
+	    INNER JOIN turnosuministradora ts on ts.uidsucursal = CDS.UidSucursalSuministradora
+	    INNER JOIN TurnoDistribuidora td on td.UidSucursal = CDS.UidSucursalDistribuidora
 	    INNER JOIN ZonaDeRepartoDeContrato ZDRC on ZDRC.UidContrato = CDS.UidContrato 
 	    INNER JOIN Tarifario t on t.UidRegistroTarifario = ZDRC.UidTarifario 
 	    INNER JOIN ZonaDeServicio zd on zd.UidColonia = @UidColonia and zd.UidRelacionZonaServicio = t.UidRelacionZonaEntrega 
