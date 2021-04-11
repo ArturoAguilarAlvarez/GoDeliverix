@@ -54,7 +54,9 @@ namespace VistaDelModelo
                     Date = (DateTime)row["Date"],
                     Folio = (long)row["Folio"],
                     Type = (string)row["Type"],
-                    FolioOrdenSucursal = row.IsNull("FolioOrdenSucursal") ? null : (long?)row["FolioOrdenSucursal"]
+                    Entity = (int)row["Entity"],
+                    EntityValue = (string)row["EntityValue"],
+                    FolioOrdenSucursal = null
                 });
             }
 

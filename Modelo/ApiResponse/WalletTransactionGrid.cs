@@ -25,5 +25,9 @@ namespace Modelo.ApiResponse
         public string Concept { get; set; }
 
         public long? FolioOrdenSucursal { get; set; }
+
+        public int Entity { get; set; }
+
+        public string EntityValue { get; set; }
     }
 }
