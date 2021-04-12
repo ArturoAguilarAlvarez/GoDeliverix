@@ -61,13 +61,22 @@ namespace DBControl
                     T.[VchNombre] AS [Type],
                     C.[UidConcepto] AS [UidConcept],
                     C.[VchNombre] AS [Concept],
-                    OS.[IntFolio] AS [FolioOrdenSucursal]
+                     CASE 
+                        WHEN OS.[UidRelacionOrdenSucursal] IS NOT NULL THEN 6
+                        WHEN ER.[Uid] IS NOT NULL THEN ER.[EntityType]
+                    END AS [Entity],
+                    CASE
+                        WHEN OS.[IntFolio] IS NOT NULL THEN CAST(OS.[IntFolio] AS VARCHAR)
+                        WHEN UC.Code IS NOT NULL THEN UC.Code
+                    END AS [EntityValue]
                 FROM [Movimientos] AS M
                     INNER JOIN [Monedero] AS W ON W.[UidMonedero] = M.[UidMonedero]
                     INNER JOIN [TipoDeMovimiento] AS T ON T.[UidTipoDeMovimiento] = M.[UidTipoDeMovimiento]
                     INNER JOIN [Conceptos] AS C ON C.[UidConcepto] = M.[UidConcepto]
                     LEFT JOIN [OrdenSucursalMovimientoMonedero] AS O ON O.[UidMovimiento] = M.[UidMovimiento]
                     LEFT JOIN [OrdenSucursal] AS OS ON OS.[UidRelacionOrdenSucursal] = O.[UidOrdenSucursal]
+                    LEFT JOIN [WalletTransactionEntityReference] AS ER ON ER.[TransactionUid] = M.[UidMovimiento]
+                    LEFT JOIN [UserSignInRewardCode] AS UC ON UC.[Uid] = ER.[EntityUid] AND ER.[EntityType] = 7
                 WHERE W.[UidUsuario] = '{uidUser.ToString()}' {where}";
 
             DataTable data = this.dbConexion.Consultas(query);

@@ -288,6 +288,7 @@
                                         </ContentTemplate>
                                         <Triggers>
                                             <asp:PostBackTrigger ControlID="btnCargarTodasLAsSucursales" />
+                                            <asp:PostBackTrigger ControlID="btnExportarTodasLasSucursales" />
                                         </Triggers>
                                     </asp:UpdatePanel>
                                 </div>
@@ -457,6 +458,7 @@
                                     <asp:Button Text="Subir" OnClick="MuestraExcel" CssClass="hide" ID="btnCargarExcel" runat="server" />
                                 </ContentTemplate>
                                 <Triggers>
+                                    <asp:PostBackTrigger ControlID="BtnExportarMenu" />
                                     <asp:PostBackTrigger ControlID="btnCargarExcel" />
                                 </Triggers>
                             </asp:UpdatePanel>

@@ -11,11 +11,20 @@ namespace VistaDelModelo
     public class CodesViewModel
     {
         public UserSignInRewardCodeDb SignInRewardCodeDb { get; }
+        public SignInRewardCodesConfigDb SignInRewardCodeConfigDb { get; }
 
         public CodesViewModel()
         {
             this.SignInRewardCodeDb = new UserSignInRewardCodeDb();
+            this.SignInRewardCodeConfigDb = new SignInRewardCodesConfigDb();
         }
+
+        #region Sign In Codes Config
+        public SignInRewardCodesConfig GetSignInCodesConfig()
+        {
+            return this.SignInRewardCodeConfigDb.GetConfig();
+        }
+        #endregion
 
         #region Sign In Codes
         public int VerifySignInCode(string code)
@@ -30,6 +39,11 @@ namespace VistaDelModelo
         public int VerifyAndApplySignInCode(Guid uidUser,string code)
         {
             return this.SignInRewardCodeDb.VerifyAndApplyCode(uidUser, code);
+        }
+
+        public IEnumerable<UserSignInRewardCode> GetAllParentChildRedeems(Guid UidCode)
+        {
+            return this.SignInRewardCodeDb.ReadAllChildUserCodes(UidCode);
         }
         #endregion
     }

@@ -396,8 +396,8 @@ namespace DBControl
             AvailableSelectStatemens = @"
 ,SUM (CASE WHEN @UserTime BETWEEN SEC.VchHoraInicio AND SEC.VchHoraFin THEN 1 ELSE 0 END ) AS [SecAvailable],
 SUM (CASE WHEN @UserTime between SUC.HorarioApertura and SUC.HorarioCierre THEN 1 ELSE 0 END) AS [SucAvailable],
-SUM (CASE WHEN  CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME)  AND TS.DtmHoraFin IS NULL THEN 1 ELSE 0 END) AS [TsAvailable],
-SUM (CASE WHEN CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL THEN 1 ELSE 0 END) AS [TdAvailable]";
+SUM (CASE WHEN CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME) AND TS.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TSUC.HorarioApertura AS TIME) AND CAST(TSUC.HorarioCierre AS TIME) THEN 1 ELSE 0 END) AS [TsAvailable],
+SUM (CASE WHEN CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TDSUC.HorarioApertura AS TIME) AND CAST(TDSUC.HorarioCierre AS TIME)   THEN 1 ELSE 0 END) AS [TdAvailable] ";
 
             if (available.HasValue)
             {
@@ -405,8 +405,8 @@ SUM (CASE WHEN CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATET
                 AvailableSelectStatemens = "";
                 AvailableWhereStatemens = @" AND @UserTime BETWEEN SEC.VchHoraInicio AND SEC.VchHoraFin ";
                 AvailableWhereStatemens += " AND @UserTime between SUC.HorarioApertura and SUC.HorarioCierre ";
-                AvailableWhereStatemens += " AND CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME)  AND TS.DtmHoraFin IS NULL ";
-                AvailableWhereStatemens += " AND CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL ";
+                AvailableWhereStatemens += " AND CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME) AND TS.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TSUC.HorarioApertura AS TIME) AND CAST(TSUC.HorarioCierre AS TIME) ";
+                AvailableWhereStatemens += " AND CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TDSUC.HorarioApertura AS TIME) AND CAST(TDSUC.HorarioCierre AS TIME) ";
             }
 
 
@@ -476,7 +476,9 @@ SUM (CASE WHEN CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATET
 	                INNER JOIN ZonaDeServicio ZDS on ZDS.UidColonia = @UidColonia and ZDS.UidRelacionZonaServicio = T.UidRelacionZonaEntrega 
     
 	                INNER JOIN turnosuministradora TS on TS.uidsucursal = CDS.UidSucursalSuministradora
+                    INNER JOIN Sucursales AS TSUC ON TSUC.UidSucursal = TS.UidSucursal
 	                INNER JOIN TurnoDistribuidora TD on TD.UidSucursal = CDS.UidSucursalDistribuidora
+                    INNER JOIN Sucursales AS TDSUC ON TDSUC.UidSucursal = TD.UidSucursal
                     INNER JOIN Comision AS COM ON COM.UidEmpresa = EMP.UidEmpresa
                     {filterJoin}
                 WHERE 
@@ -598,8 +600,8 @@ SUM (CASE WHEN CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATET
 
             string selectAvailability = $@"
 @UserTime between S.HorarioApertura and S.HorarioCierre and ZHP.IdZonaHoraria = @TimeZone 
-AND CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME)  AND TS.DtmHoraFin IS NULL
-AND CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL
+AND CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME) AND TS.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TSUC.HorarioApertura AS TIME) AND CAST(TSUC.HorarioCierre AS TIME)
+AND CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TDSUC.HorarioApertura AS TIME) AND CAST(TDSUC.HorarioCierre AS TIME)
 AND @UserTime between se.VchHoraInicio and se.VchHoraFin ";
             string whereAvailability = $@" AND 1=1 ";
 
@@ -608,8 +610,8 @@ AND @UserTime between se.VchHoraInicio and se.VchHoraFin ";
                 selectAvailability = " 1=1 ";
                 whereAvailability = $@"
 AND @UserTime between S.HorarioApertura and S.HorarioCierre and ZHP.IdZonaHoraria = @TimeZone
-AND CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME)  AND TS.DtmHoraFin IS NULL
-AND CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL
+AND CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME) AND TS.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TSUC.HorarioApertura AS TIME) AND CAST(TSUC.HorarioCierre AS TIME)
+AND CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TDSUC.HorarioApertura AS TIME) AND CAST(TDSUC.HorarioCierre AS TIME)
 AND @UserTime between se.VchHoraInicio and se.VchHoraFin ";
             }
 
@@ -653,8 +655,10 @@ SELECT *, [Count] = COUNT (*) OVER() FROM (
 	    INNER JOIN Dias D on D.UidDia = DO.UidDia 
 	    INNER JOIN Sucursales s on s.UidSucursal = o.Uidsucursal 
 	    INNER JOIN ContratoDeServicio CDS on CDS.UidSucursalSuministradora = s.UidSucursal 
-	    INNER JOIN turnosuministradora ts on ts.uidsucursal = CDS.UidSucursalSuministradora and ts.dtmhorafin is null
-	    INNER JOIN TurnoDistribuidora td on td.UidSucursal = CDS.UidSucursalDistribuidora and td.DtmHoraFin is null
+	    INNER JOIN turnosuministradora ts on ts.uidsucursal = CDS.UidSucursalSuministradora
+        INNER JOIN Sucursales AS TSUC ON TSUC.UidSucursal = TS.UidSucursal
+	    INNER JOIN TurnoDistribuidora td on td.UidSucursal = CDS.UidSucursalDistribuidora
+        INNER JOIN Sucursales AS TDSUC ON TDSUC.UidSucursal = TD.UidSucursal
 	    INNER JOIN ZonaDeRepartoDeContrato ZDRC on ZDRC.UidContrato = CDS.UidContrato 
 	    INNER JOIN Tarifario t on t.UidRegistroTarifario = ZDRC.UidTarifario 
 	    INNER JOIN ZonaDeServicio zd on zd.UidColonia = @UidColonia and zd.UidRelacionZonaServicio = t.UidRelacionZonaEntrega 

@@ -46,6 +46,34 @@ namespace WebApplication1.Controllers.v2
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet]
+        public IHttpActionResult GetAllParentChildRedeems(Guid UidCode)
+        {
+            try
+            {
+                var result = this.VmCodes.GetAllParentChildRedeems(UidCode);
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetCodeConfig()
+        {
+            try
+            {
+                var result = this.VmCodes.GetSignInCodesConfig();
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 
     public class CodeResult

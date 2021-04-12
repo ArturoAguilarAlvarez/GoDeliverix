@@ -190,7 +190,7 @@ namespace VistaDelModelo
         //    }
         //}
 
-        public void ObtenerDireccionConGoogle(string strNombreCiudad, string CodigoPais, string CodigoEstado)
+        public void ObtenerDireccionConGoogle(string CodigoPais, string CodigoEstado, string strNombreCiudad = "")
         {
             SqlCommand cmd = new SqlCommand();
 
@@ -200,8 +200,11 @@ namespace VistaDelModelo
                 cmd.CommandText = "asp_ObtenerDireccion";
 
                 //Dato 1
-                cmd.Parameters.Add("@VchNombreCiudad", SqlDbType.NVarChar, 200);
-                cmd.Parameters["@VchNombreCiudad"].Value = strNombreCiudad;
+                if (!string.IsNullOrEmpty(strNombreCiudad))
+                {
+                    cmd.Parameters.Add("@VchNombreCiudad", SqlDbType.NVarChar, 200);
+                    cmd.Parameters["@VchNombreCiudad"].Value = strNombreCiudad;
+                }
 
                 cmd.Parameters.Add("@VchCodigoPais", SqlDbType.NVarChar, 10);
                 cmd.Parameters["@VchCodigoPais"].Value = CodigoPais;
@@ -212,15 +215,29 @@ namespace VistaDelModelo
                 ListaDIRECCIONES = new List<VMDireccion>();
                 foreach (DataRow item in oConexion.Busquedas(cmd).Rows)
                 {
-                    ListaDIRECCIONES.Add(new VMDireccion()
+                    if (string.IsNullOrEmpty(strNombreCiudad))
                     {
-                        ID = Guid.NewGuid(),
-                        PAIS = item["UidPais"].ToString(),
-                        ESTADO = item["UidEstado"].ToString(),
-                        MUNICIPIO = item["UidMunicipio"].ToString(),
-                        CIUDAD = item["UidCiudad"].ToString(),
-                        NOMBRECIUDAD = ObtenerNombreDeLaCiudad(item["UidCiudad"].ToString())
-                    });
+                        ListaDIRECCIONES.Add(new VMDireccion()
+                        {
+                            ID = Guid.NewGuid(),
+                            PAIS = item["UidPais"].ToString(),
+                            ESTADO = item["UidEstado"].ToString(),
+                            MUNICIPIO = item["UidMunicipio"].ToString()
+                        });
+                    }
+                    else if (!string.IsNullOrEmpty(strNombreCiudad))
+                    {
+                        ListaDIRECCIONES.Add(new VMDireccion()
+                        {
+                            ID = Guid.NewGuid(),
+                            PAIS = item["UidPais"].ToString(),
+                            ESTADO = item["UidEstado"].ToString(),
+                            MUNICIPIO = item["UidMunicipio"].ToString(),
+                            CIUDAD = item["UidCiudad"].ToString(),
+                            NOMBRECIUDAD = ObtenerNombreDeLaCiudad(item["UidCiudad"].ToString())
+                        });
+                    }
+
                 }
                 //foreach (var item in ListaDIRECCIONES)
                 //{

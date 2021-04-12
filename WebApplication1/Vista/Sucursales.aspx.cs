@@ -1975,19 +1975,15 @@ namespace WebApplication1.Vista
 
                 //Variables de ubicacion
                 Guid UidUbicacion = Guid.NewGuid();
-                DbLatitud = double.Parse(TxtLatitud.Text);
-                DbLongitud = double.Parse(txtLongitud.Text);
-                if (!double.TryParse(TxtLatitud.Text,out DbLatitud))
+                if (double.TryParse(txtLongitud.Text, out DbLongitud))
                 {
                     PanelMensaje.Visible = true;
-                    LblMensaje.Text = "La latitud es invalida";
-                    return;
+                    LblMensaje.Text = "Longitud invalida, introduce valores numeros!";
                 }
-                if (!double.TryParse(txtLongitud.Text,out DbLongitud))
+                if (double.TryParse(TxtLatitud.Text, out DbLatitud))
                 {
                     PanelMensaje.Visible = true;
-                    LblMensaje.Text = "La longitud es invalida";
-                    return;
+                    LblMensaje.Text = "Latitud invalida, introduce valores numericos!";
                 }
                 #endregion
                 if (Session["Accion"].ToString() == "NuevoRegistro")
@@ -2192,7 +2188,13 @@ namespace WebApplication1.Vista
                             }
                             #endregion
                             //Actualiza el datagrid de las ciudades de la zona de servicio
-                            MVUbicacion.actualizaUbicacion(new Guid(LblUidUbicacion.Text), TxtLatitud.Text, txtLongitud.Text);
+                            if (LblUidUbicacion.Text != Guid.Empty.ToString())
+                            {
+                                UidUbicacion = new Guid(LblUidUbicacion.Text);
+                            }
+                            string UidSuministradora = txtUidSucursal.Text;
+
+                            MVUbicacion.actualizaUbicacion(UidUbicacion, TxtLatitud.Text, txtLongitud.Text, UidSuministradora);
                             if (MVEmpresa.ObtenerTipoDeEmpresa(Session["UidEmpresaSistema"].ToString()))
                             {
                                 //Elimina datos e ingresa informacion de contrato
