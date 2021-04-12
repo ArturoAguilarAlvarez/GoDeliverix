@@ -96,6 +96,7 @@
     <Compile Include="Direccion.cs" />
     <Compile Include="Empresa.cs" />
     <Compile Include="Enums\CodeRewardType.cs" />
+    <Compile Include="Enums\EntityType.cs" />
     <Compile Include="Enums\NotificationTarget.cs" />
     <Compile Include="Enums\NotificationType.cs" />
     <Compile Include="Enums\UserWebSharedCodeLogType.cs" />
