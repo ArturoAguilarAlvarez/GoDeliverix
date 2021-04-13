@@ -1149,22 +1149,13 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.HyperLink HlnkCorreoElectronico;
 
         /// <summary>
-        /// lblComisionGoDeliverix control.
+        /// ChbxPagoOrdenAlRecolectar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblComisionGoDeliverix;
-
-        /// <summary>
-        /// lblComisionSucursal control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblComisionSucursal;
+        protected global::System.Web.UI.WebControls.CheckBox ChbxPagoOrdenAlRecolectar;
 
         /// <summary>
         /// txtComisionProducto control.
@@ -1176,13 +1167,13 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.TextBox txtComisionProducto;
 
         /// <summary>
-        /// ChbxPagoOrdenAlRecolectar control.
+        /// txtComisionEnvio control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox ChbxPagoOrdenAlRecolectar;
+        protected global::System.Web.UI.WebControls.TextBox txtComisionEnvio;
 
         /// <summary>
         /// liInformacionTelefono control.

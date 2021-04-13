@@ -133,7 +133,7 @@ namespace Deliverix.Wpf.Distribuidores
                 }
                 else
                 {
-                    FrameContenido.Content = new PageLicencia(this);
+                    //FrameContenido.Content = new PageLicencia(this);
                 }
             }
         }
