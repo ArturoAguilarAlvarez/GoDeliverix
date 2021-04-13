@@ -859,69 +859,68 @@
                                                 <asp:BoundField DataField="NUMERO" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" HeaderText="Numero" />
                                             </Columns>
                                         </asp:GridView>
+                                    </asp:Panel>
+                                    <asp:Panel ID="panelInformacionTarifario" runat="server">
 
-                                        <asp:Panel ID="panelInformacionTarifario" runat="server">
+                                        <asp:Panel ID="PanelTarifarioSuministradora" runat="server">
 
-                                            <asp:Panel ID="PanelTarifarioSuministradora" runat="server">
-
-                                                <div class="form-inline">
-                                                    <div class="form-group">
-                                                        <label>Colonia</label>
-                                                        <asp:TextBox ID="txtPITxtColonia" CssClass="form-control" runat="server" />
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Registros</label>
-                                                        <asp:DropDownList CssClass="form-control" AutoPostBack="true" ID="DDLPIColonias" OnSelectedIndexChanged="DDLPIColonias_SelectedIndexChanged" runat="server">
-                                                            <asp:ListItem Value="Todos" Text="Todos" />
-                                                            <asp:ListItem Value="Seleccionado" Text="Seleccionados" />
-                                                            <asp:ListItem Value="Deseleccionados" Text="Deseleccionados" />
-                                                        </asp:DropDownList>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <asp:LinkButton CssClass="btn btn-default btn-sm" ID="BTNPIBuscarColonia" OnClick="BTNPIBuscarColonia_Click" runat="server">
-                                                <span class="glyphicon glyphicon-search"></span>
-                                                        </asp:LinkButton>
-                                                    </div>
+                                            <div class="form-inline">
+                                                <div class="form-group">
+                                                    <label>Colonia</label>
+                                                    <asp:TextBox ID="txtPITxtColonia" CssClass="form-control" runat="server" />
                                                 </div>
-                                                <asp:GridView runat="server" ID="DgvInformacionTarifario" Style="margin-top: 10px;" OnRowDataBound="DgvInformacionTarifario_RowDataBound" AutoGenerateColumns="false" DataKeyNames="UidTarifario" CssClass="table table-bordered table-hover table-condensed table-striped input-sm">
-                                                    <EmptyDataTemplate>
-                                                        <div class="info">
-                                                            No hay zonas de entrega disponibles para mostrar                                                   
-                                                        </div>
-                                                    </EmptyDataTemplate>
-                                                    <SelectedRowStyle CssClass="table table-hover input-sm success" />
-                                                    <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />
-                                                    <Columns>
-                                                        <asp:ButtonField CommandName="Select" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" />
-                                                        <asp:TemplateField ItemStyle-Width="10">
-                                                            <ItemTemplate>
-                                                                <asp:CheckBox ID="chkbTarifario" runat="server" />
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
-                                                        <asp:BoundField DataField="DPrecio" ItemStyle-Width="10" HeaderText="Precio" />
-                                                        <asp:BoundField DataField="StrNombreColoniaZE" HeaderText="Colonia a entregar" />
-                                                    </Columns>
-                                                </asp:GridView>
-                                            </asp:Panel>
-
-                                            <asp:Panel ID="PanelTarifarioDistribuidora" runat="server">
-
-                                                <asp:GridView runat="server" ID="DGVInformacionTarifarioDistribuidora" Style="margin-top: 10px;" AutoGenerateColumns="false" DataKeyNames="UidTarifario" CssClass="table table-bordered table-hover table-condensed table-striped input-sm">
-                                                    <EmptyDataTemplate>
-                                                        <div class="info">
-                                                            No hay zonas de entrega disponibles para mostrar                                                   
-                                                        </div>
-                                                    </EmptyDataTemplate>
-                                                    <SelectedRowStyle CssClass="table table-hover input-sm success" />
-                                                    <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />
-                                                    <Columns>
-                                                        <asp:BoundField DataField="StrNombreColoniaZE" HeaderText="Colonia a entregar" />
-                                                        <asp:BoundField DataField="DPrecio" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" HeaderText="Precio" />
-                                                    </Columns>
-                                                </asp:GridView>
-                                            </asp:Panel>
-
+                                                <div class="form-group">
+                                                    <label>Registros</label>
+                                                    <asp:DropDownList CssClass="form-control" AutoPostBack="true" ID="DDLPIColonias" OnSelectedIndexChanged="DDLPIColonias_SelectedIndexChanged" runat="server">
+                                                        <asp:ListItem Value="Todos" Text="Todos" />
+                                                        <asp:ListItem Value="Seleccionado" Text="Seleccionados" />
+                                                        <asp:ListItem Value="Deseleccionados" Text="Deseleccionados" />
+                                                    </asp:DropDownList>
+                                                </div>
+                                                <div class="form-group">
+                                                    <asp:LinkButton CssClass="btn btn-default btn-sm" ID="BTNPIBuscarColonia" OnClick="BTNPIBuscarColonia_Click" runat="server">
+                                                <span class="glyphicon glyphicon-search"></span>
+                                                    </asp:LinkButton>
+                                                </div>
+                                            </div>
+                                            <asp:GridView runat="server" Visible="true" ID="DgvInformacionTarifario" Style="margin-top: 10px;" OnRowDataBound="DgvInformacionTarifario_RowDataBound" AutoGenerateColumns="false" DataKeyNames="UidTarifario" CssClass="table table-bordered table-hover table-condensed table-striped input-sm">
+                                                <EmptyDataTemplate>
+                                                    <div class="info">
+                                                        No hay zonas de entrega disponibles para mostrar                                                   
+                                                    </div>
+                                                </EmptyDataTemplate>
+                                                <SelectedRowStyle CssClass="table table-hover input-sm success" />
+                                                <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />
+                                                <Columns>
+                                                    <asp:ButtonField CommandName="Select" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" />
+                                                    <asp:TemplateField ItemStyle-Width="10">
+                                                        <ItemTemplate>
+                                                            <asp:CheckBox ID="chkbTarifario" runat="server" />
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:BoundField DataField="DPrecio" ItemStyle-Width="10" HeaderText="Precio" />
+                                                    <asp:BoundField DataField="StrNombreColoniaZE" HeaderText="Colonia a entregar" />
+                                                </Columns>
+                                            </asp:GridView>
                                         </asp:Panel>
+
+                                        <asp:Panel ID="PanelTarifarioDistribuidora" runat="server">
+
+                                            <asp:GridView runat="server" ID="DGVInformacionTarifarioDistribuidora" Style="margin-top: 10px;" AutoGenerateColumns="false" DataKeyNames="UidTarifario" CssClass="table table-bordered table-hover table-condensed table-striped input-sm">
+                                                <EmptyDataTemplate>
+                                                    <div class="info">
+                                                        No hay zonas de entrega disponibles para mostrar                                                   
+                                                    </div>
+                                                </EmptyDataTemplate>
+                                                <SelectedRowStyle CssClass="table table-hover input-sm success" />
+                                                <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />
+                                                <Columns>
+                                                    <asp:BoundField DataField="StrNombreColoniaZE" HeaderText="Colonia a entregar" />
+                                                    <asp:BoundField DataField="DPrecio" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" HeaderText="Precio" />
+                                                </Columns>
+                                            </asp:GridView>
+                                        </asp:Panel>
+
                                     </asp:Panel>
                                 </asp:Panel>
 

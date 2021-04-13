@@ -2198,7 +2198,6 @@ namespace WebApplication1.Vista
                             if (MVEmpresa.ObtenerTipoDeEmpresa(Session["UidEmpresaSistema"].ToString()))
                             {
                                 //Elimina datos e ingresa informacion de contrato
-                                string UidSuministradora = txtUidSucursal.Text;
                                 MVContrato.borrarSucursalSuministradora(UidSuministradora);
                                 MVContrato.GuardaRelacionDeContrato();
                                 if (MVTarifario.ListaDeTarifariosSeleccionados.Count > 0)
@@ -3827,6 +3826,12 @@ namespace WebApplication1.Vista
                             item.UidContrato = objeto.Uid;
                         }
                     }
+                    else
+                    {
+                        ChbxPagoOrdenAlRecolectar.Checked = false;
+                        txtComisionProducto.Text = "0";
+                        txtComisionEnvio.Text = "0";
+                    }
 
                     //for (int i = 0; i < MVTarifario.ListaDeTarifariosSeleccionados.Count; i++)
                     //{
@@ -3862,6 +3867,7 @@ namespace WebApplication1.Vista
                     {
                         DgvInformacionTarifario.Enabled = true;
                     }
+
                     PanelTarifarioSuministradora.Visible = true;
                     PanelTarifarioDistribuidora.Visible = false;
                 }
@@ -3876,10 +3882,20 @@ namespace WebApplication1.Vista
                     }
                     var registro = MVContrato.ListaDeSucursalesEnContrato.Find(c => c.UidSucursalSuministradora.ToString() == UidSucursal);
                     //Los botones se muestran siempre y cuando el contrato ya haya sido contratado
-                    if (registro.UidEstatus == new Guid("CD20F9BF-EBA2-4128-88FB-647544457B2D") || registro.UidEstatus == new Guid("5719C82E-6E7F-42A7-9C56-0F75DFEF0343"))
+                    if (registro != null)
                     {
-                        btnEditarContrato.Visible = true;
-                        btnAceptarEdicionContrato.Visible = false;
+                        if (registro.UidEstatus == new Guid("CD20F9BF-EBA2-4128-88FB-647544457B2D") || registro.UidEstatus == new Guid("5719C82E-6E7F-42A7-9C56-0F75DFEF0343"))
+                        {
+                            btnEditarContrato.Visible = true;
+                            btnAceptarEdicionContrato.Visible = false;
+                        }
+                    }
+                    else
+                    {
+                        ChbxPagoOrdenAlRecolectar.Enabled = true;
+                        txtComisionEnvio.Enabled = true;
+                        txtComisionProducto.Enabled = true;
+
                     }
                     MVTarifario.BuscarTarifario("Informacion distribuidora", uidSucursal: UidSucursal, UidSucursalDistribuidora: txtUidSucursal.Text);
                     DGVInformacionTarifarioDistribuidora.DataSource = MVTarifario.ListaDeTarifarios;
@@ -4010,8 +4026,8 @@ namespace WebApplication1.Vista
             {
                 if (MVEmpresa.ObtenerTipoDeEmpresa(Session["UidEmpresaSistema"].ToString()))
                 {
-                    panelInformacionContacto.Visible = true;
-                    panelInformacionTarifario.Visible = false;
+                    panelInformacionContacto.Visible = false;
+                    panelInformacionTarifario.Visible = true;
                     //Muestra los paneles
                     PanelTarifarioSuministradora.Visible = true;
                     PanelTarifarioDistribuidora.Visible = false;

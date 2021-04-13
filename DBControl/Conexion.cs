@@ -12,7 +12,7 @@ namespace DBControl
         //Conexion Osbel
         //public SqlConnection cn = new SqlConnection("Data Source=HP-BLANCA;Initial Catalog=DELIVERIX;User ID=sa;Password=12345678");
         //Conexion para la GearHost
-        //private readonly SqlConnection myVar = new SqlConnection("Data Source=den1.mssql5.gear.host;Initial Catalog=deliverix;Persist Security Info=True;User ID=deliverix;Password=Yj8q4DyP!d!o");
+        private readonly SqlConnection myVar = new SqlConnection("Data Source=den1.mssql5.gear.host;Initial Catalog=deliverix;Persist Security Info=True;User ID=deliverix;Password=Yj8q4DyP!d!o");
         //Conexion Toshiba
         //private SqlConnection myVar = new SqlConnection(connectionString: @"Data Source=192.168.100.50;Initial Catalog=Deliverix;User ID=sa;Password=12345678");
         //Conexion HP
