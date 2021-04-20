@@ -351,7 +351,7 @@ namespace DBControl
                 filterJoin = "INNER JOIN [GiroProducto] as GP ON GP.UidProducto = P.UidProducto";
             }
 
-            string order = (string.IsNullOrEmpty(sortField) || string.IsNullOrEmpty(sortOrder)) ? " UID DESC " : $"{sortField} {sortOrder.ToUpper()}";
+            string order = (string.IsNullOrEmpty(sortField) || string.IsNullOrEmpty(sortOrder)) ? " [Available] DESC " : $"{sortField} {sortOrder.ToUpper()}";
 
             SqlCommand command = new SqlCommand();
             command.CommandType = CommandType.Text;
@@ -367,46 +367,30 @@ namespace DBControl
             if (!string.IsNullOrEmpty(filtro))
             {
                 command.Parameters.AddWithValue("@Filter", filtro);
-                where += " and P.VchNombre like '%'+@Filter+'%' ";
+                filterWhere += " and P.VchNombre like '%'+@Filter+'%' ";
             }
 
             if (uidSeccion.HasValue)
             {
                 command.Parameters.AddWithValue("@UidSeccion", uidSeccion);
-                where += " and SEC.UidSeccion = @UidSeccion ";
+                filterWhere += " and SEC.UidSeccion = @UidSeccion ";
             }
 
             if (uidOferta.HasValue)
             {
                 command.Parameters.AddWithValue("@UidOferta", uidOferta);
-                where += " and O.UidOferta = @UidOferta ";
+                filterWhere += " and O.UidOferta = @UidOferta ";
             }
 
             if (uidEmpresa.HasValue)
             {
                 command.Parameters.AddWithValue("@UidEmpresa", uidEmpresa);
-                where += " and EMP.UidEmpresa = @UidEmpresa ";
+                filterWhere += " and EMP.UidEmpresa = @UidEmpresa ";
             }
-
-            string outerParams = $",(CASE WHEN [SecAvailable] = 0 OR [SucAvailable] = 0 OR [TdAvailable] = 0 OR [TsAvailable] = 0 THEN CAST(0 AS BIT) ELSE CAST(1 AS BIT) END) AS [Available]";
-
-            string AvailableSelectStatemens = "";
-            string AvailableWhereStatemens = "";
-
-            AvailableSelectStatemens = @"
-,SUM (CASE WHEN @UserTime BETWEEN SEC.VchHoraInicio AND SEC.VchHoraFin THEN 1 ELSE 0 END ) AS [SecAvailable],
-SUM (CASE WHEN @UserTime between SUC.HorarioApertura and SUC.HorarioCierre THEN 1 ELSE 0 END) AS [SucAvailable],
-SUM (CASE WHEN CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME) AND TS.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TSUC.HorarioApertura AS TIME) AND CAST(TSUC.HorarioCierre AS TIME) THEN 1 ELSE 0 END) AS [TsAvailable],
-SUM (CASE WHEN CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TDSUC.HorarioApertura AS TIME) AND CAST(TDSUC.HorarioCierre AS TIME)   THEN 1 ELSE 0 END) AS [TdAvailable] ";
 
             if (available.HasValue)
             {
-                outerParams = ",(CAST(1 AS BIT)) AS [Available]";
-                AvailableSelectStatemens = "";
-                AvailableWhereStatemens = @" AND @UserTime BETWEEN SEC.VchHoraInicio AND SEC.VchHoraFin ";
-                AvailableWhereStatemens += " AND @UserTime between SUC.HorarioApertura and SUC.HorarioCierre ";
-                AvailableWhereStatemens += " AND CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME) AND TS.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TSUC.HorarioApertura AS TIME) AND CAST(TSUC.HorarioCierre AS TIME) ";
-                AvailableWhereStatemens += " AND CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TDSUC.HorarioApertura AS TIME) AND CAST(TDSUC.HorarioCierre AS TIME) ";
+                where += " AND  [Available] = 1 ";
             }
 
 
@@ -435,7 +419,7 @@ SUM (CASE WHEN CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATET
             SELECT @UserTime = CONVERT(VARCHAR, @UserDateTime, 8)
 
             SELECT 
-                * {outerParams},[Count] = COUNT (*) OVER()  
+                *,[Count] = COUNT (*) OVER()  
             FROM (
                 SELECT     
                     P.[UidProducto] AS [Uid],
@@ -450,7 +434,17 @@ SUM (CASE WHEN CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATET
                          WHEN COM.BAboserveComision = 1 THEN SP.Mcosto
                          ELSE ((SP.Mcosto / 100)*CDS.ComisionTotalProducto) + SP.Mcosto
                     END 
-                    ) AS [Price] {AvailableSelectStatemens}                    
+                    ) AS [Price],
+                    CASE 
+                        WHEN SUM(
+                        CASE WHEN 
+                            @UserTime BETWEEN SEC.VchHoraInicio AND SEC.VchHoraFin
+                            AND @UserTime between SUC.HorarioApertura and SUC.HorarioCierre
+                            AND CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME) AND TS.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TSUC.HorarioApertura AS TIME) AND CAST(TSUC.HorarioCierre AS TIME)
+                            AND CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TDSUC.HorarioApertura AS TIME) AND CAST(TDSUC.HorarioCierre AS TIME)
+                        THEN 1 ELSE 0 END) > 0 
+                        THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+                    END AS [Available]
                 FROM [Productos] AS P    
                     INNER JOIN [SeccionProducto] AS SP ON P.[UidProducto] = SP.[UidProducto]
                     INNER JOIN [Seccion] AS SEC ON SEC.UidSeccion = SP.UidSeccion AND SEC.IntEstatus = 1
@@ -488,10 +482,10 @@ SUM (CASE WHEN CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATET
                     AND CDS.UidEstatusContrato = 'CD20F9BF-EBA2-4128-88FB-647544457B2D'
                     AND ZHP.IdZonaHoraria = @TimeZone    
                     AND P.intEstatus = 1
-                    {filterWhere} {where} {AvailableWhereStatemens}
+                    {filterWhere}  
                 GROUP BY P.UidProducto,P.[VchNombre],IPROD.NVchRuta,IEMP.NVchRuta,EMP.[UidEmpresa],EMP.[NombreComercial],P.VchDescripcion
             ) payload 
-            WHERE 1=1 
+            WHERE 1=1  {where}
             ORDER BY {order}
             OFFSET @pageSize * @pageNumber ROWS
             FETCH NEXT @pageSize ROWS ONLY";
@@ -571,13 +565,6 @@ SUM (CASE WHEN CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATET
             command.Parameters.AddWithValue("@Dia", dia);
             command.Parameters.AddWithValue("@FilterType", tipoFiltro);
             command.Parameters.AddWithValue("@UidFilter", uidFiltro);
-
-            if (!string.IsNullOrEmpty(filtro))
-            {
-                command.Parameters.AddWithValue("@Filter", filtro);
-                where += " AND e.NombreComercial like '%'+@Filter+'%' ";
-            }
-
             if (string.IsNullOrEmpty(tipoFiltro) || tipoFiltro.Equals("None"))
             {
                 filterJoin = " INNER JOIN GiroProducto gp on gp.UidProducto = p.UidProducto ";
@@ -598,24 +585,19 @@ SUM (CASE WHEN CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATET
                 filterWhere = " AND scp.UidSubcategoria = @UidFilter ";
             }
 
-            string selectAvailability = $@"
-@UserTime between S.HorarioApertura and S.HorarioCierre and ZHP.IdZonaHoraria = @TimeZone 
-AND CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME) AND TS.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TSUC.HorarioApertura AS TIME) AND CAST(TSUC.HorarioCierre AS TIME)
-AND CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TDSUC.HorarioApertura AS TIME) AND CAST(TDSUC.HorarioCierre AS TIME)
-AND @UserTime between se.VchHoraInicio and se.VchHoraFin ";
-            string whereAvailability = $@" AND 1=1 ";
+            if (!string.IsNullOrEmpty(filtro))
+            {
+                command.Parameters.AddWithValue("@Filter", filtro);
+                filterWhere += " AND e.NombreComercial like '%'+@Filter+'%' ";
+            }
+
 
             if (available.HasValue)
             {
-                selectAvailability = " 1=1 ";
-                whereAvailability = $@"
-AND @UserTime between S.HorarioApertura and S.HorarioCierre and ZHP.IdZonaHoraria = @TimeZone
-AND CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME) AND TS.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TSUC.HorarioApertura AS TIME) AND CAST(TSUC.HorarioCierre AS TIME)
-AND CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TDSUC.HorarioApertura AS TIME) AND CAST(TDSUC.HorarioCierre AS TIME)
-AND @UserTime between se.VchHoraInicio and se.VchHoraFin ";
+                where += " AND  [Available] = 1 ";
             }
 
-            string order = (string.IsNullOrEmpty(sortField) || string.IsNullOrEmpty(sortOrder)) ? " Uid " : $"{sortField} {sortOrder.ToUpper()}";
+            string order = (string.IsNullOrEmpty(sortField) || string.IsNullOrEmpty(sortOrder)) ? " [Available] DESC " : $"{sortField} {sortOrder.ToUpper()}";
 
             string query = $@"
 -- Zona horaria del usuario acorde al estado
@@ -641,11 +623,16 @@ SELECT *, [Count] = COUNT (*) OVER() FROM (
         E.NombreComercial AS [Name],
         I.NVchRuta AS [ImgUrl],
         COUNT(DISTINCT S.UidSucursal) AS [AvailableBranches],
-        CASE WHEN 
-        SUM(
         CASE 
-            WHEN {selectAvailability} THEN 1 ELSE 0 
-        END) = 0 THEN CAST(0 AS BIT) ELSE CAST(1 AS BIT) END AS [Available]
+            WHEN SUM(
+            CASE WHEN 
+                @UserTime BETWEEN se.VchHoraInicio AND se.VchHoraFin
+                AND @UserTime between s.HorarioApertura and s.HorarioCierre
+                AND CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME) AND TS.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TSUC.HorarioApertura AS TIME) AND CAST(TSUC.HorarioCierre AS TIME)
+                AND CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TDSUC.HorarioApertura AS TIME) AND CAST(TDSUC.HorarioCierre AS TIME)
+            THEN 1 ELSE 0 END) > 0 
+            THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+        END AS [Available]
     FROM Empresa E
         INNER JOIN Productos p on e.UidEmpresa = p.UidEmpresa
 	    INNER JOIN SeccionProducto sp on sp.UidProducto = p.UidProducto 
@@ -683,9 +670,10 @@ SELECT *, [Count] = COUNT (*) OVER() FROM (
         AND i.NVchRuta not like '%/Portada/%'
         AND i.NVchRuta LIKE '%FotoPerfil%'
         AND e.IdEstatus = 1 
-        AND s.IntEstatus = 1 {filterWhere} {where} {whereAvailability}
+        AND s.IntEstatus = 1 {filterWhere} 
     GROUP BY  E.UidEmpresa, E.NombreComercial, I.NVchRuta
 ) payload 
+WHERE 1=1 {where} 
 ORDER BY {order}
 OFFSET @pageSize * @pageNumber ROWS
 FETCH NEXT @pageSize ROWS ONLY";
