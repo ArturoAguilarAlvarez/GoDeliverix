@@ -1556,7 +1556,7 @@ namespace WebApplication1.Vista
                                                 }
                                                 else
                                                 {
-                                                    lblEstado.Text = "Productos casi cargados";
+                                                    lblEstado.Text = "Productos cargados correctamente";
                                                     PanelImportarProductos.Visible = false;
                                                     PanelBusqueda.Visible = true;
                                                     MVProducto.Buscar(UidEmpresa: new Guid(Session["UidEmpresaSistema"].ToString()));
@@ -1623,22 +1623,20 @@ namespace WebApplication1.Vista
         protected bool GuardaFotoS(FileUpload FU, string RUTA, string UidEmpresa)
         {
             bool resultado = false;
-
-
-            foreach (var item in FU.PostedFiles)
+            RUTA = RUTA + UidEmpresa;
+            for (int i = 0; i < FU.PostedFiles.Count; i++)
             {
                 GuardarImagenGiro:
                 //Valida si el directorio existe en el servidor
                 if (Directory.Exists(Server.MapPath(RUTA)))
                 {
                     //Crea el directorio de la empresa
-                    RUTA = RUTA + UidEmpresa;
                     CrearCarpetaDeEmpresa:
                     if (Directory.Exists(Server.MapPath(RUTA)))
                     {
                         CrearArchivoServidor:
                         //El archivo no existe en el servidor
-                        if (!File.Exists(Server.MapPath(item.FileName)))
+                        if (!File.Exists(Server.MapPath(FU.PostedFiles[i].FileName)))
                         {
                             long Random = new Random().Next(999999999);
                             string RutaCompleta = RUTA + "/" + Random + ".png";
@@ -1647,8 +1645,8 @@ namespace WebApplication1.Vista
                             if (!File.Exists(RutaCompleta))
                             {
                                 oImagenHelper = new ImagenHelper();
-                                System.Drawing.Image img = oImagenHelper.RedimensionarImagen(System.Drawing.Image.FromStream(item.InputStream));
-                                img = oImagenHelper.RedimensionarImagen(System.Drawing.Image.FromStream(item.InputStream));
+                                System.Drawing.Image img = oImagenHelper.RedimensionarImagen(System.Drawing.Image.FromStream(FU.PostedFiles[i].InputStream));
+                                img = oImagenHelper.RedimensionarImagen(System.Drawing.Image.FromStream(FU.PostedFiles[i].InputStream));
                                 //Guarda la imagen en el servidor
                                 //item.InputStream.Read(byte.Parse(img.), 0, item.ContentLength);
 
@@ -1664,7 +1662,7 @@ namespace WebApplication1.Vista
                         //Si el archivo existe lo elimina
                         else
                         {
-                            File.Delete(Server.MapPath("~/Vista/" + item.FileName));
+                            File.Delete(Server.MapPath("~/Vista/" + FU.PostedFiles[i].FileName));
                             goto CrearArchivoServidor;
                         }
                     }
