@@ -13,7 +13,15 @@
                 <div class="panel-heading">
                     Busqueda de productos
                 </div>
-                <div class="row container-fluid">
+                <div class="row container-fluid" style="margin: 10px">
+                    <div class="pull-left">
+                        <asp:LinkButton runat="server" ID="btnImportar" OnClick="btnImportar_Click" CssClass="btn btn-sm btn-success ">
+                            <span class="glyphicon glyphicon-save">
+                                        </span> Importar productos</asp:LinkButton>
+                        <asp:LinkButton runat="server" ID="btnExportar" OnClick="btnExportar_Click" CssClass="btn btn-sm btn-warning">
+                            <span class="glyphicon glyphicon-open">
+                                                </span>Descargar plantilla Excel</asp:LinkButton>
+                    </div>
                     <div class="pull-right">
                         <asp:LinkButton runat="server" ID="BtnBAOcultar" CssClass="btn btn-sm btn-default">
                             <span class="glyphicon glyphicon-eye-open"></span>
@@ -24,54 +32,105 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <div class="col-md-12" style="margin-bottom: 5px;">
-                        <div class="col-md-4">
-                            <asp:CheckBox Text="Multiseleccion" AutoPostBack="true" ID="ChkFGiro" OnCheckedChanged="ChkFGiro_CheckedChanged" CssClass="checkbox" runat="server" />
-                            <label>Giro</label>
-                            <asp:DropDownList ID="DDLFGiro" AutoPostBack="true" OnSelectedIndexChanged="DDLFGiro_SelectedIndexChanged" CssClass="form-control" runat="server">
-                            </asp:DropDownList>
-                            <asp:ListBox ID="LBFFGiro" CssClass="form-control" SelectionMode="Multiple" runat="server"></asp:ListBox>
+
+                    <asp:UpdatePanel runat="server" ID="PanelImportarProductos">
+                        <ContentTemplate>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h6>Selecciona imagenes</h6>
+                                    <asp:FileUpload runat="server" ID="FUImportarImagenes" AllowMultiple="true" />
+                                </div>
+                                <div class="col-md-12">
+                                    <h6>Subir excel</h6>
+                                    <asp:FileUpload runat="server" ID="FUImportarProductos" />
+                                </div>
+                            </div>
+                            <div class="row container-fluid">
+                                <h6>Selecciona los catalogos</h6>
+                                <div class="col-md-4">
+                                    <label>Giro</label>
+                                    <asp:DropDownList ID="DDLImportGiro" AutoPostBack="true" OnSelectedIndexChanged="DDLImportGiro_SelectedIndexChanged" CssClass="form-control" runat="server">
+                                    </asp:DropDownList>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Categoria</label>
+                                    <asp:DropDownList ID="DDLImportCategoria" AutoPostBack="true" OnSelectedIndexChanged="DDLImportCategoria_SelectedIndexChanged" CssClass="form-control" runat="server">
+                                    </asp:DropDownList>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Subcategoria</label>
+                                    <asp:ListBox ID="LBSubcategoriaImport" CssClass="form-control" SelectionMode="Multiple" runat="server"></asp:ListBox>
+                                </div>
+                            </div>
+
+                            <div class="pull-right" style="margin: 20px;">
+                                <asp:LinkButton runat="server" ID="btnCargarProductos" OnClick="btnCargarProductos_Click" CssClass="btn btn-sm btn-success">
+                            <span class="glyphicon glyphicon-ok"></span>
+                            Cargar productos
+                                </asp:LinkButton>
+                                <asp:LinkButton runat="server" ID="BtnCancelarImportacion" OnClick="BtnCancelarImportacion_Click" CssClass="btn btn-sm btn-danger">
+                            <span class="glyphicon glyphicon-ok"></span>
+                            Cancelar
+                                </asp:LinkButton>
+                            </div>
+                        </ContentTemplate>
+                        <Triggers>
+                            <asp:PostBackTrigger ControlID="btnCargarProductos" />
+                        </Triggers>
+                    </asp:UpdatePanel>
+                    <asp:Panel runat="server" ID="PanelBusqueda">
+                        <div class="col-md-12" style="margin-bottom: 5px;">
+                            <div class="col-md-4">
+                                <asp:CheckBox Text="Multiseleccion" AutoPostBack="true" ID="ChkFGiro" OnCheckedChanged="ChkFGiro_CheckedChanged" CssClass="checkbox" runat="server" />
+                                <label>Giro</label>
+                                <asp:DropDownList ID="DDLFGiro" AutoPostBack="true" OnSelectedIndexChanged="DDLFGiro_SelectedIndexChanged" CssClass="form-control" runat="server">
+                                </asp:DropDownList>
+                                <asp:ListBox ID="LBFFGiro" CssClass="form-control" SelectionMode="Multiple" runat="server"></asp:ListBox>
+                            </div>
+                            <div class="col-md-4">
+                                <asp:CheckBox Text="Multiseleccion" AutoPostBack="true" ID="ChkFCategoria" OnCheckedChanged="ChkFCategoria_CheckedChanged" CssClass="checkbox" runat="server" />
+                                <label>Categoria</label>
+                                <asp:DropDownList ID="DDLFCategoria" AutoPostBack="true" OnSelectedIndexChanged="DDLFCategoria_SelectedIndexChanged" CssClass="form-control" runat="server">
+                                </asp:DropDownList>
+                                <asp:ListBox ID="LBFCategoria" CssClass="form-control" SelectionMode="Multiple" runat="server"></asp:ListBox>
+                            </div>
+                            <div class="col-md-4">
+                                <asp:CheckBox Text="Multiseleccion" AutoPostBack="true" ID="ChkFSubcategoria" OnCheckedChanged="ChkFSubcategoria_CheckedChanged" CssClass="checkbox" runat="server" />
+                                <label>Subcategoria</label>
+                                <asp:DropDownList ID="DDLFSubcategoria" AutoPostBack="true" CssClass="form-control" runat="server">
+                                </asp:DropDownList>
+                                <asp:ListBox ID="LBFSubcategoria" CssClass="form-control" SelectionMode="Multiple" runat="server"></asp:ListBox>
+                            </div>
+                            <div class="col-md-4">
+                                <h6>Nombre</h6>
+                                <asp:TextBox ID="txtFNombre" CssClass="form-control" runat="server" />
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <asp:CheckBox Text="Multiseleccion" AutoPostBack="true" ID="ChkFCategoria" OnCheckedChanged="ChkFCategoria_CheckedChanged" CssClass="checkbox" runat="server" />
-                            <label>Categoria</label>
-                            <asp:DropDownList ID="DDLFCategoria" AutoPostBack="true" OnSelectedIndexChanged="DDLFCategoria_SelectedIndexChanged" CssClass="form-control" runat="server">
-                            </asp:DropDownList>
-                            <asp:ListBox ID="LBFCategoria" CssClass="form-control" SelectionMode="Multiple" runat="server"></asp:ListBox>
-                        </div>
-                        <div class="col-md-4">
-                            <asp:CheckBox Text="Multiseleccion" AutoPostBack="true" ID="ChkFSubcategoria" OnCheckedChanged="ChkFSubcategoria_CheckedChanged" CssClass="checkbox" runat="server" />
-                            <label>Subcategoria</label>
-                            <asp:DropDownList ID="DDLFSubcategoria" AutoPostBack="true" CssClass="form-control" runat="server">
-                            </asp:DropDownList>
-                            <asp:ListBox ID="LBFSubcategoria" CssClass="form-control" SelectionMode="Multiple" runat="server"></asp:ListBox>
-                        </div>
-                        <div class="col-md-4">
-                            <h6>Nombre</h6>
-                            <asp:TextBox ID="txtFNombre" CssClass="form-control" runat="server" />
-                        </div>
-                    </div>
-                    <asp:GridView ID="dgvProductos" AutoGenerateColumns="false" AllowSorting="true" OnSorting="dgvProductos_Sorting" AllowPaging="True" OnPageIndexChanging="dgvProductos_PageIndexChanging" PageSize="10" DataKeyNames="UID" OnSelectedIndexChanged="dgvProductos_SelectedIndexChanged" OnRowDataBound="dgvProductos_RowDataBound" CssClass="table table-bordered table-hover table-condensed table-striped input-sm" runat="server">
-                        <EmptyDataTemplate>
-                            No hay informacion relacionada
-                        </EmptyDataTemplate>
-                        <SelectedRowStyle CssClass="table table-hover input-sm success" />
-                        <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />
-                        <Columns>
-                            <asp:ButtonField CommandName="Select" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide">
-                                <FooterStyle CssClass="hide" />
-                                <HeaderStyle CssClass="hide" />
-                                <ItemStyle CssClass="hide" />
-                            </asp:ButtonField>
-                            <asp:BoundField DataField="STRNOMBRE" HeaderText="Giro" HeaderStyle-CssClass="text-center" SortExpression="STRNOMBRE" />
-                            <asp:TemplateField HeaderText="Estatus" SortExpression="STATUS">
-                                <ItemTemplate>
-                                    <asp:Label ID="lblEstatus" runat="server" />
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                            <asp:BoundField DataField="ESTATUS" HeaderText="Estatus" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" SortExpression="ESTATUS" />
-                        </Columns>
-                    </asp:GridView>
+
+                        <asp:GridView ID="dgvProductos" AutoGenerateColumns="false" AllowSorting="true" OnSorting="dgvProductos_Sorting" AllowPaging="True" OnPageIndexChanging="dgvProductos_PageIndexChanging" PageSize="10" DataKeyNames="UID" OnSelectedIndexChanged="dgvProductos_SelectedIndexChanged" OnRowDataBound="dgvProductos_RowDataBound" CssClass="table table-bordered table-hover table-condensed table-striped input-sm" runat="server">
+                            <EmptyDataTemplate>
+                                No hay informacion relacionada
+                       
+                            </EmptyDataTemplate>
+                            <SelectedRowStyle CssClass="table table-hover input-sm success" />
+                            <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />
+                            <Columns>
+                                <asp:ButtonField CommandName="Select" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide">
+                                    <FooterStyle CssClass="hide" />
+                                    <HeaderStyle CssClass="hide" />
+                                    <ItemStyle CssClass="hide" />
+                                </asp:ButtonField>
+                                <asp:BoundField DataField="STRNOMBRE" HeaderText="Giro" HeaderStyle-CssClass="text-center" SortExpression="STRNOMBRE" />
+                                <asp:TemplateField HeaderText="Estatus" SortExpression="STATUS">
+                                    <ItemTemplate>
+                                        <asp:Label ID="lblEstatus" runat="server" />
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:BoundField DataField="ESTATUS" HeaderText="Estatus" HeaderStyle-CssClass="hide" FooterStyle-CssClass="hide" ItemStyle-CssClass="hide" SortExpression="ESTATUS" />
+                            </Columns>
+                        </asp:GridView>
+                    </asp:Panel>
+
                 </div>
             </div>
         </div>
@@ -81,14 +140,17 @@
                 <div class="panel-heading">
                     Gestion de producto
                 </div>
-                <div class=" pull-left">
-                    <asp:LinkButton runat="server" ID="btnNuevo" OnClick="btnNuevo_Click" CssClass="btn btn-sm btn-default "><span class="glyphicon glyphicon-file"></span> Nuevo</asp:LinkButton>
-                    <asp:LinkButton runat="server" ID="btnEditar" OnClick="btnEditar_Click" CssClass="btn btn-sm btn-default disabled"><span class="glyphicon glyphicon-cog"></span> Editar</asp:LinkButton>
-                    <asp:LinkButton runat="server" ID="btnGuardar" OnClick="btnGuardar_Click" CssClass="btn btn-sm btn-success ">
-                        <asp:Label runat="server" ID="lblGuardarDatos"></asp:Label>
-                    </asp:LinkButton>
-                    <asp:LinkButton runat="server" ID="btnCancelar" OnClick="btnCancelar_Click" CssClass="btn btn-sm btn-danger "><asp:label CssClass=" glyphicon glyphicon-remove" runat="server" /></asp:LinkButton><asp:Label runat="server" ID="lblEstado"></asp:Label>
+                <div class="row" style="margin: 10px">
+                    <div class=" pull-left">
+                        <asp:LinkButton runat="server" ID="btnNuevo" OnClick="btnNuevo_Click" CssClass="btn btn-sm btn-default "><span class="glyphicon glyphicon-file"></span> Nuevo</asp:LinkButton>
+                        <asp:LinkButton runat="server" ID="btnEditar" OnClick="btnEditar_Click" CssClass="btn btn-sm btn-default disabled"><span class="glyphicon glyphicon-cog"></span> Editar</asp:LinkButton>
+                        <asp:LinkButton runat="server" ID="btnGuardar" OnClick="btnGuardar_Click" CssClass="btn btn-sm btn-success ">
+                            <asp:Label runat="server" ID="lblGuardarDatos"></asp:Label>
+                        </asp:LinkButton>
+                        <asp:LinkButton runat="server" ID="btnCancelar" OnClick="btnCancelar_Click" CssClass="btn btn-sm btn-danger "><asp:label CssClass=" glyphicon glyphicon-remove" runat="server" /></asp:LinkButton><asp:Label runat="server" ID="lblEstado"></asp:Label>
+                    </div>
                 </div>
+
                 <div class="clearfix"></div>
                 <%--Panel de mensaje de sistema--%>
                 <asp:Panel CssClass="well well-lg" ID="PanelMensaje" runat="server">
@@ -123,6 +185,9 @@
                             </asp:LinkButton>
                         </li>
                     </ul>
+
+
+
                     <asp:Panel ID="panelGeneral" runat="server">
                         <div class="col-md-6">
                             <asp:UpdatePanel runat="server">
@@ -214,9 +279,10 @@
 
                                         <asp:LinkButton CommandName="unselect" CssClass=" btn-default" runat="server">
                                             Seleccionado
-                                                    <div class="col-md-6">
-                                                        <img src="<%#  Eval("RUTAIMAGEN") %>" width="80" height="80" class="img-thumbnail" />
-                                                    </div>
+                                                   
+                                            <div class="col-md-6">
+                                                <img src="<%#  Eval("RUTAIMAGEN") %>" width="80" height="80" class="img-thumbnail" />
+                                            </div>
                                             <div class="col-md-6 ">
                                                 <p>
                                                     <asp:Label ID="lblDescripcion" runat="server">

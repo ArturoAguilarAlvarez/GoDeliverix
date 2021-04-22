@@ -18,7 +18,7 @@ namespace WebApplication1.Vista.Office
         VMSucursales MVSucursal = new VMSucursales();
         VMEmpresas MVEmpresa = new VMEmpresas();
         VMTarifario MVTarifario = new VMTarifario();
-
+        VMProducto MVProductos = new VMProducto();
 
 
         protected void Page_Load(object sender, EventArgs e)
@@ -111,6 +111,26 @@ namespace WebApplication1.Vista.Office
                             case "Todos los tarifarios":
                                 data = MVTarifario.ExportarTarifario();
                                 NombreDearchivo = "TodasLasTarifas";
+                                break;
+                            case "Exportar productos":
+                                MVProductos.Buscar(UidEmpresa: new Guid(Session["UidEmpresaSistema"].ToString()));
+                                data = ExcelProductosActualizar();
+                                foreach (var item in MVProductos.ListaDeProductos)
+                                {
+                                    DR = data.NewRow();
+                                    // Then add the new row to the collection.
+                                    var imagen = new VMImagen();
+                                    imagen.ObtenerImagenProducto(item.UID.ToString());
+                                    DR["UID"] = item.UID;
+                                    DR["Imagen"] = imagen.STRRUTA;
+                                    DR["Nombre"] = item.STRNOMBRE;
+                                    DR["Descripcion"] = item.STRDESCRIPCION;
+                                    data.Rows.Add(DR);
+                                }
+                                break;
+                            case "Exportar plantilla productos":
+                                data = ExcelProductosAgregar();
+                                NombreDearchivo = "PlantillaDeNuevosProductos";
                                 break;
                             default:
                                 break;
@@ -212,6 +232,74 @@ namespace WebApplication1.Vista.Office
             // Create an array for DataColumn objects.
             DataColumn[] keys = new DataColumn[1];
             keys[0] = lID;
+            namesTable.PrimaryKey = keys;
+
+            // Return the new DataTable.
+            return namesTable;
+        }
+        private DataTable ExcelProductosActualizar()
+        {
+            // Create a new DataTable titled 'Names.'
+            DataTable namesTable = new DataTable("Productos");
+
+            // Add three column objects to the table.
+            DataColumn lID = new DataColumn();
+            lID.DataType = System.Type.GetType("System.String");
+            lID.ColumnName = "UID";
+            lID.DefaultValue = "";
+            namesTable.Columns.Add(lID);
+
+            DataColumn Lsucursal = new DataColumn();
+            Lsucursal.DataType = System.Type.GetType("System.String");
+            Lsucursal.ColumnName = "Imagen";
+            Lsucursal.DefaultValue = "";
+            namesTable.Columns.Add(Lsucursal);
+
+            DataColumn lHORAAPARTURA = new DataColumn();
+            lHORAAPARTURA.DataType = System.Type.GetType("System.String");
+            lHORAAPARTURA.ColumnName = "Nombre";
+            namesTable.Columns.Add(lHORAAPARTURA);
+
+            DataColumn lHORACIERRE = new DataColumn();
+            lHORACIERRE.DataType = System.Type.GetType("System.String");
+            lHORACIERRE.ColumnName = "Descripcion";
+            namesTable.Columns.Add(lHORACIERRE);
+
+            // Create an array for DataColumn objects.
+            DataColumn[] keys = new DataColumn[1];
+            keys[0] = lID;
+            namesTable.PrimaryKey = keys;
+
+            // Return the new DataTable.
+            return namesTable;
+        }
+
+        private DataTable ExcelProductosAgregar()
+        {
+            // Create a new DataTable titled 'Names.'
+            DataTable namesTable = new DataTable("Productos");
+
+            // Add three column objects to the table.
+
+            DataColumn LImagen = new DataColumn();
+            LImagen.DataType = System.Type.GetType("System.String");
+            LImagen.ColumnName = "Imagen";
+            LImagen.DefaultValue = "";
+            namesTable.Columns.Add(LImagen);
+
+            DataColumn lHORAAPARTURA = new DataColumn();
+            lHORAAPARTURA.DataType = System.Type.GetType("System.String");
+            lHORAAPARTURA.ColumnName = "Nombre";
+            namesTable.Columns.Add(lHORAAPARTURA);
+
+            DataColumn lHORACIERRE = new DataColumn();
+            lHORACIERRE.DataType = System.Type.GetType("System.String");
+            lHORACIERRE.ColumnName = "Descripcion";
+            namesTable.Columns.Add(lHORACIERRE);
+
+            // Create an array for DataColumn objects.
+            DataColumn[] keys = new DataColumn[1];
+            keys[0] = LImagen;
             namesTable.PrimaryKey = keys;
 
             // Return the new DataTable.

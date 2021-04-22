@@ -7,6 +7,8 @@ using System.IO;
 using System.Web.UI.WebControls;
 using VistaDelModelo;
 using System.Drawing.Imaging;
+using System.Data;
+using ClosedXML.Excel;
 
 namespace WebApplication1.Vista
 {
@@ -53,9 +55,9 @@ namespace WebApplication1.Vista
 
                 MuestraPanel("General");
 
-
                 MVGiro.ListaDeGiroConimagen();
                 CargaDropDownList("Giro");
+                CargaDropDownList("GiroImport");
                 CargaListBox("Giro");
 
                 //Muestra el tooltip de cada registro del giro
@@ -73,15 +75,19 @@ namespace WebApplication1.Vista
                                 ObjectoLabel.ToolTip = Giro.STRDESCRIPCION;
                             }
                         }
-
                     }
                 }
 
                 MuestraFiltrosMultiSelect("Giro");
                 MVGiro.BuscarGiro(Estatus: "1");
                 CargaDropDownList("Giro");
-
+                MVCategoria.BuscarCategorias(Estatus: "1", UidGiro: DDLImportGiro.SelectedItem.Value);
+                CargaDropDownList("CategoriaImport");
+                MVSubcategoria.BuscarSubCategoria(UidCategoria: DDLImportCategoria.SelectedItem.Value);
+                CargaListBox("SubcategoriaImport");
+                PanelImportarProductos.Visible = false;
                 PanelMensaje.Visible = false;
+                PanelBusqueda.Visible = true;
             }
             else
             {
@@ -1249,6 +1255,18 @@ namespace WebApplication1.Vista
                     DDLFSubcategoria.DataValueField = "UID";
                     DDLFSubcategoria.DataBind();
                     break;
+                case "GiroImport":
+                    DDLImportGiro.DataSource = MVGiro.LISTADEGIRO;
+                    DDLImportGiro.DataTextField = "STRNOMBRE";
+                    DDLImportGiro.DataValueField = "UIDVM";
+                    DDLImportGiro.DataBind();
+                    break;
+                case "CategoriaImport":
+                    DDLImportCategoria.DataSource = MVCategoria.LISTADECATEGORIAS;
+                    DDLImportCategoria.DataTextField = "STRNOMBRE";
+                    DDLImportCategoria.DataValueField = "UIDCATEGORIA";
+                    DDLImportCategoria.DataBind();
+                    break;
                 default:
                     break;
             }
@@ -1278,6 +1296,12 @@ namespace WebApplication1.Vista
                     LBFSubcategoria.DataTextField = "STRNOMBRE";
                     LBFSubcategoria.DataValueField = "UID";
                     LBFSubcategoria.DataBind();
+                    break;
+                case "SubcategoriaImport":
+                    LBSubcategoriaImport.DataSource = MVSubcategoria.LISTADESUBCATEGORIAS;
+                    LBSubcategoriaImport.DataTextField = "STRNOMBRE";
+                    LBSubcategoriaImport.DataValueField = "UID";
+                    LBSubcategoriaImport.DataBind();
                     break;
                 default:
                     break;
@@ -1414,6 +1438,273 @@ namespace WebApplication1.Vista
         {
             //dgvProductos.DataSource = MVProducto.Sort(sortExpression, Valor); ;
             //dgvProductos.DataBind();
+        }
+
+        protected void btnImportar_Click(object sender, EventArgs e)
+        {
+            if (!PanelImportarProductos.Visible)
+            {
+                PanelImportarProductos.Visible = true;
+                PanelBusqueda.Visible = false;
+            }
+            else
+            {
+                PanelImportarProductos.Visible = false;
+                PanelBusqueda.Visible = true;
+            }
+        }
+
+        protected void btnExportar_Click(object sender, EventArgs e)
+        {
+            Session["ParametroVentanaExcel"] = "Exportar plantilla productos";
+            Session["UidEmpresaSistema"] = Session["UidEmpresaSistema"].ToString();
+            string _open = "window.open('Office/ExportarMenu.aspx', '_blank');";
+            ScriptManager.RegisterStartupScript(this, this.GetType(), Guid.NewGuid().ToString(), _open, true);
+        }
+
+        protected void btnCargarProductos_Click(object sender, EventArgs e)
+        {
+            if (FUImportarImagenes.HasFiles)
+            {
+                if (ValidaImagenesExcel(FUImportarImagenes))
+                {
+                    if (FUImportarProductos.HasFile)
+                    {
+                        if (".xlsx" == Path.GetExtension(FUImportarProductos.FileName))
+                        {
+                            try
+                            {
+                                byte[] buffer = new byte[FUImportarProductos.FileBytes.Length];
+                                FUImportarProductos.FileContent.Seek(0, SeekOrigin.Begin);
+                                FUImportarProductos.FileContent.Read(buffer, 0, Convert.ToInt32(FUImportarProductos.FileContent.Length));
+
+                                Stream stream2 = new MemoryStream(buffer);
+
+                                DataTable dt = new DataTable();
+                                using (XLWorkbook workbook = new XLWorkbook(stream2))
+                                {
+                                    IXLWorksheet sheet = workbook.Worksheet(1);
+                                    bool FirstRow = true;
+                                    string readRange = "1:1";
+                                    foreach (IXLRow row in sheet.RowsUsed())
+                                    {
+                                        //If Reading the First Row (used) then add them as column name  
+                                        if (FirstRow)
+                                        {
+                                            //Checking the Last cellused for column generation in datatable  
+                                            readRange = string.Format("{0}:{1}", 1, row.LastCellUsed().Address.ColumnNumber);
+                                            foreach (IXLCell cell in row.Cells(readRange))
+                                            {
+                                                dt.Columns.Add(cell.Value.ToString());
+                                            }
+                                            FirstRow = false;
+                                        }
+                                        else
+                                        {
+                                            //Adding a Row in datatable  
+                                            dt.Rows.Add();
+                                            int cellIndex = 0;
+                                            //Updating the values of datatable  
+                                            foreach (IXLCell cell in row.Cells(readRange))
+                                            {
+                                                dt.Rows[dt.Rows.Count - 1][cellIndex] = cell.Value.ToString();
+                                                cellIndex++;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (dt.Columns.Contains("Imagen".Trim()) && dt.Columns.Contains("Nombre".Trim()) && dt.Columns.Contains("Descripcion".Trim()))
+                                {
+                                    int imagenesVerificadas = 0;
+                                    foreach (DataRow item in dt.Rows)
+                                    {
+                                        try
+                                        {
+                                            if (MVImagen.listaDeImagenes.Find(i => i.STRRUTA == item[0].ToString()) != null && !string.IsNullOrEmpty(item[1].ToString()) && !string.IsNullOrEmpty(item[2].ToString()))
+                                            {
+                                                imagenesVerificadas += 1;
+                                            }
+                                            else
+                                            {
+                                                imagenesVerificadas -= 1;
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            lblEstado.Text = ex.Message;
+                                            throw;
+                                        }
+                                    }
+                                    if (imagenesVerificadas == MVImagen.listaDeImagenes.Count)
+                                    {
+                                        if (DDLImportGiro.SelectedItem == null)
+                                        {
+                                            lblEstado.Text = "No se ha seleccionado un Giro para la importacion";
+                                        }
+                                        else
+                                        {
+                                            if (DDLImportCategoria.SelectedItem == null)
+                                            {
+                                                lblEstado.Text = "No se ha seleccionado una Categoria para la importacion";
+                                            }
+                                            else
+                                            {
+                                                if (LBSubcategoriaImport.SelectedItem == null)
+                                                {
+                                                    lblEstado.Text = "No se ha seleccionado una Subcategoria para la importacion";
+                                                }
+                                                else
+                                                {
+                                                    lblEstado.Text = "Productos casi cargados";
+                                                    PanelImportarProductos.Visible = false;
+                                                    PanelBusqueda.Visible = true;
+                                                    MVProducto.Buscar(UidEmpresa: new Guid(Session["UidEmpresaSistema"].ToString()));
+                                                    dgvProductos.DataSource = MVProducto.ListaDeProductos;
+                                                    dgvProductos.DataBind();
+                                                    foreach (ListItem item in LBSubcategoriaImport.Items)
+                                                    {
+                                                        item.Selected = false;
+                                                    }
+                                                    GuardaFotoS(FUImportarImagenes, "Img/Productos/", Session["UidEmpresaSistema"].ToString());
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        lblEstado.Text = "Uno o mas registros no coinciden o no estan completos en el excel";
+                                    }
+                                }
+                                else
+                                {
+                                    lblEstado.Text = "el archivo no tiene las columnas correctas";
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                lblEstado.Text = ex.Message;
+                            }
+                        }
+                        else
+                        {
+                            lblEstado.Text = "El archivo de los productos no es valido, solo admite formato .xlsx";
+                        }
+                    }
+                    else
+                    {
+                        lblEstado.Text = "No se cargo archivo de excel";
+                    }
+                }
+                else
+                {
+                    lblEstado.Text = "Error al cargar archivos, solo se admiten los siguientes formatos: .png,.jpg,.jpeg";
+                }
+            }
+        }
+        private bool ValidaImagenesExcel(FileUpload fuimagenes)
+        {
+            bool resultado = true;
+            MVImagen.listaDeImagenes = new List<VMImagen>();
+            foreach (var file in fuimagenes.PostedFiles)
+            {
+                if (!MVImagen.ValidarExtencionImagen(Path.GetExtension(file.FileName).ToLower()))
+                {
+                    resultado = false;
+                }
+                else
+                {
+                    MVImagen.listaDeImagenes.Add(new VMImagen() { STRRUTA = file.FileName });
+                }
+            }
+            return resultado;
+        }
+        protected bool GuardaFotoS(FileUpload FU, string RUTA, string UidEmpresa)
+        {
+            bool resultado = false;
+
+
+            foreach (var item in FU.PostedFiles)
+            {
+                GuardarImagenGiro:
+                //Valida si el directorio existe en el servidor
+                if (Directory.Exists(Server.MapPath(RUTA)))
+                {
+                    //Crea el directorio de la empresa
+                    RUTA = RUTA + UidEmpresa;
+                    CrearCarpetaDeEmpresa:
+                    if (Directory.Exists(Server.MapPath(RUTA)))
+                    {
+                        CrearArchivoServidor:
+                        //El archivo no existe en el servidor
+                        if (!File.Exists(Server.MapPath(item.FileName)))
+                        {
+                            long Random = new Random().Next(999999999);
+                            string RutaCompleta = RUTA + "/" + Random + ".png";
+
+                            //Valida si el archivo existe
+                            if (!File.Exists(RutaCompleta))
+                            {
+                                oImagenHelper = new ImagenHelper();
+                                System.Drawing.Image img = oImagenHelper.RedimensionarImagen(System.Drawing.Image.FromStream(item.InputStream));
+                                img = oImagenHelper.RedimensionarImagen(System.Drawing.Image.FromStream(item.InputStream));
+                                //Guarda la imagen en el servidor
+                                //item.InputStream.Read(byte.Parse(img.), 0, item.ContentLength);
+
+                                img.Save(Server.MapPath("~/Vista/" + RutaCompleta), ImageFormat.Png);
+                                resultado = true;
+                            }
+                            else
+                            {
+                                lblEstado.Text = "Imagen existente en el sistema, favor de agregar otra.";
+                                resultado = false;
+                            }
+                        }
+                        //Si el archivo existe lo elimina
+                        else
+                        {
+                            File.Delete(Server.MapPath("~/Vista/" + item.FileName));
+                            goto CrearArchivoServidor;
+                        }
+                    }
+                    else
+                    {
+                        Directory.CreateDirectory(Server.MapPath(RUTA));
+                        goto CrearCarpetaDeEmpresa;
+                    }
+                }
+                else
+                {
+                    Directory.CreateDirectory(Server.MapPath(RUTA));
+                    goto GuardarImagenGiro;
+                }
+            }
+            return resultado;
+        }
+
+        protected void BtnCancelarImportacion_Click(object sender, EventArgs e)
+        {
+            PanelImportarProductos.Visible = false;
+            PanelBusqueda.Visible = true;
+        }
+
+        protected void DDLImportGiro_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (DDLImportGiro.SelectedItem != null)
+            {
+                MVCategoria.BuscarCategorias(Estatus: "1", UidGiro: DDLImportGiro.SelectedItem.Value);
+                CargaDropDownList("CategoriaImport");
+            }
+        }
+
+        protected void DDLImportCategoria_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (DDLImportCategoria.SelectedItem != null)
+            {
+                MVSubcategoria.BuscarSubCategoria(UidCategoria: DDLImportCategoria.SelectedItem.Value);
+                CargaListBox("SubcategoriaImport");
+            }
         }
     }
 }

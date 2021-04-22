@@ -283,7 +283,13 @@ namespace VistaDelModelo
                         string nombre = item["VchNombre"].ToString().ToUpper();
                         string descripcion = item["VchDescripcion"].ToString();
                         string Estatus = item["intEstatus"].ToString();
-                        ListaDeProductos.Add(new VMProducto() { UID = uidproducto, STRNOMBRE = nombre, ESTATUS = Int32.Parse(Estatus) });
+                        ListaDeProductos.Add(new VMProducto()
+                        {
+                            UID = uidproducto,
+                            STRNOMBRE = nombre,
+                            ESTATUS = Int32.Parse(Estatus),
+                            STRDESCRIPCION = descripcion
+                        });
                     }
                 }
                 else
