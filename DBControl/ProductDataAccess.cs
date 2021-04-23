@@ -321,7 +321,7 @@ namespace DBControl
         /// <param name="uidOferta"></param>
         /// <param name="uidEmpresa"></param>
         /// <returns></returns>
-        public DataTable ReadAllStoreVersion3(int pageSize, int pageNumber, string sortField, string sortOrder, Guid uidEstado, Guid uidColonia, string dia, string tipoFiltro, Guid uidFiltro, string filtro = null, Guid? uidSeccion = null, Guid? uidOferta = null, Guid? uidEmpresa = null, bool? available = null)
+        public DataTable ReadAllStoreVersion3(int pageSize, int pageNumber, string sortField, string sortOrder, Guid uidEstado, Guid uidColonia, string dia, string tipoFiltro, Guid uidFiltro, string filtro = null, Guid? uidSeccion = null, Guid? uidOferta = null, Guid? uidEmpresa = null, bool? available = true)
         {
 
             string filterJoin = string.Empty;
@@ -388,9 +388,20 @@ namespace DBControl
                 filterWhere += " and EMP.UidEmpresa = @UidEmpresa ";
             }
 
+            string availabilityStatements = @"
+AND @UserTime BETWEEN SEC.VchHoraInicio AND SEC.VchHoraFin
+AND CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME) AND TS.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(SUC.HorarioApertura AS TIME) AND CAST(SUC.HorarioCierre AS TIME)
+AND CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TDSUC.HorarioApertura AS TIME) AND CAST(TDSUC.HorarioCierre AS TIME)";
+            string selectStatements = availabilityStatements;
+            string whereStatements = string.Empty;
+
             if (available.HasValue)
             {
-                where += " AND  [Available] = 1 ";
+                if (available.Value)
+                {
+                    selectStatements = string.Empty;
+                    whereStatements = availabilityStatements;
+                }
             }
 
 
@@ -438,10 +449,8 @@ namespace DBControl
                     CASE 
                         WHEN SUM(
                         CASE WHEN 
-                            @UserTime BETWEEN SEC.VchHoraInicio AND SEC.VchHoraFin
-                            AND @UserTime between SUC.HorarioApertura and SUC.HorarioCierre
-                            AND CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME) AND TS.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TSUC.HorarioApertura AS TIME) AND CAST(TSUC.HorarioCierre AS TIME)
-                            AND CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TDSUC.HorarioApertura AS TIME) AND CAST(TDSUC.HorarioCierre AS TIME)
+                            1=1
+                            {selectStatements}
                         THEN 1 ELSE 0 END) > 0 
                         THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
                     END AS [Available]
@@ -470,7 +479,7 @@ namespace DBControl
 	                INNER JOIN ZonaDeServicio ZDS on ZDS.UidColonia = @UidColonia and ZDS.UidRelacionZonaServicio = T.UidRelacionZonaEntrega 
     
 	                INNER JOIN turnosuministradora TS on TS.uidsucursal = CDS.UidSucursalSuministradora
-                    INNER JOIN Sucursales AS TSUC ON TSUC.UidSucursal = TS.UidSucursal
+                    -- INNER JOIN Sucursales AS TSUC ON TSUC.UidSucursal = TS.UidSucursal
 	                INNER JOIN TurnoDistribuidora TD on TD.UidSucursal = CDS.UidSucursalDistribuidora
                     INNER JOIN Sucursales AS TDSUC ON TDSUC.UidSucursal = TD.UidSucursal
                     INNER JOIN Comision AS COM ON COM.UidEmpresa = EMP.UidEmpresa
@@ -482,7 +491,7 @@ namespace DBControl
                     AND CDS.UidEstatusContrato = 'CD20F9BF-EBA2-4128-88FB-647544457B2D'
                     AND ZHP.IdZonaHoraria = @TimeZone    
                     AND P.intEstatus = 1
-                    {filterWhere}  
+                    {filterWhere}  {whereStatements} 
                 GROUP BY P.UidProducto,P.[VchNombre],IPROD.NVchRuta,IEMP.NVchRuta,EMP.[UidEmpresa],EMP.[NombreComercial],P.VchDescripcion
             ) payload 
             WHERE 1=1  {where}
