@@ -574,23 +574,24 @@ AND CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD
             command.Parameters.AddWithValue("@Dia", dia);
             command.Parameters.AddWithValue("@FilterType", tipoFiltro);
             command.Parameters.AddWithValue("@UidFilter", uidFiltro);
+
             if (string.IsNullOrEmpty(tipoFiltro) || tipoFiltro.Equals("None"))
             {
-                filterJoin = " INNER JOIN GiroProducto gp on gp.UidProducto = p.UidProducto ";
+                filterJoin = " INNER JOIN GiroSucursal as GP ON GP.UidSucursal = S.UidSucursal ";
             }
             else if (tipoFiltro.Equals("Giro"))
             {
-                filterJoin = " INNER JOIN GiroProducto gp on gp.UidProducto = p.UidProducto ";
+                filterJoin = "INNER JOIN GiroSucursal as GP ON GP.UidSucursal = S.UidSucursal ";
                 filterWhere = " AND gp.UidGiro = @UidFilter ";
             }
             else if (tipoFiltro.Equals("Categoria"))
             {
-                filterJoin = " INNER JOIN CategoriaProducto cp on cp.UidProducto = p.UidProducto ";
+                filterJoin = " INNER JOIN CategoriaSucursal AS CP ON CP.UidSucursal = S.UidSucursal ";
                 filterWhere = " AND cp.UidCategoria = @UidFilter ";
             }
             else if (tipoFiltro.Equals("Subcategoria"))
             {
-                filterJoin = " INNER JOIN SubcategoriaProducto scp on scp.UidProducto = p.UidProducto ";
+                filterJoin = " INNER JOIN SubcategoriaSucursal AS SCP ON scp.UidSucursal = S.UidSucursal ";
                 filterWhere = " AND scp.UidSubcategoria = @UidFilter ";
             }
 
@@ -636,23 +637,30 @@ SELECT *, [Count] = COUNT (*) OVER() FROM (
             WHEN SUM(
             CASE WHEN 
                 @UserTime BETWEEN se.VchHoraInicio AND se.VchHoraFin
-                AND @UserTime between s.HorarioApertura and s.HorarioCierre
-                AND CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME) AND TS.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TSUC.HorarioApertura AS TIME) AND CAST(TSUC.HorarioCierre AS TIME)
+                AND CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME) AND TS.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(s.HorarioApertura AS TIME) AND CAST(s.HorarioCierre AS TIME)
                 AND CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TDSUC.HorarioApertura AS TIME) AND CAST(TDSUC.HorarioCierre AS TIME)
             THEN 1 ELSE 0 END) > 0 
             THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
         END AS [Available]
     FROM Empresa E
-        INNER JOIN Productos p on e.UidEmpresa = p.UidEmpresa
-	    INNER JOIN SeccionProducto sp on sp.UidProducto = p.UidProducto 
-	    INNER JOIN Seccion se on se.UidSeccion = sp.UidSeccion 
-	    INNER JOIN Oferta O on O.UidOferta = se.UidOferta 
-	    INNER JOIN DiaOferta DO on DO.UidOferta = O.UidOferta 
-	    INNER JOIN Dias D on D.UidDia = DO.UidDia 
-	    INNER JOIN Sucursales s on s.UidSucursal = o.Uidsucursal 
-	    INNER JOIN ContratoDeServicio CDS on CDS.UidSucursalSuministradora = s.UidSucursal 
+        -- INNER JOIN Productos p on e.UidEmpresa = p.UidEmpresa
+	    -- INNER JOIN SeccionProducto sp on sp.UidProducto = p.UidProducto 
+	    -- INNER JOIN Seccion se on se.UidSeccion = sp.UidSeccion 
+	    -- INNER JOIN Oferta O on O.UidOferta = se.UidOferta 
+	    -- INNER JOIN DiaOferta DO on DO.UidOferta = O.UidOferta 
+	    
+	    INNER JOIN Sucursales S on S.UidEmpresa = E.UidEmpresa
+
+        INNER JOIN Oferta AS O ON O.Uidsucursal = S.UidSucursal
+        INNER JOIN DiaOferta DO on DO.UidOferta = O.UidOferta 
+        INNER JOIN Dias D on D.UidDia = DO.UidDia 
+        INNER JOIN Seccion se on se.UidOferta = o.UidOferta AND se.IntEstatus = 1
+
+	    INNER JOIN ContratoDeServicio CDS on CDS.UidSucursalSuministradora = S.UidSucursal 
 	    INNER JOIN turnosuministradora ts on ts.uidsucursal = CDS.UidSucursalSuministradora
-        INNER JOIN Sucursales AS TSUC ON TSUC.UidSucursal = TS.UidSucursal
+
+        -- INNER JOIN Sucursales AS TSUC ON TSUC.UidSucursal = TS.UidSucursal
+
 	    INNER JOIN TurnoDistribuidora td on td.UidSucursal = CDS.UidSucursalDistribuidora
         INNER JOIN Sucursales AS TDSUC ON TDSUC.UidSucursal = TD.UidSucursal
 	    INNER JOIN ZonaDeRepartoDeContrato ZDRC on ZDRC.UidContrato = CDS.UidContrato 
@@ -663,17 +671,17 @@ SELECT *, [Count] = COUNT (*) OVER() FROM (
 
         INNER JOIN Direccion AS DIR ON DIR.UidDireccion = S.UidDireccion
         INNER JOIN ZonaHorariaEstado ZHE on ZHE.UidEstado = DIR.UidEstado
-        INNER JOIN ZonaHorariaPais ZHP on ZHP.UidZonaHorariaPais = ZHE.UidRelacionZonaPaisEstado 
+        INNER JOIN ZonaHorariaPais ZHP on ZHP.UidZonaHorariaPais = ZHE.UidRelacionZonaPaisEstado  
 
         {filterJoin}
     WHERE   
         1=1
 	    AND zd.UidColonia = @UidColonia 
-        AND p.IntEstatus = 1 
+        -- AND p.IntEstatus = 1 
         AND	D.VchNombre = @Dia 
         AND O.IntEstatus = 1 
         AND se.IntEstatus = 1 
-        AND sp.VchTiempoElaboracion IS NOT NULL 
+        -- AND sp.VchTiempoElaboracion IS NOT NULL 
         AND CDS.UidEstatusContrato = 'CD20F9BF-EBA2-4128-88FB-647544457B2D'
 	    -- AND ((@Filter is not null AND e.NombreComercial like '%'+@Filter+'%')or(@Filter is null))
         AND i.NVchRuta not like '%/Portada/%'
