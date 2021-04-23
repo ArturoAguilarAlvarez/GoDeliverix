@@ -26,7 +26,7 @@ namespace Modelo.ApiResponse
         public Guid? UidOferta { get; set; } = null;
         public Guid? UidEmpresa { get; set; } = null;
 
-        public bool? Available { get; set; } = null;
+        public bool? Available { get; set; } = true;
 
     }
 }
