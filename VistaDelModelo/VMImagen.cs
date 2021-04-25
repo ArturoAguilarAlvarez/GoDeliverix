@@ -16,6 +16,15 @@ namespace VistaDelModelo
         private Imagen _Imagen;
         private Guid _UidImagen;
 
+        private Stream _bitimage;
+
+        public Stream BitImage
+        {
+            get { return _bitimage; }
+            set { _bitimage = value; }
+        }
+
+
         public Guid ID
         {
             get { return _UidImagen; }
@@ -51,6 +60,13 @@ namespace VistaDelModelo
         {
             get { return _UidPropietario; }
             set { _UidPropietario = value; }
+        }
+        private string _strNombrePropietario;
+
+        public string NombrePropietario
+        {
+            get { return _strNombrePropietario; }
+            set { _strNombrePropietario = value; }
         }
 
 

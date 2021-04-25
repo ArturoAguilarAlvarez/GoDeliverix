@@ -226,9 +226,16 @@ namespace VistaDelModelo
         {
             return CLASSProducto.Guardar(new Producto() { UID = UidProducto, UIDEMPRESA = UidEmpresa, STRNOMBRE = Nombre, STRDESCRIPCION = Descripcion, oEstatus = new Estatus() { ID = Int32.Parse(Estatus) } });
         }
-        public bool Actualizar(string Nombre, string Descripcion, Guid UidProducto, string Estatus)
+        public bool Actualizar(string Nombre, string Descripcion, Guid UidProducto, string Estatus = "")
         {
-            return CLASSProducto.Actualizar(new Producto() { UID = UidProducto, STRNOMBRE = Nombre, STRDESCRIPCION = Descripcion, oEstatus = new Estatus() { ID = Int32.Parse(Estatus) } });
+            if (!string.IsNullOrEmpty(Estatus))
+            {
+                return CLASSProducto.Actualizar(new Producto() { UID = UidProducto, STRNOMBRE = Nombre, STRDESCRIPCION = Descripcion, oEstatus = new Estatus() { ID = Int32.Parse(Estatus) } });
+            }
+            else
+            {
+                return CLASSProducto.Actualizar(new Producto() { UID = UidProducto, STRNOMBRE = Nombre, STRDESCRIPCION = Descripcion });
+            }
         }
         public void Buscar(string Nombre = "", string Descripcion = "", string estatus = "", Guid UidEmpresa = new Guid(), Guid UidProducto = new Guid(), string Giro = "", string Categoria = "", string Subcategoria = "")
         {

@@ -33,51 +33,76 @@
                 </div>
                 <div class="panel-body">
 
-                    <asp:UpdatePanel runat="server" ID="PanelImportarProductos">
-                        <ContentTemplate>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h6>Selecciona imagenes</h6>
-                                    <asp:FileUpload runat="server" ID="FUImportarImagenes" AllowMultiple="true" />
-                                </div>
-                                <div class="col-md-12">
-                                    <h6>Subir excel</h6>
-                                    <asp:FileUpload runat="server" ID="FUImportarProductos" />
-                                </div>
-                            </div>
-                            <div class="row container-fluid">
-                                <h6>Selecciona los catalogos</h6>
-                                <div class="col-md-4">
-                                    <label>Giro</label>
-                                    <asp:DropDownList ID="DDLImportGiro" AutoPostBack="true" OnSelectedIndexChanged="DDLImportGiro_SelectedIndexChanged" CssClass="form-control" runat="server">
-                                    </asp:DropDownList>
-                                </div>
-                                <div class="col-md-4">
-                                    <label>Categoria</label>
-                                    <asp:DropDownList ID="DDLImportCategoria" AutoPostBack="true" OnSelectedIndexChanged="DDLImportCategoria_SelectedIndexChanged" CssClass="form-control" runat="server">
-                                    </asp:DropDownList>
-                                </div>
-                                <div class="col-md-4">
-                                    <label>Subcategoria</label>
-                                    <asp:ListBox ID="LBSubcategoriaImport" CssClass="form-control" SelectionMode="Multiple" runat="server"></asp:ListBox>
-                                </div>
-                            </div>
+                    <asp:Panel runat="server" ID="PanelImportarProducto">
 
-                            <div class="pull-right" style="margin: 20px;">
-                                <asp:LinkButton runat="server" ID="btnCargarProductos" OnClick="btnCargarProductos_Click" CssClass="btn btn-sm btn-success">
+                        <asp:UpdatePanel runat="server">
+                            <ContentTemplate>
+                                <div class="pull-left">
+                                    <asp:LinkButton runat="server" ID="btnCargarProductos" OnClick="btnCargarProductos_Click" CssClass="btn btn-sm btn-success">
                             <span class="glyphicon glyphicon-ok"></span>
-                            Cargar productos
-                                </asp:LinkButton>
-                                <asp:LinkButton runat="server" ID="BtnCancelarImportacion" OnClick="BtnCancelarImportacion_Click" CssClass="btn btn-sm btn-danger">
-                            <span class="glyphicon glyphicon-ok"></span>
-                            Cancelar
-                                </asp:LinkButton>
-                            </div>
-                        </ContentTemplate>
-                        <Triggers>
-                            <asp:PostBackTrigger ControlID="btnCargarProductos" />
-                        </Triggers>
-                    </asp:UpdatePanel>
+                                    </asp:LinkButton>
+                                    <asp:LinkButton runat="server" ID="BtnCancelarImportacion" OnClick="BtnCancelarImportacion_Click" CssClass="btn btn-sm btn-danger">
+                            <span class="glyphicon glyphicon-remove"></span>
+                                    </asp:LinkButton>
+                                </div>
+                               <div class="clearfix"></div>
+                                <div class="row container-fluid">
+                                    <h6>Selecciona los catalogos</h6>
+                                    <div class="col-md-4">
+                                        <label>Giro</label>
+                                        <asp:DropDownList ID="DDLImportGiro" AutoPostBack="true" OnSelectedIndexChanged="DDLImportGiro_SelectedIndexChanged" CssClass="form-control" runat="server">
+                                        </asp:DropDownList>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Categoria</label>
+                                        <asp:DropDownList ID="DDLImportCategoria" AutoPostBack="true" OnSelectedIndexChanged="DDLImportCategoria_SelectedIndexChanged" CssClass="form-control" runat="server">
+                                        </asp:DropDownList>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Subcategoria</label>
+                                        <asp:DropDownList ID="DDLImportSubcategoria" AutoPostBack="true" CssClass="form-control" runat="server"></asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="pull-right" style="margin: 20px;">
+                                    <asp:LinkButton runat="server" ID="BtnAgregarCategoriasImportacion" OnClick="BtnAgregarCategoriasImportacion_Click" CssClass="btn btn-sm btn-success">
+                            <span class="glyphicon glyphicon-plus"></span>                            
+                                    </asp:LinkButton>
+                                </div>
+                                <%--Categorias seleccionadas--%>
+                                <asp:GridView ID="DVCategoriasImportacion" DataKeyNames="Uid" AutoGenerateColumns="false" AllowSorting="true" AllowPaging="True" PageSize="10" OnRowDeleting="DVCategoriasImportacion_RowDeleting" CssClass="table table-bordered table-hover table-condensed table-striped input-sm" runat="server">
+                                    <Columns>
+                                        <asp:BoundField DataField="NombreGiro" HeaderText="Giro" HeaderStyle-CssClass="text-center" SortExpression="Giro" />
+                                        <asp:BoundField DataField="NombreCategoria" HeaderText="Giro" HeaderStyle-CssClass="text-center" SortExpression="Categoria" />
+                                        <asp:BoundField DataField="NombreSubcategoria" HeaderText="Giro" HeaderStyle-CssClass="text-center" SortExpression="Subcategoria" />
+                                        <%-- Boton eliminar --%>
+                                        <asp:TemplateField>
+                                            <ItemStyle CssClass="text-center" />
+                                            <ItemTemplate>
+                                                <asp:LinkButton ID="btnEliminarLicencia" CssClass="btn btn-sm btn-danger" ToolTip="Eliminar" CommandName="Delete" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" runat="server">
+                                                            <span class="glyphicon glyphicon-trash"></span>
+                                                </asp:LinkButton>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                    </Columns>
+                                </asp:GridView>
+                                <div class="row" style="margin: 10px;">
+
+                                    <div class="col-md-12">
+                                        <h6>Selecciona imagenes</h6>
+                                        <asp:FileUpload runat="server" ID="FUImportarImagenes" AllowMultiple="true" />
+                                    </div>
+                                    <div class="col-md-12">
+                                        <h6>Subir excel</h6>
+                                        <asp:FileUpload runat="server" ID="FUImportarProductos" />
+                                    </div>
+                                </div>
+                            </ContentTemplate>
+                            <Triggers>
+                                <asp:PostBackTrigger ControlID="DVCategoriasImportacion" />
+                                <asp:PostBackTrigger ControlID="btnCargarProductos" />
+                            </Triggers>
+                        </asp:UpdatePanel>
+                    </asp:Panel>
                     <asp:Panel runat="server" ID="PanelBusqueda">
                         <div class="col-md-12" style="margin-bottom: 5px;">
                             <div class="col-md-4">

@@ -69,31 +69,31 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.LinkButton BtnBABuscar;
 
         /// <summary>
-        /// PanelImportarProductos control.
+        /// PanelImportarProducto control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel PanelImportarProductos;
+        protected global::System.Web.UI.WebControls.Panel PanelImportarProducto;
 
         /// <summary>
-        /// FUImportarImagenes control.
+        /// btnCargarProductos control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.FileUpload FUImportarImagenes;
+        protected global::System.Web.UI.WebControls.LinkButton btnCargarProductos;
 
         /// <summary>
-        /// FUImportarProductos control.
+        /// BtnCancelarImportacion control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.FileUpload FUImportarProductos;
+        protected global::System.Web.UI.WebControls.LinkButton BtnCancelarImportacion;
 
         /// <summary>
         /// DDLImportGiro control.
@@ -114,31 +114,49 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.DropDownList DDLImportCategoria;
 
         /// <summary>
-        /// LBSubcategoriaImport control.
+        /// DDLImportSubcategoria control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListBox LBSubcategoriaImport;
+        protected global::System.Web.UI.WebControls.DropDownList DDLImportSubcategoria;
 
         /// <summary>
-        /// btnCargarProductos control.
+        /// BtnAgregarCategoriasImportacion control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnCargarProductos;
+        protected global::System.Web.UI.WebControls.LinkButton BtnAgregarCategoriasImportacion;
 
         /// <summary>
-        /// BtnCancelarImportacion control.
+        /// DVCategoriasImportacion control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton BtnCancelarImportacion;
+        protected global::System.Web.UI.WebControls.GridView DVCategoriasImportacion;
+
+        /// <summary>
+        /// FUImportarImagenes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.FileUpload FUImportarImagenes;
+
+        /// <summary>
+        /// FUImportarProductos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.FileUpload FUImportarProductos;
 
         /// <summary>
         /// PanelBusqueda control.

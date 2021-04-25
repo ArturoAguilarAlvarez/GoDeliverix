@@ -122,8 +122,12 @@ namespace Modelo
                 Comando.Parameters.Add("@VchDescripcion", SqlDbType.VarChar, 300);
                 Comando.Parameters["@VchDescripcion"].Value = Objeto.STRDESCRIPCION;
 
-                Comando.Parameters.Add("@IntEstatus", SqlDbType.Int);
-                Comando.Parameters["@IntEstatus"].Value = Objeto.oEstatus.ID;
+                if (Objeto.oEstatus != null)
+                {
+                    Comando.Parameters.Add("@IntEstatus", SqlDbType.Int);
+                    Comando.Parameters["@IntEstatus"].Value = Objeto.oEstatus.ID;
+                }
+
 
                 resultado = CN.ModificarDatos(Comando);
             }

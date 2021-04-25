@@ -21,6 +21,7 @@ namespace WebApplication1.Vista
         VMGiro MVGiro = new VMGiro();
         VMCategoria MVCategoria = new VMCategoria();
         VMSubCategoria MVSubcategoria = new VMSubCategoria();
+        List<CatalogosViewModel> ListCatalogos = new List<CatalogosViewModel>();
         ImagenHelper oImagenHelper = new ImagenHelper();
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -33,6 +34,7 @@ namespace WebApplication1.Vista
                 Session["MVGiro"] = MVGiro;
                 Session["MVCategoria"] = MVCategoria;
                 Session["MVSubcategoria"] = MVSubcategoria;
+                Session["VMCatalogos"] = ListCatalogos;
 
                 Session.Remove("RutaImagen");
 
@@ -85,7 +87,7 @@ namespace WebApplication1.Vista
                 CargaDropDownList("CategoriaImport");
                 MVSubcategoria.BuscarSubCategoria(UidCategoria: DDLImportCategoria.SelectedItem.Value);
                 CargaListBox("SubcategoriaImport");
-                PanelImportarProductos.Visible = false;
+                PanelImportarProducto.Visible = false;
                 PanelMensaje.Visible = false;
                 PanelBusqueda.Visible = true;
             }
@@ -96,6 +98,7 @@ namespace WebApplication1.Vista
                 MVGiro = (VMGiro)Session["MVGiro"];
                 MVCategoria = (VMCategoria)Session["MVCategoria"];
                 MVSubcategoria = (VMSubCategoria)Session["MVSubcategoria"];
+                ListCatalogos = (List<CatalogosViewModel>)Session["VMCatalogos"];
             }
         }
 
@@ -1298,10 +1301,10 @@ namespace WebApplication1.Vista
                     LBFSubcategoria.DataBind();
                     break;
                 case "SubcategoriaImport":
-                    LBSubcategoriaImport.DataSource = MVSubcategoria.LISTADESUBCATEGORIAS;
-                    LBSubcategoriaImport.DataTextField = "STRNOMBRE";
-                    LBSubcategoriaImport.DataValueField = "UID";
-                    LBSubcategoriaImport.DataBind();
+                    DDLImportSubcategoria.DataSource = MVSubcategoria.LISTADESUBCATEGORIAS;
+                    DDLImportSubcategoria.DataTextField = "STRNOMBRE";
+                    DDLImportSubcategoria.DataValueField = "UID";
+                    DDLImportSubcategoria.DataBind();
                     break;
                 default:
                     break;
@@ -1442,21 +1445,21 @@ namespace WebApplication1.Vista
 
         protected void btnImportar_Click(object sender, EventArgs e)
         {
-            if (!PanelImportarProductos.Visible)
+            if (!PanelImportarProducto.Visible)
             {
-                PanelImportarProductos.Visible = true;
+                PanelImportarProducto.Visible = true;
                 PanelBusqueda.Visible = false;
             }
             else
             {
-                PanelImportarProductos.Visible = false;
+                PanelImportarProducto.Visible = false;
                 PanelBusqueda.Visible = true;
             }
         }
 
         protected void btnExportar_Click(object sender, EventArgs e)
         {
-            Session["ParametroVentanaExcel"] = "Exportar plantilla productos";
+            Session["ParametroVentanaExcel"] = "Exportar productos";
             Session["UidEmpresaSistema"] = Session["UidEmpresaSistema"].ToString();
             string _open = "window.open('Office/ExportarMenu.aspx', '_blank');";
             ScriptManager.RegisterStartupScript(this, this.GetType(), Guid.NewGuid().ToString(), _open, true);
@@ -1514,20 +1517,32 @@ namespace WebApplication1.Vista
                                     }
                                 }
 
-                                if (dt.Columns.Contains("Imagen".Trim()) && dt.Columns.Contains("Nombre".Trim()) && dt.Columns.Contains("Descripcion".Trim()))
+                                if (dt.Columns.Contains("Uid".Trim()) && dt.Columns.Contains("Imagen".Trim()) && dt.Columns.Contains("Nombre".Trim()) && dt.Columns.Contains("Descripcion".Trim()))
                                 {
                                     int imagenesVerificadas = 0;
                                     foreach (DataRow item in dt.Rows)
                                     {
                                         try
                                         {
-                                            if (MVImagen.listaDeImagenes.Find(i => i.STRRUTA == item[0].ToString()) != null && !string.IsNullOrEmpty(item[1].ToString()) && !string.IsNullOrEmpty(item[2].ToString()))
+                                            if (item[0].ToString() == Guid.Empty.ToString())
                                             {
-                                                imagenesVerificadas += 1;
-                                            }
-                                            else
-                                            {
-                                                imagenesVerificadas -= 1;
+                                                if (!string.IsNullOrEmpty(item[1].ToString()) && !string.IsNullOrEmpty(item[2].ToString()) && !string.IsNullOrEmpty(item[3].ToString()))
+                                                {
+                                                    if (MVImagen.listaDeImagenes.Exists(img => img.STRRUTA == item[1].ToString()))
+                                                    {
+                                                        var registro = MVImagen.listaDeImagenes.Find(img => img.STRRUTA == item[1].ToString());
+                                                        registro.NombrePropietario = item[2].ToString();
+                                                        imagenesVerificadas += 1;
+                                                    }
+                                                    else
+                                                    {
+                                                        imagenesVerificadas -= 1;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    imagenesVerificadas -= 1;
+                                                }
                                             }
                                         }
                                         catch (Exception ex)
@@ -1538,37 +1553,102 @@ namespace WebApplication1.Vista
                                     }
                                     if (imagenesVerificadas == MVImagen.listaDeImagenes.Count)
                                     {
-                                        if (DDLImportGiro.SelectedItem == null)
+                                        if (ListCatalogos == null || ListCatalogos.Count == 0)
                                         {
-                                            lblEstado.Text = "No se ha seleccionado un Giro para la importacion";
+                                            lblEstado.Text = "No se ha seleccionado una categoria para la importacion";
                                         }
                                         else
                                         {
-                                            if (DDLImportCategoria.SelectedItem == null)
+                                            if (GuardaFotoS(MVImagen.listaDeImagenes, "Img/Productos/", Session["UidEmpresaSistema"].ToString()))
                                             {
-                                                lblEstado.Text = "No se ha seleccionado una Categoria para la importacion";
+
+                                                foreach (DataRow item in dt.Rows)
+                                                {
+                                                    try
+                                                    {
+                                                        string Nombre = item[2].ToString();
+                                                        string Descripcion = item[2].ToString();
+                                                        if (item[0].ToString() == Guid.Empty.ToString())
+                                                        {
+                                                            if (MVImagen.listaDeImagenes.Exists(img => img.NombrePropietario == item[2].ToString()))
+                                                            {
+                                                                var registro = MVImagen.listaDeImagenes.Find(img => img.NombrePropietario == item[2].ToString());
+
+                                                                Guid UidEmpresa = new Guid(Session["UidEmpresaSistema"].ToString());
+
+                                                                Guid Uid = Guid.NewGuid();
+                                                                if (MVProducto.Guardar(Nombre, Descripcion, UidEmpresa, Uid, "1"))
+                                                                {
+                                                                    if (MVImagen.GuardaImagen(registro.STRRUTA, Uid.ToString(), "asp_InsertaImagenProducto"))
+                                                                    {
+                                                                        foreach (var cat in ListCatalogos)
+                                                                        {
+                                                                            MVProducto.RelacionGiro(cat.UidGiro.ToString(), Uid);
+                                                                            MVProducto.RelacionCategoria(cat.UidCategoria.ToString(), Uid);
+                                                                            MVProducto.RelacionSubategoria(cat.UidSubcategoria.ToString(), Uid);
+                                                                        }
+                                                                        PanelMensaje.Visible = true;
+                                                                        LblMensaje.Text = "Producto agregado";
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        PanelMensaje.Visible = true;
+                                                                        LblMensaje.Text = "Ocurrio un problema al agregar la imagen. /n Estamos trabajando en ello";
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    PanelMensaje.Visible = true;
+                                                                    LblMensaje.Text = "Ocurrio un problema al agregar. /n Estamos trabajando en ello";
+                                                                }
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            string UidProducto = item[0].ToString();
+                                                            if (MVProducto.Actualizar(Nombre, Descripcion, new Guid(UidProducto)))
+                                                            {
+                                                                MVProducto.EliminaGiro(UidProducto);
+                                                                MVProducto.EliminaCategoria(UidProducto);
+                                                                MVProducto.EliminaSubcategoria(UidProducto);
+
+                                                                foreach (var cat in ListCatalogos)
+                                                                {
+                                                                    MVProducto.RelacionGiro(cat.UidGiro.ToString(), new Guid(UidProducto));
+                                                                    MVProducto.RelacionCategoria(cat.UidCategoria.ToString(), new Guid(UidProducto));
+                                                                    MVProducto.RelacionSubategoria(cat.UidSubcategoria.ToString(), new Guid(UidProducto));
+                                                                }
+                                                                PanelMensaje.Visible = true;
+                                                                LblMensaje.Text = "Producto actualizado";
+                                                            }
+                                                            else
+                                                            {
+                                                                PanelMensaje.Visible = true;
+                                                                LblMensaje.Text = "Ocurrio un problema al actualizar. /n Estamos trabajando en ello";
+                                                            }
+                                                            Acciones = "Edicion";
+                                                            ManejoDeAcciones("Desactivado");
+                                                        }
+                                                    }
+                                                    catch (Exception ex)
+                                                    {
+                                                        lblEstado.Text = ex.Message;
+                                                        throw;
+                                                    }
+                                                }
+
+
+                                                lblEstado.Text = "Productos cargados correctamente";
+                                                PanelImportarProducto.Visible = false;
+                                                PanelBusqueda.Visible = true;
+                                                MVProducto.Buscar(UidEmpresa: new Guid(Session["UidEmpresaSistema"].ToString()));
+                                                dgvProductos.DataSource = MVProducto.ListaDeProductos;
+                                                dgvProductos.DataBind();
                                             }
                                             else
                                             {
-                                                if (LBSubcategoriaImport.SelectedItem == null)
-                                                {
-                                                    lblEstado.Text = "No se ha seleccionado una Subcategoria para la importacion";
-                                                }
-                                                else
-                                                {
-                                                    lblEstado.Text = "Productos cargados correctamente";
-                                                    PanelImportarProductos.Visible = false;
-                                                    PanelBusqueda.Visible = true;
-                                                    MVProducto.Buscar(UidEmpresa: new Guid(Session["UidEmpresaSistema"].ToString()));
-                                                    dgvProductos.DataSource = MVProducto.ListaDeProductos;
-                                                    dgvProductos.DataBind();
-                                                    foreach (ListItem item in LBSubcategoriaImport.Items)
-                                                    {
-                                                        item.Selected = false;
-                                                    }
-                                                    GuardaFotoS(FUImportarImagenes, "Img/Productos/", Session["UidEmpresaSistema"].ToString());
+                                                lblEstado.Text = "Ocurrio un problema al cargar las imagenes";
 
-                                                }
                                             }
                                         }
                                     }
@@ -1615,16 +1695,16 @@ namespace WebApplication1.Vista
                 }
                 else
                 {
-                    MVImagen.listaDeImagenes.Add(new VMImagen() { STRRUTA = file.FileName });
+                    MVImagen.listaDeImagenes.Add(new VMImagen() { STRRUTA = file.FileName, BitImage = file.InputStream });
                 }
             }
             return resultado;
         }
-        protected bool GuardaFotoS(FileUpload FU, string RUTA, string UidEmpresa)
+        protected bool GuardaFotoS(List<VMImagen> FU, string RUTA, string UidEmpresa)
         {
             bool resultado = false;
             RUTA = RUTA + UidEmpresa;
-            for (int i = 0; i < FU.PostedFiles.Count; i++)
+            for (int i = 0; i < FU.Count; i++)
             {
                 GuardarImagenGiro:
                 //Valida si el directorio existe en el servidor
@@ -1636,21 +1716,22 @@ namespace WebApplication1.Vista
                     {
                         CrearArchivoServidor:
                         //El archivo no existe en el servidor
-                        if (!File.Exists(Server.MapPath(FU.PostedFiles[i].FileName)))
+                        if (!File.Exists(Server.MapPath(FU[i].STRRUTA)))
                         {
                             long Random = new Random().Next(999999999);
                             string RutaCompleta = RUTA + "/" + Random + ".png";
-
+                            var imagen = MVImagen.listaDeImagenes.Find(d => d.STRRUTA == FU[i].STRRUTA);
                             //Valida si el archivo existe
                             if (!File.Exists(RutaCompleta))
                             {
                                 oImagenHelper = new ImagenHelper();
-                                System.Drawing.Image img = oImagenHelper.RedimensionarImagen(System.Drawing.Image.FromStream(FU.PostedFiles[i].InputStream));
-                                img = oImagenHelper.RedimensionarImagen(System.Drawing.Image.FromStream(FU.PostedFiles[i].InputStream));
+                                System.Drawing.Image img = oImagenHelper.RedimensionarImagen(System.Drawing.Image.FromStream(FU[i].BitImage));
+                                img = oImagenHelper.RedimensionarImagen(System.Drawing.Image.FromStream(FU[i].BitImage));
                                 //Guarda la imagen en el servidor
                                 //item.InputStream.Read(byte.Parse(img.), 0, item.ContentLength);
 
                                 img.Save(Server.MapPath("~/Vista/" + RutaCompleta), ImageFormat.Png);
+                                imagen.STRRUTA = RutaCompleta;
                                 resultado = true;
                             }
                             else
@@ -1662,7 +1743,7 @@ namespace WebApplication1.Vista
                         //Si el archivo existe lo elimina
                         else
                         {
-                            File.Delete(Server.MapPath("~/Vista/" + FU.PostedFiles[i].FileName));
+                            File.Delete(Server.MapPath("~/Vista/" + FU[i].STRRUTA));
                             goto CrearArchivoServidor;
                         }
                     }
@@ -1683,7 +1764,7 @@ namespace WebApplication1.Vista
 
         protected void BtnCancelarImportacion_Click(object sender, EventArgs e)
         {
-            PanelImportarProductos.Visible = false;
+            PanelImportarProducto.Visible = false;
             PanelBusqueda.Visible = true;
         }
 
@@ -1704,5 +1785,58 @@ namespace WebApplication1.Vista
                 CargaListBox("SubcategoriaImport");
             }
         }
+
+        protected void BtnAgregarCategoriasImportacion_Click(object sender, EventArgs e)
+        {
+            lblEstado.Text = string.Empty;
+            if (DDLImportGiro.SelectedItem == null)
+            {
+                lblEstado.Text = "Ningun giro seleccionado";
+                return;
+            }
+            if (DDLImportCategoria.SelectedItem == null)
+            {
+                lblEstado.Text = "Ninguna categoria seleccionada";
+                return;
+            }
+            if (DDLImportSubcategoria.SelectedItem == null)
+            {
+                lblEstado.Text = "Ninguna subcategoria seleccionada";
+                return;
+            }
+
+            var Giro = DDLImportGiro.SelectedItem;
+            var Categoria = DDLImportCategoria.SelectedItem;
+            var Subcategoria = DDLImportSubcategoria.SelectedItem;
+            if (ListCatalogos.FindAll(r => r.UidGiro == new Guid(Giro.Value) && r.UidCategoria == new Guid(Categoria.Value) && r.UidSubcategoria == new Guid(Subcategoria.Value)).Count >= 1)
+            {
+                lblEstado.Text = "La subcategoria ya existe en la lista";
+                return;
+            }
+            ListCatalogos.Add(new CatalogosViewModel()
+            {
+                Uid = Guid.NewGuid(),
+                UidGiro = new Guid(Giro.Value),
+                NombreGiro = Giro.Text,
+                UidCategoria = new Guid(Categoria.Value),
+                NombreCategoria = Categoria.Text,
+                UidSubcategoria = new Guid(Subcategoria.Value),
+                NombreSubcategoria = Subcategoria.Text
+            });
+            DVCategoriasImportacion.DataSource = ListCatalogos;
+            DVCategoriasImportacion.DataBind();
+        }
+
+        protected void DVCategoriasImportacion_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            var registro = ListCatalogos.Find(p => p.Uid.ToString() == Convert.ToString(((GridView)sender).DataKeys[e.RowIndex].Value));
+            if (registro != null)
+            {
+                ListCatalogos.Remove(registro);
+                DVCategoriasImportacion.DataSource = ListCatalogos;
+                DVCategoriasImportacion.DataBind();
+            }
+        }
+
     }
 }
