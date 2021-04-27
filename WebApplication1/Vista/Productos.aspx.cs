@@ -1414,34 +1414,7 @@ namespace WebApplication1.Vista
         }
         #endregion
 
-        protected void dgvProductos_PageIndexChanging(object sender, GridViewPageEventArgs e)
-        {
-            dgvProductos.PageIndex = e.NewPageIndex;
-            dgvProductos.DataSource = MVProducto.ListaDeProductos;
-            dgvProductos.DataBind();
-        }
-
-        protected void dgvProductos_Sorting(object sender, GridViewSortEventArgs e)
-        {
-            string sortExpression = e.SortExpression;
-            Session["sortExpression"] = sortExpression;
-
-            if (Session["SortDirection"] != null && Session["SortDirection"].ToString() == SortDirection.Descending.ToString())
-            {
-                Session["SortDirection"] = SortDirection.Ascending;
-                Sort(sortExpression, "ASC", "Ampliada");
-            }
-            else
-            {
-                Session["SortDirection"] = SortDirection.Descending;
-                Sort(sortExpression, "DESC", "Ampliada");
-            }
-        }
-        private void Sort(string sortExpression, string Valor, string GridView)
-        {
-            //dgvProductos.DataSource = MVProducto.Sort(sortExpression, Valor); ;
-            //dgvProductos.DataBind();
-        }
+        #region Importacion en excel de productos
 
         protected void btnImportar_Click(object sender, EventArgs e)
         {
@@ -1837,6 +1810,37 @@ namespace WebApplication1.Vista
                 DVCategoriasImportacion.DataBind();
             }
         }
+        #endregion
+        protected void dgvProductos_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            dgvProductos.PageIndex = e.NewPageIndex;
+            dgvProductos.DataSource = MVProducto.ListaDeProductos;
+            dgvProductos.DataBind();
+        }
+
+        protected void dgvProductos_Sorting(object sender, GridViewSortEventArgs e)
+        {
+            string sortExpression = e.SortExpression;
+            Session["sortExpression"] = sortExpression;
+
+            if (Session["SortDirection"] != null && Session["SortDirection"].ToString() == SortDirection.Descending.ToString())
+            {
+                Session["SortDirection"] = SortDirection.Ascending;
+                Sort(sortExpression, "ASC", "Ampliada");
+            }
+            else
+            {
+                Session["SortDirection"] = SortDirection.Descending;
+                Sort(sortExpression, "DESC", "Ampliada");
+            }
+        }
+        private void Sort(string sortExpression, string Valor, string GridView)
+        {
+            //dgvProductos.DataSource = MVProducto.Sort(sortExpression, Valor); ;
+            //dgvProductos.DataBind();
+        }
+
+
 
     }
 }

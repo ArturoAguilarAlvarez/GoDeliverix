@@ -430,7 +430,7 @@ namespace WebApplication1.Vista
                 if (Directory.Exists(Server.MapPath(RUTA)))
                 {
                     long Random = new Random().Next(999999999);
-                    string RutaCompleta = RUTA + Random  + ".png";
+                    string RutaCompleta = RUTA + Random + ".png";
 
                     //Valida si el archivo existe
                     if (!File.Exists(RutaCompleta))
@@ -535,7 +535,7 @@ namespace WebApplication1.Vista
         #endregion
 
         #region Subcategoria
-        
+
         protected void LimpiarCajasDeTextoSubcategoria()
         {
             txtUidSubCategoria.Text = string.Empty;
@@ -549,7 +549,7 @@ namespace WebApplication1.Vista
         {
 
             string Valor = DGVSubcategorias.SelectedDataKey.Value.ToString();
-            
+
             MVSubCategoria.BuscarSubCategoria(UidSubCategoria: Valor);
             MVImagen.ObtenerImagenSubcategoria(Valor);
             txtUidSubCategoria.Text = MVSubCategoria.UID.ToString();
@@ -579,7 +579,7 @@ namespace WebApplication1.Vista
         }
         #endregion
 
-       
+
 
         #endregion
 
@@ -845,7 +845,7 @@ namespace WebApplication1.Vista
                                     File.Delete(Server.MapPath(Ruta));
                                 }
                             }
-                            
+
                             if (txtIdCategoria.Text == string.Empty)
                             {
                                 //Recarga el controlador de la imagen de la categoria con una imagen default
@@ -1089,7 +1089,7 @@ namespace WebApplication1.Vista
                         if (MVCategoria.Guardar(UidCategoria, nombre, descripcion, Estatus, UidGiroSeleccionado))
                         {
                             lblEstado.Text = "Categoria agregada";
-                            
+
                             if (Session["RutaImagen"] != null)
                             {
                                 MVImagen.GuardaImagen(Session["RutaImagen"].ToString(), UidCategoria.ToString(), "asp_InsertaImagenCategoria");
@@ -1219,6 +1219,13 @@ namespace WebApplication1.Vista
         {
             DGVSubcategorias.PageIndex = e.NewPageIndex;
             CargaGrid("Subcategoria");
+        }
+
+        protected void BTnExportarCatalogos_Click(object sender, EventArgs e)
+        {
+            Session["ParametroVentanaExcel"] = "Catalogos";
+            string _open = "window.open('Office/ExportarMenu.aspx', '_blank');";
+            ScriptManager.RegisterStartupScript(this, this.GetType(), Guid.NewGuid().ToString(), _open, true);
         }
     }
 

@@ -618,6 +618,24 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.Button btnCargarExcel;
 
         /// <summary>
+        /// btnExportarProductos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnExportarProductos;
+
+        /// <summary>
+        /// btnImportarProductos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnImportarProductos;
+
+        /// <summary>
         /// btnNuevo control.
         /// </summary>
         /// <remarks>
@@ -699,6 +717,60 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.LinkButton BtnCerrarPanelMensaje;
 
         /// <summary>
+        /// pnlProductos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlProductos;
+
+        /// <summary>
+        /// btnCargarProductos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnCargarProductos;
+
+        /// <summary>
+        /// BtnCancelarImportacion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton BtnCancelarImportacion;
+
+        /// <summary>
+        /// FUImportarImagenes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.FileUpload FUImportarImagenes;
+
+        /// <summary>
+        /// FUImportarProductos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.FileUpload FUImportarProductos;
+
+        /// <summary>
+        /// pnlAgregarOEditar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlAgregarOEditar;
+
+        /// <summary>
         /// liDatosGenerales control.
         /// </summary>
         /// <remarks>
@@ -769,6 +841,24 @@ namespace WebApplication1.Vista
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnDatosComision;
+
+        /// <summary>
+        /// LiDatosProductos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiDatosProductos;
+
+        /// <summary>
+        /// BtnDatosProductos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton BtnDatosProductos;
 
         /// <summary>
         /// lblUidEmpresa control.

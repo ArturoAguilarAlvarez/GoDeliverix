@@ -15,8 +15,25 @@
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             Busqueda de categorias
+                       
                         </div>
-                        <div class="pull-right">
+                        <div class="pull-left" style="margin: 10px;">
+
+                            <asp:UpdatePanel runat="server">
+                                <ContentTemplate>
+                                    <asp:LinkButton ID="BTnExportarCatalogos" runat="server" OnClick="BTnExportarCatalogos_Click" CssClass="btn btn-sm btn-success " ToolTip="Descargar">
+                                        <span class="glyphicon glyphicon-save">
+                                        </span>
+                                        Descargar catalogos
+                                    </asp:LinkButton>
+
+                                </ContentTemplate>
+                                <Triggers>
+                                    <asp:PostBackTrigger ControlID="BTnExportarCatalogos" />
+                                </Triggers>
+                            </asp:UpdatePanel>
+                        </div>
+                        <div class="pull-right" style="margin: 10px;">
                             <asp:LinkButton runat="server" ID="BtnBOcultar" OnClick="BtnBOcultar_Click" CssClass="btn btn-sm btn-default">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                                 <asp:Label ID="lblBAFiltrosVisibilidad" runat="server" />
@@ -42,19 +59,19 @@
                             <%-- Barra de navegacion inferior --%>
                             <ul class="nav nav-tabs pull-left" style="margin-bottom: 10px">
                                 <li role="presentation" id="libtnGridGiro" runat="server">
-                                    <asp:LinkButton runat="server" ID="BtnGridGiro" OnClick="BtnGridGiro_Click" >
+                                    <asp:LinkButton runat="server" ID="BtnGridGiro" OnClick="BtnGridGiro_Click">
                                         <span class="glyphicon glyphicon-adjust"></span>
                                         Giro
                                     </asp:LinkButton>
                                 </li>
                                 <li role="presentation" id="libtnGridCategoria" runat="server">
-                                    <asp:LinkButton runat="server" ID="btnGridCategoria" OnClick="btnGridCategoria_Click" >
+                                    <asp:LinkButton runat="server" ID="btnGridCategoria" OnClick="btnGridCategoria_Click">
                                         <span class="glyphicon glyphicon-object-align-horizontal"></span>
                                         Categoria
                                     </asp:LinkButton>
                                 </li>
                                 <li role="presentation" id="libtnGridSubcategoria" runat="server">
-                                    <asp:LinkButton runat="server" ID="btnGridSubcategoria" OnClick="btnGridSubcategoria_Click" >
+                                    <asp:LinkButton runat="server" ID="btnGridSubcategoria" OnClick="btnGridSubcategoria_Click">
                                         <span class="glyphicon glyphicon-object-align-left"></span>
                                         Subcategoria
                                     </asp:LinkButton>
@@ -63,9 +80,10 @@
                             <%-- Panel de gridview Giro --%>
                             <asp:Panel ID="PanelGridGiro" runat="server">
 
-                                <asp:GridView ID="DGVGiro" AutoGenerateColumns="false"  OnRowDataBound="DGVGiro_RowDataBound" OnPageIndexChanging="DGVGiro_PageIndexChanging" OnSelectedIndexChanged="DGVGiro_SelectedIndexChanged" Style="margin-top: 5px;" AllowSorting="true" AllowPaging="True" DataKeyNames="UIDVM" runat="server" CssClass="table table-bordered table-hover table-condensed table-striped input-sm text-center" PageSize="20">
+                                <asp:GridView ID="DGVGiro" AutoGenerateColumns="false" OnRowDataBound="DGVGiro_RowDataBound" OnPageIndexChanging="DGVGiro_PageIndexChanging" OnSelectedIndexChanged="DGVGiro_SelectedIndexChanged" Style="margin-top: 5px;" AllowSorting="true" AllowPaging="True" DataKeyNames="UIDVM" runat="server" CssClass="table table-bordered table-hover table-condensed table-striped input-sm text-center" PageSize="20">
                                     <EmptyDataTemplate>
                                         No se encontro información 
+                                   
                                     </EmptyDataTemplate>
                                     <SelectedRowStyle CssClass="table table-hover input-sm success" />
                                     <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />
@@ -91,6 +109,7 @@
                                 <asp:GridView ID="DGVCategorias" OnPageIndexChanging="DGVCategorias_PageIndexChanging" PageSize="20" Style="margin-top: 5px;" AllowSorting="true" AllowPaging="True" DataKeyNames="UIDCATEGORIA" AutoGenerateColumns="false" OnRowDataBound="DGVCategorias_RowDataBound" OnSelectedIndexChanged="DGVCategorias_SelectedIndexChanged" CssClass="table table-bordered table-hover table-condensed table-striped input-sm text-center" runat="server">
                                     <EmptyDataTemplate>
                                         No se encontro información
+                                   
                                     </EmptyDataTemplate>
                                     <SelectedRowStyle CssClass="table table-hover input-sm success" />
                                     <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />
@@ -118,6 +137,7 @@
                                 <asp:GridView ID="DGVSubcategorias" AutoGenerateColumns="false" OnPageIndexChanging="DGVSubcategorias_PageIndexChanging" Style="margin-top: 5px;" AllowSorting="true" AllowPaging="True" OnRowDataBound="DGVSubcategorias_RowDataBound" DataKeyNames="UID" runat="server" OnSelectedIndexChanged="DGVSubcategorias_OnSelectedIndexChanged" CssClass="table table-bordered table-hover table-condensed table-striped input-sm text-center" PageSize="20">
                                     <EmptyDataTemplate>
                                         No se encontro información 
+                                   
                                     </EmptyDataTemplate>
                                     <SelectedRowStyle CssClass="table table-hover input-sm success" />
                                     <SortedAscendingHeaderStyle CssClass="glyphicon glyphicon-sort-by-alphabet" />
@@ -154,8 +174,9 @@
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 Gestion de areas
+                           
                             </div>
-                            <div class=" pull-left">
+                            <div class=" pull-left" style="margin:10px;">
                                 <asp:LinkButton runat="server" ID="btnNuevo" OnClick="btnNuevo_Click" CssClass="btn btn-sm btn-default "><span class="glyphicon glyphicon-file"></span> Nuevo</asp:LinkButton>
                                 <asp:LinkButton runat="server" ID="btnEditar" OnClick="btnEditar_Click" CssClass="btn btn-sm btn-default disabled"><span class="glyphicon glyphicon-cog"></span> Editar</asp:LinkButton>
                                 <asp:LinkButton runat="server" ID="btnGuardar" OnClick="btnGuardar_Click" CssClass="btn btn-sm btn-success ">
@@ -205,8 +226,8 @@
                                                         function UploadFileGiro(fileUpload) {
                                                             if (fileUpload.value != '') {
                                                                 document.getElementById("<%=btnImagenGiro.ClientID %>").click();
-                                                                }
                                                             }
+                                                        }
                                                     </script>
                                                     <asp:LinkButton CssClass="btn btn-sm btn-default" ID="btn2ImagenGiro" OnClick="ActivaFileUploadGiro" runat="server">
                                                 <span class="glyphicon glyphicon-open">

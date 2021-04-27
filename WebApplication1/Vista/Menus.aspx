@@ -83,7 +83,6 @@
                     <%--importacion y exportacion de Menu--%>
                     <div class="col-md-12" style="margin-top: 10px;">
                         <div class="pull-right">
-
                             <asp:UpdatePanel runat="server">
                                 <ContentTemplate>
                                     <asp:LinkButton ID="BtnExportarMenu" runat="server" OnClick="BtnExportarMenu_Click" CssClass="btn btn-sm btn-success " ToolTip="Descargar">
@@ -119,7 +118,6 @@
                 <asp:Panel CssClass=" alert alert-danger " Style="padding: 10px;" ID="PanelMensaje" runat="server">
                     <span class="glyphicon glyphicon-info-sign"></span>
                     <asp:Label ID="LblMensaje" Text="Mensaje del sistema" Font-Size="Large" runat="server" />
-
                     <div class="pull-right">
                         <asp:LinkButton ID="BtnCerrarPanelMensaje" CssClass="btn btn-sm btn-danger" OnClick="BtnCerrarPanelMensaje_Click" ForeColor="White" runat="server">
                             <span class="glyphicon glyphicon-remove"></span>
@@ -153,7 +151,6 @@
                         <%--importacion y exportacion de Menu--%>
                         <div class="col-md-12" style="margin-top: 10px;">
                             <div class="pull-right">
-
                                 <asp:UpdatePanel runat="server">
                                     <ContentTemplate>
                                         <asp:LinkButton ID="btnExportarSecciones" runat="server" OnClick="btnExportarSecciones_Click" CssClass="btn btn-sm btn-success " ToolTip="Descargar">
@@ -246,15 +243,12 @@
                     </asp:Panel>
                     <%-- Panel de Catalogo --%>
                     <asp:Panel ID="PanelSeccion" runat="server">
-
-                        <div class="clearfix"></div>
                         <div class=" pull-left" style="margin-top: 5px; margin-left: 15px;">
                             <asp:LinkButton runat="server" ID="btnNuevoSeccion" OnClick="btnNuevoSeccion_Click" CssClass="btn btn-sm btn-default "><span class="glyphicon glyphicon-file"></span> Nuevo</asp:LinkButton><asp:LinkButton runat="server" ID="btnEditarSeccion" OnClick="btnEditarSeccion_Click" CssClass="btn btn-sm btn-default disabled"><span class="glyphicon glyphicon-cog"></span> Editar</asp:LinkButton><asp:LinkButton runat="server" ID="btnModificarSeccion" OnClick="btnModificarSeccion_Click" CssClass="btn btn-sm btn-success ">
                                 <asp:Label runat="server" ID="lblAcciones"></asp:Label>
                             </asp:LinkButton><asp:LinkButton runat="server" ID="btnCancelarSeccion" OnClick="btnCancelarSeccion_Click" CssClass="btn btn-sm btn-danger "><asp:label CssClass=" glyphicon glyphicon-remove" runat="server" /></asp:LinkButton><asp:Label runat="server" ID="Label3"></asp:Label>
                         </div>
                         <div class="clearfix"></div>
-
                         <div class="col-md-6">
                             <!-- GridView de secciones-->
                             <asp:GridView runat="server" ID="DGVSeccion" PageSize="10" OnPageIndexChanging="DGVSeccion_PageIndexChanging" AllowSorting="true" Style="margin-top: 5px;" OnRowDataBound="DGVSeccion_RowDataBound" OnSelectedIndexChanged="DGVSeccion_SelectedIndexChanged" CssClass="table table-bordered table-hover table-condensed table-striped input-sm" AutoGenerateColumns="false" DataKeyNames="UID" AllowPaging="True">
@@ -305,8 +299,6 @@
                     </asp:Panel>
                     <%-- Panel de Productos --%>
                     <asp:Panel ID="PanelProductos" runat="server">
-
-
                         <div class="clearfix"></div>
                         <div class=" pull-left" style="margin-top: 5px;">
                             <asp:LinkButton runat="server" ID="btnSeleccionarProducto" OnClick="btnSeleccionarProducto_Click" CssClass="btn btn-sm btn-default"><span class="glyphicon glyphicon-ok-circle"></span> Seleccionar</asp:LinkButton><asp:LinkButton runat="server" ID="btnGuardarSeleccionproducto" OnClick="btnGuardarSeleccionproducto_Click" CssClass="btn btn-sm btn-success ">

@@ -332,7 +332,7 @@
 
                                 <div class="row" style="margin-top: 5px;">
                                     <div class="col-md-12 table-responsive">
-                                        <asp:GridView AutoGenerateColumns="false" ID="DgvLicencia" OnSelectedIndexChanged="DgvLicencia_SelectedIndexChanged" OnRowUpdating="DgvLicencia_RowUpdating" OnRowCancelingEdit="DgvLicencia_RowCancelingEdit" OnRowDeleting="  " OnRowDataBound="DgvLicencia_RowDataBound" OnRowEditing="DgvLicencia_RowEditing" DataKeyNames="UidLicencia" runat="server" CssClass="table table-bordered table-hover table-condensed table-striped input-sm">
+                                        <asp:GridView AutoGenerateColumns="false" ID="DgvLicencia" OnSelectedIndexChanged="DgvLicencia_SelectedIndexChanged" OnRowUpdating="DgvLicencia_RowUpdating" OnRowCancelingEdit="DgvLicencia_RowCancelingEdit" OnRowDataBound="DgvLicencia_RowDataBound" OnRowEditing="DgvLicencia_RowEditing" DataKeyNames="UidLicencia" runat="server" CssClass="table table-bordered table-hover table-condensed table-striped input-sm">
                                             <EmptyDataTemplate>
                                                 <div class="info">
                                                     No existen licencias

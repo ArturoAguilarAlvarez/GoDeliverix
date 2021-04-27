@@ -1279,7 +1279,7 @@ namespace WebApplication1.Vista
                             }
                         }
 
-                        if (dt.Columns.Contains("UID".Trim()) && dt.Columns.Contains("SECCION".Trim()) && dt.Columns.Contains("HORAAPARTURA".Trim()) && dt.Columns.Contains("HORACIERRE".Trim()))
+                        if (dt.Columns.Contains("UID".Trim()) && dt.Columns.Contains("Oferta".Trim()) && dt.Columns.Contains("SECCION".Trim()) && dt.Columns.Contains("HORAAPARTURA".Trim()) && dt.Columns.Contains("HORACIERRE".Trim()))
                         {
                             if (!lblSucursal.Text.Contains(dt.Rows[0].ItemArray[1].ToString()))
                             {
@@ -1292,8 +1292,8 @@ namespace WebApplication1.Vista
                                 try
                                 {
                                     MVSeccion.Buscar(UIDSECCION: new Guid(item[0].ToString()));
-                                    var horainicio = DateTime.Parse(item[3].ToString());
-                                    var horafin = DateTime.Parse(item[4].ToString());
+                                    var horainicio = DateTime.Parse(item[4].ToString());
+                                    var horafin = DateTime.Parse(item[5].ToString());
                                     var hora = "";
                                     var Minuto = "";
                                     if (horainicio.Hour < 10)
@@ -1425,7 +1425,7 @@ namespace WebApplication1.Vista
 
                         if (dt.Columns.Contains("UidSeccion".Trim()) && dt.Columns.Contains("UidProducto".Trim()) && dt.Columns.Contains("Empresa".Trim()) && dt.Columns.Contains("Sucursal".Trim()) && dt.Columns.Contains("Oferta".Trim()) && dt.Columns.Contains("Seccion".Trim()) && dt.Columns.Contains("Producto".Trim()) && dt.Columns.Contains("Precio".Trim()) && dt.Columns.Contains("Tiempo".Trim()))
                         {
-                            if (!lblSucursal.Text.Contains(dt.Rows[1].ItemArray[3].ToString()))
+                            if (!lblSucursal.Text.Contains(dt.Rows[1].ItemArray[1].ToString()))
                             {
                                 MuestraMensajeError("No coincide la sucursal", true);
                                 return;
@@ -1436,8 +1436,39 @@ namespace WebApplication1.Vista
                             {
                                 try
                                 {
-                                    MVProducto.ActualizarProducto(item[1].ToString(), item[8].ToString(), item[7].ToString(), item[0].ToString());
+                                    Guid UidProducto = new Guid(item[5].ToString());
+                                    Guid UidSeccion = new Guid(item[3].ToString());
+                                    var TiempoDeElaboracion = DateTime.Parse(item[8].ToString());
+                                    var hora = "";
+                                    var Minuto = "";
+                                    var tiempo = "";
+                                    if (TiempoDeElaboracion.Hour < 10)
+                                    {
+                                        hora = "0" + TiempoDeElaboracion.Hour;
+                                    }
+                                    else
+                                    {
+                                        hora = TiempoDeElaboracion.Hour.ToString();
+                                    }
+                                    if (TiempoDeElaboracion.Minute < 10)
+                                    {
+                                        Minuto = "0" + TiempoDeElaboracion.Minute;
+                                    }
+                                    else
+                                    {
+                                        Minuto = TiempoDeElaboracion.Minute.ToString();
+                                    }
+                                    tiempo = hora + ":" + Minuto;
 
+                                    if (MVSeccion.EncuentraRegistro(UidProducto, UidSeccion) == 0)
+                                    {
+                                        MVSeccion.RelacionConProducto(UidSeccion, UidProducto);
+                                        MVProducto.ActualizarProducto(UidProducto.ToString(), tiempo, item[7].ToString(), UidSeccion.ToString());
+                                    }
+                                    else
+                                    {
+                                        MVProducto.ActualizarProducto(UidProducto.ToString(), tiempo, item[7].ToString(), UidSeccion.ToString());
+                                    }
                                 }
                                 catch (Exception ex)
                                 {
@@ -1483,5 +1514,20 @@ namespace WebApplication1.Vista
         }
 
         #endregion
+        protected void BtnExportarSeccion_Click(object sender, EventArgs e)
+        {
+            if (!lblSeleccionSucursal.Visible)
+            {
+                MuestraMensajeError("Ninguna sucursal seleccionada", true);
+                return;
+            }
+            else
+            {
+                Session["ParametroVentanaExcel"] = "Horario secciones";
+                Session["UidSucursal"] = txtUidSucursal.Text;
+                string _open = "window.open('Office/ExportarMenu.aspx', '_blank');";
+                ScriptManager.RegisterStartupScript(this, this.GetType(), Guid.NewGuid().ToString(), _open, true);
+            }
+        }
     }
 }

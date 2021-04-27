@@ -21,6 +21,7 @@ namespace WebApplication1.Vista
         VMImagen MVImagen;
         VMComision MVComision;
         VMTelefono MVTelefono;
+        VMProducto MVProducto;
         VMCorreoElectronico MVCorreoElectronico;
         ImagenHelper oImagenHelper = new ImagenHelper();
         string AccionesDeLaPagina = "";
@@ -45,6 +46,7 @@ namespace WebApplication1.Vista
                 MVEmpresas = new VMEmpresas();
                 MVCorreoElectronico = new VMCorreoElectronico();
                 MVComision = new VMComision();
+                MVProducto = new VMProducto();
                 AccionesDeLaPagina = string.Empty;
                 Session["MVEmpresas"] = MVEmpresas;
                 Session["MVComision"] = MVComision;
@@ -52,6 +54,7 @@ namespace WebApplication1.Vista
                 Session["MVTelefono"] = MVTelefono;
                 Session["MVImagen"] = MVImagen;
                 Session["MVCorreoElectronico"] = MVCorreoElectronico;
+                Session["MVProducto"] = MVProducto;
                 #region Panel derecho
                 MVEmpresas.TipoDeEmpresa();
                 MVEmpresas.Estatus();
@@ -64,6 +67,7 @@ namespace WebApplication1.Vista
                 pnlDireccion.Visible = false;
                 pnlContacto.Visible = false;
                 PnlComisiones.Visible = false;
+                pnlProductos.Visible = false;
                 btnGuardar.Visible = false;
                 btnCancelar.Visible = false;
                 btnGuardarTelefono.Visible = false;
@@ -74,6 +78,7 @@ namespace WebApplication1.Vista
                 liDatosGenerales.Attributes.Add("class", "active");
                 liDatosDireccion.Attributes.Add("class", " ");
                 liDatosContacto.Attributes.Add("class", "");
+                LiDatosProductos.Attributes.Add("class", "");
                 //Placeholders
                 txtDManzana.Attributes.Add("placeholder", "Manzana");
                 txtCalle1.Attributes.Add("plcaeholder", "Calle");
@@ -258,6 +263,7 @@ namespace WebApplication1.Vista
                 MVTelefono = (VMTelefono)Session["MVTelefono"];
                 MVImagen = (VMImagen)Session["MVImagen"];
                 MVCorreoElectronico = (VMCorreoElectronico)Session["MVCorreoElectronico"];
+                MVProducto = (VMProducto)Session["MVProducto"];
             }
 
         }
@@ -531,7 +537,7 @@ namespace WebApplication1.Vista
             TextboxActivados();
 
             string valor = DGVEMPRESAS.SelectedDataKey.Value.ToString();
-            
+
             btnEditar.CssClass = "btn btn-sm btn-default";
             btnEditar.Enabled = true;
 
@@ -1354,10 +1360,33 @@ namespace WebApplication1.Vista
             PanelDeBusqueda.Visible = true;
             PanelMensaje.Visible = false;
             PnlComisiones.Visible = true;
+            pnlProductos.Visible = false;
             liDatosGenerales.Attributes.Add("class", "");
             liDatosDireccion.Attributes.Add("class", "");
             liDatosContacto.Attributes.Add("class", "");
             LiDatosComision.Attributes.Add("Class", "active");
+            LiDatosProductos.Attributes.Add("Class", "");
+            if (Session["Accion"] != null)
+            {
+                AccionesDeLaPagina = Session["Accion"].ToString();
+            }
+            TextboxActivados(ControlDeACcion: "Desactivado");
+        }
+        protected void PanelProducto(object sender, EventArgs e)
+        {
+            pnlDatosGenerales.Visible = false;
+            pnlDireccion.Visible = false;
+            pnlContacto.Visible = false;
+            PanelDatosDireccion.Visible = false;
+            PanelDeBusqueda.Visible = true;
+            PanelMensaje.Visible = false;
+            PnlComisiones.Visible = false;
+            pnlProductos.Visible = true;
+            liDatosGenerales.Attributes.Add("class", "");
+            liDatosDireccion.Attributes.Add("class", "");
+            liDatosContacto.Attributes.Add("class", "");
+            LiDatosComision.Attributes.Add("Class", "");
+            LiDatosProductos.Attributes.Add("Class", "active");
             if (Session["Accion"] != null)
             {
                 AccionesDeLaPagina = Session["Accion"].ToString();
@@ -2674,6 +2703,509 @@ namespace WebApplication1.Vista
                 default:
                     break;
             }
+        }
+
+        protected void btnExportarPoroductos_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(lblUidEmpresa.Text))
+            {
+                MuestraMensajeError("Ninguna empresa seleccionada", true);
+            }
+            else
+            {
+                Session["ParametroVentanaExcel"] = "Exportar productos desde empresas";
+                Session["UidEmpresaSistema"] = lblUidEmpresa.Text;
+                string _open = "window.open('Office/ExportarMenu.aspx', '_blank');";
+                ScriptManager.RegisterStartupScript(this, this.GetType(), Guid.NewGuid().ToString(), _open, true);
+            }
+        }
+
+        protected void btnImportarProductos_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(lblUidEmpresa.Text))
+            {
+                MuestraMensajeError("Ninguna empresa seleccionada", true);
+            }
+            else
+            {
+                if (pnlAgregarOEditar.Visible)
+                {
+                    pnlAgregarOEditar.Visible = false;
+                    pnlProductos.Visible = true;
+                    btnNuevo.Visible = false;
+                    btnEditar.Visible = false;
+                }
+                else
+                {
+                    pnlAgregarOEditar.Visible = true;
+                    pnlProductos.Visible = false;
+                    btnNuevo.Visible = true;
+                    btnEditar.Visible = true;
+                }
+            }
+        }
+
+        protected void BtnCancelarImportacion_Click(object sender, EventArgs e)
+        {
+            pnlAgregarOEditar.Visible = true;
+            pnlProductos.Visible = false;
+            btnNuevo.Visible = true;
+            btnEditar.Visible = true;
+        }
+
+        protected void btnCargarProductos_Click(object sender, EventArgs e)
+        {
+            int productosActualizados = 0;
+            int productosAgregados = 0;
+            int ErrorGiro = 0;
+            int ErrorCategoria = 0;
+            int ErrorSubcategoria = 0;
+            if (FUImportarImagenes.HasFiles)
+            {
+                if (ValidaImagenesExcel(FUImportarImagenes))
+                {
+                    if (FUImportarProductos.HasFile)
+                    {
+                        if (".xlsx" == Path.GetExtension(FUImportarProductos.FileName))
+                        {
+                            try
+                            {
+                                byte[] buffer = new byte[FUImportarProductos.FileBytes.Length];
+                                FUImportarProductos.FileContent.Seek(0, SeekOrigin.Begin);
+                                FUImportarProductos.FileContent.Read(buffer, 0, Convert.ToInt32(FUImportarProductos.FileContent.Length));
+
+                                Stream stream2 = new MemoryStream(buffer);
+
+                                DataTable dt = new DataTable();
+                                using (XLWorkbook workbook = new XLWorkbook(stream2))
+                                {
+                                    IXLWorksheet sheet = workbook.Worksheet(1);
+                                    bool FirstRow = true;
+                                    string readRange = "1:1";
+                                    foreach (IXLRow row in sheet.RowsUsed())
+                                    {
+                                        //If Reading the First Row (used) then add them as column name  
+                                        if (FirstRow)
+                                        {
+                                            //Checking the Last cellused for column generation in datatable  
+                                            readRange = string.Format("{0}:{1}", 1, row.LastCellUsed().Address.ColumnNumber);
+                                            foreach (IXLCell cell in row.Cells(readRange))
+                                            {
+                                                dt.Columns.Add(cell.Value.ToString());
+                                            }
+                                            FirstRow = false;
+                                        }
+                                        else
+                                        {
+                                            //Adding a Row in datatable  
+                                            dt.Rows.Add();
+                                            int cellIndex = 0;
+                                            //Updating the values of datatable  
+                                            foreach (IXLCell cell in row.Cells(readRange))
+                                            {
+                                                dt.Rows[dt.Rows.Count - 1][cellIndex] = cell.Value.ToString();
+                                                cellIndex++;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (dt.Columns.Contains("UidProducto".Trim()) && dt.Columns.Contains("Imagen".Trim()) && dt.Columns.Contains("Nombre".Trim()) && dt.Columns.Contains("Descripcion".Trim()) && dt.Columns.Contains("UidGiro".Trim()) && dt.Columns.Contains("UidCategoria".Trim()) && dt.Columns.Contains("UidSubcategoria".Trim()) && dt.Columns.Contains("Giro".Trim()) && dt.Columns.Contains("Categoria".Trim()) && dt.Columns.Contains("Subcategoria".Trim()))
+                                {
+                                    int imagenesVerificadas = 0;
+
+                                    foreach (DataRow item in dt.Rows)
+                                    {
+                                        try
+                                        {
+                                            if (item[0].ToString() == Guid.Empty.ToString())
+                                            {
+                                                string Giro = item[4].ToString();
+                                                string Categoria = item[6].ToString();
+                                                string Subcategoria = item[8].ToString();
+                                                var mvgiro = new VMGiro();
+                                                var vmcategoria = new VMCategoria();
+                                                var vmsubcategoria = new VMSubCategoria();
+                                                mvgiro.BuscarGiro(UidGiro: Giro);
+                                                vmcategoria.BuscarCategorias(UidCategoria: Categoria);
+                                                vmsubcategoria.BuscarSubCategoria(UidSubCategoria: Subcategoria);
+                                                if (string.IsNullOrEmpty(mvgiro.UIDVM.ToString()))
+                                                {
+                                                    ErrorGiro += 1;
+                                                }
+                                                if (string.IsNullOrEmpty(vmcategoria.UIDCATEGORIA.ToString()))
+                                                {
+                                                    ErrorCategoria += 1;
+                                                }
+                                                if (string.IsNullOrEmpty(vmsubcategoria.UID.ToString()))
+                                                {
+                                                    ErrorSubcategoria += 1;
+                                                }
+                                                if (!string.IsNullOrEmpty(item[1].ToString()) && !string.IsNullOrEmpty(item[2].ToString()) && !string.IsNullOrEmpty(item[3].ToString()) && !string.IsNullOrEmpty(item[4].ToString()) && !string.IsNullOrEmpty(item[5].ToString()) && !string.IsNullOrEmpty(item[6].ToString()))
+                                                {
+                                                    if (MVImagen.listaDeImagenes.Exists(img => img.STRRUTA == item[1].ToString()))
+                                                    {
+                                                        var registro = MVImagen.listaDeImagenes.Find(img => img.STRRUTA == item[1].ToString());
+                                                        registro.NombrePropietario = item[2].ToString();
+                                                        imagenesVerificadas += 1;
+                                                    }
+                                                    else
+                                                    {
+                                                        imagenesVerificadas -= 1;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    imagenesVerificadas -= 1;
+                                                }
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            MuestraMensajeError(ex.Message, true);
+                                        }
+                                    }
+                                    if (ErrorGiro > 0 || ErrorCategoria > 0 || ErrorSubcategoria > 0)
+                                    {
+                                        MuestraMensajeError("Uno o mas catalogos no coinciden Giro: " + ErrorGiro + ". Categoria: " + ErrorCategoria + ". Subcategoria: " + ErrorSubcategoria, true);
+                                        return;
+                                    }
+                                    if (imagenesVerificadas == MVImagen.listaDeImagenes.Count)
+                                    {
+                                        if (GuardaFotoS(MVImagen.listaDeImagenes, "Img/Productos/", Session["UidEmpresaSistema"].ToString()))
+                                        {
+
+                                            foreach (DataRow item in dt.Rows)
+                                            {
+                                                try
+                                                {
+                                                    string Nombre = item[2].ToString();
+                                                    string Descripcion = item[2].ToString();
+                                                    Guid UidProducto = new Guid(item[0].ToString());
+                                                    string Giro = item[4].ToString();
+                                                    string Categoria = item[6].ToString();
+                                                    string Subcategoria = item[8].ToString();
+                                                    if (UidProducto == Guid.Empty)
+                                                    {
+                                                        if (MVImagen.listaDeImagenes.Exists(img => img.NombrePropietario == item[2].ToString()))
+                                                        {
+                                                            var registro = MVImagen.listaDeImagenes.Find(img => img.NombrePropietario == item[2].ToString());
+
+                                                            Guid UidEmpresa = new Guid(lblUidEmpresa.Text);
+
+                                                            UidProducto = Guid.NewGuid();
+                                                            if (MVProducto.Guardar(Nombre, Descripcion, UidEmpresa, UidProducto, "1"))
+                                                            {
+                                                                if (MVImagen.GuardaImagen(registro.STRRUTA, UidProducto.ToString(), "asp_InsertaImagenProducto"))
+                                                                {
+                                                                    MVProducto.RelacionGiro(Giro, UidProducto);
+                                                                    MVProducto.RelacionCategoria(Categoria, UidProducto);
+                                                                    MVProducto.RelacionSubategoria(Subcategoria, UidProducto);
+                                                                    productosAgregados += 1;
+                                                                }
+                                                                else
+                                                                {
+                                                                    PanelMensaje.Visible = true;
+                                                                    MuestraMensajeError("Ocurrio un problema al agregar la imagen. /n Estamos trabajando en ello", true);
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                PanelMensaje.Visible = true;
+                                                                MuestraMensajeError("Ocurrio un problema al agregar. /n Estamos trabajando en ello", true);
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        if (MVProducto.Actualizar(Nombre, Descripcion, UidProducto))
+                                                        {
+                                                            MVProducto.EliminaGiro(UidProducto.ToString());
+                                                            MVProducto.EliminaCategoria(UidProducto.ToString());
+                                                            MVProducto.EliminaSubcategoria(UidProducto.ToString());
+
+                                                            MVProducto.RelacionGiro(Giro, UidProducto);
+                                                            MVProducto.RelacionCategoria(Categoria, UidProducto);
+                                                            MVProducto.RelacionSubategoria(Subcategoria, UidProducto);
+
+                                                            productosActualizados += 1;
+                                                        }
+                                                        else
+                                                        {
+                                                            PanelMensaje.Visible = true;
+                                                            MuestraMensajeError("Ocurrio un problema al actualizar. /n Estamos trabajando en ello", true);
+                                                        }
+                                                    }
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    MuestraMensajeError(ex.Message, true);
+                                                }
+                                            }
+                                            MuestraMensajeError("Registros actualizados: " + productosActualizados + ". Registros agregados: " + productosAgregados, true);
+                                        }
+                                        else
+                                        {
+                                            MuestraMensajeError("Ocurrio un problema al cargar las imagenes", true);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        MuestraMensajeError("Uno o mas registros no coinciden o no estan completos en el excel", true);
+                                    }
+                                }
+                                else
+                                {
+                                    MuestraMensajeError("el archivo no tiene las columnas correctas", true);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                MuestraMensajeError(ex.Message, true);
+                            }
+                        }
+                        else
+                        {
+                            MuestraMensajeError("El archivo de los productos no es valido, solo admite formato .xlsx", true);
+                        }
+                    }
+                    else
+                    {
+                        MuestraMensajeError("No se cargo archivo de excel", true);
+                    }
+                }
+                else
+                {
+                    MuestraMensajeError("Error al cargar archivos, solo se admiten los siguientes formatos: .png,.jpg,.jpeg", true);
+                }
+            }
+            else
+            {
+                if (FUImportarProductos.HasFile)
+                {
+                    if (".xlsx" == Path.GetExtension(FUImportarProductos.FileName))
+                    {
+                        try
+                        {
+                            byte[] buffer = new byte[FUImportarProductos.FileBytes.Length];
+                            FUImportarProductos.FileContent.Seek(0, SeekOrigin.Begin);
+                            FUImportarProductos.FileContent.Read(buffer, 0, Convert.ToInt32(FUImportarProductos.FileContent.Length));
+
+                            Stream stream2 = new MemoryStream(buffer);
+                            DataTable dt = new DataTable();
+                            using (XLWorkbook workbook = new XLWorkbook(stream2))
+                            {
+                                IXLWorksheet sheet = workbook.Worksheet(1);
+                                bool FirstRow = true;
+                                string readRange = "1:1";
+                                foreach (IXLRow row in sheet.RowsUsed())
+                                {
+                                    //If Reading the First Row (used) then add them as column name  
+                                    if (FirstRow)
+                                    {
+                                        //Checking the Last cellused for column generation in datatable  
+                                        readRange = string.Format("{0}:{1}", 1, row.LastCellUsed().Address.ColumnNumber);
+                                        foreach (IXLCell cell in row.Cells(readRange))
+                                        {
+                                            dt.Columns.Add(cell.Value.ToString());
+                                        }
+                                        FirstRow = false;
+                                    }
+                                    else
+                                    {
+                                        //Adding a Row in datatable  
+                                        dt.Rows.Add();
+                                        int cellIndex = 0;
+                                        //Updating the values of datatable  
+                                        foreach (IXLCell cell in row.Cells(readRange))
+                                        {
+                                            dt.Rows[dt.Rows.Count - 1][cellIndex] = cell.Value.ToString();
+                                            cellIndex++;
+                                        }
+                                    }
+                                }
+                            }
+                            foreach (DataRow item in dt.Rows)
+                            {
+                                try
+                                {
+                                    if (item[0].ToString() == Guid.Empty.ToString())
+                                    {
+                                        string Giro = item[4].ToString();
+                                        string Categoria = item[6].ToString();
+                                        string Subcategoria = item[8].ToString();
+                                        var mvgiro = new VMGiro();
+                                        var vmcategoria = new VMCategoria();
+                                        var vmsubcategoria = new VMSubCategoria();
+                                        mvgiro.BuscarGiro(UidGiro: Giro);
+                                        vmcategoria.BuscarCategorias(UidCategoria: Categoria);
+                                        vmsubcategoria.BuscarSubCategoria(UidSubCategoria: Subcategoria);
+                                        if (string.IsNullOrEmpty(mvgiro.UIDVM.ToString()))
+                                        {
+                                            ErrorGiro += 1;
+                                        }
+                                        if (string.IsNullOrEmpty(vmcategoria.UIDCATEGORIA.ToString()))
+                                        {
+                                            ErrorCategoria += 1;
+                                        }
+                                        if (string.IsNullOrEmpty(vmsubcategoria.UID.ToString()))
+                                        {
+                                            ErrorSubcategoria += 1;
+                                        }
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    MuestraMensajeError(ex.Message, true);
+                                }
+                            }
+                            if (ErrorGiro > 0 || ErrorCategoria > 0 || ErrorSubcategoria > 0)
+                            {
+                                MuestraMensajeError("Uno o mas catalogos no coinciden Giro: " + ErrorGiro + ". Categoria: " + ErrorCategoria + ". Subcategoria: " + ErrorSubcategoria, true);
+                                return;
+                            }
+                            if (dt.Columns.Contains("UidProducto".Trim()) && dt.Columns.Contains("Imagen".Trim()) && dt.Columns.Contains("Nombre".Trim()) && dt.Columns.Contains("Descripcion".Trim()) && dt.Columns.Contains("UidGiro".Trim()) && dt.Columns.Contains("UidCategoria".Trim()) && dt.Columns.Contains("UidSubcategoria".Trim()) && dt.Columns.Contains("Giro".Trim()) && dt.Columns.Contains("Categoria".Trim()) && dt.Columns.Contains("Subcategoria".Trim()))
+                            {
+                                foreach (DataRow item in dt.Rows)
+                                {
+                                    try
+                                    {
+                                        string Nombre = item[2].ToString();
+                                        string Descripcion = item[2].ToString();
+                                        Guid UidProducto = new Guid(item[0].ToString());
+                                        string Giro = item[4].ToString();
+                                        string Categoria = item[6].ToString();
+                                        string Subcategoria = item[8].ToString();
+
+                                        if (UidProducto != Guid.Empty)
+                                        {
+                                            if (MVProducto.Actualizar(Nombre, Descripcion, UidProducto))
+                                            {
+                                                MVProducto.EliminaGiro(UidProducto.ToString());
+                                                MVProducto.EliminaCategoria(UidProducto.ToString());
+                                                MVProducto.EliminaSubcategoria(UidProducto.ToString());
+
+                                                MVProducto.RelacionGiro(Giro, UidProducto);
+                                                MVProducto.RelacionCategoria(Categoria, UidProducto);
+                                                MVProducto.RelacionSubategoria(Subcategoria, UidProducto);
+
+                                                PanelMensaje.Visible = true;
+                                                productosActualizados += 1;
+                                            }
+                                            else
+                                            {
+                                                PanelMensaje.Visible = true;
+                                                MuestraMensajeError("Ocurrio un problema al actualizar. /n Estamos trabajando en ello", true);
+                                            }
+                                        }
+
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        MuestraMensajeError(ex.Message, true);
+                                    }
+                                }
+                                MuestraMensajeError("Registros actualizados: " + productosActualizados + ". Registros agregados: " + productosAgregados, true);
+                            }
+                            else
+                            {
+                                MuestraMensajeError("el archivo no tiene las columnas correctas", true);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MuestraMensajeError(ex.Message, true);
+                        }
+                    }
+                    else
+                    {
+                        MuestraMensajeError("El archivo de los productos no es valido, solo admite formato .xlsx", true);
+                    }
+                }
+                else
+                {
+                    MuestraMensajeError("No se cargo archivo de excel", true);
+                }
+            }
+        }
+        protected bool GuardaFotoS(List<VMImagen> FU, string RUTA, string UidEmpresa)
+        {
+            bool resultado = false;
+            RUTA = RUTA + UidEmpresa;
+            for (int i = 0; i < FU.Count; i++)
+            {
+                GuardarImagenGiro:
+                //Valida si el directorio existe en el servidor
+                if (Directory.Exists(Server.MapPath(RUTA)))
+                {
+                    //Crea el directorio de la empresa
+                    CrearCarpetaDeEmpresa:
+                    if (Directory.Exists(Server.MapPath(RUTA)))
+                    {
+                        CrearArchivoServidor:
+                        //El archivo no existe en el servidor
+                        if (!File.Exists(Server.MapPath(FU[i].STRRUTA)))
+                        {
+                            long Random = new Random().Next(999999999);
+                            string RutaCompleta = RUTA + "/" + Random + ".png";
+                            var imagen = MVImagen.listaDeImagenes.Find(d => d.STRRUTA == FU[i].STRRUTA);
+                            //Valida si el archivo existe
+                            if (!File.Exists(RutaCompleta))
+                            {
+                                oImagenHelper = new ImagenHelper();
+                                System.Drawing.Image img = oImagenHelper.RedimensionarImagen(System.Drawing.Image.FromStream(FU[i].BitImage));
+                                img = oImagenHelper.RedimensionarImagen(System.Drawing.Image.FromStream(FU[i].BitImage));
+                                //Guarda la imagen en el servidor
+                                //item.InputStream.Read(byte.Parse(img.), 0, item.ContentLength);
+
+                                img.Save(Server.MapPath("~/Vista/" + RutaCompleta), ImageFormat.Png);
+                                imagen.STRRUTA = RutaCompleta;
+                                resultado = true;
+                            }
+                            else
+                            {
+                                MuestraMensajeError("Imagen existente en el sistema, favor de agregar otra.", true);
+                                resultado = false;
+                            }
+                        }
+                        //Si el archivo existe lo elimina
+                        else
+                        {
+                            File.Delete(Server.MapPath("~/Vista/" + FU[i].STRRUTA));
+                            goto CrearArchivoServidor;
+                        }
+                    }
+                    else
+                    {
+                        Directory.CreateDirectory(Server.MapPath(RUTA));
+                        goto CrearCarpetaDeEmpresa;
+                    }
+                }
+                else
+                {
+                    Directory.CreateDirectory(Server.MapPath(RUTA));
+                    goto GuardarImagenGiro;
+                }
+            }
+            return resultado;
+        }
+
+        private bool ValidaImagenesExcel(FileUpload fuimagenes)
+        {
+            bool resultado = true;
+            MVImagen.listaDeImagenes = new List<VMImagen>();
+            foreach (var file in fuimagenes.PostedFiles)
+            {
+                if (!MVImagen.ValidarExtencionImagen(Path.GetExtension(file.FileName).ToLower()))
+                {
+                    resultado = false;
+                }
+                else
+                {
+                    MVImagen.listaDeImagenes.Add(new VMImagen() { STRRUTA = file.FileName, BitImage = file.InputStream });
+                }
+            }
+            return resultado;
         }
     }
 }

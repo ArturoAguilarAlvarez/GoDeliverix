@@ -25,21 +25,21 @@ namespace DBControl
         public DataTable ObtenerGiro(string UidProducto)
         {
             oConexion = new Conexion();
-            string query = "select UidGiro from GiroProducto where UidProducto = '" + UidProducto + "'";
+            string query = "select * from GiroProducto where UidProducto = '" + UidProducto + "'";
             return oConexion.Consultas(query);
         }
 
         public DataTable ObtenerCategoria(string UidProducto)
         {
             oConexion = new Conexion();
-            string Query = "select UidCategoria from CategoriaProducto where UidProducto = '" + UidProducto + "'";
+            string Query = "select * from CategoriaProducto where UidProducto = '" + UidProducto + "'";
             return oConexion.Consultas(Query);
         }
 
         public DataTable ObtenerSubcategoria(string UidProducto)
         {
             oConexion = new Conexion();
-            string query = "select UidSubcategoria from subcategoriaproducto where uidproducto = '" + UidProducto + "'";
+            string query = "select * from subcategoriaproducto where uidproducto = '" + UidProducto + "'";
             return oConexion.Consultas(query);
         }
         public void EliminaGiro(string UidProducto)
@@ -269,7 +269,6 @@ namespace DBControl
             string query = "select p.UidProducto, p.VchNombre, sp.VchTiempoElaboracion, dbo.ObtenerPrecioConComision(sp.Mcosto,p.UidEmpresa )  as Mcosto,i.NVchRuta, p.VchDescripcion from Productos p inner join SeccionProducto sp on sp.UidProducto = p.UidProducto inner join Seccion s on s.UidSeccion = sp.UidSeccion inner join ImagenProducto ip on ip.UidProducto = p.UidProducto inner join Imagenes i on i.UIdImagen = ip.UidImagen where s.UidSeccion = '" + uidSeccion.ToString() + "' and p.IntEstatus = 1";
             return oConexion.Consultas(query);
         }
-
         public DataTable ProductoCarrito(Guid uidProducto, string UidSucursal, string UidSeccion)
         {
             oConexion = new Conexion();

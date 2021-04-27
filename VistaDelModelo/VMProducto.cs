@@ -375,6 +375,7 @@ namespace VistaDelModelo
         /// Recibe el uid de la seccion a buscar y llena una lista de productos
         /// </summary>
         /// <param name="UidSeccion"></param>
+
         public void BuscarProductosSeccion(Guid UidSeccion)
         {
             ListaDeProductos = new List<VMProducto>();
