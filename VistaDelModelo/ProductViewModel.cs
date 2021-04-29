@@ -220,6 +220,10 @@ namespace VistaDelModelo
                     ImgUrl = row.IsNull("ImgUrl") ? "" : (string)row["ImgUrl"],
                     AvailableBranches = row.IsNull("AvailableBranches") ? 0 : (int)row["AvailableBranches"],
                     Available = row.IsNull("Available") ? false : (bool)row["Available"],
+                    OpenAt = row.IsNull("OpenAt") ? "" : row["OpenAt"].ToString(),
+                    ClosedAt = row.IsNull("ClosedAt") ? "" : row["ClosedAt"].ToString(),
+                    AfterClose = row.IsNull("AfterClose") ? false : (bool)row["AfterClose"],
+                    BeforeOpen = row.IsNull("BeforeOpen") ? false : (bool)row["BeforeOpen"],
                 });
             }
 

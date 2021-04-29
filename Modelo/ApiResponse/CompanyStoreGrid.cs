@@ -17,6 +17,14 @@ namespace Modelo.ApiResponse
 
         public int AvailableBranches { get; set; }
 
+        public string OpenAt { get; set; }
+
+        public string ClosedAt { get; set; }
+
+        public bool BeforeOpen { get; set; }
+
+        public bool AfterClose { get; set; }
+
         public bool Available { get; set; }
     }
 }
