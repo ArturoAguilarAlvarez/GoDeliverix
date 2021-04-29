@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -327,6 +327,7 @@ namespace DBControl
             string filterJoin = string.Empty;
             string filterWhere = string.Empty;
             string where = string.Empty;
+
             if (string.IsNullOrEmpty(tipoFiltro))
             {
                 tipoFiltro = string.Empty;
@@ -385,22 +386,14 @@ namespace DBControl
             if (uidEmpresa.HasValue)
             {
                 command.Parameters.AddWithValue("@UidEmpresa", uidEmpresa);
-                filterWhere += " and EMP.UidEmpresa = @UidEmpresa ";
+                filterWhere += " and E.UidEmpresa = @UidEmpresa ";
             }
-
-            string availabilityStatements = @"
-AND @UserTime BETWEEN SEC.VchHoraInicio AND SEC.VchHoraFin
-AND CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME) AND TS.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(SUC.HorarioApertura AS TIME) AND CAST(SUC.HorarioCierre AS TIME)
-AND CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD.DtmHoraFin IS NULL AND CAST(@UserDateTime AS TIME) BETWEEN CAST(TDSUC.HorarioApertura AS TIME) AND CAST(TDSUC.HorarioCierre AS TIME)";
-            string selectStatements = availabilityStatements;
-            string whereStatements = string.Empty;
 
             if (available.HasValue)
             {
                 if (available.Value)
                 {
-                    selectStatements = string.Empty;
-                    whereStatements = availabilityStatements;
+                    where += " AND [Available] = 1 ";
                 }
             }
 
@@ -416,88 +409,95 @@ AND CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND TD
             DECLARE @ValorComision INT;
 
             -- Obtener zona horaria del estado
-            SELECT
-                @TimeZone = Z.IdZonaHoraria
+            SELECT @TimeZone = Z.IdZonaHoraria
             FROM [ZonaHoraria] AS Z
-                INNER JOIN [ZonaHorariaPais] AS P ON P.[IdZonaHoraria] = Z.[IdZonaHoraria]
-                INNER JOIN [ZonaHorariaEstado] AS E ON E.[UidRelacionZonaPaisEstado] = P.[UidZonaHorariaPais]
-            WHERE E.UidEstado = @UidEstado
+                     INNER JOIN [ZonaHorariaPais] AS P ON P.[IdZonaHoraria] = Z.[IdZonaHoraria]
+                     INNER JOIN [ZonaHorariaEstado] AS E ON E.[UidRelacionZonaPaisEstado] = P.[UidZonaHorariaPais]
+            WHERE E.UidEstado = @UidEstado;
 
             -- Obtener DateTime del la zona horaria
-            SELECT @UserDateTime = SYSDATETIMEOFFSET() AT TIME ZONE @TimeZone 
+            SELECT @UserDateTime = SYSDATETIMEOFFSET() AT TIME ZONE @TimeZone;
 
             -- Obtener Time del DateTime
-            SELECT @UserTime = CONVERT(VARCHAR, @UserDateTime, 8)
+            SELECT @UserTime = CONVERT(VARCHAR, @UserDateTime, 8);
 
-            SELECT 
-                *,[Count] = COUNT (*) OVER()  
-            FROM (
-                SELECT     
-                    P.[UidProducto] AS [Uid],
-                    IPROD.NVchRuta  AS [ImgUrl],
-                    IEMP.NVchRuta AS [CompanyImgUrl],
-                    P.VchNombre AS [Name],
-                    P.VchDescripcion AS [Description],
-                    EMP.[UidEmpresa] AS [UidCompany],
-                    EMP.[NombreComercial] AS [CompanyName],
-                    MIN(
-                    CASE 
-                         WHEN COM.BAboserveComision = 1 THEN SP.Mcosto
-                         ELSE ((SP.Mcosto / 100)*CDS.ComisionTotalProducto) + SP.Mcosto
-                    END 
-                    ) AS [Price],
-                    CASE 
-                        WHEN SUM(
-                        CASE WHEN 
-                            1=1
-                            {selectStatements}
-                        THEN 1 ELSE 0 END) > 0 
-                        THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
-                    END AS [Available]
-                FROM [Productos] AS P    
-                    INNER JOIN [SeccionProducto] AS SP ON P.[UidProducto] = SP.[UidProducto]
-                    INNER JOIN [Seccion] AS SEC ON SEC.UidSeccion = SP.UidSeccion AND SEC.IntEstatus = 1
-                    INNER JOIN [ImagenProducto] AS [IP] ON [IP].[UidProducto] = P.[UidProducto]
-                    INNER JOIN [Imagenes] AS IPROD ON IPROD.UIdImagen = [IP].UidImagen
-                    INNER JOIN [ImagenEmpresa] AS IE ON IE.UidRelacion = (SELECT TOP 1 UidRelacion FROM ImagenEmpresa WHERE UidEmpresa = P.UidEmpresa)
-                    INNER JOIN [Imagenes] AS IEMP ON IEMP.UIdImagen = [IE].UidImagen
+SELECT [Count] = COUNT(*) OVER (),
+       *
+FROM (
+         SELECT P.UidProducto                                                                       AS [Uid],
+                P.VchNombre                                                                         AS [Name],
+                P.VchDescripcion                                                                    AS [Description],
+                IPROD.NVchRuta                                                                      AS [ImgUrl],
+                E.UidEmpresa                                                                        AS [UidCompany],
+                E.NombreComercial                                                                   AS [CompanyName],
+                IEMP.NVchRuta                                                                       AS [CompanyImgUrl],
+                (MIN(CASE
+                         WHEN C.BAboserveComision = 1 THEN SECP.Mcosto
+                         ELSE ((SECP.Mcosto / 100) * CDS.ComisionTotalProducto) + SECP.Mcosto END)) AS [Price],
+                CASE
+                    WHEN SUM(CASE
+                                 WHEN
+                                         SEC.UidSeccion IS NOT NULL
+                                         AND TS.UidTurnoSuministradora IS NOT NULL AND SUC.UidSucursal IS NOT NULL
+                                         AND TD.UidTurnoDistribuidora IS NOT NULL AND TDSUC.UidSucursal IS NOT NULL
+                                     THEN 1
+                                 ELSE 0
+                        END) > 0 THEN CAST(1 AS BIT)
+                    ELSE CAST(0 AS BIT) END                                                                      AS [Available]
+         FROM Productos AS P
+                  INNER JOIN Empresa AS E on P.UidEmpresa = E.UidEmpresa AND E.IdEstatus = 1
+                  INNER JOIN SeccionProducto AS SECP
+                             ON SECP.UidProducto = P.UidProducto AND SECP.VchTiempoElaboracion IS NOT NULL
+                  INNER JOIN Oferta AS O ON O.UidOferta = (SELECT Seccion.UidOferta
+                                                           FROM Seccion
+                                                           WHERE Seccion.UidSeccion = SECP.UidSeccion
+                                                             AND Seccion.IntEstatus = 1)
+                  INNER JOIN DiaOferta AS DO ON DO.UidOferta = O.UidOferta
+                  INNER JOIN Dias AS D ON D.UidDia = DO.UidDia
 
-                    INNER JOIN [Oferta] AS O ON O.UidOferta= SEC.UidOferta AND O.IntEstatus = 1
-                    INNER JOIN DiaOferta AS DO ON DO.UidOferta = O.UidOferta
-                    INNER JOIN Dias AS D ON D.UidDia = DO.UidDia
-                    INNER JOIN Sucursales AS SUC ON SUC.UidSucursal = O.Uidsucursal AND SUC.IntEstatus = 1
+                  INNER JOIN ImagenProducto AS IP ON IP.UidProducto = P.UidProducto
+                  INNER JOIN Imagenes AS IPROD ON IPROD.UIdImagen = IP.UidImagen
 
-                    INNER JOIN Empresa AS EMP ON EMP.UidEmpresa = P.UidEmpresa AND EMP.IdEstatus =1
+                  INNER JOIN [ImagenEmpresa] AS IE ON IE.UidRelacion = (SELECT TOP 1 UidRelacion
+                                                                        FROM ImagenEmpresa
+                                                                        WHERE UidEmpresa = P.UidEmpresa)
+                  INNER JOIN [Imagenes] AS IEMP ON IEMP.UIdImagen = [IE].UidImagen
 
-                    INNER JOIN Direccion AS DIR ON DIR.UidDireccion = SUC.UidDireccion
-                    INNER JOIN ZonaHorariaEstado AS ZHE ON ZHE.UidEstado = DIR.UidEstado
-                    INNER JOIN ZonaHorariaPais ZHP ON ZHP.UidZonaHorariaPais = ZHE.UidRelacionZonaPaisEstado
+                  INNER JOIN ContratoDeServicio AS CDS ON CDS.UidSucursalSuministradora = O.UidSucursal AND
+                                                          CDS.UidEstatusContrato = 'CD20F9BF-EBA2-4128-88FB-647544457B2D'
+                  INNER JOIN ZonaDeRepartoDeContrato ZDRDC on ZDRDC.UidContrato = CDS.UidContrato
+                  INNER JOIN Tarifario T on t.UidRegistroTarifario = ZDRDC.UidTarifario
+                  INNER JOIN ZonaDeServicio ZDS
+                             ON ZDS.UidColonia = @UidColonia AND ZDS.UidRelacionZonaServicio = T.UidRelacionZonaEntrega
+                  INNER JOIN Comision C on E.UidEmpresa = C.UidEmpresa
 
-                    INNER JOIN ContratoDeServicio CDS on CDS.UidSucursalSuministradora = SUC.UidSucursal 
-                    INNER JOIN ZonaDeRepartoDeContrato ZDRDC on ZDRDC.UidContrato = CDS.UidContrato 
-	                INNER JOIN Tarifario T on t.UidRegistroTarifario = ZDRDC.UidTarifario 
-	                INNER JOIN ZonaDeServicio ZDS on ZDS.UidColonia = @UidColonia and ZDS.UidRelacionZonaServicio = T.UidRelacionZonaEntrega 
-    
-	                INNER JOIN turnosuministradora TS on TS.uidsucursal = CDS.UidSucursalSuministradora
-                    -- INNER JOIN Sucursales AS TSUC ON TSUC.UidSucursal = TS.UidSucursal
-	                INNER JOIN TurnoDistribuidora TD on TD.UidSucursal = CDS.UidSucursalDistribuidora
-                    INNER JOIN Sucursales AS TDSUC ON TDSUC.UidSucursal = TD.UidSucursal
-                    INNER JOIN Comision AS COM ON COM.UidEmpresa = EMP.UidEmpresa
+                  LEFT JOIN Seccion AS SEC ON SEC.UidSeccion = SECP.UidSeccion AND SEC.IntEstatus = 1 AND
+                                              @UserTime BETWEEN SEC.VchHoraInicio AND SEC.VchHoraFin
+
+                  LEFT JOIN turnosuministradora TS on TS.uidsucursal = CDS.UidSucursalSuministradora AND
+                                                      CAST(@UserDateTime AS DATETIME) >= CAST(TS.DtmHoraInicio AS DATETIME) AND
+                                                      TS.DtmHoraFin IS NULL
+                  LEFT JOIN Sucursales AS SUC ON SUC.UidSucursal = O.Uidsucursal AND SUC.IntEstatus = 1 AND
+                                                 CAST(@UserDateTime AS TIME) BETWEEN CAST(SUC.HorarioApertura AS TIME) AND CAST(SUC.HorarioCierre AS TIME)
+
+                  LEFT JOIN TurnoDistribuidora TD on TD.UidSucursal = CDS.UidSucursalDistribuidora AND
+                                                     CAST(@UserDateTime AS DATETIME) >= CAST(TD.DtmHoraInicio AS DATETIME) AND
+                                                     TD.DtmHoraFin IS NULL
+                  LEFT JOIN Sucursales AS TDSUC ON TDSUC.UidSucursal = TD.UidSucursal AND
+                                                   CAST(@UserDateTime AS TIME) BETWEEN CAST(TDSUC.HorarioApertura AS TIME) AND CAST(TDSUC.HorarioCierre AS TIME)
+
+                  LEFT JOIN Direccion AS DIR ON DIR.UidDireccion = SUC.UidDireccion
+                  LEFT JOIN ZonaHorariaEstado ZHE ON DIR.UidEstado = ZHE.UidEstado
+                  LEFT JOIN ZonaHorariaPais ZHP on ZHE.UidRelacionZonaPaisEstado = ZHP.UidZonaHorariaPais AND ZHP.IdZonaHoraria = @TimeZone
                     {filterJoin}
-                WHERE 
-                     D.VchNombre = @Dia    
-                    AND SP.VchTiempoElaboracion IS NOT NULL 
-                    AND ZDS.UidColonia = @UidColonia 
-                    AND CDS.UidEstatusContrato = 'CD20F9BF-EBA2-4128-88FB-647544457B2D'
-                    AND ZHP.IdZonaHoraria = @TimeZone    
-                    AND P.intEstatus = 1
-                    {filterWhere}  {whereStatements} 
-                GROUP BY P.UidProducto,P.[VchNombre],IPROD.NVchRuta,IEMP.NVchRuta,EMP.[UidEmpresa],EMP.[NombreComercial],P.VchDescripcion
-            ) payload 
-            WHERE 1=1  {where}
-            ORDER BY {order}
-            OFFSET @pageSize * @pageNumber ROWS
-            FETCH NEXT @pageSize ROWS ONLY";
+        WHERE  1=1
+            AND P.intEstatus = 1
+            AND D.VchNombre = @Dia {filterWhere}   
+        GROUP BY P.UidProducto, P.VchNombre, P.VchDescripcion, IPROD.NVchRuta, E.UidEmpresa, E.NombreComercial,IEMP.NVchRuta
+ ) payload
+WHERE 1=1 {where}
+ORDER BY {order}
+OFFSET @pageSize * @pageNumber ROWS FETCH NEXT @pageSize ROWS ONLY";
             command.CommandText = query;
 
             DataTable data = this.dbConexion.Busquedas(command);
