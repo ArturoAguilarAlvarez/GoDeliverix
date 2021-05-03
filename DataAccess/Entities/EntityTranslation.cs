@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Entities
 {
-    public class EntityTranslations
+    public class EntityTranslation
     {
-        public int Uid { get; set; }
+        public int Id { get; set; }
         public EntityType EntityType { get; set; }
         public Guid EntityUid { get; set; }
         public string Key { get; set; }
