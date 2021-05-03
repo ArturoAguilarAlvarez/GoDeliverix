@@ -21,6 +21,7 @@ namespace Modelo.Enums
         Orden,
         OndenSucursal,
         UserSignInRewardCode,
-        AllUserSignInRewardCode
+        AllUserSignInRewardCode,
+        AppContactView
     }
 }
