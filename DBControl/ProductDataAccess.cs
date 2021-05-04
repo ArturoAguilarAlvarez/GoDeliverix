@@ -604,7 +604,10 @@ OFFSET @pageSize * @pageNumber ROWS FETCH NEXT @pageSize ROWS ONLY";
 
             if (available.HasValue)
             {
-                where += " AND [Available] = 1 ";
+                if (available.Value)
+                {
+                    where += " AND [Available] = 1 ";
+                }
             }
 
             string order = (string.IsNullOrEmpty(sortField) || string.IsNullOrEmpty(sortOrder)) ? " [Available] DESC " : $"{sortField} {sortOrder.ToUpper()}";
