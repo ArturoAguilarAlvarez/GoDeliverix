@@ -509,6 +509,7 @@
     <Compile Include="Controllers\TarifarioController.cs" />
     <Compile Include="Controllers\TelefonoController.cs" />
     <Compile Include="Controllers\TerminosYCondicionesController.cs" />
+    <Compile Include="Controllers\v2\ConfigController.cs" />
     <Compile Include="Controllers\v2\TranslationsController.cs" />
     <Compile Include="Controllers\TurnoController.cs" />
     <Compile Include="Controllers\UbicacionController.cs" />

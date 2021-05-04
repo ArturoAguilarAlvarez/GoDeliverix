@@ -48,7 +48,9 @@
     <Compile Include="AddressDb.cs" />
     <Compile Include="AuthDb.cs" />
     <Compile Include="Common\BaseDapper.cs" />
+    <Compile Include="ConfigDb.cs" />
     <Compile Include="Entities\Code.cs" />
+    <Compile Include="Entities\ConfiguracionClienteMovil.cs" />
     <Compile Include="Entities\EntityTranslation.cs" />
     <Compile Include="Entities\SignInRewardCodesConfig.cs" />
     <Compile Include="Entities\UserCode.cs" />

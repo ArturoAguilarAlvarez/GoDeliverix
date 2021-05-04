@@ -48,6 +48,7 @@
     <Compile Include="AuthenticationViewModel.cs" />
     <Compile Include="CatalogosViewModel.cs" />
     <Compile Include="CodesViewModel.cs" />
+    <Compile Include="ConfigViewModel.cs" />
     <Compile Include="DealersViewModel.cs" />
     <Compile Include="NotificationViewModel.cs" />
     <Compile Include="OrderViewModel.cs" />
