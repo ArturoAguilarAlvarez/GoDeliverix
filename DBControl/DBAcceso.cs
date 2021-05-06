@@ -19,7 +19,7 @@ namespace DBControl
             //Crea la variable de acceso que define el resultado del registro a buscar
             string query = $" select u.UidUsuario from Usuarios u inner join CorreoUsuario cu on cu.UidUsuario = u.UidUsuario " +
                 $"inner join CorreoElectronico ce on ce.IdCorreo = cu.UidCorreo where('{USUARIO}' != '' and Usuario = '{USUARIO}' or('{USUARIO}' = '')) and" +
-                $" (('{correoElectronico}' != '' and ce.Correo = '{correoElectronico}')or('{correoElectronico}' = '')) and Contrasena = '{PASSWORD}'";
+                $" (('{correoElectronico}' != '' and ce.Correo = '{correoElectronico}')or('{correoElectronico}' = '')) and Contrasena = '{PASSWORD}' and u.ESTATUS =1";
             return oConexcion.Consultas(query);
         }
         public DataTable EstatusUsuario(string UidUsuario)
