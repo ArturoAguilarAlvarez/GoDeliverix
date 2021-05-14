@@ -8,14 +8,13 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Entities
 {
-    [Table("Codes")]
-    public class Codes
+    [Table("CodeExpirations")]
+   public class CodeExpiration
     {
         public Guid Uid { get; set; }
-        public Guid? CodeExpirationUid { get; set; }
-        public int IndexC { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public string Code { get; set; }
-        public CodeType Type { get; set; }
+        public CodeExpirationType Type { get; set; }
+        public DateTime? ExpirationDate { get; set; }
+        public int? ActivationsLimit { get; set; }
+        public int? DaysAfterActivation { get; set; }
     }
 }
