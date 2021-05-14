@@ -35,8 +35,8 @@ namespace DataAccess.Models
         public decimal DeliveryCardPaymentComission { get; set; }
         public bool IncludeCPTD { get; set; }
         public bool IncludeCPTS { get; set; }
-
-        public List <ProductOrderHistory> Products { get; set; }
+        public List<ProductOrderHistory> Products { get; set; }
+        public int ProductCount { get { return this.Products.Sum(p => p.Quantity); } }
 
         public OrderHistory()
         {
