@@ -17,6 +17,8 @@
     <link href="../../Content/bootstrap.css" rel="stylesheet" />
     <link href="../../Content/bootstrap-theme.css" rel="stylesheet" />
     <link rel="icon" href="../../Vista/FavIcon/Favicon.png" />
+    <%--Fabook validation--%>
+    <meta name="facebook-domain-verification" content="mqg1mvgcedre1vugy0hmqjji378hjg" />
 </head>
 <body class="container">
     <form id="form1" runat="server">
@@ -62,8 +64,8 @@
                                     </asp:LinkButton>
                                 </div>
                             </asp:Panel>
-                            <asp:Image ImageUrl="~/Vista/Img/Logo.png" Width="200"  runat="server" />
-                            <div class="input-group" style="margin-top:10px;">
+                            <asp:Image ImageUrl="~/Vista/Img/Logo.png" Width="200" runat="server" />
+                            <div class="input-group" style="margin-top: 10px;">
                                 <i class="input-group-addon">
                                     <span class="glyphicon glyphicon-user"></span>
                                 </i>
@@ -136,7 +138,7 @@
                 location.href = "https://play.google.com/store/apps/details?id=com.CompuAndSoft.GDCliente";
             } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
                 location.href = "https://apps.apple.com/app/godeliverix/id1495911877";
-            }            
+            }
         }
     </script>
 </body>

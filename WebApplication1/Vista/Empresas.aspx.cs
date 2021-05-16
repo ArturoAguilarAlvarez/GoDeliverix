@@ -78,7 +78,6 @@ namespace WebApplication1.Vista
                 liDatosGenerales.Attributes.Add("class", "active");
                 liDatosDireccion.Attributes.Add("class", " ");
                 liDatosContacto.Attributes.Add("class", "");
-                LiDatosProductos.Attributes.Add("class", "");
                 //Placeholders
                 txtDManzana.Attributes.Add("placeholder", "Manzana");
                 txtCalle1.Attributes.Add("plcaeholder", "Calle");
@@ -1365,7 +1364,6 @@ namespace WebApplication1.Vista
             liDatosDireccion.Attributes.Add("class", "");
             liDatosContacto.Attributes.Add("class", "");
             LiDatosComision.Attributes.Add("Class", "active");
-            LiDatosProductos.Attributes.Add("Class", "");
             if (Session["Accion"] != null)
             {
                 AccionesDeLaPagina = Session["Accion"].ToString();
@@ -1386,7 +1384,6 @@ namespace WebApplication1.Vista
             liDatosDireccion.Attributes.Add("class", "");
             liDatosContacto.Attributes.Add("class", "");
             LiDatosComision.Attributes.Add("Class", "");
-            LiDatosProductos.Attributes.Add("Class", "active");
             if (Session["Accion"] != null)
             {
                 AccionesDeLaPagina = Session["Accion"].ToString();
@@ -2880,7 +2877,7 @@ namespace WebApplication1.Vista
                                                 try
                                                 {
                                                     string Nombre = item[2].ToString();
-                                                    string Descripcion = item[2].ToString();
+                                                    string Descripcion = item[3].ToString();
                                                     Guid UidProducto = new Guid(item[0].ToString());
                                                     string Giro = item[4].ToString();
                                                     string Categoria = item[6].ToString();
@@ -3071,7 +3068,7 @@ namespace WebApplication1.Vista
                                     try
                                     {
                                         string Nombre = item[2].ToString();
-                                        string Descripcion = item[2].ToString();
+                                        string Descripcion = item[3].ToString();
                                         Guid UidProducto = new Guid(item[0].ToString());
                                         string Giro = item[4].ToString();
                                         string Categoria = item[6].ToString();

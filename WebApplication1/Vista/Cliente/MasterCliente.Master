@@ -20,8 +20,6 @@
     <link href="../../Content/animate.css" rel="stylesheet" />
     <link href="../../Content/MisEstilos.css" rel="stylesheet" />
     <%--Scripts para mapas--%>
-
-
     <script src="../../scripts/locationpicker.jquery.js"></script>
     <%--Carga loader--%>
     <link href="../../Content/Loader.css" rel="stylesheet" />
@@ -182,6 +180,7 @@
                                     <EmptyDataTemplate>
                                         <div class="info">
                                             No se puede enviar este producto
+                                       
                                         </div>
                                     </EmptyDataTemplate>
                                     <LayoutTemplate>
@@ -317,6 +316,7 @@
                             <div class="modal-footer">
                                 <p>
                                     Total:
+                                   
                                     <asp:Label ID="lblTotalDeOrden" runat="server" />
                                 </p>
                             </div>
@@ -451,6 +451,7 @@
                                             </div>
 
 
+                                       
                                         </asp:LinkButton>
                                     </SelectedItemTemplate>
                                 </asp:ListView>

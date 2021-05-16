@@ -549,8 +549,6 @@
                                             <asp:LinkButton runat="server" ID="btnDatosDeConectado" OnClick="PanelContacto"><span class="glyphicon glyphicon-phone"></span> CONTACTO</asp:LinkButton></li>
                                         <li role="presentation" id="LiDatosComision" runat="server">
                                             <asp:LinkButton runat="server" ID="btnDatosComision" OnClick="PanelCoMision"><span class="glyphicon glyphicon-phone"></span> COMISIONES</asp:LinkButton></li>
-                                        <li role="presentation" id="LiDatosProductos" runat="server">
-                                            <asp:LinkButton runat="server" ID="BtnDatosProductos" OnClick="PanelProducto"><span class="glyphicon glyphicon-gift"></span> PRODUCTOS</asp:LinkButton></li>
                                     </ul>
                                 </ContentTemplate>
                                 <Triggers>

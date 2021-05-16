@@ -843,24 +843,6 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.LinkButton btnDatosComision;
 
         /// <summary>
-        /// LiDatosProductos control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiDatosProductos;
-
-        /// <summary>
-        /// BtnDatosProductos control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton BtnDatosProductos;
-
-        /// <summary>
         /// lblUidEmpresa control.
         /// </summary>
         /// <remarks>
