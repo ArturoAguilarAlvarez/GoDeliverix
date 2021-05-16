@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -59,6 +59,7 @@
     <Compile Include="Entities\UserCodeConfig.cs" />
     <Compile Include="Entities\UserCodeNetwork.cs" />
     <Compile Include="Entities\UserCodeNetworkConfig.cs" />
+    <Compile Include="Entities\UserCodeNetworkLog.cs" />
     <Compile Include="Entities\UserCodes.cs" />
     <Compile Include="Entities\UserCodeStatus.cs" />
     <Compile Include="Entities\UserSignInRewardCode.cs" />
@@ -72,7 +73,11 @@
     <Compile Include="Enum\CodeValidationResult.cs" />
     <Compile Include="Enum\ComparisonOperator.cs" />
     <Compile Include="Enum\LogicalOperator.cs" />
+    <Compile Include="Enum\UserCodeNetworkLogType.cs" />
+    <Compile Include="Models\OrderHistoryDetailProduct.cs" />
     <Compile Include="Models\OrderHistory.cs" />
+    <Compile Include="Models\OrderHistoryDetail.cs" />
+    <Compile Include="Models\OrderHistoryDetailTimeLine.cs" />
     <Compile Include="Models\ProductOrderHistory.cs" />
     <Compile Include="Models\PurchaseHistory.cs" />
     <Compile Include="OrderDb.cs" />
