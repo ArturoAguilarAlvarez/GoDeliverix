@@ -80,6 +80,9 @@
     <Compile Include="Models\OrderHistoryDetailTimeLine.cs" />
     <Compile Include="Models\ProductOrderHistory.cs" />
     <Compile Include="Models\PurchaseHistory.cs" />
+    <Compile Include="Models\PurchaseHistoryDetail.cs" />
+    <Compile Include="Models\PurchaseHistoryDetailOrder.cs" />
+    <Compile Include="Models\PurchaseHistoryDetailProduct.cs" />
     <Compile Include="OrderDb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\UserCodeNetworkService.cs" />

@@ -60,6 +60,21 @@ namespace WebApplication1.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
+        [HttpGet]
+        public IHttpActionResult GetPurchaseDetail([FromUri] Guid uid)
+        {
+            try
+            {
+                var result = this.OrderVm.GetPurchaseDetail(uid);
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 
     public class CancelOrderParams

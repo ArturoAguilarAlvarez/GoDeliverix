@@ -35,5 +35,10 @@ namespace VistaDelModelo
         {
             return this.OrderDb.GetOrder(uidOrder);
         }
+
+        public PurchaseHistoryDetail GetPurchaseDetail(Guid uidPurchase)
+        {
+            return this.OrderDb.GetPurchaseDetail(uidPurchase);
+        }
     }
 }
