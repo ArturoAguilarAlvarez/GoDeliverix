@@ -5,14 +5,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAccess.Entities
 {
-    [Table("Codes")]
-    public class Codes
+    [Table("UserCodeNetworkLog")]
+    public class UserCodeNetworkLog
     {
         [Key]
         public Guid Uid { get; set; }
-        public int IndexC { get; set; }
+        public Guid UserCodeNetworkUid { get; set; }
         public DateTime CreatedDate { get; set; }
-        public string Code { get; set; }
-        public CodeType Type { get; set; }
+        public UserCodeNetworkLogType Type { get; set; }
+
+        public Guid? OwnerCodeNetworkUid { get; set; }
+        public decimal? Amount { get; set; }
     }
 }
