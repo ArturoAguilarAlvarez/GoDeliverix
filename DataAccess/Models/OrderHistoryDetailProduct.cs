@@ -12,7 +12,7 @@ namespace DataAccess.Models
         public Guid OrderUid { get; set; }
         public string Name { get; set; }
         public int Quantity { get; set; }
-        public int Notes { get; set; }
+        public string Notes { get; set; }
         public decimal Total { get; set; }
     }
 }
