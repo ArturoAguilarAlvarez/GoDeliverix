@@ -522,12 +522,15 @@ namespace WebApplication1.Controllers
             Respuesta.Status = true;
             Respuesta.Message = "Informacion agregada satisfactoriamente";
 
-            try
+            if (UidEstatus.Equals(new Guid("2D2F38B8-7757-45FB-9CA6-6ECFE20356ED")))
             {
-                var info = this.VmCodes.GetPurchaseInfoToApplyReward(new Guid(UidOrden));
-                await this.VmCodes.VerifyUserNetworkCode(info.UidUser, info.UidPurchase);
+                try
+                {
+                    var info = this.VmCodes.GetPurchaseInfoToApplyReward(new Guid(UidOrden));
+                    await this.VmCodes.VerifyUserNetworkCode(info.UidUser, info.UidPurchase);
+                }
+                catch (Exception ex) {/* TODO: CATCH LOG */}
             }
-            catch (Exception ex) {/* TODO: CATCH LOG */}
 
             return Respuesta;
         }
