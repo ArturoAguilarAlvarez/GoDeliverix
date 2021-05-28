@@ -416,6 +416,11 @@ namespace VistaDelModelo
 
             this._EmailService.SendEmail(template, user.Email, subject, lang: user.Lang);
         }
+
+        public ApplyPurchaseReward GetPurchaseInfoToApplyReward(Guid uidOrden)
+        {
+            return this._CodeDb.GetPurchaseInfoToApplyReward(uidOrden);
+        }
         #endregion
     }
 }

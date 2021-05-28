@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using VistaDelModelo;
@@ -10,20 +11,30 @@ namespace WebApplication1.Controllers
     public class OrdersController : ApiController
     {
         private OrderViewModel OrderVm { get; }
+        private CodesViewModel VmCodes { get; }
 
         public OrdersController()
         {
             this.OrderVm = new OrderViewModel();
+            this.VmCodes = new CodesViewModel(HttpContext.Current.Server.MapPath("~/"));
         }
 
         [HttpPost]
-        public IHttpActionResult Cancel([FromBody] CancelOrderParams parameters)
+        public async Task<IHttpActionResult> Cancel([FromBody] CancelOrderParams parameters)
         {
             try
             {
                 bool result = this.OrderVm.CancelOrder(parameters.UidOrdenSucursal, parameters.UidUsuario, parameters.UidDireccion);
                 if (result)
+                {
+                    try
+                    {
+                        var info = this.VmCodes.GetPurchaseInfoToApplyReward(parameters.UidOrdenSucursal);
+                        await this.VmCodes.VerifyUserNetworkCode(info.UidUser, info.UidPurchase);
+                    }
+                    catch (Exception ex) {/* TODO: CATCH LOG */}
                     return Ok();
+                }
                 else
                     return BadRequest("");
             }

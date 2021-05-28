@@ -123,10 +123,4 @@ namespace WebApplication1.Controllers.v2
     {
         public int Code { get; set; }
     }
-
-    public class ApplyPurchaseReward
-    {
-        public Guid uidUser { get; set; }
-        public Guid uidPurchase { get; set; }
-    }
 }

@@ -164,6 +164,21 @@ FROM UserCodeNetwork";
                 return false;
             }
         }
+
+        public ApplyPurchaseReward GetPurchaseInfoToApplyReward(Guid uidOrden)
+        {
+            string query = @"
+select os.UidOrden      AS UidPurchase,
+       ou.UidUsuario    AS UidUser
+from OrdenSucursal os
+         inner join OrdenUsuario ou on ou.UidOrden = os.UidOrden
+where os.UidRelacionOrdenSucursal = @ordenUid";
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@ordenUid", uidOrden);
+
+            return this.QuerySingleOrDefault<ApplyPurchaseReward>(query, parameters);
+        }
         #endregion
 
         #region User

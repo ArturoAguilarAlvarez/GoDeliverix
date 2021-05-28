@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Web.Http;
 using VistaDelModelo;
 using System.Collections;
@@ -9,6 +9,8 @@ using System.Windows.Documents;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Web;
+using System.Threading.Tasks;
 
 namespace WebApplication1.Controllers
 {
@@ -16,7 +18,12 @@ namespace WebApplication1.Controllers
     {
         VMOrden MVOrden;
         ResponseHelper Respuesta;
+        private CodesViewModel VmCodes { get; }
 
+        public OrdenController()
+        {
+            this.VmCodes = new CodesViewModel(HttpContext.Current.Server.MapPath("~/"));
+        }
 
         #region Aplicacion cliente
 
@@ -84,7 +91,7 @@ namespace WebApplication1.Controllers
                         MTotal = decimal.Parse(ord["MTotal"].ToString()),
                         intCantidad = cantidad,
                         StrNombreEmpresa = emp.NOMBRECOMERCIAL,
-                        LngCodigoDeEntrega = ord.IsNull("BintCodigoEntrega") ? 0 :(long)ord["BintCodigoEntrega"]
+                        LngCodigoDeEntrega = ord.IsNull("BintCodigoEntrega") ? 0 : (long)ord["BintCodigoEntrega"]
                     });
                 }
 
@@ -489,7 +496,7 @@ namespace WebApplication1.Controllers
         /// <param name="UidLicencia"></param>
         /// <param name="UidSucursal"></param>
         /// <returns></returns>
-        public ResponseHelper GetAgregaEstatusALaOrden(Guid UidEstatus, string StrParametro, string Mensaje = "", string UidOrden = "", long LngFolio = 0, string UidLicencia = "", string UidSucursal = "")
+        public async Task<ResponseHelper> GetAgregaEstatusALaOrden(Guid UidEstatus, string StrParametro, string Mensaje = "", string UidOrden = "", long LngFolio = 0, string UidLicencia = "", string UidSucursal = "")
         {
             MVOrden = new VMOrden();
 
@@ -514,6 +521,14 @@ namespace WebApplication1.Controllers
             Respuesta.Data = "Registro guardado";
             Respuesta.Status = true;
             Respuesta.Message = "Informacion agregada satisfactoriamente";
+
+            try
+            {
+                var info = this.VmCodes.GetPurchaseInfoToApplyReward(new Guid(UidOrden));
+                await this.VmCodes.VerifyUserNetworkCode(info.UidUser, info.UidPurchase);
+            }
+            catch (Exception ex) {/* TODO: CATCH LOG */}
+
             return Respuesta;
         }
 
