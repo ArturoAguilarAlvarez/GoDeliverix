@@ -18,12 +18,14 @@ namespace DataAccess.Entities
         public CodeRewardType OwnerRewardType { get; set; }
         public CodeRewardValueType OwnerRewardValueType { get; set; }
         public decimal OwnerRewardValue { get; set; }
+        public int? OwnerRewardLimit { get; set; }
         // -- Parent 
 
         // -- Owner 
         public CodeRewardType GuestRewardType { get; set; }
         public CodeRewardValueType GuestRewardValueType { get; set; }
         public decimal GuestRewardValue { get; set; }
+        public int? GuestRewardLimit { get; set; }
         // -- Owner
     }
 }

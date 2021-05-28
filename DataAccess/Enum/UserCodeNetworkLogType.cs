@@ -12,14 +12,22 @@ namespace DataAccess.Enum
         /// El codigo fue creado
         /// </summary>
         Created,
+
         /// <summary>
-        /// El codigo fue compartido (otro usuario lo activo)
+        /// El codigo del usuario fue registrado por otra persona
         /// </summary>
         Shared,
+
+        /// <summary>
+        /// El codigo del owner fue asociado
+        /// </summary>
+        AssociateOwner,
+
         /// <summary>
         /// El usuario recibio la recompesa
         /// </summary>
         Rewarded,
+
         /// <summary>
         /// El usuario dio la recompensa
         /// </summary>

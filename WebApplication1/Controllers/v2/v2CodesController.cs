@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using VistaDelModelo;
@@ -14,7 +15,7 @@ namespace WebApplication1.Controllers.v2
 
         public v2CodesController()
         {
-            this.VmCodes = new CodesViewModel();
+            this.VmCodes = new CodesViewModel(HttpContext.Current.Server.MapPath("~/"));
         }
 
         [HttpGet]
@@ -74,10 +75,58 @@ namespace WebApplication1.Controllers.v2
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet]
+        public async Task<IHttpActionResult> VerifyCode([FromUri] string code)
+        {
+            try
+            {
+                var result = await this.VmCodes.VerifyCodeAsync(code);
+                return Json(new { result = result });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IHttpActionResult> VerifyCodeByUser(Guid uidUser, string code)
+        {
+            try
+            {
+                var result = await this.VmCodes.VerifyCodeAsync(uidUser, code);
+                return Json(new { result = result });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IHttpActionResult> ApplyPurchaseReward([FromBody] ApplyPurchaseReward reward)
+        {
+            try
+            {
+                await this.VmCodes.VerifyUserNetworkCode(reward.uidUser, reward.uidPurchase);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 
     public class CodeResult
     {
         public int Code { get; set; }
+    }
+
+    public class ApplyPurchaseReward
+    {
+        public Guid uidUser { get; set; }
+        public Guid uidPurchase { get; set; }
     }
 }

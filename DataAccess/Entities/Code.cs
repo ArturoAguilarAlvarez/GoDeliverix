@@ -10,9 +10,15 @@ namespace DataAccess.Entities
     {
         [Key]
         public Guid Uid { get; set; }
+
+        [Editable(false)]
         public int IndexC { get; set; }
+
+        [Editable(false)]
         public DateTime CreatedDate { get; set; }
+
         public string Code { get; set; }
+
         public CodeType Type { get; set; }
     }
 }

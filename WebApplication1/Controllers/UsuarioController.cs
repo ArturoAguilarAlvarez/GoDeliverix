@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Http;
+using System.Web;
 using System.Web.Helpers;
 using System.Web.Http;
 using VistaDelModelo;
@@ -16,7 +17,7 @@ namespace WebApplication1.Controllers
 
         public UsuarioController()
         {
-            this.VmCodes = new CodesViewModel();
+            this.VmCodes = new CodesViewModel(HttpContext.Current.Server.MapPath("~/"));
         }
 
         // GET: api/Profile/5

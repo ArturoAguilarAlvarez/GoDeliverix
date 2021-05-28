@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddressViewModel.cs" />
+    <Compile Include="ApplicationVars.cs" />
     <Compile Include="AuthenticationViewModel.cs" />
     <Compile Include="CatalogosViewModel.cs" />
     <Compile Include="CodesViewModel.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="OrderViewModel.cs" />
     <Compile Include="PaymentViewModel.cs" />
     <Compile Include="ProductViewModel.cs" />
+    <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\FirebaseService.cs" />
     <Compile Include="Services\GoogleService.cs" />
     <Compile Include="TranslationsViewModel.cs" />

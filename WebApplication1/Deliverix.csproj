@@ -313,6 +313,10 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\EmailTemplate\UserCodeNetwork\gd_code_activated_en.html" />
+    <Content Include="Resources\EmailTemplate\UserCodeNetwork\gd_code_activated_es.html" />
+    <Content Include="Resources\EmailTemplate\UserCodeNetwork\gd_rewarded_en.html" />
+    <Content Include="Resources\EmailTemplate\UserCodeNetwork\gd_rewarded_es.html" />
     <Content Include="scripts\jquery-ui-1.12.1.js" />
     <Content Include="scripts\jquery-ui-1.12.1.min.js" />
     <Content Include="scripts\jquery-ui.js" />

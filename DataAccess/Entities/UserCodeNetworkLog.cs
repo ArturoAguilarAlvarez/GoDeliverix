@@ -10,11 +10,14 @@ namespace DataAccess.Entities
     {
         [Key]
         public Guid Uid { get; set; }
+
         public Guid UserCodeNetworkUid { get; set; }
+
         public DateTime CreatedDate { get; set; }
+
         public UserCodeNetworkLogType Type { get; set; }
 
-        public Guid? OwnerCodeNetworkUid { get; set; }
+        public Guid? SharedCodeNetworkUid { get; set; }
         public decimal? Amount { get; set; }
     }
 }

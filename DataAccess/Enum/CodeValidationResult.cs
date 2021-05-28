@@ -14,6 +14,7 @@ namespace DataAccess.Enum
         Expired = 0,
         Activated,
         ActivatedAndRewarded,
-        Valid
+        Valid,
+        Invalid
     }
 }
