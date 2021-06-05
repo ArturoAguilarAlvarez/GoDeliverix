@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Entities
 {
+    [Serializable]
     [Table("CodeRules")]
     public class CodeRule
     {

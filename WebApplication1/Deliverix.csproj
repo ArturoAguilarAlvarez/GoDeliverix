@@ -329,6 +329,8 @@
     <Content Include="Vista\Cliente\Configuracion.aspx" />
     <Content Include="Vista\Cliente\Default.aspx" />
     <Content Include="Vista\Cliente\Historico.aspx" />
+    <Content Include="Vista\CodigoForm.aspx" />
+    <Content Include="Vista\Codigos.aspx" />
     <Content Include="Vista\Configuracion.aspx" />
     <Content Include="Vista\ConfiguracionComisiones.aspx" />
     <Content Include="Vista\ConfiguracionDeEmpresa.aspx" />
@@ -603,6 +605,20 @@
     </Compile>
     <Compile Include="Vista\Cliente\MasterCliente.Master.designer.cs">
       <DependentUpon>MasterCliente.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Vista\CodigoForm.aspx.cs">
+      <DependentUpon>CodigoForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Vista\CodigoForm.aspx.designer.cs">
+      <DependentUpon>CodigoForm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Vista\Codigos.aspx.cs">
+      <DependentUpon>Codigos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Vista\Codigos.aspx.designer.cs">
+      <DependentUpon>Codigos.aspx</DependentUpon>
     </Compile>
     <Compile Include="Vista\Configuracion.aspx.cs">
       <DependentUpon>Configuracion.aspx</DependentUpon>

@@ -10,10 +10,12 @@
 .EspacioFiltrosBusqueda {
     margin-top: 20px;
 }
+
 .QuitaEspacios {
     padding: 0px;
     margin: 0px;
 }
+
 .vidrio {
     border-radius: 10px;
     border: solid 5px rgba(255,255,255,.1);
@@ -22,6 +24,19 @@
     background: -moz-linear-gradient(-45deg, rgba(255,255,255,.2) 60%, rgba(255,255,255,.05) 60%, rgba(255,255,255,.05) 80%, rgba(0,0,0,.1) 80%);
 }
 
+.pb-0 {
+    padding-bottom: 0px !important;
+}
+
+.mb-0 {
+    margin-bottom: 0px !important;
+}
+
+.mb-2 {
+    margin-bottom: 2px !important;
+}
 
 
-
+.text-bold {
+    font-weight: 600;
+}

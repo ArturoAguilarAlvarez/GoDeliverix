@@ -104,19 +104,7 @@ namespace WebApplication1.Controllers.v2
             }
         }
 
-        //[HttpPost]
-        //public async Task<IHttpActionResult> ApplyPurchaseReward([FromBody] ApplyPurchaseReward reward)
-        //{
-        //    try
-        //    {
-        //        await this.VmCodes.VerifyUserNetworkCode(reward.uidUser, reward.uidPurchase);
-        //        return Ok();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+        
     }
 
     public class CodeResult

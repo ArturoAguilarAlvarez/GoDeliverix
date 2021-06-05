@@ -2,6 +2,7 @@
 {
     public enum CodeType
     {
-        UserNetwork
+        UserNetwork,
+        PromotionCode
     }
 }

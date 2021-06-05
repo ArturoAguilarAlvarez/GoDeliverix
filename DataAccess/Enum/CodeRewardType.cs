@@ -10,6 +10,10 @@ namespace DataAccess.Enum
     {
         None,
         WalletAmount,
-        FreeDelivery
+        FreeDelivery,
+        Discount,
+        DeliveryDiscount,
+        SubtotalRefund,
+        DeliveryRefund
     }
 }

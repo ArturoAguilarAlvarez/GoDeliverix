@@ -8,8 +8,11 @@ namespace DataAccess.Enum
 {
     public enum CodeRuleValueType
     {
-        Uid,
-        Amount,
-        Name
+        SubtotalOrder,
+        ShipmentOrder,
+        SubtotalPurchase,
+        ShipmentPurchase,
+        Product,
+        ProductQuantity
     }
 }

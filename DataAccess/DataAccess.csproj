@@ -63,6 +63,7 @@
     <Compile Include="Entities\ConfiguracionClienteMovil.cs" />
     <Compile Include="Entities\EntityTranslation.cs" />
     <Compile Include="Entities\Movimiento.cs" />
+    <Compile Include="Entities\PromotionCode.cs" />
     <Compile Include="Entities\SignInRewardCodesConfig.cs" />
     <Compile Include="Entities\UserCode.cs" />
     <Compile Include="Entities\UserCodeConfig.cs" />
