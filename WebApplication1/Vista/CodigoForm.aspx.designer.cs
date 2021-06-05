@@ -15,6 +15,69 @@ namespace WebApplication1.Vista
     {
 
         /// <summary>
+        /// Wizard1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Wizard Wizard1;
+
+        /// <summary>
+        /// wsCodeType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WizardStep wsCodeType;
+
+        /// <summary>
+        /// ddlCodeType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlCodeType;
+
+        /// <summary>
+        /// wsLocation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WizardStep wsLocation;
+
+        /// <summary>
+        /// wsDeliveryCompany control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WizardStep wsDeliveryCompany;
+
+        /// <summary>
+        /// wsCompany control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WizardStep wsCompany;
+
+        /// <summary>
+        /// wsCodeDetails control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WizardStep wsCodeDetails;
+
+        /// <summary>
         /// txtCode control.
         /// </summary>
         /// <remarks>
@@ -114,6 +177,15 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.Panel pnlDaysBeforeActivation;
 
         /// <summary>
+        /// wsRules control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WizardStep wsRules;
+
+        /// <summary>
         /// btnCodeRuleNew control.
         /// </summary>
         /// <remarks>
@@ -148,15 +220,6 @@ namespace WebApplication1.Vista
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCodeRuleCancel;
-
-        /// <summary>
-        /// lblCodeRuleError control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblCodeRuleError;
 
         /// <summary>
         /// ddlCodeRuleValueType control.
@@ -202,5 +265,14 @@ namespace WebApplication1.Vista
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView gvCodeRules;
+
+        /// <summary>
+        /// wsSummary control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.WizardStep wsSummary;
     }
 }

@@ -33,6 +33,7 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
+    <asp:ContentPlaceHolder runat="server" ID="Styles"></asp:ContentPlaceHolder>
 </head>
 <body style="background-color: lavender; padding-bottom: 50px; padding-top: 60px;">
 
