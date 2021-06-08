@@ -85,6 +85,8 @@
     <Compile Include="Enum\LogicalOperator.cs" />
     <Compile Include="Enum\UserCodeNetworkLogType.cs" />
     <Compile Include="Models\ApplyPurchaseReward.cs" />
+    <Compile Include="Models\ListboxView.cs" />
+    <Compile Include="Models\ListboxViewInteger.cs" />
     <Compile Include="Models\OrderHistoryDetailProduct.cs" />
     <Compile Include="Models\OrderHistory.cs" />
     <Compile Include="Models\OrderHistoryDetail.cs" />

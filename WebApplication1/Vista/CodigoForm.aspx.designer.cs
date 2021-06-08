@@ -15,6 +15,24 @@ namespace WebApplication1.Vista
     {
 
         /// <summary>
+        /// pnlError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlError;
+
+        /// <summary>
+        /// lblError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblError;
+
+        /// <summary>
         /// Wizard1 control.
         /// </summary>
         /// <remarks>
@@ -33,13 +51,13 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.WizardStep wsCodeType;
 
         /// <summary>
-        /// ddlCodeType control.
+        /// ddlCodeLevel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlCodeType;
+        protected global::System.Web.UI.WebControls.DropDownList ddlCodeLevel;
 
         /// <summary>
         /// wsLocation control.
@@ -51,6 +69,51 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.WizardStep wsLocation;
 
         /// <summary>
+        /// ddlCountry control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlCountry;
+
+        /// <summary>
+        /// ddlState control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::WebApplication1.UserControls.uDropDownListCheck ddlState;
+
+        /// <summary>
+        /// ddlMunicipality control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::WebApplication1.UserControls.uDropDownListCheck ddlMunicipality;
+
+        /// <summary>
+        /// ddlCity control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::WebApplication1.UserControls.uDropDownListCheck ddlCity;
+
+        /// <summary>
+        /// ddlNeighborhood control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::WebApplication1.UserControls.uDropDownListCheck ddlNeighborhood;
+
+        /// <summary>
         /// wsDeliveryCompany control.
         /// </summary>
         /// <remarks>
@@ -60,6 +123,24 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.WizardStep wsDeliveryCompany;
 
         /// <summary>
+        /// ddlDeliveryCompany control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlDeliveryCompany;
+
+        /// <summary>
+        /// ddlDeliveryCompanyBranch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::WebApplication1.UserControls.uDropDownListCheck ddlDeliveryCompanyBranch;
+
+        /// <summary>
         /// wsCompany control.
         /// </summary>
         /// <remarks>
@@ -67,6 +148,24 @@ namespace WebApplication1.Vista
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.WizardStep wsCompany;
+
+        /// <summary>
+        /// ddlCompany control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlCompany;
+
+        /// <summary>
+        /// ddlCompanyBranch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::WebApplication1.UserControls.uDropDownListCheck ddlCompanyBranch;
 
         /// <summary>
         /// wsCodeDetails control.

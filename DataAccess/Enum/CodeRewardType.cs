@@ -11,9 +11,14 @@ namespace DataAccess.Enum
         None,
         WalletAmount,
         FreeDelivery,
-        Discount,
-        DeliveryDiscount,
-        SubtotalRefund,
-        DeliveryRefund
+        DeliveryFixedRate,
+        OrderDiscount,
+        DeliveryOrderDiscount,
+        PurchaseDiscount,
+        DeliveryPurchaseDiscount,
+        OrderRefund,
+        DeliveryOrderRefund,
+        PurchaseRefund,
+        DeliveryPurchaseRefund,
     }
 }

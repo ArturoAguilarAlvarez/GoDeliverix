@@ -422,5 +422,30 @@ namespace VistaDelModelo
             return this._CodeDb.GetPurchaseInfoToApplyReward(uidOrden);
         }
         #endregion
+
+        #region View Resources
+        public IEnumerable<ListboxView> ReadAllCompanies(int type, Guid? uid = null, string defaultItem = "")
+        {
+            var data = this._CodeDb.ReadAllCompanies(type, uid);
+            if (defaultItem != string.Empty)
+            {
+                var tmp = data.ToList();
+                tmp.Insert(0, new ListboxView() { Uid = Guid.Empty, Name = defaultItem });
+                data = tmp;
+            }
+            return data;
+        }
+        public IEnumerable<ListboxView> ReadAllCompanyBranches(Guid uid, string defaultItem = "")
+        {
+            var data = this._CodeDb.ReadAllCompanyBranches(uid);
+            if (defaultItem != string.Empty)
+            {
+                var tmp = data.ToList();
+                tmp.Insert(0, new ListboxView() { Uid = Guid.Empty, Name = defaultItem });
+                data = tmp;
+            }
+            return data;
+        }
+        #endregion
     }
 }

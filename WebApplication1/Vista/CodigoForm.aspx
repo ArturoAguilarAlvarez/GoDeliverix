@@ -1,5 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Vista/MasterDeliverix.Master" AutoEventWireup="true" CodeBehind="CodigoForm.aspx.cs" Inherits="WebApplication1.Vista.CodigoForm" %>
 
+<%@ Register TagName="DropDownListCheck" TagPrefix="uWebControl" Src="~/UserControls/uDropDownListCheck.ascx" %>
 <asp:Content runat="server" ID="Styles" ContentPlaceHolderID="Styles">
     <style>
         .w-100 {
@@ -47,11 +48,17 @@
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
+
+                <asp:Panel runat="server" ID="pnlError" CssClass="panel panel-danger">
+                    <asp:Label Text="Error" runat="server" ID="lblError"></asp:Label>
+                </asp:Panel>
+
                 <%--WIZARD--%>
-                <asp:Wizard ID="Wizard1" runat="server" CssClass="panel w-100" OnSideBarButtonClick="Wizard1_SideBarButtonClick">
+                <asp:Wizard ID="Wizard1" runat="server" CssClass="panel w-100" OnNextButtonClick="Wizard1_NextButtonClick" OnSideBarButtonClick="Wizard1_SideBarButtonClick">
 
                     <StepPreviousButtonStyle CssClass="btn btn-sm btn-default" />
                     <StartNextButtonStyle CssClass="btn btn-sm btn-primary" />
@@ -84,7 +91,6 @@
 
                     <HeaderTemplate>
                         <h3>Código de promoción</h3>
-                        <asp:Label Text="Error" runat="server" ID="lblError" CssClass="text-danger" />
                     </HeaderTemplate>
 
                     <LayoutTemplate>
@@ -132,12 +138,14 @@
                         <asp:WizardStep ID="wsCodeType" runat="server" Title=" ">
                             <h5 class="text-muted">Selección del tipo de codigo de promocion</h5>
 
+
                             <div class="row">
                                 <div class="col-md-12">
                                     <h6 class="text-muted">Tipo de codigo</h6>
-                                    <asp:DropDownList runat="server" ID="ddlCodeType" CssClass="form-control form-group-sm">
-                                        <asp:ListItem Text="text1" />
-                                        <asp:ListItem Text="text2" />
+                                    <asp:DropDownList runat="server" ID="ddlCodeLevel" CssClass="form-control form-group-sm">
+                                        <asp:ListItem Text="Region" Value="0" />
+                                        <asp:ListItem Text="Suministradora" Value="1" />
+                                        <asp:ListItem Text="Distribuidora" Value="2" />
                                     </asp:DropDownList>
                                 </div>
                             </div>
@@ -150,42 +158,20 @@
                             <%--ROW--%>
                             <div class="row">
                                 <div class="col-md-12">
-                                    
-                                </div>
-                                <div class="col-md-12">
                                     <h6 class="text-muted">Pais</h6>
-                                    <asp:DropDownList runat="server" CssClass="form-control form-control-sm">
-                                        <asp:ListItem Text="text1" />
-                                        <asp:ListItem Text="text2" />
-                                    </asp:DropDownList>
+                                    <asp:DropDownList runat="server" ID="ddlCountry" AutoPostBack="true" OnSelectedIndexChanged="ddlCountry_SelectedIndexChanged" CssClass="form-control form-control-sm"></asp:DropDownList>
                                 </div>
                                 <div class="col-md-12">
-                                    <h6 class="text-muted">Estado</h6>
-                                    <asp:DropDownList runat="server" CssClass="form-control form-control-sm">
-                                        <asp:ListItem Text="text1" />
-                                        <asp:ListItem Text="text2" />
-                                    </asp:DropDownList>
+                                    <uWebControl:DropDownListCheck runat="server" ID="ddlState" OnSelectedIndexChanged="ddlState_SelectedIndexChanged" Label="Estado" />
                                 </div>
                                 <div class="col-md-12">
-                                    <h6 class="text-muted">Municipio</h6>
-                                    <asp:DropDownList runat="server" CssClass="form-control form-control-sm">
-                                        <asp:ListItem Text="text1" />
-                                        <asp:ListItem Text="text2" />
-                                    </asp:DropDownList>
+                                    <uWebControl:DropDownListCheck runat="server" ID="ddlMunicipality" OnSelectedIndexChanged="ddlMunicipality_SelectedIndexChanged" Label="Municipio" />
                                 </div>
                                 <div class="col-md-12">
-                                    <h6 class="text-muted">Ciudad</h6>
-                                    <asp:DropDownList runat="server" CssClass="form-control form-control-sm">
-                                        <asp:ListItem Text="text1" />
-                                        <asp:ListItem Text="text2" />
-                                    </asp:DropDownList>
+                                    <uWebControl:DropDownListCheck runat="server" ID="ddlCity" OnSelectedIndexChanged="ddlCity_SelectedIndexChanged" Label="Ciudad" />
                                 </div>
                                 <div class="col-md-12">
-                                    <h6 class="text-muted">Colonia</h6>
-                                    <asp:DropDownList runat="server" CssClass="form-control form-control-sm">
-                                        <asp:ListItem Text="text1" />
-                                        <asp:ListItem Text="text2" />
-                                    </asp:DropDownList>
+                                    <uWebControl:DropDownListCheck runat="server" ID="ddlNeighborhood" OnSelectedIndexChanged="ddlNeighborhood_SelectedIndexChanged" Label="Colonia" />
                                 </div>
                             </div>
                             <%--ROW--%>
@@ -199,17 +185,11 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <h6 class="text-muted">Distribuidora</h6>
-                                    <asp:DropDownList runat="server" CssClass="form-control form-control-sm">
-                                        <asp:ListItem Text="text1" />
-                                        <asp:ListItem Text="text2" />
+                                    <asp:DropDownList runat="server" ID="ddlDeliveryCompany" AutoPostBack="true" OnSelectedIndexChanged="ddlDeliveryCompany_SelectedIndexChanged" CssClass="form-control form-control-sm">
                                     </asp:DropDownList>
                                 </div>
                                 <div class="col-md-12">
-                                    <h6 class="text-muted">Sucursal</h6>
-                                    <asp:DropDownList runat="server" CssClass="form-control form-control-sm">
-                                        <asp:ListItem Text="text1" />
-                                        <asp:ListItem Text="text2" />
-                                    </asp:DropDownList>
+                                    <uWebControl:DropDownListCheck runat="server" ID="ddlDeliveryCompanyBranch" OnSelectedIndexChanged="ddlDeliveryCompanyBranch_SelectedIndexChanged" Label="Sucursal" />
                                 </div>
                             </div>
                             <%--ROW--%>
@@ -222,18 +202,12 @@
                             <%--ROW--%>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h6 class="text-muted">Empresa</h6>
-                                    <asp:DropDownList runat="server" CssClass="form-control form-control-sm">
-                                        <asp:ListItem Text="text1" />
-                                        <asp:ListItem Text="text2" />
+                                    <h6 class="text-muted">Suministradora</h6>
+                                    <asp:DropDownList runat="server" ID="ddlCompany" AutoPostBack="true" OnSelectedIndexChanged="ddlCompany_SelectedIndexChanged" CssClass="form-control form-control-sm">
                                     </asp:DropDownList>
                                 </div>
                                 <div class="col-md-12">
-                                    <h6 class="text-muted">Sucursal</h6>
-                                    <asp:DropDownList runat="server" CssClass="form-control form-control-sm">
-                                        <asp:ListItem Text="text1" />
-                                        <asp:ListItem Text="text2" />
-                                    </asp:DropDownList>
+                                    <uWebControl:DropDownListCheck runat="server" ID="ddlCompanyBranch" OnSelectedIndexChanged="ddlCompanyBranch_SelectedIndexChanged" Label="Sucursal" />
                                 </div>
                             </div>
                             <%--ROW--%>
@@ -335,10 +309,10 @@
                                 <h5 class="text-muted">Reglas</h5>
 
                                 <div>
-                                    <asp:Button Text="Nuevo" runat="server" ID="btnCodeRuleNew" CssClass="btn btn-sm btn-default" />
-                                    <asp:Button Text="Editar" runat="server" ID="btnCodeRuleEdit" Visible="false" CssClass="btn btn-sm btn-info" />
-                                    <asp:Button Text="Agregar" runat="server" ID="btnCodeRuleSave" Visible="false" CssClass="btn btn-sm btn-success" />
-                                    <asp:Button Text="Cancelar" runat="server" ID="btnCodeRuleCancel" Visible="false" CssClass="btn btn-sm btn-danger" />
+                                    <asp:Button Text="Nuevo" runat="server" ID="btnCodeRuleNew" OnClick="btnCodeRuleNew_Click" CssClass="btn btn-sm btn-default" />
+                                    <asp:Button Text="Editar" runat="server" ID="btnCodeRuleEdit" OnClick="btnCodeRuleEdit_Click" Visible="false" CssClass="btn btn-sm btn-info" />
+                                    <asp:Button Text="Agregar" runat="server" ID="btnCodeRuleSave" OnClick="btnCodeRuleSave_Click" Visible="false" CssClass="btn btn-sm btn-success" />
+                                    <asp:Button Text="Cancelar" runat="server" ID="btnCodeRuleCancel" OnClick="btnCodeRuleCancel_Click" Visible="false" CssClass="btn btn-sm btn-danger" />
                                 </div>
                             </div>
                             <%--TITLE--%>
@@ -381,6 +355,8 @@
                             </div>
                             <%--ROW--%>
 
+                            <br />
+
                             <%--ROW--%>
                             <div class="row">
                                 <div class="col-md-12">
@@ -392,15 +368,6 @@
                                             <asp:BoundField HeaderText="Donde" DataField="ValueTypeText" />
                                             <asp:BoundField HeaderText="Sea" DataField="OperatorText" />
                                             <asp:BoundField HeaderText="A" DataField="ValueView" />
-                                            <asp:TemplateField HeaderText="Union" ItemStyle-Width="124">
-                                                <ItemTemplate>
-                                                    <asp:DropDownList runat="server" CssClass="form-control form-group-sm">
-                                                        <asp:ListItem Text="Ninguno" />
-                                                        <asp:ListItem Text="Y" />
-                                                        <asp:ListItem Text="O" />
-                                                    </asp:DropDownList>
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
                                         </Columns>
                                     </asp:GridView>
                                 </div>

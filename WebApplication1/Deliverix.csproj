@@ -321,6 +321,7 @@
     <Content Include="scripts\jquery-ui-1.12.1.min.js" />
     <Content Include="scripts\jquery-ui.js" />
     <Content Include="TYC.aspx" />
+    <Content Include="UserControls\uDropDownListCheck.ascx" />
     <Content Include="Vista\ActivacionDeCuenta.aspx" />
     <Content Include="Vista\Carrito.png" />
     <Content Include="Vista\Catalogos.aspx" />
@@ -548,6 +549,13 @@
     </Compile>
     <Compile Include="TYC.aspx.designer.cs">
       <DependentUpon>TYC.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\uDropDownListCheck.ascx.cs">
+      <DependentUpon>uDropDownListCheck.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\uDropDownListCheck.ascx.designer.cs">
+      <DependentUpon>uDropDownListCheck.ascx</DependentUpon>
     </Compile>
     <Compile Include="Vista\ActivacionDeCuenta.aspx.cs">
       <DependentUpon>ActivacionDeCuenta.aspx</DependentUpon>

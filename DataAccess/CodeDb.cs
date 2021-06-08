@@ -206,5 +206,40 @@ where u.UidUsuario = @Uid";
             return this.QuerySingleOrDefault<UserDetails>(query, parameters);
         }
         #endregion
+
+        #region View Resources
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type"> 1=>Suministradora, 2=>Distribuidora </param>
+        /// <param name="uid"></param>
+        /// <returns></returns>
+        public IEnumerable<ListboxView> ReadAllCompanies(int type, Guid? uid = null)
+        {
+            string query = $@"
+select UidEmpresa as Uid, NombreComercial as Name
+from Empresa
+where IdTipoDeEmpresa = @Type
+  and IdEstatus = 1
+  {(uid.HasValue ? "and UidEmpresa = @Uid" : "")}
+order by NombreComercial";
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@Type", type);
+            parameters.Add("@Uid", uid);
+
+            return this.Query<ListboxView>(query, parameters);
+        }
+
+        public IEnumerable<ListboxView> ReadAllCompanyBranches(Guid uid)
+        {
+            string query = $@"select UidSucursal as Uid, Identificador as Name from Sucursales where UidEmpresa = @Uid and IntEstatus = 1 order by Identificador";
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@Uid", uid);
+
+            return this.Query<ListboxView>(query, parameters);
+        }
+        #endregion
     }
 }
