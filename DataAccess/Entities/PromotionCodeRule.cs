@@ -10,13 +10,13 @@ namespace DataAccess.Entities
 {
     [Serializable]
     [Table("CodeRules")]
-    public class CodeRule
+    public class PromotionCodeRule
     {
         public Guid Uid { get; set; }
         public Guid CodeUid { get; set; }
         public int Position { get; set; }
         public ComparisonOperator Operator { get; set; }
-        public CodeRuleValueType ValueType { get; set; }
+        public PromotionCodeRuleValueType ValueType { get; set; }
         public string Value { get; set; }
         public LogicalOperator Union { get; set; }
     }

@@ -13,8 +13,11 @@ namespace DataAccess.Entities
     {
         public Guid Uid { get; set; }
         public Guid CodeUid { get; set; }
+        public Guid? ExpirationUid { get; set; }
         public CodeRewardType RewardType { get; set; }
         public CodeRewardValueType ValueType { get; set; }
         public decimal Value { get; set; }
+        public PromotionCode ActivationType { get; set; }
+        public int Activations { get; set; }
     }
 }

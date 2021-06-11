@@ -24,15 +24,30 @@
 
             .step-dots > li {
                 float: left;
-                width: 12px;
+                width: 24px;
                 height: 12px;
-                border-radius: 6px;
                 background-color: #d9ffff;
             }
 
                 .step-dots > li > a {
                     border-radius: 4px;
                 }
+
+                    .step-dots > li::after {
+                        content: " ";
+                        display: block;
+                        width: 0;
+                        height: 0;
+                        border-top: 50px solid transparent;
+                        border-bottom: 50px solid transparent;
+                        border-left: 30px solid white;
+                        position: absolute;
+                        top: 50%;
+                        margin-top: -50px;
+                        margin-left: 1px;
+                        left: 100%;
+                        z-index: 1;
+                    }
 
                 .step-dots > li + li {
                     margin-left: 6px;
@@ -54,7 +69,9 @@
             <div class="col-lg-12">
 
                 <asp:Panel runat="server" ID="pnlError" CssClass="panel panel-danger">
+                    <div class="panel-body">
                     <asp:Label Text="Error" runat="server" ID="lblError"></asp:Label>
+                        </div>
                 </asp:Panel>
 
                 <%--WIZARD--%>
@@ -77,9 +94,9 @@
                                 </ul>
                             </LayoutTemplate>
                             <ItemTemplate>
-                                <li>
+                                <li class="<%# GetLinkStepClass(Container.DataItem) %>"">
                                     <asp:LinkButton runat="server" ID="SideBarButton" />
-                                </li>
+                                </l>
                             </ItemTemplate>
                             <SelectedItemTemplate>
                                 <li class="active">

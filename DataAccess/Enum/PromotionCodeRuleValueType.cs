@@ -6,13 +6,16 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Enum
 {
-    public enum CodeRuleValueType
+    public enum PromotionCodeRuleValueType
     {
         SubtotalOrder,
         ShipmentOrder,
         SubtotalPurchase,
         ShipmentPurchase,
         Product,
-        ProductQuantity
+        ProductQuantity,
+        Giro,
+        Categoria,
+        Subcategoria
     }
 }

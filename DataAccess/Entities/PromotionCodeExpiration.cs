@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace DataAccess.Entities
 {
     [Table("CodeExpirations")]
-   public class CodeExpiration
+   public class PromotionCodeExpiration
     {
         public Guid Uid { get; set; }
         public CodeExpirationType Type { get; set; }

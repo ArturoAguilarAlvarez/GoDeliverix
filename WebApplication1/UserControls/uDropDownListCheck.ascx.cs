@@ -18,7 +18,11 @@ namespace WebApplication1.UserControls
 
         public bool IsEnabled { get { return this.uDdl.Enabled; } }
 
-        public string SelectedValue { get { return this.uDdl.SelectedValue; } }
+        public string SelectedValue
+        {
+            get => this.uDdl.SelectedValue;
+            set => this.uDdl.SelectedValue = value;
+        }
 
         [Browsable(true)]
         [Description("Invoked when user clicks dropdownlist")]

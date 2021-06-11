@@ -58,8 +58,8 @@
     <Compile Include="Common\BaseDapper.cs" />
     <Compile Include="ConfigDb.cs" />
     <Compile Include="Entities\Code.cs" />
-    <Compile Include="Entities\CodeExpiration.cs" />
-    <Compile Include="Entities\CodeRule.cs" />
+    <Compile Include="Entities\PromotionCodeExpiration.cs" />
+    <Compile Include="Entities\PromotionCodeRule.cs" />
     <Compile Include="Entities\ConfiguracionClienteMovil.cs" />
     <Compile Include="Entities\EntityTranslation.cs" />
     <Compile Include="Entities\Movimiento.cs" />
@@ -78,7 +78,8 @@
     <Compile Include="Enum\CodeExpirationType.cs" />
     <Compile Include="Enum\CodeRewardType.cs" />
     <Compile Include="Enum\CodeRewardValueType.cs" />
-    <Compile Include="Enum\CodeRuleValueType.cs" />
+    <Compile Include="Enum\PromotionCodeActivationType.cs" />
+    <Compile Include="Enum\PromotionCodeRuleValueType.cs" />
     <Compile Include="Enum\CodeType.cs" />
     <Compile Include="Enum\CodeValidationResult.cs" />
     <Compile Include="Enum\ComparisonOperator.cs" />

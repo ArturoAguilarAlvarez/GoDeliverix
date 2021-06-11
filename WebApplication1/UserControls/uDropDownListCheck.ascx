@@ -8,7 +8,6 @@
         <asp:CheckBox Text="" runat="server" ID="uChk" AutoPostBack="true" OnCheckedChanged="uChk_CheckedChanged" />
     </div>
     <asp:DropDownList runat="server" ID="uDdl" AutoPostBack="true" OnSelectedIndexChanged="uDdl_SelectedIndexChanged" CssClass="form-control form-control-sm">
-        <asp:ListItem Text="text1" />
-        <asp:ListItem Text="text2" />
+        <asp:ListItem Text="text1" Value=""/>
     </asp:DropDownList>
 </div>

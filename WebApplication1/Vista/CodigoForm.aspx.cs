@@ -43,6 +43,16 @@ namespace WebApplication1.Vista
             get { return (CodeBusiness)ViewState["company"]; }
             set { ViewState["company"] = value; }
         }
+        public PromotionCodeBase Code
+        {
+            get => (PromotionCodeBase)ViewState["code"];
+            set => ViewState["code"] = value;
+        }
+        public PromotionCodeExpirationBase Expiration
+        {
+            get => (PromotionCodeExpirationBase)ViewState["expiration"];
+            set => ViewState["expiration"] = value;
+        }
 
         private int[] RegionCodeRewards = new int[2] { 6, 7 };
         private int[] CompanyCodeRewards = new int[2] { 4, 8 };
@@ -62,6 +72,21 @@ namespace WebApplication1.Vista
             new ListboxViewInteger(){ Id=10, Name="Reembolso del subtotal de la compra" },
             new ListboxViewInteger(){ Id=11, Name="Reembolso del costo de envio de la compra" }
         };
+
+        private int[] RegionCodeRules = new int[5] { 2, 3, 7, 8, 9 };
+        private int[] CompanyCodeRules = new int[6] { 0, 1, 2, 3, 4, 5 };
+        private int[] DeliveryCompanyCodeRules = new int[3] { 0, 4, 5 };
+        private IList<ListboxViewInteger> CodeRuleValueTypes = new List<ListboxViewInteger>() {
+            new ListboxViewInteger(){ Id = 0, Name = "Subtotal (Orden)" },
+            new ListboxViewInteger(){ Id = 1, Name = "Envió (Orden)" },
+            new ListboxViewInteger(){ Id = 2, Name = "Subtotal (Compra)" },
+            new ListboxViewInteger(){ Id = 3, Name = "Envió (Compra)" },
+            new ListboxViewInteger(){ Id = 4, Name = "Producto" },
+            new ListboxViewInteger(){ Id = 5, Name = "Cantidad de Productos" },
+            new ListboxViewInteger(){ Id = 6, Name = "Giro" },
+            new ListboxViewInteger(){ Id = 7, Name = "Categoria" },
+            new ListboxViewInteger(){ Id = 8, Name = "Subcategoria" },
+        };
         #endregion
 
         #region ViewModel
@@ -80,6 +105,8 @@ namespace WebApplication1.Vista
                 this.Company = new CodeBusiness();
                 this.DeliveryCompany = new CodeBusiness();
                 this.CodeRules = new List<CodeRuleGrid>();
+                this.Code = new PromotionCodeBase();
+                this.Expiration = new PromotionCodeExpirationBase();
 
                 HideError();
                 EnableCodeRuleFields(false);
@@ -115,16 +142,51 @@ namespace WebApplication1.Vista
                     FillDeliveryCompanies();
                 }
 
-                FillCodeRewards();
+                FillCodeCatalogs();
             }
-            else if (e.CurrentStepIndex == 1)
+            else if (e.CurrentStepIndex == 1) // Location
             {
+                if (!this.PromotionCodeRegion.CountryUid.HasValue)
+                {
+                    DrawError("Seleccione un pais");
+                    e.Cancel = true;
+                }
+
+                if (this.PromotionCodeRegion.CountryUid.HasValue && this.PromotionCodeRegion.CountryUid.Value == Guid.Empty)
+                {
+                    DrawError("Seleccione un pais");
+                    e.Cancel = true;
+                }
+
+                Wizard1.ActiveStepIndex = 4;
             }
             else if (e.CurrentStepIndex == 2) // Delivery Company
             {
+                if (!this.DeliveryCompany.UidCompany.HasValue)
+                {
+                    DrawError("Seleccione una distribuidora");
+                    e.Cancel = true;
+                }
+
+                if (this.DeliveryCompany.UidCompany.HasValue && this.DeliveryCompany.UidCompany == Guid.Empty)
+                {
+                    DrawError("Seleccione una distribuidora");
+                    e.Cancel = true;
+                }
             }
             else if (e.CurrentStepIndex == 3) // Company
             {
+                if (!this.Company.UidCompany.HasValue)
+                {
+                    DrawError("Seleccione una suministradora");
+                    e.Cancel = true;
+                }
+
+                if (this.Company.UidCompany.HasValue && this.Company.UidCompany == Guid.Empty)
+                {
+                    DrawError("Seleccione una suministradora");
+                    e.Cancel = true;
+                }
             }
             else if (e.CurrentStepIndex == 4) // Code details
             {
@@ -138,6 +200,8 @@ namespace WebApplication1.Vista
                     cancel = true;
                 }
 
+                
+
                 e.Cancel = cancel;
             }
             else if (e.CurrentStepIndex == 5) // Rules
@@ -147,7 +211,49 @@ namespace WebApplication1.Vista
             {
             }
 
+            if (e.NextStepIndex == 1)
+            {
+                // Fill Values Region
+                ddlCountry.SelectedValue = PromotionCodeRegion.CountryUid.HasValue ? PromotionCodeRegion.CountryUid.Value.ToString() : default;
+                ddlState.SelectedValue = PromotionCodeRegion.StateUid.HasValue ? PromotionCodeRegion.StateUid.Value.ToString() : default;
+                ddlMunicipality.SelectedValue = PromotionCodeRegion.MunicipalityUid.HasValue ? PromotionCodeRegion.MunicipalityUid.Value.ToString() : default;
+                ddlCity.SelectedValue = PromotionCodeRegion.CityUid.HasValue ? PromotionCodeRegion.CityUid.Value.ToString() : default;
+                ddlNeighborhood.SelectedValue = PromotionCodeRegion.NeighborhoodUid.HasValue ? PromotionCodeRegion.NeighborhoodUid.Value.ToString() : default;
+            }
+            else if (e.NextStepIndex == 2)
+            {
+                // Fill Values Delivery Company
+                ddlDeliveryCompany.SelectedValue = DeliveryCompany.UidCompany.HasValue ? DeliveryCompany.UidCompany.Value.ToString() : default;
+                ddlDeliveryCompanyBranch.SelectedValue = DeliveryCompany.UidCompanyBranch.HasValue ? DeliveryCompany.UidCompanyBranch.Value.ToString() : default;
+            }
+            else if (e.NextStepIndex == 3)
+            {
+                // Fill Values Company
+                ddlCompany.SelectedValue = Company.UidCompany.HasValue ? Company.UidCompany.Value.ToString() : default;
+                ddlCompanyBranch.SelectedValue = Company.UidCompanyBranch.HasValue ? Company.UidCompanyBranch.Value.ToString() : default;
+            }
 
+        }
+
+        public string GetLinkStepClass(object wStep)
+        {
+            if (wStep == null)
+                return "";
+
+            int stepIndex = Wizard1.WizardSteps.IndexOf((WizardStep)wStep);
+
+            if (stepIndex < Wizard1.ActiveStepIndex)
+            {
+                return "active";
+            }
+            else if (stepIndex > Wizard1.ActiveStepIndex)
+            {
+                return "";
+            }
+            else
+            {
+                return "active";
+            }
         }
 
         protected void ddlCountry_SelectedIndexChanged(object sender, EventArgs e)
@@ -180,7 +286,7 @@ namespace WebApplication1.Vista
         {
 
             Guid uid = Guid.Parse(ddlNeighborhood.SelectedValue);
-            this.PromotionCodeRegion.NeighborgoodUid = uid;
+            this.PromotionCodeRegion.NeighborhoodUid = uid;
         }
 
         protected void ddlDeliveryCompany_SelectedIndexChanged(object sender, EventArgs e)
@@ -234,12 +340,12 @@ namespace WebApplication1.Vista
                 return;
             }
 
-            CodeRuleValueType type = (CodeRuleValueType)int.Parse(ddlCodeRuleValueType.SelectedValue.ToString());
+            PromotionCodeRuleValueType type = (PromotionCodeRuleValueType)int.Parse(ddlCodeRuleValueType.SelectedValue.ToString());
             int valueType = 0;
 
             switch (type)
             {
-                case DataAccess.Enum.CodeRuleValueType.Product:
+                case DataAccess.Enum.PromotionCodeRuleValueType.Product:
                     valueType = 1;
                     break;
             }
@@ -348,7 +454,7 @@ namespace WebApplication1.Vista
         }
         private void FillDeliveryCompanyBranches()
         {
-            ddlDeliveryCompanyBranch.SetDataSource(this.VmCodes.ReadAllCompanyBranches(this.DeliveryCompany.UidCompany, "Seleccionar sucursal"), "Uid", "Name");
+            ddlDeliveryCompanyBranch.SetDataSource(this.VmCodes.ReadAllCompanyBranches(this.DeliveryCompany.UidCompany.Value, "Seleccionar sucursal"), "Uid", "Name");
             ddlDeliveryCompanyBranch.DataBind();
         }
 
@@ -361,7 +467,7 @@ namespace WebApplication1.Vista
         }
         private void FillCompanyBranches()
         {
-            ddlCompanyBranch.SetDataSource(this.VmCodes.ReadAllCompanyBranches(this.Company.UidCompany, "Seleccionar sucursal"), "Uid", "Name");
+            ddlCompanyBranch.SetDataSource(this.VmCodes.ReadAllCompanyBranches(this.Company.UidCompany.Value, "Seleccionar sucursal"), "Uid", "Name");
             ddlCompanyBranch.DataBind();
         }
 
@@ -375,27 +481,36 @@ namespace WebApplication1.Vista
             lblError.Text = error;
         }
 
-        private void FillCodeRewards()
+        private void FillCodeCatalogs()
         {
             var rewards = new List<ListboxViewInteger>();
+            var ruleTypes = new List<ListboxViewInteger>();
 
             if (this.CodeLevel == 0)
             {
                 rewards = this.CodeRewards.Where(r => this.RegionCodeRewards.Contains(r.Id)).ToList();
+                ruleTypes = this.CodeRuleValueTypes.Where(r => this.RegionCodeRules.Contains(r.Id)).ToList();
             }
             else if (this.CodeLevel == 1)
             {
                 rewards = this.CodeRewards.Where(r => this.CompanyCodeRewards.Contains(r.Id)).ToList();
+                ruleTypes = this.CodeRuleValueTypes.Where(r => this.CompanyCodeRules.Contains(r.Id)).ToList();
             }
             else if (this.CodeLevel == 2)
             {
                 rewards = this.CodeRewards.Where(r => this.DeliveryCompanyCodeRewards.Contains(r.Id)).ToList();
+                ruleTypes = this.CodeRuleValueTypes.Where(r => this.DeliveryCompanyCodeRules.Contains(r.Id)).ToList();
             }
 
             ddlRewardType.DataSource = rewards;
             ddlRewardType.DataTextField = "Name";
             ddlRewardType.DataValueField = "Id";
             ddlRewardType.DataBind();
+
+            ddlCodeRuleValueType.DataSource = ruleTypes;
+            ddlCodeRuleValueType.DataTextField = "Name";
+            ddlCodeRuleValueType.DataValueField = "Id";
+            ddlCodeRuleValueType.DataBind();
         }
 
         private void EnableCodeRuleFields(bool isEnabled)
@@ -408,24 +523,24 @@ namespace WebApplication1.Vista
         public bool VerifyCodeRuleFields()
         {
             HideError();
-            DataAccess.Enum.CodeRuleValueType type = (DataAccess.Enum.CodeRuleValueType)int.Parse(ddlCodeRuleValueType.SelectedValue.ToString());
+            DataAccess.Enum.PromotionCodeRuleValueType type = (DataAccess.Enum.PromotionCodeRuleValueType)int.Parse(ddlCodeRuleValueType.SelectedValue.ToString());
             bool isValid = true;
             int valueType = 0;
 
             switch (type)
             {
-                case DataAccess.Enum.CodeRuleValueType.SubtotalOrder:
+                case DataAccess.Enum.PromotionCodeRuleValueType.SubtotalOrder:
                     break;
-                case DataAccess.Enum.CodeRuleValueType.ShipmentOrder:
+                case DataAccess.Enum.PromotionCodeRuleValueType.ShipmentOrder:
                     break;
-                case DataAccess.Enum.CodeRuleValueType.SubtotalPurchase:
+                case DataAccess.Enum.PromotionCodeRuleValueType.SubtotalPurchase:
                     break;
-                case DataAccess.Enum.CodeRuleValueType.ShipmentPurchase:
+                case DataAccess.Enum.PromotionCodeRuleValueType.ShipmentPurchase:
                     break;
-                case DataAccess.Enum.CodeRuleValueType.Product:
+                case DataAccess.Enum.PromotionCodeRuleValueType.Product:
                     valueType = 1;
                     break;
-                case DataAccess.Enum.CodeRuleValueType.ProductQuantity:
+                case DataAccess.Enum.PromotionCodeRuleValueType.ProductQuantity:
                     break;
             }
 
@@ -451,7 +566,7 @@ namespace WebApplication1.Vista
         public int Position { get; set; }
         public ComparisonOperator Operator { get; set; }
         public string OperatorText { get; set; }
-        public CodeRuleValueType ValueType { get; set; }
+        public PromotionCodeRuleValueType ValueType { get; set; }
         public string ValueTypeText { get; set; }
         public string Value { get; set; }
         public string ValueView { get; set; }
@@ -466,13 +581,37 @@ namespace WebApplication1.Vista
         public Guid? StateUid { get; set; } = null;
         public Guid? MunicipalityUid { get; set; } = null;
         public Guid? CityUid { get; set; } = null;
-        public Guid? NeighborgoodUid { get; set; } = null;
+        public Guid? NeighborhoodUid { get; set; } = null;
     }
 
     [Serializable]
     public class CodeBusiness
     {
-        public Guid UidCompany { get; set; }
-        public Guid UidCompanyBranch { get; set; }
+        public Guid? UidCompany { get; set; }
+        public Guid? UidCompanyBranch { get; set; }
+    }
+
+    [Serializable]
+    public class PromotionCodeBase
+    {
+        public Guid Uid { get; set; }
+        public Guid CodeUid { get; set; }
+        public Guid? ExpirationUid { get; set; }
+        public CodeRewardType RewardType { get; set; }
+        public CodeRewardValueType ValueType { get; set; }
+        public decimal Value { get; set; }
+        public PromotionCodeActivationType ActivationType { get; set; }
+        public int Activations { get; set; }
+        public string Code { get; set; }
+    }
+
+    [Serializable]
+    public class PromotionCodeExpirationBase
+    {
+        public Guid Uid { get; set; }
+        public CodeExpirationType Type { get; set; }
+        public DateTime? ExpirationDate { get; set; }
+        public int? ActivationsLimit { get; set; }
+        public int? DaysAfterActivation { get; set; }
     }
 }
