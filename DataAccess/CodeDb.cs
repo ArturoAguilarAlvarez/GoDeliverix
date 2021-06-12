@@ -4,6 +4,7 @@ using DataAccess.Entities;
 using DataAccess.Enum;
 using DataAccess.Models;
 using DataAccess.Util;
+using Modelo.v2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -239,6 +240,130 @@ order by NombreComercial";
             parameters.Add("@Uid", uid);
 
             return this.Query<ListboxView>(query, parameters);
+        }
+        #endregion
+
+        #region Promotion Code
+        public bool AddPromotionCode(
+            string code,
+            CodeRewardType rewardType,
+            CodeRewardValueType valueType,
+            decimal value,
+            PromotionCodeActivationType activationType,
+            CodeExpirationType expirationType,
+            DateTime startAt,
+            DateTime? expiredAt = null,
+            int? expirationValue = null,
+            PromotionCodeBusiness company = null,
+            PromotionCodeBusiness deliveryCompany = null,
+            PromotionCodeGeography geography = null,
+            IEnumerable<PromotionCodeRuleView> rules = null)
+        {
+            this.BeginTransaction();
+
+            try
+            {
+
+                Codes cCode = new Codes()
+                {
+                    Code = code,
+                    Type = CodeType.PromotionCode
+                };
+                var cUid = this.Insert(code);
+
+                if (!cUid.HasValue) throw new Exception("Cant create code");
+
+                PromotionCodeExpiration codeExpiration = new PromotionCodeExpiration()
+                {
+                    Type = expirationType,
+                    StartAt = startAt,
+                    ExpirationDate = expirationType == CodeExpirationType.Date ? (DateTime?)expiredAt : null,
+                    ActivationsLimit = expirationType == CodeExpirationType.Activations ? (int?)expirationValue : null,
+                    DaysAfterActivation = expirationType == CodeExpirationType.DaysBeforeActivations ? (int?)expirationValue : null,
+                };
+                var eUid = this.Insert(codeExpiration);
+
+                if (!cUid.HasValue) throw new Exception("Cant create expiration code");
+
+                PromotionCode pCode = new PromotionCode()
+                {
+                    Activations = 0,
+                    ActivationType = activationType,
+                    CodeUid = cUid.Value,
+                    ExpirationUid = eUid,
+                    RewardType = rewardType,
+                    Value = value,
+                    ValueType = valueType
+                };
+                var pUid = this.Insert(pCode);
+
+                if (!pUid.HasValue) throw new Exception("Cant create promotion code");
+
+                if (geography != null)
+                {
+                    PromotionCodeRegion codeRegion = new PromotionCodeRegion()
+                    {
+                        PromotionCodeUid = pUid.Value,
+                        CountryUid = geography.CountryUid.Value,
+                        StateUid = geography.StateUid,
+                        MunicipalityUid = geography.MunicipalityUid,
+                        CityUid = geography.CityUid,
+                        NeighborhoodUid = geography.NeighborhoodUid
+                    };
+
+                    this.Insert(codeRegion);
+                }
+
+                if (company != null)
+                {
+                    PromotionCodeCompany codeCompany = new PromotionCodeCompany()
+                    {
+                        PromotionCodeUid = pUid.Value,
+                        CompanyUid = company.UidCompany.Value,
+                        BranchUid = company.UidCompanyBranch
+                    };
+
+                    this.Insert(codeCompany);
+                }
+
+                if (deliveryCompany != null)
+                {
+                    PromotionCodeDeliveryCompany codeDeliveryCompany = new PromotionCodeDeliveryCompany()
+                    {
+                        PromotionCodeUid = pUid.Value,
+                        CompanyUid = deliveryCompany.UidCompany.Value,
+                        BranchUid = deliveryCompany.UidCompanyBranch
+                    };
+                    this.Insert(codeDeliveryCompany);
+                }
+
+                if (rules != null)
+                {
+                    foreach (PromotionCodeRuleView rule in rules)
+                    {
+                        PromotionCodeRule eRule = new PromotionCodeRule()
+                        {
+                            Value = rule.Value,
+                            PromotionCodeUid = pUid.Value,
+                            Operator = (ComparisonOperator)rule.Operator,
+                            Position = rule.Position,
+                            Union = LogicalOperator.And,
+                            ValueType = (PromotionCodeRuleValueType)rule.ValueType
+                        };
+
+                        this.Insert(eRule);
+                    }
+                }
+
+                this.CommitTransaction();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                this.RollbackTransaction();
+
+                throw;
+            }
         }
         #endregion
     }

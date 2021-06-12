@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Modelo.v2;
 using VistaDelModelo.Services;
 
 namespace VistaDelModelo
@@ -445,6 +446,27 @@ namespace VistaDelModelo
                 data = tmp;
             }
             return data;
+        }
+        #endregion
+
+        #region Promotion Codes
+
+        public bool AddPromotionCode(
+            string code,
+            CodeRewardType rewardType,
+            CodeRewardValueType valueType,
+            decimal value,
+            PromotionCodeActivationType activationType,
+            CodeExpirationType expirationType,
+            DateTime startAt,
+            DateTime? expiredAt = null,
+            int? expirationValue = null,
+            PromotionCodeBusiness company = null,
+            PromotionCodeBusiness deliveryCompany = null,
+            PromotionCodeGeography geography = null,
+            IEnumerable<PromotionCodeRuleView> rules = null)
+        {
+            return this._CodeDb.AddPromotionCode(code, rewardType, valueType, value, activationType, expirationType, startAt, expiredAt, expirationValue, company, deliveryCompany, geography, rules);
         }
         #endregion
     }

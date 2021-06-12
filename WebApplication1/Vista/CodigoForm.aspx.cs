@@ -1,5 +1,6 @@
 ﻿using DataAccess.Enum;
 using DataAccess.Models;
+using Modelo.v2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,35 +14,37 @@ namespace WebApplication1.Vista
     public partial class CodigoForm : System.Web.UI.Page
     {
         #region Properties
+
+        protected Guid? UidPromotionCode
+        {
+            get => (Guid?)ViewState["uidpromotioncode"];
+            set => ViewState["uidpromotioncode"] = value;
+        }
         public int CodeLevel
         {
             get => (int)ViewState["codelevel"];
             set => ViewState["codelevel"] = value;
         }
-        public IList<CodeRuleGrid> CodeRules
+
+        public IList<PromotionCodeRuleView> CodeRules
         {
-            get { return (IList<CodeRuleGrid>)ViewState["codeRules"]; }
-            set { ViewState["codeRules"] = value; }
+            get => (IList<PromotionCodeRuleView>)ViewState["codeRules"];
+            set => ViewState["codeRules"] = value;
         }
-        public int CodeRuleValueType
+        public PromotionCodeGeography PromotionCodeRegion
         {
-            get { return (int)ViewState["coderulevaluetype"]; }
-            set { ViewState["coderulevaluetype"] = value; }
-        }
-        public CodeRegion PromotionCodeRegion
-        {
-            get { return (CodeRegion)ViewState["coderegion"]; }
+            get { return (PromotionCodeGeography)ViewState["coderegion"]; }
             set { ViewState["coderegion"] = value; }
         }
-        public CodeBusiness DeliveryCompany
+        public PromotionCodeBusiness DeliveryCompany
         {
-            get { return (CodeBusiness)ViewState["deliverycompany"]; }
-            set { ViewState["deliverycompany"] = value; }
+            get => (PromotionCodeBusiness)ViewState["deliverycompany"];
+            set => ViewState["deliverycompany"] = value;
         }
-        public CodeBusiness Company
+        public PromotionCodeBusiness Company
         {
-            get { return (CodeBusiness)ViewState["company"]; }
-            set { ViewState["company"] = value; }
+            get => (PromotionCodeBusiness)ViewState["company"];
+            set => ViewState["company"] = value;
         }
         public PromotionCodeBase Code
         {
@@ -54,10 +57,10 @@ namespace WebApplication1.Vista
             set => ViewState["expiration"] = value;
         }
 
-        private int[] RegionCodeRewards = new int[2] { 6, 7 };
-        private int[] CompanyCodeRewards = new int[2] { 4, 8 };
-        private int[] DeliveryCompanyCodeRewards = new int[10] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-        private IList<ListboxViewInteger> CodeRewards = new List<ListboxViewInteger>()
+        private readonly int[] _RegionCodeRewards = new int[2] { 6, 7 };
+        private readonly int[] _CompanyCodeRewards = new int[2] { 4, 8 };
+        private readonly int[] _DeliveryCompanyCodeRewards = new int[10] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+        private readonly IList<ListboxViewInteger> _CodeRewards = new List<ListboxViewInteger>()
         {
             new ListboxViewInteger(){ Id=0, Name="Ninguno" },
             new ListboxViewInteger(){ Id=1, Name="Monto a monedero" },
@@ -73,10 +76,10 @@ namespace WebApplication1.Vista
             new ListboxViewInteger(){ Id=11, Name="Reembolso del costo de envio de la compra" }
         };
 
-        private int[] RegionCodeRules = new int[5] { 2, 3, 7, 8, 9 };
-        private int[] CompanyCodeRules = new int[6] { 0, 1, 2, 3, 4, 5 };
-        private int[] DeliveryCompanyCodeRules = new int[3] { 0, 4, 5 };
-        private IList<ListboxViewInteger> CodeRuleValueTypes = new List<ListboxViewInteger>() {
+        private readonly int[] _RegionCodeRules = new int[5] { 2, 3, 7, 8, 9 };
+        private readonly int[] _CompanyCodeRules = new int[6] { 0, 1, 2, 3, 4, 5 };
+        private readonly int[] _DeliveryCompanyCodeRules = new int[3] { 0, 4, 5 };
+        private readonly IList<ListboxViewInteger> _CodeRuleValueTypes = new List<ListboxViewInteger>() {
             new ListboxViewInteger(){ Id = 0, Name = "Subtotal (Orden)" },
             new ListboxViewInteger(){ Id = 1, Name = "Envió (Orden)" },
             new ListboxViewInteger(){ Id = 2, Name = "Subtotal (Compra)" },
@@ -101,15 +104,30 @@ namespace WebApplication1.Vista
 
             if (!Page.IsPostBack)
             {
-                this.PromotionCodeRegion = new CodeRegion();
-                this.Company = new CodeBusiness();
-                this.DeliveryCompany = new CodeBusiness();
-                this.CodeRules = new List<CodeRuleGrid>();
+                this.PromotionCodeRegion = new PromotionCodeGeography();
+                this.Company = new PromotionCodeBusiness();
+                this.DeliveryCompany = new PromotionCodeBusiness();
+                this.CodeRules = new List<PromotionCodeRuleView>();
                 this.Code = new PromotionCodeBase();
                 this.Expiration = new PromotionCodeExpirationBase();
 
                 HideError();
                 EnableCodeRuleFields(false);
+
+                txtStartAt.Text = DateTime.Now.ToString("yyyy-MM-dd");
+
+                if (Request.QueryString.HasKeys())
+                {
+                    var qUid = Request.QueryString["uid"];
+                    if (qUid != null)
+                    {
+                        Guid tmp = Guid.Empty;
+                        if (Guid.TryParse(qUid, out tmp))
+                        {
+                            this.UidPromotionCode = Guid.Parse(qUid);
+                        }
+                    }
+                }
             }
         }
 
@@ -193,6 +211,11 @@ namespace WebApplication1.Vista
                 bool cancel = false;
 
                 decimal value = 0;
+                DateTime startAt = DateTime.Now;
+
+                CodeExpirationType expirationType = (CodeExpirationType)int.Parse(ddlCodeExpirationType.SelectedValue);
+                DateTime expirationDate = DateTime.Now;
+                int expirationValue = 0;
 
                 if (!decimal.TryParse(txtValue.Text, out value))
                 {
@@ -200,7 +223,51 @@ namespace WebApplication1.Vista
                     cancel = true;
                 }
 
-                
+                if (!DateTime.TryParse(txtStartAt.Text.Trim(), out startAt))
+                {
+                    DrawError("Ingrese una fecha de inicio valida");
+                    cancel = true;
+                }
+
+                if (expirationType == CodeExpirationType.Date)
+                {
+                    if (!DateTime.TryParse(txtExpirationDate.Text.Trim(), out expirationDate))
+                    {
+                        DrawError("Ingrese una fecha de expiracion valida");
+                        cancel = true;
+                    }
+                }
+                else if (expirationType == CodeExpirationType.Activations)
+                {
+                    if (!int.TryParse(txtActivationsNumber.Text.Trim(), out expirationValue))
+                    {
+                        DrawError("Ingrese un numero de activaciones valido");
+                        cancel = true;
+                    }
+                }
+                else if (expirationType == CodeExpirationType.DaysBeforeActivations)
+                {
+                    if (!int.TryParse(txtDaysBeforeActivation.Text.Trim(), out expirationValue))
+                    {
+                        DrawError("Ingrese un numero de activaciones valido");
+                        cancel = true;
+                    }
+                }
+
+                if (!cancel)
+                {
+                    this.Code.Code = txtCode.Text.Trim();
+                    this.Code.RewardType = (CodeRewardType)int.Parse(ddlRewardType.SelectedValue);
+                    this.Code.ValueType = (CodeRewardValueType)int.Parse(ddlValueType.SelectedValue);
+                    this.Code.Value = value;
+                    this.Code.ActivationType = (PromotionCodeActivationType)int.Parse(ddlActivationType.SelectedValue);
+
+                    this.Expiration.StartAt = startAt;
+                    this.Expiration.Type = expirationType;
+                    this.Expiration.ActivationsLimit = expirationValue;
+                    this.Expiration.ExpirationDate = expirationDate;
+                    this.Expiration.DaysAfterActivation = expirationValue;
+                }
 
                 e.Cancel = cancel;
             }
@@ -233,6 +300,29 @@ namespace WebApplication1.Vista
                 ddlCompanyBranch.SelectedValue = Company.UidCompanyBranch.HasValue ? Company.UidCompanyBranch.Value.ToString() : default;
             }
 
+        }
+
+        protected void Wizard1_OnFinishButtonClick(object sender, WizardNavigationEventArgs e)
+        {
+            try
+            {
+                this.VmCodes.AddPromotionCode(this.Code.Code,
+                    this.Code.RewardType,
+                    this.Code.ValueType,
+                    this.Code.Value,
+                    this.Code.ActivationType,
+                    this.Expiration.Type,
+                    this.Expiration.StartAt,
+                    this.Expiration.ExpirationDate,
+                    this.Expiration.Type == CodeExpirationType.Activations ? this.Expiration.ActivationsLimit : this.Expiration.DaysAfterActivation,
+                    this.Company,
+                    this.DeliveryCompany
+                    );
+            }
+            catch (Exception exception)
+            {
+                DrawError(exception.Message);
+            }
         }
 
         public string GetLinkStepClass(object wStep)
@@ -350,11 +440,11 @@ namespace WebApplication1.Vista
                     break;
             }
 
-            CodeRuleGrid rule = new CodeRuleGrid()
+            PromotionCodeRuleView rule = new PromotionCodeRuleView()
             {
                 OperatorText = ddlCodeRuleOperator.SelectedItem.Text,
                 ValueTypeText = ddlCodeRuleValueType.SelectedItem.Text,
-                ValueView = valueType == 0 ? decimal.Parse(txtCodeRuleValue.Text).ToString("C2") : ddlCodeRuleValue.SelectedItem.Text
+                ValueText = valueType == 0 ? decimal.Parse(txtCodeRuleValue.Text).ToString("C2") : ddlCodeRuleValue.SelectedItem.Text
             };
 
             btnCodeRuleNew.Visible = true;
@@ -488,18 +578,18 @@ namespace WebApplication1.Vista
 
             if (this.CodeLevel == 0)
             {
-                rewards = this.CodeRewards.Where(r => this.RegionCodeRewards.Contains(r.Id)).ToList();
-                ruleTypes = this.CodeRuleValueTypes.Where(r => this.RegionCodeRules.Contains(r.Id)).ToList();
+                rewards = this._CodeRewards.Where(r => _RegionCodeRewards.Contains(r.Id)).ToList();
+                ruleTypes = this._CodeRuleValueTypes.Where(r => this._RegionCodeRules.Contains(r.Id)).ToList();
             }
             else if (this.CodeLevel == 1)
             {
-                rewards = this.CodeRewards.Where(r => this.CompanyCodeRewards.Contains(r.Id)).ToList();
-                ruleTypes = this.CodeRuleValueTypes.Where(r => this.CompanyCodeRules.Contains(r.Id)).ToList();
+                rewards = this._CodeRewards.Where(r => this._CompanyCodeRewards.Contains(r.Id)).ToList();
+                ruleTypes = this._CodeRuleValueTypes.Where(r => this._CompanyCodeRules.Contains(r.Id)).ToList();
             }
             else if (this.CodeLevel == 2)
             {
-                rewards = this.CodeRewards.Where(r => this.DeliveryCompanyCodeRewards.Contains(r.Id)).ToList();
-                ruleTypes = this.CodeRuleValueTypes.Where(r => this.DeliveryCompanyCodeRules.Contains(r.Id)).ToList();
+                rewards = this._CodeRewards.Where(r => this._DeliveryCompanyCodeRewards.Contains(r.Id)).ToList();
+                ruleTypes = this._CodeRuleValueTypes.Where(r => this._DeliveryCompanyCodeRules.Contains(r.Id)).ToList();
             }
 
             ddlRewardType.DataSource = rewards;
@@ -560,38 +650,6 @@ namespace WebApplication1.Vista
     }
 
     [Serializable]
-    public class CodeRuleGrid
-    {
-        public Guid Uid { get; set; }
-        public int Position { get; set; }
-        public ComparisonOperator Operator { get; set; }
-        public string OperatorText { get; set; }
-        public PromotionCodeRuleValueType ValueType { get; set; }
-        public string ValueTypeText { get; set; }
-        public string Value { get; set; }
-        public string ValueView { get; set; }
-        public LogicalOperator Union { get; set; }
-        public string UnionText { get; set; }
-    }
-
-    [Serializable]
-    public class CodeRegion
-    {
-        public Guid? CountryUid { get; set; } = null;
-        public Guid? StateUid { get; set; } = null;
-        public Guid? MunicipalityUid { get; set; } = null;
-        public Guid? CityUid { get; set; } = null;
-        public Guid? NeighborhoodUid { get; set; } = null;
-    }
-
-    [Serializable]
-    public class CodeBusiness
-    {
-        public Guid? UidCompany { get; set; }
-        public Guid? UidCompanyBranch { get; set; }
-    }
-
-    [Serializable]
     public class PromotionCodeBase
     {
         public Guid Uid { get; set; }
@@ -609,6 +667,7 @@ namespace WebApplication1.Vista
     public class PromotionCodeExpirationBase
     {
         public Guid Uid { get; set; }
+        public DateTime StartAt { get; set; }
         public CodeExpirationType Type { get; set; }
         public DateTime? ExpirationDate { get; set; }
         public int? ActivationsLimit { get; set; }

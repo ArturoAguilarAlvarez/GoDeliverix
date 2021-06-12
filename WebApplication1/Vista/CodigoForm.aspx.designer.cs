@@ -222,13 +222,13 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.Label lblValueType;
 
         /// <summary>
-        /// DropDownList1 control.
+        /// ddlActivationType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropDownList1;
+        protected global::System.Web.UI.WebControls.DropDownList ddlActivationType;
 
         /// <summary>
         /// txtStartAt control.
@@ -258,6 +258,15 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.Panel pnlExpirationDate;
 
         /// <summary>
+        /// txtExpirationDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtExpirationDate;
+
+        /// <summary>
         /// pnlActivationNumber control.
         /// </summary>
         /// <remarks>
@@ -267,6 +276,15 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.Panel pnlActivationNumber;
 
         /// <summary>
+        /// txtActivationsNumber control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtActivationsNumber;
+
+        /// <summary>
         /// pnlDaysBeforeActivation control.
         /// </summary>
         /// <remarks>
@@ -274,6 +292,15 @@ namespace WebApplication1.Vista
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlDaysBeforeActivation;
+
+        /// <summary>
+        /// txtDaysBeforeActivation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtDaysBeforeActivation;
 
         /// <summary>
         /// wsRules control.

@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Entities
 {
-    [Table("CodeExpirations")]
-   public class PromotionCodeExpiration
+    [Table("PromotionCodeExpirations")]
+    public class PromotionCodeExpiration
     {
         public Guid Uid { get; set; }
+        public DateTime StartAt { get; set; }
         public CodeExpirationType Type { get; set; }
         public DateTime? ExpirationDate { get; set; }
         public int? ActivationsLimit { get; set; }

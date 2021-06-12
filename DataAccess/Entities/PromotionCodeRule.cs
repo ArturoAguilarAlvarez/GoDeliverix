@@ -8,12 +8,11 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Entities
 {
-    [Serializable]
-    [Table("CodeRules")]
+    [Table("PromotionCodeRules")]
     public class PromotionCodeRule
     {
         public Guid Uid { get; set; }
-        public Guid CodeUid { get; set; }
+        public Guid PromotionCodeUid { get; set; }
         public int Position { get; set; }
         public ComparisonOperator Operator { get; set; }
         public PromotionCodeRuleValueType ValueType { get; set; }

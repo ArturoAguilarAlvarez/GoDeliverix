@@ -127,6 +127,9 @@
     <Compile Include="Usuario\Perfiles.cs" />
     <Compile Include="Usuario\Persona.cs" />
     <Compile Include="Usuario\Usuarios.cs" />
+    <Compile Include="v2\PromotionCodeBusiness.cs" />
+    <Compile Include="v2\PromotionCodeGeography.cs" />
+    <Compile Include="v2\PromotionCodeRuleView.cs" />
     <Compile Include="Vehiculo.cs" />
     <Compile Include="ZonaHoraria.cs" />
   </ItemGroup>

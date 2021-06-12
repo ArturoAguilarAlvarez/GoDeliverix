@@ -75,7 +75,7 @@
                 </asp:Panel>
 
                 <%--WIZARD--%>
-                <asp:Wizard ID="Wizard1" runat="server" CssClass="panel w-100" OnNextButtonClick="Wizard1_NextButtonClick" OnSideBarButtonClick="Wizard1_SideBarButtonClick">
+                <asp:Wizard ID="Wizard1" runat="server" CssClass="panel w-100" OnNextButtonClick="Wizard1_NextButtonClick" OnSideBarButtonClick="Wizard1_SideBarButtonClick" OnFinishButtonClick="Wizard1_OnFinishButtonClick">
 
                     <StepPreviousButtonStyle CssClass="btn btn-sm btn-default" />
                     <StartNextButtonStyle CssClass="btn btn-sm btn-primary" />
@@ -275,7 +275,7 @@
 
                                         <div class="col-md-3">
                                             <h6 class="text-muted mb-2">Aplica:</h6>
-                                            <asp:DropDownList runat="server" ID="DropDownList1" CssClass="form-control form-group-sm">
+                                            <asp:DropDownList runat="server" ID="ddlActivationType" CssClass="form-control form-group-sm">
                                                 <asp:ListItem Text="Durante la compra" Value="0" />
                                                 <asp:ListItem Text="Al finalizar la compra" Value="1" />
                                             </asp:DropDownList>
@@ -302,17 +302,17 @@
 
                                         <asp:Panel runat="server" ID="pnlExpirationDate" Visible="false" class="col-md-3">
                                             <h6 class="text-muted mb-2">Fecha de expiración</h6>
-                                            <asp:TextBox runat="server" TextMode="Date" CssClass="form-control form-group-sm" />
+                                            <asp:TextBox runat="server" TextMode="Date" ID="txtExpirationDate" CssClass="form-control form-group-sm" />
                                         </asp:Panel>
 
                                         <asp:Panel runat="server" ID="pnlActivationNumber" Visible="false" class="col-md-4">
                                             <h6 class="text-muted mb-2">Numero de activaciones</h6>
-                                            <asp:TextBox runat="server" CssClass="form-control form-group-sm" />
+                                            <asp:TextBox runat="server" ID="txtActivationsNumber" CssClass="form-control form-group-sm" />
                                         </asp:Panel>
 
                                         <asp:Panel runat="server" ID="pnlDaysBeforeActivation" Visible="false" class="col-md-2">
                                             <h6 class="text-muted mb-2">Dias</h6>
-                                            <asp:TextBox runat="server" CssClass="form-control form-group-sm" />
+                                            <asp:TextBox runat="server" ID="txtDaysBeforeActivation" CssClass="form-control form-group-sm" />
                                         </asp:Panel>
                                     </div>
                                     <%--ROW--%>
@@ -377,14 +377,14 @@
                             <%--ROW--%>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <asp:GridView runat="server" ID="gvCodeRules" AutoGenerateColumns="false" CssClass="table table-responsive table-bordered">
+                                    <asp:GridView runat="server" ID="gvCodeRules" AutoGenerateColumns="false" CssClass="table table-condensed table-responsive table-bordered">
                                         <EmptyDataTemplate>
                                             <div class="panel panel-info">No hay reglas registradas </div>
                                         </EmptyDataTemplate>
                                         <Columns>
                                             <asp:BoundField HeaderText="Donde" DataField="ValueTypeText" />
                                             <asp:BoundField HeaderText="Sea" DataField="OperatorText" />
-                                            <asp:BoundField HeaderText="A" DataField="ValueView" />
+                                            <asp:BoundField HeaderText="A" DataField="ValueText" />
                                         </Columns>
                                     </asp:GridView>
                                 </div>

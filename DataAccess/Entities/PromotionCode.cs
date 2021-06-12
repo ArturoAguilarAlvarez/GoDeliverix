@@ -17,7 +17,7 @@ namespace DataAccess.Entities
         public CodeRewardType RewardType { get; set; }
         public CodeRewardValueType ValueType { get; set; }
         public decimal Value { get; set; }
-        public PromotionCode ActivationType { get; set; }
+        public PromotionCodeActivationType ActivationType { get; set; }
         public int Activations { get; set; }
     }
 }
