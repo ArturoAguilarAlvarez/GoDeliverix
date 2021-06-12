@@ -452,6 +452,7 @@ namespace VistaDelModelo
         #region Promotion Codes
 
         public bool AddPromotionCode(
+            PromotionCodeLevel level,
             string code,
             CodeRewardType rewardType,
             CodeRewardValueType valueType,
@@ -466,7 +467,7 @@ namespace VistaDelModelo
             PromotionCodeGeography geography = null,
             IEnumerable<PromotionCodeRuleView> rules = null)
         {
-            return this._CodeDb.AddPromotionCode(code, rewardType, valueType, value, activationType, expirationType, startAt, expiredAt, expirationValue, company, deliveryCompany, geography, rules);
+            return this._CodeDb.AddPromotionCode(level ,code, rewardType, valueType, value, activationType, expirationType, startAt, expiredAt, expirationValue, company, deliveryCompany, geography, rules);
         }
         #endregion
     }

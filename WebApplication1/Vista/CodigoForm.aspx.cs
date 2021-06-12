@@ -14,16 +14,15 @@ namespace WebApplication1.Vista
     public partial class CodigoForm : System.Web.UI.Page
     {
         #region Properties
-
+        protected PromotionCodeLevel CodeLevel
+        {
+            get => (PromotionCodeLevel)ViewState["promotioncodelevel"];
+            set => ViewState["promotioncodelevel"] = value;
+        }
         protected Guid? UidPromotionCode
         {
             get => (Guid?)ViewState["uidpromotioncode"];
             set => ViewState["uidpromotioncode"] = value;
-        }
-        public int CodeLevel
-        {
-            get => (int)ViewState["codelevel"];
-            set => ViewState["codelevel"] = value;
         }
 
         public IList<PromotionCodeRuleView> CodeRules
@@ -105,8 +104,8 @@ namespace WebApplication1.Vista
             if (!Page.IsPostBack)
             {
                 this.PromotionCodeRegion = new PromotionCodeGeography();
-                this.Company = new PromotionCodeBusiness();
-                this.DeliveryCompany = new PromotionCodeBusiness();
+                this.Company = null;
+                this.DeliveryCompany = null;
                 this.CodeRules = new List<PromotionCodeRuleView>();
                 this.Code = new PromotionCodeBase();
                 this.Expiration = new PromotionCodeExpirationBase();
@@ -141,23 +140,26 @@ namespace WebApplication1.Vista
         {
             HideError();
 
-            if (e.CurrentStepIndex == 0)
+            if (e.CurrentStepIndex == 0) // Code Type
             {
-                this.CodeLevel = int.Parse(ddlCodeLevel.SelectedValue);
+                this.CodeLevel = (PromotionCodeLevel)int.Parse(ddlCodeLevel.SelectedValue);
 
-                if (this.CodeLevel == 0)
+                if (this.CodeLevel == PromotionCodeLevel.Region)
                 {
                     FillCountries();
                 }
-                else if (this.CodeLevel == 1)
+                else if (this.CodeLevel == PromotionCodeLevel.DeliveryCompany)
                 {
                     Wizard1.ActiveStepIndex = 3;
                     FillCompanies();
+                    this.Company = new PromotionCodeBusiness();
+                    this.DeliveryCompany = new PromotionCodeBusiness();
                 }
-                else if (this.CodeLevel == 2)
+                else if (this.CodeLevel == PromotionCodeLevel.Company)
                 {
                     Wizard1.ActiveStepIndex = 2;
                     FillDeliveryCompanies();
+                    this.DeliveryCompany = new PromotionCodeBusiness();
                 }
 
                 FillCodeCatalogs();
@@ -277,36 +279,15 @@ namespace WebApplication1.Vista
             else if (e.CurrentStepIndex == 6) // Summary
             {
             }
-
-            if (e.NextStepIndex == 1)
-            {
-                // Fill Values Region
-                ddlCountry.SelectedValue = PromotionCodeRegion.CountryUid.HasValue ? PromotionCodeRegion.CountryUid.Value.ToString() : default;
-                ddlState.SelectedValue = PromotionCodeRegion.StateUid.HasValue ? PromotionCodeRegion.StateUid.Value.ToString() : default;
-                ddlMunicipality.SelectedValue = PromotionCodeRegion.MunicipalityUid.HasValue ? PromotionCodeRegion.MunicipalityUid.Value.ToString() : default;
-                ddlCity.SelectedValue = PromotionCodeRegion.CityUid.HasValue ? PromotionCodeRegion.CityUid.Value.ToString() : default;
-                ddlNeighborhood.SelectedValue = PromotionCodeRegion.NeighborhoodUid.HasValue ? PromotionCodeRegion.NeighborhoodUid.Value.ToString() : default;
-            }
-            else if (e.NextStepIndex == 2)
-            {
-                // Fill Values Delivery Company
-                ddlDeliveryCompany.SelectedValue = DeliveryCompany.UidCompany.HasValue ? DeliveryCompany.UidCompany.Value.ToString() : default;
-                ddlDeliveryCompanyBranch.SelectedValue = DeliveryCompany.UidCompanyBranch.HasValue ? DeliveryCompany.UidCompanyBranch.Value.ToString() : default;
-            }
-            else if (e.NextStepIndex == 3)
-            {
-                // Fill Values Company
-                ddlCompany.SelectedValue = Company.UidCompany.HasValue ? Company.UidCompany.Value.ToString() : default;
-                ddlCompanyBranch.SelectedValue = Company.UidCompanyBranch.HasValue ? Company.UidCompanyBranch.Value.ToString() : default;
-            }
-
         }
 
         protected void Wizard1_OnFinishButtonClick(object sender, WizardNavigationEventArgs e)
         {
             try
             {
-                this.VmCodes.AddPromotionCode(this.Code.Code,
+                this.VmCodes.AddPromotionCode(
+                    this.CodeLevel,
+                    this.Code.Code,
                     this.Code.RewardType,
                     this.Code.ValueType,
                     this.Code.Value,
@@ -393,6 +374,9 @@ namespace WebApplication1.Vista
 
         protected void ddlCompany_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (this.Company == null)
+                this.Company = new PromotionCodeBusiness();
+
             Guid uid = Guid.Parse(ddlCompany.SelectedValue.ToString());
             this.Company.UidCompany = uid;
             this.FillCompanyBranches();
@@ -576,17 +560,17 @@ namespace WebApplication1.Vista
             var rewards = new List<ListboxViewInteger>();
             var ruleTypes = new List<ListboxViewInteger>();
 
-            if (this.CodeLevel == 0)
+            if (this.CodeLevel == PromotionCodeLevel.Region)
             {
                 rewards = this._CodeRewards.Where(r => _RegionCodeRewards.Contains(r.Id)).ToList();
                 ruleTypes = this._CodeRuleValueTypes.Where(r => this._RegionCodeRules.Contains(r.Id)).ToList();
             }
-            else if (this.CodeLevel == 1)
+            else if (this.CodeLevel == PromotionCodeLevel.DeliveryCompany)
             {
                 rewards = this._CodeRewards.Where(r => this._CompanyCodeRewards.Contains(r.Id)).ToList();
                 ruleTypes = this._CodeRuleValueTypes.Where(r => this._CompanyCodeRules.Contains(r.Id)).ToList();
             }
-            else if (this.CodeLevel == 2)
+            else if (this.CodeLevel == PromotionCodeLevel.Company)
             {
                 rewards = this._CodeRewards.Where(r => this._DeliveryCompanyCodeRewards.Contains(r.Id)).ToList();
                 ruleTypes = this._CodeRuleValueTypes.Where(r => this._DeliveryCompanyCodeRules.Contains(r.Id)).ToList();

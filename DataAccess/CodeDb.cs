@@ -245,6 +245,7 @@ order by NombreComercial";
 
         #region Promotion Code
         public bool AddPromotionCode(
+            PromotionCodeLevel codeLevel,
             string code,
             CodeRewardType rewardType,
             CodeRewardValueType valueType,

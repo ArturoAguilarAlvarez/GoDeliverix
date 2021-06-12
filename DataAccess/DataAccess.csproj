@@ -82,6 +82,7 @@
     <Compile Include="Enum\CodeRewardType.cs" />
     <Compile Include="Enum\CodeRewardValueType.cs" />
     <Compile Include="Enum\PromotionCodeActivationType.cs" />
+    <Compile Include="Enum\PromotionCodeLevel.cs" />
     <Compile Include="Enum\PromotionCodeRuleValueType.cs" />
     <Compile Include="Enum\CodeType.cs" />
     <Compile Include="Enum\CodeValidationResult.cs" />
