@@ -447,6 +447,29 @@ namespace VistaDelModelo
             }
             return data;
         }
+        public IEnumerable<ListboxView> ReadAllCompanyProducts(Guid uid, string defaultItem = "")
+        {
+            var data = this._CodeDb.ReadAllCompanyProducts(uid);
+            if (defaultItem != string.Empty)
+            {
+                var tmp = data.ToList();
+                tmp.Insert(0, new ListboxView() { Uid = Guid.Empty, Name = defaultItem });
+                data = tmp;
+            }
+            return data;
+        }
+
+        public IEnumerable<ListboxView> ReadAllCompanyBranchProducts(Guid uid,string defaultItem = "")
+        {
+            var data = this._CodeDb.ReadAllCompanyBranchProducts(uid);
+            if (defaultItem != string.Empty)
+            {
+                var tmp = data.ToList();
+                tmp.Insert(0, new ListboxView() { Uid = Guid.Empty, Name = defaultItem });
+                data = tmp;
+            }
+            return data;
+        }
         #endregion
 
         #region Promotion Codes
@@ -468,6 +491,16 @@ namespace VistaDelModelo
             IEnumerable<PromotionCodeRuleView> rules = null)
         {
             return this._CodeDb.AddPromotionCode(level ,code, rewardType, valueType, value, activationType, expirationType, startAt, expiredAt, expirationValue, company, deliveryCompany, geography, rules);
+        }
+
+        public IEnumerable<PromotionCodeGridView> ReadAllPromotionCodes()
+        {
+            return this._CodeDb.ReadAllPromotionCodes();
+        }
+
+        public PromotionCodeEditView GetPromotionCode(Guid uid)
+        {
+            return this._CodeDb.GetPromotionCode(uid);
         }
         #endregion
     }

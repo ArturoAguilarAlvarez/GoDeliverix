@@ -1,16 +1,13 @@
 ﻿using Dapper;
 using DataAccess.Enum;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Entities
 {
     [Table("PromotionCodes")]
     public class PromotionCode
     {
+        [Key]
         public Guid Uid { get; set; }
         public Guid CodeUid { get; set; }
         public Guid? ExpirationUid { get; set; }
@@ -20,5 +17,6 @@ namespace DataAccess.Entities
         public decimal Value { get; set; }
         public PromotionCodeActivationType ActivationType { get; set; }
         public int Activations { get; set; }
+        public PromotionCodeStatus Status { get; set; }
     }
 }

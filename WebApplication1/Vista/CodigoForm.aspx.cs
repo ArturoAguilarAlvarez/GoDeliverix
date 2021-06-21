@@ -2,6 +2,7 @@
 using DataAccess.Models;
 using Modelo.v2;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -89,11 +90,24 @@ namespace WebApplication1.Vista
             new ListboxViewInteger(){ Id = 7, Name = "Categoria" },
             new ListboxViewInteger(){ Id = 8, Name = "Subcategoria" },
         };
+
+        private readonly int[] _comboRuleOperators = new int[2] { 0, 5 };
+        private readonly int[] _textRuleOperators = new int[6] { 0, 1, 2, 3, 4, 5 };
+        private readonly IList<ListboxViewInteger> _codeRuleOperators = new List<ListboxViewInteger>()
+        {
+            new ListboxViewInteger(){Id =  0,Name = "Igual"},
+            new ListboxViewInteger(){Id =  1,Name = "Menor"},
+            new ListboxViewInteger(){Id =  2,Name = "Mayor"},
+            new ListboxViewInteger(){Id =  3,Name = "Menor o igual"},
+            new ListboxViewInteger(){Id =  4,Name = "Mayor o igual"},
+            new ListboxViewInteger(){Id =  5,Name = "Diferente"}
+        };
         #endregion
 
         #region ViewModel
         public AddressViewModel VmAddress { get; set; }
         private CodesViewModel VmCodes { get; set; }
+        private ProductViewModel VmProduct { get; set; }
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
@@ -103,7 +117,7 @@ namespace WebApplication1.Vista
 
             if (!Page.IsPostBack)
             {
-                this.PromotionCodeRegion = new PromotionCodeGeography();
+                this.PromotionCodeRegion = null;
                 this.Company = null;
                 this.DeliveryCompany = null;
                 this.CodeRules = new List<PromotionCodeRuleView>();
@@ -114,6 +128,15 @@ namespace WebApplication1.Vista
                 EnableCodeRuleFields(false);
 
                 txtStartAt.Text = DateTime.Now.ToString("yyyy-MM-dd");
+
+                ddlState.SetDefault("Todos los estados", Guid.Empty);
+                ddlMunicipality.SetDefault("Todos los municipios", Guid.Empty);
+                ddlCity.SetDefault("Todos las ciudades", Guid.Empty);
+                ddlNeighborhood.SetDefault("Todos las colonias", Guid.Empty);
+
+                ddlCompanyBranch.SetDefault("Todos las sucursales", Guid.Empty);
+
+                ddlDeliveryCompanyBranch.SetDefault("Todos las sucursales", Guid.Empty);
 
                 if (Request.QueryString.HasKeys())
                 {
@@ -127,6 +150,45 @@ namespace WebApplication1.Vista
                         }
                     }
                 }
+            }
+
+            // Fill Region
+            if (this.PromotionCodeRegion != null)
+            {
+                if (this.PromotionCodeRegion.CountryUid.HasValue)
+                    ddlCountry.SelectedValue = PromotionCodeRegion.CountryUid.Value.ToString();
+
+                if (this.PromotionCodeRegion.StateUid.HasValue)
+                    ddlState.SelectedValue = PromotionCodeRegion.StateUid.Value.ToString();
+
+                if (this.PromotionCodeRegion.MunicipalityUid.HasValue)
+                    ddlMunicipality.SelectedValue = PromotionCodeRegion.MunicipalityUid.Value.ToString();
+
+                if (this.PromotionCodeRegion.CityUid.HasValue)
+                    ddlCity.SelectedValue = PromotionCodeRegion.CityUid.Value.ToString();
+
+                if (this.PromotionCodeRegion.NeighborhoodUid.HasValue)
+                    ddlNeighborhood.SelectedValue = PromotionCodeRegion.NeighborhoodUid.Value.ToString();
+            }
+
+            // Fill Company
+            if (this.Company != null)
+            {
+                if (this.Company.UidCompany.HasValue)
+                    ddlCompany.SelectedValue = this.Company.UidCompany.Value.ToString();
+
+                if (this.Company.UidCompanyBranch.HasValue)
+                    ddlCompanyBranch.SelectedValue = this.Company.UidCompanyBranch.Value.ToString();
+            }
+
+            // Fill Delivery Company
+            if (this.DeliveryCompany != null)
+            {
+                if (this.DeliveryCompany.UidCompany.HasValue)
+                    ddlDeliveryCompany.SelectedValue = this.DeliveryCompany.UidCompany.Value.ToString();
+
+                if (this.DeliveryCompany.UidCompanyBranch.HasValue)
+                    ddlDeliveryCompanyBranch.SelectedValue = this.DeliveryCompany.UidCompanyBranch.Value.ToString();
             }
         }
 
@@ -143,29 +205,52 @@ namespace WebApplication1.Vista
             if (e.CurrentStepIndex == 0) // Code Type
             {
                 this.CodeLevel = (PromotionCodeLevel)int.Parse(ddlCodeLevel.SelectedValue);
+                lblSmCodeType.Text = ddlCodeLevel.SelectedItem.Text;
 
                 if (this.CodeLevel == PromotionCodeLevel.Region)
                 {
+                    if (this.PromotionCodeRegion == null)
+                        this.PromotionCodeRegion = new PromotionCodeGeography();
+
+                    //if (this.DeliveryCompany == null)
+                    //    this.DeliveryCompany = new PromotionCodeBusiness();
+
+                    //if (this.Company == null)
+                    //    this.Company = new PromotionCodeBusiness();
+
                     FillCountries();
                 }
                 else if (this.CodeLevel == PromotionCodeLevel.DeliveryCompany)
                 {
-                    Wizard1.ActiveStepIndex = 3;
-                    FillCompanies();
-                    this.Company = new PromotionCodeBusiness();
-                    this.DeliveryCompany = new PromotionCodeBusiness();
+                    Wizard1.ActiveStepIndex = 2;
+                    FillDeliveryCompanies();
+
+                    this.PromotionCodeRegion = null;
+
+                    if (this.DeliveryCompany == null)
+                        this.DeliveryCompany = new PromotionCodeBusiness();
+
+                    if (this.Company == null)
+                        this.Company = new PromotionCodeBusiness();
                 }
                 else if (this.CodeLevel == PromotionCodeLevel.Company)
                 {
-                    Wizard1.ActiveStepIndex = 2;
-                    FillDeliveryCompanies();
-                    this.DeliveryCompany = new PromotionCodeBusiness();
+                    Wizard1.ActiveStepIndex = 3;
+                    FillCompanies();
+
+                    this.DeliveryCompany = null;
+
+                    if (this.Company == null)
+                        this.Company = new PromotionCodeBusiness();
                 }
 
                 FillCodeCatalogs();
             }
             else if (e.CurrentStepIndex == 1) // Location
             {
+                if (this.PromotionCodeRegion == null)
+                    this.PromotionCodeRegion = new PromotionCodeGeography();
+
                 if (!this.PromotionCodeRegion.CountryUid.HasValue)
                 {
                     DrawError("Seleccione un pais");
@@ -182,6 +267,9 @@ namespace WebApplication1.Vista
             }
             else if (e.CurrentStepIndex == 2) // Delivery Company
             {
+                if (this.DeliveryCompany == null)
+                    this.DeliveryCompany = new PromotionCodeBusiness();
+
                 if (!this.DeliveryCompany.UidCompany.HasValue)
                 {
                     DrawError("Seleccione una distribuidora");
@@ -193,9 +281,17 @@ namespace WebApplication1.Vista
                     DrawError("Seleccione una distribuidora");
                     e.Cancel = true;
                 }
+
+                FillCompanies();
+
+                if (this.Company == null)
+                    this.Company = new PromotionCodeBusiness();
             }
             else if (e.CurrentStepIndex == 3) // Company
             {
+                if (this.Company == null)
+                    this.Company = new PromotionCodeBusiness();
+
                 if (!this.Company.UidCompany.HasValue)
                 {
                     DrawError("Seleccione una suministradora");
@@ -263,6 +359,7 @@ namespace WebApplication1.Vista
                     this.Code.ValueType = (CodeRewardValueType)int.Parse(ddlValueType.SelectedValue);
                     this.Code.Value = value;
                     this.Code.ActivationType = (PromotionCodeActivationType)int.Parse(ddlActivationType.SelectedValue);
+                    this.Code.Status = int.Parse(ddlCodeStatus.SelectedValue);
 
                     this.Expiration.StartAt = startAt;
                     this.Expiration.Type = expirationType;
@@ -275,6 +372,94 @@ namespace WebApplication1.Vista
             }
             else if (e.CurrentStepIndex == 5) // Rules
             {
+                if (e.NextStepIndex == 6)
+                {
+                    pnlSmRegion.Visible = false;
+                    pnlSmDeliveryCompany.Visible = false;
+                    pnlSmCompany.Visible = false;
+                    pnlSmCodeRules.Visible = false;
+
+                    // Display Country Values
+                    if (this.PromotionCodeRegion != null)
+                    {
+                        pnlSmRegion.Visible = true;
+
+                        pnlSmState.Visible = this.PromotionCodeRegion.StateUid.HasValue;
+                        pnlSmMunicipality.Visible = this.PromotionCodeRegion.MunicipalityUid.HasValue;
+                        pnlSmCity.Visible = this.PromotionCodeRegion.CityUid.HasValue;
+                        pnlSmNeighborhood.Visible = this.PromotionCodeRegion.NeighborhoodUid.HasValue;
+
+                        lblSmCountry.Text = GetDropDownTextFromValue(ddlCountry, PromotionCodeRegion.CountryUid.ToString());
+
+                        if (PromotionCodeRegion.StateUid.HasValue)
+                            lblSmState.Text = ddlState.FindTextByValue(PromotionCodeRegion.StateUid.Value.ToString());
+
+                        if (PromotionCodeRegion.MunicipalityUid.HasValue)
+                            lblSmMunicipality.Text = ddlMunicipality.FindTextByValue(PromotionCodeRegion.MunicipalityUid.Value.ToString());
+
+                        if (PromotionCodeRegion.CityUid.HasValue)
+                            lblSmCity.Text = ddlCity.FindTextByValue(PromotionCodeRegion.CityUid.Value.ToString());
+
+                        if (PromotionCodeRegion.NeighborhoodUid.HasValue)
+                            lblSmNeighborhood.Text = ddlNeighborhood.FindTextByValue(PromotionCodeRegion.NeighborhoodUid.Value.ToString());
+                    }
+
+                    // Display Delivery Company Values
+                    if (this.DeliveryCompany != null)
+                    {
+                        pnlSmDeliveryCompany.Visible = true;
+                        pnlSmDeliveryCompanyBranch.Visible = this.DeliveryCompany.UidCompanyBranch.HasValue;
+
+                        if (this.DeliveryCompany.UidCompany.HasValue)
+                            lblSmDeliveryCompany.Text = GetDropDownTextFromValue(ddlDeliveryCompany, this.DeliveryCompany.UidCompany.ToString());
+
+                        if (this.DeliveryCompany.UidCompanyBranch.HasValue)
+                            lblSmDeliveryCompanyBranch.Text = ddlDeliveryCompanyBranch.FindTextByValue(this.DeliveryCompany.UidCompanyBranch.ToString());
+                    }
+
+                    // Display Company Values
+                    if (this.Company != null)
+                    {
+                        this.pnlSmCompany.Visible = true;
+                        pnlSmCompanyBranch.Visible = this.Company.UidCompanyBranch.HasValue;
+
+                        if (this.Company.UidCompany.HasValue)
+                            lblSmCompany.Text = GetDropDownTextFromValue(ddlCompany, this.Company.UidCompany.ToString());
+
+                        if (this.Company.UidCompanyBranch.HasValue)
+                            lblSmCompanyBranch.Text = ddlCompanyBranch.FindTextByValue(this.Company.UidCompanyBranch.ToString());
+                    }
+
+                    // Display Code rules
+                    if (this.CodeRules.Count > 0)
+                    {
+                        pnlSmCodeRules.Visible = true;
+
+                        gvSmCodeRules.DataSource = this.CodeRules;
+                        gvSmCodeRules.DataBind();
+                    }
+
+                    // Display Code Values
+                    lblSmCode.Text = string.IsNullOrEmpty(this.Code.Code) ? "(automatico)" : this.Code.Code;
+                    lblSmRewardType.Text = GetDropDownTextFromValue(ddlRewardType, ((int)this.Code.RewardType).ToString());
+                    lblSmValueType.Text = GetDropDownTextFromValue(ddlValueType, ((int)this.Code.ValueType).ToString());
+                    lblSmValue.Text = $" {(this.Code.ValueType == CodeRewardValueType.Amount ? "$" : "")} {this.Code.Value} {(this.Code.ValueType == CodeRewardValueType.Percentage ? "%" : "")}";
+
+                    lblSmActivationType.Text = GetDropDownTextFromValue(ddlActivationType, ((int)this.Code.ActivationType).ToString());
+                    lblSmStatus.Text = GetDropDownTextFromValue(ddlCodeStatus, ((int)this.Code.Status).ToString());
+
+                    lblSmStartAt.Text = this.Expiration.StartAt.ToString(("d"));
+                    lblSmExpirationType.Text = GetDropDownTextFromValue(ddlCodeExpirationType, ((int)this.Expiration.Type).ToString());
+
+                    pnlSmExpirationDate.Visible = this.Expiration.Type == CodeExpirationType.Date;
+                    lblSmExpirationDate.Text = this.Expiration.ExpirationDate.HasValue ? this.Expiration.ExpirationDate.Value.ToString(("d")) : "";
+
+                    pnlSmActivationNumber.Visible = this.Expiration.Type == CodeExpirationType.Activations;
+                    lblSmActivationNumber.Text = this.Expiration.ExpirationDate.HasValue ? this.Expiration.ActivationsLimit.ToString() : "";
+
+                    pnlSmDaysBeforeActivation.Visible = this.Expiration.Type == CodeExpirationType.DaysBeforeActivations;
+                    lblSmDaysBeforeActivation.Text = this.Expiration.ExpirationDate.HasValue ? this.Expiration.DaysAfterActivation.ToString() : "";
+                }
             }
             else if (e.CurrentStepIndex == 6) // Summary
             {
@@ -285,7 +470,7 @@ namespace WebApplication1.Vista
         {
             try
             {
-                this.VmCodes.AddPromotionCode(
+                var success = this.VmCodes.AddPromotionCode(
                     this.CodeLevel,
                     this.Code.Code,
                     this.Code.RewardType,
@@ -297,8 +482,13 @@ namespace WebApplication1.Vista
                     this.Expiration.ExpirationDate,
                     this.Expiration.Type == CodeExpirationType.Activations ? this.Expiration.ActivationsLimit : this.Expiration.DaysAfterActivation,
                     this.Company,
-                    this.DeliveryCompany
+                    this.DeliveryCompany,
+                    this.PromotionCodeRegion,
+                    this.CodeRules
                     );
+
+                if (success) { Response.Redirect("Codigos.aspx"); } else { DrawError("Ocurrio un error al guardar el codigo"); }
+
             }
             catch (Exception exception)
             {
@@ -327,6 +517,36 @@ namespace WebApplication1.Vista
             }
         }
 
+        protected void ddlCodeExpirationType_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            CodeExpirationType type = (CodeExpirationType)int.Parse(ddlCodeExpirationType.SelectedValue);
+
+            pnlExpirationDate.Visible = false;
+            pnlActivationNumber.Visible = false;
+            pnlDaysBeforeActivation.Visible = false;
+
+            switch (type)
+            {
+                case CodeExpirationType.None:
+                    break;
+                case CodeExpirationType.Date:
+                    pnlExpirationDate.Visible = true;
+                    break;
+                case CodeExpirationType.Activations:
+                    pnlActivationNumber.Visible = true;
+                    break;
+                case CodeExpirationType.DaysBeforeActivations:
+                    pnlDaysBeforeActivation.Visible = true;
+                    break;
+            }
+        }
+
+        protected void ddlValueType_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            CodeRewardValueType type = (CodeRewardValueType)int.Parse(ddlValueType.SelectedValue);
+            lblValueType.Text = type == CodeRewardValueType.Amount ? "$" : "%";
+        }
+
         protected void ddlCountry_SelectedIndexChanged(object sender, EventArgs e)
         {
             Guid uid = Guid.Parse(ddlCountry.SelectedValue.ToString());
@@ -338,20 +558,24 @@ namespace WebApplication1.Vista
             Guid uid = Guid.Parse(ddlState.SelectedValue);
             this.PromotionCodeRegion.StateUid = uid;
             FillMunicipalities();
+
+            ddlMunicipality.Visible = true;
         }
         protected void ddlMunicipality_SelectedIndexChanged(object sender, EventArgs e)
         {
-
             Guid uid = Guid.Parse(ddlMunicipality.SelectedValue);
             this.PromotionCodeRegion.MunicipalityUid = uid;
             FillCities();
+
+            ddlCity.Visible = true;
         }
         protected void ddlCity_SelectedIndexChanged(object sender, EventArgs e)
         {
-
             Guid uid = Guid.Parse(ddlCity.SelectedValue);
             this.PromotionCodeRegion.CityUid = uid;
             FillNeighborhoods();
+
+            ddlNeighborhood.Visible = true;
         }
         protected void ddlNeighborhood_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -374,9 +598,6 @@ namespace WebApplication1.Vista
 
         protected void ddlCompany_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.Company == null)
-                this.Company = new PromotionCodeBusiness();
-
             Guid uid = Guid.Parse(ddlCompany.SelectedValue.ToString());
             this.Company.UidCompany = uid;
             this.FillCompanyBranches();
@@ -451,12 +672,121 @@ namespace WebApplication1.Vista
 
             EnableCodeRuleFields(false);
         }
+        protected void ddlCodeRuleValueType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PromotionCodeRuleValueType type = (PromotionCodeRuleValueType)int.Parse(ddlCodeRuleValueType.SelectedValue);
+
+            txtCodeRuleValue.Visible = false;
+            ddlCodeRuleValue.Visible = false;
+            pnlRuleValueType.Visible = false;
+
+            pnlRuleGiroValueType.Visible = false;
+            ddlRuleCategoria.Visible = false;
+            ddlRuleSubcategoria.Visible = false;
+
+            string fieldType = string.Empty;
+
+            switch (type)
+            {
+                case PromotionCodeRuleValueType.SubtotalOrder:
+                    pnlRuleValueType.Visible = true;
+                    txtCodeRuleValue.Visible = true;
+                    fieldType = "Text";
+                    break;
+                case PromotionCodeRuleValueType.ShipmentOrder:
+                    pnlRuleValueType.Visible = true;
+                    txtCodeRuleValue.Visible = true;
+                    fieldType = "Text";
+                    break;
+                case PromotionCodeRuleValueType.SubtotalPurchase:
+                    pnlRuleValueType.Visible = true;
+                    txtCodeRuleValue.Visible = true;
+                    fieldType = "Text";
+                    break;
+                case PromotionCodeRuleValueType.ShipmentPurchase:
+                    pnlRuleValueType.Visible = true;
+                    txtCodeRuleValue.Visible = true;
+                    fieldType = "Text";
+                    break;
+                case PromotionCodeRuleValueType.Product:
+                    pnlRuleValueType.Visible = true;
+                    ddlCodeRuleValue.Visible = true;
+                    FillCodeRuleProducts();
+                    fieldType = "Combo";
+                    break;
+                case PromotionCodeRuleValueType.ProductQuantity:
+                    pnlRuleValueType.Visible = true;
+                    txtCodeRuleValue.Visible = true;
+                    fieldType = "Text";
+                    break;
+                case PromotionCodeRuleValueType.Giro:
+                    pnlRuleGiroValueType.Visible = true;
+                    ddlCodeRuleValue.Visible = true;
+                    fieldType = "Combo";
+                    break;
+                case PromotionCodeRuleValueType.Categoria:
+                    pnlRuleGiroValueType.Visible = true;
+                    ddlRuleCategoria.Visible = true;
+                    ddlCodeRuleValue.Visible = true;
+                    fieldType = "Combo";
+                    break;
+                case PromotionCodeRuleValueType.Subcategoria:
+                    pnlRuleGiroValueType.Visible = true;
+                    ddlRuleCategoria.Visible = true;
+                    ddlRuleSubcategoria.Visible = true;
+                    ddlCodeRuleValue.Visible = true;
+                    fieldType = "Combo";
+                    break;
+            }
+
+            if (fieldType == "Text")
+                ddlCodeRuleOperator.DataSource = this._codeRuleOperators.Where(r => this._textRuleOperators.Contains(r.Id)).ToList();
+            else
+                ddlCodeRuleOperator.DataSource = this._codeRuleOperators.Where(r => this._comboRuleOperators.Contains(r.Id)).ToList();
+
+            ddlCodeRuleOperator.DataTextField = "Name";
+            ddlCodeRuleOperator.DataValueField = "Id";
+            ddlCodeRuleOperator.DataBind();
+
+            ddlCodeRuleOperator.SelectedIndex = 0;
+        }
+
+        protected void ddlRuleGiro_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                Guid uid = Guid.Parse(ddlRuleGiro.SelectedValue);
+                this.FillCodeRuleCategoria(uid);
+            }
+            catch (Exception exception)
+            {
+                DrawError(exception.Message);
+            }
+        }
+        protected void ddlRuleCategoria_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                Guid uid = Guid.Parse(ddlRuleCategoria.SelectedValue);
+                this.FillCodeRuleSubcategoria(uid);
+            }
+            catch (Exception exception)
+            {
+                DrawError(exception.Message);
+            }
+        }
+        protected void ddlRuleSubcategoria_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
         #endregion
 
         #region Implementation
         private void FillCountries()
         {
-            ddlCountry.DataSource = this.VmAddress.ReadAllCountries("Seleccionar pais");
+            var source = this.VmAddress.ReadAllCountries("Seleccionar pais");
+
+            ddlCountry.DataSource = source;
             ddlCountry.DataValueField = "Uid";
             ddlCountry.DataTextField = "Name";
             ddlCountry.DataBind();
@@ -466,7 +796,8 @@ namespace WebApplication1.Vista
             Guid? uid = PromotionCodeRegion.CountryUid;
             if (uid.HasValue)
             {
-                ddlState.SetDataSource(this.VmAddress.ReadAllStates(uid.Value, "Seleccionar estado"), "Uid", "Name");
+                var source = this.VmAddress.ReadAllStates(uid.Value, "Todos los estados");
+                ddlState.SetDataSource(source, "Uid", "Name");
                 ddlState.DataBind();
             }
             else
@@ -480,7 +811,8 @@ namespace WebApplication1.Vista
             Guid? uid = PromotionCodeRegion.StateUid;
             if (uid.HasValue)
             {
-                ddlMunicipality.SetDataSource(this.VmAddress.ReadAllMunicipalities(uid.Value, "Seleccionar municipio"), "Uid", "Name");
+                var source = this.VmAddress.ReadAllMunicipalities(uid.Value, "Todos los municipios");
+                ddlMunicipality.SetDataSource(source, "Uid", "Name");
                 ddlMunicipality.DataBind();
             }
             else
@@ -494,7 +826,8 @@ namespace WebApplication1.Vista
             Guid? uid = PromotionCodeRegion.MunicipalityUid;
             if (uid.HasValue)
             {
-                ddlCity.SetDataSource(this.VmAddress.ReadAllCities(uid.Value, "Seleccionar ciudad"), "Uid", "Name");
+                var source = this.VmAddress.ReadAllCities(uid.Value, "Todas las ciudades");
+                ddlCity.SetDataSource(source, "Uid", "Name");
                 ddlCity.DataBind();
             }
             else
@@ -508,7 +841,8 @@ namespace WebApplication1.Vista
             Guid? uid = PromotionCodeRegion.CityUid;
             if (uid.HasValue)
             {
-                ddlNeighborhood.SetDataSource(this.VmAddress.ReadAllNeighborhoods(uid.Value, "Seleccionar colonia"), "Uid", "Name");
+                var source = this.VmAddress.ReadAllNeighborhoods(uid.Value, "Todas las colonias");
+                ddlNeighborhood.SetDataSource(source, "Uid", "Name");
                 ddlNeighborhood.DataBind();
             }
             else
@@ -520,28 +854,31 @@ namespace WebApplication1.Vista
 
         private void FillDeliveryCompanies()
         {
-
-            ddlDeliveryCompany.DataSource = this.VmCodes.ReadAllCompanies(2, defaultItem: "Seleccionar empresa");
+            var source = this.VmCodes.ReadAllCompanies(2, defaultItem: "Seleccionar empresa");
+            ddlDeliveryCompany.DataSource = source;
             ddlDeliveryCompany.DataValueField = "Uid";
             ddlDeliveryCompany.DataTextField = "Name";
             ddlDeliveryCompany.DataBind();
         }
         private void FillDeliveryCompanyBranches()
         {
-            ddlDeliveryCompanyBranch.SetDataSource(this.VmCodes.ReadAllCompanyBranches(this.DeliveryCompany.UidCompany.Value, "Seleccionar sucursal"), "Uid", "Name");
+            var source = this.VmCodes.ReadAllCompanyBranches(this.DeliveryCompany.UidCompany.Value, "Todas las sucursales");
+            ddlDeliveryCompanyBranch.SetDataSource(source, "Uid", "Name");
             ddlDeliveryCompanyBranch.DataBind();
         }
 
         private void FillCompanies()
         {
-            ddlCompany.DataSource = this.VmCodes.ReadAllCompanies(1, defaultItem: "Seleccionar empresa");
+            var source = this.VmCodes.ReadAllCompanies(1, defaultItem: "Seleccionar empresa");
+            ddlCompany.DataSource = source;
             ddlCompany.DataValueField = "Uid";
             ddlCompany.DataTextField = "Name";
             ddlCompany.DataBind();
         }
         private void FillCompanyBranches()
         {
-            ddlCompanyBranch.SetDataSource(this.VmCodes.ReadAllCompanyBranches(this.Company.UidCompany.Value, "Seleccionar sucursal"), "Uid", "Name");
+            var source = this.VmCodes.ReadAllCompanyBranches(this.Company.UidCompany.Value, "Todas las sucursales");
+            ddlCompanyBranch.SetDataSource(source, "Uid", "Name");
             ddlCompanyBranch.DataBind();
         }
 
@@ -565,12 +902,12 @@ namespace WebApplication1.Vista
                 rewards = this._CodeRewards.Where(r => _RegionCodeRewards.Contains(r.Id)).ToList();
                 ruleTypes = this._CodeRuleValueTypes.Where(r => this._RegionCodeRules.Contains(r.Id)).ToList();
             }
-            else if (this.CodeLevel == PromotionCodeLevel.DeliveryCompany)
+            else if (this.CodeLevel == PromotionCodeLevel.Company)
             {
                 rewards = this._CodeRewards.Where(r => this._CompanyCodeRewards.Contains(r.Id)).ToList();
                 ruleTypes = this._CodeRuleValueTypes.Where(r => this._CompanyCodeRules.Contains(r.Id)).ToList();
             }
-            else if (this.CodeLevel == PromotionCodeLevel.Company)
+            else if (this.CodeLevel == PromotionCodeLevel.DeliveryCompany)
             {
                 rewards = this._CodeRewards.Where(r => this._DeliveryCompanyCodeRewards.Contains(r.Id)).ToList();
                 ruleTypes = this._CodeRuleValueTypes.Where(r => this._DeliveryCompanyCodeRules.Contains(r.Id)).ToList();
@@ -630,7 +967,113 @@ namespace WebApplication1.Vista
 
             return isValid;
         }
+
+        public void FillCodeRuleProducts()
+        {
+            if (this.Company == null)
+            {
+                DrawError("Seleccione una empresa para visualizar los productos");
+                return;
+            }
+
+
+            IEnumerable<ListboxView> data = new List<ListboxView>();
+
+            if (this.Company.UidCompanyBranch.HasValue)
+                data = this.VmCodes.ReadAllCompanyBranchProducts(this.Company.UidCompanyBranch.Value);
+
+            if (this.Company.UidCompany.HasValue)
+                data = this.VmCodes.ReadAllCompanyProducts(this.Company.UidCompany.Value);
+
+            if (data.Count() == 0)
+                DrawError("No se encontraron productos");
+
+            ddlCodeRuleValue.DataSource = data;
+            ddlCodeRuleValue.DataTextField = "Name";
+            ddlCodeRuleValue.DataValueField = "Uid";
+            ddlCodeRuleValue.DataBind();
+        }
+        public void FillCodeRuleGiro()
+        {
+            if (ddlRuleGiro.Items.Count == 0)
+            {
+                ddlRuleGiro.DataSource = this.VmProduct.GetAllGiros();
+                ddlRuleGiro.DataTextField = "Name";
+                ddlRuleGiro.DataValueField = "Uid";
+                ddlRuleGiro.DataBind();
+            }
+        }
+        public void FillCodeRuleCategoria(Guid uid)
+        {
+            ddlRuleCategoria.DataSource = this.VmProduct.GetCategorias(uid);
+            ddlRuleCategoria.DataTextField = "Name";
+            ddlRuleCategoria.DataValueField = "Uid";
+            ddlRuleCategoria.DataBind();
+
+        }
+        public void FillCodeRuleSubcategoria(Guid uid)
+        {
+            ddlRuleSubcategoria.DataSource = this.VmProduct.GetSubcategorias(uid);
+            ddlRuleSubcategoria.DataTextField = "Name";
+            ddlRuleSubcategoria.DataValueField = "Uid";
+            ddlRuleSubcategoria.DataBind();
+        }
+
+        public string GetDropDownTextFromValue(DropDownList ddl, string value)
+        {
+            ListItem item = ddl.Items.FindByValue(value);
+            return item == null ? string.Empty : item.Text;
+        }
         #endregion
+
+        protected void ddlRewardType_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            CodeRewardType type = (CodeRewardType)(int.Parse(ddlRewardType.SelectedValue));
+            ddlValueType.Enabled = true;
+
+            switch (type)
+            {
+                case CodeRewardType.None:
+                    break;
+                case CodeRewardType.WalletAmount:
+                    this.Code.ActivationType = PromotionCodeActivationType.EndOfPurchase;
+                    ddlValueType.Enabled = false;
+                    ddlValueType.SelectedValue = ((int)CodeRewardValueType.Amount).ToString();
+                    break;
+                case CodeRewardType.FreeDelivery:
+                    this.Code.ActivationType = PromotionCodeActivationType.OnPurchase;
+                    ddlValueType.Enabled = false;
+                    ddlValueType.SelectedValue = ((int)CodeRewardValueType.Amount).ToString();
+                    break;
+                case CodeRewardType.DeliveryFixedRate:
+                    this.Code.ActivationType = PromotionCodeActivationType.OnPurchase;
+                    break;
+                case CodeRewardType.OrderDiscount:
+                    this.Code.ActivationType = PromotionCodeActivationType.OnPurchase;
+                    break;
+                case CodeRewardType.DeliveryOrderDiscount:
+                    this.Code.ActivationType = PromotionCodeActivationType.OnPurchase;
+                    break;
+                case CodeRewardType.PurchaseDiscount:
+                    this.Code.ActivationType = PromotionCodeActivationType.OnPurchase;
+                    break;
+                case CodeRewardType.DeliveryPurchaseDiscount:
+                    this.Code.ActivationType = PromotionCodeActivationType.OnPurchase;
+                    break;
+                case CodeRewardType.OrderRefund:
+                    this.Code.ActivationType = PromotionCodeActivationType.EndOfPurchase;
+                    break;
+                case CodeRewardType.DeliveryOrderRefund:
+                    this.Code.ActivationType = PromotionCodeActivationType.EndOfPurchase;
+                    break;
+                case CodeRewardType.PurchaseRefund:
+                    this.Code.ActivationType = PromotionCodeActivationType.EndOfPurchase;
+                    break;
+                case CodeRewardType.DeliveryPurchaseRefund:
+                    this.Code.ActivationType = PromotionCodeActivationType.EndOfPurchase;
+                    break;
+            }
+        }
     }
 
     [Serializable]
@@ -645,6 +1088,7 @@ namespace WebApplication1.Vista
         public PromotionCodeActivationType ActivationType { get; set; }
         public int Activations { get; set; }
         public string Code { get; set; }
+        public int Status { get; set; }
     }
 
     [Serializable]

@@ -44,15 +44,50 @@ namespace WebApplication1.UserControls
             this.uDdl.DataBind();
         }
 
+        public void SetDefault(string text, Guid value)
+        {
+            this.uDdl.Items.Clear();
+            this.uDdl.Items.Add(new ListItem() { Value = value.ToString(), Text = text });
+        }
+
         protected void uChk_CheckedChanged(object sender, EventArgs e)
         {
             uDdl.Enabled = uChk.Checked;
+
+            if (uDdl.Items.Count > 0)
+            {
+                if (uChk.Checked)
+                {
+                    if (uDdl.Items[0].Value != Guid.Empty.ToString())
+                    {
+                        uDdl.SelectedIndex = 0;
+                    }
+                    else
+                    {
+                        if (uDdl.Items.Count > 1)
+                            uDdl.SelectedIndex = 1;
+                    }
+                }
+                else
+                {
+                    uDdl.SelectedIndex = 0;
+                }
+
+                if (this.SelectedIndexChanged != null)
+                    this.SelectedIndexChanged(sender, e);
+            }
         }
 
         protected void uDdl_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (this.SelectedIndexChanged != null)
                 this.SelectedIndexChanged(sender, e);
+        }
+
+        public string FindTextByValue(string value)
+        {
+            ListItem item = uDdl.Items.FindByValue(value);
+            return item == null ? string.Empty : item.Text;
         }
     }
 }

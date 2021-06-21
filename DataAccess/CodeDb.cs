@@ -7,6 +7,7 @@ using DataAccess.Util;
 using Modelo.v2;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -241,6 +242,46 @@ order by NombreComercial";
 
             return this.Query<ListboxView>(query, parameters);
         }
+
+        public IEnumerable<ListboxView> ReadAllCompanyBranchProducts(Guid uid)
+        {
+            string query = $@"
+select p.UidProducto as Uid,
+       p.VchNombre   as Name
+from Productos p
+         inner join GiroProducto gp on gp.UidProducto = p.UidProducto
+         inner join GiroSucursal gs on gs.UidGiro = gp.UidGiro
+         inner join Giro g on g.UidGiro = gp.UidGiro
+where p.intEstatus = 1
+  and g.intEstatus = 1
+  and gs.UidSucursal = @Uid
+group by p.UidProducto, p.VchNombre";
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@Uid", uid);
+
+            return this.Query<ListboxView>(query, parameters);
+        }
+
+        public IEnumerable<ListboxView> ReadAllCompanyProducts(Guid uid)
+        {
+            string query = $@"
+select p.UidProducto as Uid,
+       p.VchNombre   as Name
+from Productos p
+         inner join GiroProducto gp on gp.UidProducto = p.UidProducto
+         inner join Giro g on g.UidGiro = gp.UidGiro
+where p.intEstatus = 1
+  and g.intEstatus = 1
+  and p.UidEmpresa = @Uid
+group by p.UidProducto, p.VchNombre
+";
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@Uid", uid);
+
+            return this.Query<ListboxView>(query, parameters);
+        }
         #endregion
 
         #region Promotion Code
@@ -270,7 +311,7 @@ order by NombreComercial";
                     Code = code,
                     Type = CodeType.PromotionCode
                 };
-                var cUid = this.Insert(code);
+                var cUid = this.Insert(cCode);
 
                 if (!cUid.HasValue) throw new Exception("Cant create code");
 
@@ -294,7 +335,8 @@ order by NombreComercial";
                     ExpirationUid = eUid,
                     RewardType = rewardType,
                     Value = value,
-                    ValueType = valueType
+                    ValueType = valueType,
+                    Level = codeLevel
                 };
                 var pUid = this.Insert(pCode);
 
@@ -365,6 +407,83 @@ order by NombreComercial";
 
                 throw;
             }
+        }
+
+        public IEnumerable<PromotionCodeGridView> ReadAllPromotionCodes()
+        {
+            string query = @"
+select pc.Uid,
+       pc.CreatedAt,
+       ex.StartAt,
+       c.Code,
+       pc.Activations,
+       case pc.Level
+           when 0 then 'Region'
+           when 1 then 'Suministradora'
+           when 2 then 'Distribuidora'
+           end as Level,
+       case ex.Type
+           when 0 then 'Ninguna'
+           when 1 then cast(ex.ExpirationDate as varchar)
+           when 2 then concat('', ex.ActivationsLimit, ' activaciones')
+           when 3 then concat('', ex.DaysAfterActivation, ' dias despues de activacion')
+           end as Expiration
+from Codes c
+         inner join PromotionCodes pc on pc.CodeUid = c.Uid
+         inner join PromotionCodeExpirations ex on ex.Uid = pc.ExpirationUid";
+
+            return this.Query<PromotionCodeGridView>(query, null);
+        }
+
+        public PromotionCodeEditView GetPromotionCode(Guid uid)
+        {
+            string query = @"
+select pc.Uid,
+       pc.Level,
+       pc.RewardType,
+       pc.ValueType,
+       pc.Value,
+       pc.ActivationType,
+       pc.Activations,
+       pc.CreatedAt,
+       pc.Status,
+
+       c.Uid         as CodeUid,
+       c.Code,
+
+       ex.Uid        as ExpirationUid,
+       ex.StartAt,
+       ex.Type       as ExpirationType,
+       ex.ExpirationDate,
+       ex.ActivationsLimit,
+       ex.DaysAfterActivation,
+
+       cr.Uid        as CodeRegionUid,
+       cr.CountryUid,
+       cr.StateUid,
+       cr.MunicipalityUid,
+       cr.CityUid,
+       cr.NeighborhoodUid,
+
+       cs.Uid        as CodeCompanyUid,
+       cs.CompanyUid as CompanyUid,
+       cs.BranchUid  as CompanyBranchUid,
+
+       cd.Uid        as CodeDeliveryCompanyUid,
+       cd.CompanyUid as DeliveryCompanyUid,
+       cd.BranchUid  as DeliveryCompanyBranchUid
+from PromotionCodes pc
+         inner join Codes c on c.Uid = pc.CodeUid
+         inner join PromotionCodeExpirations ex on ex.Uid = pc.ExpirationUid
+         left join PromotionCodeRegions cr on cr.PromotionCodeUid = pc.Uid
+         left join PromotionCodeCompanies cs on cs.PromotionCodeUid = pc.Uid
+         left join PromotionCodeDeliveryCompanies cd on cd.PromotionCodeUid = pc.Uid
+where pc.Uid = @Uid";
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@Uid", uid);
+
+            return this.QuerySingleOrDefault<PromotionCodeEditView>(query, parameters);
         }
         #endregion
     }

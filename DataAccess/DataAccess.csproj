@@ -88,6 +88,7 @@
     <Compile Include="Enum\CodeValidationResult.cs" />
     <Compile Include="Enum\ComparisonOperator.cs" />
     <Compile Include="Enum\LogicalOperator.cs" />
+    <Compile Include="Enum\PromotionCodeStatus.cs" />
     <Compile Include="Enum\UserCodeNetworkLogType.cs" />
     <Compile Include="Models\ApplyPurchaseReward.cs" />
     <Compile Include="Models\ListboxView.cs" />
@@ -97,6 +98,8 @@
     <Compile Include="Models\OrderHistoryDetail.cs" />
     <Compile Include="Models\OrderHistoryDetailTimeLine.cs" />
     <Compile Include="Models\ProductOrderHistory.cs" />
+    <Compile Include="Models\PromotionCodeEditView.cs" />
+    <Compile Include="Models\PromotionCodeGridView.cs" />
     <Compile Include="Models\PurchaseHistory.cs" />
     <Compile Include="Models\PurchaseHistoryDetail.cs" />
     <Compile Include="Models\PurchaseHistoryDetailOrder.cs" />

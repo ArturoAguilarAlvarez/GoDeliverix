@@ -1,16 +1,13 @@
 ﻿using DataAccess.Enum;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Dapper;
 
 namespace DataAccess.Entities
 {
     [Table("PromotionCodeRules")]
     public class PromotionCodeRule
     {
+        [Key]
         public Guid Uid { get; set; }
         public Guid PromotionCodeUid { get; set; }
         public int Position { get; set; }

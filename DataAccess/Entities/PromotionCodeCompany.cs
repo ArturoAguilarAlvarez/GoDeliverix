@@ -6,6 +6,7 @@ namespace DataAccess.Entities
     [Table("PromotionCodeCompanies")]
     public class PromotionCodeCompany
     {
+        [Key]
         public Guid Uid { get; set; }
         public Guid PromotionCodeUid { get; set; }
         public Guid CompanyUid { get; set; }

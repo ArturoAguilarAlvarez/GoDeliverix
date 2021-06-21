@@ -1,16 +1,13 @@
 ﻿using DataAccess.Enum;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Dapper;
 
 namespace DataAccess.Entities
 {
     [Table("PromotionCodeExpirations")]
     public class PromotionCodeExpiration
     {
+        [Key]
         public Guid Uid { get; set; }
         public DateTime StartAt { get; set; }
         public CodeExpirationType Type { get; set; }
