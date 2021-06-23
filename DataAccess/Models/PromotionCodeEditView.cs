@@ -29,19 +29,28 @@ namespace DataAccess.Models
         public int? ActivationsLimit { get; set; }
         public int? DaysAfterActivation { get; set; }
 
-        public Guid? CodeRegionUid { get; set; }
+        public Guid? CodeRegionUid { get; set; }        
         public Guid? CountryUid { get; set; }
+        public string Country { get; set; }
         public Guid? StateUid { get; set; }
+        public string State { get; set; }
         public Guid? MunicipalityUid { get; set; }
+        public string Municipality { get; set; }
         public Guid? CityUid { get; set; }
+        public string City { get;set; }
         public Guid? NeighborhoodUid { get; set; }
+        public string Neighborhood { get; set; }
 
         public Guid? CodeCompanyUid { get; set; }
         public Guid? CompanyUid { get; set; }
+        public string Company { get; set; }
         public Guid? CompanyBranchUid { get; set; }
+        public string CompanyBranch { get; set; }
 
         public Guid? CodeDeliveryCompanyUid { get; set; }
         public Guid? DeliveryCompanyUid { get; set; }
+        public string DeliveryCompany { get; set; }
         public Guid? DeliveryCompanyBranchUid { get; set; }
+        public string DeliveryCompanyBranch { get; set; }
     }
 }

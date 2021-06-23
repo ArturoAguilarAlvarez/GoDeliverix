@@ -364,18 +364,18 @@
                             <%--ROW--%>
 
                             <asp:Panel runat="server" CssClass="row" ID="pnlRuleGiroValueType" Visible="False">
-                                <div class="col-md-3">
+                                <asp:Panel runat="server" ID="pnlRuleGiro" CssClass="col-md-3">
                                     <h6 class="text-muted mb-2">Giro</h6>
                                     <asp:DropDownList runat="server" ID="ddlRuleGiro" AutoPostBack="True" OnSelectedIndexChanged="ddlRuleGiro_OnSelectedIndexChanged" CssClass="form-control form-group-sm"></asp:DropDownList>
-                                </div>
-                                <div class="col-md-3">
+                                </asp:Panel>
+                                <asp:Panel runat="server" ID="pnlRuleCategoria" CssClass="col-md-3">
                                     <h6 class="text-muted mb-2">Categoria</h6>
                                     <asp:DropDownList runat="server" ID="ddlRuleCategoria" AutoPostBack="True" OnSelectedIndexChanged="ddlRuleCategoria_OnSelectedIndexChanged" CssClass="form-control form-group-sm"></asp:DropDownList>
-                                </div>
-                                <div class="col-md-3">
+                                </asp:Panel>
+                                <asp:Panel runat="server" ID="pnlRuleSubcategoria" CssClass="col-md-3">
                                     <h6 class="text-muted mb-2">Subcategoria</h6>
                                     <asp:DropDownList runat="server" ID="ddlRuleSubcategoria" AutoPostBack="True" OnSelectedIndexChanged="ddlRuleSubcategoria_OnSelectedIndexChanged" CssClass="form-control form-group-sm"></asp:DropDownList>
-                                </div>
+                                </asp:Panel>
                             </asp:Panel>
 
                             <br />
@@ -408,27 +408,27 @@
                                 <div class="row">
                                     <asp:Panel runat="server" ID="pnlSmCountry" class="col-md-4">
                                         <h6 class="text-muted pb-0 mb-0">Pais</h6>
-                                        <asp:Label runat="server" ID="lblSmCountry" Visible="True"/>
+                                        <asp:Label runat="server" ID="lblSmCountry" Visible="True" />
                                     </asp:Panel>
 
                                     <asp:Panel runat="server" ID="pnlSmState" class="col-md-4">
                                         <h6 class="text-muted pb-0 mb-0">Estado</h6>
-                                        <asp:Label runat="server" ID="lblSmState" Visible="True"/>
+                                        <asp:Label runat="server" ID="lblSmState" Visible="True" />
                                     </asp:Panel>
 
                                     <asp:Panel runat="server" ID="pnlSmMunicipality" class="col-md-4">
                                         <h6 class="text-muted pb-0 mb-0">Municipio</h6>
-                                        <asp:Label runat="server" ID="lblSmMunicipality" Visible="True"/>
+                                        <asp:Label runat="server" ID="lblSmMunicipality" Visible="True" />
                                     </asp:Panel>
 
                                     <asp:Panel runat="server" ID="pnlSmCity" class="col-md-4">
                                         <h6 class="text-muted pb-0 mb-0">Ciudad</h6>
-                                        <asp:Label runat="server" ID="lblSmCity" Visible="True"/>
+                                        <asp:Label runat="server" ID="lblSmCity" Visible="True" />
                                     </asp:Panel>
 
                                     <asp:Panel runat="server" ID="pnlSmNeighborhood" class="col-md-4">
                                         <h6 class="text-muted pb-0 mb-0">Colonia</h6>
-                                        <asp:Label runat="server" ID="lblSmNeighborhood" Visible="True"/>
+                                        <asp:Label runat="server" ID="lblSmNeighborhood" Visible="True" />
                                     </asp:Panel>
                                 </div>
                             </asp:Panel>
@@ -452,11 +452,11 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <h6 class="text-muted pb-0 mb-0">Empresa</h6>
-                                        <asp:Label runat="server" ID="lblSmCompany" Visible="True"/>
+                                        <asp:Label runat="server" ID="lblSmCompany" Visible="True" />
                                     </div>
                                     <asp:Panel runat="server" ID="pnlSmCompanyBranch" class="col-md-6">
                                         <h6 class="text-muted pb-0 mb-0">Sucursal</h6>
-                                        <asp:Label runat="server" ID="lblSmCompanyBranch" Visible="True"/>
+                                        <asp:Label runat="server" ID="lblSmCompanyBranch" Visible="True" />
                                     </asp:Panel>
                                 </div>
                             </asp:Panel>

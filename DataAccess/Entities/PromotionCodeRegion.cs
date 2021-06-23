@@ -14,6 +14,8 @@ namespace DataAccess.Entities
         public Guid? MunicipalityUid { get; set; }
         public Guid? CityUid { get; set; }   
         public Guid? NeighborhoodUid { get; set; }   
+
+        [IgnoreInsert]
         public int Type { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using DataAccess.Models;
+﻿using DataAccess.Enum;
+using DataAccess.Models;
 using Subgurim.Controles;
 using System;
 using System.Collections.Generic;
@@ -120,6 +121,17 @@ namespace WebApplication1.Vista
         {
             var code = this.VmCodes.GetPromotionCode(this.PromotionCodeUid);
 
+            btnLinkRegion.Visible = code.Level == DataAccess.Enum.PromotionCodeLevel.Region;
+            btnLinkDeliveryCompany.Visible = code.Level == DataAccess.Enum.PromotionCodeLevel.DeliveryCompany;
+            btnLinkCompany.Visible = code.Level == DataAccess.Enum.PromotionCodeLevel.Company || code.Level == DataAccess.Enum.PromotionCodeLevel.DeliveryCompany;
+
+            if (mvTabs.ActiveViewIndex == 1 && (code.Level == PromotionCodeLevel.DeliveryCompany || code.Level == PromotionCodeLevel.Company)) // Region
+                mvTabs.ActiveViewIndex = 0;
+            if (mvTabs.ActiveViewIndex == 2 && (code.Level == PromotionCodeLevel.Region || code.Level == PromotionCodeLevel.Company)) // Delivery Company
+                mvTabs.ActiveViewIndex = 0;
+            if (mvTabs.ActiveViewIndex == 3 && (code.Level == PromotionCodeLevel.Region)) // Company
+                mvTabs.ActiveViewIndex = 0;
+
             txtCode.Text = code.Code;
             ddlRewardType.SelectedValue = ((int)code.RewardType).ToString();
             ddlValueType.SelectedValue = ((int)code.ValueType).ToString();
@@ -152,6 +164,20 @@ namespace WebApplication1.Vista
                     txtDaysBeforeActivation.Text = code.DaysAfterActivation.ToString();
                     break;
             }
+
+            lblSmCountry.Text = code.Country;
+            lblSmState.Text = code.State;
+            lblSmMunicipality.Text = code.Municipality;
+            lblSmCity.Text = code.City;
+            lblSmNeighborhood.Text = code.Neighborhood;
+
+            lblCompany.Text = code.Company;
+            pnlCompanyBranch.Visible = code.CompanyBranchUid.HasValue;
+            lblCompanyBranch.Text = code.CompanyBranch;
+
+            lblDeliveryCompany.Text = code.DeliveryCompany;
+            pnlDeliveryCompanyBranch.Visible = code.DeliveryCompanyBranchUid.HasValue;
+            lblDeliveryCompanyBranch.Text = code.DeliveryCompanyBranch;
         }
 
         public string GetTabClass(object wStep)

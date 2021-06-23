@@ -76,7 +76,7 @@ namespace WebApplication1.Vista
             new ListboxViewInteger(){ Id=11, Name="Reembolso del costo de envio de la compra" }
         };
 
-        private readonly int[] _RegionCodeRules = new int[5] { 2, 3, 7, 8, 9 };
+        private readonly int[] _RegionCodeRules = new int[6] { 2, 3, 6, 7, 8, 9 };
         private readonly int[] _CompanyCodeRules = new int[6] { 0, 1, 2, 3, 4, 5 };
         private readonly int[] _DeliveryCompanyCodeRules = new int[3] { 0, 4, 5 };
         private readonly IList<ListboxViewInteger> _CodeRuleValueTypes = new List<ListboxViewInteger>() {
@@ -114,6 +114,7 @@ namespace WebApplication1.Vista
         {
             this.VmAddress = new AddressViewModel();
             this.VmCodes = new CodesViewModel("");
+            this.VmProduct = new ProductViewModel();
 
             if (!Page.IsPostBack)
             {
@@ -153,23 +154,23 @@ namespace WebApplication1.Vista
             }
 
             // Fill Region
-            if (this.PromotionCodeRegion != null)
-            {
-                if (this.PromotionCodeRegion.CountryUid.HasValue)
-                    ddlCountry.SelectedValue = PromotionCodeRegion.CountryUid.Value.ToString();
+            //if (this.PromotionCodeRegion != null)
+            //{
+            //    if (this.PromotionCodeRegion.CountryUid.HasValue)
+            //        ddlCountry.SelectedValue = PromotionCodeRegion.CountryUid.Value.ToString();
 
-                if (this.PromotionCodeRegion.StateUid.HasValue)
-                    ddlState.SelectedValue = PromotionCodeRegion.StateUid.Value.ToString();
+            //    if (this.PromotionCodeRegion.StateUid.HasValue)
+            //        ddlState.SelectedValue = PromotionCodeRegion.StateUid.Value.ToString();
 
-                if (this.PromotionCodeRegion.MunicipalityUid.HasValue)
-                    ddlMunicipality.SelectedValue = PromotionCodeRegion.MunicipalityUid.Value.ToString();
+            //    if (this.PromotionCodeRegion.MunicipalityUid.HasValue)
+            //        ddlMunicipality.SelectedValue = PromotionCodeRegion.MunicipalityUid.Value.ToString();
 
-                if (this.PromotionCodeRegion.CityUid.HasValue)
-                    ddlCity.SelectedValue = PromotionCodeRegion.CityUid.Value.ToString();
+            //    if (this.PromotionCodeRegion.CityUid.HasValue)
+            //        ddlCity.SelectedValue = PromotionCodeRegion.CityUid.Value.ToString();
 
-                if (this.PromotionCodeRegion.NeighborhoodUid.HasValue)
-                    ddlNeighborhood.SelectedValue = PromotionCodeRegion.NeighborhoodUid.Value.ToString();
-            }
+            //    if (this.PromotionCodeRegion.NeighborhoodUid.HasValue)
+            //        ddlNeighborhood.SelectedValue = PromotionCodeRegion.NeighborhoodUid.Value.ToString();
+            //}
 
             // Fill Company
             if (this.Company != null)
@@ -681,8 +682,8 @@ namespace WebApplication1.Vista
             pnlRuleValueType.Visible = false;
 
             pnlRuleGiroValueType.Visible = false;
-            ddlRuleCategoria.Visible = false;
-            ddlRuleSubcategoria.Visible = false;
+            pnlRuleCategoria.Visible = false;
+            pnlRuleSubcategoria.Visible = false;
 
             string fieldType = string.Empty;
 
@@ -720,22 +721,67 @@ namespace WebApplication1.Vista
                     fieldType = "Text";
                     break;
                 case PromotionCodeRuleValueType.Giro:
+                    pnlRuleValueType.Visible = false;
+
                     pnlRuleGiroValueType.Visible = true;
-                    ddlCodeRuleValue.Visible = true;
+
                     fieldType = "Combo";
+
+                    FillCodeRuleGiro();
+
+                    ddlRuleCategoria.DataSource = new List<ListboxView>() { new ListboxView() { Uid = Guid.Empty, Name = "Todos" } };
+                    ddlRuleCategoria.DataTextField = "Name";
+                    ddlRuleCategoria.DataValueField = "Uid";
+                    ddlRuleCategoria.DataBind();
+
+                    ddlRuleSubcategoria.DataSource = new List<ListboxView>() { new ListboxView() { Uid = Guid.Empty, Name = "Todos" } };
+                    ddlRuleSubcategoria.DataTextField = "Name";
+                    ddlRuleSubcategoria.DataValueField = "Uid";
+                    ddlRuleSubcategoria.DataBind();
+
                     break;
                 case PromotionCodeRuleValueType.Categoria:
+                    pnlRuleValueType.Visible = false;
+
                     pnlRuleGiroValueType.Visible = true;
-                    ddlRuleCategoria.Visible = true;
-                    ddlCodeRuleValue.Visible = true;
+                    pnlRuleCategoria.Visible = true;
+
                     fieldType = "Combo";
+
+                    FillCodeRuleGiro();
+
+                    ddlRuleCategoria.DataSource = new List<ListboxView>() { new ListboxView() { Uid = Guid.Empty, Name = "Todos" } };
+                    ddlRuleCategoria.DataTextField = "Name";
+                    ddlRuleCategoria.DataValueField = "Uid";
+                    ddlRuleCategoria.DataBind();
+
+                    ddlRuleSubcategoria.DataSource = new List<ListboxView>() { new ListboxView() { Uid = Guid.Empty, Name = "Todos" } };
+                    ddlRuleSubcategoria.DataTextField = "Name";
+                    ddlRuleSubcategoria.DataValueField = "Uid";
+                    ddlRuleSubcategoria.DataBind();
+
                     break;
                 case PromotionCodeRuleValueType.Subcategoria:
+                    pnlRuleValueType.Visible = false;
+
                     pnlRuleGiroValueType.Visible = true;
-                    ddlRuleCategoria.Visible = true;
-                    ddlRuleSubcategoria.Visible = true;
-                    ddlCodeRuleValue.Visible = true;
+                    pnlRuleCategoria.Visible = true;
+                    pnlRuleSubcategoria.Visible = true;
+
                     fieldType = "Combo";
+
+                    FillCodeRuleGiro();
+
+                    ddlRuleCategoria.DataSource = new List<ListboxView>() { new ListboxView() { Uid = Guid.Empty, Name = "Todos" } };
+                    ddlRuleCategoria.DataTextField = "Name";
+                    ddlRuleCategoria.DataValueField = "Uid";
+                    ddlRuleCategoria.DataBind();
+
+                    ddlRuleSubcategoria.DataSource = new List<ListboxView>() { new ListboxView() { Uid = Guid.Empty, Name = "Todos" } };
+                    ddlRuleSubcategoria.DataTextField = "Name";
+                    ddlRuleSubcategoria.DataValueField = "Uid";
+                    ddlRuleSubcategoria.DataBind();
+
                     break;
             }
 
@@ -1005,7 +1051,13 @@ namespace WebApplication1.Vista
         }
         public void FillCodeRuleCategoria(Guid uid)
         {
-            ddlRuleCategoria.DataSource = this.VmProduct.GetCategorias(uid);
+            var data = this.VmProduct.GetCategorias(uid);
+
+            var tmp = data.ToList();
+            tmp.Insert(0, new Modelo.ApiResponse.CommonListBox() { Uid = Guid.Empty, Name = "Todos" });
+            data = tmp;
+
+            ddlRuleCategoria.DataSource = data;
             ddlRuleCategoria.DataTextField = "Name";
             ddlRuleCategoria.DataValueField = "Uid";
             ddlRuleCategoria.DataBind();
@@ -1013,7 +1065,13 @@ namespace WebApplication1.Vista
         }
         public void FillCodeRuleSubcategoria(Guid uid)
         {
-            ddlRuleSubcategoria.DataSource = this.VmProduct.GetSubcategorias(uid);
+            var data = this.VmProduct.GetSubcategorias(uid);
+
+            var tmp = data.ToList();
+            tmp.Insert(0, new Modelo.ApiResponse.CommonListBox() { Uid = Guid.Empty, Name = "Todos" });
+            data = tmp;
+
+            ddlRuleSubcategoria.DataSource = data;
             ddlRuleSubcategoria.DataTextField = "Name";
             ddlRuleSubcategoria.DataValueField = "Uid";
             ddlRuleSubcategoria.DataBind();

@@ -419,8 +419,8 @@ select pc.Uid,
        pc.Activations,
        case pc.Level
            when 0 then 'Region'
-           when 1 then 'Suministradora'
-           when 2 then 'Distribuidora'
+           when 1 then 'Distribuidora'
+           when 2 then 'Suministradora'
            end as Level,
        case ex.Type
            when 0 then 'Ninguna'
@@ -448,34 +448,48 @@ select pc.Uid,
        pc.CreatedAt,
        pc.Status,
 
-       c.Uid         as CodeUid,
+       c.Uid                                                                   as CodeUid,
        c.Code,
 
-       ex.Uid        as ExpirationUid,
+       ex.Uid                                                                  as ExpirationUid,
        ex.StartAt,
-       ex.Type       as ExpirationType,
+       ex.Type                                                                 as ExpirationType,
        ex.ExpirationDate,
        ex.ActivationsLimit,
        ex.DaysAfterActivation,
 
-       cr.Uid        as CodeRegionUid,
+       cr.Uid                                                                  as CodeRegionUid,
        cr.CountryUid,
+       isnull(cp.Nombre, '')                                                   as Country,
        cr.StateUid,
+       isnull(ce.Nombre, '')                                                   as State,
        cr.MunicipalityUid,
+       isnull(cm.Nombre, '')                                                   as Municipality,
        cr.CityUid,
+       isnull(cc.Nombre, '')                                                   as City,
        cr.NeighborhoodUid,
+       isnull(ccl.Nombre, '')                                                  as Neighborhood,
 
-       cs.Uid        as CodeCompanyUid,
-       cs.CompanyUid as CompanyUid,
-       cs.BranchUid  as CompanyBranchUid,
+       cs.Uid                                                                  as CodeCompanyUid,
+       cs.CompanyUid                                                           as CompanyUid,
+       (select NombreComercial from Empresa where UidEmpresa = cs.CompanyUid)  as Company,
+       cs.BranchUid                                                            as CompanyBranchUid,
+       (select Identificador from Sucursales where UidSucursal = cs.BranchUid) as CompanyBranch,
 
-       cd.Uid        as CodeDeliveryCompanyUid,
-       cd.CompanyUid as DeliveryCompanyUid,
-       cd.BranchUid  as DeliveryCompanyBranchUid
+       cd.Uid                                                                  as CodeDeliveryCompanyUid,
+       cd.CompanyUid                                                           as DeliveryCompanyUid,
+       (select NombreComercial from Empresa where UidEmpresa = cd.CompanyUid)  as DeliveryCompany,
+       cd.BranchUid                                                            as DeliveryCompanyBranchUid,
+       (select Identificador from Sucursales where UidSucursal = cd.BranchUid) as DeliveryCompanyBranch
 from PromotionCodes pc
          inner join Codes c on c.Uid = pc.CodeUid
          inner join PromotionCodeExpirations ex on ex.Uid = pc.ExpirationUid
          left join PromotionCodeRegions cr on cr.PromotionCodeUid = pc.Uid
+         left join Paises cp on cp.UidPais = cr.CountryUid
+         left join estados ce on ce.UidEstado = cr.StateUid
+         left join Municipios cm on cm.UidMunicipio = cr.MunicipalityUid
+         left join Ciudades cc on cc.UidCiudad = cr.CityUid
+         left join Colonia ccl on ccl.UidColonia = cr.NeighborhoodUid
          left join PromotionCodeCompanies cs on cs.PromotionCodeUid = pc.Uid
          left join PromotionCodeDeliveryCompanies cd on cd.PromotionCodeUid = pc.Uid
 where pc.Uid = @Uid";

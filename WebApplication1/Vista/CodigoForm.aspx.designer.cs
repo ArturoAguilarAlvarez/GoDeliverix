@@ -411,6 +411,15 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.Panel pnlRuleGiroValueType;
 
         /// <summary>
+        /// pnlRuleGiro control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlRuleGiro;
+
+        /// <summary>
         /// ddlRuleGiro control.
         /// </summary>
         /// <remarks>
@@ -420,6 +429,15 @@ namespace WebApplication1.Vista
         protected global::System.Web.UI.WebControls.DropDownList ddlRuleGiro;
 
         /// <summary>
+        /// pnlRuleCategoria control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlRuleCategoria;
+
+        /// <summary>
         /// ddlRuleCategoria control.
         /// </summary>
         /// <remarks>
@@ -427,6 +445,15 @@ namespace WebApplication1.Vista
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlRuleCategoria;
+
+        /// <summary>
+        /// pnlRuleSubcategoria control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlRuleSubcategoria;
 
         /// <summary>
         /// ddlRuleSubcategoria control.
