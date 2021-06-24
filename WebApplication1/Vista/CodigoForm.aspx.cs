@@ -173,24 +173,24 @@ namespace WebApplication1.Vista
             //}
 
             // Fill Company
-            if (this.Company != null)
-            {
-                if (this.Company.UidCompany.HasValue)
-                    ddlCompany.SelectedValue = this.Company.UidCompany.Value.ToString();
+            //if (this.Company != null)
+            //{
+            //    if (this.Company.UidCompany.HasValue)
+            //        ddlCompany.SelectedValue = this.Company.UidCompany.Value.ToString();
 
-                if (this.Company.UidCompanyBranch.HasValue)
-                    ddlCompanyBranch.SelectedValue = this.Company.UidCompanyBranch.Value.ToString();
-            }
+            //    if (this.Company.UidCompanyBranch.HasValue)
+            //        ddlCompanyBranch.SelectedValue = this.Company.UidCompanyBranch.Value.ToString();
+            //}
 
             // Fill Delivery Company
-            if (this.DeliveryCompany != null)
-            {
-                if (this.DeliveryCompany.UidCompany.HasValue)
-                    ddlDeliveryCompany.SelectedValue = this.DeliveryCompany.UidCompany.Value.ToString();
+            //if (this.DeliveryCompany != null)
+            //{
+            //    if (this.DeliveryCompany.UidCompany.HasValue)
+            //        ddlDeliveryCompany.SelectedValue = this.DeliveryCompany.UidCompany.Value.ToString();
 
-                if (this.DeliveryCompany.UidCompanyBranch.HasValue)
-                    ddlDeliveryCompanyBranch.SelectedValue = this.DeliveryCompany.UidCompanyBranch.Value.ToString();
-            }
+            //    if (this.DeliveryCompany.UidCompanyBranch.HasValue)
+            //        ddlDeliveryCompanyBranch.SelectedValue = this.DeliveryCompany.UidCompanyBranch.Value.ToString();
+            //}
         }
 
         #region UI
@@ -637,26 +637,50 @@ namespace WebApplication1.Vista
             }
 
             PromotionCodeRuleValueType type = (PromotionCodeRuleValueType)int.Parse(ddlCodeRuleValueType.SelectedValue.ToString());
-            int valueType = 0;
+
+            string value = string.Empty;
+            string valueText = string.Empty;
 
             switch (type)
             {
                 case DataAccess.Enum.PromotionCodeRuleValueType.Product:
-                    valueType = 1;
+                    value = ddlCodeRuleValue.SelectedItem.Value;
+                    valueText = ddlCodeRuleValue.SelectedItem.Text;
+                    break;
+                case PromotionCodeRuleValueType.Giro:
+                    value = ddlRuleGiro.SelectedItem.Value;
+                    valueText = ddlRuleGiro.SelectedItem.Text;
+                    break;
+                case PromotionCodeRuleValueType.Categoria:
+                    value = ddlRuleCategoria.SelectedItem.Value;
+                    valueText = ddlRuleCategoria.SelectedItem.Text;
+                    break;
+                case PromotionCodeRuleValueType.Subcategoria:
+                    value = ddlRuleSubcategoria.SelectedItem.Value;
+                    valueText = ddlRuleSubcategoria.SelectedItem.Text;
+                    break;
+                default:
+                    value = txtValue.Text.Trim();
+                    valueText = txtValue.Text.Trim();
                     break;
             }
 
             PromotionCodeRuleView rule = new PromotionCodeRuleView()
             {
+                Operator = int.Parse(ddlCodeRuleOperator.SelectedItem.Value),
+                ValueType = (int)type,
+                Value = value,
                 OperatorText = ddlCodeRuleOperator.SelectedItem.Text,
                 ValueTypeText = ddlCodeRuleValueType.SelectedItem.Text,
-                ValueText = valueType == 0 ? decimal.Parse(txtCodeRuleValue.Text).ToString("C2") : ddlCodeRuleValue.SelectedItem.Text
+                ValueText = valueText
             };
 
             btnCodeRuleNew.Visible = true;
             btnCodeRuleEdit.Visible = false;
             btnCodeRuleSave.Visible = false;
             btnCodeRuleCancel.Visible = false;
+
+            ClearCodeRuleFields();
 
             EnableCodeRuleFields(false);
 
@@ -670,6 +694,8 @@ namespace WebApplication1.Vista
             btnCodeRuleEdit.Visible = false;
             btnCodeRuleSave.Visible = false;
             btnCodeRuleCancel.Visible = false;
+
+            ClearCodeRuleFields();
 
             EnableCodeRuleFields(false);
         }
@@ -982,26 +1008,36 @@ namespace WebApplication1.Vista
             HideError();
             DataAccess.Enum.PromotionCodeRuleValueType type = (DataAccess.Enum.PromotionCodeRuleValueType)int.Parse(ddlCodeRuleValueType.SelectedValue.ToString());
             bool isValid = true;
+
             int valueType = 0;
 
             switch (type)
             {
-                case DataAccess.Enum.PromotionCodeRuleValueType.SubtotalOrder:
+                case PromotionCodeRuleValueType.SubtotalOrder:
                     break;
-                case DataAccess.Enum.PromotionCodeRuleValueType.ShipmentOrder:
+                case PromotionCodeRuleValueType.ShipmentOrder:
                     break;
-                case DataAccess.Enum.PromotionCodeRuleValueType.SubtotalPurchase:
+                case PromotionCodeRuleValueType.SubtotalPurchase:
                     break;
-                case DataAccess.Enum.PromotionCodeRuleValueType.ShipmentPurchase:
+                case PromotionCodeRuleValueType.ShipmentPurchase:
                     break;
-                case DataAccess.Enum.PromotionCodeRuleValueType.Product:
+                case PromotionCodeRuleValueType.Product:
                     valueType = 1;
                     break;
-                case DataAccess.Enum.PromotionCodeRuleValueType.ProductQuantity:
+                case PromotionCodeRuleValueType.ProductQuantity:
+                    break;
+                case PromotionCodeRuleValueType.Giro:
+                    valueType = 2;
+                    break;
+                case PromotionCodeRuleValueType.Categoria:
+                    valueType = 3;
+                    break;
+                case PromotionCodeRuleValueType.Subcategoria:
+                    valueType = 4;
                     break;
             }
 
-            if (valueType == 0)
+            if (valueType == 0) // Monto
             {
                 decimal dValue = 0m;
                 if (!decimal.TryParse(txtCodeRuleValue.Text.Trim(), out dValue))
@@ -1010,8 +1046,57 @@ namespace WebApplication1.Vista
                     isValid = false;
                 }
             }
+            else if (valueType == 1) // Producto
+            {
+                if (ddlCodeRuleValue.SelectedValue == Guid.Empty.ToString())
+                {
+                    DrawError("Seleccione un producto valido");
+                    isValid = false;
+                }
+            }
+            else if (valueType == 2) // Giro
+            {
+                if (ddlRuleGiro.SelectedValue == Guid.Empty.ToString())
+                {
+                    DrawError("Seleccione un giro valido");
+                    isValid = false;
+                }
+            }
+            else if (valueType == 3) // Categoria
+            {
+                if (ddlRuleCategoria.SelectedValue == Guid.Empty.ToString())
+                {
+                    DrawError("Seleccione una categoria valida");
+                    isValid = false;
+                }
+            }
+            else if (valueType == 4) // Subcategoria
+            {
+                if (ddlRuleSubcategoria.SelectedValue == Guid.Empty.ToString())
+                {
+                    DrawError("Seleccione una subcategoria valida");
+                    isValid = false;
+                }
+            }
 
             return isValid;
+        }
+        private void ClearCodeRuleFields()
+        {
+            pnlRuleGiroValueType.Visible = false;
+            ddlCodeRuleValueType.SelectedIndex = 0;
+            ddlCodeRuleOperator.SelectedIndex = 0;
+
+            ddlCodeRuleValue.DataSource = null;
+            ddlCodeRuleValue.DataBind();
+
+            ddlRuleGiro.DataSource = null;
+            ddlRuleGiro.DataBind();
+
+            ddlRuleCategoria.DataSource = null;
+            ddlRuleCategoria.DataBind();
+
+            txtCodeRuleValue.Text = string.Empty;
         }
 
         public void FillCodeRuleProducts()
@@ -1043,7 +1128,13 @@ namespace WebApplication1.Vista
         {
             if (ddlRuleGiro.Items.Count == 0)
             {
-                ddlRuleGiro.DataSource = this.VmProduct.GetAllGiros();
+                var data = this.VmProduct.GetAllGiros();
+
+                var tmp = data.ToList();
+                tmp.Insert(0, new Modelo.ApiResponse.StoreGiro() { Uid = Guid.Empty, Name = "Todos" });
+                data = tmp;
+
+                ddlRuleGiro.DataSource = data;
                 ddlRuleGiro.DataTextField = "Name";
                 ddlRuleGiro.DataValueField = "Uid";
                 ddlRuleGiro.DataBind();
